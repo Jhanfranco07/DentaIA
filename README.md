@@ -1,9 +1,26 @@
-# DentAI
+# DentAI · Prototipo académico para pacientes
 
-Prototipo académico orientado a pacientes. No realiza diagnósticos médicos ni analiza fotografías con inteligencia artificial en esta fase.
+Aplicación de demostración desarrollada con **Next.js 15, React 19 y TypeScript** para el proyecto final de carrera. Orientación preventiva de salud bucal y directorio de profesionales.
 
-Tecnología: Next.js, TypeScript y despliegue en Vercel.
+## Ejecutar
+```bash
+npm install
+npm run dev
+npm run build
+```
 
-## Privacidad
+## Publicación en Vercel
+Importar `Jhanfranco07/DentaIA`, usar el framework **Next.js** y el directorio raíz. No requiere variables de entorno para la demostración.
 
-Los archivos seleccionados permanecen en el navegador; esta versión no los sube a servidores.
+## Funcionalidades
+- Inicio responsivo y recorrido educativo.
+- Consentimiento explícito y vista previa de imágenes JPG, PNG o WebP de hasta 8 MB.
+- El archivo permanece en el navegador; no se sube ni almacena en servidores.
+- Reporte **ficticio**, no condicionado por la fotografía.
+- Directorio de odontólogos y precios **ficticios**, con búsqueda y filtros.
+- Información de privacidad y alcance del prototipo.
+
+**Importante:** no existe ningún análisis automatizado ni diagnóstico clínico. Ante dolor o urgencia hay que consultar a un profesional. El modelo IA y los datos verificados corresponden a fases posteriores.
+
+## Convención de commits
+En español: `feat: desarrollar navegación del paciente`; `fix: corregir validación de imágenes`; `docs: explicar alcance académico`.
