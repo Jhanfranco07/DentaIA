@@ -1,12 +1,27 @@
 # Desarrollo independiente de DentaIA
 
+## Empezar aquí: guía para el equipo
+
+La base común ya está fusionada en `main`. Cada integrante debe leer esta guía, preparar su entorno
+y desarrollar únicamente su módulo. No necesita esperar a que los demás terminen.
+
+| Integrante | Avance funcional | Dónde programar |
+| --- | --- | --- |
+| Jhan | Registro, login, cierre de sesión y perfil persistente | `src/app/(modulos)/cuenta/` |
+| Angie | Directorio desde BD, búsqueda, filtros y detalle | `src/app/(modulos)/directorio/` |
+| Anelis | Registrar, listar y cancelar solicitudes de demostración | `src/app/(modulos)/solicitudes/` |
+| Stephan | Consentimiento, carga privada, consulta y eliminación de fotografías | `src/app/(modulos)/fotografias/` |
+
+Más abajo, **Contrato real de datos y operaciones** contiene las instrucciones de cada integrante.
+Las pantallas son puntos de partida: el avance funcional debe programarlo cada persona con sus propios commits.
+
 ## Preparación común
 
 Esta base agrega conexión y espacios de trabajo. No completa los cuatro avances ni sustituye el MVP de `/`.
 Los módulos empiezan como pantallas pendientes; cada integrante programa y demuestra su propia funcionalidad.
 
 1. Instalar Node.js 22 LTS (mínimo 22.9; `nvm use` si se utiliza nvm) y Git.
-2. Fusionar el PR de preparación en `main` antes de crear las cuatro ramas.
+2. La preparación ya está fusionada en `main`; actualizar esa rama antes de crear la rama individual.
 3. Cada integrante clona el repositorio, actualiza `main` y copia su SHA con `git rev-parse HEAD`.
    Los cuatro deben usar ese mismo SHA como punto de partida.
 
@@ -30,30 +45,49 @@ La URL y clave de `.env.example` son públicas y corresponden al proyecto acadé
 No añadir contraseñas PostgreSQL, claves secretas ni service_role al frontend.
 Los comandos de build funcionan sin `.env.local`; la falta de variables se informa al usar la conexión.
 
-## Cuentas de prueba: una vez, solo el propietario
+## Acceso compartido de prueba
 
-Las cuentas NO se crean copiando el repositorio. El acceso de prueba no registra usuarios ni envía correos.
-La integración de Supabase permite SQL pero no incluye una operación administrativa de creación de usuarios Auth.
-Por eso se incluye un script local que usa la API oficial de Auth y evita modificar directamente `auth.users`.
+La cuenta `jhan.dev@dentaia.test` ya existe y tiene el correo confirmado.
+Los cuatro integrantes pueden utilizarla desde sus propias computadoras.
 
-En Supabase > Settings > API Keys, el propietario obtiene una **secret key** (o la service_role heredada).
-Crear `.env.admin.local` con `SUPABASE_SECRET_KEY=...`. Es un archivo ignorado por Git; no entregarlo al equipo.
+- **Correo:** `jhan.dev@dentaia.test`.
+- **Contraseña:** solicitarla a Jhan por un canal privado. No se publica en este repositorio público.
+- **Dónde ingresar:** http://localhost:3000/desarrollo/acceso, después de ejecutar `npm run dev`.
+- Cada integrante usa su propia cuenta de GitHub para sus ramas, commits y Pull Requests.
 
-```bash
-npm run setup:test-users
-```
+No es una cuenta administradora de Supabase; es un usuario de prueba de la aplicación.
+No necesitan la contraseña PostgreSQL ni una clave secret/service_role para desarrollar.
 
-Se crean jhan.dev, angie.dev, anelis.dev y stephan.dev bajo el dominio reservado `dentaia.test`,
-con email confirmado y contraseñas aleatorias distintas. Son identidades de prueba, no correos reales.
-Las credenciales se guardan en `.env.test-accounts.local`, también ignorado; entregar a cada integrante solo su par.
-Eliminar `.env.admin.local` al terminar. El script nunca cambia cuentas existentes ni sobrescribe el archivo de salida.
-Si hubo un fallo parcial, conservar las credenciales ya generadas y completar las cuentas faltantes desde
-Authentication > Users > Add user. También se pueden crear las cuatro cuentas directamente desde ese panel,
-marcando la confirmación del correo, sin ejecutar el script.
+### Pasos para usarla
 
-Cada persona ingresa en `/desarrollo/acceso` con su cuenta. La sesión persiste en ese navegador y permite
-usar su módulo sin esperar el login final. Para probar aislamiento, usar dos perfiles de navegador distintos.
-La ruta devuelve 404 en `npm run build && npm start`; no es el acceso de producción.
+1. Preparar el entorno con los comandos anteriores y abrir la dirección local.
+2. Iniciar sesión con la cuenta compartida y la contraseña recibida por privado.
+3. Usar los enlaces para entrar a su módulo; la sesión persiste en ese navegador.
+4. Implementar y probar su funcionalidad sin importar código de las otras tres ramas.
+
+El acceso de prueba no registra usuarios ni envía correos. Devuelve 404 en `npm run build && npm start`;
+no es el login final de producción que implementará Jhan.
+
+### Datos compartidos
+
+Todos usan el mismo usuario: verán las mismas solicitudes, fotografías y perfil.
+Identificar los registros de prueba con el nombre del integrante y no eliminar registros de otro.
+Usar únicamente datos ficticios e imágenes de prueba. Un cambio del perfil compartido afecta a todos.
+
+Esto permite comenzar los cuatro avances, pero no comprobar aislamiento entre personas:
+para esa prueba posterior se necesita una segunda cuenta diferente y dos perfiles de navegador.
+
+### Crear cuentas adicionales después (opcional, solo el propietario)
+
+No es necesario crear cuatro cuentas para comenzar. Si luego se necesitan cuentas individuales,
+el propietario puede crearlas desde Authentication > Users > Add user > Create new user,
+marcando Auto confirm user, o usar `npm run setup:test-users`.
+
+El script requiere `SUPABASE_SECRET_KEY` en `.env.admin.local`, un archivo ignorado por Git.
+Nunca entregar esa clave al equipo. El script crea únicamente cuentas nuevas, no modifica la contraseña
+de la cuenta compartida existente, y guarda las credenciales nuevas en `.env.test-accounts.local`.
+Como Jhan ya tiene una cuenta creada, el script informará que esa cuenta no se creó de nuevo;
+conservar las credenciales originales y revisar los resultados antes de repetirlo.
 
 ## Archivos y ramas exclusivos
 
@@ -80,7 +114,7 @@ El SDK genera tipos de Update para todas las columnas, pero los permisos SQL sol
 
 - Implementar registro con `auth.signUp`, login con `auth.signInWithPassword` y cierre con `auth.signOut`.
 - El registro normal puede exigir confirmación por correo según la configuración de Auth. No desactivarla
-  ni cambiar los proveedores del proyecto sin coordinar. Las cuentas de desarrollo ya confirmadas evitan ese bloqueo.
+  ni cambiar los proveedores del proyecto sin coordinar. La cuenta compartida ya confirmada evita ese bloqueo para las pruebas de acceso.
 - Consultar el usuario con `auth.getUser()`. Crear `profiles` con `{ id: user.id, full_name }` después de iniciar sesión;
   validar nombre de 2–120 caracteres. Leer el perfil propio y actualizar únicamente `full_name`.
 - La pantalla de prueba ya inicia sesiones; el avance individual consiste en el flujo del producto, validaciones,
@@ -152,7 +186,7 @@ npm run build
 ```
 
 `check:supabase` hace consultas reales al directorio y verifica que un visitante no reciba datos privados.
-Para probar Auth, cada integrante puede agregar SOLO sus credenciales a `.env.local` como
+Para probar Auth, cada integrante puede agregar las credenciales de prueba recibidas por privado a `.env.local` como
 `DENTAIA_TEST_EMAIL` y `DENTAIA_TEST_PASSWORD` (sin prefijo NEXT_PUBLIC_) y repetir el comando.
 No es una prueba completa de las cuatro funcionalidades; cada PR debe probar su operación real y casos de error.
 
