@@ -1,0 +1,11 @@
+.page { max-width: 680px; margin: 2rem auto; padding: 1.5rem; color: #153b3c; }
+.page h1 { font-size: 2rem; margin-block: 1rem; }
+.page p { margin-block: 1rem; }
+.form { display: grid; gap: 1rem; margin-block: 1.5rem; }
+.form label { display: grid; gap: .4rem; }
+.form input { padding: .8rem; border: 1px solid #7c9595; border-radius: .5rem; }
+.page button { padding: .8rem; background: #08695f; color: white; border-radius: .5rem; cursor: pointer; }
+.page button:disabled { opacity: .6; cursor: wait; }
+.links { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1.5rem; }
+.links a { text-decoration: underline; color: #08695f; }
+.status { overflow-wrap: anywhere; border-left: 3px solid #08695f; padding: .75rem; }

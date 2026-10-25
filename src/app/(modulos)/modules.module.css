@@ -1,0 +1,5 @@
+.shell { min-height: 100vh; background: #f5f8f8; color: #153b3c; }
+.header { padding: 1.25rem; display: flex; gap: 1.5rem; justify-content: space-between; flex-wrap: wrap; background: white; border-bottom: 1px solid #c9d9d9; }
+.nav { display: flex; flex-wrap: wrap; gap: 1rem; }
+.header a { color: #08695f; text-decoration: underline; text-underline-offset: .2em; }
+.main { max-width: 960px; margin: auto; padding: 2rem 1.25rem; }

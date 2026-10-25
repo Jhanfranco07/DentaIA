@@ -6,9 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:supabase": "node --env-file-if-exists=.env.local scripts/check-supabase.mjs",
+    "setup:test-users": "node --env-file-if-exists=.env.local --env-file-if-exists=.env.admin.local scripts/create-test-users.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.118.0",
     "next": "15.5.28",
     "react": "19.1.8",
     "react-dom": "19.1.8"
@@ -20,6 +23,6 @@
     "typescript": "5.9.3"
   },
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.9.0"
   }
 }
