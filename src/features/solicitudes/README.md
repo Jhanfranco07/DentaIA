@@ -17,3 +17,15 @@ Con sesión autenticada, obtener odontólogos desde `dentists` sin importar el c
 Pruebas `*.test.mjs` con cliente simulado para validaciones, lista vacía, fecha, cancelación y estados. Pruebas con Supabase real y dos identidades aparte; no incluir credenciales en Git. Empezar desde `main` actualizada y trabajar solo en `src/app/(modulos)/solicitudes/**` y `src/features/solicitudes/**`. Commits propios y PR. Los tres pipelines comunes se ejecutan automáticamente; no crear pipelines individuales.
 
 Guía general: [docs/DESARROLLO.md](../../../docs/DESARROLLO.md).
+
+
+## Entregables numerados de Anelis
+
+- **Avance 1 — PENDIENTE DE CONFIRMAR:** solicitudes de demostración, listado propio y cancelación; debe probarse y tener PR integrado antes de considerarse completado.
+- **Avance 2 — DI-24–25 / DI-86–91:** escenarios, métricas, consentimiento/protocolo y pruebas de usabilidad con participantes reales; registro de hallazgos. **DI-27:** reparar errores detectados en formularios de solicitudes. No inventar participantes, comentarios ni métricas.
+- **Avance 3 — DI-36 / DI-117–119:** reforzar persistencia y validaciones, probar permisos/autorización y operaciones de solicitud. **DI-39:** revisar calidad y privacidad de fotografías con evidencia; coordinar con dueño del módulo sin editarlo directamente.
+- **Avance 4 — DI-42 / DI-134–135:** reporte preventivo explicable y vínculo con directorio, *solo orientación no diagnóstica*. **DI-43:** ejecutar/documentar pruebas y revisión odontológica únicamente si ocurren realmente.
+
+**En paralelo:** DI-28 segmentación ya figura *Listo* (revisar evidencia) y DI-31 Business Model Canvas *En curso*. No son funcionalidades de solicitudes.
+
+Crear rama independiente por avance, mantener código separado y resultados reproducibles. Ver [plan maestro](../../../docs/DESARROLLO.md).
