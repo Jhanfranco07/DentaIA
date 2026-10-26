@@ -1,3 +1,5 @@
+const CORREO_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function validarNombre(nombre: string): string | null {
   const longitud = nombre.trim().length;
   return longitud < 2 || longitud > 120 ? "El nombre completo debe tener entre 2 y 120 caracteres." : null;
@@ -5,7 +7,7 @@ export function validarNombre(nombre: string): string | null {
 
 export function validarAcceso(email: string, password: string): string | null {
   if (!email.trim() || !password) return "Completa el correo electrónico y la contraseña.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return "Introduce un correo electrónico válido.";
+  if (!CORREO_VALIDO.test(email.trim())) return "Introduce un correo electrónico válido.";
   return null;
 }
 
@@ -13,6 +15,22 @@ export function validarRegistro(nombre: string, email: string, password: string,
   return validarNombre(nombre) ?? validarAcceso(email, password)
     ?? (password.length < 8 ? "Usa una contraseña de al menos 8 caracteres." : null)
     ?? (password !== confirmacion ? "Las contraseñas no coinciden." : null);
+}
+
+export type CampoCuenta = "nombre" | "email" | "password" | "confirmacion";
+
+// Conserva las validaciones existentes y señala dónde corregir el primer error.
+export function validarFormularioCuenta({ registro, nombre, email, password, confirmacion }: {
+  registro: boolean; nombre: string; email: string; password: string; confirmacion: string;
+}): { campo: CampoCuenta; mensaje: string } | null {
+  const mensaje = registro ? validarRegistro(nombre, email, password, confirmacion) : validarAcceso(email, password);
+  if (!mensaje) return null;
+  let campo: CampoCuenta;
+  if (registro && validarNombre(nombre)) campo = "nombre";
+  else if (!email.trim() || !CORREO_VALIDO.test(email.trim())) campo = "email";
+  else if (!password || (registro && password.length < 8)) campo = "password";
+  else campo = "confirmacion";
+  return { campo, mensaje };
 }
 
 // No se muestran mensajes crudos del proveedor ni se registran credenciales.

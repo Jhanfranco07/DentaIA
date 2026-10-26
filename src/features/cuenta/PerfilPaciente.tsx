@@ -13,6 +13,8 @@ export default function PerfilPaciente({ usuario, bloqueado }: { usuario: User; 
   const [cargando, setCargando] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
+  const [nombreInvalido, setNombreInvalido] = useState(false);
+  const campoNombre = useRef<HTMLInputElement>(null);
   const [aviso, setAviso] = useState("");
   const [intento, setIntento] = useState(0);
   const [disponible, setDisponible] = useState(false);
@@ -21,7 +23,7 @@ export default function PerfilPaciente({ usuario, bloqueado }: { usuario: User; 
 
   useEffect(() => {
     const version = ++vigente.current;
-    setCargando(true); setDisponible(false); setError(""); setPerfil(null); setNombre("");
+    setCargando(true); setDisponible(false); setError(""); setNombreInvalido(false); setPerfil(null); setNombre("");
     async function cargar() {
       try {
         const client = getSupabaseBrowserClient();
@@ -44,9 +46,9 @@ export default function PerfilPaciente({ usuario, bloqueado }: { usuario: User; 
   async function guardar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (operacion.current || !disponible || bloqueado) return;
-    setError(""); setAviso("");
+    setError(""); setAviso(""); setNombreInvalido(false);
     const invalido = validarNombre(nombre);
-    if (invalido) { setError(invalido); return; }
+    if (invalido) { setError(invalido); setNombreInvalido(true); campoNombre.current?.focus(); return; }
     const version = vigente.current;
     operacion.current = true; setGuardando(true);
     try {
@@ -63,12 +65,12 @@ export default function PerfilPaciente({ usuario, bloqueado }: { usuario: User; 
     <h2 id="perfil-titulo">Mi perfil</h2>
     <dl className={styles.datos}><div><dt>Correo electrónico</dt><dd>{usuario.email ?? "Sin correo disponible"}</dd></div><div><dt>Nombre guardado</dt><dd>{cargando ? "Consultando…" : perfil?.full_name ?? "Todavía no registrado"}</dd></div></dl>
     {cargando ? <p role="status">Consultando tu perfil…</p> : <>
-      {error && <p role="alert" className={styles.error}>{error}</p>}
+      {error && <p id="perfil-error" role="alert" className={styles.error}>{error}</p>}
       {aviso && <p role="status" className={styles.aviso}>{aviso}</p>}
       {!disponible ? <button type="button" disabled={bloqueado} className={styles.boton} onClick={() => setIntento(i => i + 1)}>Volver a consultar mi perfil</button> : <>
         {!perfil && <p className={styles.nota}>Completa tu nombre para crear tu perfil personal.</p>}
         <form onSubmit={guardar} className={styles.formulario} noValidate aria-busy={guardando}>
-          <fieldset disabled={guardando || bloqueado}><label>Nombre completo<input name="full_name" autoComplete="name" required minLength={2} maxLength={120} value={nombre} onChange={e => setNombre(e.target.value)} aria-describedby="nombre-ayuda" /></label><small id="nombre-ayuda">Entre 2 y 120 caracteres. Tu correo no se modifica desde este formulario.</small><button type="submit" className={styles.boton}>{guardando ? "Guardando…" : perfil ? "Guardar cambios" : "Crear mi perfil"}</button></fieldset>
+          <fieldset disabled={guardando || bloqueado}><label>Nombre completo<input ref={campoNombre} name="full_name" autoComplete="name" required minLength={2} maxLength={120} value={nombre} onChange={e => { setNombre(e.target.value); if (nombreInvalido) { setNombreInvalido(false); setError(""); } }} aria-invalid={nombreInvalido || undefined} aria-describedby={nombreInvalido ? "nombre-ayuda perfil-error" : "nombre-ayuda"} /></label><small id="nombre-ayuda">Entre 2 y 120 caracteres. Tu correo no se modifica desde este formulario.</small><button type="submit" className={styles.boton}>{guardando ? "Guardando…" : perfil ? "Guardar cambios" : "Crear mi perfil"}</button></fieldset>
         </form>
       </>}
     </>}

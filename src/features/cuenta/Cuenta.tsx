@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { mensajeError, validarAcceso, validarRegistro } from "./validaciones";
+import { mensajeError, validarFormularioCuenta, type CampoCuenta } from "./validaciones";
 import styles from "./cuenta.module.css";
 import PerfilPaciente from "./PerfilPaciente";
 import { useSesion } from "./useSesion";
@@ -18,6 +18,7 @@ export default function Cuenta() {
   const [confirmacion, setConfirmacion] = useState("");
   const [ocupado, setOcupado] = useState(false);
   const [error, setError] = useState("");
+  const [campoInvalido, setCampoInvalido] = useState<CampoCuenta | null>(null);
   const [aviso, setAviso] = useState("");
 
   useEffect(() => {
@@ -28,15 +29,29 @@ export default function Cuenta() {
   useEffect(() => {
     // No conservar formularios ni mensajes de otra sesión.
     setNombre(""); setEmail(""); setPassword(""); setConfirmacion("");
-    setError(""); setAviso("");
+    setError(""); setAviso(""); setCampoInvalido(null);
   }, [usuario?.id]);
+
+  function limpiarValidacion(campo: CampoCuenta) {
+    if (campoInvalido === campo) { setCampoInvalido(null); setError(""); }
+  }
+
+  function cambiarModo(crear: boolean) {
+    setRegistro(crear); setError(""); setAviso(""); setCampoInvalido(null);
+    setPassword(""); setConfirmacion("");
+  }
 
   async function enviar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (operacion.current || cargando || errorSesion) return;
-    setError(""); setAviso("");
-    const invalido = registro ? validarRegistro(nombre, email, password, confirmacion) : validarAcceso(email, password);
-    if (invalido) { setError(invalido); return; }
+    setError(""); setAviso(""); setCampoInvalido(null);
+    const invalido = validarFormularioCuenta({ registro, nombre, email, password, confirmacion });
+    if (invalido) {
+      setError(invalido.mensaje); setCampoInvalido(invalido.campo);
+      const campo = event.currentTarget.elements.namedItem(invalido.campo);
+      if (campo instanceof HTMLInputElement) campo.focus();
+      return;
+    }
     operacion.current = true; setOcupado(true);
     try {
       const client = getSupabaseBrowserClient();
@@ -77,23 +92,23 @@ export default function Cuenta() {
       <aside className={styles.presentacion}><span className={styles.simbolo} aria-hidden="true">✦</span><h2>Una sonrisa más informada empieza contigo.</h2><p>Tu cuenta te acompaña en cada visita. Mantén tus datos a mano y vuelve cuando lo necesites.</p><span className={styles.nota}>Prototipo académico · Usa datos de demostración.</span></aside>
       <div className={styles.contenido}>
         {cargando ? <p role="status">Comprobando tu sesión…</p> : <>
-          {error && <p className={styles.error} role="alert">{error}</p>}
+          {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}
           {aviso && <p className={styles.aviso} role="status">{aviso}</p>}
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
             <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />
             <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>
           </> : <>
             <div className={styles.opciones} aria-label="Opciones de acceso">
-              <button type="button" aria-pressed={!registro} disabled={ocupado} onClick={() => { setRegistro(false); setError(""); setAviso(""); setPassword(""); setConfirmacion(""); }}>Iniciar sesión</button>
-              <button type="button" aria-pressed={registro} disabled={ocupado} onClick={() => { setRegistro(true); setError(""); setAviso(""); setPassword(""); setConfirmacion(""); }}>Crear cuenta</button>
+              <button type="button" aria-pressed={!registro} disabled={ocupado} onClick={() => cambiarModo(false)}>Iniciar sesión</button>
+              <button type="button" aria-pressed={registro} disabled={ocupado} onClick={() => cambiarModo(true)}>Crear cuenta</button>
             </div>
             <h2>{registro ? "Crea tu cuenta" : "Qué bueno verte de nuevo"}</h2>
             <form className={styles.formulario} onSubmit={enviar} noValidate aria-busy={ocupado}>
               <fieldset disabled={ocupado}>
-                {registro && <label>Nombre completo<input name="nombre" autoComplete="name" required minLength={2} maxLength={120} value={nombre} onChange={e => setNombre(e.target.value)} /></label>}
-                <label>Correo electrónico<input name="email" type="email" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} /></label>
-                <label>Contraseña<input name="password" type="password" autoComplete={registro ? "new-password" : "current-password"} required value={password} onChange={e => setPassword(e.target.value)} aria-describedby={registro ? "password-ayuda" : undefined} /></label>
-                {registro && <><small id="password-ayuda">Al menos 8 caracteres. También se aplican las reglas de seguridad del servicio.</small><label>Confirmar contraseña<input name="confirmacion" type="password" autoComplete="new-password" required value={confirmacion} onChange={e => setConfirmacion(e.target.value)} /></label></>}
+                {registro && <label>Nombre completo<input name="nombre" autoComplete="name" required minLength={2} maxLength={120} value={nombre} aria-invalid={campoInvalido === "nombre" || undefined} aria-describedby={campoInvalido === "nombre" ? "cuenta-error" : undefined} onChange={e => { setNombre(e.target.value); limpiarValidacion("nombre"); }} /></label>}
+                <label>Correo electrónico<input name="email" type="email" autoComplete="username" required value={email} aria-invalid={campoInvalido === "email" || undefined} aria-describedby={campoInvalido === "email" ? "cuenta-error" : undefined} onChange={e => { setEmail(e.target.value); limpiarValidacion("email"); }} /></label>
+                <label>Contraseña<input name="password" type="password" autoComplete={registro ? "new-password" : "current-password"} required value={password} onChange={e => { setPassword(e.target.value); limpiarValidacion("password"); }} aria-invalid={campoInvalido === "password" || undefined} aria-describedby={[registro ? "password-ayuda" : "", campoInvalido === "password" ? "cuenta-error" : ""].filter(Boolean).join(" ") || undefined} /></label>
+                {registro && <><small id="password-ayuda">Al menos 8 caracteres. También se aplican las reglas de seguridad del servicio.</small><label>Confirmar contraseña<input name="confirmacion" type="password" autoComplete="new-password" required value={confirmacion} aria-invalid={campoInvalido === "confirmacion" || undefined} aria-describedby={campoInvalido === "confirmacion" ? "cuenta-error" : undefined} onChange={e => { setConfirmacion(e.target.value); limpiarValidacion("confirmacion"); }} /></label></>}
                 <button className={styles.boton} type="submit">{ocupado ? "Procesando…" : registro ? "Registrarme" : "Entrar a mi cuenta"}</button>
               </fieldset>
             </form>

@@ -70,6 +70,9 @@ Trabajar en nueva rama propia derivada de `main`, solo `src/app/(modulos)/cuenta
 
 ## Entregables numerados de Jhan
 
+La corrección de foco y errores accesibles del Avance 2 se documenta en [AVANCE2.md](./AVANCE2.md),
+con reproducción, alcance y límites de las pruebas. La suite pasa de 9 a 14 pruebas aisladas.
+
 - **Avance 1 — COMPLETADO en PR #5:** registro/login, perfil y sesión; 9 pruebas aisladas y pruebas RLS controladas.
 - **Avance 2 — DI-27 / DI-94–95:** detectar y corregir errores reproducibles de cuenta, validaciones, mensajes, navegación con teclado y sesión. Documentar antes/después, prueba y PR. **DI-26** solo se atribuye a cambios priorizados desde hallazgos reales.
 - **Avance 3 — DI-34 / DI-111–113:** documentar arquitectura, entidades y contratos de acceso. **DI-40:** evaluación de visión *exploratoria* con metodología, datos aptos y métricas si se implementa; no producir diagnósticos. No modificar módulos ajenos.
