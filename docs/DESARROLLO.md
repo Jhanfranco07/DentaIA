@@ -250,3 +250,79 @@ No modificar Jira ni fechas/sprints por preparar esta base.
 - [Angie — directorio](../src/features/directorio/README.md)
 - [Anelis — solicitudes](../src/features/solicitudes/README.md)
 - [Stephan — fotografías](../src/features/fotografias/README.md)
+
+
+---
+
+## Plan maestro de entregables numerados (26/10/2026)
+
+> **Esta sección sustituye la interpretación de “rondas” genéricas por una ruta de entregables.** Las rondas anteriores son orientativas; el plan de abajo define qué entregar y cuándo se considera revisable. No confundir fecha académica con fecha de commit ni cerrar una historia solo por tener un PR. Comprobar Jira y GitHub antes de marcar estados.
+
+### Avance 1 — Base funcional (primera entrega)
+
+**Meta:** contar con cuatro módulos iniciales navegables y comprobables de forma individual.
+
+- **Jhan:** registro/inicio/cierre de sesión y perfil persistente (PR #5, fusionado).
+- **Angie:** directorio de odontólogos, búsqueda/filtros/detalle (PR #2, fusionado).
+- **Anelis:** solicitudes de demostración, listado propio y cancelación (pendiente de confirmar mediante su PR).
+- **Stephan:** consentimiento y carga/consulta/eliminación privada de fotos ficticias (pendiente de confirmar mediante su PR).
+- **Entrega:** PR por persona, commits propios, demo, casos de éxito/error y CI/Security/Tests. La funcionalidad integrada se relaciona con **DI-23** y partes de **DI-76–85**, **DI-81**; no significa que todas estén terminadas.
+- **No empezar a llamar “Avance 2 terminado” si Avance 1 del integrante sigue abierto.** Se puede programar el siguiente avance en una rama nueva una vez su primera ronda esté integrada, sin esperar a otros compañeros.
+
+### Avance 2 — Completar y validar el MVP (Sprint 4 y Sprint 5)
+
+**Historias:** **DI-23** prototipo navegable; **DI-24** escenarios y métricas; **DI-25** pruebas de usabilidad reales; **DI-26** priorización y mejoras de interfaz; **DI-27** corrección de fallos. Evidencia por historia y subtarea, no solo por nombre del sprint.
+
+| Responsable propuesto para código | Actividades comprobables | Entrega y evidencia |
+| --- | --- | --- |
+| **Jhan** | Probar navegación, errores de cuenta, foco de teclado, sesión y despliegue; corregir fallos reales (**DI-27, DI-94, DI-95**). | Commit/PR con error reproducible, corrección, capturas si procede y validación CI/Tests/Vercel. |
+| **Angie** | Auditar pantallas del directorio en móvil/teclado; mejorar experiencia a partir de hallazgos, registrar comparación antes/después (**DI-26, DI-92, DI-93**). | Matriz de mejoras con prioridad y evidencia, capturas/prototipo y PR de interfaz. |
+| **Anelis** | Preparar escenarios y métricas (**DI-24, DI-86–88**), protocolo de prueba (**DI-25, DI-89**), conducir sesiones reales (**DI-90**) y recopilar retroalimentación (**DI-91**). Puede corregir sus validaciones de solicitudes, sin atribuirlo a sesiones inexistentes. | Protocolo, registro anonimizado de observaciones reales, resultados y PR si hay corrección funcional. |
+| **Stephan** | Auditar consentimiento, flujo de fotos, errores, recaptura y dispositivos; corregir defectos dentro de su módulo, como contribución técnica a **DI-27 / DI-94–95**. | Capturas de prueba con material ficticio, pasos para reproducir y PR de corrección. |
+
+**Condición de cierre:** evidencia auténtica de pruebas de usuarios (sin inventarlas); mejoras priorizadas; errores resueltos o documentados; criterios DI-23–27 revisados. La participación de Stephan aquí es una **propuesta técnica**, no una reasignación de historias en Jira.
+
+**Trabajo académico paralelo del Sprint 5, no asumirlo resuelto por programar:**
+- **DI-28 — Segmentar y seleccionar público objetivo:** estado Jira *Listo*; revisar evidencia existente.
+- **DI-29 — Dimensionar TAM, SAM, SOM:** estado Jira *Listo*; revisar fuentes/cálculos.
+- **DI-30 — Benchmarking y posicionamiento:** *En curso*, asignado Jhan.
+- **DI-31 — Nueve bloques del Business Model Canvas:** *En curso*, asignado Anelis.
+- **DI-32 — Viabilidad y flujo de caja:** *Por hacer*, asignado Jhan.
+- **DI-33 — Coherencia del modelo de negocio:** *Por hacer*, asignado Angie.
+Cada resultado requiere su propia evidencia académica (documento, tabla, fuentes, cálculos), no commits ficticios.
+
+### Avance 3 — Consolidación técnica y exploración de IA (Sprint 6)
+
+**Historias:** **DI-34** arquitectura/modelo; **DI-35** web de producción; **DI-36** backend/persistencia; **DI-37** fotos y consentimiento; **DI-38** datasets/anotación; **DI-39** calidad y privacidad fotográfica; **DI-40** evaluación exploratoria de visión por computadora.
+
+| Integrante | Alcance propuesto de entrega | Evidencia mínima |
+| --- | --- | --- |
+| **Jhan** | **DI-34/DI-111–113:** diagrama lógico, entidades y contratos/privacidad; evaluar cobertura de CI/Auth. **DI-40:** experimento de IA *exploratorio* con datos aptos y métricas, sin afirmaciones diagnósticas. | Diagramas reproducibles, justificación técnica y protocolo/resultados del experimento si llega a ejecutarse. |
+| **Angie** | **DI-35/DI-114–116:** modularización UI, accesibilidad/responsive e integración comprobada con servicios. **DI-38:** revisión documentada de datasets y protocolo de anotación, no inventar dataset etiquetado. | PR de interfaz, pruebas móvil/teclado, ficha de fuentes/licencias y protocolo. |
+| **Anelis** | **DI-36/DI-117–119:** migraciones/persistencia, validación de operaciones y pruebas de permisos sobre el backend existente. **DI-39:** checklist y evaluación documentada de privacidad/calidad de imágenes de demostración. | PR de su módulo si aplica, pruebas reales de permisos y documentación reproducible sin secretos. |
+| **Stephan** | Contribución técnica propuesta a **DI-37/DI-120–122**: completar subida segura, consentimiento/revocación, borrado y pruebas de cámara/recaptura en móvil. | PR de fotos y pruebas con imágenes sintéticas, evidencia de RLS/Storage sin exponer fotos privadas. |
+
+**Condición de cierre:** frontend, backend, modelo y almacenamiento con pruebas; artefactos de arquitectura verificables; investigación de IA registrada como exploratoria, con límites y sin diagnóstico clínico. La propiedad formal de **DI-37** aparece actualmente asignada a Jhan; la implementación por Stephan se debe coordinar y regularizar en Jira si procede.
+
+### Avance 4 — Integración y cierre de DentaIA (Sprint 7)
+
+**Historias:** **DI-41** directorio y filtros (incluido trabajo ya realizado), **DI-42** reporte preventivo explicable, **DI-43** pruebas de usabilidad/seguridad/revisión odontológica, **DI-44** documentación y pitch, **DI-45** entrega técnica/retrospectiva.
+
+| Integrante | Aporte planificado | Evidencia mínima |
+| --- | --- | --- |
+| **Jhan** | Integración y estabilización de flujos, evidencia GitHub Actions/Vercel; **DI-45** entrega técnica, retrospectiva y limitaciones. | Checklist final, demo estable, links PR/Actions y retrospectiva. |
+| **Angie** | Revisar **DI-41** con lo ya construido, cerrar faltantes de perfiles/filtros/tarifas ficticias; **DI-44** documentos, pantallas, guion y pitch. | Pruebas directorio, capturas, documentación final y presentación. |
+| **Anelis** | **DI-42** reporte **orientativo, explicable, no diagnóstico**, y conexión con directorio; **DI-43** evidencia de pruebas/seguridad y revisión por profesional **solo si realmente ocurrió**. | Función demostrativa real, evidencia de pruebas y límites explícitos; no inventar validación odontológica. |
+| **Stephan** | Apoyar integración final de fotos privadas con el flujo preventivo, mensajes de consentimiento y pruebas de regresión dentro de su módulo. | PR de integración puntual, pruebas de protección de imágenes y demostración con archivos ficticios. |
+
+**Condición de cierre:** demostración funcional sin promesas clínicas, documentación, pruebas, resultados y entrega académica verificables. Si alguna validación profesional no se realiza, dejar explícito el límite.
+
+### Cómo entregar cada avance en GitHub
+
+1. Actualizar `main` y crear rama del **avance correspondiente**: `feature/<nombre>-avance2`, `feature/<nombre>-avance3`, `feature/<nombre>-avance4`. No reutilizar ramas antiguas ni duplicar commits fusionados.
+2. Seleccionar tareas de su fila **que todavía falten**. Los entregables académicos sin código pueden registrarse en documentos, no forzar commits.
+3. Un PR por conjunto pequeño y coherente, con: **Avance N**, códigos Jira explicados, descripción, criterios de aceptación, capturas/resultados, pruebas y enlace al despliegue si corresponde.
+4. No fusionar sin verificar CI, Security y Tests. Para `*.test.mjs`, solo pruebas sin red/secretos; Supabase real requiere pruebas controladas aparte.
+5. Registrar evidencia y estado en Jira **solo después de revisar y verificar**; Sprint 5 y demás sprints no se declaran finalizados por crear esta planificación.
+
+**Nota:** la organización por Avance 1–4 es una forma de entrega del equipo; no renombra ni cambia los siete sprints existentes del proyecto en Jira.
