@@ -199,3 +199,54 @@ Commits propios y en español; incluir código funcional y evidencia del caso co
 Un PR por integrante. Los cuatro pueden demostrarse individualmente antes de integrar las demás ramas.
 Orden de integración flexible porque las carpetas son distintas; después de cada merge comprobar las cuatro rutas.
 No modificar Jira ni fechas/sprints por preparar esta base.
+
+
+---
+
+## Guía de siguientes rondas (propuesta, 26/10/2026)
+
+**Leer antes de programar:** esta sección traduce las historias de Jira a tareas comprensibles. Es una **propuesta de próximos avances**, no una orden de completar todo en una noche, ni significa que esas historias estén cerradas o reasignadas en Jira.
+
+**Estado de referencia:** la primera ronda de Angie (directorio, PR #2) y Jhan (cuenta, PR #5) está integrada en `main`. Anelis y Stephan todavía deben confirmar mediante sus propios PR la implementación de sus módulos. Antes de comenzar una segunda ronda, comprobar en GitHub qué se fusionó realmente, para no repetir trabajo.
+
+### Qué significan los códigos de Jira
+
+- **DI-25 — Ejecutar pruebas de usabilidad del prototipo (Sprint 5, 27/10–09/11):** planificar y realizar sesiones con participantes reales, observar dificultades y completar la cuadrícula de retroalimentación. **DI-89** prepara protocolo y escenarios; **DI-90** son sesiones reales; **DI-91** registra gustos, críticas, preguntas e ideas. No inventar participantes ni resultados.
+- **DI-26 — Priorizar e implementar mejoras de interfaz (Sprint 5):** organizar hallazgos reales, priorizar mejoras y actualizar pantallas, demostrando *antes y después*. **DI-92** es una matriz por gravedad, frecuencia, esfuerzo y responsable; **DI-93** contempla Figma, capturas y justificación. **Una mejora de código sin feedback aún es mejora técnica propuesta; no afirmar que provino de pacientes.**
+- **DI-27 — Corregir fallos funcionales del prototipo (Sprint 5):** corregir errores comprobados de navegación, formularios, fotografía local y adaptabilidad, validar la aplicación y registrar las pruebas. **DI-94** revisa teclado, móvil, validaciones, reporte ficticio y directorio; **DI-95** pide commits en español, build y evidencia del error resuelto.
+- **DI-35 / DI-115 (Sprint 6):** experiencia web y comprobación de accesibilidad/adaptación móvil (PC/Android/iOS, contraste, etiquetas, teclado).
+- **DI-36 / DI-119 (Sprint 6):** backend y persistencia segura; ejecutar pruebas reales de operaciones y permisos.
+- **DI-37 / DI-120–122 (Sprint 6):** subir fotos de prueba de forma privada, consentimiento y eliminación, y probar captura móvil.
+- **DI-41 / DI-131–133 (Sprint 7):** directorio y filtros; el directorio de Angie ya existe, así que verificar la cobertura existente antes de añadir trabajo.
+
+### Orden de trabajo para todos
+
+1. **Ronda 1 — módulo asignado:** completar y probar el módulo indicado arriba, con commits propios en su rama y PR independiente. El directorio de Angie y cuenta de Jhan ya están integrados; no rehacerlos.
+2. **Ronda 2 — mejora pequeña e independiente:** seleccionar **un** problema real de su módulo, documentar cómo reproducirlo y corregirlo; o elegir una mejora de accesibilidad comprobable. Vincularla a DI-26 o DI-27 *según corresponda*, sin asumir que la historia global quedó completa.
+3. **Ronda 3 — pruebas automatizadas:** añadir pruebas aisladas `*.test.mjs` en `src/features/<modulo>/` si pueden correr sin red ni claves. Se ejecutan mediante el workflow Tests ya fusionado. Las pruebas con Supabase real y credenciales se documentan aparte. No modificar los pipelines comunes sin coordinar.
+
+### Propuestas por integrante (no reasignaciones de Jira)
+
+| Integrante | Ronda 1 | Ronda 2: avance de código sugerido y autónomo | Ronda 3: pruebas sugeridas |
+| --- | --- | --- | --- |
+| **Jhan** | **Hecha**: registro/login, perfil y sesión en `/cuenta` (PR #5) | Revisar accesibilidad del formulario, navegación por teclado, indicadores de carga y mensajes seguros de error; corregir **un** problema reproducible (DI-27 / DI-94; DI-26 si surge de feedback) | Validaciones y lógica del perfil, estados de error y regresión; pruebas sin credenciales en `src/features/cuenta/` |
+| **Angie** | **Hecha**: directorio con Supabase, búsqueda, distrito y detalle (PR #2) | Probar y mejorar uso móvil, foco de teclado, etiquetas y estado sin resultados **sin rehacer filtros existentes** (DI-26 / DI-115; DI-27 si corrige un error) | Normalización de búsqueda/filtros, formato y estados vacíos/errores con datos simulados |
+| **Anelis** | **Por comprobar**: alta/listado/cancelación de solicitudes desde `/solicitudes` | Una vez funcional, mejorar validación de fecha y horas, errores y estados vacíos dentro de su módulo (DI-27 / DI-94) | Validación de campos, estados `requested/cancelled` con cliente simulado; permisos reales verificados por separado (DI-119 cuando corresponda) |
+| **Stephan** | **Por comprobar**: consentimiento, foto privada, consulta y eliminación desde `/fotografias` | Una vez funcional, mejorar error de archivo inválido, recaptura/uso móvil y mensajes de eliminación (DI-27 / DI-94; DI-122 si se prueba móvil) | Tipo, tamaño, consentimiento, revocación y rutas de error simuladas; subir/eliminar realmente solo con archivos ficticios y credenciales de prueba |
+
+### Trabajo paralelo sin bloqueos
+
+- Cada ronda adicional **empieza desde `main` actualizada**, no desde una rama antigua de otro miembro. Si ya hay cambios locales, guardarlos e integrar con cuidado antes de avanzar.
+- Cambiar solamente los directorios de su módulo; evitar `package.json`, `src/app/page.tsx`, estilos/layout globales, cliente Supabase y pipelines compartidos.
+- No esperar el trabajo de otro módulo, no importar sus componentes ni crear contratos nuevos sin discutirlo. Usar registros ficticios y operaciones ya existentes.
+- Hacer **un PR por mejora coherente** y commits representativos (funcionalidad, validación, pruebas); conservar autoría personal. Los pipelines CI, Security y Tests ya existen y se reutilizan.
+- Adjuntar en el PR el código Jira apropiado, descripción del antes/después, pasos de prueba, capturas si aplican y resultados de Actions.
+- El Sprint 5 **no está terminado**: además de código, DI-25 requiere sesiones reales; DI-26 exige priorización y evidencia; DI-27 requiere correcciones verificadas. DI-28–33 (mercado y modelo de negocio) siguen siendo trabajo académico distinto.
+- No cambiar estados ni fechas de Jira solo por editar esta documentación. La asignación formal y el cierre se hacen cuando se verifiquen evidencias.
+
+### Guías individuales
+
+- [Jhan — cuenta](../src/features/cuenta/README.md)
+- [Angie — directorio](../src/features/directorio/README.md)
+- [Anelis — solicitudes](../src/features/solicitudes/README.md)
+- [Stephan — fotografías](../src/features/fotografias/README.md)
