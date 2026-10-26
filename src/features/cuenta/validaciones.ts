@@ -17,6 +17,9 @@ export function validarRegistro(nombre: string, email: string, password: string,
 
 // No se muestran mensajes crudos del proveedor ni se registran credenciales.
 export function mensajeError(error: unknown): string {
+  if (error instanceof Error && error.message.includes("Falta configurar .env.local")) {
+    return "El acceso no está disponible porque falta la configuración de conexión. Comunícalo al responsable de DentaIA.";
+  }
   const code = typeof error === "object" && error !== null && "code" in error ? error.code : undefined;
   switch (code) {
     case "invalid_credentials": return "El correo o la contraseña no son correctos.";

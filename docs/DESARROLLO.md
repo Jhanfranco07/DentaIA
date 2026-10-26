@@ -93,7 +93,7 @@ conservar las credenciales originales y revisar los resultados antes de repetirl
 
 | Integrante | Rama | Ruta | Archivos que puede editar |
 | --- | --- | --- | --- |
-| Jhan | `feature/jhan-cuenta` | `/cuenta` | `src/app/(modulos)/cuenta/**`, `src/features/cuenta/**` |
+| Jhan | `feature/jhan-auth` | `/cuenta` | `src/app/(modulos)/cuenta/**`, `src/features/cuenta/**` |
 | Angie | `feature/angie-directorio` | `/directorio` | `src/app/(modulos)/directorio/**`, `src/features/directorio/**` |
 | Anelis | `feature/anelis-solicitudes` | `/solicitudes` | `src/app/(modulos)/solicitudes/**`, `src/features/solicitudes/**` |
 | Stephan | `feature/stephan-fotografias` | `/fotografias` | `src/app/(modulos)/fotografias/**`, `src/features/fotografias/**` |

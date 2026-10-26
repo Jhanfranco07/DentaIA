@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import type { User } from "@supabase/supabase-js";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { mensajeError, validarAcceso, validarRegistro } from "./validaciones";
 import styles from "./cuenta.module.css";
 import PerfilPaciente from "./PerfilPaciente";
+import { useSesion } from "./useSesion";
 
 export default function Cuenta() {
-  const [usuario, setUsuario] = useState<User | null>(null);
-  const [cargando, setCargando] = useState(true);
+  const { usuario, cargando, errorSesion, verificar } = useSesion();
+  const operacion = useRef(false);
+  const activo = useRef(true);
   const [registro, setRegistro] = useState(false);
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -20,44 +21,54 @@ export default function Cuenta() {
   const [aviso, setAviso] = useState("");
 
   useEffect(() => {
-    let activo = true;
-    async function consultar() {
-      try {
-        const { data, error } = await getSupabaseBrowserClient().auth.getUser();
-        if (!activo) return;
-        if (error && error.name !== "AuthSessionMissingError") throw error;
-        setUsuario(data.user);
-      } catch (error) { if (activo) setError(mensajeError(error)); }
-      finally { if (activo) setCargando(false); }
-    }
-    void consultar();
-    return () => { activo = false; };
+    activo.current = true;
+    return () => { activo.current = false; };
   }, []);
+
+  useEffect(() => {
+    // No conservar formularios ni mensajes de otra sesión.
+    setNombre(""); setEmail(""); setPassword(""); setConfirmacion("");
+    setError(""); setAviso("");
+  }, [usuario?.id]);
 
   async function enviar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (ocupado) return;
+    if (operacion.current || cargando || errorSesion) return;
     setError(""); setAviso("");
     const invalido = registro ? validarRegistro(nombre, email, password, confirmacion) : validarAcceso(email, password);
     if (invalido) { setError(invalido); return; }
-    setOcupado(true);
+    operacion.current = true; setOcupado(true);
     try {
       const client = getSupabaseBrowserClient();
       const { data, error } = registro
         ? await client.auth.signUp({ email: email.trim(), password, options: { data: { full_name: nombre.trim() } } })
         : await client.auth.signInWithPassword({ email: email.trim(), password });
       if (error) throw error;
+      if (!activo.current) return;
       if (data.session) {
-        const resultado = await client.auth.getUser();
-        if (resultado.error) throw resultado.error;
-        setUsuario(resultado.data.user);
-        setAviso("Sesión iniciada correctamente.");
+        await verificar();
       } else {
         setAviso("Si el registro puede completarse, recibirás un correo de confirmación. Revisa tu bandeja de entrada y spam, confirma el correo y vuelve para iniciar sesión.");
         setRegistro(false);
       }
-    } catch (error) { setError(mensajeError(error)); }
-    finally { setPassword(""); setConfirmacion(""); setOcupado(false); }
+    } catch (error) { if (activo.current) setError(mensajeError(error)); }
+    finally {
+      operacion.current = false;
+      if (activo.current) { setPassword(""); setConfirmacion(""); setOcupado(false); }
+    }
+  }
+
+  async function cerrarSesion() {
+    if (operacion.current) return;
+    operacion.current = true; setOcupado(true); setError(""); setAviso("");
+    try {
+      // Cierra este navegador sin interrumpir otras sesiones de la cuenta compartida.
+      const { error } = await getSupabaseBrowserClient().auth.signOut({ scope: "local" });
+      if (error) throw error;
+      await verificar();
+      if (activo.current) { setRegistro(false); setAviso("Cerraste tu sesión en este navegador."); }
+    } catch (error) { if (activo.current) setError(mensajeError(error)); }
+    finally { operacion.current = false; if (activo.current) setOcupado(false); }
   }
 
   return <section className={styles.pagina} aria-labelledby="cuenta-titulo">
@@ -68,7 +79,10 @@ export default function Cuenta() {
         {cargando ? <p role="status">Comprobando tu sesión…</p> : <>
           {error && <p className={styles.error} role="alert">{error}</p>}
           {aviso && <p className={styles.aviso} role="status">{aviso}</p>}
-          {usuario ? <PerfilPaciente key={usuario.id} usuario={usuario} /> : <>
+          {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
+            <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />
+            <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>
+          </> : <>
             <div className={styles.opciones} aria-label="Opciones de acceso">
               <button type="button" aria-pressed={!registro} disabled={ocupado} onClick={() => { setRegistro(false); setError(""); setAviso(""); setPassword(""); setConfirmacion(""); }}>Iniciar sesión</button>
               <button type="button" aria-pressed={registro} disabled={ocupado} onClick={() => { setRegistro(true); setError(""); setAviso(""); setPassword(""); setConfirmacion(""); }}>Crear cuenta</button>

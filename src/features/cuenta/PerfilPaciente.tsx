@@ -7,7 +7,7 @@ import { guardarPerfil, leerPerfil, type Perfil } from "./perfiles";
 import { mensajeError, validarNombre } from "./validaciones";
 import styles from "./cuenta.module.css";
 
-export default function PerfilPaciente({ usuario }: { usuario: User }) {
+export default function PerfilPaciente({ usuario, bloqueado }: { usuario: User; bloqueado: boolean }) {
   const [perfil, setPerfil] = useState<Perfil | null>(null);
   const [nombre, setNombre] = useState("");
   const [cargando, setCargando] = useState(true);
@@ -43,7 +43,7 @@ export default function PerfilPaciente({ usuario }: { usuario: User }) {
 
   async function guardar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (operacion.current || !disponible) return;
+    if (operacion.current || !disponible || bloqueado) return;
     setError(""); setAviso("");
     const invalido = validarNombre(nombre);
     if (invalido) { setError(invalido); return; }
@@ -65,10 +65,10 @@ export default function PerfilPaciente({ usuario }: { usuario: User }) {
     {cargando ? <p role="status">Consultando tu perfil…</p> : <>
       {error && <p role="alert" className={styles.error}>{error}</p>}
       {aviso && <p role="status" className={styles.aviso}>{aviso}</p>}
-      {!disponible ? <button type="button" className={styles.boton} onClick={() => setIntento(i => i + 1)}>Volver a consultar mi perfil</button> : <>
+      {!disponible ? <button type="button" disabled={bloqueado} className={styles.boton} onClick={() => setIntento(i => i + 1)}>Volver a consultar mi perfil</button> : <>
         {!perfil && <p className={styles.nota}>Completa tu nombre para crear tu perfil personal.</p>}
         <form onSubmit={guardar} className={styles.formulario} noValidate aria-busy={guardando}>
-          <fieldset disabled={guardando}><label>Nombre completo<input name="full_name" autoComplete="name" required minLength={2} maxLength={120} value={nombre} onChange={e => setNombre(e.target.value)} aria-describedby="nombre-ayuda" /></label><small id="nombre-ayuda">Entre 2 y 120 caracteres. Tu correo no se modifica desde este formulario.</small><button type="submit" className={styles.boton}>{guardando ? "Guardando…" : perfil ? "Guardar cambios" : "Crear mi perfil"}</button></fieldset>
+          <fieldset disabled={guardando || bloqueado}><label>Nombre completo<input name="full_name" autoComplete="name" required minLength={2} maxLength={120} value={nombre} onChange={e => setNombre(e.target.value)} aria-describedby="nombre-ayuda" /></label><small id="nombre-ayuda">Entre 2 y 120 caracteres. Tu correo no se modifica desde este formulario.</small><button type="submit" className={styles.boton}>{guardando ? "Guardando…" : perfil ? "Guardar cambios" : "Crear mi perfil"}</button></fieldset>
         </form>
       </>}
     </>}

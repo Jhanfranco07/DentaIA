@@ -20,4 +20,6 @@ test('traduce errores sin exponer el mensaje del proveedor', () => {
   assert.match(mensajeError({code:'weak_password'}), /reglas de seguridad/);
   assert.match(mensajeError(new Error('secreto-interno')), /conexión/);
   assert.doesNotMatch(mensajeError({message:'secreto-interno'}), /secreto/);
+  assert.match(mensajeError(new Error('Falta configurar .env.local.')), /configuración de conexión/);
+  assert.match(mensajeError({code:'over_request_rate_limit'}), /Espera/);
 });

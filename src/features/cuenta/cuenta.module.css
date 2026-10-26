@@ -28,4 +28,6 @@
 .datos { display: grid; gap: 1rem; margin-bottom: 1.75rem; }
 .datos dt { font-size: .75rem; color: #4b6b6c; margin-bottom: .3rem; }
 .datos dd { margin: 0; font-weight: 600; line-height: 1.5; }
+.secundario { width: 100%; margin-top: 1.5rem; padding: .85rem 1rem; border: 1px solid #a6c6be; border-radius: 10px; font: inherit; color: #08695f; background: white; cursor: pointer; }
+.secundario:hover { background: #edf6f2; }
 @media (max-width: 700px) { .panel { grid-template-columns: 1fr; } .presentacion, .contenido { padding: 1.5rem; } .presentacion h2 { font-size: 1.35rem; margin-top: 1rem; } .nota { padding-top: .6rem; } }

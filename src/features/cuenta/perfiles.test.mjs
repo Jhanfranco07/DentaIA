@@ -37,3 +37,21 @@ test('propaga errores de RLS o red y rechaza nombres inválidos',async()=>{
   const invalido=cliente(); await assert.rejects(()=>guardarPerfil(invalido,'propio',' ',false));
   assert.deepEqual(invalido.llamadas,[]);
 });
+
+test('una creación simultánea recupera el perfil existente sin sobrescribirlo',async()=>{
+  const c=cliente();
+  const base=c.from.bind(c);
+  c.from=(tabla)=>{
+    const query=base(tabla);
+    query.single=async()=>({data:null,error:{code:'23505'}});
+    return query;
+  };
+  const perfil=await guardarPerfil(c,'propio','Nombre nuevo',true);
+  assert.equal(perfil.full_name,'Paciente Demo');
+  assert.equal(c.llamadas.filter(x=>x[0]==='insert').length,1);
+  assert.equal(c.llamadas.filter(x=>x[0]==='update').length,0);
+});
+
+test('no informa éxito si una actualización no devuelve ninguna fila',async()=>{
+  await assert.rejects(()=>guardarPerfil(cliente({perfil:null}),'propio','Paciente Demo',false));
+});
