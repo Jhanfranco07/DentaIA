@@ -55,3 +55,26 @@ el segundo guarda el perfil en Supabase y el tercero controla validaciones y cie
 Reutilizo el cliente común, verifico la identidad con getUser y RLS protege cada perfil.
 Muestro las validaciones, el flujo con mi cuenta ficticia y las verificaciones de GitHub Actions.
 Distingo las pruebas locales simuladas de los flujos que he probado realmente con Supabase».
+
+
+## Siguiente ronda propuesta (no es trabajo ya finalizado)
+
+La primera ronda de cuenta está integrada en PR #5. No rehacer registro, login ni perfil.
+
+- **DI-27, «Corregir fallos funcionales del prototipo» (Sprint 5):** detectar y corregir un error real de navegación/formulario o manejo de errores; dejar pasos para reproducir y verificar la corrección. Relacionado con **DI-94**, «Revisar navegación y manejo de errores», y **DI-95**, «Corregir errores y actualizar despliegue».
+- **DI-26, «Priorizar e implementar mejoras de interfaz» (Sprint 5):** solo si hay hallazgos verificables, priorizar por gravedad/frecuencia/esfuerzo y mostrar antes/después; no inventar feedback. Puedes centrarse en accesibilidad, foco con teclado y mensajes de confirmación del módulo `/cuenta`.
+- **Pruebas:** ampliar las nueve pruebas existentes cuando aparezca un caso nuevo que pueda comprobarse sin red. Mantener las pruebas con RLS/Supabase real como evidencia separada.
+
+Trabajar en nueva rama propia derivada de `main`, solo `src/app/(modulos)/cuenta/**` y `src/features/cuenta/**`. Crear PR con evidencias; CI, Security y Tests validan automáticamente. Ver [guía de próximas rondas](../../../docs/DESARROLLO.md).
+
+
+## Entregables numerados de Jhan
+
+- **Avance 1 — COMPLETADO en PR #5:** registro/login, perfil y sesión; 9 pruebas aisladas y pruebas RLS controladas.
+- **Avance 2 — DI-27 / DI-94–95:** detectar y corregir errores reproducibles de cuenta, validaciones, mensajes, navegación con teclado y sesión. Documentar antes/después, prueba y PR. **DI-26** solo se atribuye a cambios priorizados desde hallazgos reales.
+- **Avance 3 — DI-34 / DI-111–113:** documentar arquitectura, entidades y contratos de acceso. **DI-40:** evaluación de visión *exploratoria* con metodología, datos aptos y métricas si se implementa; no producir diagnósticos. No modificar módulos ajenos.
+- **Avance 4 — DI-45:** checklist de integración, revisión de GitHub Actions/Vercel, documentación técnica de release, demostración final y retrospectiva. Mantener correo de confirmación real como prueba pendiente hasta verificarlo.
+
+**En paralelo, tareas académicas asignadas en Jira del Sprint 5:** DI-30 benchmarking/posicionamiento (en curso) y DI-32 viabilidad/flujo de caja (por hacer). No se consideran completadas por cambios del módulo de cuenta.
+
+Cada avance requiere **su propio PR o entregable verificable**, partiendo de `main`, con commits en español; no rehacer Avance 1. Ver [plan maestro](../../../docs/DESARROLLO.md).
