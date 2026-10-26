@@ -55,3 +55,14 @@ el segundo guarda el perfil en Supabase y el tercero controla validaciones y cie
 Reutilizo el cliente común, verifico la identidad con getUser y RLS protege cada perfil.
 Muestro las validaciones, el flujo con mi cuenta ficticia y las verificaciones de GitHub Actions.
 Distingo las pruebas locales simuladas de los flujos que he probado realmente con Supabase».
+
+
+## Siguiente ronda propuesta (no es trabajo ya finalizado)
+
+La primera ronda de cuenta está integrada en PR #5. No rehacer registro, login ni perfil.
+
+- **DI-27, «Corregir fallos funcionales del prototipo» (Sprint 5):** detectar y corregir un error real de navegación/formulario o manejo de errores; dejar pasos para reproducir y verificar la corrección. Relacionado con **DI-94**, «Revisar navegación y manejo de errores», y **DI-95**, «Corregir errores y actualizar despliegue».
+- **DI-26, «Priorizar e implementar mejoras de interfaz» (Sprint 5):** solo si hay hallazgos verificables, priorizar por gravedad/frecuencia/esfuerzo y mostrar antes/después; no inventar feedback. Puedes centrarse en accesibilidad, foco con teclado y mensajes de confirmación del módulo `/cuenta`.
+- **Pruebas:** ampliar las nueve pruebas existentes cuando aparezca un caso nuevo que pueda comprobarse sin red. Mantener las pruebas con RLS/Supabase real como evidencia separada.
+
+Trabajar en nueva rama propia derivada de `main`, solo `src/app/(modulos)/cuenta/**` y `src/features/cuenta/**`. Crear PR con evidencias; CI, Security y Tests validan automáticamente. Ver [guía de próximas rondas](../../../docs/DESARROLLO.md).
