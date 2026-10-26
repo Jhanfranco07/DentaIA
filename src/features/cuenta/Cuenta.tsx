@@ -5,6 +5,7 @@ import type { User } from "@supabase/supabase-js";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { mensajeError, validarAcceso, validarRegistro } from "./validaciones";
 import styles from "./cuenta.module.css";
+import PerfilPaciente from "./PerfilPaciente";
 
 export default function Cuenta() {
   const [usuario, setUsuario] = useState<User | null>(null);
@@ -67,7 +68,7 @@ export default function Cuenta() {
         {cargando ? <p role="status">Comprobando tu sesión…</p> : <>
           {error && <p className={styles.error} role="alert">{error}</p>}
           {aviso && <p className={styles.aviso} role="status">{aviso}</p>}
-          {usuario ? <><span className={styles.estado}>Sesión activa</span><h2>Bienvenido a tu cuenta</h2><p>{usuario.email}</p></> : <>
+          {usuario ? <PerfilPaciente key={usuario.id} usuario={usuario} /> : <>
             <div className={styles.opciones} aria-label="Opciones de acceso">
               <button type="button" aria-pressed={!registro} disabled={ocupado} onClick={() => { setRegistro(false); setError(""); setAviso(""); setPassword(""); setConfirmacion(""); }}>Iniciar sesión</button>
               <button type="button" aria-pressed={registro} disabled={ocupado} onClick={() => { setRegistro(true); setError(""); setAviso(""); setPassword(""); setConfirmacion(""); }}>Crear cuenta</button>

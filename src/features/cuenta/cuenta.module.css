@@ -25,4 +25,7 @@
 .error { color: #7a1f1f; background: #fff3f3; border: 1px solid #e0b4b4; }
 .aviso { color: #086052; background: #edf8f1; border: 1px solid #c0dfd0; }
 .estado { display: inline-block; background: #e8f3ef; color: #08695f; padding: .3rem .7rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+.datos { display: grid; gap: 1rem; margin-bottom: 1.75rem; }
+.datos dt { font-size: .75rem; color: #4b6b6c; margin-bottom: .3rem; }
+.datos dd { margin: 0; font-weight: 600; line-height: 1.5; }
 @media (max-width: 700px) { .panel { grid-template-columns: 1fr; } .presentacion, .contenido { padding: 1.5rem; } .presentacion h2 { font-size: 1.35rem; margin-top: 1rem; } .nota { padding-top: .6rem; } }
