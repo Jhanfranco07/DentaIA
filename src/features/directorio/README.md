@@ -17,3 +17,15 @@ Añadir pruebas de utilidades y filtrado con datos ficticios sin red en `src/fea
 Comenzar desde `main` actualizada, crear una rama nueva como `feature/angie-directorio-mejoras`. Editar solo `src/app/(modulos)/directorio/**` y `src/features/directorio/**`. Commits propios, un PR sin fusionarlo automáticamente. No cambiar estados Jira sin evidencia.
 
 Guía general: [docs/DESARROLLO.md](../../../docs/DESARROLLO.md).
+
+
+## Entregables numerados de Angie
+
+- **Avance 1 — COMPLETADO PR #2:** directorio, búsqueda, filtros y detalle desde Supabase. No duplicar.
+- **Avance 2 — DI-26 / DI-92–93:** revisar feedback y preparar matriz de mejoras, aplicar correcciones de interfaz con capturas antes/después. **DI-27 / DI-94–95:** reparar errores comprobados de filtros/responsive/navegación.
+- **Avance 3 — DI-35 / DI-114–116:** mejorar modularidad, accesibilidad, teclado y móvil e integración con servicios existentes. **DI-38:** estudiar datasets y documentar un protocolo de anotación; no inventar dataset ni anotaciones.
+- **Avance 4 — DI-41 / DI-131–133:** verificar qué parte del directorio ya cubre estos criterios; completar solo faltantes, incluyendo claridad de tarifas ficticias. **DI-44:** apoyar documentación, pitch y comparativas finales.
+
+**En paralelo, tareas académicas de Jira:** DI-29 TAM/SAM/SOM aparece *Listo* (verificar respaldo); DI-33 validación del modelo de negocio aparece *Por hacer*. No afirmar que la segunda se completa por hacer frontend.
+
+Abrir rama nueva desde `main` para cada avance, con PR propio y pruebas. Ver [plan maestro](../../../docs/DESARROLLO.md).
