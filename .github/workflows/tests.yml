@@ -1,0 +1,32 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, 'feature/**']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Pruebas automatizadas con Node.js
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Preparar Node.js 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      # Incluye las pruebas actuales y futuras de los módulos del equipo.
+      # Reservar *.test.mjs para pruebas aisladas sin red ni credenciales.
+      # Las integraciones reales deben usar otra convención y ejecutarse aparte.
+      - name: Ejecutar pruebas aisladas
+        run: node --experimental-strip-types --test --test-reporter=tap "src/features/**/*.test.mjs"
