@@ -12,6 +12,7 @@ import styles from "./page.module.css";
 const BUCKET = "dental-photos";
 const POLICY_VERSION = "1.0";
 
+const CONSENT_PURPOSE = "academic_photo_storage";
 const CONSENT_TEXT = `Acepto de forma expresa que las fotografías sintéticas o de prueba que seleccione sean almacenadas de forma privada en Supabase dentro del prototipo académico DentAI. La finalidad es demostrar el almacenamiento, consulta y eliminación segura de fotografías dentro del proyecto. La fotografía se almacenará en un bucket privado y podrá ser consultada o eliminada por el propietario. No se realizará análisis automatizado, diagnóstico clínico, entrenamiento de modelos de inteligencia artificial ni uso de las fotografías para otros fines. Puedo revocar este consentimiento y eliminar posteriormente las fotografías almacenadas.`;
 
 const MIN_FILE_SIZE = 1;
@@ -40,6 +41,25 @@ type Preview = {
 
 function formatBytes(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+}
+
+function getErrorMessage(error: unknown, fallback: string) {
+  const candidate = error as { code?: string; message?: string } | null;
+
+  if (candidate?.code === "23514" && candidate.message?.includes("patient_consents_purpose_check")) {
+    return "No se pudo registrar el consentimiento porque la finalidad no es válida. La operación fue detenida sin modificar las restricciones de la base de datos.";
+  }
+
+  if (
+    candidate?.code === "401" ||
+    candidate?.code === "403" ||
+    candidate?.message?.toLowerCase().includes("jwt") ||
+    candidate?.message?.toLowerCase().includes("session")
+  ) {
+    return "Tu sesión ya no es válida. Inicia sesión nuevamente desde /cuenta y vuelve a intentarlo.";
+  }
+
+  return candidate?.message || fallback;
 }
 
 async function validateImage(file: File) {
@@ -158,16 +178,42 @@ export default function PhotosPage() {
   }
 
   useEffect(() => {
+    const client = getSupabaseBrowserClient();
+
     void loadData();
 
-    return () => {
-      previews.forEach((preview) => URL.revokeObjectURL(preview.url));
+    const {
+      data: { subscription },
+    } = client.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") {
+        setUserId(null);
+        setConsentId(null);
+        setPhotos([]);
+        setAccepted(false);
+        setPreviews((current) => {
+          current.forEach((preview) => URL.revokeObjectURL(preview.url));
+          return [];
+        });
+        setMessage("");
+        setError("Tu sesión se cerró. Inicia sesión nuevamente desde /cuenta para continuar.");
+        return;
+      }
 
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
+        window.setTimeout(() => {
+          void loadData();
+        }, 0);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+      previews.forEach((preview) => URL.revokeObjectURL(preview.url));
       if (localPreview) {
         URL.revokeObjectURL(localPreview);
       }
     };
-    // La carga inicial debe ejecutarse una sola vez.
+    // La suscripción controla cambios de sesión; la carga inicial se ejecuta una sola vez.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -240,8 +286,7 @@ export default function PhotosPage() {
         .insert({
           policy_version: POLICY_VERSION,
           consent_text: CONSENT_TEXT,
-          purpose:
-            "Almacenamiento privado de fotografías sintéticas/de prueba para el prototipo académico DentAI.",
+          purpose: CONSENT_PURPOSE,
         })
         .select("id")
         .single();
@@ -453,25 +498,65 @@ export default function PhotosPage() {
     try {
       const client = getSupabaseBrowserClient();
 
+      if (!userId) {
+        throw new Error("Tu sesión ya no es válida. Inicia sesión nuevamente desde /cuenta.");
+      }
+
+      const { data: metadata, error: metadataReadError } = await client
+        .from("dental_photos")
+        .select(
+          "id, consent_id, object_path, original_filename, mime_type, size_bytes, created_at"
+        )
+        .eq("id", photo.id)
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (metadataReadError) {
+        throw metadataReadError;
+      }
+
+      if (!metadata) {
+        throw new Error("La fotografía no existe o ya no tienes permiso para eliminarla.");
+      }
+
+      // Primero eliminamos los metadatos. Si Storage falla, intentamos restaurarlos
+      // para no dejar un archivo privado sin registro en dental_photos.
+      const { error: metadataError } = await client
+        .from("dental_photos")
+        .delete()
+        .eq("id", photo.id)
+        .eq("user_id", userId);
+
+      if (metadataError) {
+        throw metadataError;
+      }
+
       const { error: storageError } = await client.storage
         .from(BUCKET)
         .remove([photo.object_path]);
 
       if (storageError) {
-        throw new Error(
-          `No se pudo eliminar el archivo de Storage. No se eliminarán los metadatos. Puedes reintentar. Detalle: ${storageError.message}`
-        );
-      }
+        const { error: restoreError } = await client
+          .from("dental_photos")
+          .insert({
+            id: metadata.id,
+            user_id: userId,
+            consent_id: metadata.consent_id,
+            object_path: metadata.object_path,
+            original_filename: metadata.original_filename,
+            mime_type: metadata.mime_type,
+            size_bytes: metadata.size_bytes,
+            created_at: metadata.created_at,
+          });
 
-      const { error: metadataError } = await client
-        .from("dental_photos")
-        .delete()
-        .eq("id", photo.id)
-        .eq("user_id", userId ?? "");
+        if (restoreError) {
+          throw new Error(
+            "No se pudo eliminar el archivo de Storage ni restaurar sus metadatos. El estado requiere revisión administrativa."
+          );
+        }
 
-      if (metadataError) {
         throw new Error(
-          `El archivo fue eliminado de Storage, pero no se pudieron eliminar los metadatos. Puedes reintentar la eliminación de los metadatos. Detalle: ${metadataError.message}`
+          `No se pudo eliminar el archivo de Storage. Los metadatos fueron restaurados y la fotografía sigue disponible. Puedes reintentar. Detalle: ${storageError.message}`
         );
       }
 
@@ -518,7 +603,8 @@ export default function PhotosPage() {
         .update({
           revoked_at: new Date().toISOString(),
         })
-        .eq("id", consentId);
+        .eq("id", consentId)
+        .eq("user_id", userId ?? "");
 
       if (revokeError) {
         throw revokeError;
@@ -556,12 +642,12 @@ export default function PhotosPage() {
         <section className={styles.card}>
           <h1>Fotografías</h1>
           <p>
-            Debes iniciar sesión desde la herramienta de desarrollo antes de
-            utilizar este módulo.
+            Debes iniciar sesión para utilizar este módulo. Tu cuenta y tus
+            fotografías están protegidas por la sesión y las políticas RLS de Supabase.
           </p>
 
-          <a href="/desarrollo/acceso" className={styles.button}>
-            Ir al acceso de prueba
+          <a href="/cuenta" className={styles.button}>
+            Ir a mi cuenta
           </a>
         </section>
       </main>
