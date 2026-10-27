@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatearPrecio, inicialesDe, normalizar, textoOpcional } from "./formato";
 import type { Dentista } from "./tipos";
@@ -17,6 +17,7 @@ export default function DirectorioLista() {
   const [intento, setIntento] = useState(0);
   const [busqueda, setBusqueda] = useState("");
   const [distrito, setDistrito] = useState("");
+const busquedaRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let cancelado = false;
@@ -65,6 +66,7 @@ export default function DirectorioLista() {
   function limpiarFiltros() {
     setBusqueda("");
     setDistrito("");
+    busquedaRef.current?.focus();
   }
 
   return (
@@ -104,6 +106,7 @@ export default function DirectorioLista() {
               <label htmlFor="dir-busqueda">Buscar por nombre o especialidad</label>
               <input
                 id="dir-busqueda"
+                ref={busquedaRef}
                 type="search"
                 placeholder="Ej.: ortodoncia, Dra. …"
                 value={busqueda}
