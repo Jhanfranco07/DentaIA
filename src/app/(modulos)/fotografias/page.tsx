@@ -8,6 +8,7 @@ import {
 } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import styles from "./page.module.css";
+import { eliminarFotografia, ErrorEliminacionFoto } from "@/features/fotografias/eliminar";
 
 const BUCKET = "dental-photos";
 const POLICY_VERSION = "1.0";
@@ -506,72 +507,7 @@ export default function PhotosPage() {
     try {
       const client = getSupabaseBrowserClient();
 
-      if (!userId) {
-        throw new Error("Tu sesión ya no es válida. Inicia sesión nuevamente desde /cuenta.");
-      }
-
-      const { data: metadata, error: metadataReadError } = await client
-        .from("dental_photos")
-        .select(
-          "id, consent_id, object_path, original_filename, mime_type, size_bytes, created_at"
-        )
-        .eq("id", photo.id)
-        .eq("user_id", userId)
-        .maybeSingle();
-
-      if (metadataReadError) {
-        throw metadataReadError;
-      }
-
-      if (!metadata) {
-        throw new Error("La fotografía no existe o ya no tienes permiso para eliminarla.");
-      }
-
-      // Eliminamos primero el archivo de Storage. Si Storage falla, no tocamos
-      // los metadatos. Si luego falla el borrado de metadatos, restauramos el
-      // archivo desde el Blob descargado para evitar dejar el registro sin archivo.
-      const { data: fileData, error: downloadError } = await client.storage
-        .from(BUCKET)
-        .download(metadata.object_path);
-
-      if (downloadError) {
-        throw downloadError;
-      }
-
-      const { error: storageError } = await client.storage
-        .from(BUCKET)
-        .remove([metadata.object_path]);
-
-      if (storageError) {
-        throw new Error(
-          `No se pudo eliminar el archivo de Storage. Los metadatos permanecen intactos y la fotografía sigue disponible. Puedes reintentar. Detalle: ${storageError.message}`
-        );
-      }
-
-      const { error: metadataError } = await client
-        .from("dental_photos")
-        .delete()
-        .eq("id", metadata.id)
-        .eq("user_id", userId);
-
-      if (metadataError) {
-        const { error: restoreError } = await client.storage
-          .from(BUCKET)
-          .upload(metadata.object_path, fileData, {
-            upsert: false,
-            contentType: metadata.mime_type,
-          });
-
-        if (restoreError) {
-          throw new Error(
-            "El archivo fue eliminado de Storage, pero no se pudo completar ni revertir la eliminación de sus metadatos. El estado requiere revisión administrativa."
-          );
-        }
-
-        throw new Error(
-          `No se pudo eliminar el registro de la fotografía. El archivo fue restaurado en Storage y la fotografía sigue disponible. Puedes reintentar. Detalle: ${metadataError.message}`
-        );
-      }
+      const resultado = await eliminarFotografia(client, userId, photo.id);
 
       removePreview(photo.id);
 
@@ -579,8 +515,9 @@ export default function PhotosPage() {
         current.filter((item) => item.id !== photo.id)
       );
 
-      setMessage("Fotografía eliminada correctamente.");
+      setMessage(resultado === "eliminada" ? "Fotografía eliminada correctamente." : "La fotografía ya no está disponible para esta sesión.");
     } catch (err) {
+      if (err instanceof ErrorEliminacionFoto && err.archivoAusente) removePreview(photo.id);
       setError(
         err instanceof Error
           ? err.message
