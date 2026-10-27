@@ -87,8 +87,7 @@ const busquedaRef = useRef<HTMLInputElement>(null);
       {carga.estado === "error" && (
         <div className={`${styles.aviso} ${styles.avisoError}`} role="alert">
           <strong>No pudimos cargar el directorio.</strong>
-          <p>Revisa tu conexión y vuelve a intentarlo. Si el problema continúa, verifica que exista tu archivo .env.local.</p>
-          <p className={styles.detalleTecnico}>Detalle: {carga.mensaje}</p>
+  <p>Revisa tu conexión a internet y vuelve a intentarlo. Si el problema continúa, inténtalo de nuevo más tarde.</p>
           <button type="button" className={styles.boton} onClick={reintentar}>Reintentar</button>
         </div>
       )}
