@@ -36,7 +36,7 @@ export function validarFormularioCuenta({ registro, nombre, email, password, con
 // No se muestran mensajes crudos del proveedor ni se registran credenciales.
 export function mensajeError(error: unknown): string {
   if (error instanceof Error && error.message.includes("Falta configurar .env.local")) {
-    return "El acceso no está disponible porque falta la configuración de conexión. Comunícalo al responsable de DentaIA.";
+    return "El acceso no está disponible en este momento. Inténtalo de nuevo más tarde.";
   }
   const code = typeof error === "object" && error !== null && "code" in error ? error.code : undefined;
   switch (code) {

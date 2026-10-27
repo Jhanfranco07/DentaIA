@@ -3,9 +3,10 @@ import FormularioSolicitud from "@/features/solicitudes/FormularioSolicitud";
 import MisSolicitudes from "@/features/solicitudes/MisSolicitudes";
 import styles from "@/features/solicitudes/solicitudes.module.css";
 
-export default function RequestsPage() {
+export default async function RequestsPage({ searchParams }: { searchParams: Promise<{ odontologo?: string }> }) {
+  const { odontologo } = await searchParams;
   return (
-    <main className={styles.contenedor}>
+    <section className={styles.contenedor}>
       <header className={styles.encabezado}>
         <p className={styles.etiquetaSuperior}>
           SOLICITUDES ODONTOLÓGICAS
@@ -23,8 +24,8 @@ export default function RequestsPage() {
         </p>
       </header>
 
-      <FormularioSolicitud />
+      <FormularioSolicitud odontologoInicial={odontologo ?? ""} />
       <MisSolicitudes />
-    </main>
+    </section>
   );
 }

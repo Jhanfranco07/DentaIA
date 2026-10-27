@@ -6,12 +6,14 @@ import { mensajeError, validarFormularioCuenta, type CampoCuenta } from "./valid
 import styles from "./cuenta.module.css";
 import PerfilPaciente from "./PerfilPaciente";
 import { useSesion } from "./useSesion";
+import Link from "next/link";
+import { Icono } from "@/components/Identidad";
 
-export default function Cuenta() {
+export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean }) {
   const { usuario, cargando, errorSesion, verificar } = useSesion();
   const operacion = useRef(false);
   const activo = useRef(true);
-  const [registro, setRegistro] = useState(false);
+  const [registro, setRegistro] = useState(modoInicial);
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -87,15 +89,16 @@ export default function Cuenta() {
   }
 
   return <section className={styles.pagina} aria-labelledby="cuenta-titulo">
-    <header className={styles.cabecera}><span className={styles.etiqueta}>TU ESPACIO EN DENTAIA</span><h1 id="cuenta-titulo">Tu cuenta, cerca de ti.</h1><p>Accede a tu espacio personal para continuar tu recorrido de orientación bucal.</p></header>
+    <header className={styles.cabecera}><span className={styles.etiqueta}>TU ESPACIO EN DENTAIA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>Tu perfil, tus fotografías de prueba y el seguimiento de tus solicitudes, en un solo lugar.</p></header>
     <div className={styles.panel}>
-      <aside className={styles.presentacion}><span className={styles.simbolo} aria-hidden="true">✦</span><h2>Una sonrisa más informada empieza contigo.</h2><p>Tu cuenta te acompaña en cada visita. Mantén tus datos a mano y vuelve cuando lo necesites.</p><span className={styles.nota}>Prototipo académico · Usa datos de demostración.</span></aside>
+      <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32}/></span><h2>Una sonrisa más informada empieza contigo.</h2><p>Conserva tus datos a mano y continúa tu recorrido cuando lo necesites.</p><span className={styles.nota}>Esta versión utiliza profesionales ficticios e imágenes de prueba. La demostración no reemplaza la atención odontológica.</span><Link href="/analisis/demo" className="text-link">Conocer la demostración</Link></aside>
       <div className={styles.contenido}>
         {cargando ? <p role="status">Comprobando tu sesión…</p> : <>
           {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}
           {aviso && <p className={styles.aviso} role="status">{aviso}</p>}
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
             <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />
+            <nav aria-label="Continuar mi recorrido" className={styles.accesos}><Link href="/analisis/demo">Explorar la demostración</Link><Link href="/fotografias">Mis fotografías</Link><Link href="/solicitudes">Mis solicitudes</Link></nav>
             <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>
           </> : <>
             <div className={styles.opciones} aria-label="Opciones de acceso">

@@ -8,6 +8,8 @@ import {
 } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import styles from "./page.module.css";
+import Link from "next/link";
+import { mensajeFotografia } from "@/features/fotografias/mensajes";
 import { eliminarFotografia, ErrorEliminacionFoto } from "@/features/fotografias/eliminar";
 
 const BUCKET = "dental-photos";
@@ -168,11 +170,7 @@ export default function PhotosPage() {
 
       setPhotos(photoData ?? []);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo cargar la información."
-      );
+      setError(mensajeFotografia(err, "No se pudo cargar la información."));
     } finally {
       setLoading(false);
     }
@@ -196,7 +194,7 @@ export default function PhotosPage() {
           return [];
         });
         setMessage("");
-        setError("Tu sesión se cerró. Inicia sesión nuevamente desde /cuenta para continuar.");
+        setError("Tu sesión se cerró. Inicia sesión de nuevo en Mi cuenta para continuar.");
         return;
       }
 
@@ -240,11 +238,7 @@ export default function PhotosPage() {
         setLocalPreview(URL.createObjectURL(file));
       })
       .catch((err) => {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "No se pudo validar la imagen."
-        );
+        setError(mensajeFotografia(err, "No se pudo validar la imagen."));
 
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
@@ -299,11 +293,7 @@ export default function PhotosPage() {
       setConsentId(data.id);
       setMessage("Consentimiento registrado correctamente.");
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo registrar el consentimiento."
-      );
+      setError(mensajeFotografia(err, "No se pudo registrar el consentimiento."));
     } finally {
       setBusy(false);
     }
@@ -429,11 +419,7 @@ export default function PhotosPage() {
 
       setMessage("Fotografía almacenada correctamente.");
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo subir la fotografía."
-      );
+      setError(mensajeFotografia(err, "No se pudo subir la fotografía."));
     } finally {
       setBusy(false);
     }
@@ -471,11 +457,7 @@ export default function PhotosPage() {
         ];
       });
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo descargar la fotografía."
-      );
+      setError(mensajeFotografia(err, "No se pudo descargar la fotografía."));
     }
   }
 
@@ -518,11 +500,7 @@ export default function PhotosPage() {
       setMessage(resultado === "eliminada" ? "Fotografía eliminada correctamente." : "La fotografía ya no está disponible para esta sesión.");
     } catch (err) {
       if (err instanceof ErrorEliminacionFoto && err.archivoAusente) removePreview(photo.id);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo eliminar la fotografía."
-      );
+      setError(mensajeFotografia(err, "No se pudo eliminar la fotografía."));
     } finally {
       setBusy(false);
     }
@@ -566,11 +544,7 @@ export default function PhotosPage() {
         "Consentimiento revocado. Ya no puedes realizar nuevas cargas con este consentimiento."
       );
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "No se pudo revocar el consentimiento."
-      );
+      setError(mensajeFotografia(err, "No se pudo revocar el consentimiento."));
     } finally {
       setBusy(false);
     }
@@ -578,42 +552,40 @@ export default function PhotosPage() {
 
   if (loading) {
     return (
-      <main className={styles.page}>
+      <section className={styles.page}>
         <section className={styles.card}>
-          <p>Cargando módulo de fotografías...</p>
+          <p>Preparando tus fotografías…</p>
         </section>
-      </main>
+      </section>
     );
   }
 
   if (!userId) {
     return (
-      <main className={styles.page}>
+      <section className={styles.page}>
         <section className={styles.card}>
-          <h1>Fotografías</h1>
+          <h1>Mis fotografías dentales</h1>
           <p>
-            Debes iniciar sesión para utilizar este módulo. Tu cuenta y tus
-            fotografías están protegidas por la sesión y las políticas RLS de Supabase.
+            Inicia sesión para consultar y guardar tus fotografías de prueba en tu espacio personal.
           </p>
 
           <a href="/cuenta" className={styles.button}>
             Ir a mi cuenta
           </a>
         </section>
-      </main>
+      </section>
     );
   }
 
   return (
-    <main className={styles.page}>
+    <section className={styles.page}>
       <header className={styles.header}>
-        <p className={styles.eyebrow}>DentAI · Prototipo académico</p>
-        <h1>Consentimiento y fotografías</h1>
+        <p className={styles.eyebrow}>TU ESPACIO PRIVADO</p>
+        <h1>Mis fotografías dentales</h1>
         <p>
-          Este módulo permite demostrar el almacenamiento privado de imágenes
-          sintéticas o de prueba. No realiza análisis mediante IA ni diagnóstico
-          clínico.
+          Guarda y consulta tus imágenes de prueba. Tú decides cuándo dar o revocar el permiso de almacenamiento. Aquí no se analizan fotografías ni se realizan diagnósticos.
         </p>
+      <Link href="/analisis/demo" className={styles.secondaryButton}>Explorar imágenes de ejemplo</Link>
       </header>
 
       {error && (
@@ -629,17 +601,15 @@ export default function PhotosPage() {
       )}
 
       <section className={styles.card}>
-        <h2>Antes de almacenar una fotografía</h2>
+        <h2>Tu permiso para guardar imágenes</h2>
 
         <p>
-          La vista previa local del MVP es diferente del almacenamiento en
-          Supabase. Si aceptas, la fotografía seleccionada será enviada a un
-          bucket privado de Supabase.
+          Al aceptar, las imágenes de prueba que subas se guardarán de forma privada y asociadas a tu cuenta. Puedes revocar el permiso para nuevas cargas y eliminar tus fotografías anteriores.
         </p>
 
         <ul>
           <li>
-            <strong>Destino:</strong> almacenamiento privado de Supabase.
+            <strong>Destino:</strong> tu galería privada en DentaIA.
           </li>
           <li>
             <strong>Finalidad:</strong> demostración académica del manejo de
@@ -647,7 +617,7 @@ export default function PhotosPage() {
           </li>
           <li>
             <strong>Eliminación:</strong> podrás eliminar las fotografías
-            almacenadas desde este módulo.
+            guardadas en tu galería.
           </li>
           <li>
             <strong>IA:</strong> las fotografías no se analizarán ni utilizarán
@@ -692,22 +662,22 @@ export default function PhotosPage() {
 
         {consentId && (
           <p className={styles.status}>
-            Consentimiento vigente · Política {POLICY_VERSION}
+            Permiso de almacenamiento activo
           </p>
         )}
       </section>
 
       <section className={styles.card}>
-        <h2>Subir fotografía</h2>
+        <h2>Guardar una fotografía</h2>
 
         <p>
-          Solo se aceptan JPG, PNG y WebP entre 1 byte y 8 MB. La imagen debe
-          poder ser decodificada correctamente por el navegador.
+          Elige una imagen de prueba en formato JPG, PNG o WebP de hasta 8 MB. No subas fotografías de pacientes reales en esta demostración.
         </p>
 
         <input
           ref={fileInputRef}
           type="file"
+          aria-label="Seleccionar fotografía de prueba"
           accept="image/jpeg,image/png,image/webp"
           onChange={handleFileChange}
           disabled={!consentId || busy}
@@ -717,7 +687,7 @@ export default function PhotosPage() {
           <div className={styles.previewBox}>
             <img
               src={localPreview}
-              alt="Vista previa local de la fotografía seleccionada"
+              alt="Fotografía seleccionada antes de guardarla"
               className={styles.preview}
             />
 
@@ -747,8 +717,7 @@ export default function PhotosPage() {
           <div>
             <h2>Mis fotografías</h2>
             <p>
-              Los archivos se descargan mediante Storage API y se muestran
-              usando una URL temporal local.
+              Aquí encontrarás las imágenes que guardaste con tu cuenta. Puedes abrirlas o eliminarlas cuando lo necesites.
             </p>
           </div>
 
@@ -756,7 +725,7 @@ export default function PhotosPage() {
         </div>
 
         {photos.length === 0 ? (
-          <p>No tienes fotografías almacenadas.</p>
+          <p>Tu galería está vacía. Descarga una muestra de la demostración y vuelve aquí para probar el guardado.</p>
         ) : (
           <div className={styles.photoGrid}>
             {photos.map((photo) => {
@@ -801,7 +770,7 @@ export default function PhotosPage() {
                           disabled={busy}
                           onClick={() => downloadPhoto(photo)}
                         >
-                          Consultar
+                          Ver fotografía
                         </button>
                       )}
 
@@ -821,6 +790,6 @@ export default function PhotosPage() {
           </div>
         )}
       </section>
-    </main>
+    </section>
   );
 }
