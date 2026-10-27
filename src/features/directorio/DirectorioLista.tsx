@@ -148,7 +148,13 @@ export default function DirectorioLista() {
                       <span>Distrito: {textoOpcional(d.district, "no indicado")}</span>
                       <span>Consulta: {formatearPrecio(d.consultation_price, d.currency)}</span>
                     </div>
-                    <Link href={`/directorio/${d.id}`} className={styles.enlace}>Ver detalle →</Link>
+                    <Link
+                       href={`/directorio/${d.id}`}
+                       className={styles.enlace}
+                       aria-label={`Ver detalle de ${d.name.trim() || "profesional"}`}
+                    >
+                        Ver detalle →
+                     </Link>
                   </div>
                 </li>
               ))}
