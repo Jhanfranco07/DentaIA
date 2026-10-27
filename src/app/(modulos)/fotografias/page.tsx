@@ -398,10 +398,18 @@ export default function PhotosPage() {
         .single();
 
       if (metadataError) {
-        await client.storage.from(BUCKET).remove([objectPath]);
+        const { error: cleanupError } = await client.storage
+          .from(BUCKET)
+          .remove([objectPath]);
+
+        if (cleanupError) {
+          throw new Error(
+            `La fotografía se subió, pero no se pudo registrar su información y tampoco fue posible limpiar el archivo temporal. El estado requiere revisión administrativa. Detalle del registro: ${metadataError.message}`
+          );
+        }
 
         throw new Error(
-          `La fotografía se subió, pero no se pudo registrar su información. El archivo fue eliminado de Storage. Detalle: ${metadataError.message}`
+          `La fotografía se subió, pero no se pudo registrar su información. El archivo temporal fue eliminado de Storage. Detalle: ${metadataError.message}`
         );
       }
 
@@ -519,44 +527,49 @@ export default function PhotosPage() {
         throw new Error("La fotografía no existe o ya no tienes permiso para eliminarla.");
       }
 
-      // Primero eliminamos los metadatos. Si Storage falla, intentamos restaurarlos
-      // para no dejar un archivo privado sin registro en dental_photos.
-      const { error: metadataError } = await client
-        .from("dental_photos")
-        .delete()
-        .eq("id", photo.id)
-        .eq("user_id", userId);
+      // Eliminamos primero el archivo de Storage. Si Storage falla, no tocamos
+      // los metadatos. Si luego falla el borrado de metadatos, restauramos el
+      // archivo desde el Blob descargado para evitar dejar el registro sin archivo.
+      const { data: fileData, error: downloadError } = await client.storage
+        .from(BUCKET)
+        .download(metadata.object_path);
 
-      if (metadataError) {
-        throw metadataError;
+      if (downloadError) {
+        throw downloadError;
       }
 
       const { error: storageError } = await client.storage
         .from(BUCKET)
-        .remove([photo.object_path]);
+        .remove([metadata.object_path]);
 
       if (storageError) {
-        const { error: restoreError } = await client
-          .from("dental_photos")
-          .insert({
-            id: metadata.id,
-            user_id: userId,
-            consent_id: metadata.consent_id,
-            object_path: metadata.object_path,
-            original_filename: metadata.original_filename,
-            mime_type: metadata.mime_type,
-            size_bytes: metadata.size_bytes,
-            created_at: metadata.created_at,
+        throw new Error(
+          `No se pudo eliminar el archivo de Storage. Los metadatos permanecen intactos y la fotografía sigue disponible. Puedes reintentar. Detalle: ${storageError.message}`
+        );
+      }
+
+      const { error: metadataError } = await client
+        .from("dental_photos")
+        .delete()
+        .eq("id", metadata.id)
+        .eq("user_id", userId);
+
+      if (metadataError) {
+        const { error: restoreError } = await client.storage
+          .from(BUCKET)
+          .upload(metadata.object_path, fileData, {
+            upsert: false,
+            contentType: metadata.mime_type,
           });
 
         if (restoreError) {
           throw new Error(
-            "No se pudo eliminar el archivo de Storage ni restaurar sus metadatos. El estado requiere revisión administrativa."
+            "El archivo fue eliminado de Storage, pero no se pudo completar ni revertir la eliminación de sus metadatos. El estado requiere revisión administrativa."
           );
         }
 
         throw new Error(
-          `No se pudo eliminar el archivo de Storage. Los metadatos fueron restaurados y la fotografía sigue disponible. Puedes reintentar. Detalle: ${storageError.message}`
+          `No se pudo eliminar el registro de la fotografía. El archivo fue restaurado en Storage y la fotografía sigue disponible. Puedes reintentar. Detalle: ${metadataError.message}`
         );
       }
 
