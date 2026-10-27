@@ -7,13 +7,14 @@ import type { Tables } from "@/lib/supabase/database.types";
 import { useSesion } from "@/features/cuenta/useSesion";
 import { validarSolicitud } from "./validaciones";
 import styles from "./solicitudes.module.css";
+import Link from "next/link";
 
 type Odontologo = Pick<
   Tables<"dentists">,
   "id" | "name" | "specialty" | "district"
 >;
 
-export default function FormularioSolicitud() {
+export default function FormularioSolicitud({ odontologoInicial = "" }: { odontologoInicial?: string }) {
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [fecha, setFecha] = useState("");
@@ -43,6 +44,8 @@ export default function FormularioSolicitud() {
 
   useEffect(() => {
     let activo = true;
+    setCargandoOdontologos(true);
+    setErrorOdontologos("");
 
     async function cargarOdontologos() {
       try {
@@ -57,6 +60,7 @@ export default function FormularioSolicitud() {
 
         if (activo) {
           setOdontologos(data ?? []);
+          setOdontologoId(data?.some(d => d.id === odontologoInicial) ? odontologoInicial : "");
         }
       } catch {
         if (activo) {
@@ -72,7 +76,7 @@ export default function FormularioSolicitud() {
     return () => {
       activo = false;
     };
-  }, []);
+  }, [odontologoInicial]);
 
   async function registrarSolicitud(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
@@ -158,7 +162,6 @@ export default function FormularioSolicitud() {
       setHora("");
       setMensaje("");
     } catch (error) {
-      console.error("Error al registrar solicitud:", error);
       setErrorRegistro(
         "No se pudo registrar la solicitud. Verifica tu sesión e inténtalo nuevamente.",
       );
@@ -329,8 +332,7 @@ export default function FormularioSolicitud() {
 
         {!cargandoSesion && !usuario && (
           <p className={styles.aviso}>
-            Debes iniciar sesión desde Acceso de prueba para registrar
-            solicitudes.
+            <Link href="/cuenta">Inicia sesión en Mi cuenta</Link> para registrar tu solicitud y consultar su estado.
           </p>
         )}
       </form>

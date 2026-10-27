@@ -17,7 +17,7 @@ export default function DirectorioLista() {
   const [intento, setIntento] = useState(0);
   const [busqueda, setBusqueda] = useState("");
   const [distrito, setDistrito] = useState("");
-const busquedaRef = useRef<HTMLInputElement>(null);
+  const busquedaRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let cancelado = false;
@@ -73,10 +73,10 @@ const busquedaRef = useRef<HTMLInputElement>(null);
     <section className={styles.pagina}>
       <header className={styles.cabecera}>
         <span className={styles.etiqueta}>Directorio odontológico</span>
-        <h1>Encuentra al profesional adecuado</h1>
+        <h1>Encuentra un odontólogo</h1>
         <p>
-          Busca por nombre o especialidad y filtra por distrito. Los perfiles y precios de este
-          prototipo son <strong>ficticios</strong> y no permiten contactar ni reservar con personas reales.
+          Busca por nombre, especialidad o distrito. Los perfiles y precios son <strong>ficticios</strong>:
+          puedes explorar el recorrido y registrar solicitudes de demostración, sin confirmar citas reales.
         </p>
       </header>
 
@@ -87,7 +87,7 @@ const busquedaRef = useRef<HTMLInputElement>(null);
       {carga.estado === "error" && (
         <div className={`${styles.aviso} ${styles.avisoError}`} role="alert">
           <strong>No pudimos cargar el directorio.</strong>
-  <p>Revisa tu conexión a internet y vuelve a intentarlo. Si el problema continúa, inténtalo de nuevo más tarde.</p>
+          <p>Revisa tu conexión a internet y vuelve a intentarlo. Si el problema continúa, inténtalo de nuevo más tarde.</p>
           <button type="button" className={styles.boton} onClick={reintentar}>Reintentar</button>
         </div>
       )}
@@ -155,7 +155,7 @@ const busquedaRef = useRef<HTMLInputElement>(null);
                        className={styles.enlace}
                        aria-label={`Ver detalle de ${d.name.trim() || "profesional"}`}
                     >
-                        Ver detalle →
+                        Conocer al profesional →
                      </Link>
                   </div>
                 </li>

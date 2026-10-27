@@ -6,6 +6,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatearPrecio, inicialesDe, textoOpcional } from "./formato";
 import type { Dentista } from "./tipos";
 import styles from "./directorio.module.css";
+import { enlaceSolicitud } from "@/lib/navegacion";
 
 type Carga =
   | { estado: "cargando" }
@@ -60,7 +61,6 @@ export default function DentistaDetalle({ id }: { id: string }) {
         <div className={`${styles.aviso} ${styles.avisoError}`} role="alert">
           <strong>No pudimos cargar este perfil.</strong>
           <p>Revisa tu conexión y vuelve a intentarlo.</p>
-          <p className={styles.detalleTecnico}>Detalle: {carga.mensaje}</p>
           <button type="button" className={styles.boton} onClick={reintentar}>Reintentar</button>
         </div>
       )}
@@ -103,9 +103,10 @@ export default function DentistaDetalle({ id }: { id: string }) {
             <p>{textoOpcional(carga.dentista.description, "Este profesional aún no ha publicado una descripción.")}</p>
 
             <p className={styles.nota}>
-              Información orientativa. Este prototipo no permite reservar ni contactar al profesional,
-              y no reemplaza una evaluación odontológica.
+              Este perfil y sus tarifas son ilustrativos. Una solicitud de demostración no confirma
+              una cita ni se envía a una clínica.
             </p>
+            {carga.dentista.is_demo && <Link className={styles.solicitar} href={enlaceSolicitud(carga.dentista.id)}>Solicitar atención de demostración</Link>}
           </div>
         </article>
       )}

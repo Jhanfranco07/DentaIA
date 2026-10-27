@@ -10,6 +10,7 @@ import {
 } from "./solicitudes";
 import type { Tables } from "@/lib/supabase/database.types";
 import styles from "./solicitudes.module.css";
+import Link from "next/link";
 
 type Solicitud = Tables<"appointment_requests">;
 
@@ -112,7 +113,6 @@ export default function MisSolicitudes() {
     setMensajeAccion("Solicitud cancelada correctamente.");
     
     } catch (error) {
-      console.error("Error al cancelar solicitud:", error);
       setError(
         "No se pudo cancelar la solicitud. Actualiza la página e inténtalo nuevamente.",
       );
@@ -122,7 +122,7 @@ export default function MisSolicitudes() {
   }
 
   return (
-    <section className={styles.tarjeta}>
+    <section className={styles.tarjeta} id="mis-solicitudes">
       <h2 className={styles.tituloSeccion}>Mis solicitudes</h2>
 
       <p className={styles.subtitulo}>
@@ -135,7 +135,7 @@ export default function MisSolicitudes() {
         </p>
       )}
 
-      {cargando && <p>Cargando solicitudes...</p>}
+      {cargando && <p role="status">Cargando tus solicitudes…</p>}
 
       {error && (
         <p className={styles.error} role="alert">
@@ -145,7 +145,7 @@ export default function MisSolicitudes() {
 
       {!cargando && !error && solicitudes.length === 0 && (
         <div className={styles.vacio}>
-          Todavía no tienes solicitudes registradas.
+          {usuario ? "Todavía no tienes solicitudes. Puedes registrar una de demostración en el formulario de arriba." : <><p>Inicia sesión para consultar tus solicitudes personales.</p><Link href="/cuenta">Ir a Mi cuenta</Link></>}
         </div>
       )}
 
