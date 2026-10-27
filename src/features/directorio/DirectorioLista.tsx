@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatearPrecio, inicialesDe, normalizar, textoOpcional } from "./formato";
 import type { Dentista } from "./tipos";
@@ -17,6 +17,7 @@ export default function DirectorioLista() {
   const [intento, setIntento] = useState(0);
   const [busqueda, setBusqueda] = useState("");
   const [distrito, setDistrito] = useState("");
+const busquedaRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let cancelado = false;
@@ -65,6 +66,7 @@ export default function DirectorioLista() {
   function limpiarFiltros() {
     setBusqueda("");
     setDistrito("");
+    busquedaRef.current?.focus();
   }
 
   return (
@@ -85,8 +87,7 @@ export default function DirectorioLista() {
       {carga.estado === "error" && (
         <div className={`${styles.aviso} ${styles.avisoError}`} role="alert">
           <strong>No pudimos cargar el directorio.</strong>
-          <p>Revisa tu conexión y vuelve a intentarlo. Si el problema continúa, verifica que exista tu archivo .env.local.</p>
-          <p className={styles.detalleTecnico}>Detalle: {carga.mensaje}</p>
+  <p>Revisa tu conexión a internet y vuelve a intentarlo. Si el problema continúa, inténtalo de nuevo más tarde.</p>
           <button type="button" className={styles.boton} onClick={reintentar}>Reintentar</button>
         </div>
       )}
@@ -104,6 +105,7 @@ export default function DirectorioLista() {
               <label htmlFor="dir-busqueda">Buscar por nombre o especialidad</label>
               <input
                 id="dir-busqueda"
+                ref={busquedaRef}
                 type="search"
                 placeholder="Ej.: ortodoncia, Dra. …"
                 value={busqueda}
@@ -148,7 +150,13 @@ export default function DirectorioLista() {
                       <span>Distrito: {textoOpcional(d.district, "no indicado")}</span>
                       <span>Consulta: {formatearPrecio(d.consultation_price, d.currency)}</span>
                     </div>
-                    <Link href={`/directorio/${d.id}`} className={styles.enlace}>Ver detalle →</Link>
+                    <Link
+                       href={`/directorio/${d.id}`}
+                       className={styles.enlace}
+                       aria-label={`Ver detalle de ${d.name.trim() || "profesional"}`}
+                    >
+                        Ver detalle →
+                     </Link>
                   </div>
                 </li>
               ))}
