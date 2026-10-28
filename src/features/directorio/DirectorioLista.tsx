@@ -18,6 +18,7 @@ export default function DirectorioLista() {
   const [busqueda, setBusqueda] = useState("");
   const [distrito, setDistrito] = useState("");
   const busquedaRef = useRef<HTMLInputElement>(null);
+     const tituloRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     let cancelado = false;
@@ -42,10 +43,11 @@ export default function DirectorioLista() {
     return () => { cancelado = true; };
   }, [intento]);
 
-  function reintentar() {
-    setCarga({ estado: "cargando" });
-    setIntento(n => n + 1);
-  }
+   function reintentar() {
+     tituloRef.current?.focus();
+     setCarga({ estado: "cargando" });
+     setIntento(n => n + 1);
+   }
 
   const dentistas = carga.estado === "listo" ? carga.dentistas : [];
 
@@ -66,7 +68,7 @@ export default function DirectorioLista() {
     <section className={styles.pagina}>
       <header className={styles.cabecera}>
         <span className={styles.etiqueta}>Directorio odontológico</span>
-        <h1>Encuentra un odontólogo</h1>
+           <h1 ref={tituloRef} tabIndex={-1}>Encuentra un odontólogo</h1>
         <p>
           Busca por nombre, especialidad o distrito. Los perfiles y precios son <strong>ficticios</strong>:
           puedes explorar el recorrido y registrar solicitudes de demostración, sin confirmar citas reales.
