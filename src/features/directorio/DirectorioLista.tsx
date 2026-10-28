@@ -146,7 +146,7 @@ export default function DirectorioLista() {
                     <Link
                       href={`/directorio/${d.id}`}
                       className={styles.enlace}
-                      aria-label={`Ver detalle de ${d.name.trim() || "profesional"}`}
+                        aria-label={`Conocer al profesional ${d.name.trim()}`.trim()}
                     >
                       Conocer al profesional →
                     </Link>
