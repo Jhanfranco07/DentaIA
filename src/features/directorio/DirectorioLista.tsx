@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { formatearPrecio, inicialesDe, normalizar, textoOpcional } from "./formato";
+import { filtrarDentistas, formatearPrecio, inicialesDe, listarDistritos, textoOpcional } from "./formato";
 import type { Dentista } from "./tipos";
 import styles from "./directorio.module.css";
 
@@ -49,19 +49,12 @@ export default function DirectorioLista() {
 
   const dentistas = carga.estado === "listo" ? carga.dentistas : [];
 
-  const distritos = useMemo(() => {
-    const unicos = new Set(dentistas.map(d => d.district.trim()).filter(Boolean));
-    return [...unicos].sort((a, b) => a.localeCompare(b, "es"));
-  }, [dentistas]);
+  const distritos = useMemo(() => listarDistritos(dentistas), [dentistas]);
 
-  const visibles = useMemo(() => {
-    const q = normalizar(busqueda);
-    return dentistas.filter(d => {
-      const coincideTexto = !q || normalizar(d.name).includes(q) || normalizar(d.specialty).includes(q);
-      const coincideDistrito = !distrito || d.district.trim() === distrito;
-      return coincideTexto && coincideDistrito;
-    });
-  }, [dentistas, busqueda, distrito]);
+  const visibles = useMemo(
+    () => filtrarDentistas(dentistas, busqueda, distrito),
+    [dentistas, busqueda, distrito],
+  );
 
   function limpiarFiltros() {
     setBusqueda("");
@@ -151,12 +144,12 @@ export default function DirectorioLista() {
                       <span>Consulta: {formatearPrecio(d.consultation_price, d.currency)}</span>
                     </div>
                     <Link
-                       href={`/directorio/${d.id}`}
-                       className={styles.enlace}
-                       aria-label={`Ver detalle de ${d.name.trim() || "profesional"}`}
+                      href={`/directorio/${d.id}`}
+                      className={styles.enlace}
+                      aria-label={`Ver detalle de ${d.name.trim() || "profesional"}`}
                     >
-                        Conocer al profesional →
-                     </Link>
+                      Conocer al profesional →
+                    </Link>
                   </div>
                 </li>
               ))}

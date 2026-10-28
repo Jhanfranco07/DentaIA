@@ -31,3 +31,25 @@ export function inicialesDe(iniciales: string | null | undefined, nombre: string
   const letras = nombre.trim().split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0]).join("");
   return letras.toUpperCase() || "?";
 }
+
+
+
+
+
+type Filtrable = { name: string; specialty: string; district: string };
+
+/** Distritos únicos, sin vacíos y en orden alfabético. */
+export function listarDistritos(lista: Filtrable[]): string[] {
+  const unicos = new Set(lista.map(d => d.district.trim()).filter(Boolean));
+  return [...unicos].sort((a, b) => a.localeCompare(b, "es"));
+}
+
+/** Filtra por texto (nombre o especialidad, sin tildes) y por distrito exacto. */
+export function filtrarDentistas<T extends Filtrable>(lista: T[], busqueda: string, distrito: string): T[] {
+  const q = normalizar(busqueda);
+  return lista.filter(d => {
+    const coincideTexto = !q || normalizar(d.name).includes(q) || normalizar(d.specialty).includes(q);
+    const coincideDistrito = !distrito || d.district.trim() === distrito;
+    return coincideTexto && coincideDistrito;
+  });
+}
