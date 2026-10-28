@@ -106,6 +106,7 @@ export default function PhotosPage() {
   const [message, setMessage] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
 
   const clearMessages = () => {
     setError("");
@@ -242,6 +243,9 @@ export default function PhotosPage() {
 
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
+        }
+        if (cameraInputRef.current) {
+          cameraInputRef.current.value = "";
         }
       });
   }
@@ -682,6 +686,14 @@ export default function PhotosPage() {
           onChange={handleFileChange}
           disabled={!consentId || busy}
         />
+
+        <div className={styles.actions}>
+          <button type="button" className={styles.button} disabled={!consentId || busy} onClick={() => cameraInputRef.current?.click()}>
+            Tomar fotografía
+          </button>
+          <input ref={cameraInputRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" aria-label="Tomar fotografía con la cámara trasera" onChange={handleFileChange} disabled={!consentId || busy} style={{ display: "none" }} />
+        </div>
+        <p>En celulares compatibles se abrirá la cámara trasera. En otros dispositivos podrás seleccionar una imagen.</p>
 
         {localPreview && selectedFile && (
           <div className={styles.previewBox}>
