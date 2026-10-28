@@ -288,3 +288,5 @@ input, select, textarea { max-width: 100%; min-width: 0; }
   .reveal[data-reveal] { opacity: 1; transform: none; }
   .action:hover, .feature-card:hover { transform: none; }
 }
+
+.icono-enlace-externo{display:inline-flex;vertical-align:middle;transform:rotate(-45deg);line-height:1}.icono-enlace-externo svg{display:block}

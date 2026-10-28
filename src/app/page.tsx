@@ -17,7 +17,7 @@ export default function Inicio() {
           <h1 id="titulo-inicio">Tu sonrisa merece<br /><span>un buen comienzo.</span></h1>
           <p className="hero-description">Entender tu cuidado dental puede ser sencillo. Explora una guía visual, llévate recomendaciones y encuentra tu próximo paso, con tranquilidad.</p>
           <div className="actions"><Link className="action" href="/analisis/demo">Explorar la demostración <Icono nombre="flecha" size={18} /></Link><Link className="action action-secondary" href="/cuenta?modo=registro">Crear mi cuenta</Link></div>
-          <p className="hero-signin">¿Ya tienes una cuenta? <Link href="/cuenta">Inicia sesión <span aria-hidden="true">↗</span></Link></p>
+          <p className="hero-signin">¿Ya tienes una cuenta? <Link href="/cuenta">Inicia sesión <span aria-hidden="true" className="icono-enlace-externo"><Icono nombre="flecha" size={14}/></span></Link></p>
           <div className="hero-disclaimer"><span className="disclaimer-icon"><Icono nombre="escudo" size={22} /></span><span><strong>Información para cuidarte, sin diagnósticos.</strong><br />El análisis es una demostración con resultados educativos preparados. Las fotografías clínicas están pendientes de autorización.</span></div>
         </div>
         <div className="hero-visual">
