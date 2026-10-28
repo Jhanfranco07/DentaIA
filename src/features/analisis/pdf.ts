@@ -49,7 +49,10 @@ export function crearPDF(caso: CasoDemo, fecha: Date, imagenJpeg: Uint8Array, an
   const fechaTexto = fecha.toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric", timeZone: "America/Lima" });
   const numeroCaso = String(Math.max(1, ["cuidado-habitual", "atencion-preventiva", "cuidado-encias"].indexOf(caso.id) + 1)).padStart(2, "0");
   const referenciaPendiente = (caso as CasoDemo & { tipoImagen?: string }).tipoImagen === "referencia-pendiente";
-  const credito = (caso as CasoDemo & { atribucion?: string }).atribucion;
+  const credito = caso.atribucion;
+  const enlaces: { url: string; rect: string }[] = [{ url: DIRECTORIO, rect: "38 101 557 135" }];
+  if (!referenciaPendiente && caso.fuente) enlaces.push({ url: caso.fuente, rect: "38 9 127 25" });
+  if (!referenciaPendiente && caso.licenciaUrl) enlaces.push({ url: caso.licenciaUrl, rect: "147 9 319 25" });
 
   caja(0, 0, 595, 842, "1 1 1");
   caja(0, 0, 595, 8, COLORES.turquesa);
@@ -66,7 +69,9 @@ export function crearPDF(caso: CasoDemo, fecha: Date, imagenJpeg: Uint8Array, an
   texto("Resultado simulado para fines académicos", 49, 174, 9.5, true, COLORES.turquesa);
 
   // Contain mantiene toda la fotografía y su proporción, incluso para muestras verticales.
-  const foto = { x: 38, y: 198, w: 326, h: 201 };
+  const vertical = alto > ancho;
+  const foto = { x: 38, y: 198, w: vertical ? 169 : 326, h: 201 };
+  const contexto = { x: vertical ? 229 : 382, w: vertical ? 322 : 169 };
   caja(foto.x, foto.y, foto.w, foto.h, COLORES.fondo);
   const escala = Math.min(foto.w / ancho, foto.h / alto);
   const imagenW = ancho * escala, imagenH = alto * escala;
@@ -79,12 +84,13 @@ export function crearPDF(caso: CasoDemo, fecha: Date, imagenJpeg: Uint8Array, an
     const rx = region.rx * imagenW, ry = region.ry * imagenH, k = .55228475;
     comandos.push(`q 1 .79 .28 RG 1.8 w ${x + rx} ${y} m ${x + rx} ${y + k * ry} ${x + k * rx} ${y + ry} ${x} ${y + ry} c ${x - k * rx} ${y + ry} ${x - rx} ${y + k * ry} ${x - rx} ${y} c ${x - rx} ${y - k * ry} ${x - k * rx} ${y - ry} ${x} ${y - ry} c ${x + k * rx} ${y - ry} ${x + rx} ${y - k * ry} ${x + rx} ${y} c S Q`);
   }
-  texto(`EJEMPLO ${numeroCaso}`, 382, 211, 8, true, COLORES.turquesa);
-  let contextoY = parrafo(caso.titulo, 382, 234, 169, 14, 18, true, COLORES.tinta) + 6;
-  contextoY = parrafo(caso.resumen, 382, contextoY, 169, 9.4, 13) + 8;
-  linea(382, contextoY, 169);
+  texto(`EJEMPLO ${numeroCaso}`, contexto.x, 211, 8, true, COLORES.turquesa);
+  let contextoY = parrafo(caso.titulo, contexto.x, 234, contexto.w, 14, 18, true, COLORES.tinta) + 6;
+  contextoY = parrafo(caso.resumen, contexto.x, contextoY, contexto.w, 9.4, 13) + 8;
+  linea(contexto.x, contextoY, contexto.w);
   contextoY += 17;
-  parrafo(caso.regiones.length ? "El contorno señala una referencia visual educativa. No confirma una enfermedad." : "Ejemplo sin regiones señaladas. No determina el estado de salud de una persona.", 382, contextoY, 169, 9, 12.5);
+  contextoY = parrafo(caso.regiones.length ? "El contorno señala una referencia visual educativa. No confirma una enfermedad." : "Ejemplo sin regiones señaladas. No determina el estado de salud de una persona.", contexto.x, contextoY, contexto.w, 9, 12.5);
+  if (vertical) parrafo("La fotografía es una referencia educativa reutilizada con su licencia. Las observaciones están preparadas de antemano; no se realiza inferencia clínica.", contexto.x, contextoY + 11, contexto.w, 9, 12.5);
   texto(referenciaPendiente ? "Referencia editorial. Fotografía clínica pendiente de autorización." : "Fotografía de referencia. No pertenece a un paciente de DentaIA.", 38, 412, 7.6, false, COLORES.secundario);
 
   texto("01", 38, 441, 9, true, COLORES.turquesa);
@@ -115,21 +121,25 @@ export function crearPDF(caso: CasoDemo, fecha: Date, imagenJpeg: Uint8Array, an
   texto(`Caso: ${caso.id} | DentaIA`, 38, 792, 7.5, false, COLORES.secundario);
   texto("1 / 1", 534, 792, 8, false, COLORES.secundario);
   if (credito) {
-    const lineas = envolver(`${referenciaPendiente ? "Imagen" : "Fotografía"}: ${credito}. Fuentes completas: documentación de DentaIA.`, 519, 6.4);
+    const cambiosPDF = referenciaPendiente ? "" : ` · En este PDF: reescalado${caso.regiones.length ? " y contorno educativo" : ""}.`;
+    const lineas = envolver(`${referenciaPendiente ? "Imagen" : "Fotografía"}: ${credito}${cambiosPDF}`, 519, 6.4);
     if (lineas.length > 2) throw new Error("La atribución fotográfica excede el pie del reporte.");
     lineas.forEach((l, i) => texto(l, 38, 808 + i * 8, 6.4, false, COLORES.secundario));
   }
+
+  if (!referenciaPendiente && caso.fuente) texto("Fuente original", 38, 827, 7.2, true, COLORES.turquesa);
+  if (!referenciaPendiente && caso.licenciaUrl) texto("Licencia de la fotografía", 147, 827, 7.2, true, COLORES.turquesa);
 
   const contenido = bytes(comandos.join("\n"));
   const objetos: Uint8Array[] = [
     bytes("<< /Type /Catalog /Pages 2 0 R >>"),
     bytes("<< /Type /Pages /Kids [3 0 R] /Count 1 >>"),
-    bytes("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> /XObject << /Im1 6 0 R >> >> /Contents 7 0 R /Annots [8 0 R] >>"),
+    bytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> /XObject << /Im1 6 0 R >> >> /Contents 7 0 R /Annots [${enlaces.map((_, i) => `${8 + i} 0 R`).join(" ")}] >>`),
     bytes("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"),
     bytes("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"),
     unir([bytes(`<< /Type /XObject /Subtype /Image /Width ${ancho} /Height ${alto} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${imagenJpeg.length} >>\nstream\n`), imagenJpeg, bytes("\nendstream")]),
     unir([bytes(`<< /Length ${contenido.length} >>\nstream\n`), contenido, bytes("\nendstream")]),
-    bytes(`<< /Type /Annot /Subtype /Link /Rect [38 101 557 135] /Border [0 0 0] /A << /S /URI /URI (${DIRECTORIO}) >> >>`),
+    ...enlaces.map(enlace => bytes(`<< /Type /Annot /Subtype /Link /Rect [${enlace.rect}] /Border [0 0 0] /A << /S /URI /URI (${seguro(enlace.url)}) >> >>`)),
   ];
   const partes = [bytes("%PDF-1.4\n%âãÏÓ\n")], offsets = [0];
   let offset = partes[0].length;
