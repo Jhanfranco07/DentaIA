@@ -1,0 +1,42 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { CASOS } from './casos.ts';
+import { crearPDF } from './pdf.ts';
+
+const fecha = new Date('2026-10-28T01:00:00Z');
+for (const caso of CASOS) {
+  test(`PDF premium ${caso.id}: A4, contenido, una imagen y enlace accesible`, async () => {
+    const jpg = await readFile(new URL(`./fixtures/${caso.id}.jpg`, import.meta.url));
+    const pdf = Buffer.from(crearPDF(caso, fecha, jpg, 280, 168));
+    const texto = pdf.toString('latin1');
+    assert.match(texto, /\/MediaBox \[0 0 595 842\]/);
+    assert.match(texto, /\/Count 1/);
+    assert.equal((texto.match(/\/Subtype \/Image/g) ?? []).length, 1);
+    for (const contenido of ['Reporte preventivo', 'Resultado simulado para fines académicos', 'No representa un diagnóstico', 'Tu siguiente paso es una elección', '27 de octubre de 2026', caso.id]) assert.ok(texto.includes(contenido), contenido);
+    assert.match(texto, /\/Subtype \/Link/);
+    assert.ok(texto.includes('https://dent-ai-five.vercel.app/directorio'));
+    // Solo los casos con regiones tienen curvas de contorno; el caso general no recibe marcas.
+    assert.equal(texto.includes('1.8 w'), caso.regiones.length > 0);
+    assert.match(texto, /\(1 \/ 1\)/);
+  });
+}
+
+test('PDF conserva la proporción de fotografías horizontales y verticales', async () => {
+  const jpg = await readFile(new URL('./fixtures/cuidado-habitual.jpg', import.meta.url));
+  for (const [ancho, alto] of [[1600, 800], [800, 1600], [1000, 1000]]) {
+    const texto = Buffer.from(crearPDF(CASOS[0], fecha, jpg, ancho, alto)).toString('latin1');
+    const matriz = texto.match(/q ([\d.]+) 0 0 ([\d.]+) [\d.]+ [\d.]+ cm \/Im1 Do Q/);
+    assert.ok(matriz);
+    assert.ok(Math.abs(Number(matriz[1]) / Number(matriz[2]) - ancho / alto) < .001);
+    assert.ok(Number(matriz[1]) <= 326 && Number(matriz[2]) <= 201);
+  }
+});
+
+test('PDF rechaza fechas, dimensiones y regiones no válidas sin producir documentos incompletos', async () => {
+  const jpg = await readFile(new URL('./fixtures/cuidado-habitual.jpg', import.meta.url));
+  assert.throws(() => crearPDF(CASOS[0], new Date('invalid'), jpg, 280, 168));
+  assert.throws(() => crearPDF(CASOS[0], fecha, new Uint8Array([1, 2]), 280, 168));
+  assert.throws(() => crearPDF(CASOS[0], fecha, jpg, 0, 168));
+  assert.throws(() => crearPDF({ ...CASOS[0], regiones: [{ x: 2, y: .5, rx: .1, ry: .1, etiqueta: 'inválida' }] }, fecha, jpg, 280, 168));
+});
