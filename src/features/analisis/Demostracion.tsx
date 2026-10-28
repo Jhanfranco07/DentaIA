@@ -7,11 +7,26 @@ import { CLAVE_SESION_DEMO, enlaceDirectorioDemo, leerSesionDemo, pasoVisible, t
 import { Icono } from "@/components/Identidad";
 import styles from "./demo.module.css";
 
-function ImagenCaso({ caso, resaltado = false }: { caso: CasoDemo; resaltado?: boolean }) {
-  return <div className={styles.imagenCaso}>
-    <img src={caso.imagen} alt={`Imagen educativa de referencia: ${caso.titulo}`} />
-    {resaltado && <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">{caso.regiones.map((r, i) => <ellipse key={r.etiqueta} cx={r.x * 1000} cy={r.y * 1000} rx={r.rx * 1000} ry={r.ry * 1000} vectorEffect="non-scaling-stroke" style={{ animationDelay: `${i * 180}ms` }} />)}</svg>}
-  </div>;
+function CreditoCaso({ caso, comoCaption = false }: { caso: CasoDemo; comoCaption?: boolean }) {
+  const Contenedor = comoCaption ? "figcaption" : "div";
+  return <Contenedor className={styles.creditoImagen}>
+    <span>{caso.atribucion}</span>
+    {(caso.fuente || caso.licenciaUrl) && <span className={styles.enlacesCredito}>
+      {caso.fuente && <a href={caso.fuente} target="_blank" rel="noopener noreferrer">Fuente de la fotografía <span aria-hidden="true">↗</span></a>}
+      {caso.licenciaUrl && <a href={caso.licenciaUrl} target="_blank" rel="noopener noreferrer">Ver licencia <span aria-hidden="true">↗</span></a>}
+    </span>}
+  </Contenedor>;
+}
+
+function ImagenCaso({ caso, resaltado = false, credito = true, compacta = false }: { caso: CasoDemo; resaltado?: boolean; credito?: boolean; compacta?: boolean }) {
+  const alturaMaxima = compacta ? 310 : 580;
+  return <figure className={styles.figuraCaso}>
+    <div className={styles.imagenCaso} style={{ maxWidth: `${alturaMaxima * caso.ancho / caso.alto}px` }}>
+      <img src={caso.imagen} width={caso.ancho} height={caso.alto} alt={`${caso.tipoImagen === "fotografia-autorizada" ? "Fotografía intraoral de ejemplo" : "Referencia editorial"}: ${caso.titulo}`} />
+      {resaltado && <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">{caso.regiones.map((r, i) => <ellipse key={r.etiqueta} cx={r.x * 1000} cy={r.y * 1000} rx={r.rx * 1000} ry={r.ry * 1000} vectorEffect="non-scaling-stroke" style={{ animationDelay: `${i * 180}ms` }} />)}</svg>}
+    </div>
+    {credito && <CreditoCaso caso={caso} comoCaption/>}
+  </figure>;
 }
 
 const TITULOS: Record<EtapaDemo, string> = {
@@ -133,6 +148,7 @@ export default function Demostracion() {
   }
   function ampliar() { dialogo.current?.showModal(); }
   const paso = pasoVisible(etapa);
+  const fotografiasPendientes = CASOS.some(muestra => muestra.tipoImagen !== "fotografia-autorizada");
 
   return <section className={styles.experiencia} aria-busy={restaurando || ocupado}>
     <div className={styles.encabezado}><div><span className="eyebrow">DENTAIA · EXPERIENCIA EDUCATIVA</span><h1 ref={encabezado} tabIndex={-1}>{TITULOS[etapa]}</h1><p>{etapa === "seleccion" ? "Explora un ejemplo educativo y descubre una guía de cuidado, a tu ritmo." : "Una demostración para orientarte. Las decisiones sobre tu salud se toman con un profesional."}</p></div><span className={styles.sello}><Icono nombre="escudo" size={18} /> Sin diagnóstico médico</span></div>
@@ -142,12 +158,12 @@ export default function Demostracion() {
     {(restaurando || ocupado) && <div className={styles.cargando} role="status"><span className={styles.spinner} />{restaurando ? "Preparando tu recorrido…" : "Abriendo la imagen de ejemplo…"}</div>}
 
     {!restaurando && etapa === "seleccion" && <div className={styles.etapa}>
-      <div className={styles.tituloSeccion}><div><span className="eyebrow">01 / ELIGE TU PUNTO DE PARTIDA</span><h2>Tres ejemplos. Una mirada preventiva.</h2></div><p>No necesitas subir una fotografía personal.</p></div><p className={styles.avisoFotografias}><strong>Fotografías clínicas pendientes.</strong> Las referencias editoriales actuales no son fotografías clínicas. La colección se incorporará cuando podamos verificar su autorización de reutilización.</p>
+      <div className={styles.tituloSeccion}><div><span className="eyebrow">01 / ELIGE TU PUNTO DE PARTIDA</span><h2>Tres ejemplos. Una mirada preventiva.</h2></div><p>No necesitas subir una fotografía personal.</p></div>{fotografiasPendientes ? <p className={styles.avisoFotografias}><strong>Algunas fotografías clínicas están pendientes.</strong> Los ejemplos sin fotografía autorizada se identifican como referencias editoriales; no son fotografías clínicas.</p> : <p className={styles.fotosAutorizadas}>Fotografías educativas reutilizadas con su atribución y licencia. No corresponden a pacientes de DentaIA ni representan tu estado de salud.</p>}
       <div className={styles.casos}>{CASOS.map((muestra, i) => <article className={styles.caso} key={muestra.id}>
         <button type="button" aria-label={`Elegir ejemplo: ${muestra.titulo}`} aria-pressed={caso?.id === muestra.id} onClick={() => void elegir(muestra)} disabled={ocupado} className={styles.elegir}>
-          <div className={styles.fotoTarjeta}><img src={muestra.imagen} alt={`Referencia educativa ${i + 1}: ${muestra.titulo}`} /><span>CASO 0{i + 1}</span></div>
+          <div className={styles.fotoTarjeta}><img src={muestra.imagen} width={muestra.ancho} height={muestra.alto} alt={`${muestra.tipoImagen === "fotografia-autorizada" ? "Fotografía intraoral" : "Referencia editorial"} de ejemplo ${i + 1}: ${muestra.titulo}`} /><span>CASO 0{i + 1}</span></div>
           <div className={styles.contenidoTarjeta}><h3>{muestra.titulo}</h3><p>{muestra.resumen}</p><span className={styles.enlaceTarjeta}>Elegir este ejemplo <Icono nombre="flecha" size={18}/></span></div>
-        </button><a href={muestra.imagen} download className={styles.descargaMuestra}><Icono nombre="reporte" size={16}/> Descargar muestra <span className="sr-only">{muestra.titulo}</span></a>
+        </button><CreditoCaso caso={muestra}/><a href={muestra.imagen} download className={styles.descargaMuestra}><Icono nombre="reporte" size={16}/> Descargar muestra <span className="sr-only">{muestra.titulo}</span></a>
       </article>)}</div>
       <div className={styles.archivo}><div><h3>¿Ya tienes una de nuestras muestras?</h3><p>Ábrela aquí. Reconocemos el contenido de las muestras, incluso con otro nombre. Una imagen diferente no recibe resultados predefinidos.</p></div><label className={styles.campoArchivo}>Abrir una imagen<input type="file" accept="image/png,image/jpeg,image/webp" disabled={ocupado} onChange={e => { void abrirArchivo(e.target.files?.[0]); e.target.value = ""; }} /></label></div>
       <p className={styles.notaPrivacidad}><Icono nombre="escudo" size={16}/>Tu selección permanece en este navegador y no se guarda en tu cuenta.</p>
@@ -159,12 +175,12 @@ export default function Demostracion() {
     </div>}
 
     {etapa === "preparacion" && caso && <div className={`${styles.etapa} ${styles.preparacion}`} role="status">
-      <div className={styles.fotoPreparacion}><ImagenCaso caso={caso}/><span className={styles.insigniaPreparacion}><span className={styles.spinner}/>Preparando resultados educativos</span></div><div className={styles.textoPreparacion}><span className="eyebrow">UN MOMENTO PARA TU GUÍA</span><h2>Organizando el ejemplo y sus recomendaciones.</h2><p>Son contenidos educativos predefinidos. No estamos analizando tu salud ni realizando una inferencia de inteligencia artificial.</p><div className={styles.progresoPreparacion} aria-hidden="true"/><button className={styles.volver} onClick={mostrarResultado}>Mostrar resultado ahora</button><button className={styles.volver} onClick={() => { if (temporizador.current) clearTimeout(temporizador.current); operacion.current++; ir("revision"); }}>Volver a la imagen</button></div>
+      <div className={styles.fotoPreparacion}><div className={styles.preparacionVisual}><ImagenCaso caso={caso} credito={false}/><span className={styles.insigniaPreparacion}><span className={styles.spinner}/>Preparando resultados educativos</span></div><CreditoCaso caso={caso}/></div><div className={styles.textoPreparacion}><span className="eyebrow">UN MOMENTO PARA TU GUÍA</span><h2>Organizando el ejemplo y sus recomendaciones.</h2><p>Son contenidos educativos predefinidos. No estamos analizando tu salud ni realizando una inferencia de inteligencia artificial.</p><div className={styles.progresoPreparacion} aria-hidden="true"/><button className={styles.volver} onClick={mostrarResultado}>Mostrar resultado ahora</button><button className={styles.volver} onClick={() => { if (temporizador.current) clearTimeout(temporizador.current); operacion.current++; ir("revision"); }}>Volver a la imagen</button></div>
     </div>}
 
     {etapa === "resultado" && caso && <div className={styles.etapa}>
       <div className={styles.tituloSeccion}><div><span className="eyebrow">03 / TU RESULTADO DE EJEMPLO</span><h2>{caso.titulo}</h2></div><span className={styles.etiqueta}>Observaciones educativas</span></div>
-      <div className={styles.resultadoGrid}><div className={styles.panelFoto}><ImagenCaso caso={caso} resaltado/><div className={styles.leyenda}><span className={styles.punto}/>{caso.regiones.length ? caso.regiones.map(r => r.etiqueta).join(" · ") : "Ejemplo sin regiones resaltadas"}<button className={styles.ampliarTexto} onClick={ampliar}>Ampliar</button></div><p className={styles.aclaracion}>Las marcas son referencias visuales preparadas para una imagen autorizada, cuando estén disponibles. No indican una enfermedad detectada.</p></div><div className={styles.observaciones}><span className="eyebrow">UNA MIRADA PARA APRENDER</span><h3>Qué muestra este ejemplo</h3>{caso.observaciones.map((p, i) => <div className={styles.observacion} key={p}><span>0{i + 1}</span><p>{p}</p></div>)}<div className={styles.limite}><Icono nombre="escudo" size={22}/><p>Una fotografía de ejemplo no permite confirmar un diagnóstico ni recomendar un tratamiento.</p></div></div></div>
+      <div className={styles.resultadoGrid}><div className={styles.panelFoto}><ImagenCaso caso={caso} resaltado/><div className={styles.leyenda}><span className={styles.punto}/>{caso.regiones.length ? caso.regiones.map(r => r.etiqueta).join(" · ") : "Ejemplo sin regiones resaltadas"}<button className={styles.ampliarTexto} onClick={ampliar}>Ampliar</button></div><p className={styles.aclaracion}>Las marcas, cuando aparecen, son referencias visuales preparadas para este ejemplo. No indican una enfermedad detectada.</p></div><div className={styles.observaciones}><span className="eyebrow">UNA MIRADA PARA APRENDER</span><h3>Qué muestra este ejemplo</h3>{caso.observaciones.map((p, i) => <div className={styles.observacion} key={p}><span>0{i + 1}</span><p>{p}</p></div>)}<div className={styles.limite}><Icono nombre="escudo" size={22}/><p>Una fotografía de ejemplo no permite confirmar un diagnóstico ni recomendar un tratamiento.</p></div></div></div>
       <div className={styles.acciones}><button className={styles.volver} onClick={() => ir("revision")}>← Volver a la imagen</button><button className="action" onClick={() => ir("recomendaciones")}>Ver recomendaciones <Icono nombre="flecha" size={18}/></button></div>
     </div>}
 
@@ -177,7 +193,7 @@ export default function Demostracion() {
 
     {etapa === "reporte" && caso && <div className={`${styles.etapa} ${styles.reporteGrid}`}>
       <div className={styles.reporteTexto}><span className="eyebrow">05 / MI REPORTE PREVENTIVO</span><h2>Una guía para llevar contigo.</h2><p>Tu ejemplo, las observaciones y las ideas de cuidado, reunidos en un documento educativo.</p><ul className={styles.listaReporte}><li>Imagen y contexto del ejemplo</li><li>Observaciones y recomendaciones</li><li>Próximos pasos a tu elección</li></ul><p className={styles.notaPrivacidad}>No incluye tu nombre, correo ni historial de salud.</p>{preparandoReporte && <p role="status">Preparando la vista previa del PDF…</p>}{pdfUrl && <a className={styles.enlacePDF} href={pdfUrl} target="_blank" rel="noopener noreferrer">Abrir vista previa PDF <span aria-hidden="true" className="icono-enlace-externo"><Icono nombre="flecha" size={14}/></span></a>}<button className="action" disabled={generando} aria-busy={generando} onClick={() => void descargar()}><Icono nombre="reporte" size={18}/>{generando ? "Preparando PDF…" : "Descargar reporte PDF"}</button><button className={`action action-secondary ${styles.continuarReporte}`} onClick={() => ir("orientacion")}>Continuar <Icono nombre="flecha" size={18}/></button><button className={styles.volver} onClick={() => ir("resultado")}>← Volver al resultado</button></div>
-      <article className={styles.documento} aria-label="Vista previa del reporte preventivo"><header><span className={styles.marcaReporte}>Denta<span>IA</span></span><span>REPORTE EDUCATIVO</span></header><div className={styles.documentoTitulo}><span className="eyebrow">REPORTE PREVENTIVO</span><h3>{caso.titulo}</h3><p>{new Date(fecha).toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric", timeZone: "America/Lima" })} · DEMO-{caso.id}</p></div><ImagenCaso caso={caso} resaltado/><div className={styles.documentoCuerpo}><span className={styles.etiqueta}>{AVISO_DEMO}</span><h4>Observaciones educativas</h4>{caso.observaciones.map(p => <p key={p}>{p}</p>)}<h4>Para tu cuidado cotidiano</h4><ol>{caso.recomendaciones.map(p => <li key={p}>{p}</li>)}</ol><div className={styles.documentoPasos}><strong>Tu siguiente paso</strong><p>Mantén tus hábitos de higiene y considera una evaluación odontológica cuando lo necesites.</p></div><footer>No representa un diagnóstico ni reemplaza una evaluación odontológica.<br/>DentaIA · Guía de demostración · 1 / 1</footer></div></article>
+      <article className={styles.documento} aria-label="Vista previa del reporte preventivo"><header><span className={styles.marcaReporte}>Denta<span>IA</span></span><span>REPORTE EDUCATIVO</span></header><div className={styles.documentoTitulo}><span className="eyebrow">REPORTE PREVENTIVO</span><h3>{caso.titulo}</h3><p>{new Date(fecha).toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric", timeZone: "America/Lima" })} · DEMO-{caso.id}</p></div><ImagenCaso caso={caso} resaltado compacta/><div className={styles.documentoCuerpo}><span className={styles.etiqueta}>{AVISO_DEMO}</span><h4>Observaciones educativas</h4>{caso.observaciones.map(p => <p key={p}>{p}</p>)}<h4>Para tu cuidado cotidiano</h4><ol>{caso.recomendaciones.map(p => <li key={p}>{p}</li>)}</ol><div className={styles.documentoPasos}><strong>Tu siguiente paso</strong><p>Mantén tus hábitos de higiene y considera una evaluación odontológica cuando lo necesites.</p></div><footer>No representa un diagnóstico ni reemplaza una evaluación odontológica.<br/>DentaIA · Guía de demostración · 1 / 1</footer></div></article>
     </div>}
 
     {etapa === "orientacion" && caso && <div className={`${styles.etapa} ${styles.orientacion}`}>
