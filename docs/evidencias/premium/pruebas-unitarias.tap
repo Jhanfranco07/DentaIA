@@ -1,0 +1,580 @@
+TAP version 13
+# (node:4740) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/analisis/casos.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: muestra cuidado-habitual: imagen original válida, hash y resultado fijo
+ok 1 - muestra cuidado-habitual: imagen original válida, hash y resultado fijo
+  ---
+  duration_ms: 11.948016
+  type: 'test'
+  ...
+# Subtest: reporte cuidado-habitual: PDF descargable, advertencia, imagen y xref coherentes
+ok 2 - reporte cuidado-habitual: PDF descargable, advertencia, imagen y xref coherentes
+  ---
+  duration_ms: 87.745851
+  type: 'test'
+  ...
+# Subtest: muestra atencion-preventiva: imagen original válida, hash y resultado fijo
+ok 3 - muestra atencion-preventiva: imagen original válida, hash y resultado fijo
+  ---
+  duration_ms: 2.739397
+  type: 'test'
+  ...
+# Subtest: reporte atencion-preventiva: PDF descargable, advertencia, imagen y xref coherentes
+ok 4 - reporte atencion-preventiva: PDF descargable, advertencia, imagen y xref coherentes
+  ---
+  duration_ms: 7.072746
+  type: 'test'
+  ...
+# Subtest: muestra cuidado-encias: imagen original válida, hash y resultado fijo
+ok 5 - muestra cuidado-encias: imagen original válida, hash y resultado fijo
+  ---
+  duration_ms: 3.070754
+  type: 'test'
+  ...
+# Subtest: reporte cuidado-encias: PDF descargable, advertencia, imagen y xref coherentes
+ok 6 - reporte cuidado-encias: PDF descargable, advertencia, imagen y xref coherentes
+  ---
+  duration_ms: 2.527806
+  type: 'test'
+  ...
+# Subtest: la asociación depende de bytes y nunca del nombre de archivo
+ok 7 - la asociación depende de bytes y nunca del nombre de archivo
+  ---
+  duration_ms: 5.701214
+  type: 'test'
+  ...
+# Subtest: rechaza imágenes desconocidas, vacías o demasiado grandes sin asignar resultados
+ok 8 - rechaza imágenes desconocidas, vacías o demasiado grandes sin asignar resultados
+  ---
+  duration_ms: 1.138513
+  type: 'test'
+  ...
+# Subtest: identificadores estables y regiones acotadas al ejemplo
+ok 9 - identificadores estables y regiones acotadas al ejemplo
+  ---
+  duration_ms: 1.33126
+  type: 'test'
+  ...
+# Subtest: el reporte rechaza imagen inválida, dimensiones imposibles y fecha inválida
+ok 10 - el reporte rechaza imagen inválida, dimensiones imposibles y fecha inválida
+  ---
+  duration_ms: 1.827151
+  type: 'test'
+  ...
+# Subtest: el enlace de solicitud acepta solo IDs internos válidos
+ok 11 - el enlace de solicitud acepta solo IDs internos válidos
+  ---
+  duration_ms: 2.624406
+  type: 'test'
+  ...
+# Subtest: las ilustraciones antiguas no se presentan como fotografías ni conservan resultados
+ok 12 - las ilustraciones antiguas no se presentan como fotografías ni conservan resultados
+  ---
+  duration_ms: 5.631694
+  type: 'test'
+  ...
+# (node:4741) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/analisis/flujo.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: la vuelta del directorio conserva únicamente una referencia pública al reporte
+ok 13 - la vuelta del directorio conserva únicamente una referencia pública al reporte
+  ---
+  duration_ms: 2.88338
+  type: 'test'
+  ...
+# Subtest: una sesión manipulada, desconocida o inválida nunca restaura resultados
+ok 14 - una sesión manipulada, desconocida o inválida nunca restaura resultados
+  ---
+  duration_ms: 0.285224
+  type: 'test'
+  ...
+# Subtest: una preparación interrumpida vuelve a revisión y omitir mantiene el último paso
+ok 15 - una preparación interrumpida vuelve a revisión y omitir mantiene el último paso
+  ---
+  duration_ms: 14.443815
+  type: 'test'
+  ...
+# (node:4742) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/analisis/casos.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: PDF premium cuidado-habitual: A4, contenido, una imagen y enlace accesible
+ok 16 - PDF premium cuidado-habitual: A4, contenido, una imagen y enlace accesible
+  ---
+  duration_ms: 23.843096
+  type: 'test'
+  ...
+# Subtest: PDF premium atencion-preventiva: A4, contenido, una imagen y enlace accesible
+ok 17 - PDF premium atencion-preventiva: A4, contenido, una imagen y enlace accesible
+  ---
+  duration_ms: 2.738679
+  type: 'test'
+  ...
+# Subtest: PDF premium cuidado-encias: A4, contenido, una imagen y enlace accesible
+ok 18 - PDF premium cuidado-encias: A4, contenido, una imagen y enlace accesible
+  ---
+  duration_ms: 2.437968
+  type: 'test'
+  ...
+# Subtest: PDF conserva la proporción de fotografías horizontales y verticales
+ok 19 - PDF conserva la proporción de fotografías horizontales y verticales
+  ---
+  duration_ms: 4.271087
+  type: 'test'
+  ...
+# Subtest: PDF rechaza fechas, dimensiones y regiones no válidas sin producir documentos incompletos
+ok 20 - PDF rechaza fechas, dimensiones y regiones no válidas sin producir documentos incompletos
+  ---
+  duration_ms: 1.325073
+  type: 'test'
+  ...
+# Subtest: PDF solo marca regiones definidas para la referencia y etiqueta el material pendiente con transparencia
+ok 21 - PDF solo marca regiones definidas para la referencia y etiqueta el material pendiente con transparencia
+  ---
+  duration_ms: 2.868072
+  type: 'test'
+  ...
+# (node:4765) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/cuenta/validaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: login vacío dirige la corrección al correo; después a la contraseña
+ok 22 - login vacío dirige la corrección al correo; después a la contraseña
+  ---
+  duration_ms: 0.755251
+  type: 'test'
+  ...
+# Subtest: correo mal formado identifica email, sin marcar el nombre oculto del login
+ok 23 - correo mal formado identifica email, sin marcar el nombre oculto del login
+  ---
+  duration_ms: 0.168644
+  type: 'test'
+  ...
+# Subtest: registro identifica el primer campo incorrecto en orden de lectura
+ok 24 - registro identifica el primer campo incorrecto en orden de lectura
+  ---
+  duration_ms: 0.130337
+  type: 'test'
+  ...
+# Subtest: cada error incluye un mensaje y no expone el valor de contraseña
+ok 25 - cada error incluye un mensaje y no expone el valor de contraseña
+  ---
+  duration_ms: 0.307548
+  type: 'test'
+  ...
+# Subtest: campos válidos y contraseña existente corta no reciben estado de error
+ok 26 - campos válidos y contraseña existente corta no reciben estado de error
+  ---
+  duration_ms: 0.116254
+  type: 'test'
+  ...
+# (node:4772) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/cuenta/perfiles.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sin sesión o con otro usuario no consulta ni modifica perfiles
+ok 27 - sin sesión o con otro usuario no consulta ni modifica perfiles
+  ---
+  duration_ms: 1.402368
+  type: 'test'
+  ...
+# Subtest: lectura filtra por el usuario validado; ausencia de perfil se conserva
+ok 28 - lectura filtra por el usuario validado; ausencia de perfil se conserva
+  ---
+  duration_ms: 0.32233
+  type: 'test'
+  ...
+# Subtest: edición envía solo full_name; creación usa el ID verificado
+ok 29 - edición envía solo full_name; creación usa el ID verificado
+  ---
+  duration_ms: 0.350379
+  type: 'test'
+  ...
+# Subtest: propaga errores de RLS o red y rechaza nombres inválidos
+ok 30 - propaga errores de RLS o red y rechaza nombres inválidos
+  ---
+  duration_ms: 0.559268
+  type: 'test'
+  ...
+# Subtest: una creación simultánea recupera el perfil existente sin sobrescribirlo
+ok 31 - una creación simultánea recupera el perfil existente sin sobrescribirlo
+  ---
+  duration_ms: 0.461964
+  type: 'test'
+  ...
+# Subtest: no informa éxito si una actualización no devuelve ninguna fila
+ok 32 - no informa éxito si una actualización no devuelve ninguna fila
+  ---
+  duration_ms: 0.23585
+  type: 'test'
+  ...
+# (node:4780) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/cuenta/validaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: rechaza campos vacíos y correo inválido; permite contraseñas existentes cortas al ingresar
+ok 33 - rechaza campos vacíos y correo inválido; permite contraseñas existentes cortas al ingresar
+  ---
+  duration_ms: 0.80341
+  type: 'test'
+  ...
+# Subtest: registro valida nombre, longitud y confirmación
+ok 34 - registro valida nombre, longitud y confirmación
+  ---
+  duration_ms: 0.163077
+  type: 'test'
+  ...
+# Subtest: traduce errores sin exponer el mensaje del proveedor
+ok 35 - traduce errores sin exponer el mensaje del proveedor
+  ---
+  duration_ms: 0.316551
+  type: 'test'
+  ...
+# (node:4787) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/directorio/formato.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: formatearPrecio: muestra un precio válido en soles
+ok 36 - formatearPrecio: muestra un precio válido en soles
+  ---
+  duration_ms: 1.595077
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: sin moneda usa soles
+ok 37 - formatearPrecio: sin moneda usa soles
+  ---
+  duration_ms: 0.385359
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: acepta otra moneda válida
+ok 38 - formatearPrecio: acepta otra moneda válida
+  ---
+  duration_ms: 0.401329
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: una moneda inválida cae a soles
+ok 39 - formatearPrecio: una moneda inválida cae a soles
+  ---
+  duration_ms: 0.264312
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: no inventa un precio si el dato no es válido
+ok 40 - formatearPrecio: no inventa un precio si el dato no es válido
+  ---
+  duration_ms: 0.209012
+  type: 'test'
+  ...
+# Subtest: normalizar: quita tildes y pasa a minúsculas
+ok 41 - normalizar: quita tildes y pasa a minúsculas
+  ---
+  duration_ms: 0.823696
+  type: 'test'
+  ...
+# Subtest: normalizar: recorta espacios y maneja texto vacío
+ok 42 - normalizar: recorta espacios y maneja texto vacío
+  ---
+  duration_ms: 0.247291
+  type: 'test'
+  ...
+# Subtest: textoOpcional: devuelve el texto recortado si existe
+ok 43 - textoOpcional: devuelve el texto recortado si existe
+  ---
+  duration_ms: 0.155673
+  type: 'test'
+  ...
+# Subtest: textoOpcional: usa la alternativa si falta o está vacío
+ok 44 - textoOpcional: usa la alternativa si falta o está vacío
+  ---
+  duration_ms: 0.355836
+  type: 'test'
+  ...
+# Subtest: inicialesDe: usa las iniciales guardadas si existen
+ok 45 - inicialesDe: usa las iniciales guardadas si existen
+  ---
+  duration_ms: 0.57465
+  type: 'test'
+  ...
+# Subtest: inicialesDe: las deriva del nombre si vienen vacías
+ok 46 - inicialesDe: las deriva del nombre si vienen vacías
+  ---
+  duration_ms: 0.473278
+  type: 'test'
+  ...
+# Subtest: inicialesDe: devuelve ? si no hay datos
+ok 47 - inicialesDe: devuelve ? si no hay datos
+  ---
+  duration_ms: 0.137646
+  type: 'test'
+  ...
+# (node:4788) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/lib/navegacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: el contexto conserva solo el caso conocido y descarta parámetros arbitrarios
+ok 48 - el contexto conserva solo el caso conocido y descarta parámetros arbitrarios
+  ---
+  duration_ms: 3.485579
+  type: 'test'
+  ...
+# Subtest: la solicitud conserva el profesional validado y el regreso al reporte
+ok 49 - la solicitud conserva el profesional validado y el regreso al reporte
+  ---
+  duration_ms: 1.901244
+  type: 'test'
+  ...
+# Subtest: continuar tras autenticación nunca acepta redirecciones externas ni otras rutas
+ok 50 - continuar tras autenticación nunca acepta redirecciones externas ni otras rutas
+  ---
+  duration_ms: 0.256156
+  type: 'test'
+  ...
+# (node:4805) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/fotografias/eliminar.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: elimina el archivo y luego los metadatos filtrando propietario, ID y ruta
+ok 51 - elimina el archivo y luego los metadatos filtrando propietario, ID y ruta
+  ---
+  duration_ms: 1.997105
+  type: 'test'
+  ...
+# Subtest: archivo inexistente: remove devuelve [] y completa la limpieza de metadatos
+ok 52 - archivo inexistente: remove devuelve [] y completa la limpieza de metadatos
+  ---
+  duration_ms: 0.293648
+  type: 'test'
+  ...
+# Subtest: fallo de Storage conserva ambos recursos y no intenta DELETE de PostgreSQL
+ok 53 - fallo de Storage conserva ambos recursos y no intenta DELETE de PostgreSQL
+  ---
+  duration_ms: 0.637656
+  type: 'test'
+  ...
+# Subtest: excepción de red se traduce sin presentar éxito ni borrar metadatos
+ok 54 - excepción de red se traduce sin presentar éxito ni borrar metadatos
+  ---
+  duration_ms: 0.226622
+  type: 'test'
+  ...
+# Subtest: fallo de PostgreSQL tras borrar archivo conserva el registro y explica el reintento
+ok 55 - fallo de PostgreSQL tras borrar archivo conserva el registro y explica el reintento
+  ---
+  duration_ms: 0.369907
+  type: 'test'
+  ...
+# Subtest: reintento después de fallo parcial completa la limpieza sin re-subir; repetir es inocuo
+ok 56 - reintento después de fallo parcial completa la limpieza sin re-subir; repetir es inocuo
+  ---
+  duration_ms: 0.394129
+  type: 'test'
+  ...
+# Subtest: consentimiento revocado: la eliminación y recuperación no requieren consultarlo ni upload
+ok 57 - consentimiento revocado: la eliminación y recuperación no requieren consultarlo ni upload
+  ---
+  duration_ms: 1.37234
+  type: 'test'
+  ...
+# Subtest: foto de otro propietario es invisible y no se toca Storage ni se informa borrado
+ok 58 - foto de otro propietario es invisible y no se toca Storage ni se informa borrado
+  ---
+  duration_ms: 0.182712
+  type: 'test'
+  ...
+# Subtest: rechaza rutas ajenas, bucket distinto y rutas manipuladas aunque haya metadatos propios
+ok 59 - rechaza rutas ajenas, bucket distinto y rutas manipuladas aunque haya metadatos propios
+  ---
+  duration_ms: 0.521923
+  type: 'test'
+  ...
+# Subtest: sin sesión, JWT inválido o cambio de usuario no se consulta ni modifica ningún recurso
+ok 60 - sin sesión, JWT inválido o cambio de usuario no se consulta ni modifica ningún recurso
+  ---
+  duration_ms: 0.536004
+  type: 'test'
+  ...
+# Subtest: sesión expirada entre servicios conserva los metadatos y permite reintentar al autenticarse
+ok 61 - sesión expirada entre servicios conserva los metadatos y permite reintentar al autenticarse
+  ---
+  duration_ms: 0.249913
+  type: 'test'
+  ...
+# Subtest: Storage 200 sin filas afectadas no es éxito si el objeto sigue listado
+ok 62 - Storage 200 sin filas afectadas no es éxito si el objeto sigue listado
+  ---
+  duration_ms: 0.161905
+  type: 'test'
+  ...
+# Subtest: fallo al comprobar Storage impide borrar el registro
+ok 63 - fallo al comprobar Storage impide borrar el registro
+  ---
+  duration_ms: 0.254241
+  type: 'test'
+  ...
+# Subtest: DELETE de PostgreSQL sin filas y con registro aún presente no informa éxito
+ok 64 - DELETE de PostgreSQL sin filas y con registro aún presente no informa éxito
+  ---
+  duration_ms: 0.146457
+  type: 'test'
+  ...
+# Subtest: borrado concurrente de metadatos se comprueba antes de confirmar finalización
+ok 65 - borrado concurrente de metadatos se comprueba antes de confirmar finalización
+  ---
+  duration_ms: 0.121207
+  type: 'test'
+  ...
+# Subtest: distingue errores de permisos y base de datos sin filtrar mensajes del proveedor
+ok 66 - distingue errores de permisos y base de datos sin filtrar mensajes del proveedor
+  ---
+  duration_ms: 0.188188
+  type: 'test'
+  ...
+# (node:4812) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/fotografias/mensajes.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: los errores del proveedor nunca se muestran crudos al paciente
+ok 67 - los errores del proveedor nunca se muestran crudos al paciente
+  ---
+  duration_ms: 2.147804
+  type: 'test'
+  ...
+# Subtest: la eliminación parcial conserva una instrucción comprensible de reintento
+ok 68 - la eliminación parcial conserva una instrucción comprensible de reintento
+  ---
+  duration_ms: 0.777568
+  type: 'test'
+  ...
+# Subtest: sesión y permisos se diferencian de errores de archivo
+ok 69 - sesión y permisos se diferencian de errores de archivo
+  ---
+  duration_ms: 0.19435
+  type: 'test'
+  ...
+# (node:4819) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/solicitudes/solicitudes.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sin sesión no permite consultar solicitudes
+ok 70 - sin sesión no permite consultar solicitudes
+  ---
+  duration_ms: 1.259456
+  type: 'test'
+  ...
+# Subtest: no permite consultar solicitudes de otro usuario
+ok 71 - no permite consultar solicitudes de otro usuario
+  ---
+  duration_ms: 0.186408
+  type: 'test'
+  ...
+# Subtest: la consulta filtra por usuario y solicitudes demo
+ok 72 - la consulta filtra por usuario y solicitudes demo
+  ---
+  duration_ms: 0.235168
+  type: 'test'
+  ...
+# Subtest: sin solicitudes devuelve una lista vacía
+ok 73 - sin solicitudes devuelve una lista vacía
+  ---
+  duration_ms: 0.12071
+  type: 'test'
+  ...
+# Subtest: la cancelación exige una sesión válida
+ok 74 - la cancelación exige una sesión válida
+  ---
+  duration_ms: 0.276065
+  type: 'test'
+  ...
+# Subtest: solo cancela solicitudes propias, demo y solicitadas
+ok 75 - solo cancela solicitudes propias, demo y solicitadas
+  ---
+  duration_ms: 0.373022
+  type: 'test'
+  ...
+# Subtest: no informa éxito cuando ninguna fila fue cancelada
+ok 76 - no informa éxito cuando ninguna fila fue cancelada
+  ---
+  duration_ms: 0.16542
+  type: 'test'
+  ...
+# Subtest: propaga los errores de consulta y cancelación
+ok 77 - propaga los errores de consulta y cancelación
+  ---
+  duration_ms: 0.223874
+  type: 'test'
+  ...
+# (node:4820) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/solicitudes/validaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: acepta una solicitud válida
+ok 78 - acepta una solicitud válida
+  ---
+  duration_ms: 1.05035
+  type: 'test'
+  ...
+# Subtest: rechaza campos obligatorios vacíos
+ok 79 - rechaza campos obligatorios vacíos
+  ---
+  duration_ms: 0.150723
+  type: 'test'
+  ...
+# Subtest: rechaza correos inválidos
+ok 80 - rechaza correos inválidos
+  ---
+  duration_ms: 0.120536
+  type: 'test'
+  ...
+# Subtest: rechaza fechas anteriores a hoy
+ok 81 - rechaza fechas anteriores a hoy
+  ---
+  duration_ms: 0.257583
+  type: 'test'
+  ...
+# Subtest: acepta la fecha actual
+ok 82 - acepta la fecha actual
+  ---
+  duration_ms: 0.120551
+  type: 'test'
+  ...
+# Subtest: rechaza mensajes mayores a 1000 caracteres
+ok 83 - rechaza mensajes mayores a 1000 caracteres
+  ---
+  duration_ms: 0.187184
+  type: 'test'
+  ...
+# Subtest: acepta mensajes de 1000 caracteres
+ok 84 - acepta mensajes de 1000 caracteres
+  ---
+  duration_ms: 0.088675
+  type: 'test'
+  ...
+# Subtest: solo permite cancelar solicitudes solicitadas
+ok 85 - solo permite cancelar solicitudes solicitadas
+  ---
+  duration_ms: 0.086138
+  type: 'test'
+  ...
+# Subtest: rechaza fechas inexistentes
+ok 86 - rechaza fechas inexistentes
+  ---
+  duration_ms: 0.374674
+  type: 'test'
+  ...
+# Subtest: acepta el 29 de febrero de un año bisiesto
+ok 87 - acepta el 29 de febrero de un año bisiesto
+  ---
+  duration_ms: 0.459381
+  type: 'test'
+  ...
+1..87
+# tests 87
+# suites 0
+# pass 87
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 749.300678

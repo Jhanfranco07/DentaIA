@@ -1,5 +1,7 @@
 # Rediseño y demostración educativa de DentaIA
 
+> Este documento conserva la evidencia histórica del PR #13. El recorrido y material vigentes se documentan en [Premium Experience](PREMIUM_EXPERIENCE.md); las ilustraciones antiguas se retiraron y las fotografías clínicas permanecen pendientes de autorización.
+
 Aporte independiente de Jhan Franco sobre `main` (base `6dfe23e`). Se conserva el historial y las implementaciones originales de Angie (directorio), Anelis (solicitudes), Stephan (consentimiento y fotografías) y Jhan (cuenta y recuperación de borrado).
 
 ## Recorrido para presentar

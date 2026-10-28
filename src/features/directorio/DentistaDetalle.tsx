@@ -6,7 +6,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatearPrecio, inicialesDe, textoOpcional } from "./formato";
 import type { Dentista } from "./tipos";
 import styles from "./directorio.module.css";
-import { enlaceSolicitud } from "@/lib/navegacion";
+import { contextoReporte, enlaceSolicitud } from "@/lib/navegacion";
 
 type Carga =
   | { estado: "cargando" }
@@ -17,6 +17,8 @@ type Carga =
 export default function DentistaDetalle({ id }: { id: string }) {
   const [carga, setCarga] = useState<Carga>({ estado: "cargando" });
   const [intento, setIntento] = useState(0);
+  const [contexto, setContexto] = useState("");
+  useEffect(() => { setContexto(contextoReporte(window.location.search)); }, []);
 
   useEffect(() => {
     let cancelado = false;
@@ -51,7 +53,7 @@ export default function DentistaDetalle({ id }: { id: string }) {
 
   return (
     <section className={styles.pagina}>
-      <Link href="/directorio" className={styles.volver}>← Volver al directorio</Link>
+      <nav aria-label="Volver al recorrido" className={styles.retorno}><Link href={`/directorio${contexto ? `?${contexto}` : ""}`} className={styles.volver}>← Volver al directorio</Link>{contexto && <Link href="/analisis/demo?reporte=1">Volver a mi reporte</Link>}</nav>
 
       {carga.estado === "cargando" && (
         <div className={styles.aviso} role="status" aria-live="polite">Cargando perfil…</div>
@@ -106,7 +108,7 @@ export default function DentistaDetalle({ id }: { id: string }) {
               Este perfil y sus tarifas son ilustrativos. Una solicitud de demostración no confirma
               una cita ni se envía a una clínica.
             </p>
-            {carga.dentista.is_demo && <Link className={styles.solicitar} href={enlaceSolicitud(carga.dentista.id)}>Solicitar atención de demostración</Link>}
+            {carga.dentista.is_demo && <Link className={styles.solicitar} href={enlaceSolicitud(carga.dentista.id, contexto)}>Solicitar atención de demostración</Link>}
           </div>
         </article>
       )}

@@ -1,0 +1,17 @@
+{
+  "rama": "feature/jhan-dentaia-premium-experience",
+  "autor_commits": "Jhan Franco",
+  "cuenta_github_conectada": "no verificable por política de red",
+  "consultas_github": {
+    "GET /user": "Forbidden",
+    "GET /repos/Jhanfranco07/DentaIA": "Forbidden"
+  },
+  "git_https_read": "aprobado",
+  "git_push_dry_run": "aprobado; no identifica cuenta",
+  "rama_subida": false,
+  "pr_creado": false,
+  "github_actions": "no verificado",
+  "vercel_preview": "no verificado",
+  "autorizacion_usuario": "Usar conexión autorizada de Anelis después de verificar cuenta y escritura; no modificar autor Jhan ni fusionar",
+  "accion_pendiente": "Aplicar api.github.com en ajustes de red y repetir verificación de cuenta/permisos antes de publicar"
+}

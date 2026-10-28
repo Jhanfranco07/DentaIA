@@ -8,12 +8,15 @@ import PerfilPaciente from "./PerfilPaciente";
 import { useSesion } from "./useSesion";
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
+import { retornoSolicitud } from "@/lib/navegacion";
 
 export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean }) {
   const { usuario, cargando, errorSesion, verificar } = useSesion();
   const operacion = useRef(false);
   const activo = useRef(true);
   const [registro, setRegistro] = useState(modoInicial);
+  const [continuar, setContinuar] = useState<string | null>(null);
+  useEffect(() => { setContinuar(retornoSolicitud(new URLSearchParams(window.location.search).get("continuar"))); }, []);
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -97,6 +100,7 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
           {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}
           {aviso && <p className={styles.aviso} role="status">{aviso}</p>}
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
+            {continuar && <div className="notice"><strong>Tu profesional sigue seleccionado.</strong><p>Ya puedes continuar con tu solicitud de demostración.</p><Link href={continuar} className="action">Continuar mi solicitud</Link></div>}
             <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />
             <nav aria-label="Continuar mi recorrido" className={styles.accesos}><Link href="/analisis/demo">Explorar la demostración</Link><Link href="/fotografias">Mis fotografías</Link><Link href="/solicitudes">Mis solicitudes</Link></nav>
             <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>
