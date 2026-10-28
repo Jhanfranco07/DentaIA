@@ -47,6 +47,7 @@ export default function Demostracion() {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [preparandoReporte, setPreparandoReporte] = useState(false);
   const [fecha, setFecha] = useState(() => new Date().toISOString());
+  const camaraInput = useRef<HTMLInputElement>(null);
   const operacion = useRef(0);
   const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null);
   const encabezado = useRef<HTMLHeadingElement>(null);
@@ -165,7 +166,7 @@ export default function Demostracion() {
           <div className={styles.contenidoTarjeta}><h3>{muestra.titulo}</h3><p>{muestra.resumen}</p><span className={styles.enlaceTarjeta}>Elegir este ejemplo <Icono nombre="flecha" size={18}/></span></div>
         </button><CreditoCaso caso={muestra}/><a href={muestra.imagen} download className={styles.descargaMuestra}><Icono nombre="reporte" size={16}/> Descargar muestra <span className="sr-only">{muestra.titulo}</span></a>
       </article>)}</div>
-      <div className={styles.archivo}><div><h3>¿Ya tienes una de nuestras muestras?</h3><p>Ábrela aquí. Reconocemos el contenido de las muestras, incluso con otro nombre. Una imagen diferente no recibe resultados predefinidos.</p></div><label className={styles.campoArchivo}>Abrir una imagen<input type="file" accept="image/png,image/jpeg,image/webp" disabled={ocupado} onChange={e => { void abrirArchivo(e.target.files?.[0]); e.target.value = ""; }} /></label></div>
+      <div className={styles.archivo}><div><h3>¿Ya tienes una de nuestras muestras?</h3><p>Ábrela aquí. Reconocemos el contenido de las muestras, incluso con otro nombre. Una imagen diferente no recibe resultados predefinidos.</p></div><label className={styles.campoArchivo}>Abrir una imagen<input type="file" accept="image/png,image/jpeg,image/webp" disabled={ocupado} onChange={e => { void abrirArchivo(e.target.files?.[0]); e.target.value = ""; }} /></label><button type="button" className={styles.campoArchivo} disabled={ocupado} onClick={() => camaraInput.current?.click()}>Tomar fotografía</button><input ref={camaraInput} type="file" accept="image/png,image/jpeg,image/webp" capture="environment" aria-label="Tomar fotografía con la cámara trasera" disabled={ocupado} style={{ display: "none" }} onChange={e => { void abrirArchivo(e.target.files?.[0]); e.target.value = ""; }} /></div>
       <p className={styles.notaPrivacidad}><Icono nombre="escudo" size={16}/>Tu selección permanece en este navegador y no se guarda en tu cuenta.</p>
     </div>}
 
