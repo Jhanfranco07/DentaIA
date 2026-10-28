@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
 import Reveal from "@/components/Reveal";
+import { CASOS } from "@/features/analisis/casos";
+
+const muestraInicio = CASOS[0];
+const fotografiaDisponible = muestraInicio.tipoImagen === "fotografia-autorizada";
+const fotografiasCompletas = CASOS.every(caso => caso.tipoImagen === "fotografia-autorizada");
 
 const recorrido = [
-  { numero: "01", icono: "diente", titulo: "Mira con más claridad", texto: "Elige un caso de referencia y explora sus observaciones educativas. Las fotografías clínicas esperan autorización verificable.", href: "/analisis/demo", accion: "Explorar los ejemplos" },
+  { numero: "01", icono: "diente", titulo: "Mira con más claridad", texto: fotografiasCompletas ? "Elige una fotografía dental de ejemplo y explora sus observaciones educativas preparadas. No se realiza un diagnóstico." : "Elige un caso de referencia y explora sus observaciones educativas. Las fotografías clínicas esperan autorización verificable.", href: "/analisis/demo", accion: "Explorar los ejemplos" },
   { numero: "02", icono: "reporte", titulo: "Lleva tu guía contigo", texto: "Revisa tus recomendaciones y descarga un reporte preventivo que puedes consultar a tu ritmo.", href: "/analisis/demo", accion: "Conocer el recorrido" },
   { numero: "03", icono: "persona", titulo: "Decide tu siguiente paso", texto: "Si lo deseas, explora el directorio y prueba una solicitud de atención. Tú eliges cuándo continuar.", href: "/directorio", accion: "Encontrar odontólogo" },
 ] as const;
@@ -18,13 +23,14 @@ export default function Inicio() {
           <p className="hero-description">Entender tu cuidado dental puede ser sencillo. Explora una guía visual, llévate recomendaciones y encuentra tu próximo paso, con tranquilidad.</p>
           <div className="actions"><Link className="action" href="/analisis/demo">Explorar la demostración <Icono nombre="flecha" size={18} /></Link><Link className="action action-secondary" href="/cuenta?modo=registro">Crear mi cuenta</Link></div>
           <p className="hero-signin">¿Ya tienes una cuenta? <Link href="/cuenta">Inicia sesión <span aria-hidden="true" className="icono-enlace-externo"><Icono nombre="flecha" size={14}/></span></Link></p>
-          <div className="hero-disclaimer"><span className="disclaimer-icon"><Icono nombre="escudo" size={22} /></span><span><strong>Información para cuidarte, sin diagnósticos.</strong><br />El análisis es una demostración con resultados educativos preparados. Las fotografías clínicas están pendientes de autorización.</span></div>
+          <div className="hero-disclaimer"><span className="disclaimer-icon"><Icono nombre="escudo" size={22} /></span><span><strong>Información para cuidarte, sin diagnósticos.</strong><br />El análisis es una demostración con resultados educativos preparados.{!fotografiasCompletas && " Algunas fotografías clínicas están pendientes de autorización."}</span></div>
         </div>
         <div className="hero-visual">
           <div className="hero-visual-decoration" aria-hidden="true" />
           <div className="hero-photo-card">
             <div className="hero-photo-heading"><span className="hero-live-label"><span aria-hidden="true" /> TU GUÍA PREVENTIVA</span><Icono nombre="diente" size={23} /></div>
-            <div className="hero-photo"><img src="/demo/cuidado-habitual.jpg" alt="Tarjeta editorial del caso de cuidado habitual; fotografía clínica pendiente de autorización" width={1200} height={800} fetchPriority="high" /><span className="photo-caption">Referencia educativa · Fotografía pendiente</span></div>
+            <div className={`hero-photo ${fotografiaDisponible && muestraInicio.alto > muestraInicio.ancho ? "hero-photo-portrait" : ""}`}><img src={muestraInicio.imagen} alt={fotografiaDisponible ? "Fotografía intraoral de ejemplo para acompañar el cuidado bucal habitual; no corresponde a un paciente de DentaIA" : "Referencia editorial; fotografía clínica pendiente de autorización"} width={muestraInicio.ancho} height={muestraInicio.alto} fetchPriority="high" /><span className="photo-caption">{fotografiaDisponible ? "Fotografía de ejemplo · Orientación educativa" : "Referencia educativa · Fotografía pendiente"}</span></div>
+            <p className="hero-photo-credit">{muestraInicio.atribucion}{muestraInicio.fuente && <> · <a href={muestraInicio.fuente}>Fuente</a></>}{muestraInicio.licenciaUrl && <> · <a href={muestraInicio.licenciaUrl}>Licencia</a></>}</p>
             <div className="hero-photo-details"><span className="hero-detail-icon"><Icono nombre="reporte" size={24} /></span><div><span className="eyebrow">DE LA ORIENTACIÓN A TU PRÓXIMO PASO</span><h2>Una guía que puedes llevar contigo.</h2><p>Observaciones claras. Recomendaciones útiles.</p></div></div>
             <Link className="hero-card-link" href="/analisis/demo"><span>Conocer mi reporte de ejemplo</span><Icono nombre="flecha" size={19} /></Link>
           </div>
