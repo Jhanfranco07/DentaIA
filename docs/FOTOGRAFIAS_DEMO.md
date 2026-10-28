@@ -1,34 +1,51 @@
-# Fotografías de demostración: autorización pendiente
+# Fotografías clínicas públicas de demostración
 
-**Estado: faltan las tres fotografías clínicas auténticas solicitadas.** No se ha obtenido una fuente con licencia y procedencia verificables que pueda incorporarse legalmente desde esta máquina. Este bloqueo impide aprobar el criterio visual de fotografía clínica, las regiones anatómicas sobre fotos y los PDF con fotografía auténtica.
+Se incorporaron **tres fotografías intraorales auténticas y diferentes**, almacenadas localmente, sin datos identificativos visibles y sin dependencia externa para mostrarlas. No proceden de pacientes de DentaIA. Las fotografías ilustran contenido educativo fijo; DentaIA no realiza inferencia, detección clínica ni diagnóstico a partir de ellas.
 
-Las tarjetas actuales en `public/demo/*.jpg` son **referencias editoriales originales de DentaIA**, generadas mediante formas y texto, sin anatomía dental. Su texto visible indica «Fotografía pendiente de autorización» y «No es una fotografía clínica». No son imágenes de pacientes, fotografías sintéticas, pruebas clínicas ni un sustituto del requisito pendiente. Permiten revisar la interfaz y el contenido educativo mientras se obtiene el material. Los tres PDF generados usan estas referencias y deben revisarse como documentos con material fotográfico pendiente.
+## Fuentes y licencias por archivo
 
-| Caso | Fotografía auténtica | Regiones actuales |
-| --- | --- | --- |
-| Cuidado bucal habitual | Pendiente | Ninguna |
-| Atención preventiva dental | Pendiente | Ninguna: no se inventa una zona dental sobre una tarjeta |
-| Cuidado de encías | Pendiente | Ninguna: no se inventa una región gingival sobre una tarjeta |
+Se obtuvieron de una copia pública redistribuida en [Dental Vision Benchmark](https://github.com/Tuminha/dental-vision-benchmark), un benchmark odontológico de Francisco Teixeira Barbosa y Daniel Robles Cantero. **La licencia MIT de su código no se aplica a estas imágenes**. El proyecto conserva las licencias individuales de Wikimedia Commons, explicitadas para cada archivo en sus registros de atribución.
 
-## Búsqueda realizada
+La revisión usó el commit inmutable **`19a7a39df441275f216435dda04ef87a5ef34bb8`** y su correspondencia exacta entre `data/items.json`, `CREDITS.md` y `data/images/`. El archivo de atribuciones declara expresamente que todos los archivos de `data/images/` son obras de terceros usadas bajo las licencias individuales indicadas y que mantienen esas licencias.
 
-Se consultaron fuentes públicas durante esta implementación. Ninguna fotografía externa fue copiada al proyecto.
+**Alcance de verificación:** se leyeron las licencias, autores y fuentes específicas publicados por el redistribuidor GitHub, además de inspeccionar visualmente los tres archivos y comprobar hashes. No se pudo consultar directamente la página original de Commons porque la red actual devuelve CONNECT 403 para ese dominio. La evidencia conservada permite revisar la atribución y la redistribución por archivo sin inventar una visita a la fuente primaria.
 
-- `https://commons.wikimedia.org/` y `https://upload.wikimedia.org/`: la política de red devuelve **CONNECT 403** antes de poder consultar las páginas de archivo, licencias y originales. Se guardaron los dominios requeridos en el borrador de configuración del entorno; ese guardado no aplica la política a la máquina actual.
-- `https://github.com/jihwan1008/Gingivitis_Classification`: contiene fotografías, pero no se encontró autorización de redistribución para los archivos. **Descartado**: un repositorio público no equivale a una licencia.
-- `https://github.com/thangngoc89/SegmentAnyTooth`: el README limita MIT al código y publica los pesos bajo condiciones distintas. No se pudo establecer una licencia específica para reutilizar las imágenes de pacientes como material público de una aplicación. **Descartado**.
-- `https://github.com/WenhDeng/metadent-bench`: el README distingue DS1 (CC BY-NC 4.0), DS2 (condiciones de la fuente original) y DS3 (condiciones de COYO). No se pudo verificar a qué componente corresponden tres archivos candidatos ni las condiciones originales de su publicación. **Descartado**; no se generaliza la licencia Apache del código a las fotografías.
-- `https://data.mendeley.com/datasets/3253gj88rr/1` y `https://data.mendeley.com/datasets/g8yhdvgjy2/3`: candidatos señalados por un catálogo público, con CC BY 4.0 declarada en ese catálogo. **No verificados**: la referencia secundaria no autoriza copiar imágenes sin revisar el registro original, archivos y condiciones de los participantes.
+| Caso y archivo local | Obra original | Autor/atribución conservada | Licencia |
+| --- | --- | --- | --- |
+| Cuidado bucal habitual — `public/demo/cuidado-habitual.jpg` | [Detailed view of the inside of the human mouth](https://commons.wikimedia.org/wiki/File:Detailed_view_of_the_inside_of_the_human_mouth.jpg) | El registro espejo no indica autor; CC0 no exige atribución. Se conserva título y fuente. | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Atención preventiva dental — `public/demo/atencion-preventiva.jpg` | [Dental Caries Cavity 2 (cropped)](https://commons.wikimedia.org/wiki/File%3ADental_Caries_Cavity_2_%28cropped%29.JPG) | Suyash.dwivedi | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| Cuidado de encías — `public/demo/cuidado-encias.jpg` | [MandibularAnteriorCalculus](https://commons.wikimedia.org/wiki/File%3AMandibularAnteriorCalculus.JPG) | DRosenbach at English Wikipedia | Dominio público, según el registro individual; [referencia a dominio público](https://creativecommons.org/publicdomain/mark/1.0/) |
 
-No se solicitó acceso a imágenes privadas ni se utilizaron datos de pacientes de DentaIA. No se infieren diagnósticos a partir de ninguna referencia.
+La atribución, enlace a la fuente y enlace a la licencia se muestran en el recorrido y se incorporan a los PDF. La atribución de la fotografía del inicio aparece junto a ella. No se sugiere que los autores avalen DentaIA.
 
-## Reanudar la incorporación
+## Evidencia reproducible
 
-1. Aplicar el acceso a `commons.wikimedia.org` y `upload.wikimedia.org` mediante configuración de red del entorno. Para explorar artículos o datasets alternativos, revisar los destinos específicos `pmc.ncbi.nlm.nih.gov`, `cdn.ncbi.nlm.nih.gov` o `data.mendeley.com` antes de añadirlos; no se necesita ampliar acceso a todo Internet.
-2. Elegir tres fotografías diferentes, de resolución suficiente y sin personas identificables. Verificar una licencia que permita reproducción y redistribución pública. Comprobar que no hay exclusiones de derechos para la figura o fotografía concreta y que el uso previsto es compatible; conservar la evidencia de licencia y publicación/consentimiento disponible.
-3. Registrar por imagen: título, autor, página original, URL original, licencia y enlace, fecha de consulta, transformación aplicada y hash SHA-256 del archivo original y del optimizado. Guardar la licencia/atribución necesaria junto a la evidencia.
-4. Optimizar a JPEG/WebP local conservando la relación de aspecto y sin recortar información clínica. Eliminar metadatos privados. Asignar `ancho`, `alto`, `tipoImagen: "fotografia-autorizada"`, `fuente`, `atribucion` y `licenciaUrl` en `CASOS`. Actualizar la UI si el formato cambia.
-5. En el caso 1 no crear regiones anómalas. Para los casos 2 y 3 definir manualmente una región ilustrativa coherente con la fotografía y proporcional a sus dimensiones; nunca presentarla como detección automática o confirmación clínica.
-6. Actualizar los hashes de los bytes optimizados y las imágenes de prueba. Volver a ejecutar las pruebas por contenido, navegador responsive, descarga PDF, renderizado e inspección visual de **los tres** documentos. Las imágenes desconocidas deben seguir rechazadas.
+- [Inventario de fuentes y hashes](evidencias/fotografias/fuentes.json): commit espejo, enlaces inmutables al archivo exacto y al original, licencia por archivo, SHA-256 del original obtenido del espejo y del optimizado local, dimensiones, tamaños y transformaciones.
+- [Registros individuales originales](evidencias/fotografias/items-fuente.json): copia de las tres entradas pertinentes de `data/items.json`, incluidas sus fuentes y licencias.
+- [Créditos originales del redistribuidor](evidencias/fotografias/CREDITS-fuente.md): copia sin editar de su archivo de atribuciones. Las demás obras listadas en ese documento **no se incorporan a DentaIA**.
+- [Registro original versionado](https://github.com/Tuminha/dental-vision-benchmark/blob/19a7a39df441275f216435dda04ef87a5ef34bb8/data/items.json) y [créditos originales versionados](https://github.com/Tuminha/dental-vision-benchmark/blob/19a7a39df441275f216435dda04ef87a5ef34bb8/CREDITS.md).
 
-`node scripts/generar-muestras-demo.mjs` regenera únicamente las tarjetas editoriales propias y sus JPEG de prueba. Se detiene si un caso ya está marcado como fotografía autorizada: **no sobrescribe fotografías aprobadas**. Las ilustraciones PNG/SVG del PR anterior se retiraron de `public/demo/`; su historial permanece en Git. No se ofrecen como fotografías clínicas ni se reconocen como las nuevas muestras. El punto de entrada `scripts/qa-recorrido-demo.mjs` reexporta por compatibilidad el nuevo QA premium, que utiliza los JPEG y selectores actuales.
+## Transformaciones y reutilización
+
+Los originales de la copia versionada se recomprimieron a JPEG progresivo, calidad 88, para reducir tamaño. Se eliminaron EXIF y otros metadatos. **No se recortaron, estiraron, retocaron ni generaron zonas anatómicas nuevas.** Se conservaron sus dimensiones naturales: 1280×1707, 1280×960 y 1280×636, respectivamente. Los JPEG de prueba se reducen a 280 píxeles de ancho conservando su proporción.
+
+La adaptación local de **Dental Caries Cavity 2 (cropped)** se distribuye bajo **CC BY-SA 4.0**, la misma licencia del original. Cualquier reutilización de esa fotografía debe conservar la atribución, enlace de licencia, indicación de cambios y condiciones de compartir igual. Esta condición corresponde a la fotografía y sus adaptaciones; no se declara que sea la licencia del código de DentaIA ni de las demás fotografías. CC0 y dominio público mantienen sus condiciones respectivas.
+
+Las marcas de los casos 2 y 3 son anotaciones vectoriales educativas superpuestas, preparadas manualmente. No alteran el JPEG descargable de la muestra ni son una salida de IA. En el PDF, las anotaciones acompañan la fotografía con el mismo carácter ilustrativo. La foto 1 no recibe marcas; la ausencia de regiones no certifica salud. El título de cada caso describe el tema educativo, no una evaluación del estado clínico de la persona fotografiada.
+
+## Verificación y mantenimiento
+
+```bash
+node --experimental-strip-types scripts/generar-muestras-demo.mjs
+node --experimental-strip-types --test --experimental-test-isolation=none --test-reporter=tap src/features/analisis/casos.test.mjs
+```
+
+El script verifica los hashes del catálogo y el inventario, las dimensiones y la fuente de cada fotografía. Regenera únicamente los JPEG pequeños de prueba; **no sobrescribe fotografías públicas, no produce imágenes sintéticas y no cambia hashes para ocultar discrepancias**. Las imágenes ajenas, los archivos recomprimidos por terceros o los recursos antiguos no reciben resultados predefinidos.
+
+Al reemplazar una foto, verificar primero la autorización de redistribución del archivo concreto, ausencia de información identificable y compatibilidad de licencia. Actualizar evidencia, atribución, dimensiones, hash y regiones manuales; ejecutar pruebas responsive, descargas y renderizar/revisar visualmente los tres PDF. No utilizar imágenes privadas de usuarios como muestras ni enviarlas a un modelo.
+
+## Registro de búsqueda anterior
+
+Los intentos iniciales de acceso directo a Commons quedaron bloqueados por política de red; se guardaron los dominios `commons.wikimedia.org` y `upload.wikimedia.org` en el borrador del entorno. El guardado no aplicó la política a esta máquina. Se descartaron Gingivitis_Classification (sin licencia específica), SegmentAnyTooth (licencia de código no suficiente para fotos) y MetaDent (licencias distintas según componente, sin procedencia suficiente por archivo). Ninguna de sus imágenes fue incorporada. Las tarjetas editoriales temporales y las ilustraciones antiguas se reemplazaron por estas tres fotografías con atribuciones individuales verificadas en el espejo.
+
+Pendiente opcional de trazabilidad: cuando se aplique el permiso de red, contrastar las páginas primarias de Commons con la copia preservada. La falta de esa consulta directa se mantiene explícita; no se presenta como ejecutada.
