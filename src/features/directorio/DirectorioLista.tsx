@@ -6,6 +6,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatearPrecio, inicialesDe, normalizar, textoOpcional } from "./formato";
 import type { Dentista } from "./tipos";
 import styles from "./directorio.module.css";
+import { contextoReporte } from "@/lib/navegacion";
 
 type Carga =
   | { estado: "cargando" }
@@ -17,6 +18,10 @@ export default function DirectorioLista() {
   const [intento, setIntento] = useState(0);
   const [busqueda, setBusqueda] = useState("");
   const [distrito, setDistrito] = useState("");
+  const [especialidad, setEspecialidad] = useState("");
+  const [contexto, setContexto] = useState("");
+
+  useEffect(() => { setContexto(contextoReporte(window.location.search)); }, []);
   const busquedaRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -54,23 +59,27 @@ export default function DirectorioLista() {
     return [...unicos].sort((a, b) => a.localeCompare(b, "es"));
   }, [dentistas]);
 
+  const especialidades = useMemo(() => [...new Set(dentistas.map(d => d.specialty.trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b,"es")), [dentistas]);
+
   const visibles = useMemo(() => {
     const q = normalizar(busqueda);
     return dentistas.filter(d => {
       const coincideTexto = !q || normalizar(d.name).includes(q) || normalizar(d.specialty).includes(q);
       const coincideDistrito = !distrito || d.district.trim() === distrito;
-      return coincideTexto && coincideDistrito;
+      return coincideTexto && coincideDistrito && (!especialidad || d.specialty.trim() === especialidad);
     });
-  }, [dentistas, busqueda, distrito]);
+  }, [dentistas, busqueda, distrito, especialidad]);
 
   function limpiarFiltros() {
     setBusqueda("");
     setDistrito("");
+    setEspecialidad("");
     busquedaRef.current?.focus();
   }
 
   return (
     <section className={styles.pagina}>
+      {contexto && <nav aria-label="Volver al recorrido" className={styles.retorno}><Link href="/analisis/demo?reporte=1">← Volver a mi reporte</Link><span>La búsqueda es opcional. Tu reporte sigue disponible durante esta sesión.</span></nav>}
       <header className={styles.cabecera}>
         <span className={styles.etiqueta}>Directorio odontológico</span>
         <h1>Encuentra un odontólogo</h1>
@@ -81,7 +90,7 @@ export default function DirectorioLista() {
       </header>
 
       {carga.estado === "cargando" && (
-        <div className={styles.aviso} role="status" aria-live="polite">Cargando odontólogos…</div>
+        <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i/><i/><i/></div></div>
       )}
 
       {carga.estado === "error" && (
@@ -119,8 +128,16 @@ export default function DirectorioLista() {
                 {distritos.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
+            <div className={styles.campo}>
+              <label htmlFor="dir-especialidad">Especialidad</label>
+              <select id="dir-especialidad" value={especialidad} onChange={e => setEspecialidad(e.target.value)}>
+                <option value="">Todas las especialidades</option>
+                {especialidades.map(e => <option key={e} value={e}>{e}</option>)}
+              </select>
+            </div>
           </div>
 
+          {distrito && <p className={styles.distritoElegido}>Profesionales de demostración en el distrito seleccionado: <strong>{distrito}</strong>. No se calculan distancias ni disponibilidad de atención.</p>}
           <p className={styles.conteo} aria-live="polite">
             Mostrando {visibles.length} de {dentistas.length} profesionales
           </p>
@@ -151,7 +168,7 @@ export default function DirectorioLista() {
                       <span>Consulta: {formatearPrecio(d.consultation_price, d.currency)}</span>
                     </div>
                     <Link
-                       href={`/directorio/${d.id}`}
+                       href={`/directorio/${d.id}${contexto ? `?${contexto}` : ""}`}
                        className={styles.enlace}
                        aria-label={`Ver detalle de ${d.name.trim() || "profesional"}`}
                     >
