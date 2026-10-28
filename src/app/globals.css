@@ -89,7 +89,7 @@ input, select, textarea { max-width: 100%; min-width: 0; }
 .hero-disclaimer { display: flex; gap: 12px; align-items: center; margin-top: 37px; font-size: 12px; line-height: 1.65; color: var(--muted); max-width: 460px; }
 .hero-disclaimer strong { color: var(--ink); font-weight: 600; }
 .disclaimer-icon { width: 39px; height: 39px; flex-shrink: 0; display: grid; place-items: center; color: var(--teal); background: #e7f4ef; border-radius: 50%; }
-.hero-visual { position: relative; padding-bottom: 28px; animation: home-arrive .8s .12s ease both; }
+.hero-visual { position: relative; padding-bottom: 70px; animation: home-arrive .8s .12s ease both; }
 .hero-visual-decoration { position: absolute; inset: 30px -32px 0 35px; background: #d8edeb; border-radius: 38px 38px 90px 38px; transform: rotate(5deg); }
 .hero-photo-card { position: relative; background: #fff; border: 1px solid #e0e9eb; border-radius: 22px; padding: 21px; box-shadow: 0 25px 60px -25px #143f4c40; }
 .hero-photo-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--teal); margin-bottom: 17px; }
@@ -240,7 +240,7 @@ input, select, textarea { max-width: 100%; min-width: 0; }
   .hero-copy>.actions .action { min-height: 49px; }
   .hero-signin { text-align: center; margin-top: 17px; font-size: 11px; }
   .hero-disclaimer { margin-top: 25px; font-size: 11px; gap: 10px; }
-  .hero-visual { width: calc(100% - 8px); padding-bottom: 29px; }
+  .hero-visual { width: calc(100% - 8px); padding-bottom: 70px; }
   .hero-photo-card { padding: 15px; border-radius: 18px; }
   .hero-visual-decoration { inset: 20px -12px 2px 22px; border-radius: 25px 25px 50px 25px; }
   .hero-photo-heading { margin-bottom: 13px; }
