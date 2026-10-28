@@ -8,8 +8,10 @@ import {crearPDF} from './pdf.ts';
 for(const caso of CASOS){
  test(`muestra ${caso.id}: imagen original válida, hash y resultado fijo`,async()=>{
   const data=await readFile(new URL(`../../../public${caso.imagen}`,import.meta.url));
-  assert.equal(data.subarray(1,4).toString(),'PNG');
-  assert.equal(data.readUInt32BE(16),1400);assert.equal(data.readUInt32BE(20),840);
+  assert.equal(data[0],0xff); assert.equal(data[1],0xd8);
+  assert.equal(caso.ancho,1400); assert.equal(caso.alto,840);
+  assert.equal(caso.tipoImagen,'referencia-pendiente');
+  assert.match(caso.atribucion,/no es una fotografía clínica/);
   assert.equal((await reconocerMuestra(data))?.id,caso.id);
   assert(caso.observaciones.length>=2);assert(caso.recomendaciones.length>=3);
   assert.equal((await reconocerMuestra(Uint8Array.from(data)))?.id,caso.id);
@@ -30,7 +32,7 @@ for(const caso of CASOS){
  });
 }
 test('la asociación depende de bytes y nunca del nombre de archivo',async()=>{
- const data=await readFile(new URL('../../../public/demo/cuidado-habitual.png',import.meta.url));
+ const data=await readFile(new URL('../../../public/demo/cuidado-habitual.jpg',import.meta.url));
  const alterado=Buffer.from(data);alterado[alterado.length-1]^=1;
  assert.equal(await reconocerMuestra(alterado),null);
  assert.equal((await reconocerMuestra(data)).id,'cuidado-habitual');
@@ -40,7 +42,8 @@ test('rechaza imágenes desconocidas, vacías o demasiado grandes sin asignar re
 });
 test('identificadores estables y regiones acotadas al ejemplo',()=>{
  assert.equal(new Set(CASOS.map(c=>c.id)).size,3);assert.equal(new Set(CASOS.map(c=>c.sha256)).size,3);
- assert.equal(CASOS[0].regiones.length,0);assert.equal(CASOS[1].regiones.length,1);assert.equal(CASOS[2].regiones.length,1);
+ // Sin fotos autorizadas no se inventan regiones anatómicas sobre tarjetas.
+ assert(CASOS.every(c=>c.regiones.length===0));
  for(const c of CASOS){assert.match(c.sha256,/^[a-f0-9]{64}$/);for(const r of c.regiones){assert(r.x-r.rx>=0&&r.x+r.rx<=1&&r.y-r.ry>=0&&r.y+r.ry<=1);}}
  assert.match(AVISO_DEMO,/simulado/);
 });
@@ -52,4 +55,10 @@ test('el reporte rechaza imagen inválida, dimensiones imposibles y fecha invál
 test('el enlace de solicitud acepta solo IDs internos válidos',()=>{
  const id='a1560ae0-2fc1-4fbc-87c6-beee116cf2e5';assert.equal(enlaceSolicitud(id),`/solicitudes?odontologo=${id}`);
  for(const id of ['https://otro.test','../cuenta','', '<script>'])assert.equal(enlaceSolicitud(id),'/solicitudes');
+});
+
+test('las ilustraciones antiguas no se presentan como fotografías ni conservan resultados',async()=>{
+ const antigua=Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><text>Ilustración anterior sin fotografía clínica</text></svg>');
+ assert.equal(await reconocerMuestra(antigua),null);
+ assert(CASOS.every(c=>c.imagen.endsWith('.jpg')));
 });
