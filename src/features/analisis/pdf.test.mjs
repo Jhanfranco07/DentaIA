@@ -40,3 +40,15 @@ test('PDF rechaza fechas, dimensiones y regiones no válidas sin producir docume
   assert.throws(() => crearPDF(CASOS[0], fecha, jpg, 0, 168));
   assert.throws(() => crearPDF({ ...CASOS[0], regiones: [{ x: 2, y: .5, rx: .1, ry: .1, etiqueta: 'inválida' }] }, fecha, jpg, 280, 168));
 });
+
+
+test('PDF solo marca regiones definidas para la referencia y etiqueta el material pendiente con transparencia', async () => {
+  const jpg = await readFile(new URL('./fixtures/cuidado-habitual.jpg', import.meta.url));
+  const caso = { ...CASOS[0], tipoImagen: 'referencia-pendiente', atribucion: 'Referencia editorial DentaIA · no es una fotografía clínica', regiones: [] };
+  const pendiente = Buffer.from(crearPDF(caso, fecha, jpg, 280, 168)).toString('latin1');
+  assert.ok(pendiente.includes('Referencia editorial. Fotografía clínica pendiente de autorización.'));
+  assert.ok(!pendiente.includes('Fotografía de referencia. No pertenece'));
+  assert.equal(pendiente.includes('1.8 w'), false);
+  const conRegion = Buffer.from(crearPDF({ ...caso, regiones: [{ x: .5, y: .5, rx: .1, ry: .1, etiqueta: 'Referencia de prueba' }] }, fecha, jpg, 280, 168)).toString('latin1');
+  assert.equal(conRegion.includes('1.8 w'), true);
+});

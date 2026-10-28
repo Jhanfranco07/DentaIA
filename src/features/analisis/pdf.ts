@@ -48,6 +48,7 @@ export function crearPDF(caso: CasoDemo, fecha: Date, imagenJpeg: Uint8Array, an
   };
   const fechaTexto = fecha.toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric", timeZone: "America/Lima" });
   const numeroCaso = String(Math.max(1, ["cuidado-habitual", "atencion-preventiva", "cuidado-encias"].indexOf(caso.id) + 1)).padStart(2, "0");
+  const referenciaPendiente = (caso as CasoDemo & { tipoImagen?: string }).tipoImagen === "referencia-pendiente";
   const credito = (caso as CasoDemo & { atribucion?: string }).atribucion;
 
   caja(0, 0, 595, 842, "1 1 1");
@@ -84,7 +85,7 @@ export function crearPDF(caso: CasoDemo, fecha: Date, imagenJpeg: Uint8Array, an
   linea(382, contextoY, 169);
   contextoY += 17;
   parrafo(caso.regiones.length ? "El contorno señala una referencia visual educativa. No confirma una enfermedad." : "Ejemplo sin regiones señaladas. No determina el estado de salud de una persona.", 382, contextoY, 169, 9, 12.5);
-  texto("Fotografía de referencia. No pertenece a un paciente de DentaIA.", 38, 412, 7.6, false, COLORES.secundario);
+  texto(referenciaPendiente ? "Referencia editorial. Fotografía clínica pendiente de autorización." : "Fotografía de referencia. No pertenece a un paciente de DentaIA.", 38, 412, 7.6, false, COLORES.secundario);
 
   texto("01", 38, 441, 9, true, COLORES.turquesa);
   texto("Qué muestra este ejemplo", 61, 441, 14, true);
@@ -114,7 +115,7 @@ export function crearPDF(caso: CasoDemo, fecha: Date, imagenJpeg: Uint8Array, an
   texto(`Caso: ${caso.id} | DentaIA`, 38, 792, 7.5, false, COLORES.secundario);
   texto("1 / 1", 534, 792, 8, false, COLORES.secundario);
   if (credito) {
-    const lineas = envolver(`Fotografía: ${credito}. Fuentes completas: documentación de DentaIA.`, 519, 6.4);
+    const lineas = envolver(`${referenciaPendiente ? "Imagen" : "Fotografía"}: ${credito}. Fuentes completas: documentación de DentaIA.`, 519, 6.4);
     if (lineas.length > 2) throw new Error("La atribución fotográfica excede el pie del reporte.");
     lineas.forEach((l, i) => texto(l, 38, 808 + i * 8, 6.4, false, COLORES.secundario));
   }

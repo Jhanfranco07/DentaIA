@@ -14,5 +14,5 @@ for (const caso of CASOS) {
   const pdf = crearPDF(caso, new Date(), data, info.width, info.height);
   const archivo = path.join(destino, `DentaIA-${caso.id}.pdf`);
   await writeFile(archivo, pdf);
-  console.log(`${archivo}: ${pdf.byteLength} bytes; fotografía ${info.width} × ${info.height}`);
+  console.log(`${archivo}: ${pdf.byteLength} bytes; imagen ${info.width} × ${info.height}`);
 }
