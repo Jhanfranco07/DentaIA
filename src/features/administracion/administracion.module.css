@@ -23,7 +23,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  overflow: clip;
+  position: relative;
 }
 .lateral {
   display: flex;
@@ -92,14 +92,67 @@
 .limiteClinico h2 { font-size: 14px; margin: 0 0 8px; }
 .limiteClinico p { color: var(--muted); font-size: 12px; margin: 0; }
 
-/* Base fluida para no bloquear la vista local. La revisión responsive completa es la parte 2. */
-@media (max-width: 800px) {
-  .panel { grid-template-columns: 1fr; }
-  .lateral { border-right: 0; border-bottom: 1px solid var(--line); }
-  .etiquetaMenu { margin-top: 20px; }
-  .navegacion { display: flex; flex-wrap: wrap; }
-  .navegacion button { width: auto; }
-  .notaLateral { margin: 20px 8px 10px; padding-top: 0; }
-  .contenido, .encabezado { padding: 22px; }
+
+.botonMenu { display: none; }
+.saltarContenido { position: absolute; top: 8px; left: 8px; z-index: 1; padding: 10px 16px; border-radius: 8px; background: var(--ink); color: #fff; transform: translateY(-200%); opacity: 0; pointer-events: none; }
+.saltarContenido:focus { transform: none; opacity: 1; pointer-events: auto; }
+.trabajo { position: relative; }
+.pagina h1, .pagina h2, .pagina h3, .pagina button, .pagina label, .pagina strong, .pagina span { overflow-wrap: anywhere; }
+.pagina button, .pagina select, .volver { min-height: 44px; }
+.selectorEstado { display: grid; gap: 8px; margin-top: 24px; }
+.selectorEstado label { font-size: 13px; font-weight: 650; }
+.selectorEstado select { width: 100%; max-width: 320px; border: 1px solid var(--muted); border-radius: 8px; padding: 8px 12px; color: var(--ink); background: #fff; }
+.selectorEstado p { margin: 0; color: var(--muted); font-size: 12px; }
+.estado { display: grid; justify-items: center; gap: 12px; padding: 12px 0; }
+.estado strong { font-size: 15px; }
+.estado p { margin: 8px 0 0; max-width: 440px; color: var(--muted); }
+.iconoEstado { display: grid !important; place-items: center; width: 48px; height: 48px; margin: 0 !important; border-radius: 50%; background: var(--soft); color: var(--teal-dark) !important; font-size: 24px; font-weight: 700; }
+.iconoEstado svg { margin: 0; }
+.estado[data-estado="error"] .iconoEstado { background: #fbeef0; color: var(--danger) !important; }
+.estado[data-estado="error"] strong { color: var(--danger); }
+.cargando { display: block; width: 24px; height: 24px; border: 3px solid #b7d9db; border-top-color: var(--teal-dark); border-radius: 50%; animation: giro 1s linear infinite; }
+.esqueleto { width: min(360px, 100%); display: grid; gap: 8px; }
+.esqueleto span { display: block; height: 12px; margin: 0; background: #e5edf2; border-radius: 4px; }
+.esqueleto span:last-child { width: 65%; }
+.accionEstado { border: 1px solid var(--teal-dark); border-radius: 8px; background: #fff; color: var(--teal-dark); padding: 8px 16px; font-weight: 650; }
+.accionEstado:hover { background: var(--soft); }
+@keyframes giro { to { transform: rotate(360deg); } }
+
+/* Mantener el control enfocado visible hasta que matchMedia transfiera el foco. */
+@media (min-width: 801px) {
+  .botonMenu:focus { display: flex; grid-column: 1 / -1; }
+}
+@media (min-width: 801px) and (max-width: 1100px) {
+  .panel { grid-template-columns: 210px minmax(0, 1fr); }
+  .contenido, .encabezado { padding: 24px; }
   .tarjetas { grid-template-columns: 1fr; }
+}
+@media (max-width: 800px) {
+  .pagina { width: calc(100% - 32px); margin-top: 24px; }
+  .panel { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .botonMenu { display: flex; align-items: center; gap: 12px; width: 100%; padding: 16px 20px; border: 0; border-bottom: 1px solid var(--line); border-radius: var(--radius) var(--radius) 0 0; background: #f1f6fa; color: var(--teal-dark); text-align: left; font-size: 14px; font-weight: 650; }
+  .botonMenu > svg { flex-shrink: 0; }
+  .botonMenu > span:last-child { margin-left: auto; }
+  .lateral { display: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 20px; }
+  .lateral[data-abierto="true"], .lateral:focus-within { display: flex; }
+  .etiquetaMenu { margin-top: 20px; }
+  .notaLateral { margin: 20px 8px 10px; padding-top: 0; }
+  .contenido, .encabezado { padding: 24px; }
+}
+@media (max-width: 600px) {
+  .pagina { width: calc(100% - 24px); margin: 16px auto 40px; }
+  .avisoDemo { padding: 14px; font-size: 12px; margin-bottom: 16px; }
+  .contenido, .encabezado { padding: 20px 16px; }
+  .encabezado p { flex-wrap: wrap; gap: 8px; }
+  .tarjetas { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .tarjeta, .bloque { padding: 18px 14px; border-radius: 12px; }
+  .limiteClinico { padding: 16px 14px; gap: 10px; }
+  .tabla { table-layout: fixed; }
+  .tabla th { padding: 10px 6px; overflow-wrap: anywhere; }
+  .tabla td { padding: 20px 10px; }
+  .roles li { display: grid; gap: 10px; }
+  .roles li > span { justify-self: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cargando { animation: none; }
 }
