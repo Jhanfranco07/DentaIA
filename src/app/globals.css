@@ -297,3 +297,75 @@ input, select, textarea { max-width: 100%; min-width: 0; }
 }
 
 .icono-enlace-externo{display:inline-flex;vertical-align:middle;transform:rotate(-45deg);line-height:1}.icono-enlace-externo svg{display:block}
+
+.hero-photo-placeholder { display: grid; place-items: center; min-height: 250px; font-size: 84px; color: var(--teal); background: radial-gradient(ellipse, #f5f8f9, #e2ecee); }
+.home-principles b { color: var(--teal); font-weight: 400; }
+ 
+/* Botones: variantes extra */
+.action-full { width: 100%; }
+ 
+/* Paneles y encabezados de panel */
+.panel { padding: 28px; }
+.panel h2 { font-size: 1.15rem; margin: 0 0 4px; }
+.panel-title { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+.panel-title p { margin: 0; color: var(--muted); font-size: 14px; }
+.panel-icon, .result-icon { width: 44px; height: 44px; flex-shrink: 0; display: grid; place-items: center; border-radius: 12px; background: var(--soft); color: var(--teal); }
+.panel .notice { margin-top: 16px; }
+.panel .notice .action { margin-top: 12px; }
+ 
+/* Vista: analizar (subir fotografía) */
+.upload-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.drop { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; padding: 38px 20px; border: 2px dashed #b8d3d7; border-radius: 16px; background: #f8fcfc; cursor: pointer; }
+.drop small { color: var(--muted); }
+.upload-symbol { font-size: 34px; color: var(--teal); }
+.preview img { width: 100%; max-height: 360px; object-fit: contain; border-radius: 14px; background: #f0f5f6; display: block; }
+.preview-caption { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; font-size: 13px; color: var(--muted); }
+.preview-caption button { border: 0; background: transparent; color: var(--teal-dark); font-weight: 650; }
+.check { display: flex; gap: 12px; align-items: flex-start; margin: 20px 0; font-size: 14px; color: var(--muted); }
+.check input { width: 20px; height: 20px; margin-top: 3px; flex-shrink: 0; accent-color: var(--teal); }
+.link-inline { border: 0; background: transparent; padding: 0; min-height: 0; color: var(--teal-dark); font-weight: 650; text-decoration: underline; }
+.sidebar { display: grid; gap: 16px; }
+.tip-panel { padding: 22px; border-radius: 16px; background: var(--soft); border: 1px solid #cfe6e5; }
+.tip-panel.neutral { background: #fff; border-color: var(--line); }
+.tip-panel h3 { margin: 0 0 10px; font-size: 1rem; }
+.tip-panel p { margin: 6px 0; font-size: 14px; color: var(--muted); }
+ 
+/* Vistas: resultados y cómo funciona */
+.result-grid, .info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin: 24px 0; }
+.info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.result-card h3, .info-card h3 { margin: 16px 0 8px; }
+.result-card p, .info-card p { color: var(--muted); font-size: 14px; margin: 0; }
+.step-num { font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #7893a3; }
+.result-actions, .center-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+.center-actions { justify-content: center; margin-top: 28px; }
+ 
+/* Vista: directorio de odontólogos */
+.filters { display: grid; grid-template-columns: 1fr 220px; gap: 12px; margin-bottom: 14px; }
+.filters input, .filters select { min-height: 48px; padding: 10px 14px; border: 1px solid #cbd9e1; border-radius: 10px; background: #fff; color: var(--ink); }
+.count { font-size: 13px; color: var(--muted); }
+.dentist-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.dentist-card { display: flex; gap: 18px; padding: 22px; }
+.dentist-avatar { width: 64px; height: 64px; flex-shrink: 0; display: grid; place-items: center; border-radius: 16px; font-weight: 700; color: var(--ink); }
+.dentist-detail { flex: 1; min-width: 0; }
+.dentist-detail h3 { margin: 8px 0 2px; }
+.dentist-detail p { margin: 0 0 10px; color: var(--muted); font-size: 14px; }
+.dentist-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.fake-tag { display: inline-block; font-size: 9px; font-weight: 750; letter-spacing: .1em; padding: 3px 7px; border-radius: 5px; background: #fff3d6; color: #7a5a10; }
+.profile-extra { margin-top: 12px; padding: 14px; border-radius: 12px; background: var(--soft); font-size: 13px; }
+.profile-extra p { margin: 6px 0 0; }
+.empty { padding: 28px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; }
+ 
+/* Vista: privacidad */
+.privacy h2 { font-size: 1.2rem; margin: 24px 0 8px; }
+.privacy h2:first-child { margin-top: 0; }
+.privacy p { color: var(--muted); max-width: 70ch; }
+ 
+/* Responsive de las vistas internas */
+@media (max-width: 900px) {
+  .upload-grid, .result-grid, .info-grid, .dentist-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 650px) {
+  .filters { grid-template-columns: 1fr; }
+  .dentist-card { flex-direction: column; }
+  .panel { padding: 22px; }
+}
