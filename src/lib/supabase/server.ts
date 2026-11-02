@@ -17,5 +17,9 @@ export function crearClienteIdentidadServidor() {
     }) },
   });
   // Exponer solo la operación necesaria, sin consultas SQL, Storage o métodos administrativos.
-  return { auth: { getUser: (token?: string) => cliente.auth.getUser(token) } };
+  return { auth: {
+    getUser: (token?: string) => cliente.auth.getUser(token),
+    // Claves de firma pueden cachearse en el SDK; las asignaciones de rol se consultan con getUser.
+    getClaims: (token?: string) => cliente.auth.getClaims(token),
+  } };
 }

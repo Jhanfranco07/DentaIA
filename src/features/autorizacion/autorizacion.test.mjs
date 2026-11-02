@@ -5,11 +5,11 @@ import { autorizarSolicitudAdministrativa, responderComprobacionAdministrativa, 
 // Identidad sintética: solo fixtures en memoria, nunca se crea en Supabase.
 const asignacion = {version:1, estado:'activo', roles:['superusuario']};
 const usuario = (extra={}) => ({id:'identidad-sintetica',aud:'authenticated',confirmed_at:'2026-10-31T00:00:00Z',
-  app_metadata:{dentaia:asignacion},user_metadata:{},...extra});
+  app_metadata:{dentaia:asignacion},user_metadata:{},factors:[{id:'factor-sintetico',status:'verified',factor_type:'totp'}],...extra});
 const headers = () => new Headers({Authorization:'Bearer token-sintetico'});
 function proveedor(user=usuario(), error=null) {
   const llamadas=[];
-  return {llamadas,crear:()=>({auth:{getUser:async token=>{llamadas.push(token);return {data:{user},error};}}})};
+  return {llamadas,crear:()=>({auth:{getUser:async token=>{llamadas.push(token);return {data:{user},error};},getClaims:async()=>({data:{claims:{sub:user?.id,role:'authenticated',aal:'aal2',session_id:'sesion-sintetica',exp:Date.now()/1000+3600}},error:null})}})};
 }
 
 test('sin sesión, esquema incorrecto o bearer ambiguo: 401 y no consulta Auth',async()=>{
@@ -71,7 +71,7 @@ test('identidad anónima, sin confirmar, eliminada o suspendida se deniega',asyn
 });
 test('revocación de rol se consulta en la siguiente petición, aun con el mismo token',async()=>{
   let actual=usuario(); let llamadas=0;
-  const crear=()=>({auth:{getUser:async()=>{llamadas++;return {data:{user:actual},error:null};}}});
+  const crear=()=>({auth:{...proveedor().crear().auth,getUser:async()=>{llamadas++;return {data:{user:actual},error:null};}}});
   assert.equal((await autorizarSolicitudAdministrativa(headers(),crear)).autorizado,true);
   actual=usuario({app_metadata:{dentaia:{...asignacion,estado:'suspendido'}}});
   assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),crear),{autorizado:false,status:403});

@@ -11,7 +11,7 @@ export type AsignacionAdministrativa = {
   roles: readonly RolPersistido[];
 };
 
-type ClienteIdentidad = { auth: Pick<SupabaseClient["auth"], "getUser"> };
+type ClienteIdentidad = { auth: Pick<SupabaseClient["auth"], "getUser" | "getClaims"> };
 export type CrearClienteIdentidad = () => ClienteIdentidad;
 export type AccesoAdministrativo =
   | { autorizado: true; usuarioId: string }
@@ -51,7 +51,8 @@ export async function autorizarSolicitudAdministrativa(
   const token = /^Bearer ([A-Za-z0-9._~+/-]+=*)$/i.exec(cabecera)?.[1];
   if (!token) return { autorizado: false, status: 401 };
   try {
-    const { data, error } = await crearCliente().auth.getUser(token);
+    const cliente = crearCliente();
+    const { data, error } = await cliente.auth.getUser(token);
     if (error) {
       // AuthRetryableFetchError puede llegar sin status o con status 0.
       const sesionInvalida = error.status === 400 || error.status === 401 || error.status === 403 || error.status === 422;
@@ -62,6 +63,19 @@ export async function autorizarSolicitudAdministrativa(
     // Lectura fresca en cada petición: no usar los claims antiguos del access token.
     const asignacion = leerAsignacionAdministrativa(data.user.app_metadata);
     if (!asignacion?.roles.includes("superusuario")) return { autorizado: false, status: 403 };
+    // Solo el SDK verifica firma/caducidad. Nunca interpretar aal desde un JWT sin verificar.
+    const verificacion = await cliente.auth.getClaims(token);
+    if (verificacion.error) {
+      const status = verificacion.error.status;
+      return { autorizado: false, status: status === 400 || status === 401 || status === 403 || status === 422 ? 401 : 503 };
+    }
+    const claims = verificacion.data?.claims;
+    if (!claims || claims.sub !== data.user.id || claims.role !== "authenticated"
+      || typeof claims.exp !== "number" || !Number.isFinite(claims.exp) || claims.exp <= Date.now() / 1000
+      || typeof claims.session_id !== "string" || !claims.session_id) return { autorizado: false, status: 401 };
+    if (claims.aal !== "aal2" || !data.user.factors?.some(factor => factor.status === "verified")) {
+      return { autorizado: false, status: 403 };
+    }
     return { autorizado: true, usuarioId: data.user.id };
   } catch {
     // Error de configuración/red/proveedor: nunca permitir ni filtrar el detalle técnico.
@@ -69,17 +83,45 @@ export async function autorizarSolicitudAdministrativa(
   }
 }
 
-/** Respuesta mínima: ningún perfil, identificador, token, rol ni dato clínico se serializa. */
-export async function responderComprobacionAdministrativa(request: Request, crearCliente: CrearClienteIdentidad): Promise<Response> {
-  const resultado = await autorizarSolicitudAdministrativa(request.headers, crearCliente);
-  const status = resultado.autorizado ? 200 : resultado.status;
-  const headers = new Headers({
-    "Cache-Control": "private, no-store, max-age=0",
-    "CDN-Cache-Control": "no-store",
-    "Vary": "Authorization",
-  });
+// Lista deliberadamente cerrada. DI-151/DI-152 deberán añadir permisos específicos revisados.
+export const ACCIONES_ADMINISTRATIVAS = ["comprobar_acceso"] as const;
+export type AccionAdministrativa = typeof ACCIONES_ADMINISTRATIVAS[number];
+export type ContextoAdministrativo = Readonly<{ usuarioId: string; accion: AccionAdministrativa }>;
+export type OperacionAdministrativa = (contexto: ContextoAdministrativo) => Promise<Response> | Response;
+
+function respuestaPrivada(response: Response): Response {
+  const headers = new Headers(response.headers);
+  headers.set("Cache-Control", "private, no-store, max-age=0");
+  headers.set("CDN-Cache-Control", "no-store");
+  headers.set("Vary", [...new Set([...(headers.get("Vary") ?? "").split(",").map(v => v.trim()).filter(Boolean), "Authorization"])].join(", "));
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
+function respuestaDenegada(status: 401 | 403 | 500 | 503): Response {
+  const headers = new Headers();
   if (status === 401) headers.set("WWW-Authenticate", "Bearer");
-  return Response.json(resultado.autorizado ? { autorizado: true } : {
+  return respuestaPrivada(Response.json({
     error: status === 401 ? "Autenticación requerida." : status === 403 ? "Acceso denegado." : "Verificación no disponible.",
-  }, { status, headers });
+  }, { status, headers }));
+}
+
+/** Ejecuta el servicio y construye su respuesta solo DESPUÉS de autorizar, por petición. */
+export async function ejecutarOperacionAdministrativa(
+  request: Request, accion: AccionAdministrativa, crearCliente: CrearClienteIdentidad, operacion: OperacionAdministrativa,
+): Promise<Response> {
+  const acceso = await autorizarSolicitudAdministrativa(request.headers, crearCliente);
+  if (!acceso.autorizado) return respuestaDenegada(acceso.status);
+  if (!ACCIONES_ADMINISTRATIVAS.includes(accion)) return respuestaDenegada(403);
+  try {
+    // Nunca aceptar el contexto desde el cuerpo, la URL o una autorización anterior.
+    return respuestaPrivada(await operacion(Object.freeze({ usuarioId: acceso.usuarioId, accion })));
+  } catch {
+    return respuestaDenegada(500);
+  }
+}
+
+/** Respuesta mínima: ningún perfil, identificador, token, rol ni dato clínico se serializa. */
+export function responderComprobacionAdministrativa(request: Request, crearCliente: CrearClienteIdentidad): Promise<Response> {
+  return ejecutarOperacionAdministrativa(request, "comprobar_acceso", crearCliente,
+    () => Response.json({ autorizado: true }));
 }
