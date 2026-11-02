@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { Icono } from "@/components/Identidad";
 import LayoutAdministrativo from "./LayoutAdministrativo";
-import EstadoAdministrativo, { type EstadoAdministrativoTipo } from "./EstadoAdministrativo";
+import UsuariosAdministrativosDemo from "./UsuariosAdministrativosDemo";
 import TarjetaAdministrativa from "./TarjetaAdministrativa";
 import { SECCIONES_ADMINISTRATIVAS, type SeccionAdministrativa } from "./estructura";
 import styles from "./administracion.module.css";
@@ -15,11 +15,9 @@ const ROLES_PREVISTOS = [
   { nombre: "Superusuario", alcance: "Administración no clínica de cuentas y roles.", situacion: "Rol autenticado por incorporar" },
 ] as const;
 
-// Solo presentación y navegación en memoria. No importa Auth, servicios ni clientes de datos.
+// Demo solo en desarrollo: navegación y proveedor sintético, sin clientes Supabase.
 export default function PanelAdministrativoDemo() {
   const [seccion, setSeccion] = useState<SeccionAdministrativa>("inicio");
-  const [estado, setEstado] = useState<"estructura" | EstadoAdministrativoTipo>("estructura");
-  const selectorEstado = useRef<HTMLSelectElement>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
   const actual = SECCIONES_ADMINISTRATIVAS.find(item => item.id === seccion)!;
 
@@ -30,8 +28,8 @@ export default function PanelAdministrativoDemo() {
 
   return <section className={styles.pagina} aria-label="Demostración local de estructura administrativa">
     <div className={styles.avisoDemo}>
-      <strong>DI-149 · Diseño del panel administrativo</strong>
-      <p>Demostración visual disponible solo en desarrollo. No consulta usuarios, no asigna roles y no accede a información clínica.</p>
+      <strong>DI-151 · Administración con datos sintéticos</strong>
+      <p>Demostración visual disponible solo en desarrollo. Solo usa cuentas sintéticas; no consulta usuarios reales, no guarda roles ni accede a información clínica.</p>
     </div>
     <LayoutAdministrativo seccion={seccion} onSeleccionar={seleccionar}>
       <div className={styles.introduccion}>
@@ -39,7 +37,7 @@ export default function PanelAdministrativoDemo() {
         <h1 id="admin-titulo" ref={titulo} tabIndex={-1}>{seccion === "inicio" ? "Un espacio para organizar DentaIA." : actual.titulo}</h1>
         <p>{seccion === "inicio"
           ? "Una base visual para la futura administración de cuentas y permisos, con responsabilidades claras y acceso mínimo."
-          : actual.descripcion + ". Solo presentación: las funciones de gestión todavía no están conectadas."}</p>
+          : actual.descripcion + ". Proveedor simulado: las funciones no están conectadas a cuentas reales."}</p>
       </div>
 
       {seccion === "inicio" && <>
@@ -56,42 +54,12 @@ export default function PanelAdministrativoDemo() {
           <ul className={styles.pasos}>
             <li><span>01</span><div><strong>Estructura visual</strong><p>Layout, navegación y espacios de trabajo. Base de presentación de DI-149, sin funciones de gestión.</p></div></li>
             <li><span>02</span><div><strong>Continuación del diseño</strong><p>Menú adaptable, estados de carga, vacío y error, y navegación mediante teclado.</p></div></li>
-            <li><span>03</span><div><strong>Acceso administrativo seguro</strong><p>La autenticación y autorización se abordarán en DI-150 antes de habilitar un panel real.</p></div></li>
+            <li><span>03</span><div><strong>Acceso administrativo seguro</strong><p>DI-150 aporta el guard de servidor; su aceptación real y la integración productiva siguen pendientes.</p></div></li>
           </ul>
         </section>
       </>}
 
-      {seccion === "usuarios" && <section className={styles.bloque} aria-labelledby="admin-usuarios">
-        <div className={styles.tituloBloque}><h2 id="admin-usuarios">Organización de cuentas</h2><span className={styles.indicador}>Sin conexión de datos</span></div>
-        <p>Distribución inicial de la futura lista. No son cuentas reales ni un listado vacío obtenido de la base de datos.</p>
-        <div className={styles.selectorEstado}>
-          <label htmlFor="admin-estado">Previsualizar estado de la lista</label>
-          <select ref={selectorEstado} id="admin-estado" value={estado}
-            aria-describedby="admin-simulacion" onChange={event => setEstado(event.target.value as typeof estado)}>
-            <option value="estructura">Estructura prevista</option>
-            <option value="carga">Carga</option>
-            <option value="vacio">Vacío</option>
-            <option value="error">Error</option>
-          </select>
-          <p id="admin-simulacion">Simulación visual manual: no se consulta ninguna cuenta. Reintentar muestra la carga simulada; el selector permite revisar los demás estados.</p>
-        </div>
-        <div className={styles.tablaContenedor}>
-          <table className={styles.tabla}>
-            <caption className="sr-only">Columnas previstas para la gestión de usuarios; sin registros</caption>
-            <thead><tr><th scope="col">Identidad</th><th scope="col">Asignaciones</th><th scope="col">Estado de cuenta</th></tr></thead>
-            <tbody><tr><td colSpan={3} className={styles.espacioDatos}>
-              {estado === "estructura" ? <>
-              <Icono nombre="persona" size={28} /><strong>Aquí se organizarán las cuentas</strong>
-              <span>La consulta y las acciones se incorporarán después de implementar los controles de acceso correspondientes.</span>
-              </> : <EstadoAdministrativo estado={estado} onReintentar={() => {
-                setEstado("carga");
-                selectorEstado.current?.focus();
-              }} />}
-            </td></tr></tbody>
-          </table>
-        </div>
-        <p className={styles.aclaracion}>No se incluyen invitaciones, cambios de estado ni edición de usuarios en esta parte.</p>
-      </section>}
+      {seccion === "usuarios" && <UsuariosAdministrativosDemo />}
 
       {seccion === "roles" && <section className={styles.bloque} aria-labelledby="admin-roles">
         <div className={styles.tituloBloque}><h2 id="admin-roles">Perfiles previstos del sistema</h2><span className={styles.indicador}>Referencia de DI-148</span></div>
