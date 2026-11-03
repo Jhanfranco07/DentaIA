@@ -1,0 +1,175 @@
+[
+  {
+    "inicio_utc": "2026-11-03T17:29:42.208426+00:00",
+    "migraciones": [],
+    "aprobadas": 0,
+    "fallidas": 0,
+    "bloqueo": "ERROR:  permission denied to set parameter \"dentaia.architecture_draft\"",
+    "errores": []
+  },
+  {
+    "inicio_utc": "2026-11-03T17:30:17.620830+00:00",
+    "migraciones": [
+      {
+        "archivo": "01_clinical_identidad.sql",
+        "aprobada": true,
+        "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+        "error": null
+      },
+      {
+        "archivo": "02_clinical_contenido.sql",
+        "aprobada": true,
+        "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+        "error": null
+      },
+      {
+        "archivo": "03_clinical_permisos_auditoria.sql",
+        "aprobada": true,
+        "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+        "error": null
+      },
+      {
+        "archivo": "04_clinical_integridad.sql",
+        "aprobada": true,
+        "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+        "error": null
+      },
+      {
+        "archivo": "05_ia_investigacion.sql",
+        "aprobada": true,
+        "sha256": "045ac6a52109779a3d42dde5aa56d62a227531d77a16c5d726386ddcee382f0e",
+        "error": null
+      },
+      {
+        "archivo": "06_ia_analisis.sql",
+        "aprobada": true,
+        "sha256": "bfb2cd70a5e0631be3a084bf7b57ddce906afe466d65b72d53f49253a4569079",
+        "error": null
+      },
+      {
+        "archivo": "07_ia_integridad.sql",
+        "aprobada": true,
+        "sha256": "3388f091564c14e2d515a9b8e91ebd83ac47cbfb2b2738283e7e842c05968aff",
+        "error": null
+      }
+    ],
+    "aprobadas": 116,
+    "fallidas": 1,
+    "bloqueo": null,
+    "errores": [
+      {
+        "nombre": "Catálogo real SQL: public.appointment_requests",
+        "categoria": "catálogo PostgreSQL",
+        "aprobado": false,
+        "detalle": {
+          "campos": 11,
+          "errores": [
+            "preferred_time"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "inicio_utc": "2026-11-03T17:32:55.731287+00:00",
+    "migraciones": [
+      {
+        "archivo": "01_clinical_identidad.sql",
+        "aprobada": true,
+        "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+        "error": null
+      },
+      {
+        "archivo": "02_clinical_contenido.sql",
+        "aprobada": true,
+        "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+        "error": null
+      },
+      {
+        "archivo": "03_clinical_permisos_auditoria.sql",
+        "aprobada": true,
+        "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+        "error": null
+      },
+      {
+        "archivo": "04_clinical_integridad.sql",
+        "aprobada": true,
+        "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+        "error": null
+      },
+      {
+        "archivo": "05_ia_investigacion.sql",
+        "aprobada": true,
+        "sha256": "045ac6a52109779a3d42dde5aa56d62a227531d77a16c5d726386ddcee382f0e",
+        "error": null
+      },
+      {
+        "archivo": "06_ia_analisis.sql",
+        "aprobada": true,
+        "sha256": "bfb2cd70a5e0631be3a084bf7b57ddce906afe466d65b72d53f49253a4569079",
+        "error": null
+      },
+      {
+        "archivo": "07_ia_integridad.sql",
+        "aprobada": true,
+        "sha256": "3388f091564c14e2d515a9b8e91ebd83ac47cbfb2b2738283e7e842c05968aff",
+        "error": null
+      }
+    ],
+    "aprobadas": 117,
+    "fallidas": 0,
+    "bloqueo": null,
+    "errores": []
+  },
+  {
+    "inicio_utc": "2026-11-03T17:44:22.290784+00:00",
+    "migraciones": [
+      {
+        "archivo": "01_clinical_identidad.sql",
+        "aprobada": true,
+        "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+        "error": null
+      },
+      {
+        "archivo": "02_clinical_contenido.sql",
+        "aprobada": true,
+        "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+        "error": null
+      },
+      {
+        "archivo": "03_clinical_permisos_auditoria.sql",
+        "aprobada": true,
+        "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+        "error": null
+      },
+      {
+        "archivo": "04_clinical_integridad.sql",
+        "aprobada": true,
+        "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+        "error": null
+      },
+      {
+        "archivo": "05_ia_investigacion.sql",
+        "aprobada": true,
+        "sha256": "045ac6a52109779a3d42dde5aa56d62a227531d77a16c5d726386ddcee382f0e",
+        "error": null
+      },
+      {
+        "archivo": "06_ia_analisis.sql",
+        "aprobada": true,
+        "sha256": "bfb2cd70a5e0631be3a084bf7b57ddce906afe466d65b72d53f49253a4569079",
+        "error": null
+      },
+      {
+        "archivo": "07_ia_integridad.sql",
+        "aprobada": true,
+        "sha256": "3388f091564c14e2d515a9b8e91ebd83ac47cbfb2b2738283e7e842c05968aff",
+        "error": null
+      }
+    ],
+    "aprobadas": 118,
+    "fallidas": 0,
+    "bloqueo": null,
+    "errores": []
+  }
+]

@@ -1,0 +1,70 @@
+{
+  "docker": "29.9.2",
+  "imagenes": [
+    {
+      "nombre": "public.ecr.aws/supabase/postgres:17.11.0.011",
+      "digests": [
+        "public.ecr.aws/supabase/postgres@sha256:7bd84e6a1d5322c7b864b9751873a0ac50f48df3f20a776e88114eadb2948fc0"
+      ]
+    },
+    {
+      "nombre": "public.ecr.aws/supabase/gotrue:v2.197.0",
+      "digests": [
+        "public.ecr.aws/supabase/gotrue@sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b"
+      ]
+    },
+    {
+      "nombre": "public.ecr.aws/supabase/postgrest:v16.5",
+      "digests": [
+        "public.ecr.aws/supabase/postgrest@sha256:1347d7552b88f17832912c06afbf7c43209af6eeeb60834b04aae12c9bd9d5cc"
+      ]
+    },
+    {
+      "nombre": "public.ecr.aws/supabase/storage-api:v1.88.0",
+      "digests": [
+        "public.ecr.aws/supabase/storage-api@sha256:dd4a100612635a8eb0d64387ddc38769fb30eb3ddd9b411d0fe3121e1cb223b3"
+      ]
+    },
+    {
+      "nombre": "public.ecr.aws/supabase/kong:2.8.1",
+      "digests": [
+        "public.ecr.aws/supabase/kong@sha256:1b53405d8680a09d6f44494b7990bf7da2ea43f84a258c59717d4539abf09f6d"
+      ]
+    },
+    {
+      "nombre": "public.ecr.aws/supabase/realtime:v2.151.3",
+      "digests": [
+        "public.ecr.aws/supabase/realtime@sha256:dac44c958d0776144f0046ff0c0f8d51e0ff4f8a86c4a5e25287dd2f79fffa1e"
+      ]
+    }
+  ],
+  "catalogo_local": {
+    "postgresql": "17.11",
+    "roles": [
+      {
+        "rolname": "authenticated",
+        "rolsuper": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "anon",
+        "rolsuper": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "service_role",
+        "rolsuper": false,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "postgres",
+        "rolsuper": false,
+        "rolbypassrls": true
+      }
+    ],
+    "columnas_auth": 68
+  },
+  "sin_credenciales_remotas": true,
+  "servicios_http_base": "postgres",
+  "base_pruebas_sql": "dentaia_arch_qa_fase2"
+}
