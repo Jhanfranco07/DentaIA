@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import HeroCarousel from "@/components/HeroCarousel";
 
 type Vista =
   | "inicio"
@@ -84,7 +85,6 @@ export default function Home() {
   const [done, setDone] = useState(false);
   const [search, setSearch] = useState("");
   const [zona, setZona] = useState("Todas");
-  const [menu, setMenu] = useState(false);
   const [perfil, setPerfil] = useState<string | null>(null);
   const [savingConsent, setSavingConsent] = useState(false);
 
@@ -98,7 +98,6 @@ export default function Home() {
 
   function nav(v: Vista) {
     setVista(v);
-    setMenu(false);
     setPerfil(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -232,78 +231,11 @@ export default function Home() {
 
   return (
     <>
-      <a className="skip-link" href="#contenido">
-        Saltar al contenido
-      </a>
-
-      {/* ───────────── HEADER ───────────── */}
-      <header className="site-header">
-        <div className="site-header-inner">
-          <a
-            className="marca-enlace"
-            href="#"
-            onClick={(e) => go(e, "inicio")}
-            aria-label="Ir al inicio"
-          >
-            <Logo />
-          </a>
-
-          <span className="header-divider" aria-hidden="true" />
-
-          <nav
-            className={menu ? "site-nav is-open" : "site-nav"}
-            aria-label="Navegación principal"
-          >
-            <a
-              href="#"
-              onClick={(e) => go(e, "inicio")}
-              aria-current={vista === "inicio" ? "page" : undefined}
-            >
-              Inicio
-            </a>
-            <a
-              href="#"
-              onClick={(e) => go(e, "como")}
-              aria-current={vista === "como" ? "page" : undefined}
-            >
-              Cómo funciona
-            </a>
-            <a
-              href="#"
-              onClick={(e) => go(e, "odontologos")}
-              aria-current={vista === "odontologos" ? "page" : undefined}
-            >
-              Encontrar odontólogos
-            </a>
-          </nav>
-
-          <button
-            className="action action-small"
-            onClick={() => nav("analizar")}
-          >
-            Probar DentAI <span aria-hidden="true">→</span>
-          </button>
-
-          <button
-            className={menu ? "menu-toggle is-open" : "menu-toggle"}
-            onClick={() => setMenu(!menu)}
-            aria-label="Abrir menú"
-            aria-expanded={menu}
-          >
-            <span className="menu-bars" aria-hidden="true">
-              <i />
-              <i />
-              <i />
-            </span>
-            <span>Menú</span>
-          </button>
-        </div>
-      </header>
-
       {/* ───────────── INICIO ───────────── */}
       {vista === "inicio" && (
         <main id="contenido">
           <section className="home-hero">
+            <HeroCarousel />
             <div className="home-hero-inner">
               <div className="hero-copy">
                 <span className="eyebrow hero-eyebrow">

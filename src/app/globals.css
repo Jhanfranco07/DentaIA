@@ -369,3 +369,64 @@ input, select, textarea { max-width: 100%; min-width: 0; }
   .dentist-card { flex-direction: column; }
   .panel { padding: 22px; }
 }
+
+/* =========================================================
+   HERO: CARRUSEL DE FONDO CINEMATOGRÁFICO
+   ========================================================= */
+.home-hero { position: relative; }
+
+/* El contenido queda siempre por encima del carrusel */
+.home-hero-inner,
+.home-principles { position: relative; z-index: 1; }
+
+.hero-carousel { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+
+/* Cada imagen: fundido suave + zoom lento (efecto cine) */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1);
+  filter: saturate(1.05) contrast(1.04);
+  transition: opacity 1.4s ease, transform 8s linear;
+  will-change: opacity, transform;
+}
+.hero-slide.is-active { opacity: 1; transform: scale(1.08); }
+
+/* Gradación de color: tinte verde-azulado de la marca, muy sutil */
+.hero-carousel-grade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(8, 126, 139, .16), rgba(16, 42, 67, .10));
+  mix-blend-mode: multiply;
+}
+
+/* Velo claro para que el texto oscuro se lea siempre:
+   fuerte a la izquierda (donde está el texto), casi transparente a la derecha,
+   más viñeta suave en los bordes y velo inferior para la fila de principios */
+.hero-carousel-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg,
+      rgba(246, 249, 252, .97) 0%,
+      rgba(246, 249, 252, .93) 40%,
+      rgba(246, 249, 252, .60) 55%,
+      rgba(246, 249, 252, .15) 75%,
+      rgba(246, 249, 252, .05) 100%),
+    linear-gradient(0deg, rgba(246, 249, 252, .96) 0%, rgba(246, 249, 252, 0) 24%),
+    radial-gradient(ellipse at center, transparent 55%, rgba(16, 42, 67, .18) 100%);
+}
+
+/* En pantallas angostas el texto ocupa todo el ancho: velo uniforme */
+@media (max-width: 900px) {
+  .hero-carousel-scrim {
+    background:
+      linear-gradient(180deg,
+        rgba(246, 249, 252, .94) 0%,
+        rgba(246, 249, 252, .86) 55%,
+        rgba(246, 249, 252, .72) 100%);
+  }
+}
