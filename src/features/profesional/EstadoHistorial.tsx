@@ -2,8 +2,8 @@ import type {
   AtencionClinicaSintetica,
   CampoClinico,
   ReferenciaExamen,
-  VistaHistorial,
 } from "./historial-sintetico";
+import type { VistaHistorialSinteticaAutorizada } from "./proveedor-historial-sintetico";
 import {
   formatearFechaClinica,
   textoCampoClinico,
@@ -118,7 +118,7 @@ function AtencionDetalle({
 export default function EstadoHistorial({
   vista,
 }: {
-  vista: VistaHistorial;
+  vista: VistaHistorialSinteticaAutorizada;
 }) {
   if (vista.estado === "cargando") {
     return (
@@ -138,12 +138,19 @@ export default function EstadoHistorial({
   }
 
   if (vista.estado === "denegado") {
+    const mensajePermiso =
+      vista.permisoSimulado === "expirado"
+        ? "El permiso simulado está expirado."
+        : vista.permisoSimulado === "revocado"
+          ? "El permiso simulado fue revocado."
+          : "No existe un permiso simulado aplicable a esta consulta.";
+
     return (
       <div className={styles.estadoDenegado} role="alert">
-        <strong>Acceso denegado simulado.</strong>
+        <strong>{mensajePermiso}</strong>
         <p>
-          No se muestran datos clínicos. Esta pantalla no valida identidad,
-          rol, concesiones ni auditoría.
+          No se muestran datos clínicos. Este resultado es una demostración y
+          no valida identidad, rol, concesiones reales ni auditoría.
         </p>
       </div>
     );
@@ -169,7 +176,9 @@ export default function EstadoHistorial({
     <div className={styles.resultadoHistorial}>
       <header className={styles.resumenCaso}>
         <div>
-          <p className={styles.etiquetaResultado}>Caso seleccionado</p>
+          <p className={styles.etiquetaResultado}>
+            Permiso simulado concedido · solo registros autorizados
+          </p>
           <h3>{vista.caso.patientAlias}</h3>
         </div>
         <dl>
@@ -185,8 +194,8 @@ export default function EstadoHistorial({
       </header>
 
       <p className={styles.ayudaResultado}>
-        Cronología de demostración. La fecha de atención puede diferir de la
-        fecha de registro.
+        Cronología sintética de demostración. La fecha de atención puede diferir
+        de la fecha de registro; los permisos no representan seguridad real.
       </p>
 
       <ol className={styles.cronologia}>
