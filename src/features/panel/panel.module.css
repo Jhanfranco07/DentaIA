@@ -30,3 +30,4 @@
   .grilla { grid-template-columns: 1fr; }
   .tarjeta { padding: 1rem; }
 }
+.recomendaciones { margin: 0; padding-left: 1.25rem; display: grid; gap: .4rem; line-height: 1.6; }
