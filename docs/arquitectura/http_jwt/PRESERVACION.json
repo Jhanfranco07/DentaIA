@@ -1,0 +1,16 @@
+{
+  "archivosPrevios": 120,
+  "archivosPreviosAusentes": [],
+  "actualizacionesDocumentalesPermitidas": [
+    "CONTRATOS_API.json",
+    "CONTRATOS_API.md",
+    "IMPLEMENTACION_SERVICIOS_CLINICOS.md",
+    "README.md",
+    "herramientas/validar_arquitectura.py",
+    "validacion/RESULTADOS.json"
+  ],
+  "archivosPreviosSinCambios": 114,
+  "hallazgosSecretosLiterales": 0,
+  "archivosEntornoTemporales": 0,
+  "alcanceEscaneo": "docs/arquitectura y nuevos modulos src clinicos; patrones JWT, claves secretas y PEM; no sustituye revision manual"
+}
