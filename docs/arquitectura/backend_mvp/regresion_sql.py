@@ -4,7 +4,7 @@ from urllib.parse import urlsplit,unquote
 from pathlib import Path
 sys.dont_write_bytecode=True
 R=Path(__file__).resolve().parent;A=R.parent;C='supabase_db_DentaIA-arquitectura-fase2-qa';DB='dentaia_arch_qa_fase5'
-OUT=R.parent/'versionado_fase6' if '--fase6' in sys.argv else R
+OUT=R.parent/'qa_fase7' if '--fase7' in sys.argv else R.parent/'versionado_fase6' if '--fase6' in sys.argv else R
 OUT.mkdir(exist_ok=True)
 if os.environ.get('DOCKER_HOST')or subprocess.check_output(['docker','context','show'],text=True).strip()!='desktop-linux':raise SystemExit('LOCAL_ONLY')
 def sql(s,check=True,db_user='postgres'):

@@ -7,7 +7,7 @@ from urllib.parse import unquote
 
 R=Path(__file__).resolve().parents[1]
 REPO=R.parents[1]
-ap=argparse.ArgumentParser();ap.add_argument('--parser-dir');args=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--parser-dir');ap.add_argument('--fase7',action='store_true');args=ap.parse_args()
 if args.parser_dir:sys.path.insert(0,args.parser_dir)
 from pglast import parser,ast,stream
 
@@ -116,7 +116,7 @@ check('contratos implementados corresponden exactamente a Route Handlers',actual
 check('Jira 171 descripciones sin modificar',len(json.loads((R/'REQUISITOS_JIRA_VERIFICADOS.json').read_text(encoding='utf8'))['issues'])==171)
 
 # Crear el destino para que los enlaces de resultados sean verificables antes del informe final.
-target=R/'validacion/RESULTADOS.json';target.parent.mkdir(exist_ok=True);target.write_text('{}\n',encoding='utf8')
+target=R/('qa_fase7/ARQUITECTURA_ESTATICA.json' if args.fase7 else 'validacion/RESULTADOS.json');target.parent.mkdir(exist_ok=True);target.write_text('{}\n',encoding='utf8')
 broken=[]
 for p in R.rglob('*.md'):
  for link in re.findall(r'\]\(([^)]+)\)',p.read_text(encoding='utf8')):

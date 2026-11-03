@@ -45,3 +45,9 @@ Fecha: **03/11/2026, America/Lima**. Rama local `docs/auditoria-arquitectura-int
 En la Fase 1 el motor Mermaid renderizó 17 diagramas y los borradores solo se analizaron sintácticamente por falta de daemon Docker. La ejecución local posterior figura en el informe de Fase 2 enlazado arriba. Los tests del repositorio no sustituyen los ensayos SQL ni las pruebas con JWT reales, todavía pendientes. No existe autorización para aplicar estas propuestas a Dental-IA.
 
 Consultar también la [matriz por tabla](MATRIZ_AUDITORIA_TABLAS.md) y los [comandos reproducibles](herramientas/README.md). Regresión ejecutada: **231/231 pruebas aprobadas**; no es validación de las nuevas migraciones.
+
+## Fase 7 — QA y entrega a frontend
+
+- [Validación local y bloqueo de QA remoto](VALIDACION_SUPABASE_QA_FASE_7.md).
+- [Guía de integración para Anelis y Angie](GUIA_INTEGRACION_FRONTEND_QA.md).
+- [Evidencias nuevas y plan de migraciones](qa_fase7/README.md).

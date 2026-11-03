@@ -6,6 +6,7 @@ import {readFileSync,writeFileSync,existsSync}from'node:fs';
 import {dirname,join}from'node:path';
 import {fileURLToPath}from'node:url';
 import {status,sql,command}from'../http_jwt/local.mjs';
+const outputDir=process.argv.includes('--fase7')?join(dirname(fileURLToPath(import.meta.url)),'../qa_fase7'):dirname(fileURLToPath(import.meta.url));
 const here=dirname(fileURLToPath(import.meta.url)),root=join(here,'../../..'),base='http://127.0.0.1:3107';
 const id=n=>`40000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 const report={alcance:process.argv.includes('--solo-datos')?'datos y servicios; no repetir administracion':'integral con MFA real',fecha:'2026-11-03',remoto:false,pruebas:[],bloqueos:[],datos:'solo sintéticos locales',tokensGuardados:false};
@@ -84,6 +85,6 @@ finally{
  try{if(photoPath)await actors.patient1.client.storage.from('dental-photos').remove([photoPath]);}catch{}
  if(server?.pid){try{command('taskkill.exe',['/PID',String(server.pid),'/T','/F']);}catch{}}
  report.aprobadas=report.pruebas.filter(x=>x.aprobada).length;report.fallidas=report.pruebas.filter(x=>!x.aprobada).length;
- const file=join(here,'INTENTOS_HTTP_MVP.json'),history=existsSync(file)?JSON.parse(readFileSync(file,'utf8')):[];history.push(report);writeFileSync(file,JSON.stringify(history,null,2)+'\n');writeFileSync(join(here,'HTTP_MVP.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({aprobadas:report.aprobadas,fallidas:report.fallidas,bloqueo:report.bloqueo,bloqueos:report.bloqueos}));
+ const file=join(outputDir,'INTENTOS_HTTP_MVP.json'),history=existsSync(file)?JSON.parse(readFileSync(file,'utf8')):[];history.push(report);writeFileSync(file,JSON.stringify(history,null,2)+'\n');writeFileSync(join(outputDir,'HTTP_MVP.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({aprobadas:report.aprobadas,fallidas:report.fallidas,bloqueo:report.bloqueo,bloqueos:report.bloqueos}));
  if(report.fallidas||report.bloqueo)process.exitCode=1;
 }

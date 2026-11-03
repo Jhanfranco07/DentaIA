@@ -4,6 +4,7 @@ import{writeFileSync}from'node:fs';
 import{dirname,join}from'node:path';
 import{fileURLToPath}from'node:url';
 import{status,sql}from'../http_jwt/local.mjs';
+const outputDir=process.argv.includes('--fase7')?join(dirname(fileURLToPath(import.meta.url)),'../qa_fase7'):dirname(fileURLToPath(import.meta.url));
 const here=dirname(fileURLToPath(import.meta.url)),r={fecha:'2026-11-03',remoto:false,pruebas:[]};
 const c=status(),options={auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}},admin=createClient(c.url,c.admin,options),client=createClient(c.url,c.anon,options);let consent;
 try{
@@ -24,5 +25,5 @@ try{
 }catch(e){r.bloqueo=e.message;process.exitCode=1;}
 finally{
  if(consent){const cleanup=await client.from('patient_consents').update({revoked_at:new Date().toISOString()}).eq('id',consent).select('id');r.consentimientoQARevocado=!cleanup.error&&cleanup.data.length===1;}
- r.aprobadas=r.pruebas.length;writeFileSync(join(here,'STORAGE_LIMITES.json'),JSON.stringify(r,null,2)+'\n');console.log(JSON.stringify(r));
+ r.aprobadas=r.pruebas.length;writeFileSync(join(outputDir,'STORAGE_LIMITES.json'),JSON.stringify(r,null,2)+'\n');console.log(JSON.stringify(r));
 }

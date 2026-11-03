@@ -1,0 +1,70 @@
+{
+  "fecha": "2026-11-03",
+  "entorno": "local",
+  "suiteNode": {
+    "tests": 269,
+    "pass": 269,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "typecheck": {
+    "exitCode": 0,
+    "fuente": "npm run typecheck, salida real de esta fase"
+  },
+  "build": {
+    "exitCode": 0,
+    "sha256Log": "d8f8a14f8f043f667dce2c67d3761069edc11968d0d1aea4ffd6d2f1b70270cc"
+  },
+  "audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "sql": {
+    "aprobadas": 78,
+    "fallidas": 0,
+    "metodo": "claims SQL sinteticos"
+  },
+  "httpJWT": {
+    "aprobadas": 59,
+    "fallidas": 0,
+    "metodo": "firmas ES256 GoTrue local"
+  },
+  "mvp": {
+    "aprobadas": 45,
+    "fallidas": 0,
+    "metodo": "ejecucion integral nueva Auth MFA/RPC/Storage/Next locales"
+  },
+  "storage": 3,
+  "produccionCerrada": 8,
+  "secretosLiteralesDetectados": [],
+  "limiteEscaneo": "Patrones JWT/secret/PEM/connection strings y revision de archivos; no certificacion exhaustiva",
+  "archivosRevisados": 32,
+  "sintaxisScripts": [
+    "docs/arquitectura/backend_mvp/mfa_local.mjs",
+    "docs/arquitectura/backend_mvp/preparar.py",
+    "docs/arquitectura/backend_mvp/preparar_http.py",
+    "docs/arquitectura/backend_mvp/regresion_http_f4.mjs",
+    "docs/arquitectura/backend_mvp/regresion_sql.py",
+    "docs/arquitectura/backend_mvp/validar_http_mvp.mjs",
+    "docs/arquitectura/backend_mvp/validar_storage_limites.mjs",
+    "docs/arquitectura/backend_mvp/verificar_produccion.mjs",
+    "docs/arquitectura/herramientas/validar_arquitectura.py",
+    "docs/arquitectura/versionado_fase6/cerrar_qa.mjs"
+  ],
+  "fuentesCongeladasPreservadas": 38,
+  "diffCheck": true,
+  "codigoFuncionalModificado": false,
+  "pruebasRemotas": 0,
+  "qaRemoto": "BLOQUEADO_CUPO_FREE",
+  "produccionLista": false,
+  "arquitecturaEstatica": {
+    "total_comprobaciones": 361,
+    "aprobadas": 361,
+    "fallidas": 0
+  }
+}
