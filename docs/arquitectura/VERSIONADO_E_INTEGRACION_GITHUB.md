@@ -18,7 +18,7 @@ Se añadió .gitattributes para conservar CRLF/LF exactos de documentos/evidenci
 | Base de datos | `3cdce8077cf7c018ecf6acb2cd128014060b0ba6` | 24 archivos: 01–04, pruebas SQL/constraints/RLS y explicación de borradores |
 | Servicios clínicos | `5738b938fb689843019ebfe3cb0b1ce494108bfc` | 17 archivos: 08–10, RPC, pruebas/carreras y el incremental MVP de workspace |
 | Backend HTTP | `edaad20e516ba883eb6cb648f451338d1b6527d3` | 31 archivos: Route Handlers, DTO, autenticación, cursor, pruebas aisladas y banco JWT |
-| Evidencias y contratos finales | Localizable por mensaje `DI-36 test(docs): documentar validaciones e integracion del backend` | Informes F1–5, contratos definitivos, paquete QA/harness y preparación F6 |
+| Evidencias y contratos finales | `d0b442380096e4202f39e96e98683c03df175736` | 45 archivos: informes F1–5, contratos definitivos, paquete QA/harness y preparación F6 |
 
 Este documento no inventa el SHA del commit que lo contiene. El cierre posterior identifica los commits ya existentes en un inventario verificable; el SHA final se entrega por Git/PR y no obliga a reescribir historia. Identidad Git comprobada de Jhan antes de crear commits; se mantienen los commits anteriores y la autoría de los demás integrantes.
 
@@ -53,3 +53,24 @@ La revisión debe distinguir documentación (29 tablas/219 columnas integrales, 
 Pendientes: revisión de DI-144/150/151 con main; integración acordada con las vistas de Anelis/Angie, selección segura de destinatarios, verificación profesional, consentimiento clínico, retención/bajas, descarga clínica auditada, observabilidad y paquete desplegable QA con guardas de destino. El adaptador actual no acepta un proyecto alojado ni production; no se debilita para obtener un Preview positivo.
 
 Fase 7 propuesta: acordar y autorizar un proyecto Supabase QA separado, revisar baseline/migraciones/owners, ensayar desde vacío y recuperación y ejecutar JWT/RLS/UI integrados allí. No copiar datos de Dental-IA, no activar servicios clínicos productivos ni considerar estas pruebas validación clínica. No se modifica Jira, Supabase remoto, Vercel, fechas, responsables o sprints.
+
+## Cierre verificado de publicación
+
+Rama remota publicada: [docs/auditoria-arquitectura-integral](https://github.com/Jhanfranco07/DentaIA/tree/docs/auditoria-arquitectura-integral). [PR #19](https://github.com/Jhanfranco07/DentaIA/pull/19): abierto, **Draft**, base main, sin merge ni auto-merge habilitado por esta tarea. GitHub confirmó mergeable=true para d0b4423; se conserva la revisión de la dependencia administrativa aunque no haya conflictos.
+
+Después de los cinco commits se reejecutaron **269/269 pruebas Node, 78/78 SQL/concurrencia, 59/59 HTTP/JWT reales**, TypeScript y build con exit 0, npm audit sin vulnerabilidades y **8/8 cierres productivos 404/no-store** con flag true. La validación documental pasó **361/361**. Los diff-check del trabajo nuevo y del PR completo pasaron. El escaneo no encontró claves, tokens o binarios entre 235 archivos examinados. [Resultados nuevos](versionado_fase6/VALIDACIONES.json).
+
+No se reejecutó MFA/escritura administrativa ni los 45 escenarios MVP de F5: son antecedentes explícitos conservados. F6 no cambia la implementación funcional. Los nuevos resultados se guardan en versionado_fase6 y no sobrescriben los informes anteriores. La repetición SQL se hizo desde una base local propia limpia; tras los ensayos se cerró la configuración clínica de los dos bancos locales y se verificó JWT 3600 y conservación de F2/F3. [Epílogo QA](versionado_fase6/QA_CERRADO.json).
+
+Checks observados para el snapshot funcional d0b4423:
+
+| Verificación GitHub | Estado observado | Evidencia |
+|---|---|---|
+| CI, TypeScript y build | SUCCESS | [run 41717376910](https://github.com/Jhanfranco07/DentaIA/actions/runs/41717376910) |
+| Tests | SUCCESS, log 269 aprobadas y 0 fallidas | [run 41717376969](https://github.com/Jhanfranco07/DentaIA/actions/runs/41717376969) |
+| Security | SUCCESS | [run 41717376751](https://github.com/Jhanfranco07/DentaIA/actions/runs/41717376751) |
+| Vercel Preview | SUCCESS según estado del commit | [estado Vercel](https://vercel.com/jhan-francos-projects/dent-ai/AQvci6s67VUVUNkG3czCPMrPFHQP) |
+
+[GITHUB_REVISADO.json](versionado_fase6/GITHUB_REVISADO.json) identifica el SHA, los runs y el recuento extraído del log real. El cierre documental posterior se publica como **sexto commit**, conservando los cinco anteriores, sin amend/rebase. Su SHA y el estado del último HEAD se entregan en el resumen final y la descripción del PR; no se escribe un SHA futuro ni se crean commits recursivos para registrar su propia ejecución. Consultar [checks actuales del PR](https://github.com/Jhanfranco07/DentaIA/pull/19/checks) para cualquier actualización posterior a esta tabla.
+
+No se excluyó ningún archivo inicial del alcance. Se preservaron las 38 evidencias originales; .env.local, node_modules, .next, caches y credenciales permanecen ignorados y no se añadieron. [Inventario por commit y autor](versionado_fase6/COMMITS_Y_ARCHIVOS.json). Las propuestas SQL de IA quedan versionadas únicamente como arquitectura futura, sin aplicación ni habilitación.

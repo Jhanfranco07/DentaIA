@@ -1,0 +1,357 @@
+[
+  {
+    "fecha": "2026-11-03",
+    "inicio": "2026-11-03T20:51:58.505Z",
+    "entorno": "Supabase CLI local + Next.js real",
+    "pruebas": [
+      {
+        "nombre": "Login y JWT firmado emitido por Auth local: patient1",
+        "aprobado": true,
+        "http": 200,
+        "verificacionSDK": true
+      },
+      {
+        "nombre": "Login y JWT firmado emitido por Auth local: patient2",
+        "aprobado": true,
+        "http": 200,
+        "verificacionSDK": true
+      },
+      {
+        "nombre": "Login y JWT firmado emitido por Auth local: dentist1",
+        "aprobado": true,
+        "http": 200,
+        "verificacionSDK": true
+      },
+      {
+        "nombre": "Login y JWT firmado emitido por Auth local: dentist2",
+        "aprobado": true,
+        "http": 200,
+        "verificacionSDK": true
+      },
+      {
+        "nombre": "Login y JWT firmado emitido por Auth local: nonprofessional",
+        "aprobado": true,
+        "http": 200,
+        "verificacionSDK": true
+      },
+      {
+        "nombre": "Login y JWT firmado emitido por Auth local: superuser",
+        "aprobado": true,
+        "http": 200,
+        "verificacionSDK": true
+      },
+      {
+        "nombre": "JWT ausente devuelve 401",
+        "aprobado": true,
+        "http": 401
+      },
+      {
+        "nombre": "JWT inválido devuelve 401",
+        "aprobado": true,
+        "http": 401
+      },
+      {
+        "nombre": "JWT manipulado sin nueva firma devuelve 401",
+        "aprobado": true,
+        "http": 401
+      },
+      {
+        "nombre": "Paciente concede autorización propia mediante HTTP",
+        "aprobado": true,
+        "http": 201
+      },
+      {
+        "nombre": "Reintento HTTP de concesión respeta idempotencia",
+        "aprobado": true,
+        "http": 200
+      },
+      {
+        "nombre": "Misma clave con contenido diferente devuelve 409",
+        "aprobado": true,
+        "http": 409
+      },
+      {
+        "nombre": "Paciente no concede recursos clínicos de otro paciente",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "No se acepta actorId del cuerpo",
+        "aprobado": true,
+        "http": 400
+      },
+      {
+        "nombre": "No se acepta rol del cuerpo",
+        "aprobado": true,
+        "http": 400
+      },
+      {
+        "nombre": "Clínica/profesional inexistente se rechazan",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Odontólogo autorizado consulta dos clínicas por HTTP",
+        "aprobado": true,
+        "http": 200,
+        "registros": 2,
+        "clinicas": 2
+      },
+      {
+        "nombre": "Paciente consulta únicamente su historial propio",
+        "aprobado": true,
+        "http": 200,
+        "registros": 2
+      },
+      {
+        "nombre": "Acceso cruzado de pacientes denegado",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Odontólogo sin autorización de otra clínica denegado",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Usuario sin rol profesional denegado",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Superusuario no recibe acceso clínico automático",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Contexto ajeno no puede declararse propio",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Contexto propio distinto no hereda concesión",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Paciente inexistente no revela información",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Identificador malformado devuelve 400",
+        "aprobado": true,
+        "http": 400
+      },
+      {
+        "nombre": "Consulta duplicada/ambigua devuelve 400",
+        "aprobado": true,
+        "http": 400
+      },
+      {
+        "nombre": "Cuerpo supera límite devuelve 413",
+        "aprobado": true,
+        "http": 413
+      },
+      {
+        "nombre": "Origen cruzado en escritura devuelve 403",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Cursor cifrado no contiene fechas o IDs en claro",
+        "aprobado": true,
+        "http": 200,
+        "opaco": true
+      },
+      {
+        "nombre": "Cursor firmado pagina sin duplicar registros",
+        "aprobado": true,
+        "http": 200,
+        "registros": 1
+      },
+      {
+        "nombre": "Cursor manipulado devuelve 400",
+        "aprobado": true,
+        "http": 400
+      },
+      {
+        "nombre": "Cursor de otra identidad devuelve 400",
+        "aprobado": true,
+        "http": 400
+      },
+      {
+        "nombre": "Cursor de otro contexto clínico devuelve 400",
+        "aprobado": true,
+        "http": 400
+      },
+      {
+        "nombre": "Cursor con otro filtro limit devuelve 400",
+        "aprobado": true,
+        "http": 400
+      },
+      {
+        "nombre": "Cursor realmente vencido devuelve 400",
+        "aprobado": true,
+        "http": 400
+      },
+      {
+        "nombre": "Alcance limitado no incluye otras atenciones",
+        "aprobado": true,
+        "http": 200,
+        "registros": 1
+      },
+      {
+        "nombre": "Permiso realmente vencido deniega nuevas lecturas",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Paciente no revoca autorización ajena",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Denegación HTTP conserva auditoría protegida tras commit",
+        "aprobado": true,
+        "http": 403,
+        "eventos": 1
+      },
+      {
+        "nombre": "Lectura HTTP permitida deja auditoría antes de entrega",
+        "aprobado": true,
+        "http": 200,
+        "eventos": 1
+      },
+      {
+        "nombre": "JWT anterior no conserva el rol retirado en Auth",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Cambio de pertenencia clínica se evalúa en servidor",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "user_metadata editable no concede rol profesional",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Fallo real de auditoría no entrega historial HTTP",
+        "aprobado": true,
+        "http": 503
+      },
+      {
+        "nombre": "Fallo de auditoría revierte concesión HTTP",
+        "aprobado": true,
+        "http": 503,
+        "registros": 0
+      },
+      {
+        "nombre": "Fallo de auditoría revierte revocación HTTP",
+        "aprobado": true,
+        "http": 503
+      },
+      {
+        "nombre": "Dos consultas HTTP concurrentes son autorizadas",
+        "aprobado": true,
+        "http": [
+          200,
+          200
+        ]
+      },
+      {
+        "nombre": "RPC grant por HTTP usa JWT del paciente, no service_role",
+        "aprobado": true,
+        "http": 200,
+        "envelope": 201
+      },
+      {
+        "nombre": "RPC historial por HTTP respeta alcance autorizado",
+        "aprobado": true,
+        "http": 200,
+        "registros": 1
+      },
+      {
+        "nombre": "RPC revoke por HTTP usa JWT del propietario",
+        "aprobado": true,
+        "http": 200
+      },
+      {
+        "nombre": "Next traduce denegación RPC HTTP 200 a HTTP 403",
+        "aprobado": true,
+        "rpcHttp": 200,
+        "rpcEnvelope": 403,
+        "nextHttp": 403
+      },
+      {
+        "nombre": "HTTP lectura primero: revocación espera y nuevas lecturas fallan",
+        "aprobado": true,
+        "http": [
+          200,
+          200,
+          403
+        ],
+        "esperasObservadas": 2
+      },
+      {
+        "nombre": "HTTP revocación primero: lectura espera y no recibe historial",
+        "aprobado": true,
+        "http": [
+          200,
+          403
+        ],
+        "esperasObservadas": 2
+      },
+      {
+        "nombre": "Revocación HTTP impide nueva consulta",
+        "aprobado": true,
+        "http": 403
+      },
+      {
+        "nombre": "Reintento de revocación HTTP conserva estado",
+        "aprobado": true,
+        "http": [
+          200,
+          200
+        ]
+      },
+      {
+        "nombre": "JWT capturado antes del logout no abre nuevas lecturas",
+        "aprobado": true,
+        "http": 401
+      },
+      {
+        "nombre": "Otra sesión legítima conserva su acceso independiente",
+        "aprobado": true,
+        "http": 200,
+        "registros": 2
+      },
+      {
+        "nombre": "JWT realmente caducado devuelve HTTP 401",
+        "aprobado": true,
+        "http": 401
+      }
+    ],
+    "requests": {
+      "auth": 26,
+      "next": 61,
+      "rpc": 4
+    },
+    "tokensGuardados": false,
+    "remoto": false,
+    "jwtExpiry": {
+      "expiryOriginal": 3600,
+      "expiryTesting": 60,
+      "restored": true
+    },
+    "cuentasSinteticas": 6,
+    "jwtAlgorithm": "ES256",
+    "expiryWaitingSeconds": 17,
+    "configuracionAuthRestaurada": true,
+    "aprobadas": 59,
+    "fallidas": 0
+  }
+]

@@ -1,5 +1,43 @@
 {
-  "estado": "pendiente_de_ejecucion_F6",
-  "antecedentesRevisados": true,
-  "noSeDeclaranAprobadasHastaEjecutar": true
+  "estado": "APROBADO_LOCAL_ANTES_DEL_PUSH",
+  "suite": {
+    "tests": 269,
+    "pass": 269,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "SQL": {
+    "aprobadas": 78,
+    "fallidas": 0
+  },
+  "HTTP_JWT": {
+    "aprobadas": 59,
+    "fallidas": 0,
+    "algoritmo": "ES256"
+  },
+  "typecheck": {
+    "comando": "npm run typecheck",
+    "exitCode": 0,
+    "fuente": "salida real de herramienta observada"
+  },
+  "build": {
+    "exitCode": 0,
+    "sha256Salida": "1c91288b69044bc01b4e59b930b4916f811faf560261a1a3c785baad7a6f8cb5"
+  },
+  "audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "produccionCerrada": 8,
+  "diffCheckTrabajoNuevoYPR": true,
+  "secretosLiteralesDetectados": [],
+  "archivosEscaneados": 235,
+  "supabaseRemotoModificado": false,
+  "produccionLista": false,
+  "antecedentesF5": "45 MVP y 3 Storage conservados; no reejecutados en F6"
 }

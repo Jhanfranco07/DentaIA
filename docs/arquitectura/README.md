@@ -1,5 +1,7 @@
 # DentaIA — arquitectura integral auditada
 
+**Fase 6:** [versionado e integracion GitHub](VERSIONADO_E_INTEGRACION_GITHUB.md), [PR #19 en borrador](https://github.com/Jhanfranco07/DentaIA/pull/19). Commits tematicos, evidencias F6 y dependencias administrativas explicitas; sin merge, migraciones remotas ni activacion productiva.
+
 **Fase 5 vigente:** [consolidacion e implementacion del backend MVP](CONSOLIDACION_BACKEND_MVP.md): paquete local de 19 tablas/142 columnas sin IA, cinco lecturas HTTP nuevas, RPC comun y pruebas integrales. Produccion sigue cerrada; DI-36 conserva Sprint 6 y no se declara terminada. Los informes F1-4 siguientes son antecedentes conservados.
 
 **Fase 4:** [HTTP y JWT reales validados localmente](VALIDACION_HTTP_JWT.md): tres Route Handlers, **60 comprobaciones HTTP** y **255 pruebas unitarias** aprobadas. Auth local emitió JWT ES256; se probó caducidad, logout, auditoría y dos órdenes de revocación concurrente. Producción y URLs no locales permanecen cerradas. [Reproducción](http_jwt/README.md).
