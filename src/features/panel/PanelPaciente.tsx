@@ -1,3 +1,4 @@
+import MisSolicitudes from "@/features/solicitudes/MisSolicitudes";
 import Link from "next/link";
 import ResumenPanel from "./ResumenPanel";
 import ReporteDemo from "./ReporteDemo";
@@ -59,7 +60,9 @@ export default function PanelPaciente() {
         </ul>
       </nav>
 
-      <ReporteDemo />
+    <ReporteDemo />
+
+      <MisSolicitudes />
     </section>
   );
 }
