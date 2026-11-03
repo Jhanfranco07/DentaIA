@@ -1,0 +1,2247 @@
+[
+  {
+    "name": "public.profiles",
+    "domain": "existente",
+    "description": "Perfil personal editable, distinto de identidad Auth y autorización.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK",
+        "fk": null,
+        "description": "id"
+      },
+      {
+        "name": "full_name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "full name"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "created at"
+      }
+    ],
+    "rules": "CHECK (((length(btrim(full_name)) >= 2) AND (length(btrim(full_name)) <= 120))); FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE; PRIMARY KEY (id)",
+    "indexes": "CREATE UNIQUE INDEX profiles_pkey ON public.profiles USING btree (id)",
+    "status": "Existente en Supabase",
+    "retention": "Conservar comportamiento observado: Auth CASCADE para propietario; FK a consentimiento/directorio restringida; eliminación del objeto Storage es operación separada. Política de conservación clínica futura pendiente."
+  },
+  {
+    "name": "public.dentists",
+    "domain": "existente",
+    "description": "Ficha pública del directorio académico; no acredita cuenta profesional.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "id"
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "slug"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "name"
+      },
+      {
+        "name": "specialty",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "specialty"
+      },
+      {
+        "name": "district",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "district"
+      },
+      {
+        "name": "consultation_price",
+        "type": "numeric",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "consultation price"
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "nullable": false,
+        "default": "'PEN'::text",
+        "key": "",
+        "fk": null,
+        "description": "currency"
+      },
+      {
+        "name": "initials",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "initials"
+      },
+      {
+        "name": "avatar_color",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "avatar color"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "description"
+      },
+      {
+        "name": "is_demo",
+        "type": "bool",
+        "nullable": false,
+        "default": "true",
+        "key": "",
+        "fk": null,
+        "description": "is demo"
+      },
+      {
+        "name": "is_active",
+        "type": "bool",
+        "nullable": false,
+        "default": "true",
+        "key": "",
+        "fk": null,
+        "description": "is active"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "created at"
+      }
+    ],
+    "rules": "CHECK ((consultation_price >= (0)::numeric)); CHECK ((currency = 'PEN'::text)); CHECK (is_demo); PRIMARY KEY (id); UNIQUE (slug)",
+    "indexes": "CREATE INDEX dentists_district_specialty_idx ON public.dentists USING btree (district, specialty); CREATE UNIQUE INDEX dentists_pkey ON public.dentists USING btree (id); CREATE UNIQUE INDEX dentists_slug_key ON public.dentists USING btree (slug)",
+    "status": "Existente en Supabase",
+    "retention": "Conservar comportamiento observado: Auth CASCADE para propietario; FK a consentimiento/directorio restringida; eliminación del objeto Storage es operación separada. Política de conservación clínica futura pendiente."
+  },
+  {
+    "name": "public.appointment_requests",
+    "domain": "existente",
+    "description": "Solicitudes académicas; no son citas confirmadas ni historia clínica.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "id"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "auth.uid()",
+        "key": "",
+        "fk": null,
+        "description": "user id"
+      },
+      {
+        "name": "dentist_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "dentist id"
+      },
+      {
+        "name": "contact_name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "contact name"
+      },
+      {
+        "name": "contact_email",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "contact email"
+      },
+      {
+        "name": "preferred_date",
+        "type": "date",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "preferred date"
+      },
+      {
+        "name": "preferred_time",
+        "type": "time",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "preferred time"
+      },
+      {
+        "name": "message",
+        "type": "text",
+        "nullable": false,
+        "default": "''::text",
+        "key": "",
+        "fk": null,
+        "description": "message"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false,
+        "default": "'requested'::text",
+        "key": "",
+        "fk": null,
+        "description": "status"
+      },
+      {
+        "name": "is_demo",
+        "type": "bool",
+        "nullable": false,
+        "default": "true",
+        "key": "",
+        "fk": null,
+        "description": "is demo"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "created at"
+      }
+    ],
+    "rules": "CHECK (((length(contact_email) <= 254) AND (contact_email ~ '^[^[:space:]@]+@[^[:space:]@]+[.][^[:space:]@]+$'::text))); CHECK (((length(btrim(contact_name)) >= 2) AND (length(btrim(contact_name)) <= 120))); FOREIGN KEY (dentist_id) REFERENCES dentists(id); CHECK (is_demo); CHECK ((length(message) <= 1000)); PRIMARY KEY (id); CHECK ((status = ANY (ARRAY['requested'::text, 'cancelled'::text]))); FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE",
+    "indexes": "CREATE INDEX appointment_requests_dentist_idx ON public.appointment_requests USING btree (dentist_id); CREATE UNIQUE INDEX appointment_requests_pkey ON public.appointment_requests USING btree (id); CREATE INDEX appointment_requests_user_idx ON public.appointment_requests USING btree (user_id, created_at DESC)",
+    "status": "Existente en Supabase",
+    "retention": "Conservar comportamiento observado: Auth CASCADE para propietario; FK a consentimiento/directorio restringida; eliminación del objeto Storage es operación separada. Política de conservación clínica futura pendiente."
+  },
+  {
+    "name": "public.patient_consents",
+    "domain": "existente",
+    "description": "Consentimiento exclusivo de almacenamiento académico de fotos.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "id"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "auth.uid()",
+        "key": "",
+        "fk": null,
+        "description": "user id"
+      },
+      {
+        "name": "policy_version",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "policy version"
+      },
+      {
+        "name": "consent_text",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "consent text"
+      },
+      {
+        "name": "purpose",
+        "type": "text",
+        "nullable": false,
+        "default": "'academic_photo_storage'::text",
+        "key": "",
+        "fk": null,
+        "description": "purpose"
+      },
+      {
+        "name": "accepted_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "accepted at"
+      },
+      {
+        "name": "revoked_at",
+        "type": "timestamptz",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "revoked at"
+      }
+    ],
+    "rules": "CHECK (((revoked_at IS NULL) OR (revoked_at >= accepted_at))); CHECK (((length(btrim(consent_text)) >= 20) AND (length(btrim(consent_text)) <= 5000))); PRIMARY KEY (id); CHECK (((length(btrim(policy_version)) >= 1) AND (length(btrim(policy_version)) <= 80))); CHECK ((purpose = 'academic_photo_storage'::text)); FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE; UNIQUE (user_id, id)",
+    "indexes": "CREATE UNIQUE INDEX patient_consents_pkey ON public.patient_consents USING btree (id); CREATE UNIQUE INDEX patient_consents_user_id_id_key ON public.patient_consents USING btree (user_id, id); CREATE INDEX patient_consents_user_idx ON public.patient_consents USING btree (user_id)",
+    "status": "Existente en Supabase",
+    "retention": "Conservar comportamiento observado: Auth CASCADE para propietario; FK a consentimiento/directorio restringida; eliminación del objeto Storage es operación separada. Política de conservación clínica futura pendiente."
+  },
+  {
+    "name": "public.dental_photos",
+    "domain": "existente",
+    "description": "Metadatos de objetos privados, no el binario.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "id"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "auth.uid()",
+        "key": "",
+        "fk": null,
+        "description": "user id"
+      },
+      {
+        "name": "consent_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "consent id"
+      },
+      {
+        "name": "bucket_id",
+        "type": "text",
+        "nullable": false,
+        "default": "'dental-photos'::text",
+        "key": "",
+        "fk": null,
+        "description": "bucket id"
+      },
+      {
+        "name": "object_path",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "object path"
+      },
+      {
+        "name": "original_filename",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "original filename"
+      },
+      {
+        "name": "mime_type",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "mime type"
+      },
+      {
+        "name": "size_bytes",
+        "type": "int8",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "size bytes"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "created at"
+      }
+    ],
+    "rules": "CHECK ((bucket_id = 'dental-photos'::text)); CHECK (((object_path ~~ ((((user_id)::text || '/'::text) || (consent_id)::text) || '/%'::text)) AND (length(split_part(object_path, '/'::text, 3)) > 0))); CHECK ((mime_type = ANY (ARRAY['image/jpeg'::text, 'image/png'::text, 'image/webp'::text]))); UNIQUE (object_path); CHECK (((length(original_filename) >= 1) AND (length(original_filename) <= 255))); PRIMARY KEY (id); CHECK (((size_bytes >= 1) AND (size_bytes <= 8388608))); FOREIGN KEY (user_id, consent_id) REFERENCES patient_consents(user_id, id); FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE",
+    "indexes": "CREATE UNIQUE INDEX dental_photos_object_path_key ON public.dental_photos USING btree (object_path); CREATE UNIQUE INDEX dental_photos_pkey ON public.dental_photos USING btree (id); CREATE INDEX dental_photos_user_consent_idx ON public.dental_photos USING btree (user_id, consent_id)",
+    "status": "Existente en Supabase",
+    "retention": "Conservar comportamiento observado: Auth CASCADE para propietario; FK a consentimiento/directorio restringida; eliminación del objeto Storage es operación separada. Política de conservación clínica futura pendiente."
+  },
+  {
+    "name": "dentaia_admin.revisiones_roles",
+    "domain": "administracion",
+    "description": "Versión para concurrencia del protocolo de roles; ya definida en migración de rama, ausente remotamente.",
+    "fields": [
+      {
+        "name": "usuario_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK",
+        "fk": null,
+        "description": "usuario id"
+      },
+      {
+        "name": "revision",
+        "type": "integer",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "CHECK revision >= 0"
+      }
+    ],
+    "rules": "Identificador de Auth lógico, deliberadamente sin FK para no bloquear bajas de Auth. No crear una segunda autoridad de roles.",
+    "indexes": "PK usuario_id",
+    "status": "Migración en rama; no aplicada",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "dentaia_admin.aprobaciones_roles",
+    "domain": "administracion",
+    "description": "Aprobación independiente de una transición exacta.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK",
+        "fk": null,
+        "description": "id"
+      },
+      {
+        "name": "actor_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "actor id"
+      },
+      {
+        "name": "objetivo_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "objetivo id"
+      },
+      {
+        "name": "aprobado_por",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "aprobado por"
+      },
+      {
+        "name": "operacion",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "asignar o revocar"
+      },
+      {
+        "name": "rol",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "paciente, odontologo o superusuario"
+      },
+      {
+        "name": "revision_esperada",
+        "type": "integer",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "revision esperada"
+      },
+      {
+        "name": "asignacion_esperada",
+        "type": "jsonb",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "asignacion esperada"
+      },
+      {
+        "name": "creada_en",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "clock_timestamp()",
+        "key": "",
+        "fk": null,
+        "description": "creada en"
+      },
+      {
+        "name": "vence_en",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "vence en"
+      },
+      {
+        "name": "consumida_por",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "consumida por"
+      }
+    ],
+    "rules": "Actor, objetivo y aprobador distintos; vence_en > creada_en; revisión >=0. UUID de Auth y solicitud lógicos, sin FK según migración. No añadir FK nuevas a esta migración sin revisión.",
+    "indexes": "PK id; propuesto índice parcial vence_en WHERE consumida_por IS NULL",
+    "status": "Migración en rama; no aplicada",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "dentaia_admin.auditoria_roles",
+    "domain": "administracion",
+    "description": "Evento mínimo durable del protocolo de roles.",
+    "fields": [
+      {
+        "name": "actor_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK compuesto",
+        "fk": null,
+        "description": "actor id"
+      },
+      {
+        "name": "solicitud_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK compuesto",
+        "fk": null,
+        "description": "solicitud id"
+      },
+      {
+        "name": "objetivo_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "objetivo id"
+      },
+      {
+        "name": "aprobacion_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "aprobacion id"
+      },
+      {
+        "name": "peticion",
+        "type": "jsonb",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "peticion"
+      },
+      {
+        "name": "anterior",
+        "type": "jsonb",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "anterior"
+      },
+      {
+        "name": "posterior",
+        "type": "jsonb",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "posterior"
+      },
+      {
+        "name": "resultado",
+        "type": "jsonb",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "resultado"
+      },
+      {
+        "name": "registrada_en",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "clock_timestamp()",
+        "key": "",
+        "fk": null,
+        "description": "registrada en"
+      }
+    ],
+    "rules": "PK(actor_id,solicitud_id). Identificadores deliberadamente sin FK. No guardar contraseñas, tokens ni contenido clínico. INSERT en misma transacción que cambio y consumo de aprobación.",
+    "indexes": "PK compuesta; propuesto objetivo_id, registrada_en DESC",
+    "status": "Migración en rama; no aplicada",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.clinics",
+    "domain": "clinico",
+    "description": "Organización clínica dentro de DentaIA, sin integración externa implícita.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "name"
+      },
+      {
+        "name": "location",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "location"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false,
+        "default": "'active'",
+        "key": "",
+        "fk": null,
+        "description": "Estado: active, inactive"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "Nombre no vacío; ubicación mínima necesaria. No se agrega RUC ni información legal no requerida.",
+    "indexes": "status, name",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.professional_accounts",
+    "domain": "clinico",
+    "description": "Vincula una identidad Auth con una única ficha existente de odontólogo; no duplica su nombre público.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "auth.users.id",
+        "description": "Referencia a auth.users.id"
+      },
+      {
+        "name": "dentist_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "public.dentists.id",
+        "description": "Referencia a public.dentists.id"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false,
+        "default": "'pending'",
+        "key": "",
+        "fk": null,
+        "description": "Estado: pending, verified, suspended"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "UNIQUE(user_id); UNIQUE(dentist_id). Asignación manual revisada; no inferir identidad por email ni por aparecer en el directorio.",
+    "indexes": "UNIQUE user_id; UNIQUE dentist_id",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.professional_verifications",
+    "domain": "clinico",
+    "description": "Historial de revisión profesional con acceso restringido.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "professional_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "clinical.professional_accounts.id",
+        "description": "Referencia a clinical.professional_accounts.id"
+      },
+      {
+        "name": "reviewed_by",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "auth.users.id",
+        "description": "Referencia a auth.users.id"
+      },
+      {
+        "name": "decision",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "verified, rejected, revoked"
+      },
+      {
+        "name": "reference",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "Referencia protegida del expediente de verificación; sin publicar documentos"
+      },
+      {
+        "name": "reason",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "reason"
+      },
+      {
+        "name": "reviewed_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "No autoaprobación; actor autorizado separado de la persona revisada. Decisión no concede por sí sola rol Auth ni membresía clínica.",
+    "indexes": "professional_id, reviewed_at DESC",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.clinic_memberships",
+    "domain": "clinico",
+    "description": "Pertenencia de profesional a clínica, independiente del permiso del paciente.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "clinic_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "clinical.clinics.id",
+        "description": "Referencia a clinical.clinics.id"
+      },
+      {
+        "name": "professional_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "clinical.professional_accounts.id",
+        "description": "Referencia a clinical.professional_accounts.id"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false,
+        "default": "'active'",
+        "key": "",
+        "fk": null,
+        "description": "Estado: active, suspended, ended"
+      },
+      {
+        "name": "valid_from",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      },
+      {
+        "name": "valid_until",
+        "type": "timestamptz",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "valid until"
+      }
+    ],
+    "rules": "UNIQUE(clinic_id,professional_id); valid_until NULL o mayor a valid_from. Las reactivaciones preservan historial en auditoría; no se sobrescriben afiliaciones para cambiar procedencia.",
+    "indexes": "UNIQUE clinic_id,professional_id; professional_id,status",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.patient_records",
+    "domain": "clinico",
+    "description": "Identificador estable del paciente entre clínicas; nombre personal se obtiene de profiles.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "auth.users.id",
+        "description": "Referencia a auth.users.id"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false,
+        "default": "'active'",
+        "key": "",
+        "fk": null,
+        "description": "Estado: active, restricted, archived"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "UNIQUE(user_id). No duplicar paciente por clínica. Sin DNI, edad u otros datos clínicos no requeridos por el MVP.",
+    "indexes": "UNIQUE user_id",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.clinical_encounters",
+    "domain": "clinico",
+    "description": "Atención con paciente, clínica de origen y profesional responsable.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "patient_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "clinical.patient_records.id",
+        "description": "Referencia a clinical.patient_records.id"
+      },
+      {
+        "name": "membership_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "clinical.clinic_memberships.id",
+        "description": "Referencia a clinical.clinic_memberships.id"
+      },
+      {
+        "name": "attended_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "attended at"
+      },
+      {
+        "name": "recorded_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false,
+        "default": "'recorded'",
+        "key": "",
+        "fk": null,
+        "description": "Estado: recorded, amended, voided"
+      },
+      {
+        "name": "replaces_id",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": "clinical.clinical_encounters.id",
+        "description": "Referencia a clinical.clinical_encounters.id"
+      }
+    ],
+    "rules": "La membresía define clínica y profesional de origen; attended_at no se sustituye por recorded_at. Correcciones versionadas y justificadas, sin borrado destructivo; impedir ciclos en replaces_id.",
+    "indexes": "patient_id,attended_at DESC,id; membership_id",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.clinical_entries",
+    "domain": "clinico",
+    "description": "Antecedente, diagnóstico o tratamiento registrado por profesional; sin inferencia automática.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "encounter_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "clinical.clinical_encounters.id",
+        "description": "Referencia a clinical.clinical_encounters.id"
+      },
+      {
+        "name": "kind",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "background, diagnosis, treatment"
+      },
+      {
+        "name": "information_state",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "recorded, not_recorded, unknown"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "description"
+      },
+      {
+        "name": "code_system",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "code system"
+      },
+      {
+        "name": "code",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "code"
+      },
+      {
+        "name": "recorded_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      },
+      {
+        "name": "replaces_id",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": "clinical.clinical_entries.id",
+        "description": "Referencia a clinical.clinical_entries.id"
+      }
+    ],
+    "rules": "CHECK kind e information_state; description obligatoria cuando recorded, NULL cuando unknown/not_recorded. code y code_system ambos presentes o ambos NULL. No es una tabla de predicciones IA.",
+    "indexes": "encounter_id,kind; replaces_id",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.clinical_documents",
+    "domain": "clinico",
+    "description": "Examen o documento de una atención, con procedencia y referencia privada.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "encounter_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "clinical.clinical_encounters.id",
+        "description": "Referencia a clinical.clinical_encounters.id"
+      },
+      {
+        "name": "kind",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "exam, document"
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "title"
+      },
+      {
+        "name": "exam_date",
+        "type": "date",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "exam date"
+      },
+      {
+        "name": "availability",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "available, unavailable"
+      },
+      {
+        "name": "bucket_id",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "bucket id"
+      },
+      {
+        "name": "object_path",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "object path"
+      },
+      {
+        "name": "mime_type",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "mime type"
+      },
+      {
+        "name": "size_bytes",
+        "type": "bigint",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "size bytes"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "UNIQUE(bucket_id,object_path). available exige objeto privado y MIME/tamaño válidos; unavailable no inventa archivo. exam_date obligatoria para examen si es conocida; ausencia se informa. Sin campo is_valid automático: decisión clínica del profesional.",
+    "indexes": "encounter_id,exam_date DESC; UNIQUE bucket_id,object_path",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.clinical_access_grants",
+    "domain": "clinico",
+    "description": "Concesión del paciente a una membresía profesional concreta y finalidad.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "patient_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "clinical.patient_records.id",
+        "description": "Referencia a clinical.patient_records.id"
+      },
+      {
+        "name": "membership_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "clinical.clinic_memberships.id",
+        "description": "Referencia a clinical.clinic_memberships.id"
+      },
+      {
+        "name": "purpose",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "purpose"
+      },
+      {
+        "name": "policy_version",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "policy version"
+      },
+      {
+        "name": "granted_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      },
+      {
+        "name": "expires_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "expires at"
+      },
+      {
+        "name": "revoked_at",
+        "type": "timestamptz",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "revoked at"
+      },
+      {
+        "name": "scope_mode",
+        "type": "text",
+        "nullable": false,
+        "default": "'selected_encounters'",
+        "key": "",
+        "fk": null,
+        "description": "MVP: solo selected_encounters"
+      }
+    ],
+    "rules": "Paciente emisor se deriva de Auth, no del cuerpo. expires_at > granted_at; revoked_at NULL o >=granted_at. No otorgar acceso a otra clínica por cambiar contexto; default sin recursos = sin acceso. No concede escritura.",
+    "indexes": "patient_id,membership_id,expires_at; parcial patient_id,membership_id WHERE revoked_at IS NULL",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.clinical_grant_resources",
+    "domain": "clinico",
+    "description": "Atenciones concretas incluidas en una concesión; evita compartir futuros registros automáticamente.",
+    "fields": [
+      {
+        "name": "grant_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK compuesto",
+        "fk": "clinical.clinical_access_grants.id",
+        "description": "Referencia a clinical.clinical_access_grants.id"
+      },
+      {
+        "name": "encounter_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK compuesto",
+        "fk": "clinical.clinical_encounters.id",
+        "description": "Referencia a clinical.clinical_encounters.id"
+      }
+    ],
+    "rules": "PK(grant_id,encounter_id); comprobar mismo paciente entre concesión y atención en función autorizada y constraint trigger propuesto. No aceptar una atención ajena.",
+    "indexes": "PK grant_id,encounter_id; encounter_id",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "clinical.clinical_access_audit",
+    "domain": "clinico",
+    "description": "Registro permitido/denegado y de concesión/revocación sin copiar historial.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "request_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "request id"
+      },
+      {
+        "name": "actor_user_id",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": "auth.users.id",
+        "description": "Referencia a auth.users.id"
+      },
+      {
+        "name": "patient_id",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": "clinical.patient_records.id",
+        "description": "Referencia a clinical.patient_records.id"
+      },
+      {
+        "name": "membership_id",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": "clinical.clinic_memberships.id",
+        "description": "Referencia a clinical.clinic_memberships.id"
+      },
+      {
+        "name": "grant_id",
+        "type": "uuid",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": "clinical.clinical_access_grants.id",
+        "description": "Referencia a clinical.clinical_access_grants.id"
+      },
+      {
+        "name": "operation",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "history_read, document_read, grant, revoke"
+      },
+      {
+        "name": "outcome",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "allowed, denied, error"
+      },
+      {
+        "name": "reason_code",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "reason code"
+      },
+      {
+        "name": "occurred_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "Sin FK al paciente solicitado inexistente: guardar NULL y razón genérica; no registrar identificadores arbitrarios de URL como FK válida. request_id no reemplaza id: múltiples eventos por solicitud. Sin texto clínico ni IP por defecto. Auditoría no editable por consultante.",
+    "indexes": "patient_id,occurred_at DESC; actor_user_id,occurred_at DESC; request_id",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.dataset_versions",
+    "domain": "ia",
+    "description": "Origen, licencia y partición de un dataset de investigación.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "name"
+      },
+      {
+        "name": "version",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "version"
+      },
+      {
+        "name": "source_uri",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "source uri"
+      },
+      {
+        "name": "license",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "license"
+      },
+      {
+        "name": "permission_reference",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "permission reference"
+      },
+      {
+        "name": "manifest_sha256",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "manifest sha256"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "UNIQUE(name,version). Permisos de entrenamiento separados del consentimiento fotográfico. URI del manifiesto, no datos personales.",
+    "indexes": "UNIQUE name,version",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.dataset_items",
+    "domain": "ia",
+    "description": "Ítem seudonimizado con etiqueta y split congelado.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "dataset_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "ml.dataset_versions.id",
+        "description": "Referencia a ml.dataset_versions.id"
+      },
+      {
+        "name": "subject_key",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "subject key"
+      },
+      {
+        "name": "object_reference",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "object reference"
+      },
+      {
+        "name": "image_sha256",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "image sha256"
+      },
+      {
+        "name": "label",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "label"
+      },
+      {
+        "name": "split",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "train, validation, test"
+      }
+    ],
+    "rules": "UNIQUE(dataset_id,image_sha256). Un subject_key solo puede estar en un split de cada versión; validación agregada del manifiesto antes de congelar. No relacionar subject_key con Auth ni reciclar fotos del MVP.",
+    "indexes": "UNIQUE dataset_id,image_sha256; dataset_id,subject_key,split",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.model_versions",
+    "domain": "ia",
+    "description": "Artefacto de modelo exploratorio y preprocesamiento reproducible.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "dataset_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "ml.dataset_versions.id",
+        "description": "Referencia a ml.dataset_versions.id"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "name"
+      },
+      {
+        "name": "version",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "version"
+      },
+      {
+        "name": "artifact_uri",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "artifact uri"
+      },
+      {
+        "name": "artifact_sha256",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "artifact sha256"
+      },
+      {
+        "name": "preprocessing_version",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "preprocessing version"
+      },
+      {
+        "name": "code_commit",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "code commit"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false,
+        "default": "'draft'",
+        "key": "",
+        "fk": null,
+        "description": "Estado: draft, evaluated, retired"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "UNIQUE(name,version). Estado evaluated requiere evaluación real y límites; no significa validación clínica. Artefacto firmado/hash verificado antes de cargar.",
+    "indexes": "UNIQUE name,version",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.analysis_authorizations",
+    "domain": "ia",
+    "description": "Autorización explícita propuesta para análisis de una fotografía, distinta del almacenamiento y del entrenamiento.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "owner_user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "auth.users.id",
+        "description": "Referencia a auth.users.id"
+      },
+      {
+        "name": "photo_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "public.dental_photos.id",
+        "description": "Referencia a public.dental_photos.id"
+      },
+      {
+        "name": "purpose",
+        "type": "text",
+        "nullable": false,
+        "default": "'exploratory_image_analysis'",
+        "key": "",
+        "fk": null,
+        "description": "purpose"
+      },
+      {
+        "name": "policy_version",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "policy version"
+      },
+      {
+        "name": "consent_text",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "consent text"
+      },
+      {
+        "name": "granted_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      },
+      {
+        "name": "expires_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "expires at"
+      },
+      {
+        "name": "revoked_at",
+        "type": "timestamptz",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "revoked at"
+      }
+    ],
+    "rules": "purpose solo exploratory_image_analysis; expires_at>granted_at y revoked_at NULL o >=granted_at. Comprobar foto del mismo propietario. No autoriza entrenamiento ni acceso profesional. Texto/política requieren revisión antes de usar datos personales.",
+    "indexes": "owner_user_id,photo_id,expires_at; parcial photo_id WHERE revoked_at IS NULL",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.analysis_jobs",
+    "domain": "ia",
+    "description": "Trabajo futuro de análisis de una foto, sujeto a finalidad autorizada aparte.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "photo_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "public.dental_photos.id",
+        "description": "Referencia a public.dental_photos.id"
+      },
+      {
+        "name": "model_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "ml.model_versions.id",
+        "description": "Referencia a ml.model_versions.id"
+      },
+      {
+        "name": "owner_user_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "auth.users.id",
+        "description": "Referencia a auth.users.id"
+      },
+      {
+        "name": "authorization_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "ml.analysis_authorizations.id",
+        "description": "Referencia a ml.analysis_authorizations.id"
+      },
+      {
+        "name": "idempotency_key",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "idempotency key"
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false,
+        "default": "'queued'",
+        "key": "",
+        "fk": null,
+        "description": "Estado: queued, processing, succeeded, failed, cancelled"
+      },
+      {
+        "name": "error_code",
+        "type": "text",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "error code"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      },
+      {
+        "name": "finished_at",
+        "type": "timestamptz",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "finished at"
+      }
+    ],
+    "rules": "UNIQUE(owner_user_id,idempotency_key). Verificar mismo propietario/foto/autorización vigente; deshabilitado hasta implementar y revisar autorización específica. Revalidar antes de procesar y devolver; revocación cancela queued y evita nuevas respuestas, con límites del procesamiento en curso documentados.",
+    "indexes": "UNIQUE owner_user_id,idempotency_key; status,created_at; photo_id",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.analysis_results",
+    "domain": "ia",
+    "description": "Resultado orientativo persistido solo si existe ejecución real.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "job_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "ml.analysis_jobs.id",
+        "description": "Referencia a ml.analysis_jobs.id"
+      },
+      {
+        "name": "label",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "label"
+      },
+      {
+        "name": "score",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "score"
+      },
+      {
+        "name": "limitations",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "limitations"
+      },
+      {
+        "name": "disclaimer_version",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "disclaimer version"
+      },
+      {
+        "name": "quality_status",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "usable, not_evaluable"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "UNIQUE(job_id); score NULL o [0,1], no probabilidad clínica calibrada implícita. not_evaluable no devuelve hallazgos inventados.",
+    "indexes": "UNIQUE job_id",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.educational_recommendations",
+    "domain": "ia",
+    "description": "Catálogo versionado de recomendaciones explicables revisables.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "code",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "code"
+      },
+      {
+        "name": "version",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "version"
+      },
+      {
+        "name": "text",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "text"
+      },
+      {
+        "name": "source_reference",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "source reference"
+      },
+      {
+        "name": "review_status",
+        "type": "text",
+        "nullable": false,
+        "default": "'draft'",
+        "key": "",
+        "fk": null,
+        "description": "draft, reviewed, retired"
+      }
+    ],
+    "rules": "UNIQUE(code,version). Fuente y revisión profesional registradas antes de publicitar respaldo clínico.",
+    "indexes": "UNIQUE code,version",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.result_recommendations",
+    "domain": "ia",
+    "description": "Relación de resultado y recomendación con motivo explicable.",
+    "fields": [
+      {
+        "name": "result_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK compuesto",
+        "fk": "ml.analysis_results.id",
+        "description": "Referencia a ml.analysis_results.id"
+      },
+      {
+        "name": "recommendation_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK compuesto",
+        "fk": "ml.educational_recommendations.id",
+        "description": "Referencia a ml.educational_recommendations.id"
+      },
+      {
+        "name": "reason",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "reason"
+      }
+    ],
+    "rules": "PK(result_id,recommendation_id). Motivo basado en salida disponible, nunca diagnóstico autónomo.",
+    "indexes": "PK result_id,recommendation_id",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.evaluation_runs",
+    "domain": "ia",
+    "description": "Ejecución reproducible de evaluación, independiente de inferencia de un paciente.",
+    "fields": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false,
+        "default": "gen_random_uuid()",
+        "key": "PK",
+        "fk": null,
+        "description": "Identificador estable generado por el servidor"
+      },
+      {
+        "name": "model_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "ml.model_versions.id",
+        "description": "Referencia a ml.model_versions.id"
+      },
+      {
+        "name": "dataset_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": "ml.dataset_versions.id",
+        "description": "Referencia a ml.dataset_versions.id"
+      },
+      {
+        "name": "split",
+        "type": "text",
+        "nullable": false,
+        "default": "'test'",
+        "key": "",
+        "fk": null,
+        "description": "split"
+      },
+      {
+        "name": "sample_size",
+        "type": "integer",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "sample size"
+      },
+      {
+        "name": "config",
+        "type": "jsonb",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "config"
+      },
+      {
+        "name": "artifact_reference",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "artifact reference"
+      },
+      {
+        "name": "executed_at",
+        "type": "timestamptz",
+        "nullable": false,
+        "default": "now()",
+        "key": "",
+        "fk": null,
+        "description": "Instante UTC registrado por el servidor"
+      }
+    ],
+    "rules": "sample_size>0; dataset/split de evaluación declarado y sin fuga; registrar hardware/semilla/config sin secretos.",
+    "indexes": "model_id,executed_at DESC",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  },
+  {
+    "name": "ml.evaluation_metrics",
+    "domain": "ia",
+    "description": "Métrica por clase/promedio y matriz de confusión de una ejecución.",
+    "fields": [
+      {
+        "name": "run_id",
+        "type": "uuid",
+        "nullable": false,
+        "default": null,
+        "key": "PK compuesto",
+        "fk": "ml.evaluation_runs.id",
+        "description": "Referencia a ml.evaluation_runs.id"
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false,
+        "default": null,
+        "key": "PK compuesto",
+        "fk": null,
+        "description": "precision, recall, f1, confusion_matrix"
+      },
+      {
+        "name": "label",
+        "type": "text",
+        "nullable": false,
+        "default": "'aggregate'",
+        "key": "PK compuesto",
+        "fk": null,
+        "description": "label"
+      },
+      {
+        "name": "value",
+        "type": "numeric",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "value"
+      },
+      {
+        "name": "matrix",
+        "type": "jsonb",
+        "nullable": true,
+        "default": null,
+        "key": "",
+        "fk": null,
+        "description": "matrix"
+      }
+    ],
+    "rules": "PK(run_id,name,label). Métricas escalares con value [0,1] y matrix NULL; confusion_matrix con matrix de conteos >=0 y value NULL. No fabricar métricas.",
+    "indexes": "PK run_id,name,label",
+    "status": "Propuesta",
+    "retention": "RESTRICT: sin borrado en cascada del historial. Retención y anonimización requieren política aprobada."
+  }
+]

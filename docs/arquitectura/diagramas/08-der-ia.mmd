@@ -1,0 +1,118 @@
+erDiagram
+  ml_dataset_versions {
+    uuid id PK
+    text name
+    text version
+    text source_uri
+    text license
+    text permission_reference
+    text manifest_sha256
+    timestamptz created_at
+  }
+  ml_dataset_items {
+    uuid id PK
+    uuid dataset_id FK
+    text subject_key
+    text object_reference
+    text image_sha256
+    text label
+    text split
+  }
+  ml_model_versions {
+    uuid id PK
+    uuid dataset_id FK
+    text name
+    text version
+    text artifact_uri
+    text artifact_sha256
+    text preprocessing_version
+    text code_commit
+    text status
+    timestamptz created_at
+  }
+  ml_analysis_authorizations {
+    uuid id PK
+    uuid owner_user_id FK
+    uuid photo_id FK
+    text purpose
+    text policy_version
+    text consent_text
+    timestamptz granted_at
+    timestamptz expires_at
+    timestamptz revoked_at
+  }
+  ml_analysis_jobs {
+    uuid id PK
+    uuid photo_id FK
+    uuid model_id FK
+    uuid owner_user_id FK
+    uuid authorization_id FK
+    uuid idempotency_key
+    text status
+    text error_code
+    timestamptz created_at
+    timestamptz finished_at
+    uuid lease_id
+    timestamptz lease_expires_at
+    integer attempt_count
+  }
+  ml_analysis_results {
+    uuid id PK
+    uuid job_id FK
+    text label
+    numeric score
+    text limitations
+    text disclaimer_version
+    text quality_status
+    timestamptz created_at
+  }
+  ml_educational_recommendations {
+    uuid id PK
+    text code
+    text version
+    text text
+    text source_reference
+    text review_status
+  }
+  ml_result_recommendations {
+    uuid result_id PK,FK
+    uuid recommendation_id PK,FK
+    text reason
+  }
+  ml_evaluation_runs {
+    uuid id PK
+    uuid model_id FK
+    uuid dataset_id FK
+    text split
+    integer sample_size
+    jsonb config
+    text artifact_reference
+    timestamptz executed_at
+  }
+  ml_evaluation_metrics {
+    uuid run_id PK,FK
+    text name PK
+    text label PK
+    numeric value
+    jsonb matrix
+  }
+  ml_dataset_versions ||--o{ ml_dataset_items : "dataset_id"
+  ml_dataset_versions ||--o{ ml_model_versions : "dataset_id"
+  auth_users {
+    uuid id PK
+  }
+  auth_users ||--o{ ml_analysis_authorizations : "owner_user_id"
+  public_dental_photos {
+    uuid id PK
+  }
+  public_dental_photos ||--o{ ml_analysis_authorizations : "photo_id,owner_user_id"
+  auth_users ||--o{ ml_analysis_jobs : "owner_user_id"
+  public_dental_photos ||--o{ ml_analysis_jobs : "photo_id"
+  ml_model_versions ||--o{ ml_analysis_jobs : "model_id"
+  ml_analysis_authorizations ||--o{ ml_analysis_jobs : "authorization_id,photo_id,owner_user_id"
+  ml_analysis_jobs ||--o| ml_analysis_results : "job_id"
+  ml_analysis_results ||--o{ ml_result_recommendations : "result_id"
+  ml_educational_recommendations ||--o{ ml_result_recommendations : "recommendation_id"
+  ml_model_versions ||--o{ ml_evaluation_runs : "model_id"
+  ml_dataset_versions ||--o{ ml_evaluation_runs : "dataset_id"
+  ml_evaluation_runs ||--o{ ml_evaluation_metrics : "run_id"

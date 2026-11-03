@@ -1,0 +1,9 @@
+flowchart TD
+  N["Cliente web HTTPS"] --> V["Vercel: Next.js estático y servidor"]
+  V --> ENV["Configuración privada de servidor por entorno"]
+  N --> AU["Supabase Auth"]
+  N --> ST["Data API / Storage: JWT propio y RLS"]
+  V -. "administración al integrar rama" .-> AD["Auth Admin / RPC restringido"]
+  AD --> DB["PostgreSQL gestionado"]
+  ST --> DB
+  V -. "diseño futuro" .-> AI["Runtime de visión sin proveedor seleccionado"]

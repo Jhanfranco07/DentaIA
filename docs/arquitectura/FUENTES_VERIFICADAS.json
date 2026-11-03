@@ -1,0 +1,148 @@
+{
+  "fecha": "2026-11-03",
+  "refs": {
+    "origin/main": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+    "origin/feature/superusuario-admin": "c992a14229d1bc838166dae200559b9aa7f7428c",
+    "origin/feature/vista-paciente": "ac545b5d084961d96f9c3df832c291b4acbfdba7",
+    "origin/feature/vista-odontologo": "2a2fc752c8ae7c3b704bcb8182835efebbf04a22",
+    "origin/feature/anelis-di156-historial-demo": "3f69a50ccdc1959b2329a30347adca6b24f984ad",
+    "origin/feature/anelis-vista-profesional-s5": "6b9aa5ca189352bb7d17bdcb1ce82b1e42cd3376",
+    "origin/feature/angie-avance3": "fd7c7cd26dcb26f7277ef39c549ce5160a4c565a",
+    "origin/feature/landing-comercial": "55d8023acf92a14fe44dc58d365cc5d5e3b0b114"
+  },
+  "archivos_contrastados": [
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": "package.json",
+      "sha256": "061fa2f198282f5d5447bee8af28dee06a4ddcf53eae7fbcd2e22b6672342ab3"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": "next.config.ts",
+      "sha256": "4c51922302777867947757f3c986437becee5a1027c63a5a7f430f5e423d9c9a"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": "src/lib/supabase/database.types.ts",
+      "sha256": "7995eea991e8bbe241ac476159e68a24e4f57d86890a6985cca6d44e391b3340"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": "src/features/solicitudes/solicitudes.ts",
+      "sha256": "debe04841bebfdec5f2c55d0815d1a97ed7cf089fad6387303515578a6cebd80"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": "src/features/fotografias/eliminar.ts",
+      "sha256": "3ee99db0ca60b553b185805ca8b4a318c606a4bc9ea4ab3a9feb9ee07e18825d"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": "src/features/analisis/casos.ts",
+      "sha256": "fc995c1de1a82508f636e4bc6182be576a1cc982b9c59a313598eccfde98cf30"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": "src/app/(modulos)/profesional/page.tsx",
+      "sha256": "1f6111edc4745cb110852a14cde31577bb85993c93a6492c28a21dbca9edfb63"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": ".github/workflows/ci.yml",
+      "sha256": "beae0f3efccb3db269f89e2e8d82d82942f6e96ba517b84675cc9cdb1881b988"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": ".github/workflows/tests.yml",
+      "sha256": "810f36e1c5637844c5346273330e89069ecf6bda13d3d061b1ff19f7ffcb2e2f"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+      "path": ".github/workflows/security.yml",
+      "sha256": "e75ca92f8956e307156b57c06db53649315eb47e50ed05155bc528d4b9e39b67"
+    },
+    {
+      "ref": "origin/feature/superusuario-admin",
+      "commit": "c992a14229d1bc838166dae200559b9aa7f7428c",
+      "path": "src/features/autorizacion/autorizacion.ts",
+      "sha256": "ea1fa190bd5d9201da3fcfc09738f3629721cf75abb59be7dbe1606d18ec7657"
+    },
+    {
+      "ref": "origin/feature/superusuario-admin",
+      "commit": "c992a14229d1bc838166dae200559b9aa7f7428c",
+      "path": "src/features/administracion/cambios-roles.ts",
+      "sha256": "1e09aff7e6f9c825d17c9ee15e5a7650e44760bac0adc2f1c57402b1dc9f529c"
+    },
+    {
+      "ref": "origin/feature/superusuario-admin",
+      "commit": "c992a14229d1bc838166dae200559b9aa7f7428c",
+      "path": "src/features/administracion/lecturas-supabase.ts",
+      "sha256": "be224420f693a378356a22ea80e828d59cde70b038066d3e9dd8445e0dea4167"
+    },
+    {
+      "ref": "origin/feature/superusuario-admin",
+      "commit": "c992a14229d1bc838166dae200559b9aa7f7428c",
+      "path": "src/features/administracion/escrituras-roles-supabase.ts",
+      "sha256": "eb06028f0b4d2bc068b5a9356a65a4c796d2f229b1ff27150d9d06e5158a4cb0"
+    },
+    {
+      "ref": "origin/feature/superusuario-admin",
+      "commit": "c992a14229d1bc838166dae200559b9aa7f7428c",
+      "path": "src/features/administracion/servidor-cambios-roles.ts",
+      "sha256": "e866c6be5ec33e048fc75e879cb8fa8a822b211578bc3d931df3f8a0ccf77fb9"
+    },
+    {
+      "ref": "origin/feature/superusuario-admin",
+      "commit": "c992a14229d1bc838166dae200559b9aa7f7428c",
+      "path": "supabase/migrations/20261103012414_di151_roles_auditoria_atomica.sql",
+      "sha256": "4df24cc575b85f627e9b95a61a6bd451ec7fb355ff60f59ff07693f72ae4286f"
+    },
+    {
+      "ref": "origin/feature/vista-paciente",
+      "commit": "ac545b5d084961d96f9c3df832c291b4acbfdba7",
+      "path": "src/app/(modulos)/panel/page.tsx",
+      "sha256": "94ef148d0213c68cedcf5999c804957344557866fbf170222ff066b368897fcc"
+    },
+    {
+      "ref": "origin/feature/vista-paciente",
+      "commit": "ac545b5d084961d96f9c3df832c291b4acbfdba7",
+      "path": "src/features/panel/PanelPaciente.tsx",
+      "sha256": "7990eedb6e658a0b2baba39946fff15355270f2972d5fb34476840cb1aea273f"
+    },
+    {
+      "ref": "origin/feature/vista-paciente",
+      "commit": "ac545b5d084961d96f9c3df832c291b4acbfdba7",
+      "path": "src/features/panel/ResumenPanel.tsx",
+      "sha256": "db55fcaa74111761a5e7cebe381ca32dddf8a63a9690faac6b28ab5e7bdc5033"
+    },
+    {
+      "ref": "origin/feature/anelis-di156-historial-demo",
+      "commit": "3f69a50ccdc1959b2329a30347adca6b24f984ad",
+      "path": "src/features/profesional/historial-autorizado.ts",
+      "sha256": "5fd0b77b60694dc8689b602b8287477562d80e642f2223cd6677207d21b62093"
+    },
+    {
+      "ref": "origin/feature/anelis-di156-historial-demo",
+      "commit": "3f69a50ccdc1959b2329a30347adca6b24f984ad",
+      "path": "src/features/profesional/proveedor-historial-sintetico.ts",
+      "sha256": "f0c14019a0404289f143bf98f5d4d46e95bc2f461c2bf6ae99a1c46e143e3d6d"
+    },
+    {
+      "ref": "origin/feature/anelis-di156-historial-demo",
+      "commit": "3f69a50ccdc1959b2329a30347adca6b24f984ad",
+      "path": "docs/DI-157-integracion-informacion-autorizada.md",
+      "sha256": "1944ad1d08446b8dbeb8b918e437b359533ba16f905cc68173db437936dd0b93"
+    }
+  ],
+  "alcance": "No representa auditoría línea por línea de todas las ramas históricas"
+}

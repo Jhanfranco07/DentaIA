@@ -1,0 +1,12 @@
+sequenceDiagram
+  participant P as Paciente
+  participant S as API propuesta
+  participant D as PostgreSQL
+  P->>S: Conceder recursos a profesional y clínica
+  S->>D: Identidad propia, vigencia y recursos
+  D->>D: Transacción: concesión y auditoría
+  D-->>P: Confirmación
+  P->>S: Revocar concesión propia
+  S->>D: Bloqueo y marca revoked_at; auditoría
+  D-->>P: Revocación confirmada
+  Note over P,D: Próximas consultas rechazan; datos ya vistos no se borran de la memoria del receptor
