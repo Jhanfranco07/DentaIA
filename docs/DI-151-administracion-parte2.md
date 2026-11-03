@@ -4,7 +4,7 @@
 - Fecha: 02/11/2026. Responsable: Jhan.
 - Rama exclusiva: `feature/superusuario-admin`.
 - Base: `e6f6835`, primera parte de DI-151. Se conservan sus seis commits anteriores.
-- **Estado del registro: preparado para revisión de cierre y publicación de la Parte 2, por confirmación del responsable. Ver sección 14 para las comprobaciones finales repetidas y la distinción entre evidencia ejecutada y validación comunicada. Las secciones anteriores conservan el historial técnico y sus limitaciones; no se cambia automáticamente el estado de Jira.**
+- **Estado vigente: implementación de la Parte 2 publicada; funcionamiento de gestión de roles, persistencia y auditoría confirmado manualmente por el responsable. La sección 15 registra esta declaración y la revisión técnica repetida para la publicación definitiva. Las anotaciones de pendientes y estados de las secciones anteriores son históricas y no sustituyen esta actualización. No se cambia automáticamente Jira.**
 
 DI-151 tiene únicamente dos partes: Parte 1 publicada en `e6f6835` y esta Parte 2, que comprende **todos los cambios locales posteriores**. Los documentos de contrato y protocolo son anexos técnicos de la Parte 2, no partes adicionales.
 
@@ -601,3 +601,63 @@ El propietario debe configurar esa variable localmente para un eventual uso auto
 La publicación registra el desarrollo de la Parte 2 y la confirmación de validación del responsable. No equivale a desplegar la migración, activar escrituras en producción, habilitar permisos clínicos ni resolver por sí sola la verificación profesional pendiente para conceder `odontologo`. Las limitaciones arquitectónicas, el protocolo seguro de aprobación y los resultados históricos siguen disponibles para revisión. No se atribuye a esta ejecución una prueba SQL o remota que no se haya repetido.
 
 Evidencias locales sin datos de cuentas ni credenciales: `%TEMP%/DentaIA-DI151-parte2-final-pruebas.tap` y `%TEMP%/DentaIA-DI151-parte2-final-build.log`. Los archivos de entorno, los informes locales y las cachés de herramientas no se incluyen en el commit.
+
+## 15. Publicación definitiva: implementación y validación manual declarada
+
+Fecha de la revisión: 02/11/2026, America/Lima. Esta actualización pertenece a **DI-151 Parte 2**. DI-151 conserva únicamente sus dos partes.
+
+### Implementación registrada e historial conservado
+
+La implementación completa desarrollada dentro de esta Parte 2 ya se publicó en el commit `8b36f878b285980ff66e3eb739563a93d67f05d7`, con 51 archivos: integración cliente/API, proveedor de usuarios Auth y profiles, herramientas locales de MFA y QA, actualización controlada de roles, migración transaccional, fixtures, pruebas y documentación. El inventario técnico se detalla en las secciones anteriores. La concesión de odontólogo sin verificación profesional no forma parte de las transiciones habilitadas.
+
+Al comenzar esta revisión, el árbol estaba limpio y la rama local coincidía con `origin/feature/superusuario-admin`. Para conservar todos los commits publicados, no se modifica ni sustituye el commit anterior. La publicación definitiva añade un único commit documental con el mensaje solicitado; el código de la Parte 2 permanece incluido en su historial y en el estado final de la rama. No se duplica la implementación ni se modifica `main`.
+
+### Confirmación manual del responsable
+
+El responsable declara expresamente:
+
+> He realizado personalmente las validaciones funcionales y el sistema funciona correctamente, incluyendo la gestión de roles, persistencia y auditoría.
+
+Se registra como **validación manual declarada por el responsable**. No se le atribuyen logs, capturas, códigos HTTP adicionales, número de operaciones, identidades, entorno concreto, mediciones de concurrencia ni resultados obtenidos por herramientas. Esta publicación acepta esa confirmación para el registro solicitado y no la bloquea por carecer de capturas o logs. No transforma esa declaración en una nueva verificación automatizada ni implica que el agente haya aplicado migraciones o cambiado roles.
+
+### Verificaciones técnicas repetidas
+
+| Verificación ejecutada en esta revisión | Resultado |
+| --- | --- |
+| Suite Node: `node --experimental-strip-types --test --test-reporter=tap "src/features/**/*.test.mjs"` | **231 aprobadas, 0 fallidas, 0 omitidas**. Casos con fixtures y transporte interceptado mantienen su alcance aislado. |
+| `npm run typecheck` | Aprobado. |
+| `npm run build` | Aprobado antes de publicar. |
+| `git diff --check` y revisión del staging | Sin errores de formato ni archivos ajenos. |
+| Revisión de los 51 archivos de implementación | Sin valores privados configurados, JWT, claves Supabase, contraseñas de conexión, claves privadas, correos de usuarios o UUID real de la cuenta de aprovisionamiento detectados. No se incluyen archivos `.env`, cachés ni informes temporales. |
+| Scripts y migración | Migración acotada y fixtures sintéticos conservados; PowerShell sin errores de sintaxis. Ningún script de escritura o migración fue ejecutado para esta publicación. |
+| Configuración local de escritura | Bandera apagada y credencial de escritura ausente. El código mantiene la denegación por defecto. No se altera `.env.local`. |
+| `next-env.d.ts` | Sin cambios locales; no se incorpora ningún cambio automático de ese archivo en este nuevo commit. |
+
+Registros locales de las verificaciones realmente ejecutadas: `%TEMP%/DentaIA-DI151-publicacion-definitiva-pruebas.tap` y `%TEMP%/DentaIA-DI151-publicacion-definitiva-build.log`. No se suben a Git y no representan evidencia de las comprobaciones manuales del responsable.
+
+### Configuración para utilizar las funcionalidades administrativas
+
+La configuración debe aprovisionarse fuera del repositorio y sin compartir valores por el chat. Para desarrollo se usa `.env.local`, ignorado por Git; para un despliegue autorizado se utilizan variables privadas del servidor. No se incluyen plantillas con valores reales.
+
+| Variable | Uso y condiciones |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto autorizado. Es pública, no una credencial administrativa. |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clave publicable del cliente y validación de identidad; nunca sustituir por una clave privada. |
+| `DENTAIA_ADMIN_READS_ENABLED` | La lectura administrativa requiere activación explícita con `true`. |
+| `DENTAIA_SUPABASE_ADMIN_READ_SECRET` | Credencial privada utilizada solo por el adaptador servidor de lectura. No concede acceso al endpoint sin pasar DI-150. |
+| `DENTAIA_ROLE_WRITES_ENABLED` | Mantener ausente o distinta de `true` para desactivar escrituras. Activar solamente en el entorno expresamente autorizado y validado. |
+| `DENTAIA_SUPABASE_ROLE_WRITE_SECRET` | Credencial privada del servidor para el RPC restringido. Requiere la migración previamente revisada y aplicada mediante un procedimiento autorizado; no se aplica durante esta publicación. |
+| `DENTAIA_QA_MFA_ENABLED` | Habilitación explícita de la herramienta local de MFA; no concede roles y exige actuación personal para enrolar o verificar TOTP. |
+| `DENTAIA_BOOTSTRAP_USER_ID` | Objetivo privado obligatorio para un eventual aprovisionamiento excepcional del propietario. No se usa como sustituto del endpoint con auditoría ni se configura en esta publicación. |
+
+El acceso requiere una cuenta habilitada con asignación actual de superusuario, sesión AAL2 y factor verificado. La escritura revalida sesión y TOTP reciente, exige aprobación independiente exacta y revisión/snapshot vigentes. La promoción administrativa exige MFA verificado del objetivo; los cambios propios están prohibidos y el último superusuario está protegido. No se aceptan metadatos arbitrarios del navegador.
+
+Las herramientas `/desarrollo/mfa-admin`, `/desarrollo/lectura-admin` y `/desarrollo/roles-admin` son exclusivas de desarrollo, no rutas administrativas públicas de producción. El procedimiento funcional de aprobación, claves de idempotencia, lectura posterior y recuperación está en la sección 13.7. Una respuesta incierta se reconcilia con la misma solicitud y clave; no se repite como una operación nueva.
+
+### Límites de la evidencia y alcance pendiente
+
+- Esta ejecución no repite escrituras contra Supabase, no aplica migraciones ni altera usuarios, roles, permisos o MFA.
+- La gestión de roles, persistencia y auditoría quedan respaldadas aquí por la confirmación manual del responsable, además de las pruebas aisladas y la evidencia histórica que tenga cada caso; no por nuevos ensayos remotos del agente.
+- No se adjunta evidencia automática nueva de concurrencia PostgreSQL, fallo real de auditoría, expiración de sesión, despliegue de la migración o configuración de producción. Los escenarios preparados y las comprobaciones históricas mantienen sus etiquetas originales.
+- Conceder `odontologo` continúa restringido hasta disponer de verificación profesional y vinculación apropiadas. Ningún rol administrativo concede acceso clínico automático.
+- La publicación no certifica uso clínico, no modifica Jira ni completa automáticamente DI-152 o DI-153. No se crea PR ni se fusiona a `main`.
