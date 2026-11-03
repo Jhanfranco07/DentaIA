@@ -1,0 +1,2914 @@
+{
+  "columnas": [
+    {
+      "table_schema": "clinical",
+      "table_name": "clinic_memberships",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinic_memberships",
+      "column_name": "clinic_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinic_memberships",
+      "column_name": "professional_id",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinic_memberships",
+      "column_name": "status",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinic_memberships",
+      "column_name": "valid_from",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinic_memberships",
+      "column_name": "valid_until",
+      "ordinal_position": 6,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "request_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "actor_user_id",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "patient_id",
+      "ordinal_position": 4,
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "membership_id",
+      "ordinal_position": 5,
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "grant_id",
+      "ordinal_position": 6,
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "operation",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "outcome",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "reason_code",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_audit",
+      "column_name": "occurred_at",
+      "ordinal_position": 10,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_grants",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_grants",
+      "column_name": "patient_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_grants",
+      "column_name": "membership_id",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_grants",
+      "column_name": "purpose",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_grants",
+      "column_name": "policy_version",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_grants",
+      "column_name": "granted_at",
+      "ordinal_position": 6,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_grants",
+      "column_name": "expires_at",
+      "ordinal_position": 7,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_grants",
+      "column_name": "revoked_at",
+      "ordinal_position": 8,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_access_grants",
+      "column_name": "scope_mode",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "encounter_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "kind",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "title",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "exam_date",
+      "ordinal_position": 5,
+      "data_type": "date",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "availability",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "bucket_id",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "object_path",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "mime_type",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "size_bytes",
+      "ordinal_position": 10,
+      "data_type": "bigint",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_documents",
+      "column_name": "created_at",
+      "ordinal_position": 11,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_encounters",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_encounters",
+      "column_name": "patient_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_encounters",
+      "column_name": "membership_id",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_encounters",
+      "column_name": "attended_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_encounters",
+      "column_name": "recorded_at",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_encounters",
+      "column_name": "status",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_encounters",
+      "column_name": "replaces_id",
+      "ordinal_position": 7,
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_encounters",
+      "column_name": "correction_reason",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "encounter_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "kind",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "information_state",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "description",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "code_system",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "code",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "recorded_at",
+      "ordinal_position": 8,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "replaces_id",
+      "ordinal_position": 9,
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_entries",
+      "column_name": "correction_reason",
+      "ordinal_position": 10,
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_grant_resources",
+      "column_name": "grant_id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinical_grant_resources",
+      "column_name": "encounter_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinics",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinics",
+      "column_name": "name",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinics",
+      "column_name": "location",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinics",
+      "column_name": "status",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "clinics",
+      "column_name": "created_at",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "patient_records",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "patient_records",
+      "column_name": "user_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "patient_records",
+      "column_name": "status",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "patient_records",
+      "column_name": "created_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_accounts",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_accounts",
+      "column_name": "user_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_accounts",
+      "column_name": "dentist_id",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_accounts",
+      "column_name": "status",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_accounts",
+      "column_name": "created_at",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_verifications",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_verifications",
+      "column_name": "professional_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_verifications",
+      "column_name": "reviewed_by",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_verifications",
+      "column_name": "decision",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_verifications",
+      "column_name": "reference",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_verifications",
+      "column_name": "reason",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "clinical",
+      "table_name": "professional_verifications",
+      "column_name": "reviewed_at",
+      "ordinal_position": 7,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "actor_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "objetivo_id",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "aprobado_por",
+      "ordinal_position": 4,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "operacion",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "rol",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "revision_esperada",
+      "ordinal_position": 7,
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "asignacion_esperada",
+      "ordinal_position": 8,
+      "data_type": "jsonb",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "creada_en",
+      "ordinal_position": 9,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "vence_en",
+      "ordinal_position": 10,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "aprobaciones_roles",
+      "column_name": "consumida_por",
+      "ordinal_position": 11,
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "auditoria_roles",
+      "column_name": "actor_id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "auditoria_roles",
+      "column_name": "solicitud_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "auditoria_roles",
+      "column_name": "objetivo_id",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "auditoria_roles",
+      "column_name": "aprobacion_id",
+      "ordinal_position": 4,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "auditoria_roles",
+      "column_name": "peticion",
+      "ordinal_position": 5,
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "auditoria_roles",
+      "column_name": "anterior",
+      "ordinal_position": 6,
+      "data_type": "jsonb",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "auditoria_roles",
+      "column_name": "posterior",
+      "ordinal_position": 7,
+      "data_type": "jsonb",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "auditoria_roles",
+      "column_name": "resultado",
+      "ordinal_position": 8,
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "auditoria_roles",
+      "column_name": "registrada_en",
+      "ordinal_position": 9,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "revisiones_roles",
+      "column_name": "usuario_id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "dentaia_admin",
+      "table_name": "revisiones_roles",
+      "column_name": "revision",
+      "ordinal_position": 2,
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "user_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "dentist_id",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "contact_name",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "contact_email",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "preferred_date",
+      "ordinal_position": 6,
+      "data_type": "date",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "preferred_time",
+      "ordinal_position": 7,
+      "data_type": "time without time zone",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "message",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "status",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "is_demo",
+      "ordinal_position": 10,
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "appointment_requests",
+      "column_name": "created_at",
+      "ordinal_position": 11,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dental_photos",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dental_photos",
+      "column_name": "user_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dental_photos",
+      "column_name": "consent_id",
+      "ordinal_position": 3,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dental_photos",
+      "column_name": "bucket_id",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dental_photos",
+      "column_name": "object_path",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dental_photos",
+      "column_name": "original_filename",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dental_photos",
+      "column_name": "mime_type",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dental_photos",
+      "column_name": "size_bytes",
+      "ordinal_position": 8,
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dental_photos",
+      "column_name": "created_at",
+      "ordinal_position": 9,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "slug",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "name",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "specialty",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "district",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "consultation_price",
+      "ordinal_position": 6,
+      "data_type": "numeric",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "currency",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "initials",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "avatar_color",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "description",
+      "ordinal_position": 10,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "is_demo",
+      "ordinal_position": 11,
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "is_active",
+      "ordinal_position": 12,
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "dentists",
+      "column_name": "created_at",
+      "ordinal_position": 13,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "patient_consents",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "patient_consents",
+      "column_name": "user_id",
+      "ordinal_position": 2,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "patient_consents",
+      "column_name": "policy_version",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "patient_consents",
+      "column_name": "consent_text",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "patient_consents",
+      "column_name": "purpose",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "patient_consents",
+      "column_name": "accepted_at",
+      "ordinal_position": 6,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "patient_consents",
+      "column_name": "revoked_at",
+      "ordinal_position": 7,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "profiles",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "profiles",
+      "column_name": "full_name",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "profiles",
+      "column_name": "created_at",
+      "ordinal_position": 3,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    }
+  ],
+  "restricciones": [
+    {
+      "schema": "public",
+      "tabla": "patient_consents",
+      "conname": "patient_consents_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "public",
+      "tabla": "appointment_requests",
+      "conname": "appointment_requests_contact_email_check",
+      "contype": "c",
+      "definition": "CHECK (((length(contact_email) <= 254) AND (contact_email ~ '^[^[:space:]@]+@[^[:space:]@]+[.][^[:space:]@]+$'::text)))"
+    },
+    {
+      "schema": "public",
+      "tabla": "appointment_requests",
+      "conname": "appointment_requests_contact_name_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(contact_name)) >= 2) AND (length(btrim(contact_name)) <= 120)))"
+    },
+    {
+      "schema": "public",
+      "tabla": "appointment_requests",
+      "conname": "appointment_requests_is_demo_check",
+      "contype": "c",
+      "definition": "CHECK (is_demo)"
+    },
+    {
+      "schema": "public",
+      "tabla": "appointment_requests",
+      "conname": "appointment_requests_message_check",
+      "contype": "c",
+      "definition": "CHECK ((length(message) <= 1000))"
+    },
+    {
+      "schema": "public",
+      "tabla": "appointment_requests",
+      "conname": "appointment_requests_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "public",
+      "tabla": "appointment_requests",
+      "conname": "appointment_requests_status_check",
+      "contype": "c",
+      "definition": "CHECK ((status = ANY (ARRAY['requested'::text, 'cancelled'::text])))"
+    },
+    {
+      "schema": "public",
+      "tabla": "dental_photos",
+      "conname": "dental_photos_bucket_id_check",
+      "contype": "c",
+      "definition": "CHECK ((bucket_id = 'dental-photos'::text))"
+    },
+    {
+      "schema": "public",
+      "tabla": "dental_photos",
+      "conname": "dental_photos_check",
+      "contype": "c",
+      "definition": "CHECK (((object_path ~~ ((((user_id)::text || '/'::text) || (consent_id)::text) || '/%'::text)) AND (length(split_part(object_path, '/'::text, 3)) > 0)))"
+    },
+    {
+      "schema": "public",
+      "tabla": "dental_photos",
+      "conname": "dental_photos_mime_type_check",
+      "contype": "c",
+      "definition": "CHECK ((mime_type = ANY (ARRAY['image/jpeg'::text, 'image/png'::text, 'image/webp'::text])))"
+    },
+    {
+      "schema": "public",
+      "tabla": "dental_photos",
+      "conname": "dental_photos_object_path_key",
+      "contype": "u",
+      "definition": "UNIQUE (object_path)"
+    },
+    {
+      "schema": "public",
+      "tabla": "dental_photos",
+      "conname": "dental_photos_original_filename_check",
+      "contype": "c",
+      "definition": "CHECK (((length(original_filename) >= 1) AND (length(original_filename) <= 255)))"
+    },
+    {
+      "schema": "public",
+      "tabla": "dental_photos",
+      "conname": "dental_photos_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "public",
+      "tabla": "dental_photos",
+      "conname": "dental_photos_size_bytes_check",
+      "contype": "c",
+      "definition": "CHECK (((size_bytes >= 1) AND (size_bytes <= 8388608)))"
+    },
+    {
+      "schema": "public",
+      "tabla": "dentists",
+      "conname": "dentists_consultation_price_check",
+      "contype": "c",
+      "definition": "CHECK ((consultation_price >= (0)::numeric))"
+    },
+    {
+      "schema": "public",
+      "tabla": "dentists",
+      "conname": "dentists_currency_check",
+      "contype": "c",
+      "definition": "CHECK ((currency = 'PEN'::text))"
+    },
+    {
+      "schema": "public",
+      "tabla": "dentists",
+      "conname": "dentists_is_demo_check",
+      "contype": "c",
+      "definition": "CHECK (is_demo)"
+    },
+    {
+      "schema": "public",
+      "tabla": "dentists",
+      "conname": "dentists_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "public",
+      "tabla": "dentists",
+      "conname": "dentists_slug_key",
+      "contype": "u",
+      "definition": "UNIQUE (slug)"
+    },
+    {
+      "schema": "public",
+      "tabla": "patient_consents",
+      "conname": "patient_consents_check",
+      "contype": "c",
+      "definition": "CHECK (((revoked_at IS NULL) OR (revoked_at >= accepted_at)))"
+    },
+    {
+      "schema": "public",
+      "tabla": "patient_consents",
+      "conname": "patient_consents_consent_text_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(consent_text)) >= 20) AND (length(btrim(consent_text)) <= 5000)))"
+    },
+    {
+      "schema": "public",
+      "tabla": "patient_consents",
+      "conname": "patient_consents_policy_version_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(policy_version)) >= 1) AND (length(btrim(policy_version)) <= 80)))"
+    },
+    {
+      "schema": "public",
+      "tabla": "patient_consents",
+      "conname": "patient_consents_purpose_check",
+      "contype": "c",
+      "definition": "CHECK ((purpose = 'academic_photo_storage'::text))"
+    },
+    {
+      "schema": "public",
+      "tabla": "patient_consents",
+      "conname": "patient_consents_user_id_id_key",
+      "contype": "u",
+      "definition": "UNIQUE (user_id, id)"
+    },
+    {
+      "schema": "public",
+      "tabla": "profiles",
+      "conname": "profiles_full_name_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(full_name)) >= 2) AND (length(btrim(full_name)) <= 120)))"
+    },
+    {
+      "schema": "public",
+      "tabla": "profiles",
+      "conname": "profiles_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "public",
+      "tabla": "appointment_requests",
+      "conname": "appointment_requests_dentist_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (dentist_id) REFERENCES dentists(id)"
+    },
+    {
+      "schema": "public",
+      "tabla": "appointment_requests",
+      "conname": "appointment_requests_user_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "schema": "public",
+      "tabla": "dental_photos",
+      "conname": "dental_photos_user_id_consent_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id, consent_id) REFERENCES patient_consents(user_id, id)"
+    },
+    {
+      "schema": "public",
+      "tabla": "dental_photos",
+      "conname": "dental_photos_user_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "schema": "public",
+      "tabla": "patient_consents",
+      "conname": "patient_consents_user_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "schema": "public",
+      "tabla": "profiles",
+      "conname": "profiles_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "schema": "dentaia_admin",
+      "tabla": "revisiones_roles",
+      "conname": "revisiones_roles_revision_check",
+      "contype": "c",
+      "definition": "CHECK ((revision >= 0))"
+    },
+    {
+      "schema": "dentaia_admin",
+      "tabla": "revisiones_roles",
+      "conname": "revisiones_roles_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (usuario_id)"
+    },
+    {
+      "schema": "dentaia_admin",
+      "tabla": "aprobaciones_roles",
+      "conname": "aprobaciones_roles_operacion_check",
+      "contype": "c",
+      "definition": "CHECK ((operacion = ANY (ARRAY['asignar'::text, 'revocar'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_audit",
+      "conname": "clinical_access_audit_grant_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (grant_id) REFERENCES clinical.clinical_access_grants(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "dentaia_admin",
+      "tabla": "aprobaciones_roles",
+      "conname": "aprobaciones_roles_rol_check",
+      "contype": "c",
+      "definition": "CHECK ((rol = ANY (ARRAY['paciente'::text, 'odontologo'::text, 'superusuario'::text])))"
+    },
+    {
+      "schema": "dentaia_admin",
+      "tabla": "aprobaciones_roles",
+      "conname": "aprobaciones_roles_revision_esperada_check",
+      "contype": "c",
+      "definition": "CHECK ((revision_esperada >= 0))"
+    },
+    {
+      "schema": "dentaia_admin",
+      "tabla": "aprobaciones_roles",
+      "conname": "aprobaciones_roles_check",
+      "contype": "c",
+      "definition": "CHECK (((aprobado_por <> actor_id) AND (aprobado_por <> objetivo_id) AND (actor_id <> objetivo_id)))"
+    },
+    {
+      "schema": "dentaia_admin",
+      "tabla": "aprobaciones_roles",
+      "conname": "aprobaciones_roles_check1",
+      "contype": "c",
+      "definition": "CHECK ((vence_en > creada_en))"
+    },
+    {
+      "schema": "dentaia_admin",
+      "tabla": "aprobaciones_roles",
+      "conname": "aprobaciones_roles_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "dentaia_admin",
+      "tabla": "auditoria_roles",
+      "conname": "auditoria_roles_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (actor_id, solicitud_id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinics",
+      "conname": "clinics_name_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(name)) >= 1) AND (length(btrim(name)) <= 200)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinics",
+      "conname": "clinics_status_check",
+      "contype": "c",
+      "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'inactive'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinics",
+      "conname": "clinics_location_check",
+      "contype": "c",
+      "definition": "CHECK (((location IS NULL) OR (length(location) <= 300)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinics",
+      "conname": "clinics_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "encounter_no_cycles",
+      "contype": "t",
+      "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "entry_no_cycles",
+      "contype": "t",
+      "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_accounts",
+      "conname": "professional_accounts_status_check",
+      "contype": "c",
+      "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'verified'::text, 'suspended'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_accounts",
+      "conname": "professional_accounts_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_accounts",
+      "conname": "professional_accounts_user_id_key",
+      "contype": "u",
+      "definition": "UNIQUE (user_id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_accounts",
+      "conname": "professional_accounts_dentist_id_key",
+      "contype": "u",
+      "definition": "UNIQUE (dentist_id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_accounts",
+      "conname": "professional_accounts_user_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_accounts",
+      "conname": "professional_accounts_dentist_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (dentist_id) REFERENCES dentists(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_verifications",
+      "conname": "professional_verifications_decision_check",
+      "contype": "c",
+      "definition": "CHECK ((decision = ANY (ARRAY['approved'::text, 'rejected'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_verifications",
+      "conname": "professional_verifications_reference_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(reference)) >= 1) AND (length(btrim(reference)) <= 300)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_verifications",
+      "conname": "professional_verifications_reason_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(reason)) >= 1) AND (length(btrim(reason)) <= 1000)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_verifications",
+      "conname": "professional_verifications_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_verifications",
+      "conname": "professional_verifications_professional_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (professional_id) REFERENCES clinical.professional_accounts(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "professional_verifications",
+      "conname": "professional_verifications_reviewed_by_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (reviewed_by) REFERENCES auth.users(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinic_memberships",
+      "conname": "clinic_memberships_status_check",
+      "contype": "c",
+      "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'inactive'::text, 'suspended'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinic_memberships",
+      "conname": "clinic_memberships_check",
+      "contype": "c",
+      "definition": "CHECK (((valid_until IS NULL) OR (valid_until > valid_from)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinic_memberships",
+      "conname": "clinic_memberships_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinic_memberships",
+      "conname": "clinic_memberships_clinic_id_professional_id_valid_from_key",
+      "contype": "u",
+      "definition": "UNIQUE (clinic_id, professional_id, valid_from)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinic_memberships",
+      "conname": "clinic_memberships_clinic_id_professional_id_tstzrange_excl",
+      "contype": "x",
+      "definition": "EXCLUDE USING gist (clinic_id WITH =, professional_id WITH =, tstzrange(valid_from, valid_until, '[)'::text) WITH &&) WHERE ((status = 'active'::text))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinic_memberships",
+      "conname": "clinic_memberships_clinic_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (clinic_id) REFERENCES clinical.clinics(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinic_memberships",
+      "conname": "clinic_memberships_professional_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (professional_id) REFERENCES clinical.professional_accounts(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "patient_records",
+      "conname": "patient_records_status_check",
+      "contype": "c",
+      "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'archived'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "patient_records",
+      "conname": "patient_records_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "patient_records",
+      "conname": "patient_records_user_id_key",
+      "contype": "u",
+      "definition": "UNIQUE (user_id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "patient_records",
+      "conname": "patient_records_user_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_status_check",
+      "contype": "c",
+      "definition": "CHECK ((status = ANY (ARRAY['recorded'::text, 'voided'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_check",
+      "contype": "c",
+      "definition": "CHECK (((replaces_id IS NULL) OR (replaces_id <> id)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_check1",
+      "contype": "c",
+      "definition": "CHECK ((((replaces_id IS NULL) AND (correction_reason IS NULL)) OR ((replaces_id IS NOT NULL) AND ((length(btrim(correction_reason)) >= 1) AND (length(btrim(correction_reason)) <= 1000)) AND (correction_reason IS NOT NULL))))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_check2",
+      "contype": "c",
+      "definition": "CHECK (((status <> 'voided'::text) OR (replaces_id IS NOT NULL)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_id_patient_id_membership_id_key",
+      "contype": "u",
+      "definition": "UNIQUE (id, patient_id, membership_id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_replaces_id_key",
+      "contype": "u",
+      "definition": "UNIQUE (replaces_id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_patient_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (patient_id) REFERENCES clinical.patient_records(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_membership_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (membership_id) REFERENCES clinical.clinic_memberships(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_encounters",
+      "conname": "clinical_encounters_replaces_id_patient_id_membership_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (replaces_id, patient_id, membership_id) REFERENCES clinical.clinical_encounters(id, patient_id, membership_id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_kind_check",
+      "contype": "c",
+      "definition": "CHECK ((kind = ANY (ARRAY['background'::text, 'diagnosis'::text, 'treatment'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_information_state_check",
+      "contype": "c",
+      "definition": "CHECK ((information_state = ANY (ARRAY['recorded'::text, 'unknown'::text, 'not_recorded'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_check",
+      "contype": "c",
+      "definition": "CHECK ((((information_state = 'recorded'::text) AND (description IS NOT NULL) AND ((length(btrim(description)) >= 1) AND (length(btrim(description)) <= 10000))) OR ((information_state <> 'recorded'::text) AND (description IS NULL) AND (code IS NULL) AND (code_system IS NULL))))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_check1",
+      "contype": "c",
+      "definition": "CHECK (((code IS NULL) = (code_system IS NULL)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_check2",
+      "contype": "c",
+      "definition": "CHECK (((replaces_id IS NULL) OR (replaces_id <> id)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_check3",
+      "contype": "c",
+      "definition": "CHECK ((((replaces_id IS NULL) AND (correction_reason IS NULL)) OR ((replaces_id IS NOT NULL) AND (correction_reason IS NOT NULL) AND ((length(btrim(correction_reason)) >= 1) AND (length(btrim(correction_reason)) <= 1000)))))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_id_encounter_id_kind_key",
+      "contype": "u",
+      "definition": "UNIQUE (id, encounter_id, kind)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_replaces_id_key",
+      "contype": "u",
+      "definition": "UNIQUE (replaces_id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_encounter_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (encounter_id) REFERENCES clinical.clinical_encounters(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_entries",
+      "conname": "clinical_entries_replaces_id_encounter_id_kind_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (replaces_id, encounter_id, kind) REFERENCES clinical.clinical_entries(id, encounter_id, kind) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_documents",
+      "conname": "clinical_documents_kind_check",
+      "contype": "c",
+      "definition": "CHECK ((kind = ANY (ARRAY['exam'::text, 'document'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_audit",
+      "conname": "clinical_access_audit_operation_check",
+      "contype": "c",
+      "definition": "CHECK ((operation = ANY (ARRAY['read_history'::text, 'read_document'::text, 'grant_access'::text, 'revoke_access'::text, 'read_professional_requests'::text, 'list_authorized_patients'::text, 'verify_professional'::text, 'membership_change'::text, 'register_clinical'::text, 'read_context'::text, 'list_own_grants'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_documents",
+      "conname": "clinical_documents_title_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(title)) >= 1) AND (length(btrim(title)) <= 200)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_documents",
+      "conname": "clinical_documents_availability_check",
+      "contype": "c",
+      "definition": "CHECK ((availability = ANY (ARRAY['available'::text, 'unavailable'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_documents",
+      "conname": "clinical_documents_check",
+      "contype": "c",
+      "definition": "CHECK ((((availability = 'available'::text) AND (bucket_id = 'dentaia-clinical-documents'::text) AND (object_path IS NOT NULL) AND (mime_type = ANY (ARRAY['application/pdf'::text, 'image/jpeg'::text, 'image/png'::text, 'image/webp'::text])) AND ((size_bytes >= 1) AND (size_bytes <= 8388608)) AND (bucket_id IS NOT NULL) AND (mime_type IS NOT NULL) AND (size_bytes IS NOT NULL)) OR ((availability = 'unavailable'::text) AND (bucket_id IS NULL) AND (object_path IS NULL) AND (mime_type IS NULL) AND (size_bytes IS NULL))))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_documents",
+      "conname": "clinical_documents_object_path_check",
+      "contype": "c",
+      "definition": "CHECK (((object_path IS NULL) OR (((length(object_path) >= 1) AND (length(object_path) <= 512)) AND (object_path !~ '(^|/)\\.\\.?(/|$)'::text))))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_documents",
+      "conname": "clinical_documents_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_documents",
+      "conname": "clinical_documents_bucket_id_object_path_key",
+      "contype": "u",
+      "definition": "UNIQUE (bucket_id, object_path)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_documents",
+      "conname": "clinical_documents_encounter_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (encounter_id) REFERENCES clinical.clinical_encounters(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_grants",
+      "conname": "clinical_access_grants_check",
+      "contype": "c",
+      "definition": "CHECK ((expires_at > granted_at))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_grants",
+      "conname": "clinical_access_grants_check1",
+      "contype": "c",
+      "definition": "CHECK (((revoked_at IS NULL) OR (revoked_at >= granted_at)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_grants",
+      "conname": "clinical_access_grants_scope_mode_check",
+      "contype": "c",
+      "definition": "CHECK ((scope_mode = 'selected_encounters'::text))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_grants",
+      "conname": "clinical_access_grants_purpose_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(purpose)) >= 1) AND (length(btrim(purpose)) <= 100)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_grants",
+      "conname": "clinical_access_grants_policy_version_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(policy_version)) >= 1) AND (length(btrim(policy_version)) <= 80)))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_grants",
+      "conname": "clinical_access_grants_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_grants",
+      "conname": "clinical_access_grants_patient_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (patient_id) REFERENCES clinical.patient_records(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_grants",
+      "conname": "clinical_access_grants_membership_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (membership_id) REFERENCES clinical.clinic_memberships(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_grant_resources",
+      "conname": "clinical_grant_resources_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (grant_id, encounter_id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_grant_resources",
+      "conname": "clinical_grant_resources_grant_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (grant_id) REFERENCES clinical.clinical_access_grants(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_grant_resources",
+      "conname": "clinical_grant_resources_encounter_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (encounter_id) REFERENCES clinical.clinical_encounters(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_audit",
+      "conname": "clinical_access_audit_outcome_check",
+      "contype": "c",
+      "definition": "CHECK ((outcome = ANY (ARRAY['allowed'::text, 'denied'::text, 'error'::text])))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_audit",
+      "conname": "clinical_access_audit_reason_code_check",
+      "contype": "c",
+      "definition": "CHECK ((reason_code ~ '^[A-Z][A-Z0-9_]{0,79}$'::text))"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_audit",
+      "conname": "clinical_access_audit_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_audit",
+      "conname": "clinical_access_audit_actor_user_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (actor_user_id) REFERENCES auth.users(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_audit",
+      "conname": "clinical_access_audit_patient_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (patient_id) REFERENCES clinical.patient_records(id) ON DELETE RESTRICT"
+    },
+    {
+      "schema": "clinical",
+      "tabla": "clinical_access_audit",
+      "conname": "clinical_access_audit_membership_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (membership_id) REFERENCES clinical.clinic_memberships(id) ON DELETE RESTRICT"
+    }
+  ],
+  "indices": [
+    {
+      "schemaname": "public",
+      "tablename": "appointment_requests",
+      "indexname": "appointment_requests_pkey",
+      "indexdef": "CREATE UNIQUE INDEX appointment_requests_pkey ON public.appointment_requests USING btree (id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dental_photos",
+      "indexname": "dental_photos_object_path_key",
+      "indexdef": "CREATE UNIQUE INDEX dental_photos_object_path_key ON public.dental_photos USING btree (object_path)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dental_photos",
+      "indexname": "dental_photos_pkey",
+      "indexdef": "CREATE UNIQUE INDEX dental_photos_pkey ON public.dental_photos USING btree (id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dentists",
+      "indexname": "dentists_pkey",
+      "indexdef": "CREATE UNIQUE INDEX dentists_pkey ON public.dentists USING btree (id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dentists",
+      "indexname": "dentists_slug_key",
+      "indexdef": "CREATE UNIQUE INDEX dentists_slug_key ON public.dentists USING btree (slug)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "patient_consents",
+      "indexname": "patient_consents_pkey",
+      "indexdef": "CREATE UNIQUE INDEX patient_consents_pkey ON public.patient_consents USING btree (id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "patient_consents",
+      "indexname": "patient_consents_user_id_id_key",
+      "indexdef": "CREATE UNIQUE INDEX patient_consents_user_id_id_key ON public.patient_consents USING btree (user_id, id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "profiles",
+      "indexname": "profiles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX profiles_pkey ON public.profiles USING btree (id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "appointment_requests",
+      "indexname": "appointment_requests_dentist_idx",
+      "indexdef": "CREATE INDEX appointment_requests_dentist_idx ON public.appointment_requests USING btree (dentist_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "appointment_requests",
+      "indexname": "appointment_requests_user_idx",
+      "indexdef": "CREATE INDEX appointment_requests_user_idx ON public.appointment_requests USING btree (user_id, created_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dental_photos",
+      "indexname": "dental_photos_user_consent_idx",
+      "indexdef": "CREATE INDEX dental_photos_user_consent_idx ON public.dental_photos USING btree (user_id, consent_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dentists",
+      "indexname": "dentists_district_specialty_idx",
+      "indexdef": "CREATE INDEX dentists_district_specialty_idx ON public.dentists USING btree (district, specialty)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "patient_consents",
+      "indexname": "patient_consents_user_idx",
+      "indexdef": "CREATE INDEX patient_consents_user_idx ON public.patient_consents USING btree (user_id)"
+    },
+    {
+      "schemaname": "dentaia_admin",
+      "tablename": "revisiones_roles",
+      "indexname": "revisiones_roles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX revisiones_roles_pkey ON dentaia_admin.revisiones_roles USING btree (usuario_id)"
+    },
+    {
+      "schemaname": "dentaia_admin",
+      "tablename": "aprobaciones_roles",
+      "indexname": "aprobaciones_roles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX aprobaciones_roles_pkey ON dentaia_admin.aprobaciones_roles USING btree (id)"
+    },
+    {
+      "schemaname": "dentaia_admin",
+      "tablename": "auditoria_roles",
+      "indexname": "auditoria_roles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX auditoria_roles_pkey ON dentaia_admin.auditoria_roles USING btree (actor_id, solicitud_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinics",
+      "indexname": "clinics_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinics_pkey ON clinical.clinics USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinics",
+      "indexname": "clinics_q1",
+      "indexdef": "CREATE INDEX clinics_q1 ON clinical.clinics USING btree (status, name)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_accounts",
+      "indexname": "professional_accounts_pkey",
+      "indexdef": "CREATE UNIQUE INDEX professional_accounts_pkey ON clinical.professional_accounts USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_accounts",
+      "indexname": "professional_accounts_user_id_key",
+      "indexdef": "CREATE UNIQUE INDEX professional_accounts_user_id_key ON clinical.professional_accounts USING btree (user_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_accounts",
+      "indexname": "professional_accounts_dentist_id_key",
+      "indexdef": "CREATE UNIQUE INDEX professional_accounts_dentist_id_key ON clinical.professional_accounts USING btree (dentist_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_verifications",
+      "indexname": "professional_verifications_pkey",
+      "indexdef": "CREATE UNIQUE INDEX professional_verifications_pkey ON clinical.professional_verifications USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_verifications",
+      "indexname": "professional_verifications_q1",
+      "indexdef": "CREATE INDEX professional_verifications_q1 ON clinical.professional_verifications USING btree (professional_id, reviewed_at DESC, id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_verifications",
+      "indexname": "professional_verifications_q2",
+      "indexdef": "CREATE INDEX professional_verifications_q2 ON clinical.professional_verifications USING btree (reviewed_by)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinic_memberships",
+      "indexname": "clinic_memberships_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinic_memberships_pkey ON clinical.clinic_memberships USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinic_memberships",
+      "indexname": "clinic_memberships_clinic_id_professional_id_valid_from_key",
+      "indexdef": "CREATE UNIQUE INDEX clinic_memberships_clinic_id_professional_id_valid_from_key ON clinical.clinic_memberships USING btree (clinic_id, professional_id, valid_from)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinic_memberships",
+      "indexname": "clinic_memberships_clinic_id_professional_id_tstzrange_excl",
+      "indexdef": "CREATE INDEX clinic_memberships_clinic_id_professional_id_tstzrange_excl ON clinical.clinic_memberships USING gist (clinic_id, professional_id, tstzrange(valid_from, valid_until, '[)'::text)) WHERE (status = 'active'::text)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinic_memberships",
+      "indexname": "clinic_memberships_q1",
+      "indexdef": "CREATE INDEX clinic_memberships_q1 ON clinical.clinic_memberships USING btree (professional_id, status)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "patient_records",
+      "indexname": "patient_records_pkey",
+      "indexdef": "CREATE UNIQUE INDEX patient_records_pkey ON clinical.patient_records USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "patient_records",
+      "indexname": "patient_records_user_id_key",
+      "indexdef": "CREATE UNIQUE INDEX patient_records_user_id_key ON clinical.patient_records USING btree (user_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_encounters",
+      "indexname": "clinical_encounters_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_encounters_pkey ON clinical.clinical_encounters USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_encounters",
+      "indexname": "clinical_encounters_id_patient_id_membership_id_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_encounters_id_patient_id_membership_id_key ON clinical.clinical_encounters USING btree (id, patient_id, membership_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_encounters",
+      "indexname": "clinical_encounters_replaces_id_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_encounters_replaces_id_key ON clinical.clinical_encounters USING btree (replaces_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_encounters",
+      "indexname": "clinical_encounters_q1",
+      "indexdef": "CREATE INDEX clinical_encounters_q1 ON clinical.clinical_encounters USING btree (patient_id, attended_at DESC, id DESC)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_encounters",
+      "indexname": "clinical_encounters_q2",
+      "indexdef": "CREATE INDEX clinical_encounters_q2 ON clinical.clinical_encounters USING btree (membership_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_entries",
+      "indexname": "clinical_entries_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_entries_pkey ON clinical.clinical_entries USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_entries",
+      "indexname": "clinical_entries_id_encounter_id_kind_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_entries_id_encounter_id_kind_key ON clinical.clinical_entries USING btree (id, encounter_id, kind)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_entries",
+      "indexname": "clinical_entries_replaces_id_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_entries_replaces_id_key ON clinical.clinical_entries USING btree (replaces_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_entries",
+      "indexname": "clinical_entries_q1",
+      "indexdef": "CREATE INDEX clinical_entries_q1 ON clinical.clinical_entries USING btree (encounter_id, kind, recorded_at DESC)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_documents",
+      "indexname": "clinical_documents_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_documents_pkey ON clinical.clinical_documents USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_documents",
+      "indexname": "clinical_documents_bucket_id_object_path_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_documents_bucket_id_object_path_key ON clinical.clinical_documents USING btree (bucket_id, object_path)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_documents",
+      "indexname": "clinical_documents_q1",
+      "indexdef": "CREATE INDEX clinical_documents_q1 ON clinical.clinical_documents USING btree (encounter_id, exam_date DESC)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_grants",
+      "indexname": "clinical_access_grants_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_access_grants_pkey ON clinical.clinical_access_grants USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_grants",
+      "indexname": "clinical_access_grants_q1",
+      "indexdef": "CREATE INDEX clinical_access_grants_q1 ON clinical.clinical_access_grants USING btree (patient_id, membership_id, expires_at) WHERE (revoked_at IS NULL)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_grants",
+      "indexname": "clinical_access_grants_q2",
+      "indexdef": "CREATE INDEX clinical_access_grants_q2 ON clinical.clinical_access_grants USING btree (membership_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_grant_resources",
+      "indexname": "clinical_grant_resources_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_grant_resources_pkey ON clinical.clinical_grant_resources USING btree (grant_id, encounter_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_grant_resources",
+      "indexname": "clinical_grant_resources_q1",
+      "indexdef": "CREATE INDEX clinical_grant_resources_q1 ON clinical.clinical_grant_resources USING btree (encounter_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_audit",
+      "indexname": "clinical_access_audit_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_access_audit_pkey ON clinical.clinical_access_audit USING btree (id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_audit",
+      "indexname": "clinical_access_audit_q1",
+      "indexdef": "CREATE INDEX clinical_access_audit_q1 ON clinical.clinical_access_audit USING btree (patient_id, occurred_at DESC)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_audit",
+      "indexname": "clinical_access_audit_q2",
+      "indexdef": "CREATE INDEX clinical_access_audit_q2 ON clinical.clinical_access_audit USING btree (actor_user_id, occurred_at DESC)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_audit",
+      "indexname": "clinical_access_audit_q3",
+      "indexdef": "CREATE INDEX clinical_access_audit_q3 ON clinical.clinical_access_audit USING btree (request_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_audit",
+      "indexname": "clinical_access_audit_q4",
+      "indexdef": "CREATE INDEX clinical_access_audit_q4 ON clinical.clinical_access_audit USING btree (membership_id)"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_audit",
+      "indexname": "clinical_access_audit_q5",
+      "indexdef": "CREATE INDEX clinical_access_audit_q5 ON clinical.clinical_access_audit USING btree (grant_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "appointment_requests",
+      "indexname": "appointment_requests_professional_page",
+      "indexdef": "CREATE INDEX appointment_requests_professional_page ON public.appointment_requests USING btree (dentist_id, status, id) WHERE is_demo"
+    }
+  ],
+  "politicas": [
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_accounts",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_accounts",
+      "policyname": "clinical_executor_lock",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "UPDATE",
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dentists",
+      "policyname": "dentists_read",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "is_active",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "profiles",
+      "policyname": "clinical_executor_provenance",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "profiles",
+      "policyname": "profiles_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "profiles",
+      "policyname": "profiles_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "profiles",
+      "policyname": "profiles_create",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "appointment_requests",
+      "policyname": "clinical_executor_requests",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "appointment_requests",
+      "policyname": "requests_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "appointment_requests",
+      "policyname": "requests_create",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (status = 'requested'::text) AND (preferred_date >= CURRENT_DATE) AND (EXISTS ( SELECT 1\n   FROM dentists d\n  WHERE ((d.id = appointment_requests.dentist_id) AND d.is_active))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "appointment_requests",
+      "policyname": "requests_cancel",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (status = 'cancelled'::text))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "patient_consents",
+      "policyname": "consents_revoke",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (revoked_at IS NOT NULL))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "patient_consents",
+      "policyname": "consents_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "patient_consents",
+      "policyname": "consents_create",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (revoked_at IS NULL))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dental_photos",
+      "policyname": "photos_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dental_photos",
+      "policyname": "photos_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "dental_photos",
+      "policyname": "photos_create",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n   FROM patient_consents c\n  WHERE ((c.id = dental_photos.consent_id) AND (c.user_id = ( SELECT auth.uid() AS uid)) AND (c.revoked_at IS NULL)))))"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinics",
+      "policyname": "clinical_executor_lock",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "UPDATE",
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinics",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinic_memberships",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinic_memberships",
+      "policyname": "clinical_executor_lock",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "UPDATE",
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_verifications",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "patient_records",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "patient_records",
+      "policyname": "clinical_executor_lock",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "UPDATE",
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_encounters",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_encounters",
+      "policyname": "clinical_executor_lock",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "UPDATE",
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_entries",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_documents",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_grants",
+      "policyname": "clinical_executor_insert",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_grants",
+      "policyname": "clinical_executor_lock",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "UPDATE",
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_grants",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_grant_resources",
+      "policyname": "clinical_executor_insert",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_grant_resources",
+      "policyname": "clinical_executor_select",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_audit",
+      "policyname": "clinical_executor_insert",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "true"
+    }
+  ],
+  "funciones": [
+    {
+      "schema": "dentaia_admin",
+      "proname": "asignacion_valida",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "dentaia_admin",
+      "proname": "cuenta_habilitada",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "dentaia_admin",
+      "proname": "auditoria_inmutable",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "dentaia_admin",
+      "proname": "cambiar_roles_v1",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\"",
+        "lock_timeout=3s",
+        "statement_timeout=5s"
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical",
+      "proname": "reject_mutation",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical",
+      "proname": "verification_check",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical",
+      "proname": "professional_status_check",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical",
+      "proname": "resource_patient_check",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical",
+      "proname": "encounter_origin_check",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical",
+      "proname": "document_path_check",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical",
+      "proname": "encounter_cycles_check",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical",
+      "proname": "entry_cycles_check",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "valid_assignment",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "audit_event",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "dentaia_clinical_executor"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "reject_request",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "dentaia_clinical_executor"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "lock_context",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "dentaia_clinical_executor"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "verification_parent_lock",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "configuration",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "identity_context",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "session_current",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical",
+      "proname": "identity_immutable",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "propietario": "postgres"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "grant_access",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\"",
+        "lock_timeout=5s"
+      ],
+      "propietario": "dentaia_clinical_executor"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "revoke_access",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\"",
+        "lock_timeout=5s"
+      ],
+      "propietario": "dentaia_clinical_executor"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "workspace",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\"",
+        "lock_timeout=5s"
+      ],
+      "propietario": "dentaia_clinical_executor"
+    },
+    {
+      "schema": "clinical_service",
+      "proname": "read_history",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\"",
+        "lock_timeout=5s"
+      ],
+      "propietario": "dentaia_clinical_executor"
+    }
+  ],
+  "sinRpcAnon": true,
+  "sinRpcServiceRole": true,
+  "sinContenidoDirecto": true,
+  "sinContactoEjecutor": true,
+  "sinCrearPrivados": true,
+  "fecha": "2026-11-03",
+  "base": "dentaia_arch_qa_fase5",
+  "camposContrastados": 142,
+  "erroresModelo": [],
+  "remoto": false
+}

@@ -1,0 +1,57 @@
+{
+  "fecha": "2026-11-03",
+  "soloLectura": true,
+  "checks": [
+    {
+      "nombre": "Guardas HTTP de producción y opt-in siguen presentes",
+      "aprobada": true,
+      "evidencia": "Inspección de código; se complementa con requests al build."
+    },
+    {
+      "nombre": "Configuración SQL versionable inicia enabled=false",
+      "aprobada": true,
+      "evidencia": "Inspección de borrador, no nueva aplicación."
+    },
+    {
+      "nombre": "Concesión y lectura comprueban SERVICE_DISABLED",
+      "aprobada": true,
+      "evidencia": "La revocación conserva capacidad del propietario incluso al desactivar nuevas concesiones."
+    },
+    {
+      "nombre": "ACL/RLS locales sin lectura clínica directa ni elevación",
+      "aprobada": true,
+      "evidencia": {
+        "enabled": true,
+        "policy": "QA-NO-CLINICO-v1",
+        "directSelect": false,
+        "anonRpc": false,
+        "privateCreate": false,
+        "rls": true,
+        "nota": "QA local conserva activación sintética F4; no es un default ni un despliegue remoto."
+      }
+    },
+    {
+      "nombre": "POST /api/clinical/access-grants cerrado con flag=true en producción",
+      "aprobada": true,
+      "evidencia": {
+        "http": 404
+      }
+    },
+    {
+      "nombre": "POST /api/clinical/access-grants/00000000-0000-4000-8000-000000000071/revoke cerrado con flag=true en producción",
+      "aprobada": true,
+      "evidencia": {
+        "http": 404
+      }
+    },
+    {
+      "nombre": "GET /api/clinical/patients/00000000-0000-4000-8000-000000000041/history cerrado con flag=true en producción",
+      "aprobada": true,
+      "evidencia": {
+        "http": 404
+      }
+    }
+  ],
+  "errores": [],
+  "aprobadas": 7
+}
