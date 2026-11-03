@@ -44,7 +44,7 @@ El panel solo enlaza; no duplica registro, galería ni solicitudes. Cada módulo
 | Vacío | `role="status"` | Sin fotografías o sin solicitudes |
 | Error | `role="alert"` | Fallo de consulta, con mensaje comprensible y sin texto técnico |
 
-Estos estados todavía **no se muestran en la página**, porque en esta etapa no hay consultas.
+Estos estados ya se usan en el resumen del panel (DI-162): sesión, carga, vacío y error.
 
 ## 5. Accesibilidad y diseño responsive
 
@@ -55,7 +55,7 @@ Criterios aplicados y su verificación:
 | Enlaces con nombre accesible distinto | Cumple | Consola: `Ir a mi cuenta: Mi cuenta`, `Ir a mis fotografías: Mis fotografías`, `Ir a mis solicitudes: Mis solicitudes` |
 | Área táctil de al menos 44 px de alto | Cumple (44 px) | Consola, `getBoundingClientRect` |
 | Navegación identificada | Implementado | `nav` con `aria-label` |
-| Foco visible | Implementado en CSS | Por confirmar con la tecla Tab y captura |
+| Foco visible | Cumple | Recorrido con Tab en `/panel`: cada enlace de las tarjetas muestra un borde al recibir el foco. Captura: `docs/evidencias/panel/panel-foco-tab.png` |
 | Una columna en móvil | Implementado en CSS (`max-width: 760px`) | Ver capturas |
 | Tipado | Sin errores | `npm run typecheck` |
 
@@ -67,12 +67,13 @@ Criterios aplicados y su verificación:
 
 ## 7. Pendientes y límites reales
 
-- No se ha confirmado con Jhan la ruta `/panel` ni cómo se enlazará desde la navegación compartida.
+- La ruta `/panel` y su enlace en la navegación compartida (`Encabezado.tsx`, `navegacion.ts`) quedan para revisión. Esos archivos pertenecen a otro módulo y no se modificaron.
 - El feedback del profesor no se ha incorporado.
 - La coordinación con Anelis sobre el contrato de información compartida no se ha realizado.
 - El contraste de colores se tomó del directorio y no se ha medido en el panel.
 - El resumen con datos reales, la integración de recomendaciones y los resultados quedan para DI-162 y DI-163.
 - No se ha realizado validación con usuarios.
+
 
 ## 8. Criterios de aceptación de DI-161
 
