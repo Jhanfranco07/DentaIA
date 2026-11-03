@@ -3,10 +3,10 @@ import styles from "./administracion.module.css";
 
 export type EstadoAdministrativoTipo = "carga" | "vacio" | "error";
 
-type Props = { estado: EstadoAdministrativoTipo; onReintentar?: () => void };
+type Props = { estado: EstadoAdministrativoTipo; onReintentar?: () => void; reintentarTexto?: string };
 
 // Estados de presentación: no realizan consultas ni representan respuestas del servidor.
-export default function EstadoAdministrativo({ estado, onReintentar }: Props) {
+export default function EstadoAdministrativo({ estado, onReintentar, reintentarTexto = "Reintentar simulación" }: Props) {
   return <div className={styles.estado} data-estado={estado}>
     <span className={styles.iconoEstado} aria-hidden="true">
       {estado === "carga" ? <span className={styles.cargando} />
@@ -21,6 +21,6 @@ export default function EstadoAdministrativo({ estado, onReintentar }: Props) {
     </div>
     {estado === "carga" && <div className={styles.esqueleto} aria-hidden="true"><span /><span /><span /></div>}
     {estado === "error" && onReintentar && <button type="button" className={styles.accionEstado}
-      onClick={onReintentar}>Reintentar simulación</button>}
+      onClick={onReintentar}>{reintentarTexto}</button>}
   </div>;
 }

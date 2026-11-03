@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { Icono } from "@/components/Identidad";
 import LayoutAdministrativo from "./LayoutAdministrativo";
-import UsuariosAdministrativosDemo from "./UsuariosAdministrativosDemo";
+import UsuariosAdministrativos from "./UsuariosAdministrativos";
 import TarjetaAdministrativa from "./TarjetaAdministrativa";
 import { SECCIONES_ADMINISTRATIVAS, type SeccionAdministrativa } from "./estructura";
 import styles from "./administracion.module.css";
@@ -15,7 +15,7 @@ const ROLES_PREVISTOS = [
   { nombre: "Superusuario", alcance: "Administración no clínica de cuentas y roles.", situacion: "Rol autenticado por incorporar" },
 ] as const;
 
-// Demo solo en desarrollo: navegación y proveedor sintético, sin clientes Supabase.
+// Vista solo en desarrollo. La API exige su propia autorización y mantiene datos sintéticos.
 export default function PanelAdministrativoDemo() {
   const [seccion, setSeccion] = useState<SeccionAdministrativa>("inicio");
   const titulo = useRef<HTMLHeadingElement>(null);
@@ -29,7 +29,7 @@ export default function PanelAdministrativoDemo() {
   return <section className={styles.pagina} aria-label="Demostración local de estructura administrativa">
     <div className={styles.avisoDemo}>
       <strong>DI-151 · Administración con datos sintéticos</strong>
-      <p>Demostración visual disponible solo en desarrollo. Solo usa cuentas sintéticas; no consulta usuarios reales, no guarda roles ni accede a información clínica.</p>
+      <p>Vista disponible solo en desarrollo, con demo local y conexión opcional a la API protegida. El proveedor del servidor sigue siendo sintético: no se consultan usuarios reales, no se guardan roles ni se accede a información clínica.</p>
     </div>
     <LayoutAdministrativo seccion={seccion} onSeleccionar={seleccionar}>
       <div className={styles.introduccion}>
@@ -59,7 +59,7 @@ export default function PanelAdministrativoDemo() {
         </section>
       </>}
 
-      {seccion === "usuarios" && <UsuariosAdministrativosDemo />}
+      {seccion === "usuarios" && <UsuariosAdministrativos />}
 
       {seccion === "roles" && <section className={styles.bloque} aria-labelledby="admin-roles">
         <div className={styles.tituloBloque}><h2 id="admin-roles">Perfiles previstos del sistema</h2><span className={styles.indicador}>Referencia de DI-148</span></div>
