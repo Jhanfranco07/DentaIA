@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ResumenPanel from "./ResumenPanel"; // NUEVO (DI-162)
 import styles from "./panel.module.css";
 
 const SECCIONES = [
@@ -36,6 +37,8 @@ export default function PanelPaciente() {
           datos <strong>ficticios</strong> y no realiza diagnósticos ni análisis clínicos.
         </p>
       </header>
+
+      <ResumenPanel /> {/* NUEVO (DI-162) */}
 
       <nav aria-label="Secciones del panel del paciente">
         <ul className={styles.grilla}>
