@@ -7,7 +7,7 @@
 - **Commit de la lógica y pruebas automáticas del panel:** `4b01498`
 - **Fecha de redacción:** 03/11/2026
 - **Entorno:** Windows, navegador Chrome, servidor local `http://localhost:3000` (`npm run dev`), Supabase del proyecto académico, Node.js 22 (versión exacta por registrar).
-- **Estado:** EN CURSO. Hay criterios pendientes, declarados en la sección 6. Este documento no declara la subtarea terminada.
+- **Estado:** pruebas ejecutadas y registradas. Los límites y lo no ejecutado figuran en la sección 6 y no se cuentan como aprobados.
 
 ## 1. Alcance y reglas
 
@@ -25,7 +25,7 @@ node --experimental-strip-types --test --test-reporter=tap "src/features/**/*.te
 |---|---|---|---|---|
 | A1 | Pruebas existentes de cuenta, solicitudes, fotografías, navegación, directorio y análisis (89 pruebas) | Unitaria | Cliente simulado | 89 aprobadas, 0 fallidas, 0 omitidas |
 | A2 | `src/features/panel/logica.test.mjs`: conteo de solicitudes y pendientes, y decisión de reporte o ausencia de reporte (9 pruebas) | Unitaria | Datos simulados | 9 aprobadas, 0 fallidas |
-| A3 | Ejecución conjunta de todas las pruebas con las del panel incluidas | Unitaria | Simulados | **Por registrar** (esperado: 98 aprobadas) |
+| A3 | Ejecución conjunta de todas las pruebas con las del panel incluidas | Unitaria | Simulados | 98 pruebas, 98 aprobadas, 0 fallidas, 0 omitidas (ejecutado tras el commit `4b01498`) |
 
 Las advertencias `MODULE_TYPELESS_PACKAGE_JSON` de Node no son fallos.
 
@@ -40,7 +40,7 @@ Límite: los componentes de React no tienen pruebas automáticas. No se definió
 
 | Comando | Resultado |
 |---|---|
-| `npm run typecheck` | Sin errores (verificado tras DI-164). Tras el commit `4b01498`: **por registrar** |
+| `npm run typecheck` | Sin errores, verificado tras DI-164 y de nuevo tras el commit `4b01498` |
 | `npm run build` | Compiló, pasó lint y tipos y generó 11 páginas, con `/panel` incluida (verificado antes del commit `4b01498`) |
 
 El `typecheck` y el `build` no prueban comportamiento.
@@ -63,6 +63,8 @@ Todas con servidor local, Supabase real para perfil, fotografías y solicitudes,
 | M10 | Regresión | Tras `4b01498`: resumen y reporte siguen funcionando | Mismos resultados que M2, M4 y M5 | Aprobada: el resumen y el estado vacío del reporte funcionaron en M11 (con el código de `4b01498`). Reporte con recorrido completado tras `4b01498`: **por registrar** | Observación directa |
 | M11 | 3 | Privacidad con dos cuentas sintéticas reales. Paciente Demo A en `localhost:3000` y Paciente Demo B en `127.0.0.1:3000` (sesiones independientes), ambas contra Supabase real. Se abrió `/panel` en cada una | A: 0 fotografías, 2 solicitudes, 1 pendiente. B: 0 fotografías, 1 solicitud, 1 pendiente. Ninguna cuenta ve datos de la otra | Aprobada: los valores coinciden con lo esperado y no hubo datos cruzados. En el historial, A vio sus 2 solicitudes (1 «Solicitada», 1 «Cancelada») y B vio su única solicitud | Texto de pantalla verificado |
 | M12 | 3 | Misma comprobación en `/cuenta`, `/solicitudes` y `/fotografias` de cada cuenta | Cada cuenta ve solo su perfil, sus solicitudes y su galería | Aprobada: perfil, solicitudes y fotografías de A y B corresponden a su propietario | Texto de pantalla verificado |
+| M13 | 6 | Teclado en `/panel` con sesión: Tab hasta el enlace del reporte y hasta el botón «Cancelar solicitud» (sin pulsar Enter) | Ambos muestran foco visible | Aprobada (según la ejecución de la integrante) | Observación directa |
+| M14 | 6 | Adaptación móvil del panel completo a 375 px, con resumen, tarjetas, reporte y «Mis solicitudes» | Una sola columna, sin cortes ni desplazamiento lateral | Aprobada (según la ejecución de la integrante) | Observación directa |
 
 Distinción: M1 a M3 y M6 a M9 usan Supabase real. M4 y M5 usan un reporte de demostración que vive solo en el navegador y no es historial clínico persistente.
 
@@ -75,7 +77,7 @@ Distinción: M1 a M3 y M6 a M9 usan Supabase real. M4 y M5 usan un reporte de de
 | 3. Solo muestra datos del paciente autenticado; cambiar un ID no da acceso a otra cuenta | **Cumplido en la interfaz con dos cuentas reales.** El panel muestra solo los datos de la cuenta autenticada (M11, M12) y las pruebas automáticas con cliente simulado verifican el filtro por usuario (A1). Cambiar un ID contra el backend real no se probó: la interfaz no ofrece un ID editable | M2, M9, M11, M12, A1 |
 | 4. Reporte con advertencias; sin reporte, estado vacío y enlace | Cumplido | M4, M5, A2 |
 | 5. El historial reutiliza solicitudes y cancelación; los reportes temporales no se presentan como historial clínico | Cumplido | M6 |
-| 6. Se comprueban carga, error, vacío, teclado, móvil y aislamiento, distinguiendo simulación de backend real | **Parcial.** Faltan móvil completo y aislamiento | M7, M8, M3 |
+| 6. Se comprueban carga, error, vacío, teclado, móvil y aislamiento, distinguiendo simulación de backend real | **Cumplido en la interfaz.** Se comprobaron carga, error, vacío, teclado, móvil y aislamiento, distinguiendo Supabase real de datos simulados. Límites en la sección 6 | M3, M7, M8, M11, M13, M14 |
 
 ## 6. Pendientes y límites
 
@@ -83,8 +85,8 @@ No se ejecutaron o no se pueden afirmar:
 
 1. **Aislamiento con dos cuentas sintéticas:** probado en la interfaz (M11, M12). Quedan fuera la manipulación de un ID o de un retorno contra el backend real y las pruebas de API o RLS directas, que no se ejecutaron. Las pruebas automáticas con cliente simulado no acreditan aislamiento real. La rama de backend clínico (`docs/auditoria-arquitectura-integral`, PR19 en borrador) no se integró: queda fuera del alcance de DI-146.
 2. **Integración contra base de datos real mediante pruebas automatizadas:** no existe convención ni comando, y no se ejecutó.
-3. **Teclado hasta el enlace del reporte y el botón «Cancelar solicitud»:** sin resultado registrado. El Tab de las tarjetas sí está probado.
-4. **Adaptación móvil del panel completo:** la captura `panel-375.png` corresponde a la versión de DI-161, que solo tenía las tarjetas. No se afirma que el resumen, el reporte y las solicitudes se hayan comprobado a 375 px.
+3. **Teclado y móvil del panel completo:** probados (M13 y M14), sin captura nueva. La captura `panel-375.png` corresponde a la versión de DI-161, que solo tenía las tarjetas.
+4. **Contraste de colores:** no se midió.
 5. **Retorno interno validado hacia `/panel` tras iniciar sesión:** no implementado; `src/lib/navegacion.ts` solo valida retornos hacia `/solicitudes`.
 6. **Componentes de React sin pruebas automáticas:** sin arnés de renderizado definido.
 7. **La demostración solo se probó en `localhost`:** por la IP de la red local el navegador no habilita `crypto.subtle`.
