@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AVISO_DEMO, CASOS } from "@/features/analisis/casos";
 import { CLAVE_SESION_DEMO, ETAPAS, leerSesionDemo } from "@/features/analisis/flujo";
+import { resolverReporte } from "./logica";
 import EstadoPanel from "./EstadoPanel";
 import styles from "./panel.module.css";
 
@@ -29,19 +30,16 @@ export default function ReporteDemo() {
 
   useEffect(() => {
     const sesion = leerSesionDemo(leerAlmacenamiento(), CASOS.map((c) => c.id));
-    const caso = sesion ? CASOS.find((c) => c.id === sesion.casoId) : undefined;
-    const llegoARecomendaciones =
-      sesion !== null && ETAPAS.indexOf(sesion.etapa) >= ETAPAS.indexOf("recomendaciones");
-
-    if (!sesion || !caso || !llegoARecomendaciones) {
+    const reporte = resolverReporte(sesion, CASOS, ETAPAS, "recomendaciones");
+    if (reporte.tipo === "sin-reporte") {
       setEstado({ tipo: "sin-reporte" });
       return;
     }
     setEstado({
       tipo: "con-reporte",
-      titulo: caso.titulo,
-      fecha: new Date(sesion.fechaISO).toLocaleDateString("es-PE"),
-      recomendaciones: caso.recomendaciones,
+      titulo: reporte.titulo,
+      fecha: new Date(reporte.fechaISO).toLocaleDateString("es-PE"),
+      recomendaciones: reporte.recomendaciones,
     });
   }, []);
 

@@ -1,5 +1,5 @@
 "use client";
-
+import { contarSolicitudes } from "./logica";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
@@ -41,8 +41,7 @@ export default function ResumenPanel() {
           datos: {
             nombre: perfil?.full_name ?? null,
             fotos: fotos.count ?? 0,
-            solicitudes: solicitudes.length,
-            pendientes: solicitudes.filter((s) => s.status === "requested").length,
+            ...contarSolicitudes(solicitudes),
           },
         });
       } catch {
