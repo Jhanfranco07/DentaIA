@@ -3,15 +3,18 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { asignacionRolesValida, uuidRolesValido } from "./cambios-roles";
+import { uuidRolesValido } from "./cambios-roles";
 import type { AsignacionRoles, CambioRoles } from "./cambios-roles";
+import { respuestaRolesPanel } from "./cliente-panel-real";
 import styles from "./mfa-local.module.css";
 
 type Estado = { revision: number; asignacion: AsignacionRoles | null };
 type Pendiente = { clave: string; cambio: CambioRoles };
 /** Herramienta local de QA; no habilita el servidor ni aprovisiona aprobaciones. */
-export default function CambioRolesLocal() {
-  const [objetivo, setObjetivo] = useState("");
+export default function CambioRolesLocal({ usuarioInicial = "", embebido = false, onCambioConfirmado, onAccesoDenegado }: {
+  usuarioInicial?: string; embebido?: boolean; onCambioConfirmado?: () => void; onAccesoDenegado?: (status: 401 | 403) => void;
+} = {}) {
+  const [objetivo, setObjetivo] = useState(usuarioInicial);
   const [aprobacion, setAprobacion] = useState("");
   const [operacion, setOperacion] = useState<"asignar" | "revocar">("asignar");
   const [rol, setRol] = useState<CambioRoles["rol"]>("paciente");
@@ -56,12 +59,14 @@ export default function CambioRolesLocal() {
       const body = await r.json();
       if (actual !== version.current) return;
       if (r.status === 200) {
-        if (!Number.isInteger(body.revision) || body.revision < 0 || (body.asignacion !== null && !asignacionRolesValida(body.asignacion))
-          || !["consultado", "aplicado", "sin_cambios"].includes(body.resultado)) throw new Error("FORMATO");
-        setEstado({ revision: body.revision, asignacion: body.asignacion });
+        const validada = respuestaRolesPanel(body, intento?.clave ?? null);
+        if (!validada) throw new Error("FORMATO");
+        setEstado({ revision: validada.revision, asignacion: validada.asignacion });
         setPendiente(null); setAutorizado(false);
-        setMensaje(`HTTP 200 · ${body.resultado} · revisión ${body.revision}. ${intento ? "Verifica la auditoría y vuelve a consultar antes de dar por cerrada la prueba." : "Consulta real completada."}`);
+        setMensaje(`HTTP 200 · ${validada.resultado} · revisión ${validada.revision}. ${intento ? "Vuelve a consultar los usuarios para verificar el estado actualizado." : "Consulta completada por la API."}`);
+        if (intento) onCambioConfirmado?.();
       } else {
+        if (r.status === 401 || (r.status === 403 && (!body?.codigo || body.codigo === "SESION_ESCRITURA_NO_VALIDA"))) onAccesoDenegado?.(r.status);
         // Conservar la clave ante cualquier rechazo: no improvisar otro cambio o identidad.
         // Permite repetir con la misma clave tras recuperar autorización/disponibilidad.
         setMensaje(`HTTP ${r.status}. ${r.status === 503 ? "Escritura desactivada, servicio no disponible o estado no confirmado." : "Solicitud rechazada."} ${intento ? "Conserva la misma clave y contenido; resuelve el motivo antes de reintentar." : "Comprueba sesión, recencia TOTP y configuración."}`);
@@ -70,8 +75,9 @@ export default function CambioRolesLocal() {
       if (actual === version.current) setMensaje("No se confirmó el resultado. No asumas rollback; conserva la clave y repite el mismo intento después de recuperar la sesión o el servicio.");
     } finally { if (actual === version.current) { enCurso.current = false; setOcupado(false); } }
   }
-  return <main className={styles.pagina}>
-    <h1>QA local de roles — DI-151 Parte 2</h1>
+  const Contenedor = embebido ? "section" : "main";
+  return <Contenedor className={embebido ? undefined : styles.pagina} aria-label="Operación controlada de roles">
+    {embebido ? <h3>Consultar y actualizar roles autorizados</h3> : <h1>QA local de roles — DI-151 Parte 2</h1>}
     <p>Escrituras desactivadas por defecto. Usar únicamente después de aprobar la migración y una operación concreta sobre cuentas ficticias. Esta pantalla no crea aprobaciones ni cambia configuración.</p>
     <p><Link href="/desarrollo/mfa-admin">Verificar TOTP reciente</Link> · <Link href="/cuenta">Mi cuenta</Link></p>
     <fieldset disabled={ocupado || pendiente !== null}>
@@ -90,5 +96,5 @@ export default function CambioRolesLocal() {
       <p>Si el servidor rechaza definitivamente el intento, reconciliar con auditoría y lectura antes de iniciar otro; no regenerar claves para eludir una revisión o aprobación rechazada.</p></section>}
     {ocupado && <p role="status">Consultando el servidor…</p>}
     {mensaje && <p role="status">{mensaje}</p>}
-  </main>;
+  </Contenedor>;
 }

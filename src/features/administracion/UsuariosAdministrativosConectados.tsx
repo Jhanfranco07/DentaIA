@@ -1,15 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { crearClienteAdministrativo, type ErrorClienteAdministrativo } from "./cliente";
 import EstadoAdministrativo from "./EstadoAdministrativo";
-import UsuariosAdministrativosDemo from "./UsuariosAdministrativosDemo";
 import styles from "./administracion.module.css";
 
-/** Se monta solo al elegir API. Reutiliza la sesión: no inicia login, MFA ni asignaciones. */
-export default function UsuariosAdministrativosConectados() {
+const ContextoAcceso = createContext<{ invalidar: (error: ErrorClienteAdministrativo) => void } | null>(null);
+export function useAccesoPanel() {
+  const acceso = useContext(ContextoAcceso);
+  if (!acceso) throw new Error("El panel requiere la comprobación administrativa del servidor.");
+  return acceso;
+}
+
+/** Antes de montar cualquier sección. No sustituye el guard de cada API. */
+export default function UsuariosAdministrativosConectados({ children }: { children: ReactNode }) {
   const [revision, setRevision] = useState(0);
   const [acceso, setAcceso] = useState<"comprobando" | "permitido" | ErrorClienteAdministrativo>("comprobando");
   const cliente = useMemo(() => crearClienteAdministrativo(async () => {
@@ -42,5 +48,5 @@ export default function UsuariosAdministrativosConectados() {
     <div className="actions"><button type="button" className={styles.accionEstado} onClick={() => { setAcceso("comprobando"); setRevision(v => v + 1); }}>Volver a comprobar acceso</button>
       {acceso.status === 401 && <Link href="/cuenta">Ir a Mi cuenta</Link>}</div>
   </section>;
-  return <UsuariosAdministrativosDemo key={revision} cliente={cliente} onAccesoDenegado={setAcceso} />;
+  return <ContextoAcceso.Provider key={revision} value={{ invalidar: setAcceso }}>{children}</ContextoAcceso.Provider>;
 }
