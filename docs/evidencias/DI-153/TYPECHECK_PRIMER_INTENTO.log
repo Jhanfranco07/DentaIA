@@ -1,0 +1,13 @@
+
+> dentaia@0.1.0 typecheck
+> tsc --noEmit
+
+error TS6053: File '/workspace/DentaIA/.next/types/app/desarrollo/panel-admin/page.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in '/workspace/DentaIA/tsconfig.json'
+error TS6053: File '/workspace/DentaIA/.next/types/app/layout.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in '/workspace/DentaIA/tsconfig.json'
+error TS6053: File '/workspace/DentaIA/.next/types/cache-life.d.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '.next/types/**/*.ts' in '/workspace/DentaIA/tsconfig.json'

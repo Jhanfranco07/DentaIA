@@ -1,0 +1,55 @@
+
+> dentaia@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.28
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 6.9s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/10) ...
+   Generating static pages (2/10)
+   Generating static pages (4/10)
+   Generating static pages (7/10)
+ ✓ Generating static pages (10/10)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                        Size  First Load JS
+┌ ○ /                                             517 B         107 kB
+├ ○ /_not-found                                   995 B         104 kB
+├ ○ /analisis/demo                              13.2 kB         119 kB
+├ ƒ /api/administracion/acceso                    156 B         103 kB
+├ ƒ /api/administracion/roles                     156 B         103 kB
+├ ƒ /api/administracion/roles/validar             156 B         103 kB
+├ ƒ /api/administracion/usuarios                  156 B         103 kB
+├ ƒ /api/administracion/usuarios/reales           156 B         103 kB
+├ ƒ /api/clinical/access-grants                   156 B         103 kB
+├ ƒ /api/clinical/access-grants/[id]/revoke       156 B         103 kB
+├ ƒ /api/clinical/patients/[patientId]/history    156 B         103 kB
+├ ƒ /api/clinical/patients/me                     156 B         103 kB
+├ ƒ /api/desarrollo/validar-lectura-admin         156 B         103 kB
+├ ƒ /api/professional/me                          156 B         103 kB
+├ ƒ /api/professional/patients                    156 B         103 kB
+├ ƒ /api/professional/requests                    156 B         103 kB
+├ ƒ /cuenta                                     5.94 kB         177 kB
+├ ƒ /desarrollo/acceso                           1.8 kB         173 kB
+├ ƒ /desarrollo/lectura-admin                   2.24 kB         173 kB
+├ ƒ /desarrollo/mfa-admin                       5.62 kB         176 kB
+├ ƒ /desarrollo/panel-admin                     6.55 kB         183 kB
+├ ƒ /desarrollo/roles-admin                       170 B         177 kB
+├ ○ /directorio                                 3.53 kB         174 kB
+├ ƒ /directorio/[id]                             2.8 kB         174 kB
+├ ○ /fotografias                                6.01 kB         177 kB
+├ ○ /privacidad                                   162 B         106 kB
+└ ƒ /solicitudes                                5.78 kB         177 kB
++ First Load JS shared by all                    103 kB
+  ├ chunks/255-b1e2483a7e02feee.js              46.6 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js         54.2 kB
+  └ other shared chunks (total)                 1.97 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

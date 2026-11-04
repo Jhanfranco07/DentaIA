@@ -1,0 +1,47 @@
+{
+  "fecha": "2026-11-04T13:38:35.858506+00:00",
+  "entorno": "PostgreSQL 17 real en Docker local sin red; Auth es un esquema fixture, NO Supabase",
+  "base": "e9fd2f3f05807ab2f10cab335f57bc817f30c51f",
+  "pruebas": [
+    {
+      "nombre": "Suite SQL existente: grants/RLS, cambio y lectura posterior, rechazos, auditoría, rollback y último administrador",
+      "aprobada": true
+    },
+    {
+      "nombre": "Conexiones locales concurrentes: un commit y un conflicto de revisión",
+      "aprobada": true,
+      "estados": [
+        "200",
+        "409"
+      ]
+    },
+    {
+      "nombre": "Idempotencia concurrente existente: misma respuesta y una sola auditoría",
+      "aprobada": true,
+      "estados": [
+        "200",
+        "200"
+      ]
+    },
+    {
+      "nombre": "Retirada concurrente existente: se conserva el invariante de administradores",
+      "aprobada": true,
+      "estados": [
+        "200",
+        "403"
+      ]
+    }
+  ],
+  "sha256_archivos_reutilizados": {
+    "supabase/tests/fixtures-auth-local.sql": "086cfe989e252e931830e570bee52fe1943370f1adb5a6b23633f5f3aec4f5d0",
+    "supabase/migrations/20261103012414_di151_roles_auditoria_atomica.sql": "4df24cc575b85f627e9b95a61a6bd451ec7fb355ff60f59ff07693f72ae4286f",
+    "supabase/tests/di151-roles.sql": "06ce6897cdd7cacfde74feb7211a7c12d1b28aeb7a3fd472a1548be35eb5dd4d",
+    "supabase/tests/di151-concurrencia-preparar.sql": "305f76188c1a24daf21ec86cc6a4063e2ded2baf1550761fd7f26c4ca09dbd11"
+  },
+  "imagen": "postgres@sha256:3b0cda93be7c8dba2ed484d19393d93845dc3dafb88973e248ba8e6d99d784e1",
+  "version_postgres": "17.11 (Debian 17.11-1.pgdg13+2)",
+  "plpgsql_check_asserts": "on",
+  "contenedor_propio_retirado": true,
+  "aprobadas": 4,
+  "fallidas": 0
+}
