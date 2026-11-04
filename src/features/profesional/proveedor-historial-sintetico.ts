@@ -1,5 +1,6 @@
 import {
   crearServicioHistorialAutorizado,
+  type AuditorHistorialSintetico,
   type ConcesionHistorialSintetica,
   type ContextoProfesionalSintetico,
   type FuenteHistorialAutorizado,
@@ -79,16 +80,44 @@ const fuenteHistorialSintetico: FuenteHistorialAutorizado<
   obtenerConcesion,
 };
 
+/**
+ * El registro vive solo en memoria del navegador y puede perderse o alterarse.
+ * Sirve para demostrar la política de fallo cerrado; no es auditoría real.
+ */
+function crearAuditorHistorialDemostracion(): AuditorHistorialSintetico {
+  let ultimoEvento:
+    | {
+        operacion: "consulta_historial";
+        patientId: string;
+        contextId: string;
+        resultado: "permitido" | "denegado" | "sin_datos" | "error";
+      }
+    | undefined;
+
+  return {
+    registrar(evento) {
+      ultimoEvento = { ...evento };
+      void ultimoEvento;
+    },
+  };
+}
+
 export type VistaHistorialSinteticaAutorizada = VistaHistorialAutorizada<
   AtencionClinicaSintetica,
   CasoHistorialSintetico
 >;
 
-export function crearProveedorHistorialSintetico(): ServicioHistorialAutorizado<
+export function crearProveedorHistorialSintetico(
+  auditor: AuditorHistorialSintetico = crearAuditorHistorialDemostracion(),
+): ServicioHistorialAutorizado<
   AtencionClinicaSintetica,
   CasoHistorialSintetico
 > {
-  return crearServicioHistorialAutorizado(fuenteHistorialSintetico);
+  return crearServicioHistorialAutorizado(
+    fuenteHistorialSintetico,
+    auditor,
+    "requerida",
+  );
 }
 
 export function contextoPredeterminadoPaciente(patientId: string): string {

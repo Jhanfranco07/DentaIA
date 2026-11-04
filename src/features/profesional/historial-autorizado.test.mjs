@@ -1,7 +1,26 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { registerHooks } from "node:module";
 
 import { crearServicioHistorialAutorizado } from "./historial-autorizado.ts";
+
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    if (
+      specifier.startsWith(".") &&
+      context.parentURL?.includes("/profesional/") &&
+      !/\.[a-z]+$/i.test(specifier)
+    ) {
+      return nextResolve(new URL(`${specifier}.ts`, context.parentURL).href, context);
+    }
+
+    return nextResolve(specifier, context);
+  },
+});
+
+const { crearProveedorHistorialSintetico } = await import(
+  "./proveedor-historial-sintetico.ts",
+);
 
 const casos = [
   {
@@ -76,18 +95,27 @@ const concesiones = [
   },
 ];
 
-function crearProveedorPrueba() {
+function obtenerConcesionDePrueba(patientId, contextId) {
+  return concesiones.find(
+    (concesion) =>
+      concesion.patientId === patientId && concesion.contextId === contextId,
+  );
+}
+
+function crearProveedorPrueba({
+  obtenerCaso = (patientId) =>
+    casos.find((caso) => caso.patientId === patientId),
+  obtenerContexto = (contextId) =>
+    contextos.find((contexto) => contexto.id === contextId),
+  obtenerConcesion = obtenerConcesionDePrueba,
+  auditor,
+  politicaAuditoria,
+} = {}) {
   return crearServicioHistorialAutorizado({
-    obtenerCaso: (patientId) =>
-      casos.find((caso) => caso.patientId === patientId),
-    obtenerContexto: (contextId) =>
-      contextos.find((contexto) => contexto.id === contextId),
-    obtenerConcesion: (patientId, contextId) =>
-      concesiones.find(
-        (concesion) =>
-          concesion.patientId === patientId && concesion.contextId === contextId,
-      ),
-  });
+    obtenerCaso,
+    obtenerContexto,
+    obtenerConcesion,
+  }, auditor, politicaAuditoria);
 }
 
 function sinDatosClinicos(vista) {
@@ -188,6 +216,224 @@ test("un paciente inexistente, el vacío y el error no conservan datos de otra c
     const vista = await proveedor.consultar(solicitud);
 
     assert.equal(vista.estado, solicitud.estado);
+    sinDatosClinicos(vista);
+  }
+});
+
+test("DI-159: identificadores desconocidos o contextos ajenos fallan cerrados", async () => {
+  const proveedor = crearProveedorPrueba();
+
+  for (const solicitud of [
+    { patientId: "", contextId: "contexto-demo-norte" },
+    { patientId: "paciente-demo-a", contextId: "" },
+    { patientId: "paciente-inexistente", contextId: "contexto-demo-norte" },
+    { patientId: "paciente-demo-a", contextId: "contexto-inexistente" },
+  ]) {
+    const vista = await proveedor.consultar({
+      ...solicitud,
+      escenario: "concedido",
+    });
+
+    assert.equal(vista.estado, "denegado");
+    sinDatosClinicos(vista);
+  }
+});
+
+test("DI-159: el alcance repetido no duplica atenciones ni altera la cronología", async () => {
+  const proveedor = crearProveedorPrueba({
+    obtenerConcesion: (patientId, contextId) =>
+      patientId === "paciente-demo-a" && contextId === "contexto-demo-norte"
+        ? {
+            patientId,
+            contextId,
+            encounterIds: [
+              "atencion-demo-a-1",
+              "atencion-demo-a-1",
+              "atencion-demo-a-2",
+            ],
+          }
+        : undefined,
+  });
+  const vista = await proveedor.consultar({
+    patientId: "paciente-demo-a",
+    contextId: "contexto-demo-norte",
+    escenario: "concedido",
+  });
+
+  assert.equal(vista.estado, "listo");
+  assert.equal(vista.entries.length, 2);
+  assert.equal(
+    new Set(vista.entries.map((atencion) => atencion.encounterId)).size,
+    vista.entries.length,
+  );
+  assert.deepEqual(
+    vista.entries.map((atencion) => atencion.encounterId),
+    ["atencion-demo-a-2", "atencion-demo-a-1"],
+  );
+});
+
+test("DI-159: una revocación sintética se reevalúa y elimina el historial de una nueva lectura", async () => {
+  let concesionVigente = true;
+  const proveedor = crearProveedorPrueba({
+    obtenerConcesion: (patientId, contextId) =>
+      concesionVigente
+        ? obtenerConcesionDePrueba(patientId, contextId)
+        : undefined,
+  });
+  const solicitud = {
+    patientId: "paciente-demo-a",
+    contextId: "contexto-demo-norte",
+    escenario: "concedido",
+  };
+
+  const vistaPermitida = await proveedor.consultar(solicitud);
+  assert.equal(vistaPermitida.estado, "listo");
+  assert.ok(vistaPermitida.entries.length > 0);
+
+  concesionVigente = false;
+  const vistaRevocada = await proveedor.consultar(solicitud);
+  assert.equal(vistaRevocada.estado, "denegado");
+  sinDatosClinicos(vistaRevocada);
+});
+
+test("DI-159: la auditoría sintética registra resultado sin transportar entradas", async () => {
+  const eventos = [];
+  const proveedor = crearProveedorPrueba({
+    auditor: { registrar: (evento) => eventos.push(evento) },
+  });
+
+  await proveedor.consultar({
+    patientId: "paciente-demo-a",
+    contextId: "contexto-demo-norte",
+    escenario: "concedido",
+  });
+  await proveedor.consultar({
+    patientId: "paciente-demo-a",
+    contextId: "contexto-demo-sur",
+    escenario: "concedido",
+  });
+
+  assert.deepEqual(eventos.map((evento) => evento.resultado), [
+    "permitido",
+    "denegado",
+  ]);
+  for (const evento of eventos) {
+    assert.deepEqual(Object.keys(evento).sort(), [
+      "contextId",
+      "operacion",
+      "patientId",
+      "resultado",
+    ]);
+    assert.equal("entries" in evento, false);
+  }
+});
+
+test("DI-159: una política requerida sin auditor falla cerrada", async () => {
+  const proveedor = crearProveedorPrueba({ politicaAuditoria: "requerida" });
+  const vista = await proveedor.consultar({
+    patientId: "paciente-demo-a",
+    contextId: "contexto-demo-norte",
+    escenario: "concedido",
+  });
+
+  assert.equal(vista.estado, "error");
+  sinDatosClinicos(vista);
+});
+
+test("DI-159: el proveedor de demostración aplica su política requerida", async () => {
+  // JavaScript puede recibir una dependencia inválida; el proveedor no debe
+  // convertir ese caso en una lectura permitida.
+  const proveedor = crearProveedorHistorialSintetico(null);
+  const vista = await proveedor.consultar({
+    patientId: "paciente-demo-a",
+    contextId: "contexto-demo-norte",
+    escenario: "concedido",
+  });
+
+  assert.equal(vista.estado, "error");
+  sinDatosClinicos(vista);
+});
+
+test("DI-159: el proveedor de demostración exige y espera su auditor", async () => {
+  const eventos = [];
+  const orden = [];
+  const proveedor = crearProveedorHistorialSintetico({
+    async registrar(evento) {
+      orden.push("auditoria-inicio");
+      await Promise.resolve();
+      eventos.push(evento);
+      orden.push("auditoria-fin");
+    },
+  });
+
+  const vista = await proveedor.consultar({
+    patientId: "paciente-demo-a",
+    contextId: "contexto-demo-norte",
+    escenario: "concedido",
+  });
+  orden.push("respuesta");
+
+  assert.equal(vista.estado, "listo");
+  assert.deepEqual(orden, ["auditoria-inicio", "auditoria-fin", "respuesta"]);
+  assert.deepEqual(Object.keys(eventos[0]).sort(), [
+    "contextId",
+    "operacion",
+    "patientId",
+    "resultado",
+  ]);
+  assert.equal("entries" in eventos[0], false);
+});
+
+test("DI-159: un fallo de auditoría sintética impide entregar el historial", async () => {
+  const proveedor = crearProveedorPrueba({
+    auditor: {
+      registrar: () => {
+        throw new Error("fallo sintético de auditoría");
+      },
+    },
+  });
+  const vista = await proveedor.consultar({
+    patientId: "paciente-demo-a",
+    contextId: "contexto-demo-norte",
+    escenario: "concedido",
+  });
+
+  assert.equal(vista.estado, "error");
+  sinDatosClinicos(vista);
+});
+
+test("DI-159: un rechazo asíncrono de auditoría impide entregar el historial", async () => {
+  const proveedor = crearProveedorPrueba({
+    auditor: { registrar: async () => Promise.reject(new Error("fallo")) },
+  });
+  const vista = await proveedor.consultar({
+    patientId: "paciente-demo-a",
+    contextId: "contexto-demo-norte",
+    escenario: "concedido",
+  });
+
+  assert.equal(vista.estado, "error");
+  sinDatosClinicos(vista);
+});
+
+test("DI-159: excepciones de fuente devuelven error sin contenido", async () => {
+  for (const dependencia of [
+    "obtenerCaso",
+    "obtenerContexto",
+    "obtenerConcesion",
+  ]) {
+    const proveedor = crearProveedorPrueba({
+      [dependencia]: () => {
+        throw new Error("fallo sintético de fuente");
+      },
+    });
+    const vista = await proveedor.consultar({
+      patientId: "paciente-demo-a",
+      contextId: "contexto-demo-norte",
+      escenario: "concedido",
+    });
+
+    assert.equal(vista.estado, "error");
     sinDatosClinicos(vista);
   }
 });

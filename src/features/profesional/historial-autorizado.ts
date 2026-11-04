@@ -100,6 +100,27 @@ export interface ServicioHistorialAutorizado<
   ): Promise<VistaHistorialAutorizada<Entrada, Caso>>;
 }
 
+export type ResultadoAuditoriaHistorial =
+  | "permitido"
+  | "denegado"
+  | "sin_datos"
+  | "error";
+
+export type PoliticaAuditoriaHistorial = "opcional" | "requerida";
+
+/**
+ * Puerto local de auditoría para ejercitar el comportamiento de fallo cerrado.
+ * No representa una bitácora persistente ni sustituye una auditoría de servidor.
+ */
+export interface AuditorHistorialSintetico {
+  registrar(evento: {
+    operacion: "consulta_historial";
+    patientId: string;
+    contextId: string;
+    resultado: ResultadoAuditoriaHistorial;
+  }): void | Promise<void>;
+}
+
 function vistaBase<
   Entrada extends EntradaHistorialAutorizable,
   Caso extends CasoHistorialAutorizable<Entrada>,
@@ -135,6 +156,45 @@ function ordenarEntradas<Entrada extends EntradaHistorialAutorizable>(
   });
 }
 
+function resultadoAuditoria<
+  Entrada extends EntradaHistorialAutorizable,
+  Caso extends CasoHistorialAutorizable<Entrada>,
+>(vista: VistaHistorialAutorizada<Entrada, Caso>): ResultadoAuditoriaHistorial {
+  if (vista.estado === "listo") return "permitido";
+  if (vista.estado === "denegado") return "denegado";
+  if (vista.estado === "vacio") return "sin_datos";
+  return "error";
+}
+
+async function finalizarConsulta<
+  Entrada extends EntradaHistorialAutorizable,
+  Caso extends CasoHistorialAutorizable<Entrada>,
+>(
+  vista: VistaHistorialAutorizada<Entrada, Caso>,
+  solicitud: Pick<SolicitudConsultaHistorial, "patientId" | "contextId">,
+  auditor: AuditorHistorialSintetico | undefined,
+  politicaAuditoria: PoliticaAuditoriaHistorial,
+): Promise<VistaHistorialAutorizada<Entrada, Caso>> {
+  if (!auditor) {
+    return politicaAuditoria === "requerida"
+      ? vistaBase<Entrada, Caso>("error", null)
+      : vista;
+  }
+
+  try {
+    await auditor.registrar({
+      operacion: "consulta_historial",
+      patientId: solicitud.patientId,
+      contextId: solicitud.contextId,
+      resultado: resultadoAuditoria(vista),
+    });
+    return vista;
+  } catch {
+    // Un fallo de auditoría no entrega el resultado calculado previamente.
+    return vistaBase<Entrada, Caso>("error", null);
+  }
+}
+
 /**
  * Construye el servicio a partir de una fuente inyectada. El proveedor
  * sintético se mantiene aparte para que este contrato pueda reemplazarse por
@@ -145,53 +205,64 @@ export function crearServicioHistorialAutorizado<
   Caso extends CasoHistorialAutorizable<Entrada>,
 >(
   fuente: FuenteHistorialAutorizado<Entrada, Caso>,
+  auditor?: AuditorHistorialSintetico,
+  politicaAuditoria: PoliticaAuditoriaHistorial = "opcional",
 ): ServicioHistorialAutorizado<Entrada, Caso> {
   return {
     async consultar({ patientId, contextId, escenario }) {
+      let vista: VistaHistorialAutorizada<Entrada, Caso>;
+
       if (escenario === "error") {
-        return vistaBase<Entrada, Caso>("error", null);
+        vista = vistaBase<Entrada, Caso>("error", null);
+      } else if (escenario === "vacio") {
+        vista = vistaBase<Entrada, Caso>("vacio", null);
+      } else if (escenario !== "concedido") {
+        vista = vistaSinAutorizacion<Entrada, Caso>(escenario);
+      } else {
+        try {
+          const caso = fuente.obtenerCaso(patientId);
+          const contexto = fuente.obtenerContexto(contextId);
+          const concesion = fuente.obtenerConcesion(patientId, contextId);
+
+          // La ausencia de caso, contexto o concesión no revela cuál de ellos
+          // falló: la interfaz recibe la misma denegación segura.
+          if (!caso || !contexto || !concesion) {
+            vista = vistaSinAutorizacion<Entrada, Caso>("denegado");
+          } else {
+            const encuentrosAutorizados = new Set(concesion.encounterIds);
+            const entries = ordenarEntradas(caso.entries).filter((atencion) =>
+              encuentrosAutorizados.has(atencion.encounterId),
+            );
+
+            if (entries.length === 0) {
+              vista = vistaBase<Entrada, Caso>("vacio", "concedido");
+            } else {
+              const { entries: _entriesNoAutorizadas, ...resumen } = caso;
+
+              vista = {
+                estado: "listo",
+                caso: {
+                  ...resumen,
+                  professionalContext: contexto.professionalName,
+                  clinicContext: contexto.clinicName,
+                },
+                entries,
+                origen: "sintetico",
+                permisoSimulado: "concedido",
+              };
+            }
+          }
+        } catch {
+          vista = vistaBase<Entrada, Caso>("error", null);
+        }
       }
 
-      if (escenario === "vacio") {
-        return vistaBase<Entrada, Caso>("vacio", null);
-      }
-
-      if (escenario !== "concedido") {
-        return vistaSinAutorizacion<Entrada, Caso>(escenario);
-      }
-
-      const caso = fuente.obtenerCaso(patientId);
-      const contexto = fuente.obtenerContexto(contextId);
-      const concesion = fuente.obtenerConcesion(patientId, contextId);
-
-      // La ausencia de caso, contexto o concesión no revela cuál de ellos
-      // falló: la interfaz recibe la misma denegación segura.
-      if (!caso || !contexto || !concesion) {
-        return vistaSinAutorizacion<Entrada, Caso>("denegado");
-      }
-
-      const encuentrosAutorizados = new Set(concesion.encounterIds);
-      const entries = ordenarEntradas(caso.entries).filter((atencion) =>
-        encuentrosAutorizados.has(atencion.encounterId),
+      return finalizarConsulta(
+        vista,
+        { patientId, contextId },
+        auditor,
+        politicaAuditoria,
       );
-
-      if (entries.length === 0) {
-        return vistaBase<Entrada, Caso>("vacio", "concedido");
-      }
-
-      const { entries: _entriesNoAutorizadas, ...resumen } = caso;
-
-      return {
-        estado: "listo",
-        caso: {
-          ...resumen,
-          professionalContext: contexto.professionalName,
-          clinicContext: contexto.clinicName,
-        },
-        entries,
-        origen: "sintetico",
-        permisoSimulado: "concedido",
-      };
     },
   };
 }

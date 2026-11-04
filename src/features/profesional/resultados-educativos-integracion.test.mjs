@@ -96,6 +96,18 @@ test("cambiar de contenido a acceso denegado limpia el resultado educativo", asy
   assert.deepEqual(vistaDenegada, { estado: "denegado", resultado: null });
 });
 
+test("DI-159: los estados educativos sin autorización no conservan contenido", () => {
+  for (const estado of ["no_autorizado", "expirado", "revocado"]) {
+    const vista = resolverVistaResultadosEducativos({
+      estado,
+      modalidadAutorizacion: "simulada",
+      resultado: null,
+    });
+
+    assert.deepEqual(vista, { estado: "denegado", resultado: null });
+  }
+});
+
 test("una fuente educativa no disponible se presenta como error seguro", async () => {
   const respuesta = await crearProveedorResultadosEducativosSintetico(
     "error",
