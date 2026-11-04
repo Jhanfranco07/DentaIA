@@ -1,0 +1,95 @@
+{
+  "estado": "PROPUESTO_NO_INSERTADO_TRAS_MIGRACIONES",
+  "proyecto": "vwmdknzjyvmsdqpepykz",
+  "aprobacionSeparadaNecesaria": true,
+  "dataset": "fase8-synthetic-v1",
+  "cuentas": [
+    {
+      "alias": "paciente_a",
+      "emailFicticio": "fase8-paciente-a@dentaia.test",
+      "rol": "paciente",
+      "authId": null
+    },
+    {
+      "alias": "paciente_b",
+      "emailFicticio": "fase8-paciente-b@dentaia.test",
+      "rol": "paciente",
+      "authId": null
+    },
+    {
+      "alias": "odontologo_a",
+      "emailFicticio": "fase8-odontologo-a@dentaia.test",
+      "rol": "odontologo",
+      "authId": null
+    },
+    {
+      "alias": "odontologo_b",
+      "emailFicticio": "fase8-odontologo-b@dentaia.test",
+      "rol": "odontologo",
+      "authId": null
+    },
+    {
+      "alias": "administrador_qa",
+      "emailFicticio": "fase8-admin@dentaia.test",
+      "rol": "superusuario",
+      "authId": null,
+      "mfa": "TOTP legitimo y AAL2; no permisos clinicos automaticos"
+    }
+  ],
+  "reglasAuth": [
+    "No reutilizar ni cambiar cuentas existentes; abortar si hay colisión de email o marcador",
+    "Contraseñas aleatorias solo en memoria y acceso por canal seguro; nunca en Git/logs",
+    "app_metadata.dentaia canónico, metadatos ajenos preservados y marcador de lote solo servidor",
+    "No desactivar confirmación global ni MFA",
+    "Administrador QA solo tras aprobacion especifica del inventario y MFA; no modifica administradores actuales"
+  ],
+  "clinicas": [
+    "FASE8 ACADEMICO Clinica A",
+    "FASE8 ACADEMICO Clinica B"
+  ],
+  "planDeFilas": {
+    "profiles": 5,
+    "dentists": 2,
+    "professional_accounts": 2,
+    "professional_verifications": 2,
+    "clinic_memberships": 2,
+    "patient_records": 2,
+    "clinical_encounters": 3,
+    "appointment_requests": 3,
+    "clinical_access_grants": 4,
+    "clinical_entries": 9,
+    "clinical_grant_resources": 5
+  },
+  "orden": [
+    "Aprobar migraciones y verificar esquema remoto",
+    "Revisar control académico por marcador de cuentas y etiqueta de entorno antes de activar",
+    "Aprobar este lote y la provisión profesional FICTICIA con operador identificado",
+    "Crear cinco cuentas con SDK Auth Admin solo servidor y guardar IDs en manifiesto privado",
+    "Crear perfiles/directorio ficticio y relaciones clínicas con UUID de lote, sin enlazar entidades actuales",
+    "Crear solicitudes is_demo y atenciones educativas sin datos clínicos reales",
+    "Validar logins/JWT y permisos; crear/revocar concesiones mediante API autorizado de cada paciente",
+    "Cerrar configuración clínica al terminar y conservar auditoría"
+  ],
+  "limpieza": {
+    "selector": "IDs exactos del manifiesto del lote + app_metadata.dentaia_development.dataset; no nombres/LIKE/TRUNCATE",
+    "acciones": [
+      "Revocar concesiones y cerrar/suspender contextos del lote con operación autorizada",
+      "Retirar solo archivos sintéticos nuevos del lote mediante API y algoritmo reintentable",
+      "Conservar auditoría y contenido append-only según retención; no prometer DELETE de tablas protegidas",
+      "No eliminar ni modificar cuentas/registros previos; cualquier baja de las cuentas del lote requiere revisión de FK y autorización"
+    ],
+    "noEsScriptEjecutable": true
+  },
+  "pruebas": [
+    "Paciente A no consulta/modifica recursos B con JWT real",
+    "Profesional solo consulta solicitudes asignadas y contexto propio",
+    "Historial sin concesión vigente denegado, incluidas expiración y revocación",
+    "Cruce de clínica requiere alcance explícito, preserva procedencia y auditoría",
+    "Fallo de auditoría se simula solo localmente; no inyectar triggers fallidos en Dental-IA",
+    "Sin operaciones destructivas ni pruebas de carga remotas"
+  ],
+  "revision": 2,
+  "detalleVigente": "INVENTARIO_SINTETICO_PARA_APROBACION.md",
+  "directorioDemosActivos": false,
+  "solicitudesIniciales": "Fixture por operador pendiente de autorizacion; no acredita INSERT RLS desde formulario con dentistas inactivos"
+}

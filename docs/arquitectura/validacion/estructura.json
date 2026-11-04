@@ -1,0 +1,275 @@
+{
+  "originalTables": 29,
+  "originalColumns": 214,
+  "revisedTables": 29,
+  "revisedColumns": 219,
+  "tables": [
+    {
+      "table": "public.profiles",
+      "columns": 3,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 1,
+      "phase": "existente"
+    },
+    {
+      "table": "public.dentists",
+      "columns": 13,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 0,
+      "phase": "existente"
+    },
+    {
+      "table": "public.appointment_requests",
+      "columns": 11,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 2,
+      "phase": "existente"
+    },
+    {
+      "table": "public.patient_consents",
+      "columns": 7,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 1,
+      "phase": "existente"
+    },
+    {
+      "table": "public.dental_photos",
+      "columns": 9,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 2,
+      "phase": "existente"
+    },
+    {
+      "table": "dentaia_admin.revisiones_roles",
+      "columns": 2,
+      "pk": [
+        "usuario_id"
+      ],
+      "foreignKeys": 0,
+      "phase": "administrativa_pendiente"
+    },
+    {
+      "table": "dentaia_admin.aprobaciones_roles",
+      "columns": 11,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 0,
+      "phase": "administrativa_pendiente"
+    },
+    {
+      "table": "dentaia_admin.auditoria_roles",
+      "columns": 9,
+      "pk": [
+        "actor_id",
+        "solicitud_id"
+      ],
+      "foreignKeys": 0,
+      "phase": "administrativa_pendiente"
+    },
+    {
+      "table": "clinical.clinics",
+      "columns": 5,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 0,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.professional_accounts",
+      "columns": 5,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 2,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.professional_verifications",
+      "columns": 7,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 2,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.clinic_memberships",
+      "columns": 6,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 2,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.patient_records",
+      "columns": 4,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 1,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.clinical_encounters",
+      "columns": 8,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 3,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.clinical_entries",
+      "columns": 10,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 2,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.clinical_documents",
+      "columns": 11,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 1,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.clinical_access_grants",
+      "columns": 9,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 2,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.clinical_grant_resources",
+      "columns": 2,
+      "pk": [
+        "grant_id",
+        "encounter_id"
+      ],
+      "foreignKeys": 2,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "clinical.clinical_access_audit",
+      "columns": 10,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 4,
+      "phase": "mvp_sintetico_condicionado"
+    },
+    {
+      "table": "ml.dataset_versions",
+      "columns": 8,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 0,
+      "phase": "futuro_ia"
+    },
+    {
+      "table": "ml.dataset_items",
+      "columns": 7,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 1,
+      "phase": "futuro_ia"
+    },
+    {
+      "table": "ml.model_versions",
+      "columns": 10,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 1,
+      "phase": "futuro_ia"
+    },
+    {
+      "table": "ml.analysis_authorizations",
+      "columns": 9,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 2,
+      "phase": "futuro_ia"
+    },
+    {
+      "table": "ml.analysis_jobs",
+      "columns": 13,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 4,
+      "phase": "futuro_ia"
+    },
+    {
+      "table": "ml.analysis_results",
+      "columns": 8,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 1,
+      "phase": "futuro_ia"
+    },
+    {
+      "table": "ml.educational_recommendations",
+      "columns": 6,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 0,
+      "phase": "futuro_ia"
+    },
+    {
+      "table": "ml.result_recommendations",
+      "columns": 3,
+      "pk": [
+        "result_id",
+        "recommendation_id"
+      ],
+      "foreignKeys": 2,
+      "phase": "futuro_ia"
+    },
+    {
+      "table": "ml.evaluation_runs",
+      "columns": 8,
+      "pk": [
+        "id"
+      ],
+      "foreignKeys": 2,
+      "phase": "futuro_ia"
+    },
+    {
+      "table": "ml.evaluation_metrics",
+      "columns": 5,
+      "pk": [
+        "run_id",
+        "name",
+        "label"
+      ],
+      "foreignKeys": 1,
+      "phase": "futuro_ia"
+    }
+  ],
+  "sqlExecuted": false
+}

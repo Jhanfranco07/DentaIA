@@ -1,0 +1,13 @@
+{
+  "fecha": "2026-11-04T01:13:40.203Z",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "metodo": "Catálogo y configuración SQL; claims de los cinco actores originales, no JWT ni login de esas cuentas",
+  "tables": 19,
+  "rlsTables": 19,
+  "activationVersion": "20261104010757",
+  "originalActorsClosed": 5,
+  "authenticatedClinicalSelect": false,
+  "configurationSecurityInvoker": true,
+  "anonymousConfigurationExecute": false,
+  "authenticatedConfigurationExecute": false
+}

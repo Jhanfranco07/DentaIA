@@ -1,0 +1,23 @@
+{
+  "fecha": "2026-11-03",
+  "organizacion": "Jhan Franco",
+  "organizacionId": "mrhdeaoscwglprdztrif",
+  "plan": "free",
+  "cotizacion": {
+    "importe": 0,
+    "moneda": "USD",
+    "periodicidad": "mensual"
+  },
+  "creacionAutorizadaPorResponsable": true,
+  "nombreSolicitado": "DentaIA-QA",
+  "region": "us-east-1",
+  "creado": false,
+  "referenciaQA": null,
+  "bloqueo": "FREE_PROJECT_LIMIT_REACHED",
+  "detalle": "Supabase rechazo crear el proyecto por limite de dos proyectos Free activos del propietario. Inventario posterior confirma que no existe DentaIA-QA.",
+  "migracionesRemotasAplicadas": 0,
+  "pruebasRemotasEjecutadas": 0,
+  "principalProhibido": "vwmdknzjyvmsdqpepykz",
+  "otrosProyectosSinModificar": true,
+  "solucionRequiereNuevaAutorizacion": "Liberar un cupo pausando/eliminando un proyecto ajeno a esta tarea, o aprobar un cambio de plan. No ejecutado."
+}

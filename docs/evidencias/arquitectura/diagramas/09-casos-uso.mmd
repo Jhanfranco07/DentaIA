@@ -1,0 +1,11 @@
+flowchart TD
+  V["Visitante"] --> P["Consultar inicio, directorio y demo educativa"]
+  V --> L["Registrarse e iniciar sesión"]
+  PAC["Paciente autenticado"] --> M["Gestionar perfil, solicitudes y fotos propias"]
+  PAC -. "propuesto" .-> C["Conceder o revocar acceso clínico"]
+  OD["Odontólogo verificado"] -. "propuesto" .-> H["Consultar historial autorizado entre clínicas"]
+  OD -.-> X["Revisar procedencia y vigencia de exámenes"]
+  SU["Superusuario AAL2"] --> A["Consultar usuarios con habilitación privada"]
+  SU --> R["Solicitar cambio aprobado de roles"]
+  AP["Aprobador independiente"] --> R
+  R --> AU["Auditoría administrativa"]

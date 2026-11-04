@@ -1,0 +1,1269 @@
+{
+  "columns": [
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "appointment_requests",
+      "column_name": "id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "gen_random_uuid()",
+      "ordinal_position": 1
+    },
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "appointment_requests",
+      "column_name": "user_id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "auth.uid()",
+      "ordinal_position": 2
+    },
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "appointment_requests",
+      "column_name": "dentist_id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 3
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "appointment_requests",
+      "column_name": "contact_name",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 4
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "appointment_requests",
+      "column_name": "contact_email",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 5
+    },
+    {
+      "udt_name": "date",
+      "data_type": "date",
+      "table_name": "appointment_requests",
+      "column_name": "preferred_date",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 6
+    },
+    {
+      "udt_name": "time",
+      "data_type": "time without time zone",
+      "table_name": "appointment_requests",
+      "column_name": "preferred_time",
+      "is_nullable": "YES",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 7
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "appointment_requests",
+      "column_name": "message",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "''::text",
+      "ordinal_position": 8
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "appointment_requests",
+      "column_name": "status",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "'requested'::text",
+      "ordinal_position": 9
+    },
+    {
+      "udt_name": "bool",
+      "data_type": "boolean",
+      "table_name": "appointment_requests",
+      "column_name": "is_demo",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "true",
+      "ordinal_position": 10
+    },
+    {
+      "udt_name": "timestamptz",
+      "data_type": "timestamp with time zone",
+      "table_name": "appointment_requests",
+      "column_name": "created_at",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "now()",
+      "ordinal_position": 11
+    },
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "dental_photos",
+      "column_name": "id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "gen_random_uuid()",
+      "ordinal_position": 1
+    },
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "dental_photos",
+      "column_name": "user_id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "auth.uid()",
+      "ordinal_position": 2
+    },
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "dental_photos",
+      "column_name": "consent_id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 3
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dental_photos",
+      "column_name": "bucket_id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "'dental-photos'::text",
+      "ordinal_position": 4
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dental_photos",
+      "column_name": "object_path",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 5
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dental_photos",
+      "column_name": "original_filename",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 6
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dental_photos",
+      "column_name": "mime_type",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 7
+    },
+    {
+      "udt_name": "int8",
+      "data_type": "bigint",
+      "table_name": "dental_photos",
+      "column_name": "size_bytes",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 8
+    },
+    {
+      "udt_name": "timestamptz",
+      "data_type": "timestamp with time zone",
+      "table_name": "dental_photos",
+      "column_name": "created_at",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "now()",
+      "ordinal_position": 9
+    },
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "dentists",
+      "column_name": "id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "gen_random_uuid()",
+      "ordinal_position": 1
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dentists",
+      "column_name": "slug",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 2
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dentists",
+      "column_name": "name",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 3
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dentists",
+      "column_name": "specialty",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 4
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dentists",
+      "column_name": "district",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 5
+    },
+    {
+      "udt_name": "numeric",
+      "data_type": "numeric",
+      "table_name": "dentists",
+      "column_name": "consultation_price",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 6
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dentists",
+      "column_name": "currency",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "'PEN'::text",
+      "ordinal_position": 7
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dentists",
+      "column_name": "initials",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 8
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dentists",
+      "column_name": "avatar_color",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 9
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "dentists",
+      "column_name": "description",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 10
+    },
+    {
+      "udt_name": "bool",
+      "data_type": "boolean",
+      "table_name": "dentists",
+      "column_name": "is_demo",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "true",
+      "ordinal_position": 11
+    },
+    {
+      "udt_name": "bool",
+      "data_type": "boolean",
+      "table_name": "dentists",
+      "column_name": "is_active",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "true",
+      "ordinal_position": 12
+    },
+    {
+      "udt_name": "timestamptz",
+      "data_type": "timestamp with time zone",
+      "table_name": "dentists",
+      "column_name": "created_at",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "now()",
+      "ordinal_position": 13
+    },
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "patient_consents",
+      "column_name": "id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "gen_random_uuid()",
+      "ordinal_position": 1
+    },
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "patient_consents",
+      "column_name": "user_id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "auth.uid()",
+      "ordinal_position": 2
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "patient_consents",
+      "column_name": "policy_version",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 3
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "patient_consents",
+      "column_name": "consent_text",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 4
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "patient_consents",
+      "column_name": "purpose",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "'academic_photo_storage'::text",
+      "ordinal_position": 5
+    },
+    {
+      "udt_name": "timestamptz",
+      "data_type": "timestamp with time zone",
+      "table_name": "patient_consents",
+      "column_name": "accepted_at",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "now()",
+      "ordinal_position": 6
+    },
+    {
+      "udt_name": "timestamptz",
+      "data_type": "timestamp with time zone",
+      "table_name": "patient_consents",
+      "column_name": "revoked_at",
+      "is_nullable": "YES",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 7
+    },
+    {
+      "udt_name": "uuid",
+      "data_type": "uuid",
+      "table_name": "profiles",
+      "column_name": "id",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 1
+    },
+    {
+      "udt_name": "text",
+      "data_type": "text",
+      "table_name": "profiles",
+      "column_name": "full_name",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": null,
+      "ordinal_position": 2
+    },
+    {
+      "udt_name": "timestamptz",
+      "data_type": "timestamp with time zone",
+      "table_name": "profiles",
+      "column_name": "created_at",
+      "is_nullable": "NO",
+      "table_schema": "public",
+      "column_default": "now()",
+      "ordinal_position": 3
+    }
+  ],
+  "constraints": [
+    {
+      "conname": "appointment_requests_contact_email_check",
+      "contype": "c",
+      "definition": "CHECK (((length(contact_email) <= 254) AND (contact_email ~ '^[^[:space:]@]+@[^[:space:]@]+[.][^[:space:]@]+$'::text)))",
+      "table_name": "appointment_requests",
+      "schema_name": "public"
+    },
+    {
+      "conname": "appointment_requests_contact_name_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(contact_name)) >= 2) AND (length(btrim(contact_name)) <= 120)))",
+      "table_name": "appointment_requests",
+      "schema_name": "public"
+    },
+    {
+      "conname": "appointment_requests_dentist_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (dentist_id) REFERENCES dentists(id)",
+      "table_name": "appointment_requests",
+      "schema_name": "public"
+    },
+    {
+      "conname": "appointment_requests_is_demo_check",
+      "contype": "c",
+      "definition": "CHECK (is_demo)",
+      "table_name": "appointment_requests",
+      "schema_name": "public"
+    },
+    {
+      "conname": "appointment_requests_message_check",
+      "contype": "c",
+      "definition": "CHECK ((length(message) <= 1000))",
+      "table_name": "appointment_requests",
+      "schema_name": "public"
+    },
+    {
+      "conname": "appointment_requests_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "appointment_requests",
+      "schema_name": "public"
+    },
+    {
+      "conname": "appointment_requests_status_check",
+      "contype": "c",
+      "definition": "CHECK ((status = ANY (ARRAY['requested'::text, 'cancelled'::text])))",
+      "table_name": "appointment_requests",
+      "schema_name": "public"
+    },
+    {
+      "conname": "appointment_requests_user_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE",
+      "table_name": "appointment_requests",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dental_photos_bucket_id_check",
+      "contype": "c",
+      "definition": "CHECK ((bucket_id = 'dental-photos'::text))",
+      "table_name": "dental_photos",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dental_photos_check",
+      "contype": "c",
+      "definition": "CHECK (((object_path ~~ ((((user_id)::text || '/'::text) || (consent_id)::text) || '/%'::text)) AND (length(split_part(object_path, '/'::text, 3)) > 0)))",
+      "table_name": "dental_photos",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dental_photos_mime_type_check",
+      "contype": "c",
+      "definition": "CHECK ((mime_type = ANY (ARRAY['image/jpeg'::text, 'image/png'::text, 'image/webp'::text])))",
+      "table_name": "dental_photos",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dental_photos_object_path_key",
+      "contype": "u",
+      "definition": "UNIQUE (object_path)",
+      "table_name": "dental_photos",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dental_photos_original_filename_check",
+      "contype": "c",
+      "definition": "CHECK (((length(original_filename) >= 1) AND (length(original_filename) <= 255)))",
+      "table_name": "dental_photos",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dental_photos_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "dental_photos",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dental_photos_size_bytes_check",
+      "contype": "c",
+      "definition": "CHECK (((size_bytes >= 1) AND (size_bytes <= 8388608)))",
+      "table_name": "dental_photos",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dental_photos_user_id_consent_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id, consent_id) REFERENCES patient_consents(user_id, id)",
+      "table_name": "dental_photos",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dental_photos_user_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE",
+      "table_name": "dental_photos",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dentists_consultation_price_check",
+      "contype": "c",
+      "definition": "CHECK ((consultation_price >= (0)::numeric))",
+      "table_name": "dentists",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dentists_currency_check",
+      "contype": "c",
+      "definition": "CHECK ((currency = 'PEN'::text))",
+      "table_name": "dentists",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dentists_is_demo_check",
+      "contype": "c",
+      "definition": "CHECK (is_demo)",
+      "table_name": "dentists",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dentists_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "dentists",
+      "schema_name": "public"
+    },
+    {
+      "conname": "dentists_slug_key",
+      "contype": "u",
+      "definition": "UNIQUE (slug)",
+      "table_name": "dentists",
+      "schema_name": "public"
+    },
+    {
+      "conname": "patient_consents_check",
+      "contype": "c",
+      "definition": "CHECK (((revoked_at IS NULL) OR (revoked_at >= accepted_at)))",
+      "table_name": "patient_consents",
+      "schema_name": "public"
+    },
+    {
+      "conname": "patient_consents_consent_text_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(consent_text)) >= 20) AND (length(btrim(consent_text)) <= 5000)))",
+      "table_name": "patient_consents",
+      "schema_name": "public"
+    },
+    {
+      "conname": "patient_consents_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "patient_consents",
+      "schema_name": "public"
+    },
+    {
+      "conname": "patient_consents_policy_version_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(policy_version)) >= 1) AND (length(btrim(policy_version)) <= 80)))",
+      "table_name": "patient_consents",
+      "schema_name": "public"
+    },
+    {
+      "conname": "patient_consents_purpose_check",
+      "contype": "c",
+      "definition": "CHECK ((purpose = 'academic_photo_storage'::text))",
+      "table_name": "patient_consents",
+      "schema_name": "public"
+    },
+    {
+      "conname": "patient_consents_user_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE",
+      "table_name": "patient_consents",
+      "schema_name": "public"
+    },
+    {
+      "conname": "patient_consents_user_id_id_key",
+      "contype": "u",
+      "definition": "UNIQUE (user_id, id)",
+      "table_name": "patient_consents",
+      "schema_name": "public"
+    },
+    {
+      "conname": "profiles_full_name_check",
+      "contype": "c",
+      "definition": "CHECK (((length(btrim(full_name)) >= 2) AND (length(btrim(full_name)) <= 120)))",
+      "table_name": "profiles",
+      "schema_name": "public"
+    },
+    {
+      "conname": "profiles_id_fkey",
+      "contype": "f",
+      "definition": "FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE",
+      "table_name": "profiles",
+      "schema_name": "public"
+    },
+    {
+      "conname": "profiles_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "profiles",
+      "schema_name": "public"
+    }
+  ],
+  "indexes": [
+    {
+      "indexdef": "CREATE INDEX appointment_requests_dentist_idx ON public.appointment_requests USING btree (dentist_id)",
+      "indexname": "appointment_requests_dentist_idx",
+      "tablename": "appointment_requests",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX appointment_requests_pkey ON public.appointment_requests USING btree (id)",
+      "indexname": "appointment_requests_pkey",
+      "tablename": "appointment_requests",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE INDEX appointment_requests_user_idx ON public.appointment_requests USING btree (user_id, created_at DESC)",
+      "indexname": "appointment_requests_user_idx",
+      "tablename": "appointment_requests",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX dental_photos_object_path_key ON public.dental_photos USING btree (object_path)",
+      "indexname": "dental_photos_object_path_key",
+      "tablename": "dental_photos",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX dental_photos_pkey ON public.dental_photos USING btree (id)",
+      "indexname": "dental_photos_pkey",
+      "tablename": "dental_photos",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE INDEX dental_photos_user_consent_idx ON public.dental_photos USING btree (user_id, consent_id)",
+      "indexname": "dental_photos_user_consent_idx",
+      "tablename": "dental_photos",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE INDEX dentists_district_specialty_idx ON public.dentists USING btree (district, specialty)",
+      "indexname": "dentists_district_specialty_idx",
+      "tablename": "dentists",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX dentists_pkey ON public.dentists USING btree (id)",
+      "indexname": "dentists_pkey",
+      "tablename": "dentists",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX dentists_slug_key ON public.dentists USING btree (slug)",
+      "indexname": "dentists_slug_key",
+      "tablename": "dentists",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX patient_consents_pkey ON public.patient_consents USING btree (id)",
+      "indexname": "patient_consents_pkey",
+      "tablename": "patient_consents",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX patient_consents_user_id_id_key ON public.patient_consents USING btree (user_id, id)",
+      "indexname": "patient_consents_user_id_id_key",
+      "tablename": "patient_consents",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE INDEX patient_consents_user_idx ON public.patient_consents USING btree (user_id)",
+      "indexname": "patient_consents_user_idx",
+      "tablename": "patient_consents",
+      "schemaname": "public"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX profiles_pkey ON public.profiles USING btree (id)",
+      "indexname": "profiles_pkey",
+      "tablename": "profiles",
+      "schemaname": "public"
+    }
+  ],
+  "policies": [
+    {
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "appointment_requests",
+      "permissive": "PERMISSIVE",
+      "policyname": "requests_cancel",
+      "schemaname": "public",
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (status = 'cancelled'::text))"
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "appointment_requests",
+      "permissive": "PERMISSIVE",
+      "policyname": "requests_create",
+      "schemaname": "public",
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (status = 'requested'::text) AND (preferred_date >= CURRENT_DATE) AND (EXISTS ( SELECT 1\n   FROM dentists d\n  WHERE ((d.id = appointment_requests.dentist_id) AND d.is_active))))"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "appointment_requests",
+      "permissive": "PERMISSIVE",
+      "policyname": "requests_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "dental_photos",
+      "permissive": "PERMISSIVE",
+      "policyname": "photos_create",
+      "schemaname": "public",
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n   FROM patient_consents c\n  WHERE ((c.id = dental_photos.consent_id) AND (c.user_id = ( SELECT auth.uid() AS uid)) AND (c.revoked_at IS NULL)))))"
+    },
+    {
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "dental_photos",
+      "permissive": "PERMISSIVE",
+      "policyname": "photos_delete",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "dental_photos",
+      "permissive": "PERMISSIVE",
+      "policyname": "photos_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "is_active",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "tablename": "dentists",
+      "permissive": "PERMISSIVE",
+      "policyname": "dentists_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "patient_consents",
+      "permissive": "PERMISSIVE",
+      "policyname": "consents_create",
+      "schemaname": "public",
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (revoked_at IS NULL))"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "patient_consents",
+      "permissive": "PERMISSIVE",
+      "policyname": "consents_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "patient_consents",
+      "permissive": "PERMISSIVE",
+      "policyname": "consents_revoke",
+      "schemaname": "public",
+      "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND (revoked_at IS NOT NULL))"
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles_create",
+      "schemaname": "public",
+      "with_check": "(id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "(id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles_update",
+      "schemaname": "public",
+      "with_check": "(id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "cmd": "DELETE",
+      "qual": "((bucket_id = 'dental-photos'::text) AND ((storage.foldername(name))[1] = (( SELECT auth.uid() AS uid))::text))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "dentaia_photo_delete",
+      "schemaname": "storage",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((bucket_id = 'dental-photos'::text) AND ((storage.foldername(name))[1] = (( SELECT auth.uid() AS uid))::text))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "dentaia_photo_read",
+      "schemaname": "storage",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "dentaia_photo_upload",
+      "schemaname": "storage",
+      "with_check": "((bucket_id = 'dental-photos'::text) AND ((storage.foldername(name))[1] = (( SELECT auth.uid() AS uid))::text) AND (EXISTS ( SELECT 1\n   FROM patient_consents c\n  WHERE ((c.user_id = ( SELECT auth.uid() AS uid)) AND ((c.id)::text = (storage.foldername(objects.name))[2]) AND (c.revoked_at IS NULL)))))"
+    }
+  ],
+  "grants": [
+    {
+      "grantee": "authenticated",
+      "table_name": "appointment_requests",
+      "table_schema": "public",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "authenticated",
+      "table_name": "appointment_requests",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "appointment_requests",
+      "table_schema": "public",
+      "privilege_type": "DELETE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "appointment_requests",
+      "table_schema": "public",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "appointment_requests",
+      "table_schema": "public",
+      "privilege_type": "REFERENCES"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "appointment_requests",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "appointment_requests",
+      "table_schema": "public",
+      "privilege_type": "TRIGGER"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "appointment_requests",
+      "table_schema": "public",
+      "privilege_type": "TRUNCATE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "appointment_requests",
+      "table_schema": "public",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "authenticated",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "DELETE"
+    },
+    {
+      "grantee": "authenticated",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "authenticated",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "DELETE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "REFERENCES"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "TRIGGER"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "TRUNCATE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dental_photos",
+      "table_schema": "public",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "anon",
+      "table_name": "dentists",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "authenticated",
+      "table_name": "dentists",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dentists",
+      "table_schema": "public",
+      "privilege_type": "DELETE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dentists",
+      "table_schema": "public",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dentists",
+      "table_schema": "public",
+      "privilege_type": "REFERENCES"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dentists",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dentists",
+      "table_schema": "public",
+      "privilege_type": "TRIGGER"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dentists",
+      "table_schema": "public",
+      "privilege_type": "TRUNCATE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "dentists",
+      "table_schema": "public",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "authenticated",
+      "table_name": "patient_consents",
+      "table_schema": "public",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "authenticated",
+      "table_name": "patient_consents",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "patient_consents",
+      "table_schema": "public",
+      "privilege_type": "DELETE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "patient_consents",
+      "table_schema": "public",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "patient_consents",
+      "table_schema": "public",
+      "privilege_type": "REFERENCES"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "patient_consents",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "patient_consents",
+      "table_schema": "public",
+      "privilege_type": "TRIGGER"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "patient_consents",
+      "table_schema": "public",
+      "privilege_type": "TRUNCATE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "patient_consents",
+      "table_schema": "public",
+      "privilege_type": "UPDATE"
+    },
+    {
+      "grantee": "authenticated",
+      "table_name": "profiles",
+      "table_schema": "public",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "authenticated",
+      "table_name": "profiles",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "profiles",
+      "table_schema": "public",
+      "privilege_type": "DELETE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "profiles",
+      "table_schema": "public",
+      "privilege_type": "INSERT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "profiles",
+      "table_schema": "public",
+      "privilege_type": "REFERENCES"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "profiles",
+      "table_schema": "public",
+      "privilege_type": "SELECT"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "profiles",
+      "table_schema": "public",
+      "privilege_type": "TRIGGER"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "profiles",
+      "table_schema": "public",
+      "privilege_type": "TRUNCATE"
+    },
+    {
+      "grantee": "service_role",
+      "table_name": "profiles",
+      "table_schema": "public",
+      "privilege_type": "UPDATE"
+    }
+  ],
+  "rls": [
+    {
+      "relname": "dentists",
+      "schema_name": "public",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "profiles",
+      "schema_name": "public",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "appointment_requests",
+      "schema_name": "public",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "patient_consents",
+      "schema_name": "public",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "dental_photos",
+      "schema_name": "public",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    }
+  ],
+  "buckets": [
+    {
+      "id": "dental-photos",
+      "public": false,
+      "file_size_limit": 8388608,
+      "allowed_mime_types": [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ]
+    }
+  ],
+  "migrations": {
+    "migrations": [
+      {
+        "version": "20261025150315",
+        "name": "dentaia_mvp_independent_modules"
+      },
+      {
+        "version": "20261025150507",
+        "name": "allow_photo_owner_cleanup_after_consent_revocation"
+      }
+    ]
+  }
+}

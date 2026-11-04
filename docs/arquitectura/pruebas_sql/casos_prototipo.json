@@ -1,0 +1,103 @@
+[
+  {
+    "nombre": "Prototipo: paciente accede a sus dos atenciones",
+    "sql": "SELECT qa.identity(1); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=true; ASSERT (r->>'count')::integer=2; END $$;"
+  },
+  {
+    "nombre": "Prototipo: paciente no accede a otro paciente",
+    "sql": "SELECT qa.identity(2); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: profesional autorizado solo recibe un recurso",
+    "sql": "SELECT qa.identity(4); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=true; ASSERT (r->>'count')::integer=1; END $$;"
+  },
+  {
+    "nombre": "Prototipo: profesional ajeno no accede por ID",
+    "sql": "SELECT qa.identity(5); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(35),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: misma clínica no concede acceso general",
+    "sql": "SELECT qa.identity(3); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(33),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: autorización vencida deniega",
+    "sql": "SELECT qa.identity(3); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(42),qa.id(33),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: autorización revocada deniega",
+    "sql": "SELECT qa.identity(3); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(33),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: superusuario no recibe historial ajeno",
+    "sql": "SELECT qa.identity(6); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: contexto clínico de otro profesional deniega",
+    "sql": "SELECT qa.identity(4); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(33),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: rol Auth retirado se vuelve a consultar",
+    "sql": "UPDATE auth.users SET raw_app_meta_data=jsonb_set(raw_app_meta_data,'{dentaia,roles}','[\"paciente\"]') WHERE id=qa.id(4);SELECT qa.identity(4); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: membresía suspendida deniega",
+    "sql": "UPDATE clinical.clinic_memberships SET status='suspended' WHERE id=qa.id(34);SELECT qa.identity(4); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: cuenta profesional suspendida deniega",
+    "sql": "UPDATE clinical.professional_accounts SET status='suspended' WHERE id=qa.id(24);SELECT qa.identity(4); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: nueva verificación rechazada deniega",
+    "sql": "INSERT INTO clinical.professional_verifications(professional_id,reviewed_by,decision,reference,reason,reviewed_at) VALUES(qa.id(24),qa.id(6),'rejected','QA','QA',now()+interval '1 second');SELECT qa.identity(4); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$;"
+  },
+  {
+    "nombre": "Prototipo: consentimiento propio se puede revocar",
+    "sql": "SELECT qa.identity(1); SET LOCAL ROLE authenticated; SELECT qa.revoke_grant(qa.id(71),qa.id(910)); RESET ROLE; DO $$ BEGIN ASSERT (SELECT revoked_at IS NOT NULL FROM clinical.clinical_access_grants WHERE id=qa.id(71)); END $$;"
+  },
+  {
+    "nombre": "Prototipo: revocación ajena se rechaza",
+    "sql": "SELECT qa.identity(2); SET LOCAL ROLE authenticated; SELECT qa.revoke_grant(qa.id(71),qa.id(910));",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Prototipo: reintento de revocación conserva fecha",
+    "sql": "SELECT qa.identity(1); SET LOCAL ROLE authenticated; DO $$ DECLARE a jsonb; b jsonb; BEGIN a:=qa.revoke_grant(qa.id(71),qa.id(911)); b:=qa.revoke_grant(qa.id(71),qa.id(911)); ASSERT a=b; END $$;"
+  },
+  {
+    "nombre": "Prototipo: concesión e idempotencia mismo UUID y contenido",
+    "sql": "SELECT qa.identity(1); SET LOCAL ROLE authenticated; SELECT qa.grant_access(qa.id(79),qa.id(41),qa.id(35),qa.id(51),qa.id(920)); SELECT qa.grant_access(qa.id(79),qa.id(41),qa.id(35),qa.id(51),qa.id(920)); RESET ROLE; DO $$ BEGIN ASSERT (SELECT count(*)=1 FROM clinical.clinical_access_grants WHERE id=qa.id(79)); END $$;"
+  },
+  {
+    "nombre": "Prototipo: idempotencia no admite contenido distinto",
+    "sql": "SELECT qa.identity(1); SET LOCAL ROLE authenticated; SELECT qa.grant_access(qa.id(79),qa.id(41),qa.id(35),qa.id(51),qa.id(920)); SELECT qa.grant_access(qa.id(79),qa.id(41),qa.id(34),qa.id(51),qa.id(920));",
+    "sqlstate": "23505"
+  },
+  {
+    "nombre": "Prototipo: paciente no concede recurso ajeno",
+    "sql": "SELECT qa.identity(1); SET LOCAL ROLE authenticated; SELECT qa.grant_access(qa.id(79),qa.id(41),qa.id(35),qa.id(53),qa.id(920));",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Prototipo: fallo de auditoría impide entregar historial",
+    "sql": "SET LOCAL qa.fail_audit='yes'; SELECT qa.identity(4); SET LOCAL ROLE authenticated; SELECT qa.history(qa.id(41),qa.id(34),qa.id(930));",
+    "sqlstate": "58000"
+  },
+  {
+    "nombre": "Prototipo: auditoría denegada persiste sin datos clínicos",
+    "sql": "SELECT qa.identity(5); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(35),qa.id(901)); ASSERT (r->>'allowed')::boolean=false; ASSERT (r->>'count')::integer=0; END $$; RESET ROLE; DO $$ BEGIN ASSERT (SELECT outcome='denied' AND patient_id IS NULL AND grant_id IS NULL FROM clinical.clinical_access_audit WHERE request_id=qa.id(901)); END $$;"
+  },
+  {
+    "nombre": "Prototipo: auditoría permitida antes de respuesta",
+    "sql": "SELECT qa.identity(4); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=true; ASSERT (r->>'count')::integer=1; END $$; RESET ROLE; DO $$ BEGIN ASSERT (SELECT count(*)=1 FROM clinical.clinical_access_audit WHERE request_id=qa.id(901) AND outcome='allowed'); END $$;"
+  },
+  {
+    "nombre": "Prototipo: auditoría no admite edición",
+    "sql": "SELECT qa.identity(4); SET LOCAL ROLE authenticated; DO $$ DECLARE r jsonb; BEGIN r:=qa.history(qa.id(41),qa.id(34),qa.id(901)); ASSERT (r->>'allowed')::boolean=true; ASSERT (r->>'count')::integer=1; END $$; RESET ROLE; UPDATE clinical.clinical_access_audit SET reason_code='FORGED';",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Prototipo: fallo de auditoría revierte revocación",
+    "sql": "SELECT qa.identity(1); SET LOCAL qa.fail_audit='yes'; DO $$ BEGIN BEGIN PERFORM qa.revoke_grant(qa.id(71),qa.id(940)); RAISE EXCEPTION 'FALTA_RECHAZO'; EXCEPTION WHEN SQLSTATE '58000' THEN NULL; END; ASSERT (SELECT revoked_at IS NULL FROM clinical.clinical_access_grants WHERE id=qa.id(71)); END $$;"
+  }
+]

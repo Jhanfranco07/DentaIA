@@ -1,0 +1,37 @@
+{
+  "fecha": "2026-11-03",
+  "entorno": "PostgreSQL local; misma plantilla con UUID de fixtures locales; claims SQL, no JWT",
+  "pruebas": [
+    {
+      "nombre": "Actor permitido y dataset acotado se habilita bajo rol tecnico",
+      "aprobada": true
+    },
+    {
+      "nombre": "Actor ajeno falla cerrado",
+      "aprobada": true
+    },
+    {
+      "nombre": "Sin actor falla cerrado",
+      "aprobada": true
+    },
+    {
+      "nombre": "Atencion no inventariada bloquea dataset",
+      "aprobada": true
+    },
+    {
+      "nombre": "Entrada no inventariada bloquea dataset",
+      "aprobada": true
+    },
+    {
+      "nombre": "Documento no inventariado bloquea dataset",
+      "aprobada": true
+    },
+    {
+      "nombre": "Solicitud fuera de inventario bloquea dataset",
+      "aprobada": true
+    }
+  ],
+  "aprobadas": 7,
+  "fallidas": 0,
+  "configuracionOriginalCerrada": true
+}

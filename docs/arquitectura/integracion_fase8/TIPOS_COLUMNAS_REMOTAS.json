@@ -1,0 +1,346 @@
+[
+  {
+    "type": "uuid",
+    "table": "appointment_requests",
+    "column": "id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "uuid",
+    "table": "appointment_requests",
+    "column": "user_id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "uuid",
+    "table": "appointment_requests",
+    "column": "dentist_id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "appointment_requests",
+    "column": "contact_name",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "appointment_requests",
+    "column": "contact_email",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "date",
+    "table": "appointment_requests",
+    "column": "preferred_date",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "time without time zone",
+    "table": "appointment_requests",
+    "column": "preferred_time",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "appointment_requests",
+    "column": "message",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "appointment_requests",
+    "column": "status",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "boolean",
+    "table": "appointment_requests",
+    "column": "is_demo",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "timestamp with time zone",
+    "table": "appointment_requests",
+    "column": "created_at",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "uuid",
+    "table": "dental_photos",
+    "column": "id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "uuid",
+    "table": "dental_photos",
+    "column": "user_id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "uuid",
+    "table": "dental_photos",
+    "column": "consent_id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dental_photos",
+    "column": "bucket_id",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dental_photos",
+    "column": "object_path",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dental_photos",
+    "column": "original_filename",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dental_photos",
+    "column": "mime_type",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "bigint",
+    "table": "dental_photos",
+    "column": "size_bytes",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "timestamp with time zone",
+    "table": "dental_photos",
+    "column": "created_at",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "uuid",
+    "table": "dentists",
+    "column": "id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dentists",
+    "column": "slug",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dentists",
+    "column": "name",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dentists",
+    "column": "specialty",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dentists",
+    "column": "district",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "numeric(10,2)",
+    "table": "dentists",
+    "column": "consultation_price",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dentists",
+    "column": "currency",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dentists",
+    "column": "initials",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dentists",
+    "column": "avatar_color",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "dentists",
+    "column": "description",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "boolean",
+    "table": "dentists",
+    "column": "is_demo",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "boolean",
+    "table": "dentists",
+    "column": "is_active",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "timestamp with time zone",
+    "table": "dentists",
+    "column": "created_at",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "uuid",
+    "table": "patient_consents",
+    "column": "id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "uuid",
+    "table": "patient_consents",
+    "column": "user_id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "patient_consents",
+    "column": "policy_version",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "patient_consents",
+    "column": "consent_text",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "patient_consents",
+    "column": "purpose",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "timestamp with time zone",
+    "table": "patient_consents",
+    "column": "accepted_at",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "timestamp with time zone",
+    "table": "patient_consents",
+    "column": "revoked_at",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "uuid",
+    "table": "profiles",
+    "column": "id",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  },
+  {
+    "type": "text",
+    "table": "profiles",
+    "column": "full_name",
+    "identity": "",
+    "collation": "\"default\"",
+    "generated": ""
+  },
+  {
+    "type": "timestamp with time zone",
+    "table": "profiles",
+    "column": "created_at",
+    "identity": "",
+    "collation": null,
+    "generated": ""
+  }
+]

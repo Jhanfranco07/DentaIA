@@ -1,0 +1,250 @@
+[
+  {
+    "id": "H01",
+    "severidad": "Media",
+    "estado": "Corregido",
+    "hallazgo": "Ubicación del paquete",
+    "detalle": "La documentación estaba en docs/evidencias/arquitectura, no en la ruta indicada. Se conserva intacta y se crea esta copia auditada.",
+    "evidencia": "README.md"
+  },
+  {
+    "id": "H02",
+    "severidad": "Alta",
+    "estado": "Corregido en diseño",
+    "hallazgo": "FK reales omitidas del JSON",
+    "detalle": "Los 43 campos existentes tenían fk nulo aunque el catálogo incluye seis FK, una compuesta. Se modelan explícitamente sin inventar relaciones administrativas.",
+    "evidencia": "MODELO_DATOS.json"
+  },
+  {
+    "id": "H03",
+    "severidad": "Media",
+    "estado": "Corregido",
+    "hallazgo": "Diccionario semántico insuficiente",
+    "detalle": "Las descripciones repetían el nombre del campo. Se explican identidad, contexto, procedencia, disponibilidad, valores nulos y autorización.",
+    "evidencia": "DICCIONARIO_DATOS.md"
+  },
+  {
+    "id": "H04",
+    "severidad": "Alta",
+    "estado": "Corregido",
+    "hallazgo": "DER general incompleto",
+    "detalle": "El general omitía parte de administración, datasets y evaluación. Ahora representa 29 entidades de negocio y Auth como entidad externa.",
+    "evidencia": "diagramas/04-der-general.mmd"
+  },
+  {
+    "id": "H05",
+    "severidad": "Media",
+    "estado": "Corregido",
+    "hallazgo": "Cardinalidades divergentes",
+    "detalle": "UNIQUE(job_id) implica como máximo un resultado; UNIQUE(replaces_id) implica cadena sin bifurcación. Se incluyen opcionalidades y FK/PK combinadas.",
+    "evidencia": "DIAGRAMAS.md"
+  },
+  {
+    "id": "H06",
+    "severidad": "Alta",
+    "estado": "Propuesta corregida",
+    "hallazgo": "Publicación obligatoria del profesional",
+    "detalle": "dentist_id NOT NULL forzaba una ficha pública antes de verificar. Se propone nullable y UNIQUE; no se cambia CHECK is_demo existente ni se crea un segundo perfil con nombre duplicado.",
+    "evidencia": "MODELO_LOGICO.md"
+  },
+  {
+    "id": "H07",
+    "severidad": "Alta",
+    "estado": "Propuesta corregida",
+    "hallazgo": "Episodios de membresía",
+    "detalle": "UNIQUE(clinic_id,professional_id) impedía terminar y crear otra pertenencia a la misma clínica. Se propone UNIQUE con valid_from y exclusión de solapamiento activo.",
+    "evidencia": "borradores_sql/01_clinical_identidad.sql"
+  },
+  {
+    "id": "H08",
+    "severidad": "Crítica de diseño",
+    "estado": "Borrador preparado",
+    "hallazgo": "Concesión con atención de otro paciente",
+    "detalle": "Dos FK simples no garantizan el mismo paciente. Un trigger bloquea y compara ambos padres; los RPC siguen pendientes y cerrados.",
+    "evidencia": "borradores_sql/04_clinical_integridad.sql"
+  },
+  {
+    "id": "H09",
+    "severidad": "Alta",
+    "estado": "Propuesta corregida",
+    "hallazgo": "Correcciones sin motivo ni origen invariante",
+    "detalle": "Se añaden dos correction_reason, FK compuestas de origen, UNIQUE(replaces_id), detección de ciclos y registros append-only.",
+    "evidencia": "borradores_sql/02_clinical_contenido.sql"
+  },
+  {
+    "id": "H10",
+    "severidad": "Media",
+    "estado": "Corregido",
+    "hallazgo": "Retención genérica falsa",
+    "detalle": "No todas las tablas usan RESTRICT: se documentan CASCADE/NO ACTION reales y la ausencia deliberada de FK en dentaia_admin.",
+    "evidencia": "DICCIONARIO_DATOS.md"
+  },
+  {
+    "id": "H11",
+    "severidad": "Alta",
+    "estado": "Pendiente de trazabilidad",
+    "hallazgo": "Administración y despliegue",
+    "detalle": "La validación manual declarada se acepta como tal; el catálogo actual no contiene dentaia_admin y solo registra dos migraciones de octubre. No atribuir esa validación a un despliegue aquí no observado.",
+    "evidencia": "FUENTES_Y_EVIDENCIAS.md"
+  },
+  {
+    "id": "H12",
+    "severidad": "Alta",
+    "estado": "Pendiente de integración",
+    "hallazgo": "Verificación y rol profesional",
+    "detalle": "status=verified no concede Auth odontologo. La concesión está bloqueada en DI-151 y requiere una ampliación revisada del protocolo, no un trigger que otorgue roles.",
+    "evidencia": "BRECHAS_Y_PLAN_IMPLEMENTACION.md"
+  },
+  {
+    "id": "H13",
+    "severidad": "Alta",
+    "estado": "Contrato propuesto",
+    "hallazgo": "Solicitudes del profesional",
+    "detalle": "La RLS actual solo permite al paciente sus solicitudes. Se propone lectura controlada por professional_accounts.user_id y dentist_id; no se modifica la política actual. No hay clínica destino.",
+    "evidencia": "CONTRATOS_API.md"
+  },
+  {
+    "id": "H14",
+    "severidad": "Alta",
+    "estado": "Borrador preparado",
+    "hallazgo": "Documentos y rutas privadas",
+    "detalle": "Se valida la ruta contra paciente clínico y atención; la descarga debe reautorizar y auditar por ID. No guardar URL pública/firmada ni aceptar rutas libres.",
+    "evidencia": "borradores_sql/04_clinical_integridad.sql"
+  },
+  {
+    "id": "H15",
+    "severidad": "Alta",
+    "estado": "Contrato propuesto",
+    "hallazgo": "Idempotencia clínica sin almacenamiento definido",
+    "detalle": "La clave UUID se mapea al id de la concesión y se vincula al paciente derivado; comparar todos los parámetros y recursos. No se reactiva un permiso por reintento.",
+    "evidencia": "PROTOCOLO_RPC_Y_CONCURRENCIA.md"
+  },
+  {
+    "id": "H16",
+    "severidad": "Crítica de diseño",
+    "estado": "Protocolo propuesto",
+    "hallazgo": "Revocación concurrente ambigua",
+    "detalle": "Se define orden de bloqueos, linealización y revalidación por página/descarga. Una lectura ya autorizada puede acabar; no se promete retirar bytes ya vistos.",
+    "evidencia": "PROTOCOLO_RPC_Y_CONCURRENCIA.md"
+  },
+  {
+    "id": "H17",
+    "severidad": "Crítica de diseño",
+    "estado": "Cerrado por defecto",
+    "hallazgo": "Bypass de auditoría por SELECT",
+    "detalle": "Los borradores activan RLS y revocan acceso directo incluso a service_role. No se conceden RPC clínicos o de IA hasta implementar y validar el servicio auditado.",
+    "evidencia": "POLITICAS_POR_TABLA.md"
+  },
+  {
+    "id": "H18",
+    "severidad": "Alta",
+    "estado": "Propuesta corregida",
+    "hallazgo": "IA impediría borrar fotografías existentes",
+    "detalle": "FK RESTRICT hacia foto bloquearía el algoritmo actual. Se propone CASCADE solo del subárbol privado de análisis; datasets no se vinculan a fotos personales.",
+    "evidencia": "borradores_sql/06_ia_analisis.sql"
+  },
+  {
+    "id": "H19",
+    "severidad": "Alta",
+    "estado": "Propuesta corregida",
+    "hallazgo": "Lease descrito sin columnas",
+    "detalle": "Se añaden lease_id, lease_expires_at y attempt_count. Se validan transiciones; el trabajador y su RPC mínimo siguen futuros.",
+    "evidencia": "MODELO_DATOS.json"
+  },
+  {
+    "id": "H20",
+    "severidad": "Alta",
+    "estado": "Propuesta corregida",
+    "hallazgo": "Resultado no evaluable exigía clase",
+    "detalle": "label pasa a nullable y un CHECK exige label/score nulos cuando no es evaluable. No se fabrica un diagnóstico.",
+    "evidencia": "borradores_sql/06_ia_analisis.sql"
+  },
+  {
+    "id": "H21",
+    "severidad": "Alta",
+    "estado": "Propuesta corregida",
+    "hallazgo": "Fuga de sujetos entre splits",
+    "detalle": "Una comprobación de manifiesto no impide una carrera de inserciones. EXCLUDE con btree_gist impide distinto split por dataset/sujeto. No demuestra independencia entre datasets distintos.",
+    "evidencia": "borradores_sql/05_ia_investigacion.sql"
+  },
+  {
+    "id": "H22",
+    "severidad": "Alta",
+    "estado": "Borrador preparado",
+    "hallazgo": "Matriz de confusión sin estructura",
+    "detalle": "Se especifica matriz cuadrada, conteos enteros no negativos, suma sample_size y etiquetas en config.labels. Los valores científicos no se inventan.",
+    "evidencia": "borradores_sql/07_ia_integridad.sql"
+  },
+  {
+    "id": "H23",
+    "severidad": "Alta",
+    "estado": "Borrador preparado",
+    "hallazgo": "Modelo evaluated sin evaluación",
+    "detalle": "El borrador exige precision, recall, f1 y matriz en una ejecución test; dataset/artefactos se congelan. Esto no demuestra validez clínica ni entrenamiento existente.",
+    "evidencia": "borradores_sql/07_ia_integridad.sql"
+  },
+  {
+    "id": "H24",
+    "severidad": "Media",
+    "estado": "Corregido en contrato",
+    "hallazgo": "Errores y recencia del GET de roles",
+    "detalle": "La misma función SQL exige TOTP reciente también para consultar revisión y puede devolver 409. Se añaden esos límites y errores comunes 500/503.",
+    "evidencia": "CONTRATOS_API.md"
+  },
+  {
+    "id": "H25",
+    "severidad": "Media",
+    "estado": "Corregido y renderizado",
+    "hallazgo": "Sintaxis Mermaid",
+    "detalle": "El motor reprodujo error en la secuencia 10 por punto y coma. Se corrigen separadores en cinco secuencias y se renderizan los 17 diagramas.",
+    "evidencia": "DIAGRAMAS.md"
+  },
+  {
+    "id": "H26",
+    "severidad": "Media",
+    "estado": "Actualizado",
+    "hallazgo": "Ref de panel paciente desactualizada",
+    "detalle": "La rama remota avanzó a ac545b5d; se revisó su shell cliente. No se presume guard SSR ni integración en main.",
+    "evidencia": "FUENTES_Y_EVIDENCIAS.md"
+  },
+  {
+    "id": "H27",
+    "severidad": "Alta",
+    "estado": "Decisión pendiente",
+    "hallazgo": "Estados y límites nuevos",
+    "detalle": "Los CHECK y límites textuales propuestos no son acuerdos del equipo. Se requiere aceptación del vocabulario, finalidad y conservación antes de producción.",
+    "evidencia": "DECISIONES_ARQUITECTURA.md"
+  },
+  {
+    "id": "H28",
+    "severidad": "Alta",
+    "estado": "Decisión pendiente",
+    "hallazgo": "Identidad estable no significa persona deduplicada",
+    "detalle": "UNIQUE(user_id) estabiliza la cuenta, no resuelve una misma persona con dos cuentas ni interoperabilidad externa. No inferir identidad por correo/DNI no aprobados.",
+    "evidencia": "MODELO_CONCEPTUAL.md"
+  },
+  {
+    "id": "H29",
+    "severidad": "Alta",
+    "estado": "Decisión pendiente",
+    "hallazgo": "Retención y baja de Auth clínica",
+    "detalle": "Las FK RESTRICT clínicas bloquearían borrados de identidad con historia. Hace falta política de conservación/anonimización y soporte, sin inventar plazos legales.",
+    "evidencia": "SEGURIDAD_Y_ROLES.md"
+  },
+  {
+    "id": "H30",
+    "severidad": "Alta",
+    "estado": "No ejecutado",
+    "hallazgo": "Falta ensayo SQL efectivo",
+    "detalle": "Docker no tiene daemon disponible. El AST y el render no prueban integridad en ejecución, RLS efectiva, RPC ni carreras de PostgreSQL.",
+    "evidencia": "PRUEBAS_Y_LIMITACIONES.md"
+  },
+  {
+    "id": "H31",
+    "severidad": "Media",
+    "estado": "Contrato propuesto",
+    "hallazgo": "Frontera entre DTO real y sintético",
+    "detalle": "El proveedor de Anelis usa caso/entries/origen y escenario sintético; no debe recibir un JSON real con otros nombres sin adaptador ni aceptar escenario como autorización. Se versiona clinical.v1.",
+    "evidencia": "CONTRATOS_API.md"
+  }
+]

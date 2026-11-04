@@ -1,0 +1,127 @@
+erDiagram
+  clinical_clinics {
+    uuid id PK
+    text name
+    text location
+    text status
+    timestamptz created_at
+  }
+  clinical_professional_accounts {
+    uuid id PK
+    uuid user_id FK
+    uuid dentist_id FK
+    text status
+    timestamptz created_at
+  }
+  clinical_professional_verifications {
+    uuid id PK
+    uuid professional_id FK
+    uuid reviewed_by FK
+    text decision
+    text reference
+    text reason
+    timestamptz reviewed_at
+  }
+  clinical_clinic_memberships {
+    uuid id PK
+    uuid clinic_id FK
+    uuid professional_id FK
+    text status
+    timestamptz valid_from
+    timestamptz valid_until
+  }
+  clinical_patient_records {
+    uuid id PK
+    uuid user_id FK
+    text status
+    timestamptz created_at
+  }
+  clinical_clinical_encounters {
+    uuid id PK
+    uuid patient_id FK
+    uuid membership_id FK
+    timestamptz attended_at
+    timestamptz recorded_at
+    text status
+    uuid replaces_id FK
+    text correction_reason
+  }
+  clinical_clinical_entries {
+    uuid id PK
+    uuid encounter_id FK
+    text kind FK
+    text information_state
+    text description
+    text code_system
+    text code
+    timestamptz recorded_at
+    uuid replaces_id FK
+    text correction_reason
+  }
+  clinical_clinical_documents {
+    uuid id PK
+    uuid encounter_id FK
+    text kind
+    text title
+    date exam_date
+    text availability
+    text bucket_id
+    text object_path
+    text mime_type
+    bigint size_bytes
+    timestamptz created_at
+  }
+  clinical_clinical_access_grants {
+    uuid id PK
+    uuid patient_id FK
+    uuid membership_id FK
+    text purpose
+    text policy_version
+    timestamptz granted_at
+    timestamptz expires_at
+    timestamptz revoked_at
+    text scope_mode
+  }
+  clinical_clinical_grant_resources {
+    uuid grant_id PK,FK
+    uuid encounter_id PK,FK
+  }
+  clinical_clinical_access_audit {
+    uuid id PK
+    uuid request_id
+    uuid actor_user_id FK
+    uuid patient_id FK
+    uuid membership_id FK
+    uuid grant_id FK
+    text operation
+    text outcome
+    text reason_code
+    timestamptz occurred_at
+  }
+  auth_users {
+    uuid id PK
+  }
+  auth_users ||--o| clinical_professional_accounts : "user_id"
+  public_dentists {
+    uuid id PK
+  }
+  public_dentists o|--o| clinical_professional_accounts : "dentist_id"
+  clinical_professional_accounts ||--o{ clinical_professional_verifications : "professional_id"
+  auth_users ||--o{ clinical_professional_verifications : "reviewed_by"
+  clinical_clinics ||--o{ clinical_clinic_memberships : "clinic_id"
+  clinical_professional_accounts ||--o{ clinical_clinic_memberships : "professional_id"
+  auth_users ||--o| clinical_patient_records : "user_id"
+  clinical_patient_records ||--o{ clinical_clinical_encounters : "patient_id"
+  clinical_clinic_memberships ||--o{ clinical_clinical_encounters : "membership_id"
+  clinical_clinical_encounters o|--o| clinical_clinical_encounters : "replaces_id,patient_id,membership_id"
+  clinical_clinical_encounters ||--o{ clinical_clinical_entries : "encounter_id"
+  clinical_clinical_entries o|--o| clinical_clinical_entries : "replaces_id,encounter_id,kind"
+  clinical_clinical_encounters ||--o{ clinical_clinical_documents : "encounter_id"
+  clinical_patient_records ||--o{ clinical_clinical_access_grants : "patient_id"
+  clinical_clinic_memberships ||--o{ clinical_clinical_access_grants : "membership_id"
+  clinical_clinical_access_grants ||--o{ clinical_clinical_grant_resources : "grant_id"
+  clinical_clinical_encounters ||--o{ clinical_clinical_grant_resources : "encounter_id"
+  auth_users o|--o{ clinical_clinical_access_audit : "actor_user_id"
+  clinical_patient_records o|--o{ clinical_clinical_access_audit : "patient_id"
+  clinical_clinic_memberships o|--o{ clinical_clinical_access_audit : "membership_id"
+  clinical_clinical_access_grants o|--o{ clinical_clinical_access_audit : "grant_id"

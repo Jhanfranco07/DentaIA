@@ -1,0 +1,55 @@
+{
+  "fecha": "2026-11-03",
+  "entorno": "build local NODE_ENV=production; flag=true",
+  "pruebas": [
+    {
+      "method": "POST",
+      "path": "/api/clinical/access-grants",
+      "http": 404,
+      "aprobada": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/clinical/access-grants/40000000-0000-4000-8000-000000000071/revoke",
+      "http": 404,
+      "aprobada": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/clinical/patients/40000000-0000-4000-8000-000000000041/history",
+      "http": 404,
+      "aprobada": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/clinical/patients/me",
+      "http": 404,
+      "aprobada": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/clinical/access-grants",
+      "http": 404,
+      "aprobada": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/professional/me",
+      "http": 404,
+      "aprobada": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/professional/patients",
+      "http": 404,
+      "aprobada": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/professional/requests",
+      "http": 404,
+      "aprobada": true
+    }
+  ],
+  "aprobadas": 8
+}
