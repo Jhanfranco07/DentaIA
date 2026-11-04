@@ -214,6 +214,66 @@
   padding-top: 24px;
 }
 
+.resultadoEducativo {
+  display: grid;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+
+.resultadoEducativo h3,
+.resultadoEducativo h4 {
+  margin: 0;
+}
+
+.resultadoEducativo h3 {
+  font-size: 20px;
+}
+
+.resultadoEducativo h4 {
+  margin-bottom: 9px;
+  font-size: 14px;
+}
+
+.listaEducativa {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.avisoEducativo {
+  margin: 0;
+  padding: 14px;
+  border: 1px solid #d6e8e8;
+  border-radius: 10px;
+  background: #f1f7f7;
+  color: #24594d;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.fuenteEducativa {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.fuenteEducativa dt {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.fuenteEducativa dd {
+  margin: 2px 0 0;
+}
+
 .resumenCaso {
   display: flex;
   align-items: flex-start;
