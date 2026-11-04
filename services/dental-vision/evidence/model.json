@@ -1,0 +1,21 @@
+{
+  "repository": "https://github.com/Eeman1113/dental_study",
+  "commit": "f02596a0227b9eaf767b955cd67196236111a3d5",
+  "path": "best.pt",
+  "download_url": "https://media.githubusercontent.com/media/Eeman1113/dental_study/f02596a0227b9eaf767b955cd67196236111a3d5/best.pt",
+  "git_blob_bytes": 133,
+  "real_object_bytes": 80923921,
+  "sha256": "7d5f7dcf616f1febbbb28f2552f9d8a2c3e31e90b3c5b03bf26114502dea621d",
+  "lfs_oid_matches_download": true,
+  "archive_entries": 989,
+  "checkpoint_metadata_observed_without_unpickling": {
+    "architecture": "yolo11m.yaml",
+    "ultralytics_version": "8.4.104",
+    "date": "2026-07-24T10:02:55.811342",
+    "license": "AGPL-3.0 (https://ultralytics.com/license)",
+    "train_args_imgsz": 1280
+  },
+  "dataset_class_map": {"0": "d", "1": "D"},
+  "poc_inference_imgsz": 640,
+  "clinical_performance_reproduced": false
+}

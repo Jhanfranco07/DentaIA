@@ -1,0 +1,188 @@
+{
+  "real_inference": true,
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.9",
+  "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "physical_cores": 10,
+  "device": "cpu",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torchvision": "0.26.0+cpu",
+    "ultralytics": "8.4.104",
+    "fastapi": "0.135.2",
+    "starlette": "1.10.0",
+    "Pillow": "12.1.1",
+    "numpy": "2.4.6"
+  },
+  "threads": 1,
+  "imgsz": 640,
+  "conf": 0.25,
+  "iou": 0.45,
+  "method": "TestClient HTTP in-process; wall latency excludes network; RSS sampled every 10ms; Windows is not Render Linux",
+  "requests": [
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "repeat": 0,
+      "cold": true,
+      "wall_ms": 246878.56730000023,
+      "rss_mib": 624.015625,
+      "result": {
+        "model": "dental_study-yolo11m",
+        "width": 2493,
+        "height": 1869,
+        "inference_ms": 246429.855,
+        "detections": [
+          {
+            "class_id": 0,
+            "class_name": "d",
+            "confidence": 0.4341244697570801,
+            "box": {
+              "x_min": 0.8481361269950867,
+              "y_min": 0.08097542822360992,
+              "x_max": 0.9947385787963867,
+              "y_max": 0.28546857833862305
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "repeat": 1,
+      "cold": false,
+      "wall_ms": 825.1922999997987,
+      "rss_mib": 618.234375,
+      "result": {
+        "model": "dental_study-yolo11m",
+        "width": 2493,
+        "height": 1869,
+        "inference_ms": 750.491,
+        "detections": [
+          {
+            "class_id": 0,
+            "class_name": "d",
+            "confidence": 0.4341244697570801,
+            "box": {
+              "x_min": 0.8481361269950867,
+              "y_min": 0.08097542822360992,
+              "x_max": 0.9947385787963867,
+              "y_max": 0.28546857833862305
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "repeat": 2,
+      "cold": false,
+      "wall_ms": 792.1318999997311,
+      "rss_mib": 628.9296875,
+      "result": {
+        "model": "dental_study-yolo11m",
+        "width": 2493,
+        "height": 1869,
+        "inference_ms": 742.882,
+        "detections": [
+          {
+            "class_id": 0,
+            "class_name": "d",
+            "confidence": 0.4341244697570801,
+            "box": {
+              "x_min": 0.8481361269950867,
+              "y_min": 0.08097542822360992,
+              "x_max": 0.9947385787963867,
+              "y_max": 0.28546857833862305
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "repeat": 3,
+      "cold": false,
+      "wall_ms": 814.733599999272,
+      "rss_mib": 629.09375,
+      "result": {
+        "model": "dental_study-yolo11m",
+        "width": 2493,
+        "height": 1869,
+        "inference_ms": 764.722,
+        "detections": [
+          {
+            "class_id": 0,
+            "class_name": "d",
+            "confidence": 0.4341244697570801,
+            "box": {
+              "x_min": 0.8481361269950867,
+              "y_min": 0.08097542822360992,
+              "x_max": 0.9947385787963867,
+              "y_max": 0.28546857833862305
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "repeat": 0,
+      "cold": false,
+      "wall_ms": 939.7857000003569,
+      "rss_mib": 631.9609375,
+      "result": {
+        "model": "dental_study-yolo11m",
+        "width": 3367,
+        "height": 2524,
+        "inference_ms": 779.276,
+        "detections": []
+      }
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "repeat": 1,
+      "cold": false,
+      "wall_ms": 878.4536000002845,
+      "rss_mib": 634.015625,
+      "result": {
+        "model": "dental_study-yolo11m",
+        "width": 3367,
+        "height": 2524,
+        "inference_ms": 792.915,
+        "detections": []
+      }
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "repeat": 2,
+      "cold": false,
+      "wall_ms": 865.5695999996169,
+      "rss_mib": 634.890625,
+      "result": {
+        "model": "dental_study-yolo11m",
+        "width": 3367,
+        "height": 2524,
+        "inference_ms": 781.443,
+        "detections": []
+      }
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "repeat": 3,
+      "cold": false,
+      "wall_ms": 863.6004999998477,
+      "rss_mib": 630.07421875,
+      "result": {
+        "model": "dental_study-yolo11m",
+        "width": 3367,
+        "height": 2524,
+        "inference_ms": 779.182,
+        "detections": []
+      }
+    }
+  ],
+  "load_seconds": 223.72042659999988,
+  "loaded_rss_mib": 405.3828125,
+  "peak_sampled_rss_mib": 724.3046875,
+  "warm_median_wall_ms": 844.3963999998232
+}

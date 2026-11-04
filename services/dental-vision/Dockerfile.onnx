@@ -1,0 +1,26 @@
+FROM python:3.11.9-slim AS base
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
+    OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /service
+
+FROM base AS exporter
+ENV YOLO_AUTOINSTALL=false YOLO_CONFIG_DIR=/tmp/dentaia-yolo
+COPY requirements.txt requirements-export.txt ./
+RUN pip install --no-cache-dir -r requirements-export.txt
+COPY app ./app
+COPY scripts/download_model.py scripts/export_onnx.py ./scripts/
+RUN mkdir -p evidence && python scripts/download_model.py && python scripts/export_onnx.py
+
+FROM base AS runtime
+ENV MODEL_BACKEND=onnx MODEL_PATH=models/best.onnx MODEL_MANIFEST_PATH=models/best.onnx.json
+COPY requirements-onnx.txt ./
+RUN pip install --no-cache-dir -r requirements-onnx.txt
+COPY app ./app
+COPY --from=exporter /service/models/best.onnx /service/models/best.onnx
+COPY --from=exporter /service/models/best.onnx.json /service/models/best.onnx.json
+RUN useradd --create-home vision && chown -R vision:vision /service
+USER vision
+EXPOSE 10000
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000} --workers 1 --limit-concurrency 4 --timeout-keep-alive 5 --no-access-log"]

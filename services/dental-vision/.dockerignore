@@ -1,0 +1,9 @@
+.venv
+.env*
+__pycache__
+.pytest_cache
+models
+evidence
+tests
+Ultralytics
+**/__pycache__

@@ -1,0 +1,23 @@
+{
+  "dataset": "https://doi.org/10.5281/zenodo.14827784",
+  "license": "CC-BY-4.0",
+  "license_metadata": "https://zenodo.org/api/records/14827784",
+  "attribution": "Ahmed, Ghori, Khalid, Nooruddin, Adnan, Lal and Umer; Aga Khan University, 2025",
+  "usage": "Unmodified public test photographs; technical smoke test only, not clinical validation",
+  "files": [
+    {
+      "name": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "url": "https://media.githubusercontent.com/media/Eeman1113/dental_study/f02596a0227b9eaf767b955cd67196236111a3d5/yolo_split/images/test/anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "sha256": "5dc8ba6309984f4c44050dc672051ccb2e60e66992a373910f9c225a9c483be4",
+      "bytes": 403020,
+      "modified": false
+    },
+    {
+      "name": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "url": "https://media.githubusercontent.com/media/Eeman1113/dental_study/f02596a0227b9eaf767b955cd67196236111a3d5/yolo_split/images/test/anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "sha256": "2f50d26eb8c907bc391432e1022c2240ec61010bba7fc65d1104cbbdc4905569",
+      "bytes": 452158,
+      "modified": false
+    }
+  ]
+}
