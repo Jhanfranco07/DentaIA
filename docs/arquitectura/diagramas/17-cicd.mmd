@@ -1,0 +1,10 @@
+flowchart TD
+  F["Push feature o PR a main"] --> CI["CI: npm ci, typecheck y build"]
+  F --> TE["Tests Node 22 aislados"]
+  PR["PR a main / push main / manual"] --> SE["Security: npm audit"]
+  CI --> RV["Revisión y decisión humana de integración"]
+  TE --> RV
+  SE --> RV
+  RV --> MA["main; integración futura autorizada"]
+  MA --> VE["Vercel: despliegue por integración observada"]
+  VE --> QA["Propuesto: smoke y observabilidad saneada"]

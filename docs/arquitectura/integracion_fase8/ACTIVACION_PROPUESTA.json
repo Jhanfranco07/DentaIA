@@ -1,0 +1,20 @@
+{
+  "fecha": "2026-11-03",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "estado": "PENDIENTE_AUTORIZACION_ADICIONAL",
+  "archivo": "docs/arquitectura/integracion_fase8/activacion/20261104010040_di36_activacion_sintetica_fase8.sql",
+  "sha256": "df245dfdc87021632aef53581db995cef7e440fc89e85bd25c1575391a013700",
+  "modifica": [
+    "clinical_service.configuration()"
+  ],
+  "rolesOPoliticasNuevas": false,
+  "usuariosExistentesModificados": false,
+  "actoresPermitidos": [
+    "798b53d9-9bfb-483b-8f6e-6d28403a1925",
+    "f244056c-e9bc-44e4-94d6-5b93e610429b",
+    "d3374749-74b2-4146-8c40-05a268d57af9",
+    "c7a44fd8-045b-4096-a1db-0df0b46f2969",
+    "42ce87d9-0b63-422c-9805-d25b2f681b71"
+  ],
+  "dataset": "fase8-synthetic-v1"
+}

@@ -1,0 +1,12 @@
+import test from'node:test';import assert from'node:assert/strict';
+import{configurarClinica,origenLocalAutorizado,cuentaAcademicaPermitida,DENTALIA_REF,DATASET_ACADEMICO}from'./ambiente.ts';
+const ids=[1,2,3,4,5].map(n=>'00000000-0000-4000-8000-'+String(n).padStart(12,'0'));
+const env={NODE_ENV:'development',DENTAIA_CLINICAL_HTTP_ENABLED:'true',DENTAIA_CLINICAL_TARGET:'dentalia_academic',DENTAIA_CLINICAL_ACADEMIC_ENABLED:'true',DENTAIA_CLINICAL_PROJECT_REF:DENTALIA_REF,DENTAIA_CLINICAL_SUPABASE_URL:`https://${DENTALIA_REF}.supabase.co`,DENTAIA_CLINICAL_SUPABASE_PUBLISHABLE_KEY:'sb_publishable_fixture',DENTAIA_CLINICAL_CURSOR_SECRET:'a'.repeat(43),DENTAIA_CLINICAL_DEMO_USER_IDS:ids.join(',')};
+test('Remoto solo con todos los flags, origen y allowlist exactos',()=>assert.equal(configurarClinica(env).valid,true));
+for(const key of ['DENTAIA_CLINICAL_ACADEMIC_ENABLED','DENTAIA_CLINICAL_PROJECT_REF','DENTAIA_CLINICAL_DEMO_USER_IDS'])test('Falta '+key+' falla cerrado',()=>assert.equal(configurarClinica({...env,[key]:''}).valid,false));
+for(const bad of ['https://otro.supabase.co','http://'+DENTALIA_REF+'.supabase.co','https://'+DENTALIA_REF+'.supabase.co/path','https://'+DENTALIA_REF+'.supabase.co?x=1'])test('Rechaza destino '+bad,()=>assert.equal(configurarClinica({...env,DENTAIA_CLINICAL_SUPABASE_URL:bad}).valid,false));
+for(const mode of [{NODE_ENV:'production'},{VERCEL:'1'},{VERCEL_ENV:'preview'}])test('Bloqueo de despliegue '+JSON.stringify(mode),()=>assert.equal(configurarClinica({...env,...mode}).enabled,false));
+test('Clave privilegiada no aceptada',()=>assert.equal(configurarClinica({...env,DENTAIA_CLINICAL_SUPABASE_PUBLISHABLE_KEY:'sb_secret_fixture'}).valid,false));
+test('Allowlist con duplicados no aceptada',()=>assert.equal(configurarClinica({...env,DENTAIA_CLINICAL_DEMO_USER_IDS:Array(5).fill(ids[0]).join(',')}).valid,false));
+test('Solo cuenta en allowlist y marcador app_metadata',()=>{assert.equal(cuentaAcademicaPermitida(ids[0],{dentaia_development:{dataset:DATASET_ACADEMICO}},ids),true);assert.equal(cuentaAcademicaPermitida(ids[0],{},ids),false);assert.equal(cuentaAcademicaPermitida('ajeno',{dentaia_development:{dataset:DATASET_ACADEMICO}},ids),false);});
+test('Host/origin local y sin cross-site',()=>{assert.equal(origenLocalAutorizado(new Request('http://localhost:3000/api/test')),true);assert.equal(origenLocalAutorizado(new Request('https://ejemplo.com/api/test')),false);assert.equal(origenLocalAutorizado(new Request('http://localhost:3000/api/test',{headers:{origin:'https://ajeno.test'}})),false);});

@@ -1,0 +1,986 @@
+TAP version 13
+# (node:547) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/administracion/api.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: consulta autorizada reutiliza el guard AAL2 y devuelve solo datos sintéticos privados
+ok 1 - consulta autorizada reutiliza el guard AAL2 y devuelve solo datos sintéticos privados
+  ---
+  duration_ms: 49.675522
+  type: 'test'
+  ...
+# Subtest: visitante, token inválido, paciente, odontólogo y AAL1 no llegan a consultar servicios
+ok 2 - visitante, token inválido, paciente, odontólogo y AAL1 no llegan a consultar servicios
+  ---
+  duration_ms: 5.722426
+  type: 'test'
+  ...
+# Subtest: consulta estricta: desconocidos, duplicados y formato de paginación se rechazan
+ok 3 - consulta estricta: desconocidos, duplicados y formato de paginación se rechazan
+  ---
+  duration_ms: 2.217818
+  type: 'test'
+  ...
+# Subtest: proyección de respuesta excluye campos privados adicionales de un proveedor
+ok 4 - proyección de respuesta excluye campos privados adicionales de un proveedor
+  ---
+  duration_ms: 2.782229
+  type: 'test'
+  ...
+# Subtest: propuesta autorizada es validación sin aplicar; la identidad procede del guard
+ok 5 - propuesta autorizada es validación sin aplicar; la identidad procede del guard
+  ---
+  duration_ms: 4.656369
+  type: 'test'
+  ...
+# Subtest: no se aceptan actor/autoridad del cliente, acciones de escritura ni promociones
+ok 6 - no se aceptan actor/autoridad del cliente, acciones de escritura ni promociones
+  ---
+  duration_ms: 2.21259
+  type: 'test'
+  ...
+# Subtest: JSON, tipo de contenido y tamaño de cuerpo se validan tras autorización
+ok 7 - JSON, tipo de contenido y tamaño de cuerpo se validan tras autorización
+  ---
+  duration_ms: 1.727237
+  type: 'test'
+  ...
+# Subtest: escenarios vacíos, errores de servicio y excepciones no filtran detalles
+ok 8 - escenarios vacíos, errores de servicio y excepciones no filtran detalles
+  ---
+  duration_ms: 6.931551
+  type: 'test'
+  ...
+# Subtest: provisión: preparar un resumen no escribe ni imprime datos personales/metadatos
+ok 9 - provisión: preparar un resumen no escribe ni imprime datos personales/metadatos
+  ---
+  duration_ms: 3.769209
+  type: 'test'
+  ...
+# Subtest: provisión: confirmación ausente, genérica o booleana no autoriza
+ok 10 - provisión: confirmación ausente, genérica o booleana no autoriza
+  ---
+  duration_ms: 1.02059
+  type: 'test'
+  ...
+# Subtest: provisión: objetivo privado ligado a la ejecución, sin UUID real embebido ni fallback CLI
+ok 11 - provisión: objetivo privado ligado a la ejecución, sin UUID real embebido ni fallback CLI
+  ---
+  duration_ms: 28.552525
+  type: 'test'
+  ...
+# Subtest: provisión: concesión confirmada preserva metadata anidada y exige nueva lectura
+ok 12 - provisión: concesión confirmada preserva metadata anidada y exige nueva lectura
+  ---
+  duration_ms: 0.633776
+  type: 'test'
+  ...
+# Subtest: provisión: otra identidad, proveedor inesperado, cuenta no confirmada o suspendida bloquean
+ok 13 - provisión: otra identidad, proveedor inesperado, cuenta no confirmada o suspendida bloquean
+  ---
+  duration_ms: 0.558503
+  type: 'test'
+  ...
+# Subtest: provisión: nunca sobrescribe roles o namespaces existentes distintos
+ok 14 - provisión: nunca sobrescribe roles o namespaces existentes distintos
+  ---
+  duration_ms: 0.501417
+  type: 'test'
+  ...
+# Subtest: provisión: estado ya asignado es idempotente sin PUT
+ok 15 - provisión: estado ya asignado es idempotente sin PUT
+  ---
+  duration_ms: 0.184188
+  type: 'test'
+  ...
+# Subtest: provisión: cambio durante confirmación cancela sin escribir
+ok 16 - provisión: cambio durante confirmación cancela sin escribir
+  ---
+  duration_ms: 0.467686
+  type: 'test'
+  ...
+# Subtest: provisión: un update aparentemente correcto no basta sin lectura posterior coincidente
+ok 17 - provisión: un update aparentemente correcto no basta sin lectura posterior coincidente
+  ---
+  duration_ms: 0.415467
+  type: 'test'
+  ...
+# Subtest: provisión: respuesta perdida se comprueba con GET, sin reintento ni rollback
+ok 18 - provisión: respuesta perdida se comprueba con GET, sin reintento ni rollback
+  ---
+  duration_ms: 0.447485
+  type: 'test'
+  ...
+# Subtest: provisión: fallo de lectura posterior produce estado incierto, sin filtrar errores
+ok 19 - provisión: fallo de lectura posterior produce estado incierto, sin filtrar errores
+  ---
+  duration_ms: 0.812707
+  type: 'test'
+  ...
+# Subtest: provisión: transporte SDK real restringe proyecto, UUID, payload y número de escrituras con fetch ficticio
+ok 20 - provisión: transporte SDK real restringe proyecto, UUID, payload y número de escrituras con fetch ficticio
+  ---
+  duration_ms: 3.195242
+  type: 'test'
+  ...
+# (node:563) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/administracion/cambios-roles.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: contrato de cambio estricto: rechaza campos de autoridad, metadatos y revisiones inválidas
+ok 21 - contrato de cambio estricto: rechaza campos de autoridad, metadatos y revisiones inválidas
+  ---
+  duration_ms: 2.306791
+  type: 'test'
+  ...
+# Subtest: transiciones de paciente preservan roles independientes y revocar el último elimina la asignación
+ok 22 - transiciones de paciente preservan roles independientes y revocar el último elimina la asignación
+  ---
+  duration_ms: 0.234034
+  type: 'test'
+  ...
+# Subtest: cambios propios, superusuario objetivo y concesiones no aprobadas se deniegan
+ok 23 - cambios propios, superusuario objetivo y concesiones no aprobadas se deniegan
+  ---
+  duration_ms: 0.140081
+  type: 'test'
+  ...
+# Subtest: promoción administrativa requiere aprobación independiente y MFA del objetivo; protege último superusuario
+ok 24 - promoción administrativa requiere aprobación independiente y MFA del objetivo; protege último superusuario
+  ---
+  duration_ms: 1.088353
+  type: 'test'
+  ...
+# Subtest: aprobación administrativa no sustituye verificación profesional; sí permite revocar un rol existente
+ok 25 - aprobación administrativa no sustituye verificación profesional; sí permite revocar un rol existente
+  ---
+  duration_ms: 0.41063
+  type: 'test'
+  ...
+# Subtest: API reutiliza DI-150 y transmite únicamente contexto verificado, transición y clave
+ok 26 - API reutiliza DI-150 y transmite únicamente contexto verificado, transición y clave
+  ---
+  duration_ms: 35.997411
+  type: 'test'
+  ...
+# Subtest: sin sesión, paciente, odontólogo, AAL1 y fallo de Auth no acceden al proveedor
+ok 27 - sin sesión, paciente, odontólogo, AAL1 y fallo de Auth no acceden al proveedor
+  ---
+  duration_ms: 4.458059
+  type: 'test'
+  ...
+# Subtest: pérdida de autorización entre solicitudes se revalida y no reutiliza el permiso anterior
+ok 28 - pérdida de autorización entre solicitudes se revalida y no reutiliza el permiso anterior
+  ---
+  duration_ms: 1.117557
+  type: 'test'
+  ...
+# Subtest: protección de origen, tipo JSON, clave, longitud y entrada desconocida
+ok 29 - protección de origen, tipo JSON, clave, longitud y entrada desconocida
+  ---
+  duration_ms: 3.199319
+  type: 'test'
+  ...
+# Subtest: consulta de revisión es protegida y no admite campos adicionales o duplicados
+ok 30 - consulta de revisión es protegida y no admite campos adicionales o duplicados
+  ---
+  duration_ms: 1.549378
+  type: 'test'
+  ...
+# Subtest: respuestas perdidas y fallos de auditoría no se presentan como éxito ni rollback confirmado
+ok 31 - respuestas perdidas y fallos de auditoría no se presentan como éxito ni rollback confirmado
+  ---
+  duration_ms: 0.765445
+  type: 'test'
+  ...
+# Subtest: reintento conserva clave y contenido; transporte no decide por sí mismo si hubo commit
+ok 32 - reintento conserva clave y contenido; transporte no decide por sí mismo si hubo commit
+  ---
+  duration_ms: 1.217518
+  type: 'test'
+  ...
+# Subtest: solicitudes simultáneas llegan al puerto con su versión y claves distintas; no simula un lock PostgreSQL
+ok 33 - solicitudes simultáneas llegan al puerto con su versión y claves distintas; no simula un lock PostgreSQL
+  ---
+  duration_ms: 0.607857
+  type: 'test'
+  ...
+# Subtest: rechazos de la unidad transaccional se propagan sin afirmar aplicación
+ok 34 - rechazos de la unidad transaccional se propagan sin afirmar aplicación
+  ---
+  duration_ms: 1.622168
+  type: 'test'
+  ...
+# (node:571) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/administracion/cliente-panel-real.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: DI-152 cliente → endpoint real → guard → puerto simulado conserva filtros/paginación
+ok 35 - DI-152 cliente → endpoint real → guard → puerto simulado conserva filtros/paginación
+  ---
+  duration_ms: 44.309994
+  type: 'test'
+  ...
+# Subtest: DI-152 proveedor puede ajustar página fuera de rango sin fabricar resultados
+ok 36 - DI-152 proveedor puede ajustar página fuera de rango sin fabricar resultados
+  ---
+  duration_ms: 1.335345
+  type: 'test'
+  ...
+# Subtest: DI-152 búsqueda sin resultados mantiene página uno y vacío real del contrato
+ok 37 - DI-152 búsqueda sin resultados mantiene página uno y vacío real del contrato
+  ---
+  duration_ms: 0.851074
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"rol":"paciente"} antes del proveedor
+ok 38 - DI-152 rechazo {"rol":"paciente"} antes del proveedor
+  ---
+  duration_ms: 1.409538
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"rol":"odontologo"} antes del proveedor
+ok 39 - DI-152 rechazo {"rol":"odontologo"} antes del proveedor
+  ---
+  duration_ms: 0.737663
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"aal":"aal1"} antes del proveedor
+ok 40 - DI-152 rechazo {"aal":"aal1"} antes del proveedor
+  ---
+  duration_ms: 0.631523
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"invalid":true} antes del proveedor
+ok 41 - DI-152 rechazo {"invalid":true} antes del proveedor
+  ---
+  duration_ms: 0.362927
+  type: 'test'
+  ...
+# Subtest: DI-152 sesión ausente no llama al transporte y lectura apagada nunca se presenta exitosa
+ok 42 - DI-152 sesión ausente no llama al transporte y lectura apagada nunca se presenta exitosa
+  ---
+  duration_ms: 1.117116
+  type: 'test'
+  ...
+# Subtest: DI-152 validación de filtros/identidad impide peticiones manipuladas
+ok 43 - DI-152 validación de filtros/identidad impide peticiones manipuladas
+  ---
+  duration_ms: 0.295946
+  type: 'test'
+  ...
+# Subtest: DI-152 DTO conserva estados diferenciados y descarta datos extra
+ok 44 - DI-152 DTO conserva estados diferenciados y descarta datos extra
+  ---
+  duration_ms: 0.375517
+  type: 'test'
+  ...
+# Subtest: DI-152 no acepta una página de otra consulta ni resultados duplicados
+ok 45 - DI-152 no acepta una página de otra consulta ni resultados duplicados
+  ---
+  duration_ms: 0.630421
+  type: 'test'
+  ...
+# Subtest: DI-152 lectura posterior representa el nuevo estado después de respuesta confirmada
+ok 46 - DI-152 lectura posterior representa el nuevo estado después de respuesta confirmada
+  ---
+  duration_ms: 1.233833
+  type: 'test'
+  ...
+# Subtest: DI-152 resultado roles exige operación, código y clave correspondientes
+ok 47 - DI-152 resultado roles exige operación, código y clave correspondientes
+  ---
+  duration_ms: 0.166542
+  type: 'test'
+  ...
+# Subtest: DI-152 HTTP de error/HTML no expone cuerpos sensibles
+ok 48 - DI-152 HTTP de error/HTML no expone cuerpos sensibles
+  ---
+  duration_ms: 0.376789
+  type: 'test'
+  ...
+# (node:579) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/administracion/api.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: transporte lee token renovado por petición, usa rutas fijas y no cookies ni caché
+ok 49 - transporte lee token renovado por petición, usa rutas fijas y no cookies ni caché
+  ---
+  duration_ms: 37.290033
+  type: 'test'
+  ...
+# Subtest: cliente → API → guard AAL2 → proveedor; lista y valida sin modificar roles
+ok 50 - cliente → API → guard AAL2 → proveedor; lista y valida sin modificar roles
+  ---
+  duration_ms: 18.319119
+  type: 'test'
+  ...
+# Subtest: identidad del operador solo procede del servidor y rechaza propuesta propia
+ok 51 - identidad del operador solo procede del servidor y rechaza propuesta propia
+  ---
+  duration_ms: 4.267812
+  type: 'test'
+  ...
+# Subtest: paciente, odontólogo, AAL1, suspensión y token inválido no alcanzan el servicio
+ok 52 - paciente, odontólogo, AAL1, suspensión y token inválido no alcanzan el servicio
+  ---
+  duration_ms: 8.18915
+  type: 'test'
+  ...
+# Subtest: ausencia o fallo de sesión no envía una petición ni expone detalles
+ok 53 - ausencia o fallo de sesión no envía una petición ni expone detalles
+  ---
+  duration_ms: 0.917004
+  type: 'test'
+  ...
+# Subtest: estados HTTP y fallos de red producen errores seguros, sin fallback a fixtures
+ok 54 - estados HTTP y fallos de red producen errores seguros, sin fallback a fixtures
+  ---
+  duration_ms: 1.389166
+  type: 'test'
+  ...
+# Subtest: respuestas 200 malformadas, HTML, origen incoherente y paginación imposible se rechazan
+ok 55 - respuestas 200 malformadas, HTML, origen incoherente y paginación imposible se rechazan
+  ---
+  duration_ms: 3.328524
+  type: 'test'
+  ...
+# Subtest: proyección cliente excluye campos extra y conserva origen en listas vacías
+ok 56 - proyección cliente excluye campos extra y conserva origen en listas vacías
+  ---
+  duration_ms: 6.775476
+  type: 'test'
+  ...
+# Subtest: nunca da éxito a una escritura aplicada ni a respuestas de otro objetivo o rol
+ok 57 - nunca da éxito a una escritura aplicada ni a respuestas de otro objetivo o rol
+  ---
+  duration_ms: 4.377181
+  type: 'test'
+  ...
+# Subtest: filtros y JSON de propuesta se serializan sin autoridad aportada por el cliente
+ok 58 - filtros y JSON de propuesta se serializan sin autoridad aportada por el cliente
+  ---
+  duration_ms: 7.888871
+  type: 'test'
+  ...
+# Subtest: preflight sin red distingue preparación de verificación real y nunca serializa valores
+ok 59 - preflight sin red distingue preparación de verificación real y nunca serializa valores
+  ---
+  duration_ms: 3.73631
+  type: 'test'
+  ...
+# Subtest: preflight exige activación exacta, credencial dedicada, URL HTTPS y clave pública
+ok 60 - preflight exige activación exacta, credencial dedicada, URL HTTPS y clave pública
+  ---
+  duration_ms: 0.493706
+  type: 'test'
+  ...
+# Subtest: preflight detecta secretos modernos y service_role legacy bajo cualquier variable pública
+ok 61 - preflight detecta secretos modernos y service_role legacy bajo cualquier variable pública
+  ---
+  duration_ms: 1.603675
+  type: 'test'
+  ...
+# Subtest: cliente de escritura server-only y apagado sin credencial dedicada; no toma la de lectura
+ok 62 - cliente de escritura server-only y apagado sin credencial dedicada; no toma la de lectura
+  ---
+  duration_ms: 350.085834
+  type: 'test'
+  ...
+# Subtest: SDK instalado: solo POST al RPC fijo, sin sesión de navegador, caché ni redirecciones
+ok 63 - SDK instalado: solo POST al RPC fijo, sin sesión de navegador, caché ni redirecciones
+  ---
+  duration_ms: 215.910836
+  type: 'test'
+  ...
+# Subtest: errores RPC y campos privados inesperados fallan sin reenviar detalle
+ok 64 - errores RPC y campos privados inesperados fallan sin reenviar detalle
+  ---
+  duration_ms: 216.10643
+  type: 'test'
+  ...
+# Subtest: el adaptador privilegiado no se puede importar en contexto cliente
+ok 65 - el adaptador privilegiado no se puede importar en contexto cliente
+  ---
+  duration_ms: 142.566786
+  type: 'test'
+  ...
+# Subtest: sin opt-in o credencial dedicada falla sin red; no toma la clave del script de usuarios
+ok 66 - sin opt-in o credencial dedicada falla sin red; no toma la clave del script de usuarios
+  ---
+  duration_ms: 169.459876
+  type: 'test'
+  ...
+# Subtest: SDK real con fetch interceptado: GET Auth y profiles mínimo, sin caché, redirects ni métodos de escritura
+ok 67 - SDK real con fetch interceptado: GET Auth y profiles mínimo, sin caché, redirects ni métodos de escritura
+  ---
+  duration_ms: 175.221941
+  type: 'test'
+  ...
+# Subtest: SDK: errores de Auth/PostgreSQL y truncamiento no se convierten en lista vacía o perfiles ausentes
+ok 68 - SDK: errores de Auth/PostgreSQL y truncamiento no se convierten en lista vacía o perfiles ausentes
+  ---
+  duration_ms: 210.318256
+  type: 'test'
+  ...
+# Subtest: integración API → guard → proveedor → SDK Auth/profiles con transporte interceptado, sin servicio remoto
+ok 69 - integración API → guard → proveedor → SDK Auth/profiles con transporte interceptado, sin servicio remoto
+  ---
+  duration_ms: 200.337999
+  type: 'test'
+  ...
+# (node:680) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/administracion/mfa-local.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MFA local: consulta no muta y AAL2 informativo no concede administración
+ok 70 - MFA local: consulta no muta y AAL2 informativo no concede administración
+  ---
+  duration_ms: 39.739647
+  type: 'test'
+  ...
+# Subtest: MFA local: bandera y consentimiento se requieren antes de cualquier mutación
+ok 71 - MFA local: bandera y consentimiento se requieren antes de cualquier mutación
+  ---
+  duration_ms: 1.990029
+  type: 'test'
+  ...
+# Subtest: MFA local: identidad ausente o no confirmada no enrola ni consulta el endpoint
+ok 72 - MFA local: identidad ausente o no confirmada no enrola ni consulta el endpoint
+  ---
+  duration_ms: 1.296977
+  type: 'test'
+  ...
+# Subtest: MFA local: enrolamiento explícito proyecta solo QR aislado y factor ID, sin secret/uri/sesión
+ok 73 - MFA local: enrolamiento explícito proyecta solo QR aislado y factor ID, sin secret/uri/sesión
+  ---
+  duration_ms: 3.270125
+  type: 'test'
+  ...
+# Subtest: MFA local: preferir challenge de factor verificado, no enrolar duplicados
+ok 74 - MFA local: preferir challenge de factor verificado, no enrolar duplicados
+  ---
+  duration_ms: 3.483551
+  type: 'test'
+  ...
+# Subtest: MFA local: factor pendiente creado aquí se verifica legítimamente sin cambiar roles
+ok 75 - MFA local: factor pendiente creado aquí se verifica legítimamente sin cambiar roles
+  ---
+  duration_ms: 1.074231
+  type: 'test'
+  ...
+# Subtest: MFA local: código inválido y factor ajeno se rechazan
+ok 76 - MFA local: código inválido y factor ajeno se rechazan
+  ---
+  duration_ms: 0.67621
+  type: 'test'
+  ...
+# Subtest: MFA local: retomar un pendiente propio ya escaneado tras recargar exige challenge real del SDK
+ok 77 - MFA local: retomar un pendiente propio ya escaneado tras recargar exige challenge real del SDK
+  ---
+  duration_ms: 0.903724
+  type: 'test'
+  ...
+# Subtest: MFA local: una identidad distinta no verifica el factor pendiente anterior
+ok 78 - MFA local: una identidad distinta no verifica el factor pendiente anterior
+  ---
+  duration_ms: 0.43064
+  type: 'test'
+  ...
+# Subtest: MFA local: errores SDK sensibles no se propagan y no hay reintento automático
+ok 79 - MFA local: errores SDK sensibles no se propagan y no hay reintento automático
+  ---
+  duration_ms: 2.128292
+  type: 'test'
+  ...
+# Subtest: MFA local: respuesta SDK de verify sin AAL2 posterior no produce éxito
+ok 80 - MFA local: respuesta SDK de verify sin AAL2 posterior no produce éxito
+  ---
+  duration_ms: 0.62268
+  type: 'test'
+  ...
+# Subtest: MFA local: impedir doble enrolamiento y descartar una operación al cambiar sesión
+ok 81 - MFA local: impedir doble enrolamiento y descartar una operación al cambiar sesión
+  ---
+  duration_ms: 12.042389
+  type: 'test'
+  ...
+# Subtest: MFA local: token de otra identidad no se transmite al servidor y respuestas inválidas no autorizan
+ok 82 - MFA local: token de otra identidad no se transmite al servidor y respuestas inválidas no autorizan
+  ---
+  duration_ms: 1.386432
+  type: 'test'
+  ...
+# Subtest: MFA local: temporización de caducidad conservadora sin modificar la sesión remota
+ok 83 - MFA local: temporización de caducidad conservadora sin modificar la sesión remota
+  ---
+  duration_ms: 0.102214
+  type: 'test'
+  ...
+# Subtest: MFA local: sesión caducada impide enrolar y verificar antes de cualquier mutación
+ok 84 - MFA local: sesión caducada impide enrolar y verificar antes de cualquier mutación
+  ---
+  duration_ms: 0.402668
+  type: 'test'
+  ...
+# Subtest: MFA local: código rechazado y desafío caducado permiten reintento manual sin nuevo enrolamiento
+ok 85 - MFA local: código rechazado y desafío caducado permiten reintento manual sin nuevo enrolamiento
+  ---
+  duration_ms: 1.260282
+  type: 'test'
+  ...
+# Subtest: MFA local: proyecto TOTP deshabilitado, rate limit y sesión rechazada usan errores seguros
+ok 86 - MFA local: proyecto TOTP deshabilitado, rate limit y sesión rechazada usan errores seguros
+  ---
+  duration_ms: 0.291841
+  type: 'test'
+  ...
+# Subtest: MFA local: fallo de red de getUser no se confunde con expiración ni permite una mutación
+ok 87 - MFA local: fallo de red de getUser no se confunde con expiración ni permite una mutación
+  ---
+  duration_ms: 0.130246
+  type: 'test'
+  ...
+# Subtest: MFA local: QR SVG oficial, codificado y base64 se muestran como imagen sin publicar secret ni uri
+ok 88 - MFA local: QR SVG oficial, codificado y base64 se muestran como imagen sin publicar secret ni uri
+  ---
+  duration_ms: 0.495648
+  type: 'test'
+  ...
+# Subtest: MFA local: SVG inválido o servidor 401 no producen éxito ni filtración
+ok 89 - MFA local: SVG inválido o servidor 401 no producen éxito ni filtración
+  ---
+  duration_ms: 0.5432
+  type: 'test'
+  ...
+# Subtest: MFA local: SVG de SVGo con declaración XML y comentario inicial es válido
+ok 90 - MFA local: SVG de SVGo con declaración XML y comentario inicial es válido
+  ---
+  duration_ms: 0.301976
+  type: 'test'
+  ...
+# (node:688) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/administracion/servicios.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: listado paginado sintético, estable y sin información privada
+ok 91 - listado paginado sintético, estable y sin información privada
+  ---
+  duration_ms: 10.134619
+  type: 'test'
+  ...
+# Subtest: búsqueda por alias/UUID y filtros combinados no usan consultas SQL
+ok 92 - búsqueda por alias/UUID y filtros combinados no usan consultas SQL
+  ---
+  duration_ms: 6.543781
+  type: 'test'
+  ...
+# Subtest: consulta estricta rechaza tipos, roles, paginación y campos manipulables
+ok 93 - consulta estricta rechaza tipos, roles, paginación y campos manipulables
+  ---
+  duration_ms: 0.64271
+  type: 'test'
+  ...
+# Subtest: UUID inválido se rechaza; IDs sintéticos y UUID en mayúsculas se aceptan
+ok 94 - UUID inválido se rechaza; IDs sintéticos y UUID en mayúsculas se aceptan
+  ---
+  duration_ms: 0.292992
+  type: 'test'
+  ...
+# Subtest: roles permitidos se validan sin modificar el listado ni persistir cambios
+ok 95 - roles permitidos se validan sin modificar el listado ni persistir cambios
+  ---
+  duration_ms: 6.238304
+  type: 'test'
+  ...
+# Subtest: roles técnicos, visitante y payloads con campos de autoridad son rechazados
+ok 96 - roles técnicos, visitante y payloads con campos de autoridad son rechazados
+  ---
+  duration_ms: 0.347875
+  type: 'test'
+  ...
+# Subtest: autoasignación, promoción y cambios sobre superusuario requieren denegación
+ok 97 - autoasignación, promoción y cambios sobre superusuario requieren denegación
+  ---
+  duration_ms: 0.929352
+  type: 'test'
+  ...
+# Subtest: escenarios vacío/error son explícitos y la cuenta inexistente no se crea
+ok 98 - escenarios vacío/error son explícitos y la cuenta inexistente no se crea
+  ---
+  duration_ms: 4.001128
+  type: 'test'
+  ...
+# Subtest: los resultados son copias; un consumidor no altera el proveedor ni sus roles
+ok 99 - los resultados son copias; un consumidor no altera el proveedor ni sus roles
+  ---
+  duration_ms: 3.030159
+  type: 'test'
+  ...
+# (node:695) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/administracion/usuarios-reales.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: contrato real: perfiles propios del Auth ID, origen y proyección mínima
+ok 100 - contrato real: perfiles propios del Auth ID, origen y proyección mínima
+  ---
+  duration_ms: 3.902539
+  type: 'test'
+  ...
+# Subtest: perfil ausente no se crea ni se deduce desde user_metadata o correo
+ok 101 - perfil ausente no se crea ni se deduce desde user_metadata o correo
+  ---
+  duration_ms: 0.331801
+  type: 'test'
+  ...
+# Subtest: asignación ausente, inválida y suspendida son estados distintos; no asigna paciente por defecto
+ok 102 - asignación ausente, inválida y suspendida son estados distintos; no asigna paciente por defecto
+  ---
+  duration_ms: 11.091279
+  type: 'test'
+  ...
+# Subtest: estado de Auth es independiente de la asignación del negocio
+ok 103 - estado de Auth es independiente de la asignación del negocio
+  ---
+  duration_ms: 0.842251
+  type: 'test'
+  ...
+# Subtest: fechas falsy malformadas nunca se clasifican como cuenta habilitada
+ok 104 - fechas falsy malformadas nunca se clasifican como cuenta habilitada
+  ---
+  duration_ms: 0.606916
+  type: 'test'
+  ...
+# Subtest: búsqueda y filtros globales incluyen cuentas posteriores a la primera página de Auth
+ok 105 - búsqueda y filtros globales incluyen cuentas posteriores a la primera página de Auth
+  ---
+  duration_ms: 1.385691
+  type: 'test'
+  ...
+# Subtest: paginación ordenada por UUID, página fuera de rango y vacío
+ok 106 - paginación ordenada por UUID, página fuera de rango y vacío
+  ---
+  duration_ms: 1.241934
+  type: 'test'
+  ...
+# Subtest: consulta inválida no construye cliente privilegiado
+ok 107 - consulta inválida no construye cliente privilegiado
+  ---
+  duration_ms: 0.227934
+  type: 'test'
+  ...
+# Subtest: errores de Auth y PostgreSQL no devuelven datos parciales ni detalles privados
+ok 108 - errores de Auth y PostgreSQL no devuelven datos parciales ni detalles privados
+  ---
+  duration_ms: 3.774586
+  type: 'test'
+  ...
+# Subtest: cuentas repetidas durante un escaneo se rechazan como lectura inestable
+ok 109 - cuentas repetidas durante un escaneo se rechazan como lectura inestable
+  ---
+  duration_ms: 0.565073
+  type: 'test'
+  ...
+# Subtest: límite de 2000 cuentas falla sin truncar ni fingir un total completo
+ok 110 - límite de 2000 cuentas falla sin truncar ni fingir un total completo
+  ---
+  duration_ms: 3.215532
+  type: 'test'
+  ...
+# Subtest: se admite exactamente el límite únicamente después de comprobar el final de Auth
+ok 111 - se admite exactamente el límite únicamente después de comprobar el final de Auth
+  ---
+  duration_ms: 11.474767
+  type: 'test'
+  ...
+# Subtest: respuestas malformadas, perfiles ajenos y duplicados se rechazan
+ok 112 - respuestas malformadas, perfiles ajenos y duplicados se rechazan
+  ---
+  duration_ms: 1.949682
+  type: 'test'
+  ...
+# Subtest: lecturas concurrentes no comparten snapshot, filtros, resultados ni instancia
+ok 113 - lecturas concurrentes no comparten snapshot, filtros, resultados ni instancia
+  ---
+  duration_ms: 11.384306
+  type: 'test'
+  ...
+# Subtest: API real de lectura exige guard AAL2 por petición y respuesta privada sin caché
+ok 114 - API real de lectura exige guard AAL2 por petición y respuesta privada sin caché
+  ---
+  duration_ms: 35.598579
+  type: 'test'
+  ...
+# Subtest: visitante, paciente, odontólogo, AAL1, suspendido y JWT inválido no crean proveedor real
+ok 115 - visitante, paciente, odontólogo, AAL1, suspendido y JWT inválido no crean proveedor real
+  ---
+  duration_ms: 5.004568
+  type: 'test'
+  ...
+# Subtest: API rechaza query duplicada, autoridad/proveedor del cliente y tipos inválidos
+ok 116 - API rechaza query duplicada, autoridad/proveedor del cliente y tipos inválidos
+  ---
+  duration_ms: 3.01448
+  type: 'test'
+  ...
+# Subtest: API proyecta también campos anidados y nunca expone objetos del proveedor
+ok 117 - API proyecta también campos anidados y nunca expone objetos del proveedor
+  ---
+  duration_ms: 0.531873
+  type: 'test'
+  ...
+# Subtest: no hay acción administrativa de escritura habilitada, aunque el actor tenga AAL2
+ok 118 - no hay acción administrativa de escritura habilitada, aunque el actor tenga AAL2
+  ---
+  duration_ms: 0.892797
+  type: 'test'
+  ...
+# Subtest: snippet verifica las cuatro respuestas con fixtures sin reportar datos personales o tokens
+ok 119 - snippet verifica las cuatro respuestas con fixtures sin reportar datos personales o tokens
+  ---
+  duration_ms: 35.506545
+  type: 'test'
+  ...
+# Subtest: snippet requiere rechazo del guard y del endpoint en escenarios negativos, con fixtures
+ok 120 - snippet requiere rechazo del guard y del endpoint en escenarios negativos, con fixtures
+  ---
+  duration_ms: 3.503147
+  type: 'test'
+  ...
+# Subtest: snippet no acepta campos extra, estado inesperado ni datos de otra identidad
+ok 121 - snippet no acepta campos extra, estado inesperado ni datos de otra identidad
+  ---
+  duration_ms: 5.610507
+  type: 'test'
+  ...
+# Subtest: snippet no se ejecuta en producción ni confunde ausencia de sesión con aceptación positiva
+ok 122 - snippet no se ejecuta en producción ni confunde ausencia de sesión con aceptación positiva
+  ---
+  duration_ms: 1.929632
+  type: 'test'
+  ...
+# (node:715) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/administracion/validacion-lectura.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: matriz QA con fixtures: filtros, búsqueda, paginación y reporte sin filas personales
+ok 123 - matriz QA con fixtures: filtros, búsqueda, paginación y reporte sin filas personales
+  ---
+  duration_ms: 70.467636
+  type: 'test'
+  ...
+# Subtest: matriz QA limita el volumen y no presenta una muestra incompleta como validada
+ok 124 - matriz QA limita el volumen y no presenta una muestra incompleta como validada
+  ---
+  duration_ms: 4.113687
+  type: 'test'
+  ...
+# Subtest: matriz QA identifica rechazos 401 y 403 antes de consultar filas
+ok 125 - matriz QA identifica rechazos 401 y 403 antes de consultar filas
+  ---
+  duration_ms: 0.579684
+  type: 'test'
+  ...
+# Subtest: matriz QA rechaza campos adicionales sensibles y errores sin revelar contenido
+ok 126 - matriz QA rechaza campos adicionales sensibles y errores sin revelar contenido
+  ---
+  duration_ms: 0.56938
+  type: 'test'
+  ...
+# (node:723) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/autorizacion/autorizacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sin sesión, esquema incorrecto o bearer ambiguo: 401 y no consulta Auth
+ok 127 - sin sesión, esquema incorrecto o bearer ambiguo: 401 y no consulta Auth
+  ---
+  duration_ms: 84.38598
+  type: 'test'
+  ...
+# Subtest: Auth recibe el token exacto; no se decodifica como prueba de identidad
+ok 128 - Auth recibe el token exacto; no se decodifica como prueba de identidad
+  ---
+  duration_ms: 2.023614
+  type: 'test'
+  ...
+# Subtest: sesión inválida, expirada o usuario inexistente: 401 aunque vengan metadatos
+ok 129 - sesión inválida, expirada o usuario inexistente: 401 aunque vengan metadatos
+  ---
+  duration_ms: 1.300863
+  type: 'test'
+  ...
+# Subtest: paciente o profesional autenticado carece de autorización administrativa
+ok 130 - paciente o profesional autenticado carece de autorización administrativa
+  ---
+  duration_ms: 1.496008
+  type: 'test'
+  ...
+# Subtest: autoasignación en user_metadata no concede acceso, ni con namespace idéntico
+ok 131 - autoasignación en user_metadata no concede acceso, ni con namespace idéntico
+  ---
+  duration_ms: 5.376023
+  type: 'test'
+  ...
+# Subtest: rol recibido en query, cookies, encabezados o cuerpo no es autoridad
+ok 132 - rol recibido en query, cookies, encabezados o cuerpo no es autoridad
+  ---
+  duration_ms: 15.825724
+  type: 'test'
+  ...
+# Subtest: formatos desconocidos, roles inesperados y asignación inactiva se deniegan
+ok 133 - formatos desconocidos, roles inesperados y asignación inactiva se deniegan
+  ---
+  duration_ms: 2.721417
+  type: 'test'
+  ...
+# Subtest: superusuario válido procede únicamente de app_metadata obtenido del proveedor
+ok 134 - superusuario válido procede únicamente de app_metadata obtenido del proveedor
+  ---
+  duration_ms: 6.616866
+  type: 'test'
+  ...
+# Subtest: identidad anónima, sin confirmar, eliminada o suspendida se deniega
+ok 135 - identidad anónima, sin confirmar, eliminada o suspendida se deniega
+  ---
+  duration_ms: 3.372284
+  type: 'test'
+  ...
+# Subtest: revocación de rol se consulta en la siguiente petición, aun con el mismo token
+ok 136 - revocación de rol se consulta en la siguiente petición, aun con el mismo token
+  ---
+  duration_ms: 0.892391
+  type: 'test'
+  ...
+# Subtest: red, configuración, límite de peticiones o caída de Auth: 503 y ninguna concesión
+ok 137 - red, configuración, límite de peticiones o caída de Auth: 503 y ninguna concesión
+  ---
+  duration_ms: 14.080681
+  type: 'test'
+  ...
+# Subtest: todas las respuestas son privadas y mínimas; desafío Bearer solo para 401
+ok 138 - todas las respuestas son privadas y mínimas; desafío Bearer solo para 401
+  ---
+  duration_ms: 1.869982
+  type: 'test'
+  ...
+# Subtest: peticiones concurrentes no comparten identidad ni autorización
+ok 139 - peticiones concurrentes no comparten identidad ni autorización
+  ---
+  duration_ms: 0.27174
+  type: 'test'
+  ...
+# (node:731) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/DentaIA/src/features/autorizacion/autorizacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/DentaIA/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MFA: aal1, ausencia o valor manipulado se deniegan aunque el rol sea válido
+ok 140 - MFA: aal1, ausencia o valor manipulado se deniegan aunque el rol sea válido
+  ---
+  duration_ms: 94.035268
+  type: 'test'
+  ...
+# Subtest: MFA: un factor enrolado no equivale a una sesión aal2
+ok 141 - MFA: un factor enrolado no equivale a una sesión aal2
+  ---
+  duration_ms: 0.571473
+  type: 'test'
+  ...
+# Subtest: MFA: se requiere un factor verificado actual; retirarlo invalida el acceso
+ok 142 - MFA: se requiere un factor verificado actual; retirarlo invalida el acceso
+  ---
+  duration_ms: 0.725415
+  type: 'test'
+  ...
+# Subtest: MFA: identidad y claims verificados deben corresponder al mismo usuario y token
+ok 143 - MFA: identidad y claims verificados deben corresponder al mismo usuario y token
+  ---
+  duration_ms: 3.89579
+  type: 'test'
+  ...
+# Subtest: MFA: cabeceras y metadatos editables no sustituyen la prueba firmada
+ok 144 - MFA: cabeceras y metadatos editables no sustituyen la prueba firmada
+  ---
+  duration_ms: 1.866187
+  type: 'test'
+  ...
+# Subtest: MFA: fallo de firma/caducidad devuelve 401; error de proveedor devuelve 503
+ok 145 - MFA: fallo de firma/caducidad devuelve 401; error de proveedor devuelve 503
+  ---
+  duration_ms: 0.883944
+  type: 'test'
+  ...
+# Subtest: un rol revocado prevalece sobre claims firmados antiguos y evita incluso consultar MFA
+ok 146 - un rol revocado prevalece sobre claims firmados antiguos y evita incluso consultar MFA
+  ---
+  duration_ms: 0.663662
+  type: 'test'
+  ...
+# Subtest: un servicio privado nunca se invoca para visitantes, pacientes, odontólogos o sesiones rechazadas
+ok 147 - un servicio privado nunca se invoca para visitantes, pacientes, odontólogos o sesiones rechazadas
+  ---
+  duration_ms: 20.356872
+  type: 'test'
+  ...
+# Subtest: el contrato ejecuta una vez tras validar rol y MFA; impone no-store a la respuesta del servicio
+ok 148 - el contrato ejecuta una vez tras validar rol y MFA; impone no-store a la respuesta del servicio
+  ---
+  duration_ms: 1.659305
+  type: 'test'
+  ...
+# Subtest: operaciones desconocidas, gestión de cuentas y acciones clínicas permanecen denegadas
+ok 149 - operaciones desconocidas, gestión de cuentas y acciones clínicas permanecen denegadas
+  ---
+  duration_ms: 1.242795
+  type: 'test'
+  ...
+# Subtest: revocación o suspensión entre solicitudes impide volver a ejecutar el servicio
+ok 150 - revocación o suspensión entre solicitudes impide volver a ejecutar el servicio
+  ---
+  duration_ms: 10.757665
+  type: 'test'
+  ...
+# Subtest: revocar el rol y rechazar una sesión son fallos distintos
+ok 151 - revocar el rol y rechazar una sesión son fallos distintos
+  ---
+  duration_ms: 2.366361
+  type: 'test'
+  ...
+# Subtest: errores del servicio se convierten en respuesta mínima privada
+ok 152 - errores del servicio se convierten en respuesta mínima privada
+  ---
+  duration_ms: 0.700637
+  type: 'test'
+  ...
+# Subtest: no se prepara una respuesta privada mientras la identidad siga pendiente de verificación
+ok 153 - no se prepara una respuesta privada mientras la identidad siga pendiente de verificación
+  ---
+  duration_ms: 0.334775
+  type: 'test'
+  ...
+# Subtest: adaptador real: getUser llama Auth con bearer, sin caché ni cliente privilegiado
+ok 154 - adaptador real: getUser llama Auth con bearer, sin caché ni cliente privilegiado
+  ---
+  duration_ms: 352.725695
+  type: 'test'
+  ...
+# Subtest: server-only impide importar el adaptador en un contexto ordinario
+ok 155 - server-only impide importar el adaptador en un contexto ordinario
+  ---
+  duration_ms: 164.043721
+  type: 'test'
+  ...
+# Subtest: SDK real: firma criptográfica, caducidad y aal2 sin claves persistidas ni Auth remoto
+ok 156 - SDK real: firma criptográfica, caducidad y aal2 sin claves persistidas ni Auth remoto
+  ---
+  duration_ms: 317.416473
+  type: 'test'
+  ...
+1..156
+# tests 156
+# suites 0
+# pass 156
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6094.881579

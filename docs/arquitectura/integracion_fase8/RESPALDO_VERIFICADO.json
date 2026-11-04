@@ -1,0 +1,56 @@
+{
+  "fecha": "2026-11-03",
+  "target": "vwmdknzjyvmsdqpepykz",
+  "operacionesRemotas": "SELECT/pg_dump/descarga Storage solamente",
+  "escriturasRemotas": 0,
+  "backupCompleto": true,
+  "restauracionLocal": true,
+  "storageVerificado": true,
+  "dumpReutilizadoSinNuevaDescarga": true,
+  "tablasContenidoVerificado": 11,
+  "registros": {
+    "auth.users": 5,
+    "auth.sessions": 11,
+    "auth.identities": 5,
+    "public.dentists": 4,
+    "public.profiles": 2,
+    "storage.buckets": 1,
+    "storage.objects": 1,
+    "auth.mfa_factors": 1,
+    "public.dental_photos": 1,
+    "public.patient_consents": 5,
+    "public.appointment_requests": 5
+  },
+  "dumpBytes": 420450,
+  "dumpCifradoSha256": "b63d3014bafd3de2bcbe02c171cd39bf5a4e2eaed825ae80f1f6fb5d623f504b",
+  "globalesSinContrasenasRespaldados": true,
+  "membresiasRestauradas": 24,
+  "limitacionRoles": "Atributos y membresías recreados solo offline; contraseñas de login PostgreSQL excluidas. Globales completos archivados, no aplicados ciegamente sobre roles gestionados.",
+  "cifrado": "Windows DPAPI CurrentUser, ACL SID actual y SYSTEM; necesita este perfil Windows para recuperar",
+  "archivosStorage": 1,
+  "bytesStorage": 436300,
+  "storageRestauracionAPIProbada": false,
+  "limitacionStorage": "Descarga, cifrado/descifrado y hashes verificados; no se reinsertaron binarios por API ni se modificó metadata remota. No existe transacción compartida PostgreSQL/Storage.",
+  "archivosCifrados": [
+    {
+      "nombre": "postgresql-completo.dump.dpapi",
+      "sha256": "b63d3014bafd3de2bcbe02c171cd39bf5a4e2eaed825ae80f1f6fb5d623f504b"
+    },
+    {
+      "nombre": "roles-auxiliares-sin-contrasenas.json.dpapi",
+      "sha256": "d734d575d633fb387bcc9463fe408761675e53c8e658446ea1f9e7f1d41db7c3"
+    },
+    {
+      "nombre": "membresias-roles.json.dpapi",
+      "sha256": "0941cebea088a21626b895fe0672ad7c833de5cf38e08eaccf0c513b8e4525ee"
+    },
+    {
+      "nombre": "globales-sin-contrasenas.sql.dpapi",
+      "sha256": "e8e24a729b6d23a951521ca995f8094f85108d6ec567c232ee4c08b6abd8566c"
+    },
+    {
+      "nombre": "storage-binarios-y-mapa.json.dpapi",
+      "sha256": "9ed450a73e1286a1111428498f5d3f1b3e5a27ea75c5bfefc99a5deb7d6fba6a"
+    }
+  ]
+}

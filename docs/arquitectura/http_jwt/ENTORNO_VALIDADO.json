@@ -1,0 +1,41 @@
+{
+  "node": "v22.18.0",
+  "docker": "29.9.2",
+  "postgresql": "17.11",
+  "apiLocal": "http://127.0.0.1:54321",
+  "jwtExpiryRestaurada": 3600,
+  "cuentasSinteticas": 6,
+  "cuentasNoPropias": 0,
+  "fuentesRPCIdenticasFase3": true,
+  "funcionesComparadas": 13,
+  "atencionesFase2": 3,
+  "atencionesFase3": 3,
+  "triggersFalloTemporales": 0,
+  "propietarioPrivadoMinimo": true,
+  "clientesSinSelectClinico": true,
+  "wrappers": [
+    {
+      "proname": "get_authorized_clinical_history",
+      "prosecdef": false,
+      "owner": "postgres"
+    },
+    {
+      "proname": "grant_clinical_access",
+      "prosecdef": false,
+      "owner": "postgres"
+    },
+    {
+      "proname": "revoke_clinical_access",
+      "prosecdef": false,
+      "owner": "postgres"
+    }
+  ],
+  "contenedores": [
+    "supabase_storage_DentaIA-arquitectura-fase2-qa Up 18 minutes (healthy)",
+    "supabase_rest_DentaIA-arquitectura-fase2-qa Up 18 minutes",
+    "supabase_auth_DentaIA-arquitectura-fase2-qa Up 18 minutes (healthy)",
+    "supabase_kong_DentaIA-arquitectura-fase2-qa Up 18 minutes (healthy)",
+    "supabase_db_DentaIA-arquitectura-fase2-qa Up 18 minutes (healthy)"
+  ],
+  "credencialesGuardadas": false
+}

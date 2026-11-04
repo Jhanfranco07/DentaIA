@@ -1,0 +1,874 @@
+{
+  "fecha": "2026-11-03",
+  "inicio_utc": "2026-11-03T17:44:22.290784+00:00",
+  "entorno": "Supabase local Docker; Auth real del stack, identidades SQL sintéticas",
+  "base": "dentaia_arch_qa_fase2",
+  "migraciones": [
+    {
+      "archivo": "01_clinical_identidad.sql",
+      "aprobada": true,
+      "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+      "error": null
+    },
+    {
+      "archivo": "02_clinical_contenido.sql",
+      "aprobada": true,
+      "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+      "error": null
+    },
+    {
+      "archivo": "03_clinical_permisos_auditoria.sql",
+      "aprobada": true,
+      "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+      "error": null
+    },
+    {
+      "archivo": "04_clinical_integridad.sql",
+      "aprobada": true,
+      "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+      "error": null
+    },
+    {
+      "archivo": "05_ia_investigacion.sql",
+      "aprobada": true,
+      "sha256": "045ac6a52109779a3d42dde5aa56d62a227531d77a16c5d726386ddcee382f0e",
+      "error": null
+    },
+    {
+      "archivo": "06_ia_analisis.sql",
+      "aprobada": true,
+      "sha256": "bfb2cd70a5e0631be3a084bf7b57ddce906afe466d65b72d53f49253a4569079",
+      "error": null
+    },
+    {
+      "archivo": "07_ia_integridad.sql",
+      "aprobada": true,
+      "sha256": "3388f091564c14e2d515a9b8e91ebd83ac47cbfb2b2738283e7e842c05968aff",
+      "error": null
+    }
+  ],
+  "pruebas": [
+    {
+      "nombre": "Baseline QA vacío: Auth oficial y cinco tablas de catálogo",
+      "categoria": "entorno",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Migraciones conservan columnas y tipos de las cinco tablas existentes",
+      "categoria": "compatibilidad",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "21 tablas propuestas con RLS habilitada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Relaciones válidas: dos pacientes, dos clínicas, dos orígenes",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Clínica inexistente rechazada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23503; ERROR:  23503: insert or update on table \"clinic_memberships\" violates foreign key constraint \"clinic_memberships_clinic_id_fkey\"\nDETAIL:  Key (clinic_id)=(00000000-0000-4000-8000-000000000999) is not present in table \"clinics\".\nSCHEMA NAME:  clinical\nTABLE NAME:  clinic_memberships\nCONSTRAINT NAME:  clinic_memberships_clinic_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2599"
+    },
+    {
+      "nombre": "Paciente inexistente rechazado",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23503; ERROR:  23503: insert or update on table \"clinical_encounters\" violates foreign key constraint \"clinical_encounters_patient_id_fkey\"\nDETAIL:  Key (patient_id)=(00000000-0000-4000-8000-000000000999) is not present in table \"patient_records\".\nSCHEMA NAME:  clinical\nTABLE NAME:  clinical_encounters\nCONSTRAINT NAME:  clinical_encounters_patient_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2599"
+    },
+    {
+      "nombre": "Corrección de atención con otro paciente rechazada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23503; ERROR:  23503: insert or update on table \"clinical_encounters\" violates foreign key constraint \"clinical_encounters_replaces_id_patient_id_membership_id_fkey\"\nDETAIL:  Key (replaces_id, patient_id, membership_id)=(00000000-0000-4000-8000-000000000051, 00000000-0000-4000-8000-000000000042, 00000000-0000-4000-8000-000000000033) is not present in table \"clinical_encounters\".\nSCHEMA NAME:  clinical\nTABLE NAME:  clinical_encounters\nCONSTRAINT NAME:  clinical_encounters_replaces_id_patient_id_membership_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2599"
+    },
+    {
+      "nombre": "Corrección de atención con otro origen rechazada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23503; ERROR:  23503: insert or update on table \"clinical_encounters\" violates foreign key constraint \"clinical_encounters_replaces_id_patient_id_membership_id_fkey\"\nDETAIL:  Key (replaces_id, patient_id, membership_id)=(00000000-0000-4000-8000-000000000051, 00000000-0000-4000-8000-000000000041, 00000000-0000-4000-8000-000000000034) is not present in table \"clinical_encounters\".\nSCHEMA NAME:  clinical\nTABLE NAME:  clinical_encounters\nCONSTRAINT NAME:  clinical_encounters_replaces_id_patient_id_membership_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2599"
+    },
+    {
+      "nombre": "Corrección sin motivo rechazada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: new row for relation \"clinical_encounters\" violates check constraint \"clinical_encounters_check1\"\nDETAIL:  Failing row contains (4e7b2d88-63fd-4940-93e4-4a763a91d218, 00000000-0000-4000-8000-000000000041, 00000000-0000-4000-8000-000000000033, 2026-11-03 17:44:28.684769+00, 2026-11-03 17:44:28.684769+00, recorded, 00000000-0000-4000-8000-000000000051, null).\nSCHEMA NAME:  clinical\nTABLE NAME:  clinical_encounters\nCONSTRAINT NAME:  clinical_encounters_check1\nLOCATION:  ExecConstraints, execMain.c:2074"
+    },
+    {
+      "nombre": "Corrección válida append-only",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Bifurcación de correcciones rechazada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23505; ERROR:  23505: duplicate key value violates unique constraint \"clinical_encounters_replaces_id_key\"\nDETAIL:  Key (replaces_id)=(00000000-0000-4000-8000-000000000051) already exists.\nSCHEMA NAME:  clinical\nTABLE NAME:  clinical_encounters\nCONSTRAINT NAME:  clinical_encounters_replaces_id_key\nLOCATION:  _bt_check_unique, nbtinsert.c:666"
+    },
+    {
+      "nombre": "Entrada reemplazada de otra atención rechazada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23503; ERROR:  23503: insert or update on table \"clinical_entries\" violates foreign key constraint \"clinical_entries_replaces_id_encounter_id_kind_fkey\"\nDETAIL:  Key (replaces_id, encounter_id, kind)=(00000000-0000-4000-8000-000000000061, 00000000-0000-4000-8000-000000000053, background) is not present in table \"clinical_entries\".\nSCHEMA NAME:  clinical\nTABLE NAME:  clinical_entries\nCONSTRAINT NAME:  clinical_entries_replaces_id_encounter_id_kind_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2599"
+    },
+    {
+      "nombre": "Dato desconocido no puede aparentar descripción real",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: new row for relation \"clinical_entries\" violates check constraint \"clinical_entries_check\"\nDETAIL:  Failing row contains (6805cc07-8643-4ea1-abb8-506aadcdff00, 00000000-0000-4000-8000-000000000051, diagnosis, unknown, QA, null, null, 2026-11-03 17:44:29.045625+00, null, null).\nSCHEMA NAME:  clinical\nTABLE NAME:  clinical_entries\nCONSTRAINT NAME:  clinical_entries_check\nLOCATION:  ExecConstraints, execMain.c:2074"
+    },
+    {
+      "nombre": "Concesión de otro paciente no admite recurso manipulado",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: RESOURCE_PATIENT_MISMATCH\nCONTEXT:  PL/pgSQL function clinical.resource_patient_check() line 6 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Recurso autorizado duplicado rechazado",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23505; ERROR:  23505: duplicate key value violates unique constraint \"clinical_grant_resources_pkey\"\nDETAIL:  Key (grant_id, encounter_id)=(00000000-0000-4000-8000-000000000071, 00000000-0000-4000-8000-000000000051) already exists.\nSCHEMA NAME:  clinical\nTABLE NAME:  clinical_grant_resources\nCONSTRAINT NAME:  clinical_grant_resources_pkey\nLOCATION:  _bt_check_unique, nbtinsert.c:666"
+    },
+    {
+      "nombre": "Reasignación de paciente bloqueada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: PATIENT_REBIND_FORBIDDEN\nCONTEXT:  PL/pgSQL function clinical.identity_immutable() line 19 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Reasignación de membresía bloqueada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: MEMBERSHIP_REBIND_FORBIDDEN\nCONTEXT:  PL/pgSQL function clinical.identity_immutable() line 5 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Cambio de destinatario de concesión bloqueado",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: GRANT_SCOPE_IMMUTABLE\nCONTEXT:  PL/pgSQL function clinical.identity_immutable() line 25 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Revocación irreversible",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: GRANT_SCOPE_IMMUTABLE\nCONTEXT:  PL/pgSQL function clinical.identity_immutable() line 25 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Borrado de contenido histórico bloqueado",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: APPEND_ONLY_RECORD\nCONTEXT:  PL/pgSQL function clinical.reject_mutation() line 2 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Edición de atención bloqueada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: APPEND_ONLY_RECORD\nCONTEXT:  PL/pgSQL function clinical.reject_mutation() line 2 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Autoacreditación profesional rechazada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: SELF_VERIFICATION_FORBIDDEN\nCONTEXT:  PL/pgSQL function clinical.verification_check() line 5 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Profesional no aprobado no puede quedar verificado",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: VERIFICATION_REQUIRED\nCONTEXT:  PL/pgSQL function clinical.professional_status_check() line 6 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Membresías activas solapadas rechazadas",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23P01; ERROR:  23P01: conflicting key value violates exclusion constraint \"clinic_memberships_clinic_id_professional_id_tstzrange_excl\"\nDETAIL:  Key (clinic_id, professional_id, tstzrange(valid_from, valid_until, '[)'::text))=(00000000-0000-4000-8000-000000000011, 00000000-0000-4000-8000-000000000023, [\"2026-11-03 17:44:29.996286+00\",)) conflicts with existing key (clinic_id, professional_id, tstzrange(valid_from, valid_until, '[)'::text))=(00000000-0000-4000-8000-000000000011, 00000000-0000-4000-8000-000000000023, [\"2026-10-04 17:44:28.009054+00\",)).\nSCHEMA NAME:  clinical\nTABLE NAME:  clinic_memberships\nCONSTRAINT NAME:  clinic_memberships_clinic_id_professional_id_tstzrange_excl\nLOCATION:  check_exclusion_or_unique_constraint, execIndexing.c:879"
+    },
+    {
+      "nombre": "Documento no puede apuntar a otro paciente",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: DOCUMENT_PATH_MISMATCH\nCONTEXT:  PL/pgSQL function clinical.document_path_check() line 8 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Conservación clínica impide borrar identidad referenciada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23503; ERROR:  23503: update or delete on table \"users\" violates foreign key constraint \"patient_records_user_id_fkey\" on table \"patient_records\"\nDETAIL:  Key (id)=(00000000-0000-4000-8000-000000000001) is still referenced from table \"patient_records\".\nSCHEMA NAME:  clinical\nTABLE NAME:  patient_records\nCONSTRAINT NAME:  patient_records_user_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2612"
+    },
+    {
+      "nombre": "Matriz de confusión válida coincide con tamaño de muestra",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Matriz con valores negativos rechazada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: INVALID_CONFUSION_MATRIX\nCONTEXT:  PL/pgSQL function ml.metric_consistency() line 6 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Matriz con suma incorrecta rechazada",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: EVALUATION_COUNT_OR_LABEL_MISMATCH\nCONTEXT:  PL/pgSQL function ml.metric_consistency() line 12 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Modelo sin métricas no puede declararse evaluado",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: MODEL_METRICS_REQUIRED\nCONTEXT:  PL/pgSQL function ml.model_evaluation_guard() line 7 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Dataset asociado a modelo no admite edición",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: DATASET_VERSION_FROZEN\nCONTEXT:  PL/pgSQL function ml.freeze_dataset() line 12 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Evaluación no se puede reescribir",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: SCIENTIFIC_RECORD_IMMUTABLE\nCONTEXT:  PL/pgSQL function ml.reject_mutation() line 2 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "FK de análisis rechaza propietario distinto de la foto",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23503; ERROR:  23503: insert or update on table \"analysis_authorizations\" violates foreign key constraint \"analysis_authorizations_photo_id_owner_user_id_fkey\"\nDETAIL:  Key (photo_id, owner_user_id)=(00000000-0000-4000-8000-000000000092, 00000000-0000-4000-8000-000000000002) is not present in table \"dental_photos\".\nSCHEMA NAME:  ml\nTABLE NAME:  analysis_authorizations\nCONSTRAINT NAME:  analysis_authorizations_photo_id_owner_user_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2599"
+    },
+    {
+      "nombre": "FK del job rechaza autorización y propietario cruzados",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23503; ERROR:  23503: insert or update on table \"analysis_jobs\" violates foreign key constraint \"analysis_jobs_authorization_id_photo_id_owner_user_id_fkey\"\nDETAIL:  Key (authorization_id, photo_id, owner_user_id)=(00000000-0000-4000-8000-000000000093, 00000000-0000-4000-8000-000000000092, 00000000-0000-4000-8000-000000000002) is not present in table \"analysis_authorizations\".\nSCHEMA NAME:  ml\nTABLE NAME:  analysis_jobs\nCONSTRAINT NAME:  analysis_jobs_authorization_id_photo_id_owner_user_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2599"
+    },
+    {
+      "nombre": "Idempotencia de job rechaza duplicado de propietario y clave",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23505; ERROR:  23505: duplicate key value violates unique constraint \"analysis_jobs_owner_user_id_idempotency_key_key\"\nDETAIL:  Key (owner_user_id, idempotency_key)=(00000000-0000-4000-8000-000000000001, 00000000-0000-4000-8000-000000000095) already exists.\nSCHEMA NAME:  ml\nTABLE NAME:  analysis_jobs\nCONSTRAINT NAME:  analysis_jobs_owner_user_id_idempotency_key_key\nLOCATION:  _bt_check_unique, nbtinsert.c:666"
+    },
+    {
+      "nombre": "Job no puede quedar exitoso sin resultado",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: JOB_RESULT_MISMATCH\nCONTEXT:  PL/pgSQL function ml.job_result_consistency() line 8 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Job y resultado no evaluable se completan atómicamente",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Worker no puede tomar lease todavía vigente",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23514; ERROR:  23514: LEASE_STILL_HELD\nCONTEXT:  PL/pgSQL function ml.job_transition_guard() line 13 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Foto revocada sigue pudiendo eliminar metadata y análisis propios",
+      "categoria": "integridad",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Paciente puede borrar metadata propia tras revocar con RLS existente",
+      "categoria": "RLS existente y compatibilidad CASCADE",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Paciente lee solo su perfil por RLS",
+      "categoria": "RLS existente",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Paciente no puede modificar perfil ajeno",
+      "categoria": "RLS existente",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Cliente no puede editar app_metadata ni elevar rol",
+      "categoria": "permisos SQL",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: permission denied for table users\nHINT:  Grant the required privileges to the current role with: GRANT SELECT, UPDATE ON auth.users TO authenticated;\nLOCATION:  aclcheck_error, aclchk.c:2843"
+    },
+    {
+      "nombre": "visitante: ACL clínica bloquea acceso directo",
+      "categoria": "permisos SQL",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: permission denied for schema clinical\nLINE 1: SELECT * FROM clinical.clinical_encounters;\n                      ^\nLOCATION:  aclcheck_error, aclchk.c:2843"
+    },
+    {
+      "nombre": "visitante: RLS deniega las 21 tablas aun con SELECT temporal",
+      "categoria": "RLS propuesta default-deny",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "paciente: ACL clínica bloquea acceso directo",
+      "categoria": "permisos SQL",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: permission denied for schema clinical\nLINE 1: SELECT * FROM clinical.clinical_encounters;\n                      ^\nLOCATION:  aclcheck_error, aclchk.c:2843"
+    },
+    {
+      "nombre": "paciente: RLS deniega las 21 tablas aun con SELECT temporal",
+      "categoria": "RLS propuesta default-deny",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "odontólogo: ACL clínica bloquea acceso directo",
+      "categoria": "permisos SQL",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: permission denied for schema clinical\nLINE 1: SELECT * FROM clinical.clinical_encounters;\n                      ^\nLOCATION:  aclcheck_error, aclchk.c:2843"
+    },
+    {
+      "nombre": "odontólogo: RLS deniega las 21 tablas aun con SELECT temporal",
+      "categoria": "RLS propuesta default-deny",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "superusuario: ACL clínica bloquea acceso directo",
+      "categoria": "permisos SQL",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: permission denied for schema clinical\nLINE 1: SELECT * FROM clinical.clinical_encounters;\n                      ^\nLOCATION:  aclcheck_error, aclchk.c:2843"
+    },
+    {
+      "nombre": "superusuario: RLS deniega las 21 tablas aun con SELECT temporal",
+      "categoria": "RLS propuesta default-deny",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "INSERT clínico queda bloqueado por RLS con privilegio temporal",
+      "categoria": "RLS propuesta default-deny",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: new row violates row-level security policy for table \"clinics\"\nLOCATION:  ExecWithCheckOptions, execMain.c:2199"
+    },
+    {
+      "nombre": "Superusuario no puede modificar auditoría clínica",
+      "categoria": "permisos SQL",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: permission denied for schema clinical\nLINE 1: UPDATE clinical.clinical_access_audit SET outcome='allowed';\n               ^\nLOCATION:  aclcheck_error, aclchk.c:2843"
+    },
+    {
+      "nombre": "service_role no recibe acceso clínico por ACL",
+      "categoria": "permisos SQL; no evidencia RLS",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: permission denied for schema clinical\nLINE 1: SELECT * FROM clinical.clinical_encounters;\n                      ^\nLOCATION:  aclcheck_error, aclchk.c:2843"
+    },
+    {
+      "nombre": "Prototipo: paciente accede a sus dos atenciones",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: paciente no accede a otro paciente",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: profesional autorizado solo recibe un recurso",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: profesional ajeno no accede por ID",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: misma clínica no concede acceso general",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: autorización vencida deniega",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: autorización revocada deniega",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: superusuario no recibe historial ajeno",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: contexto clínico de otro profesional deniega",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: rol Auth retirado se vuelve a consultar",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: membresía suspendida deniega",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: cuenta profesional suspendida deniega",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: nueva verificación rechazada deniega",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: consentimiento propio se puede revocar",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: revocación ajena se rechaza",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: QA_NOT_OWNER\nCONTEXT:  PL/pgSQL function qa.revoke_grant(uuid,uuid) line 6 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Prototipo: reintento de revocación conserva fecha",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: concesión e idempotencia mismo UUID y contenido",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: idempotencia no admite contenido distinto",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 23505; ERROR:  23505: QA_IDEMPOTENCY_CONFLICT\nCONTEXT:  PL/pgSQL function qa.grant_access(uuid,uuid,uuid,uuid,uuid) line 10 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Prototipo: paciente no concede recurso ajeno",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: QA_WRONG_PATIENT\nCONTEXT:  PL/pgSQL function qa.grant_access(uuid,uuid,uuid,uuid,uuid) line 14 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Prototipo: fallo de auditoría impide entregar historial",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 58000; ERROR:  58000: QA_AUDIT_UNAVAILABLE\nCONTEXT:  PL/pgSQL function qa.history(uuid,uuid,uuid) line 35 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Prototipo: auditoría denegada persiste sin datos clínicos",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: auditoría permitida antes de respuesta",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Prototipo: auditoría no admite edición",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": "SQLSTATE esperado 42501; ERROR:  42501: APPEND_ONLY_RECORD\nCONTEXT:  PL/pgSQL function clinical.reject_mutation() line 2 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+    },
+    {
+      "nombre": "Prototipo: fallo de auditoría revierte revocación",
+      "categoria": "prototipo QA; no RPC implementado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Migración DI-151 sobre Auth oficial local",
+      "categoria": "administración",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Suite SQL administrativa adaptada al Auth oficial",
+      "categoria": "administración",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Catálogo real SQL: public.profiles",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: public.dentists",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 13,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: public.appointment_requests",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 11,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: public.patient_consents",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 7,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: public.dental_photos",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 9,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: dentaia_admin.revisiones_roles",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 2,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: dentaia_admin.aprobaciones_roles",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 11,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: dentaia_admin.auditoria_roles",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 9,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.clinics",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 5,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.professional_accounts",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 5,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.professional_verifications",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 7,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.clinic_memberships",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 6,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.patient_records",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 4,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.clinical_encounters",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 8,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.clinical_entries",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 10,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.clinical_documents",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 11,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.clinical_access_grants",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 9,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.clinical_grant_resources",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 2,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: clinical.clinical_access_audit",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 10,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.dataset_versions",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 8,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.dataset_items",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 7,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.model_versions",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 10,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.analysis_authorizations",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 9,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.analysis_jobs",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 13,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.analysis_results",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 8,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.educational_recommendations",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 6,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.result_recommendations",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.evaluation_runs",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 8,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Catálogo real SQL: ml.evaluation_metrics",
+      "categoria": "catálogo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "campos": 5,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "Lectura primero: revocación espera y nuevas lecturas deniegan",
+      "categoria": "concurrencia del prototipo QA",
+      "aprobado": true,
+      "detalle": {
+        "espera_observada": true
+      }
+    },
+    {
+      "nombre": "Revocación primero: lectura espera y revalida denegación",
+      "categoria": "concurrencia del prototipo QA",
+      "aprobado": true,
+      "detalle": {
+        "espera_observada": true
+      }
+    },
+    {
+      "nombre": "Dos lecturas autorizadas simultáneas usan locks compatibles",
+      "categoria": "concurrencia del prototipo QA",
+      "aprobado": true,
+      "detalle": {
+        "dos_sesiones_observadas": true
+      }
+    },
+    {
+      "nombre": "Concesión concurrente idempotente crea solo una fila",
+      "categoria": "concurrencia del prototipo QA",
+      "aprobado": true,
+      "detalle": {
+        "filas": "1"
+      }
+    },
+    {
+      "nombre": "Suspensión concurrente de contexto se revalida al leer",
+      "categoria": "concurrencia del prototipo QA",
+      "aprobado": true,
+      "detalle": {
+        "espera_observada": true
+      }
+    },
+    {
+      "nombre": "Vencimiento durante espera usa reloj real y deniega",
+      "categoria": "concurrencia del prototipo QA",
+      "aprobado": true,
+      "detalle": {
+        "espera_observada": true
+      }
+    },
+    {
+      "nombre": "DI-151: solicitudes simultáneas con misma clave producen una auditoría",
+      "categoria": "concurrencia administrativa real SQL",
+      "aprobado": true,
+      "detalle": {
+        "auditorias": "1",
+        "espera_observada": true
+      }
+    },
+    {
+      "nombre": "DI-151: dos escrituras de misma revisión rechazan la segunda obsoleta",
+      "categoria": "concurrencia administrativa real SQL",
+      "aprobado": true,
+      "detalle": {
+        "espera_observada": true
+      }
+    },
+    {
+      "nombre": "Último administrador conserva rol al rechazarse su retirada propia",
+      "categoria": "administración",
+      "aprobado": true,
+      "detalle": "Rechazo CAMBIO_PROPIO_PROHIBIDO; no cobertura de la rama ULTIMO_SUPERUSUARIO_PROTEGIDO"
+    }
+  ],
+  "remoto": false,
+  "postgresql": "PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
+  "catalogo_sql": {
+    "tablas": 29,
+    "columnas": 219,
+    "restricciones": 201,
+    "indices": 84
+  },
+  "aprobadas": 118,
+  "fallidas": 0
+}

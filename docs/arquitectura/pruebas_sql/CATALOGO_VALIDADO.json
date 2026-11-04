@@ -1,0 +1,3280 @@
+{
+  "base": "dentaia_arch_qa_fase2",
+  "comprobaciones": [
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: public.profiles",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 3,
+        "indices": 1,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: public.dentists",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 5,
+        "indices": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: public.appointment_requests",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 8,
+        "indices": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: public.patient_consents",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 7,
+        "indices": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: public.dental_photos",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 10,
+        "indices": 4,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: dentaia_admin.revisiones_roles",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 2,
+        "indices": 1,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: dentaia_admin.aprobaciones_roles",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 6,
+        "indices": 1,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: dentaia_admin.auditoria_roles",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 1,
+        "indices": 1,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.clinics",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 4,
+        "indices": 2,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.professional_accounts",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 6,
+        "indices": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.professional_verifications",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 6,
+        "indices": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.clinic_memberships",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 7,
+        "indices": 4,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.patient_records",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 4,
+        "indices": 2,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.clinical_encounters",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 11,
+        "indices": 5,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.clinical_entries",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 12,
+        "indices": 4,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.clinical_documents",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 8,
+        "indices": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.clinical_access_grants",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 8,
+        "indices": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.clinical_grant_resources",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 3,
+        "indices": 2,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: clinical.clinical_access_audit",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 8,
+        "indices": 6,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.dataset_versions",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 8,
+        "indices": 2,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.dataset_items",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 9,
+        "indices": 4,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.model_versions",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 10,
+        "indices": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.analysis_authorizations",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 9,
+        "indices": 5,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.analysis_jobs",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 14,
+        "indices": 6,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.analysis_results",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 9,
+        "indices": 2,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.educational_recommendations",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 7,
+        "indices": 2,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.result_recommendations",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 4,
+        "indices": 2,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.evaluation_runs",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 7,
+        "indices": 3,
+        "errores": []
+      }
+    },
+    {
+      "nombre": "PK/FK/UNIQUE/CHECK/índices: ml.evaluation_metrics",
+      "categoria": "catálogo completo PostgreSQL",
+      "aprobado": true,
+      "detalle": {
+        "restricciones": 5,
+        "indices": 1,
+        "errores": []
+      }
+    }
+  ],
+  "aprobadas": 29,
+  "fallidas": 0,
+  "restricciones": [
+    {
+      "name": "public.appointment_requests",
+      "contype": "c",
+      "columns": [
+        "contact_email"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(contact_email) <= 254) AND (contact_email ~ '^[^[:space:]@]+@[^[:space:]@]+[.][^[:space:]@]+$'::text)))"
+    },
+    {
+      "name": "public.appointment_requests",
+      "contype": "c",
+      "columns": [
+        "contact_name"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(contact_name)) >= 2) AND (length(btrim(contact_name)) <= 120)))"
+    },
+    {
+      "name": "public.appointment_requests",
+      "contype": "c",
+      "columns": [
+        "is_demo"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (is_demo)"
+    },
+    {
+      "name": "public.appointment_requests",
+      "contype": "c",
+      "columns": [
+        "message"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(message) <= 1000))"
+    },
+    {
+      "name": "public.appointment_requests",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "public.appointment_requests",
+      "contype": "c",
+      "columns": [
+        "status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((status = ANY (ARRAY['requested'::text, 'cancelled'::text])))"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "c",
+      "columns": [
+        "bucket_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((bucket_id = 'dental-photos'::text))"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "c",
+      "columns": [
+        "object_path",
+        "user_id",
+        "consent_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((object_path ~~ ((((user_id)::text || '/'::text) || (consent_id)::text) || '/%'::text)) AND (length(split_part(object_path, '/'::text, 3)) > 0)))"
+    },
+    {
+      "name": "public.patient_consents",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "t",
+      "columns": [],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "t",
+      "columns": [],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "c",
+      "columns": [
+        "mime_type"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((mime_type = ANY (ARRAY['image/jpeg'::text, 'image/png'::text, 'image/webp'::text])))"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "u",
+      "columns": [
+        "object_path"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (object_path)"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "c",
+      "columns": [
+        "original_filename"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(original_filename) >= 1) AND (length(original_filename) <= 255)))"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "c",
+      "columns": [
+        "size_bytes"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((size_bytes >= 1) AND (size_bytes <= 8388608)))"
+    },
+    {
+      "name": "public.dentists",
+      "contype": "c",
+      "columns": [
+        "consultation_price"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((consultation_price >= (0)::numeric))"
+    },
+    {
+      "name": "public.dentists",
+      "contype": "c",
+      "columns": [
+        "currency"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((currency = 'PEN'::text))"
+    },
+    {
+      "name": "public.dentists",
+      "contype": "c",
+      "columns": [
+        "is_demo"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (is_demo)"
+    },
+    {
+      "name": "public.dentists",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "public.dentists",
+      "contype": "u",
+      "columns": [
+        "slug"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (slug)"
+    },
+    {
+      "name": "public.patient_consents",
+      "contype": "c",
+      "columns": [
+        "revoked_at",
+        "accepted_at"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((revoked_at IS NULL) OR (revoked_at >= accepted_at)))"
+    },
+    {
+      "name": "public.patient_consents",
+      "contype": "c",
+      "columns": [
+        "consent_text"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(consent_text)) >= 20) AND (length(btrim(consent_text)) <= 5000)))"
+    },
+    {
+      "name": "public.patient_consents",
+      "contype": "c",
+      "columns": [
+        "policy_version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(policy_version)) >= 1) AND (length(btrim(policy_version)) <= 80)))"
+    },
+    {
+      "name": "public.patient_consents",
+      "contype": "c",
+      "columns": [
+        "purpose"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((purpose = 'academic_photo_storage'::text))"
+    },
+    {
+      "name": "public.patient_consents",
+      "contype": "u",
+      "columns": [
+        "user_id",
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (user_id, id)"
+    },
+    {
+      "name": "public.profiles",
+      "contype": "c",
+      "columns": [
+        "full_name"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(full_name)) >= 2) AND (length(btrim(full_name)) <= 120)))"
+    },
+    {
+      "name": "public.profiles",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "public.appointment_requests",
+      "contype": "f",
+      "columns": [
+        "dentist_id"
+      ],
+      "target": "public.dentists",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "a",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (dentist_id) REFERENCES dentists(id)"
+    },
+    {
+      "name": "public.appointment_requests",
+      "contype": "f",
+      "columns": [
+        "user_id"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "f",
+      "columns": [
+        "user_id",
+        "consent_id"
+      ],
+      "target": "public.patient_consents",
+      "references": [
+        "user_id",
+        "id"
+      ],
+      "confdeltype": "a",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (user_id, consent_id) REFERENCES patient_consents(user_id, id)"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "f",
+      "columns": [
+        "user_id"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "public.patient_consents",
+      "contype": "f",
+      "columns": [
+        "user_id"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "public.profiles",
+      "contype": "f",
+      "columns": [
+        "id"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "clinical.clinics",
+      "contype": "c",
+      "columns": [
+        "name"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(name)) >= 1) AND (length(btrim(name)) <= 200)))"
+    },
+    {
+      "name": "ml.dataset_items",
+      "contype": "c",
+      "columns": [
+        "image_sha256"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((image_sha256 ~ '^[0-9a-f]{64}$'::text))"
+    },
+    {
+      "name": "clinical.clinics",
+      "contype": "c",
+      "columns": [
+        "status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'inactive'::text])))"
+    },
+    {
+      "name": "clinical.clinics",
+      "contype": "c",
+      "columns": [
+        "location"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((location IS NULL) OR (length(location) <= 300)))"
+    },
+    {
+      "name": "clinical.clinics",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.professional_accounts",
+      "contype": "c",
+      "columns": [
+        "status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'verified'::text, 'suspended'::text])))"
+    },
+    {
+      "name": "clinical.professional_accounts",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.professional_accounts",
+      "contype": "u",
+      "columns": [
+        "user_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (user_id)"
+    },
+    {
+      "name": "clinical.professional_accounts",
+      "contype": "u",
+      "columns": [
+        "dentist_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (dentist_id)"
+    },
+    {
+      "name": "clinical.professional_accounts",
+      "contype": "f",
+      "columns": [
+        "user_id"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.professional_accounts",
+      "contype": "f",
+      "columns": [
+        "dentist_id"
+      ],
+      "target": "public.dentists",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (dentist_id) REFERENCES dentists(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.professional_verifications",
+      "contype": "c",
+      "columns": [
+        "decision"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((decision = ANY (ARRAY['approved'::text, 'rejected'::text])))"
+    },
+    {
+      "name": "clinical.professional_verifications",
+      "contype": "c",
+      "columns": [
+        "reference"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(reference)) >= 1) AND (length(btrim(reference)) <= 300)))"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "c",
+      "columns": [
+        "replaces_id",
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((replaces_id IS NULL) OR (replaces_id <> id)))"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "c",
+      "columns": [
+        "replaces_id",
+        "correction_reason"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((((replaces_id IS NULL) AND (correction_reason IS NULL)) OR ((replaces_id IS NOT NULL) AND ((length(btrim(correction_reason)) >= 1) AND (length(btrim(correction_reason)) <= 1000)) AND (correction_reason IS NOT NULL))))"
+    },
+    {
+      "name": "clinical.professional_verifications",
+      "contype": "c",
+      "columns": [
+        "reason"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(reason)) >= 1) AND (length(btrim(reason)) <= 1000)))"
+    },
+    {
+      "name": "clinical.professional_verifications",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.professional_verifications",
+      "contype": "f",
+      "columns": [
+        "professional_id"
+      ],
+      "target": "clinical.professional_accounts",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (professional_id) REFERENCES clinical.professional_accounts(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.professional_verifications",
+      "contype": "f",
+      "columns": [
+        "reviewed_by"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (reviewed_by) REFERENCES auth.users(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "contype": "c",
+      "columns": [
+        "status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'inactive'::text, 'suspended'::text])))"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "contype": "c",
+      "columns": [
+        "valid_until",
+        "valid_from"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((valid_until IS NULL) OR (valid_until > valid_from)))"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "contype": "u",
+      "columns": [
+        "clinic_id",
+        "professional_id",
+        "valid_from"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (clinic_id, professional_id, valid_from)"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "contype": "x",
+      "columns": [
+        "clinic_id",
+        "professional_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "EXCLUDE USING gist (clinic_id WITH =, professional_id WITH =, tstzrange(valid_from, valid_until, '[)'::text) WITH &&) WHERE ((status = 'active'::text))"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "contype": "f",
+      "columns": [
+        "clinic_id"
+      ],
+      "target": "clinical.clinics",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (clinic_id) REFERENCES clinical.clinics(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "contype": "f",
+      "columns": [
+        "professional_id"
+      ],
+      "target": "clinical.professional_accounts",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (professional_id) REFERENCES clinical.professional_accounts(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.patient_records",
+      "contype": "c",
+      "columns": [
+        "status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'archived'::text])))"
+    },
+    {
+      "name": "clinical.patient_records",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.patient_records",
+      "contype": "u",
+      "columns": [
+        "user_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (user_id)"
+    },
+    {
+      "name": "clinical.patient_records",
+      "contype": "f",
+      "columns": [
+        "user_id"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "c",
+      "columns": [
+        "status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((status = ANY (ARRAY['recorded'::text, 'voided'::text])))"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "f",
+      "columns": [
+        "replaces_id",
+        "encounter_id",
+        "kind"
+      ],
+      "target": "clinical.clinical_entries",
+      "references": [
+        "id",
+        "encounter_id",
+        "kind"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (replaces_id, encounter_id, kind) REFERENCES clinical.clinical_entries(id, encounter_id, kind) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "c",
+      "columns": [
+        "status",
+        "replaces_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((status <> 'voided'::text) OR (replaces_id IS NOT NULL)))"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "u",
+      "columns": [
+        "id",
+        "patient_id",
+        "membership_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (id, patient_id, membership_id)"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "u",
+      "columns": [
+        "replaces_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (replaces_id)"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "f",
+      "columns": [
+        "patient_id"
+      ],
+      "target": "clinical.patient_records",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (patient_id) REFERENCES clinical.patient_records(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "f",
+      "columns": [
+        "membership_id"
+      ],
+      "target": "clinical.clinic_memberships",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (membership_id) REFERENCES clinical.clinic_memberships(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "contype": "f",
+      "columns": [
+        "replaces_id",
+        "patient_id",
+        "membership_id"
+      ],
+      "target": "clinical.clinical_encounters",
+      "references": [
+        "id",
+        "patient_id",
+        "membership_id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (replaces_id, patient_id, membership_id) REFERENCES clinical.clinical_encounters(id, patient_id, membership_id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "c",
+      "columns": [
+        "kind"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((kind = ANY (ARRAY['background'::text, 'diagnosis'::text, 'treatment'::text])))"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "c",
+      "columns": [
+        "information_state"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((information_state = ANY (ARRAY['recorded'::text, 'unknown'::text, 'not_recorded'::text])))"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "c",
+      "columns": [
+        "information_state",
+        "description",
+        "code",
+        "code_system"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((((information_state = 'recorded'::text) AND (description IS NOT NULL) AND ((length(btrim(description)) >= 1) AND (length(btrim(description)) <= 10000))) OR ((information_state <> 'recorded'::text) AND (description IS NULL) AND (code IS NULL) AND (code_system IS NULL))))"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "c",
+      "columns": [
+        "code",
+        "code_system"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((code IS NULL) = (code_system IS NULL)))"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "c",
+      "columns": [
+        "replaces_id",
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((replaces_id IS NULL) OR (replaces_id <> id)))"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "c",
+      "columns": [
+        "replaces_id",
+        "correction_reason"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((((replaces_id IS NULL) AND (correction_reason IS NULL)) OR ((replaces_id IS NOT NULL) AND (correction_reason IS NOT NULL) AND ((length(btrim(correction_reason)) >= 1) AND (length(btrim(correction_reason)) <= 1000)))))"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "u",
+      "columns": [
+        "id",
+        "encounter_id",
+        "kind"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (id, encounter_id, kind)"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "u",
+      "columns": [
+        "replaces_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (replaces_id)"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "contype": "f",
+      "columns": [
+        "encounter_id"
+      ],
+      "target": "clinical.clinical_encounters",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (encounter_id) REFERENCES clinical.clinical_encounters(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "contype": "c",
+      "columns": [
+        "kind"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((kind = ANY (ARRAY['exam'::text, 'document'::text])))"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "contype": "c",
+      "columns": [
+        "title"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(title)) >= 1) AND (length(btrim(title)) <= 200)))"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "contype": "c",
+      "columns": [
+        "availability"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((availability = ANY (ARRAY['available'::text, 'unavailable'::text])))"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "contype": "c",
+      "columns": [
+        "availability",
+        "bucket_id",
+        "object_path",
+        "mime_type",
+        "size_bytes"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((((availability = 'available'::text) AND (bucket_id = 'dentaia-clinical-documents'::text) AND (object_path IS NOT NULL) AND (mime_type = ANY (ARRAY['application/pdf'::text, 'image/jpeg'::text, 'image/png'::text, 'image/webp'::text])) AND ((size_bytes >= 1) AND (size_bytes <= 8388608)) AND (bucket_id IS NOT NULL) AND (mime_type IS NOT NULL) AND (size_bytes IS NOT NULL)) OR ((availability = 'unavailable'::text) AND (bucket_id IS NULL) AND (object_path IS NULL) AND (mime_type IS NULL) AND (size_bytes IS NULL))))"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "contype": "c",
+      "columns": [
+        "object_path"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((object_path IS NULL) OR (((length(object_path) >= 1) AND (length(object_path) <= 512)) AND (object_path !~ '(^|/)\\.\\.?(/|$)'::text))))"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "contype": "u",
+      "columns": [
+        "bucket_id",
+        "object_path"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (bucket_id, object_path)"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "contype": "f",
+      "columns": [
+        "encounter_id"
+      ],
+      "target": "clinical.clinical_encounters",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (encounter_id) REFERENCES clinical.clinical_encounters(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "contype": "c",
+      "columns": [
+        "expires_at",
+        "granted_at"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((expires_at > granted_at))"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "contype": "c",
+      "columns": [
+        "revoked_at",
+        "granted_at"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((revoked_at IS NULL) OR (revoked_at >= granted_at)))"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "contype": "c",
+      "columns": [
+        "scope_mode"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((scope_mode = 'selected_encounters'::text))"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "contype": "f",
+      "columns": [
+        "grant_id"
+      ],
+      "target": "clinical.clinical_access_grants",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (grant_id) REFERENCES clinical.clinical_access_grants(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "contype": "c",
+      "columns": [
+        "purpose"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(purpose)) >= 1) AND (length(btrim(purpose)) <= 100)))"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "contype": "c",
+      "columns": [
+        "policy_version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(policy_version)) >= 1) AND (length(btrim(policy_version)) <= 80)))"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "contype": "f",
+      "columns": [
+        "patient_id"
+      ],
+      "target": "clinical.patient_records",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (patient_id) REFERENCES clinical.patient_records(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "contype": "f",
+      "columns": [
+        "membership_id"
+      ],
+      "target": "clinical.clinic_memberships",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (membership_id) REFERENCES clinical.clinic_memberships(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_grant_resources",
+      "contype": "p",
+      "columns": [
+        "grant_id",
+        "encounter_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (grant_id, encounter_id)"
+    },
+    {
+      "name": "clinical.clinical_grant_resources",
+      "contype": "f",
+      "columns": [
+        "grant_id"
+      ],
+      "target": "clinical.clinical_access_grants",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (grant_id) REFERENCES clinical.clinical_access_grants(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_grant_resources",
+      "contype": "f",
+      "columns": [
+        "encounter_id"
+      ],
+      "target": "clinical.clinical_encounters",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (encounter_id) REFERENCES clinical.clinical_encounters(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "contype": "c",
+      "columns": [
+        "outcome"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((outcome = ANY (ARRAY['allowed'::text, 'denied'::text, 'error'::text])))"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "contype": "c",
+      "columns": [
+        "operation"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((operation = ANY (ARRAY['read_history'::text, 'read_document'::text, 'grant_access'::text, 'revoke_access'::text, 'read_professional_requests'::text, 'list_authorized_patients'::text, 'verify_professional'::text, 'membership_change'::text, 'register_clinical'::text])))"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "contype": "c",
+      "columns": [
+        "reason_code"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((reason_code ~ '^[A-Z][A-Z0-9_]{0,79}$'::text))"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "contype": "f",
+      "columns": [
+        "actor_user_id"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (actor_user_id) REFERENCES auth.users(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "contype": "f",
+      "columns": [
+        "patient_id"
+      ],
+      "target": "clinical.patient_records",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (patient_id) REFERENCES clinical.patient_records(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "contype": "f",
+      "columns": [
+        "membership_id"
+      ],
+      "target": "clinical.clinic_memberships",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (membership_id) REFERENCES clinical.clinic_memberships(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "contype": "c",
+      "columns": [
+        "name"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(name)) >= 1) AND (length(btrim(name)) <= 120)))"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "contype": "c",
+      "columns": [
+        "version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(version)) >= 1) AND (length(btrim(version)) <= 80)))"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "contype": "c",
+      "columns": [
+        "manifest_sha256"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((manifest_sha256 ~ '^[0-9a-f]{64}$'::text))"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "contype": "c",
+      "columns": [
+        "source_uri"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(source_uri)) > 0))"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "contype": "c",
+      "columns": [
+        "license"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(license)) > 0))"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "contype": "c",
+      "columns": [
+        "permission_reference"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(permission_reference)) > 0))"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "contype": "u",
+      "columns": [
+        "name",
+        "version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (name, version)"
+    },
+    {
+      "name": "ml.dataset_items",
+      "contype": "c",
+      "columns": [
+        "split"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((split = ANY (ARRAY['train'::text, 'validation'::text, 'test'::text])))"
+    },
+    {
+      "name": "ml.dataset_items",
+      "contype": "c",
+      "columns": [
+        "subject_key"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(subject_key)) >= 1) AND (length(btrim(subject_key)) <= 128)))"
+    },
+    {
+      "name": "ml.dataset_items",
+      "contype": "c",
+      "columns": [
+        "label"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(label)) >= 1) AND (length(btrim(label)) <= 120)))"
+    },
+    {
+      "name": "ml.dataset_items",
+      "contype": "c",
+      "columns": [
+        "object_reference"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(object_reference)) > 0))"
+    },
+    {
+      "name": "ml.dataset_items",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "ml.dataset_items",
+      "contype": "u",
+      "columns": [
+        "dataset_id",
+        "image_sha256"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (dataset_id, image_sha256)"
+    },
+    {
+      "name": "ml.dataset_items",
+      "contype": "x",
+      "columns": [
+        "dataset_id",
+        "subject_key",
+        "split"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "EXCLUDE USING gist (dataset_id WITH =, subject_key WITH =, split WITH <>)"
+    },
+    {
+      "name": "ml.dataset_items",
+      "contype": "f",
+      "columns": [
+        "dataset_id"
+      ],
+      "target": "ml.dataset_versions",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (dataset_id) REFERENCES ml.dataset_versions(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "c",
+      "columns": [
+        "status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((status = ANY (ARRAY['draft'::text, 'evaluated'::text, 'retired'::text])))"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "c",
+      "columns": [
+        "artifact_sha256"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((artifact_sha256 ~ '^[0-9a-f]{64}$'::text))"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "c",
+      "columns": [
+        "code_commit"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((code_commit ~ '^[0-9a-f]{40}([0-9a-f]{24})?$'::text))"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "c",
+      "columns": [
+        "name"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(name)) > 0))"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "c",
+      "columns": [
+        "version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(version)) > 0))"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "c",
+      "columns": [
+        "preprocessing_version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(preprocessing_version)) > 0))"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "c",
+      "columns": [
+        "artifact_uri"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(artifact_uri)) > 0))"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "u",
+      "columns": [
+        "name",
+        "version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (name, version)"
+    },
+    {
+      "name": "ml.model_versions",
+      "contype": "f",
+      "columns": [
+        "dataset_id"
+      ],
+      "target": "ml.dataset_versions",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (dataset_id) REFERENCES ml.dataset_versions(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "ml.educational_recommendations",
+      "contype": "c",
+      "columns": [
+        "review_status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((review_status = ANY (ARRAY['draft'::text, 'reviewed'::text, 'retired'::text])))"
+    },
+    {
+      "name": "ml.educational_recommendations",
+      "contype": "c",
+      "columns": [
+        "code"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(code)) > 0))"
+    },
+    {
+      "name": "ml.educational_recommendations",
+      "contype": "c",
+      "columns": [
+        "version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(version)) > 0))"
+    },
+    {
+      "name": "ml.educational_recommendations",
+      "contype": "c",
+      "columns": [
+        "text"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(text)) > 0))"
+    },
+    {
+      "name": "ml.educational_recommendations",
+      "contype": "c",
+      "columns": [
+        "source_reference"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(source_reference)) > 0))"
+    },
+    {
+      "name": "ml.educational_recommendations",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "ml.educational_recommendations",
+      "contype": "u",
+      "columns": [
+        "code",
+        "version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (code, version)"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "contype": "c",
+      "columns": [
+        "split"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((split = ANY (ARRAY['train'::text, 'validation'::text, 'test'::text])))"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "contype": "c",
+      "columns": [
+        "sample_size"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((sample_size > 0))"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "contype": "c",
+      "columns": [
+        "config"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((jsonb_typeof(config) = 'object'::text))"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "contype": "c",
+      "columns": [
+        "artifact_reference"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(artifact_reference)) > 0))"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "contype": "f",
+      "columns": [
+        "model_id"
+      ],
+      "target": "ml.model_versions",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (model_id) REFERENCES ml.model_versions(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "contype": "f",
+      "columns": [
+        "dataset_id"
+      ],
+      "target": "ml.dataset_versions",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (dataset_id) REFERENCES ml.dataset_versions(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "ml.evaluation_metrics",
+      "contype": "c",
+      "columns": [
+        "name"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((name = ANY (ARRAY['accuracy'::text, 'precision'::text, 'recall'::text, 'f1'::text, 'auc'::text, 'confusion_matrix'::text])))"
+    },
+    {
+      "name": "ml.evaluation_metrics",
+      "contype": "c",
+      "columns": [
+        "name",
+        "value",
+        "matrix"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((((name = 'confusion_matrix'::text) AND (value IS NULL) AND (matrix IS NOT NULL)) OR ((name <> 'confusion_matrix'::text) AND (value IS NOT NULL) AND ((value >= (0)::numeric) AND (value <= (1)::numeric)) AND (matrix IS NULL))))"
+    },
+    {
+      "name": "ml.evaluation_metrics",
+      "contype": "c",
+      "columns": [
+        "label"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(label)) > 0))"
+    },
+    {
+      "name": "ml.evaluation_metrics",
+      "contype": "p",
+      "columns": [
+        "run_id",
+        "name",
+        "label"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (run_id, name, label)"
+    },
+    {
+      "name": "ml.evaluation_metrics",
+      "contype": "f",
+      "columns": [
+        "run_id"
+      ],
+      "target": "ml.evaluation_runs",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (run_id) REFERENCES ml.evaluation_runs(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "public.dental_photos",
+      "contype": "u",
+      "columns": [
+        "id",
+        "user_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (id, user_id)"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "contype": "c",
+      "columns": [
+        "purpose"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((purpose = 'exploratory_image_analysis'::text))"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "contype": "c",
+      "columns": [
+        "expires_at",
+        "granted_at"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((expires_at > granted_at))"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "contype": "c",
+      "columns": [
+        "revoked_at",
+        "granted_at"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((revoked_at IS NULL) OR (revoked_at >= granted_at)))"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "contype": "c",
+      "columns": [
+        "policy_version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(policy_version)) >= 1) AND (length(btrim(policy_version)) <= 80)))"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "contype": "c",
+      "columns": [
+        "consent_text"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((length(btrim(consent_text)) >= 20) AND (length(btrim(consent_text)) <= 5000)))"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "contype": "u",
+      "columns": [
+        "id",
+        "photo_id",
+        "owner_user_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (id, photo_id, owner_user_id)"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "contype": "f",
+      "columns": [
+        "owner_user_id"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (owner_user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "contype": "f",
+      "columns": [
+        "photo_id",
+        "owner_user_id"
+      ],
+      "target": "public.dental_photos",
+      "references": [
+        "id",
+        "user_id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (photo_id, owner_user_id) REFERENCES dental_photos(id, user_id) ON DELETE CASCADE"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "c",
+      "columns": [
+        "status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((status = ANY (ARRAY['queued'::text, 'running'::text, 'succeeded'::text, 'failed'::text, 'cancelled'::text])))"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "c",
+      "columns": [
+        "attempt_count"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((attempt_count >= 0))"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "c",
+      "columns": [
+        "status",
+        "lease_id",
+        "lease_expires_at"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((((status = 'running'::text) AND (lease_id IS NOT NULL) AND (lease_expires_at IS NOT NULL)) OR ((status <> 'running'::text) AND (lease_id IS NULL) AND (lease_expires_at IS NULL))))"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "c",
+      "columns": [
+        "status",
+        "finished_at"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((status = ANY (ARRAY['succeeded'::text, 'failed'::text, 'cancelled'::text])) = (finished_at IS NOT NULL)))"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "c",
+      "columns": [
+        "finished_at",
+        "created_at"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((finished_at IS NULL) OR (finished_at >= created_at)))"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "c",
+      "columns": [
+        "status",
+        "error_code"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((status <> 'failed'::text) OR (error_code IS NOT NULL)))"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "c",
+      "columns": [
+        "error_code"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((error_code IS NULL) OR (error_code ~ '^[A-Z][A-Z0-9_]{0,79}$'::text)))"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "u",
+      "columns": [
+        "owner_user_id",
+        "idempotency_key"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (owner_user_id, idempotency_key)"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "f",
+      "columns": [
+        "owner_user_id"
+      ],
+      "target": "auth.users",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (owner_user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "f",
+      "columns": [
+        "photo_id"
+      ],
+      "target": "public.dental_photos",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (photo_id) REFERENCES dental_photos(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "f",
+      "columns": [
+        "model_id"
+      ],
+      "target": "ml.model_versions",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (model_id) REFERENCES ml.model_versions(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "f",
+      "columns": [
+        "authorization_id",
+        "photo_id",
+        "owner_user_id"
+      ],
+      "target": "ml.analysis_authorizations",
+      "references": [
+        "id",
+        "photo_id",
+        "owner_user_id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (authorization_id, photo_id, owner_user_id) REFERENCES ml.analysis_authorizations(id, photo_id, owner_user_id) ON DELETE CASCADE"
+    },
+    {
+      "name": "ml.analysis_results",
+      "contype": "c",
+      "columns": [
+        "quality_status"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((quality_status = ANY (ARRAY['evaluable'::text, 'not_evaluable'::text])))"
+    },
+    {
+      "name": "ml.analysis_results",
+      "contype": "c",
+      "columns": [
+        "score"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((score IS NULL) OR ((score >= (0)::numeric) AND (score <= (1)::numeric))))"
+    },
+    {
+      "name": "ml.analysis_results",
+      "contype": "c",
+      "columns": [
+        "quality_status",
+        "label",
+        "score"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((((quality_status = 'not_evaluable'::text) AND (label IS NULL) AND (score IS NULL)) OR ((quality_status = 'evaluable'::text) AND (label IS NOT NULL) AND (length(btrim(label)) > 0))))"
+    },
+    {
+      "name": "ml.analysis_results",
+      "contype": "c",
+      "columns": [
+        "limitations"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(limitations)) > 0))"
+    },
+    {
+      "name": "ml.analysis_results",
+      "contype": "c",
+      "columns": [
+        "disclaimer_version"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(disclaimer_version)) > 0))"
+    },
+    {
+      "name": "ml.analysis_results",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "ml.analysis_results",
+      "contype": "u",
+      "columns": [
+        "job_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "UNIQUE (job_id)"
+    },
+    {
+      "name": "ml.analysis_results",
+      "contype": "f",
+      "columns": [
+        "job_id"
+      ],
+      "target": "ml.analysis_jobs",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (job_id) REFERENCES ml.analysis_jobs(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "ml.result_recommendations",
+      "contype": "c",
+      "columns": [
+        "reason"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((length(btrim(reason)) > 0))"
+    },
+    {
+      "name": "ml.result_recommendations",
+      "contype": "p",
+      "columns": [
+        "result_id",
+        "recommendation_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (result_id, recommendation_id)"
+    },
+    {
+      "name": "ml.result_recommendations",
+      "contype": "f",
+      "columns": [
+        "result_id"
+      ],
+      "target": "ml.analysis_results",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "c",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (result_id) REFERENCES ml.analysis_results(id) ON DELETE CASCADE"
+    },
+    {
+      "name": "ml.result_recommendations",
+      "contype": "f",
+      "columns": [
+        "recommendation_id"
+      ],
+      "target": "ml.educational_recommendations",
+      "references": [
+        "id"
+      ],
+      "confdeltype": "r",
+      "convalidated": true,
+      "definition": "FOREIGN KEY (recommendation_id) REFERENCES ml.educational_recommendations(id) ON DELETE RESTRICT"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "contype": "t",
+      "columns": [],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+    },
+    {
+      "name": "ml.analysis_results",
+      "contype": "t",
+      "columns": [],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+    },
+    {
+      "name": "dentaia_admin.revisiones_roles",
+      "contype": "c",
+      "columns": [
+        "revision"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((revision >= 0))"
+    },
+    {
+      "name": "dentaia_admin.revisiones_roles",
+      "contype": "p",
+      "columns": [
+        "usuario_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (usuario_id)"
+    },
+    {
+      "name": "dentaia_admin.aprobaciones_roles",
+      "contype": "c",
+      "columns": [
+        "operacion"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((operacion = ANY (ARRAY['asignar'::text, 'revocar'::text])))"
+    },
+    {
+      "name": "dentaia_admin.aprobaciones_roles",
+      "contype": "c",
+      "columns": [
+        "rol"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((rol = ANY (ARRAY['paciente'::text, 'odontologo'::text, 'superusuario'::text])))"
+    },
+    {
+      "name": "dentaia_admin.aprobaciones_roles",
+      "contype": "c",
+      "columns": [
+        "revision_esperada"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((revision_esperada >= 0))"
+    },
+    {
+      "name": "dentaia_admin.aprobaciones_roles",
+      "contype": "c",
+      "columns": [
+        "aprobado_por",
+        "actor_id",
+        "objetivo_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK (((aprobado_por <> actor_id) AND (aprobado_por <> objetivo_id) AND (actor_id <> objetivo_id)))"
+    },
+    {
+      "name": "dentaia_admin.aprobaciones_roles",
+      "contype": "c",
+      "columns": [
+        "vence_en",
+        "creada_en"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "CHECK ((vence_en > creada_en))"
+    },
+    {
+      "name": "dentaia_admin.aprobaciones_roles",
+      "contype": "p",
+      "columns": [
+        "id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "name": "dentaia_admin.auditoria_roles",
+      "contype": "p",
+      "columns": [
+        "actor_id",
+        "solicitud_id"
+      ],
+      "target": null,
+      "references": [],
+      "confdeltype": " ",
+      "convalidated": true,
+      "definition": "PRIMARY KEY (actor_id, solicitud_id)"
+    }
+  ],
+  "indices": [
+    {
+      "name": "public.appointment_requests",
+      "indexname": "appointment_requests_pkey",
+      "indexdef": "CREATE UNIQUE INDEX appointment_requests_pkey ON public.appointment_requests USING btree (id)"
+    },
+    {
+      "name": "public.dental_photos",
+      "indexname": "dental_photos_object_path_key",
+      "indexdef": "CREATE UNIQUE INDEX dental_photos_object_path_key ON public.dental_photos USING btree (object_path)"
+    },
+    {
+      "name": "public.dental_photos",
+      "indexname": "dental_photos_pkey",
+      "indexdef": "CREATE UNIQUE INDEX dental_photos_pkey ON public.dental_photos USING btree (id)"
+    },
+    {
+      "name": "public.dentists",
+      "indexname": "dentists_pkey",
+      "indexdef": "CREATE UNIQUE INDEX dentists_pkey ON public.dentists USING btree (id)"
+    },
+    {
+      "name": "public.dentists",
+      "indexname": "dentists_slug_key",
+      "indexdef": "CREATE UNIQUE INDEX dentists_slug_key ON public.dentists USING btree (slug)"
+    },
+    {
+      "name": "public.patient_consents",
+      "indexname": "patient_consents_pkey",
+      "indexdef": "CREATE UNIQUE INDEX patient_consents_pkey ON public.patient_consents USING btree (id)"
+    },
+    {
+      "name": "public.patient_consents",
+      "indexname": "patient_consents_user_id_id_key",
+      "indexdef": "CREATE UNIQUE INDEX patient_consents_user_id_id_key ON public.patient_consents USING btree (user_id, id)"
+    },
+    {
+      "name": "public.profiles",
+      "indexname": "profiles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX profiles_pkey ON public.profiles USING btree (id)"
+    },
+    {
+      "name": "public.appointment_requests",
+      "indexname": "appointment_requests_dentist_idx",
+      "indexdef": "CREATE INDEX appointment_requests_dentist_idx ON public.appointment_requests USING btree (dentist_id)"
+    },
+    {
+      "name": "public.appointment_requests",
+      "indexname": "appointment_requests_user_idx",
+      "indexdef": "CREATE INDEX appointment_requests_user_idx ON public.appointment_requests USING btree (user_id, created_at DESC)"
+    },
+    {
+      "name": "public.dental_photos",
+      "indexname": "dental_photos_user_consent_idx",
+      "indexdef": "CREATE INDEX dental_photos_user_consent_idx ON public.dental_photos USING btree (user_id, consent_id)"
+    },
+    {
+      "name": "public.dentists",
+      "indexname": "dentists_district_specialty_idx",
+      "indexdef": "CREATE INDEX dentists_district_specialty_idx ON public.dentists USING btree (district, specialty)"
+    },
+    {
+      "name": "public.patient_consents",
+      "indexname": "patient_consents_user_idx",
+      "indexdef": "CREATE INDEX patient_consents_user_idx ON public.patient_consents USING btree (user_id)"
+    },
+    {
+      "name": "clinical.clinics",
+      "indexname": "clinics_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinics_pkey ON clinical.clinics USING btree (id)"
+    },
+    {
+      "name": "clinical.clinics",
+      "indexname": "clinics_q1",
+      "indexdef": "CREATE INDEX clinics_q1 ON clinical.clinics USING btree (status, name)"
+    },
+    {
+      "name": "clinical.professional_accounts",
+      "indexname": "professional_accounts_pkey",
+      "indexdef": "CREATE UNIQUE INDEX professional_accounts_pkey ON clinical.professional_accounts USING btree (id)"
+    },
+    {
+      "name": "clinical.professional_accounts",
+      "indexname": "professional_accounts_user_id_key",
+      "indexdef": "CREATE UNIQUE INDEX professional_accounts_user_id_key ON clinical.professional_accounts USING btree (user_id)"
+    },
+    {
+      "name": "clinical.professional_accounts",
+      "indexname": "professional_accounts_dentist_id_key",
+      "indexdef": "CREATE UNIQUE INDEX professional_accounts_dentist_id_key ON clinical.professional_accounts USING btree (dentist_id)"
+    },
+    {
+      "name": "clinical.professional_verifications",
+      "indexname": "professional_verifications_pkey",
+      "indexdef": "CREATE UNIQUE INDEX professional_verifications_pkey ON clinical.professional_verifications USING btree (id)"
+    },
+    {
+      "name": "clinical.professional_verifications",
+      "indexname": "professional_verifications_q1",
+      "indexdef": "CREATE INDEX professional_verifications_q1 ON clinical.professional_verifications USING btree (professional_id, reviewed_at DESC, id)"
+    },
+    {
+      "name": "clinical.professional_verifications",
+      "indexname": "professional_verifications_q2",
+      "indexdef": "CREATE INDEX professional_verifications_q2 ON clinical.professional_verifications USING btree (reviewed_by)"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "indexname": "clinic_memberships_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinic_memberships_pkey ON clinical.clinic_memberships USING btree (id)"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "indexname": "clinic_memberships_clinic_id_professional_id_valid_from_key",
+      "indexdef": "CREATE UNIQUE INDEX clinic_memberships_clinic_id_professional_id_valid_from_key ON clinical.clinic_memberships USING btree (clinic_id, professional_id, valid_from)"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "indexname": "clinic_memberships_clinic_id_professional_id_tstzrange_excl",
+      "indexdef": "CREATE INDEX clinic_memberships_clinic_id_professional_id_tstzrange_excl ON clinical.clinic_memberships USING gist (clinic_id, professional_id, tstzrange(valid_from, valid_until, '[)'::text)) WHERE (status = 'active'::text)"
+    },
+    {
+      "name": "clinical.clinic_memberships",
+      "indexname": "clinic_memberships_q1",
+      "indexdef": "CREATE INDEX clinic_memberships_q1 ON clinical.clinic_memberships USING btree (professional_id, status)"
+    },
+    {
+      "name": "clinical.patient_records",
+      "indexname": "patient_records_pkey",
+      "indexdef": "CREATE UNIQUE INDEX patient_records_pkey ON clinical.patient_records USING btree (id)"
+    },
+    {
+      "name": "clinical.patient_records",
+      "indexname": "patient_records_user_id_key",
+      "indexdef": "CREATE UNIQUE INDEX patient_records_user_id_key ON clinical.patient_records USING btree (user_id)"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "indexname": "clinical_encounters_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_encounters_pkey ON clinical.clinical_encounters USING btree (id)"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "indexname": "clinical_encounters_id_patient_id_membership_id_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_encounters_id_patient_id_membership_id_key ON clinical.clinical_encounters USING btree (id, patient_id, membership_id)"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "indexname": "clinical_encounters_replaces_id_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_encounters_replaces_id_key ON clinical.clinical_encounters USING btree (replaces_id)"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "indexname": "clinical_encounters_q1",
+      "indexdef": "CREATE INDEX clinical_encounters_q1 ON clinical.clinical_encounters USING btree (patient_id, attended_at DESC, id DESC)"
+    },
+    {
+      "name": "clinical.clinical_encounters",
+      "indexname": "clinical_encounters_q2",
+      "indexdef": "CREATE INDEX clinical_encounters_q2 ON clinical.clinical_encounters USING btree (membership_id)"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "indexname": "clinical_entries_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_entries_pkey ON clinical.clinical_entries USING btree (id)"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "indexname": "clinical_entries_id_encounter_id_kind_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_entries_id_encounter_id_kind_key ON clinical.clinical_entries USING btree (id, encounter_id, kind)"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "indexname": "clinical_entries_replaces_id_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_entries_replaces_id_key ON clinical.clinical_entries USING btree (replaces_id)"
+    },
+    {
+      "name": "clinical.clinical_entries",
+      "indexname": "clinical_entries_q1",
+      "indexdef": "CREATE INDEX clinical_entries_q1 ON clinical.clinical_entries USING btree (encounter_id, kind, recorded_at DESC)"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "indexname": "clinical_documents_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_documents_pkey ON clinical.clinical_documents USING btree (id)"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "indexname": "clinical_documents_bucket_id_object_path_key",
+      "indexdef": "CREATE UNIQUE INDEX clinical_documents_bucket_id_object_path_key ON clinical.clinical_documents USING btree (bucket_id, object_path)"
+    },
+    {
+      "name": "clinical.clinical_documents",
+      "indexname": "clinical_documents_q1",
+      "indexdef": "CREATE INDEX clinical_documents_q1 ON clinical.clinical_documents USING btree (encounter_id, exam_date DESC)"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "indexname": "clinical_access_grants_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_access_grants_pkey ON clinical.clinical_access_grants USING btree (id)"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "indexname": "clinical_access_grants_q1",
+      "indexdef": "CREATE INDEX clinical_access_grants_q1 ON clinical.clinical_access_grants USING btree (patient_id, membership_id, expires_at) WHERE (revoked_at IS NULL)"
+    },
+    {
+      "name": "clinical.clinical_access_grants",
+      "indexname": "clinical_access_grants_q2",
+      "indexdef": "CREATE INDEX clinical_access_grants_q2 ON clinical.clinical_access_grants USING btree (membership_id)"
+    },
+    {
+      "name": "clinical.clinical_grant_resources",
+      "indexname": "clinical_grant_resources_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_grant_resources_pkey ON clinical.clinical_grant_resources USING btree (grant_id, encounter_id)"
+    },
+    {
+      "name": "clinical.clinical_grant_resources",
+      "indexname": "clinical_grant_resources_q1",
+      "indexdef": "CREATE INDEX clinical_grant_resources_q1 ON clinical.clinical_grant_resources USING btree (encounter_id)"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "indexname": "clinical_access_audit_pkey",
+      "indexdef": "CREATE UNIQUE INDEX clinical_access_audit_pkey ON clinical.clinical_access_audit USING btree (id)"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "indexname": "clinical_access_audit_q1",
+      "indexdef": "CREATE INDEX clinical_access_audit_q1 ON clinical.clinical_access_audit USING btree (patient_id, occurred_at DESC)"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "indexname": "clinical_access_audit_q2",
+      "indexdef": "CREATE INDEX clinical_access_audit_q2 ON clinical.clinical_access_audit USING btree (actor_user_id, occurred_at DESC)"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "indexname": "clinical_access_audit_q3",
+      "indexdef": "CREATE INDEX clinical_access_audit_q3 ON clinical.clinical_access_audit USING btree (request_id)"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "indexname": "clinical_access_audit_q4",
+      "indexdef": "CREATE INDEX clinical_access_audit_q4 ON clinical.clinical_access_audit USING btree (membership_id)"
+    },
+    {
+      "name": "clinical.clinical_access_audit",
+      "indexname": "clinical_access_audit_q5",
+      "indexdef": "CREATE INDEX clinical_access_audit_q5 ON clinical.clinical_access_audit USING btree (grant_id)"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "indexname": "dataset_versions_pkey",
+      "indexdef": "CREATE UNIQUE INDEX dataset_versions_pkey ON ml.dataset_versions USING btree (id)"
+    },
+    {
+      "name": "ml.dataset_versions",
+      "indexname": "dataset_versions_name_version_key",
+      "indexdef": "CREATE UNIQUE INDEX dataset_versions_name_version_key ON ml.dataset_versions USING btree (name, version)"
+    },
+    {
+      "name": "ml.dataset_items",
+      "indexname": "dataset_items_pkey",
+      "indexdef": "CREATE UNIQUE INDEX dataset_items_pkey ON ml.dataset_items USING btree (id)"
+    },
+    {
+      "name": "ml.dataset_items",
+      "indexname": "dataset_items_dataset_id_image_sha256_key",
+      "indexdef": "CREATE UNIQUE INDEX dataset_items_dataset_id_image_sha256_key ON ml.dataset_items USING btree (dataset_id, image_sha256)"
+    },
+    {
+      "name": "ml.dataset_items",
+      "indexname": "dataset_items_dataset_id_subject_key_split_excl",
+      "indexdef": "CREATE INDEX dataset_items_dataset_id_subject_key_split_excl ON ml.dataset_items USING gist (dataset_id, subject_key, split)"
+    },
+    {
+      "name": "ml.dataset_items",
+      "indexname": "dataset_items_q1",
+      "indexdef": "CREATE INDEX dataset_items_q1 ON ml.dataset_items USING btree (dataset_id, subject_key, split)"
+    },
+    {
+      "name": "ml.model_versions",
+      "indexname": "model_versions_pkey",
+      "indexdef": "CREATE UNIQUE INDEX model_versions_pkey ON ml.model_versions USING btree (id)"
+    },
+    {
+      "name": "ml.model_versions",
+      "indexname": "model_versions_name_version_key",
+      "indexdef": "CREATE UNIQUE INDEX model_versions_name_version_key ON ml.model_versions USING btree (name, version)"
+    },
+    {
+      "name": "ml.model_versions",
+      "indexname": "model_versions_q1",
+      "indexdef": "CREATE INDEX model_versions_q1 ON ml.model_versions USING btree (dataset_id)"
+    },
+    {
+      "name": "ml.educational_recommendations",
+      "indexname": "educational_recommendations_pkey",
+      "indexdef": "CREATE UNIQUE INDEX educational_recommendations_pkey ON ml.educational_recommendations USING btree (id)"
+    },
+    {
+      "name": "ml.educational_recommendations",
+      "indexname": "educational_recommendations_code_version_key",
+      "indexdef": "CREATE UNIQUE INDEX educational_recommendations_code_version_key ON ml.educational_recommendations USING btree (code, version)"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "indexname": "evaluation_runs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX evaluation_runs_pkey ON ml.evaluation_runs USING btree (id)"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "indexname": "evaluation_runs_q1",
+      "indexdef": "CREATE INDEX evaluation_runs_q1 ON ml.evaluation_runs USING btree (model_id, executed_at DESC)"
+    },
+    {
+      "name": "ml.evaluation_runs",
+      "indexname": "evaluation_runs_q2",
+      "indexdef": "CREATE INDEX evaluation_runs_q2 ON ml.evaluation_runs USING btree (dataset_id)"
+    },
+    {
+      "name": "ml.evaluation_metrics",
+      "indexname": "evaluation_metrics_pkey",
+      "indexdef": "CREATE UNIQUE INDEX evaluation_metrics_pkey ON ml.evaluation_metrics USING btree (run_id, name, label)"
+    },
+    {
+      "name": "public.dental_photos",
+      "indexname": "dental_photos_id_owner_key",
+      "indexdef": "CREATE UNIQUE INDEX dental_photos_id_owner_key ON public.dental_photos USING btree (id, user_id)"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "indexname": "analysis_authorizations_pkey",
+      "indexdef": "CREATE UNIQUE INDEX analysis_authorizations_pkey ON ml.analysis_authorizations USING btree (id)"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "indexname": "analysis_authorizations_id_photo_id_owner_user_id_key",
+      "indexdef": "CREATE UNIQUE INDEX analysis_authorizations_id_photo_id_owner_user_id_key ON ml.analysis_authorizations USING btree (id, photo_id, owner_user_id)"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "indexname": "analysis_authorizations_q1",
+      "indexdef": "CREATE INDEX analysis_authorizations_q1 ON ml.analysis_authorizations USING btree (owner_user_id, photo_id, expires_at)"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "indexname": "analysis_authorizations_q2",
+      "indexdef": "CREATE INDEX analysis_authorizations_q2 ON ml.analysis_authorizations USING btree (photo_id) WHERE (revoked_at IS NULL)"
+    },
+    {
+      "name": "ml.analysis_authorizations",
+      "indexname": "analysis_authorizations_q3",
+      "indexdef": "CREATE INDEX analysis_authorizations_q3 ON ml.analysis_authorizations USING btree (photo_id, owner_user_id)"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "indexname": "analysis_jobs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX analysis_jobs_pkey ON ml.analysis_jobs USING btree (id)"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "indexname": "analysis_jobs_owner_user_id_idempotency_key_key",
+      "indexdef": "CREATE UNIQUE INDEX analysis_jobs_owner_user_id_idempotency_key_key ON ml.analysis_jobs USING btree (owner_user_id, idempotency_key)"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "indexname": "analysis_jobs_q1",
+      "indexdef": "CREATE INDEX analysis_jobs_q1 ON ml.analysis_jobs USING btree (status, created_at)"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "indexname": "analysis_jobs_q2",
+      "indexdef": "CREATE INDEX analysis_jobs_q2 ON ml.analysis_jobs USING btree (photo_id)"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "indexname": "analysis_jobs_q3",
+      "indexdef": "CREATE INDEX analysis_jobs_q3 ON ml.analysis_jobs USING btree (model_id)"
+    },
+    {
+      "name": "ml.analysis_jobs",
+      "indexname": "analysis_jobs_q4",
+      "indexdef": "CREATE INDEX analysis_jobs_q4 ON ml.analysis_jobs USING btree (authorization_id, photo_id, owner_user_id)"
+    },
+    {
+      "name": "ml.analysis_results",
+      "indexname": "analysis_results_pkey",
+      "indexdef": "CREATE UNIQUE INDEX analysis_results_pkey ON ml.analysis_results USING btree (id)"
+    },
+    {
+      "name": "ml.analysis_results",
+      "indexname": "analysis_results_job_id_key",
+      "indexdef": "CREATE UNIQUE INDEX analysis_results_job_id_key ON ml.analysis_results USING btree (job_id)"
+    },
+    {
+      "name": "ml.result_recommendations",
+      "indexname": "result_recommendations_pkey",
+      "indexdef": "CREATE UNIQUE INDEX result_recommendations_pkey ON ml.result_recommendations USING btree (result_id, recommendation_id)"
+    },
+    {
+      "name": "ml.result_recommendations",
+      "indexname": "result_recommendations_q1",
+      "indexdef": "CREATE INDEX result_recommendations_q1 ON ml.result_recommendations USING btree (recommendation_id)"
+    },
+    {
+      "name": "dentaia_admin.revisiones_roles",
+      "indexname": "revisiones_roles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX revisiones_roles_pkey ON dentaia_admin.revisiones_roles USING btree (usuario_id)"
+    },
+    {
+      "name": "dentaia_admin.aprobaciones_roles",
+      "indexname": "aprobaciones_roles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX aprobaciones_roles_pkey ON dentaia_admin.aprobaciones_roles USING btree (id)"
+    },
+    {
+      "name": "dentaia_admin.auditoria_roles",
+      "indexname": "auditoria_roles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX auditoria_roles_pkey ON dentaia_admin.auditoria_roles USING btree (actor_id, solicitud_id)"
+    }
+  ]
+}

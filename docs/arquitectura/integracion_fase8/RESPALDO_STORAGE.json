@@ -1,0 +1,14 @@
+{
+  "fecha": "2026-11-03",
+  "project": "vwmdknzjyvmsdqpepykz",
+  "escriturasRemotas": 0,
+  "apiRestauracionProbada": false,
+  "backupCifradoVerificado": true,
+  "archivos": 1,
+  "bytes": 436300,
+  "buckets": 1,
+  "todosPrivados": true,
+  "sha256Cifrado": "f4b55ee3e3c9bdff332036b57be03d437b27a935148520e6399aeaa05541d3d6",
+  "cifrado": "DPAPI CurrentUser; ACL usuario actual y SYSTEM",
+  "limitacion": "Bytes/manifest y estabilidad antes/despues comprobados; no upload de recuperacion por API ni transaccion atomica con PostgreSQL."
+}

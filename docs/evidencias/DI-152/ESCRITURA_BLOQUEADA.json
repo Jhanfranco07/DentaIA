@@ -1,0 +1,120 @@
+{
+  "fecha": "2026-11-04T01:59:14.209Z",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "entorno": "Next local temporal; sesión AAL2 real; PostgreSQL remoto solo SELECT",
+  "expectativaAnterior": 503,
+  "recibidoAnterior": 403,
+  "escriturasHabilitadas": false,
+  "pruebas": [
+    {
+      "origen": "http://127.0.0.1:3113",
+      "esperado": 403,
+      "recibido": 403,
+      "codigo": "ORIGEN_NO_ADMITIDO",
+      "etapa": "control de origen, antes de leer cuerpo o invocar proveedor",
+      "registrosConservados": true,
+      "comparacionAntes": {
+        "auth.users": {
+          "filas": 1,
+          "huella": "c3c7f581099ba9a2202892363ed04511"
+        },
+        "public.profiles": {
+          "filas": 1,
+          "huella": "45530541da318357824160b07394ef65"
+        },
+        "dentaia_admin.auditoria_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "dentaia_admin.revisiones_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "dentaia_admin.aprobaciones_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        }
+      },
+      "comparacionDespues": {
+        "auth.users": {
+          "filas": 1,
+          "huella": "c3c7f581099ba9a2202892363ed04511"
+        },
+        "public.profiles": {
+          "filas": 1,
+          "huella": "45530541da318357824160b07394ef65"
+        },
+        "dentaia_admin.auditoria_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "dentaia_admin.revisiones_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "dentaia_admin.aprobaciones_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        }
+      },
+      "aprobada": true
+    },
+    {
+      "origen": "http://localhost:3113",
+      "esperado": 503,
+      "recibido": 503,
+      "codigo": "ESCRITURAS_DESACTIVADAS",
+      "etapa": "proveedor desactivado, antes de crear cliente de escritura",
+      "registrosConservados": true,
+      "comparacionAntes": {
+        "auth.users": {
+          "filas": 1,
+          "huella": "c3c7f581099ba9a2202892363ed04511"
+        },
+        "public.profiles": {
+          "filas": 1,
+          "huella": "45530541da318357824160b07394ef65"
+        },
+        "dentaia_admin.auditoria_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "dentaia_admin.revisiones_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "dentaia_admin.aprobaciones_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        }
+      },
+      "comparacionDespues": {
+        "auth.users": {
+          "filas": 1,
+          "huella": "c3c7f581099ba9a2202892363ed04511"
+        },
+        "public.profiles": {
+          "filas": 1,
+          "huella": "45530541da318357824160b07394ef65"
+        },
+        "dentaia_admin.auditoria_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "dentaia_admin.revisiones_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "dentaia_admin.aprobaciones_roles": {
+          "filas": 0,
+          "huella": "d41d8cd98f00b204e9800998ecf8427e"
+        }
+      },
+      "aprobada": true
+    }
+  ],
+  "causa": "La petición a 127.0.0.1 lleva ese Origin, pero la URL reconstruida por Next usa localhost. El guard de origen devuelve 403 antes de llegar a la bandera de escritura; con localhost concordante llega a la bandera y devuelve 503. No se cambió el guard.",
+  "configuracionLocalConservada": true,
+  "aprobadas": 2,
+  "fallidas": 0
+}

@@ -1,0 +1,54 @@
+{
+  "fecha": "2026-11-04T01:21:25.097Z",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "rama": "docs/auditoria-arquitectura-integral",
+  "headBaseAntesDelCommit": "49985c57e6869a968024256f92a3ac59e0b93ec2",
+  "mainObservado": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+  "suiteAislada": {
+    "tests": 284,
+    "pass": 284,
+    "fail": 0,
+    "skipped": 0
+  },
+  "typecheckExit": 0,
+  "buildExit": 0,
+  "buildLogSha256": "581778896c7a2c6adf82ddb4d447477e1a843ce915e7964d3bd1ca45250672f1",
+  "npmAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "httpNextRemoto": 35,
+  "sdkRlsMfaRemoto": 12,
+  "configuracionSqlLocal": 7,
+  "produccionCerrada": 8,
+  "originalesCongeladosConservados": 38,
+  "commitsAdministrativosConservados": [
+    "f6221d9",
+    "3576c13",
+    "12d54fb",
+    "9d4409a",
+    "fa841a7",
+    "e6f6835",
+    "8b36f87",
+    "c992a14"
+  ],
+  "rolesRealesModificadosEnPruebas": false,
+  "di151Modificado": false,
+  "datosSoloSinteticos": true,
+  "secretosDetectados": 0,
+  "diffCheck": true,
+  "pr19": "OPEN_DRAFT_SIN_MERGE",
+  "limites": [
+    "Sin prueba visual de interfaces",
+    "Sin fallos artificiales de auditoría remota",
+    "Sin nueva fotografía remota",
+    "POST grant validado por replay 200, no alta 201",
+    "Concesiones expiran 24h tras siembra",
+    "Entrega privada de passwords al equipo pendiente",
+    "No validado para uso clínico real"
+  ]
+}

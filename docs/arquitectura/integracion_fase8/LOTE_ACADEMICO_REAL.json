@@ -1,0 +1,129 @@
+{
+  "fecha": "2026-11-03",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "dataset": "fase8-synthetic-v1",
+  "datos": "solo nuevos y sinteticos",
+  "migracionesRepetidas": false,
+  "revocacionReal": {
+    "rpc": "revoke_clinical_access",
+    "transporteHTTP": 200,
+    "status": 200,
+    "conJWTPropietario": true
+  },
+  "estados": {
+    "vencidas": 1,
+    "vigentes": 2,
+    "revocadas": 1
+  },
+  "originalesConservados": {
+    "auth.users": true,
+    "public.dentists": true,
+    "public.profiles": true,
+    "storage.objects": true,
+    "public.dental_photos": true,
+    "public.patient_consents": true,
+    "public.appointment_requests": true
+  },
+  "batchId": "e19e6bf1-5969-4528-8fac-6ccb89151e2b",
+  "ids": {
+    "clinics": [
+      "ed2c6a61-315f-4655-94f0-4dc454902637",
+      "27901b90-4340-45b5-acea-e655ede37c64"
+    ],
+    "dentists": [
+      "08d0c38f-2505-43ae-9c3a-2b3ccfa6b2fb",
+      "77a82d0a-909a-4833-825d-cd4d57cf2a2b"
+    ],
+    "professionals": [
+      "e4e70b50-8d74-4a93-9620-120386bab374",
+      "2f1cc39c-b184-4f6e-b7ad-eda67135c91d"
+    ],
+    "verifications": [
+      "8e10193d-c2f3-4ac6-a71d-4114349e39bb",
+      "36a2e5b9-59c0-4284-b363-4a20ac669824"
+    ],
+    "memberships": [
+      "6d610039-c626-43d4-9633-88a8c9366f17",
+      "f7d3bb7c-968f-4c14-a3ec-88c90b8cda68"
+    ],
+    "patients": [
+      "062e3d4f-3fb0-4c97-9157-8a3728adb044",
+      "dd730ee9-e76f-4ffc-a30e-07a8f0198f0b"
+    ],
+    "requests": [
+      "e50e11ca-59e8-4a1f-8936-76a81dfecd9b",
+      "03271d59-1dd1-4661-8d2c-fedbbc6c5e3c",
+      "897cbad0-3f1d-491a-9a7d-b7f1d49dcc6c"
+    ],
+    "encounters": [
+      "1a710e35-c54d-4728-815e-4d811d083b59",
+      "3c7206d0-1a25-4256-8b11-dc3b7f05f01f",
+      "371219cf-e677-4e8c-8029-e80ef8d19eec"
+    ],
+    "entries": [
+      "00c34e93-55b2-4663-aa47-f3f0cb7a66c0",
+      "2106458f-4391-44eb-b751-31687d06dc70",
+      "35f94c3a-f745-4448-b438-f0c5e426297c",
+      "59407e62-10b2-4d4c-8a5f-b4e72c11da89",
+      "abc73c27-5a02-4d1f-aa8c-49d5a052a0aa",
+      "98c933c3-ceca-4b4a-9b1b-0bebdda56013",
+      "38260ed2-906e-4e72-9d0b-c49e39afd48d",
+      "8bc08469-a947-4be5-a08a-4150402805c1",
+      "1aa57c12-c333-4cc3-9eda-da89ab2aaeb4"
+    ],
+    "documents": [
+      "97f62daf-398e-496a-95d7-7b375501446e",
+      "608ad30e-55eb-4e7d-bbf1-a2a18b554b7a",
+      "c4393275-ac8c-4020-a42d-e08ec675e037"
+    ],
+    "grants": [
+      "6870f6f0-c952-45e1-9e18-ff0c6fe5119c",
+      "7d05f0b7-c59e-422c-8461-9db6c6e51293",
+      "01bf3c8e-871d-4876-81cc-1beca1f2f548",
+      "8bc09e91-550e-4762-85ae-97f1a038252d"
+    ]
+  },
+  "cuentas": {
+    "paciente_a": {
+      "id": "798b53d9-9bfb-483b-8f6e-6d28403a1925",
+      "email": "fase8-paciente-a@dentaia.test",
+      "rol": "paciente"
+    },
+    "paciente_b": {
+      "id": "f244056c-e9bc-44e4-94d6-5b93e610429b",
+      "email": "fase8-paciente-b@dentaia.test",
+      "rol": "paciente"
+    },
+    "odontologo_a": {
+      "id": "d3374749-74b2-4146-8c40-05a268d57af9",
+      "email": "fase8-odontologo-a@dentaia.test",
+      "rol": "odontologo"
+    },
+    "odontologo_b": {
+      "id": "c7a44fd8-045b-4096-a1db-0df0b46f2969",
+      "email": "fase8-odontologo-b@dentaia.test",
+      "rol": "odontologo"
+    },
+    "administrador_qa": {
+      "id": "42ce87d9-0b63-422c-9805-d25b2f681b71",
+      "email": "fase8-admin@dentaia.test",
+      "rol": "superusuario"
+    }
+  },
+  "conteosLote": {
+    "perfiles": 5,
+    "dentistasInactivos": 2,
+    "clinicas": 2,
+    "profesionales": 2,
+    "verificacionesFicticias": 2,
+    "membresias": 2,
+    "pacientes": 2,
+    "solicitudes": 3,
+    "atenciones": 3,
+    "entradas": 9,
+    "examenesSinArchivo": 3,
+    "concesiones": 4,
+    "recursos": 5
+  },
+  "clinicaHabilitada": false
+}

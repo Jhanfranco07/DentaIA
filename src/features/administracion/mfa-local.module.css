@@ -1,0 +1,10 @@
+.pagina { width: min(860px, calc(100% - 32px)); margin: 32px auto 64px; color: var(--ink); }
+.bloque { padding: 24px; margin-top: 24px; border: 1px solid var(--line); border-radius: 12px; background: white; }
+.bloque button { margin: 12px 12px 12px 0; padding: 10px 14px; }
+.control { display: block; margin: 16px 0 8px; }
+.control select { display: block; max-width: 100%; padding: 8px; }
+.qr { display: block; max-width: 100%; height: auto; }
+.bloque input[type="password"] { display: block; max-width: 100%; padding: 10px; }
+.bloque [role="alert"] { color: #9c2121; }
+.bloque button:focus-visible, .bloque input:focus-visible, .bloque select:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+@media (max-width: 480px) { .bloque { padding: 16px; } }

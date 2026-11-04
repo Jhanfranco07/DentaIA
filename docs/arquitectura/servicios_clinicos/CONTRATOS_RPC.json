@@ -1,0 +1,64 @@
+{
+  "apiVersion": "clinical.v1",
+  "estado": "implementado_y_probado_SQL_local_sin_HTTP",
+  "transportePrevisto": "PostgREST con JWT verificado del usuario; no service_role ni actorId del cuerpo",
+  "erroresEnvelope": {
+    "400": "INVALID_REQUEST",
+    "401": "AUTHENTICATION_REQUIRED",
+    "403": "ACCESS_DENIED",
+    "409": "IDEMPOTENCY_CONFLICT",
+    "503": "SERVICE_UNAVAILABLE"
+  },
+  "errorSQLInesperado": "P0001 / CLINICAL_OPERATION_UNAVAILABLE; sin contenido",
+  "statusSQLNoEquivaleHTTP": true,
+  "operaciones": [
+    {
+      "rpc": "grant_clinical_access",
+      "parametros": {
+        "p_id": "uuid / Idempotency-Key",
+        "p_membership_id": "uuid",
+        "p_encounter_ids": "uuid[]",
+        "p_expires_at": "timestamptz",
+        "p_policy_version": "text",
+        "p_accepted": "boolean"
+      },
+      "actor": "paciente vigente derivado de sesión",
+      "auditoria": "grant_access",
+      "respuesta": ["ok", "status", "id", "estado", "expiresAt", "revokedAt", "requestId", "replayed"],
+      "httpFuturo": "POST /api/clinical/access-grants"
+    },
+    {
+      "rpc": "revoke_clinical_access",
+      "parametros": {"p_id": "uuid"},
+      "actor": "propietario del patient_record derivado de sesión",
+      "auditoria": "revoke_access",
+      "respuesta": ["ok", "status", "id", "revokedAt", "requestId"],
+      "httpFuturo": "POST /api/clinical/access-grants/:id/revoke"
+    },
+    {
+      "rpc": "get_authorized_clinical_history",
+      "parametros": {
+        "p_patient_id": "uuid",
+        "p_membership_id": "uuid|null",
+        "p_limit": "integer default 20",
+        "p_before_at": "timestamptz|null",
+        "p_before_id": "uuid|null"
+      },
+      "actor": "paciente propio u odontólogo vigente/verificado/autorizado en contexto propio",
+      "auditoria": "read_history",
+      "respuesta": ["ok", "status", "apiVersion", "origen", "environment", "estado", "caso", "entries", "nextCursor", "requestId"],
+      "cursorSQL": "tupla sin autoridad; revalidar en cada llamada",
+      "cursorHTTPFuturo": "firmado y vinculado a actor/paciente/contexto/filtros, todavía no implementado",
+      "httpFuturo": "GET /api/clinical/patients/:patientId/history"
+    }
+  ],
+  "rutasHTTPImplementadas": [],
+  "pendientesIntegracion": [
+    "JWT HTTP reales y expiración de sesión",
+    "resolver seguro de identidad clínica propia y contextos",
+    "listado de concesiones propias",
+    "adaptador DI-145/157, sin usar escenario del cliente como autorización",
+    "aprobación de verificación profesional, política y retención",
+    "documentos privados y descarga auditada"
+  ]
+}

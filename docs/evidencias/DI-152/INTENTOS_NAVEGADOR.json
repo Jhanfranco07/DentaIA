@@ -1,0 +1,188 @@
+[
+  {
+    "fecha": "2026-11-04T01:49:02.228169+00:00",
+    "entorno": "Chromium real; respuestas HTTP y sesión ficticias; sin Supabase remoto",
+    "pruebas": [
+      {
+        "nombre": "UI sin sesión no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "UI HTTP403 no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "Listado representa DTO de usuarios de la API simulada",
+        "aprobada": true
+      },
+      {
+        "nombre": "Paginación envía parámetros esperados",
+        "aprobada": true
+      },
+      {
+        "nombre": "Filtros reinician página y conservan parámetros",
+        "aprobada": false,
+        "error": "TimeoutError"
+      },
+      {
+        "nombre": "Estado vacío representado",
+        "aprobada": true
+      },
+      {
+        "nombre": "503 no muestra éxito, datos anteriores ni detalles sensibles",
+        "aprobada": true
+      },
+      {
+        "nombre": "Reintento recupera el listado en el mismo servicio",
+        "aprobada": true
+      },
+      {
+        "nombre": "Selección de usuario integra el formulario existente y su consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Escritura bloqueada conserva intento sin confirmar éxito",
+        "aprobada": true
+      },
+      {
+        "nombre": "Éxito simulado actualiza el listado mediante nueva consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Pérdida de autorización retira el panel y las cuentas",
+        "aprobada": true
+      },
+      {
+        "nombre": "Navegación móvil y teclado conservados",
+        "aprobada": false,
+        "error": "AssertionError"
+      }
+    ],
+    "aprobadas": 11,
+    "fallidas": 2
+  },
+  {
+    "fecha": "2026-11-04T01:51:48.228677+00:00",
+    "entorno": "Chromium real; respuestas HTTP y sesión ficticias; sin Supabase remoto",
+    "pruebas": [
+      {
+        "nombre": "UI sin sesión no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "UI HTTP403 no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "Listado representa DTO de usuarios de la API simulada",
+        "aprobada": true
+      },
+      {
+        "nombre": "Paginación envía parámetros esperados",
+        "aprobada": true
+      },
+      {
+        "nombre": "Filtros reinician página y conservan parámetros",
+        "aprobada": false,
+        "error": "TimeoutError",
+        "detalleFixture": "Locator.select_option: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_label(\"Filtrar por rol\", exact=True)\n"
+      },
+      {
+        "nombre": "Estado vacío representado",
+        "aprobada": true
+      },
+      {
+        "nombre": "503 no muestra éxito, datos anteriores ni detalles sensibles",
+        "aprobada": true
+      },
+      {
+        "nombre": "Reintento recupera el listado en el mismo servicio",
+        "aprobada": true
+      },
+      {
+        "nombre": "Selección de usuario integra el formulario existente y su consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Escritura bloqueada conserva intento sin confirmar éxito",
+        "aprobada": true
+      },
+      {
+        "nombre": "Éxito simulado actualiza el listado mediante nueva consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Pérdida de autorización retira el panel y las cuentas",
+        "aprobada": true
+      },
+      {
+        "nombre": "Navegación móvil y teclado conservados",
+        "aprobada": false,
+        "error": "AssertionError",
+        "detalleFixture": "Locator expected to be visible\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_be_visible\" with timeout 5000ms\n  - waiting for get_by_role(\"navigation\", name=\"Secciones del panel administrativo\")\n\nAria snapshot:\n- link \"Ir al contenido\":\n  - /url: \"#contenido\"\n- banner:\n  - link \"DentaIA, inicio\":\n    - /url: /\n    - text: DentaIA\n  - button \"Abrir menú\"\n  - link \"Mi cuenta\":\n    - /url: /cuenta\n- main:\n  - region \"Panel administrativo protegido\":\n    - strong: DI-152 · Integración administrativa\n    - paragraph: Panel local conectado a los servicios administrativos existentes. La configuración académica compartida mantiene lecturas y escrituras desactivadas; una operación bloqueada se muestra como error, nunca como simulación o éxito.\n    - button \"Abrir menú administrativo\"\n    - link \"Saltar al contenido del panel\":\n      - /url: \"#admin-titulo\"\n    - paragraph:\n      - text: Administración\n      - strong: Inicio\n    - text: Servicios protegidos PANEL ADMINI"
+      }
+    ],
+    "aprobadas": 11,
+    "fallidas": 2
+  },
+  {
+    "fecha": "2026-11-04T01:53:26.463694+00:00",
+    "entorno": "Chromium real; respuestas HTTP y sesión ficticias; sin Supabase remoto",
+    "pruebas": [
+      {
+        "nombre": "UI sin sesión no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "UI HTTP403 no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "Listado representa DTO de usuarios de la API simulada",
+        "aprobada": true
+      },
+      {
+        "nombre": "Paginación envía parámetros esperados",
+        "aprobada": true
+      },
+      {
+        "nombre": "Filtros reinician página y conservan parámetros",
+        "aprobada": true
+      },
+      {
+        "nombre": "Estado vacío representado",
+        "aprobada": true
+      },
+      {
+        "nombre": "503 no muestra éxito, datos anteriores ni detalles sensibles",
+        "aprobada": true
+      },
+      {
+        "nombre": "Reintento recupera el listado en el mismo servicio",
+        "aprobada": true
+      },
+      {
+        "nombre": "Selección de usuario integra el formulario existente y su consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Escritura bloqueada conserva intento sin confirmar éxito",
+        "aprobada": true
+      },
+      {
+        "nombre": "Éxito simulado actualiza el listado mediante nueva consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Pérdida de autorización retira el panel y las cuentas",
+        "aprobada": true
+      },
+      {
+        "nombre": "Navegación móvil y teclado conservados",
+        "aprobada": true
+      }
+    ],
+    "aprobadas": 13,
+    "fallidas": 0
+  }
+]

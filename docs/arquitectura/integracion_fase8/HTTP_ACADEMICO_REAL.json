@@ -1,0 +1,225 @@
+{
+  "fecha": "2026-11-04T01:11:46.225Z",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "entorno": "Next.js local 127.0.0.1:3108 -> Dental-IA remoto",
+  "pruebas": [
+    {
+      "nombre": "Paciente propio paciente_a",
+      "aprobada": true,
+      "http": 200,
+      "fichas": 1
+    },
+    {
+      "nombre": "Paciente propio paciente_b",
+      "aprobada": true,
+      "http": 200,
+      "fichas": 1
+    },
+    {
+      "nombre": "Perfil profesional y clínica odontologo_a",
+      "aprobada": true,
+      "http": 200,
+      "contextos": 1
+    },
+    {
+      "nombre": "Perfil profesional y clínica odontologo_b",
+      "aprobada": true,
+      "http": 200,
+      "contextos": 1
+    },
+    {
+      "nombre": "Solicitudes asignadas odontologo_a",
+      "aprobada": true,
+      "http": 200,
+      "solicitudes": 1
+    },
+    {
+      "nombre": "Solicitudes asignadas odontologo_b",
+      "aprobada": true,
+      "http": 200,
+      "solicitudes": 2
+    },
+    {
+      "nombre": "Filtro y paginación de solicitudes profesionales",
+      "aprobada": true,
+      "http": [
+        200,
+        200,
+        200,
+        200
+      ],
+      "paginas": 2
+    },
+    {
+      "nombre": "Pacientes autorizados odontologo_a",
+      "aprobada": true,
+      "http": 200,
+      "pacientes": 1
+    },
+    {
+      "nombre": "Pacientes autorizados odontologo_b",
+      "aprobada": true,
+      "http": 200,
+      "pacientes": 1
+    },
+    {
+      "nombre": "Historial clínico propio paciente_a",
+      "aprobada": true,
+      "http": 200,
+      "atenciones": 2,
+      "entradas": 6
+    },
+    {
+      "nombre": "Historial clínico propio paciente_b",
+      "aprobada": true,
+      "http": 200,
+      "atenciones": 1,
+      "entradas": 3
+    },
+    {
+      "nombre": "Historial compartido con autorización vigente odontologo_a",
+      "aprobada": true,
+      "http": 200,
+      "atenciones": 2
+    },
+    {
+      "nombre": "Historial compartido con autorización vigente odontologo_b",
+      "aprobada": true,
+      "http": 200,
+      "atenciones": 1
+    },
+    {
+      "nombre": "Cursor de historial sin duplicados",
+      "aprobada": true,
+      "http": [
+        200,
+        200
+      ],
+      "paginas": 2
+    },
+    {
+      "nombre": "Autorizaciones propias paciente_a",
+      "aprobada": true,
+      "http": 200,
+      "autorizaciones": 2,
+      "estados": [
+        "vigente",
+        "vigente"
+      ]
+    },
+    {
+      "nombre": "Autorizaciones propias paciente_b",
+      "aprobada": true,
+      "http": 200,
+      "autorizaciones": 2,
+      "estados": [
+        "revocado",
+        "vencido"
+      ]
+    },
+    {
+      "nombre": "POST concesión: reintento idempotente de registro existente",
+      "aprobada": true,
+      "http": 200,
+      "replayed": true,
+      "nuevasConcesiones": 0
+    },
+    {
+      "nombre": "POST revocación propia ya revocada: idempotencia",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Paciente no lee otro historial",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Concesión expirada impide lectura",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Concesión revocada impide lectura",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Contexto profesional ajeno rechazado",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Paciente no abre contexto profesional",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Administrador no hereda información clínica",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Paciente ajeno no revoca concesión",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Clave de otro paciente no reutilizable",
+      "aprobada": true,
+      "http": 409
+    },
+    {
+      "nombre": "Query con identidad manipulada rechazado",
+      "aprobada": true,
+      "http": 400
+    },
+    {
+      "nombre": "Sin sesión e invalidación de firma",
+      "aprobada": true,
+      "http": [
+        401,
+        401
+      ]
+    },
+    {
+      "nombre": "Origen cruzado no habilita el adaptador académico",
+      "aprobada": true,
+      "http": 404
+    },
+    {
+      "nombre": "Superusuario AAL1 no obtiene acceso administrativo",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Superusuario con MFA real AAL2 obtiene autorización DI-150",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Paciente no obtiene acceso administrativo",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Vista administrativa local disponible sin operaciones remotas",
+      "aprobada": true,
+      "http": 200,
+      "tipo": "estructura local; datos administrativos protegidos por API, no prueba visual"
+    },
+    {
+      "nombre": "Auditoría remota persistida para respuestas protegidas",
+      "aprobada": true,
+      "respuestasAuditadas": 22
+    },
+    {
+      "nombre": "Conservación de las siete colecciones originales",
+      "aprobada": true,
+      "coleccionesConservadas": 7
+    }
+  ],
+  "sinOperacionesSobreOriginales": true,
+  "aprobadas": 35,
+  "fallidas": 0
+}

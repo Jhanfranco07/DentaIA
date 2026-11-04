@@ -1,0 +1,479 @@
+{
+  "fecha": "2026-11-03",
+  "clinicaQACerradaAlFinal": true,
+  "regresionF4": 59,
+  "escenariosMVPUnicos": 45,
+  "aprobadosMVP": 45,
+  "metodo": "Última ejecución real por escenario; no una única batería integral sin fallos. Se conservan todos los intentos y sus fallos.",
+  "escenarios": [
+    {
+      "nombre": "Seis logins y JWT verificados por Auth local",
+      "aprobada": true,
+      "cuentas": 6,
+      "algoritmo": "ES256",
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Perfil propio lectura y actualización persistente",
+      "aprobada": true,
+      "filas": 1,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "RLS profiles entre dos JWT: lectura y modificación ajenas bloqueadas",
+      "aprobada": true,
+      "filasLeidas": 0,
+      "filasModificadas": 0,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Directorio ficticio y vínculo profesional explícito, sin otorgar roles",
+      "aprobada": true,
+      "registros": 2,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Registro real de tres solicitudes académicas y persistencia",
+      "aprobada": true,
+      "registros": 3,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "RLS de solicitudes entre pacientes con dos JWT",
+      "aprobada": true,
+      "propias": 1,
+      "ajenas": 0,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Cancelación propia y persistencia, sin nuevos estados",
+      "aprobada": true,
+      "estado": "cancelled",
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Paciente ajeno no cancela solicitud de otra cuenta",
+      "aprobada": true,
+      "filas": 0,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "/api/clinical/patients/me patient1 HTTP 200",
+      "aprobada": true,
+      "http": 200,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "/api/clinical/patients/me dentist1 HTTP 403",
+      "aprobada": true,
+      "http": 403,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "/api/clinical/patients/me nonprofessional HTTP 403",
+      "aprobada": true,
+      "http": 403,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "/api/professional/me dentist1 HTTP 200",
+      "aprobada": true,
+      "http": 200,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "/api/professional/me patient1 HTTP 403",
+      "aprobada": true,
+      "http": 403,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "/api/professional/me superuser HTTP 403",
+      "aprobada": true,
+      "http": 403,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Contextos profesionales vigentes y paginación keyset",
+      "aprobada": true,
+      "http": [
+        200,
+        200
+      ],
+      "paginas": 2,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Profesional consulta solo solicitudes de su ficha vinculada",
+      "aprobada": true,
+      "http": 200,
+      "registros": 2,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Filtro de solicitudes requested/cancelled",
+      "aprobada": true,
+      "http": [
+        200,
+        200
+      ],
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Paginación de solicitudes sin duplicados",
+      "aprobada": true,
+      "http": [
+        200,
+        200
+      ],
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Contexto ajeno no abre solicitudes profesionales",
+      "aprobada": true,
+      "http": 403,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Paciente no consulta solicitudes profesionales",
+      "aprobada": true,
+      "http": 403,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Estado inventado y actor en query rechazados",
+      "aprobada": true,
+      "http": [
+        400,
+        400
+      ],
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Nueva concesión propia persistente",
+      "aprobada": true,
+      "http": 201,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Lista de concesiones propias incluye alcance y estado",
+      "aprobada": true,
+      "http": 200,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Concesión no aparece en lista del segundo paciente",
+      "aprobada": true,
+      "http": 200,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Listado de pacientes contiene solo identidades autorizadas sin contenido clínico",
+      "aprobada": true,
+      "http": 200,
+      "pacientes": 1,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Otro profesional no adopta clínica/permiso por UUID",
+      "aprobada": true,
+      "http": 403,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Retirada de rol actual deniega pese a JWT vigente",
+      "aprobada": true,
+      "http": 403,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Membresía suspendida deniega contexto y solicitudes",
+      "aprobada": true,
+      "http": 403,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Nuevas consultas fallan cerradas si no se persiste auditoría",
+      "aprobada": true,
+      "http": 503,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Concesión revocada deja de aparecer como acceso autorizado",
+      "aprobada": true,
+      "http": [
+        200,
+        200
+      ],
+      "pacientes": 0,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Auditoría de nuevas lecturas permitidas y denegadas persistida",
+      "aprobada": true,
+      "eventosPermitidos": true,
+      "eventosDenegados": true,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Consentimiento específico de almacenamiento y carga privada real",
+      "aprobada": true,
+      "storage": 200,
+      "metadatos": 201,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Descarga propia y aislamiento Storage entre dos JWT",
+      "aprobada": true,
+      "propia": 200,
+      "ajena": 400,
+      "metadatosAjenos": 0,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Bucket sin exposición pública permanente",
+      "aprobada": true,
+      "http": 400,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "Consentimiento revocado bloquea nueva carga pero permite limpieza propia",
+      "aprobada": true,
+      "uploadRevocado": "denegado",
+      "limpieza": "persistida",
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    },
+    {
+      "nombre": "DI-150 rechaza superusuario AAL1 y sesión ausente",
+      "aprobada": true,
+      "http": [
+        403,
+        401
+      ],
+      "intento": 2,
+      "alcance": "integral"
+    },
+    {
+      "nombre": "Enrolamiento/desafío TOTP real y acceso DI-150 AAL2",
+      "aprobada": true,
+      "http": 200,
+      "intento": 2,
+      "alcance": "integral"
+    },
+    {
+      "nombre": "Lecturas Auth Admin locales minimizadas: recuento sin PII",
+      "aprobada": true,
+      "usuarios": 6,
+      "metodo": "Auth Admin local, no endpoint DI151 de lectura HTTPS",
+      "intento": 2,
+      "alcance": "integral"
+    },
+    {
+      "nombre": "Escrituras administrativas Next permanecen apagadas",
+      "aprobada": true,
+      "http": 503,
+      "intento": 2,
+      "alcance": "integral"
+    },
+    {
+      "nombre": "Cambio de rol canónico con sesión AAL2 real, aprobación y persistencia atómica",
+      "aprobada": true,
+      "rpcHttp": 200,
+      "estado": 200,
+      "auditorias": 1,
+      "idempotente": true,
+      "intento": 2,
+      "alcance": "integral"
+    },
+    {
+      "nombre": "Protocolo rechaza autocambio, AAL1 y elevación profesional no aprobada",
+      "aprobada": true,
+      "estados": [
+        403,
+        403,
+        403
+      ],
+      "intento": 2,
+      "alcance": "integral"
+    },
+    {
+      "nombre": "Dos escrituras simultáneas: una aplica y otra obtiene conflicto de revisión",
+      "aprobada": true,
+      "estados": [
+        200,
+        409
+      ],
+      "intento": 2,
+      "alcance": "integral"
+    },
+    {
+      "nombre": "Fallo de auditoría administrativa revierte Auth y revisión",
+      "aprobada": true,
+      "rpc": "error esperado",
+      "persistencia": "sin cambio",
+      "intento": 2,
+      "alcance": "integral"
+    },
+    {
+      "nombre": "Pérdida de autorización administrativa deniega aun con AAL2 anterior",
+      "aprobada": true,
+      "http": 403,
+      "rpc": 403,
+      "intento": 2,
+      "alcance": "integral"
+    },
+    {
+      "nombre": "Algoritmo original no elimina foto ajena con segundo JWT",
+      "aprobada": true,
+      "resultado": "no_disponible",
+      "propiaConservada": true,
+      "intento": 3,
+      "alcance": "datos y servicios; no repetir administracion"
+    }
+  ],
+  "intentos": [
+    {
+      "numero": 1,
+      "alcance": "integral",
+      "aprobadas": 32,
+      "fallidas": 12,
+      "bloqueo": null
+    },
+    {
+      "numero": 2,
+      "alcance": "integral",
+      "aprobadas": 41,
+      "fallidas": 3,
+      "bloqueo": null
+    },
+    {
+      "numero": 3,
+      "alcance": "datos y servicios; no repetir administracion",
+      "aprobadas": 36,
+      "fallidas": 0,
+      "bloqueo": null
+    }
+  ],
+  "restauracion": {
+    "GOTRUE_MFA_TOTP_VERIFY_ENABLED": "false",
+    "GOTRUE_MFA_TOTP_ENROLL_ENABLED": "false",
+    "GOTRUE_JWT_EXP": "3600",
+    "archivoTOTPDesactivado": true,
+    "recuperacion": "El wrapper agotó el timeout al reiniciar; se repitió start local sin borrar volúmenes y se verificaron estas variables de Auth. No se atribuye éxito al wrapper fallido."
+  },
+  "estadoFinal": {
+    "cuentas": 6,
+    "cuentasNoQA": 0,
+    "factoresTOTP": 0,
+    "superusuarios": 1,
+    "odontologos": 2,
+    "triggersFallo": 0,
+    "fotosQAActivas": 0,
+    "rls": true,
+    "sinSelectClinico": true,
+    "sinContactoEjecutor": true
+  },
+  "funcionesAnterioresIdenticas": 13,
+  "basesAnteriores": [
+    {
+      "fase": 2,
+      "atenciones": 3
+    },
+    {
+      "fase": 3,
+      "atenciones": 3
+    }
+  ],
+  "produccion": {
+    "fecha": "2026-11-03",
+    "entorno": "build local NODE_ENV=production; flag=true",
+    "pruebas": [
+      {
+        "method": "POST",
+        "path": "/api/clinical/access-grants",
+        "http": 404,
+        "aprobada": true
+      },
+      {
+        "method": "POST",
+        "path": "/api/clinical/access-grants/40000000-0000-4000-8000-000000000071/revoke",
+        "http": 404,
+        "aprobada": true
+      },
+      {
+        "method": "GET",
+        "path": "/api/clinical/patients/40000000-0000-4000-8000-000000000041/history",
+        "http": 404,
+        "aprobada": true
+      },
+      {
+        "method": "GET",
+        "path": "/api/clinical/patients/me",
+        "http": 404,
+        "aprobada": true
+      },
+      {
+        "method": "GET",
+        "path": "/api/clinical/access-grants",
+        "http": 404,
+        "aprobada": true
+      },
+      {
+        "method": "GET",
+        "path": "/api/professional/me",
+        "http": 404,
+        "aprobada": true
+      },
+      {
+        "method": "GET",
+        "path": "/api/professional/patients",
+        "http": 404,
+        "aprobada": true
+      },
+      {
+        "method": "GET",
+        "path": "/api/professional/requests",
+        "http": 404,
+        "aprobada": true
+      }
+    ],
+    "aprobadas": 8
+  },
+  "remoto": false,
+  "produccionLista": false
+}

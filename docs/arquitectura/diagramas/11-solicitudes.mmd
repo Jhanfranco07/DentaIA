@@ -1,0 +1,18 @@
+sequenceDiagram
+  participant P as Paciente
+  participant C as Cliente Next.js
+  participant D as Supabase Data API
+  P->>C: Solicitud académica propia
+  C->>D: INSERT con JWT y campos permitidos
+  D->>D: RLS propietario, ficha activa y CHECK is_demo
+  D-->>C: requested o error
+  C-->>P: Solicitud registrada, no cita confirmada
+  P->>C: Cancelar solicitud propia
+  C->>D: UPDATE status requested a cancelled
+  D-->>C: Fila afectada o rechazo
+  opt Consulta profesional propuesta, aún no implementada
+    C->>D: RPC por cuenta profesional verificada y ficha vinculada
+    D->>D: Comprobar destinatario dentist_id y auditar acceso
+    D-->>C: Solo solicitudes destinadas al profesional
+  end
+  Note over C,D: No hay clínica destino en appointment_requests, no inferirla de la UI

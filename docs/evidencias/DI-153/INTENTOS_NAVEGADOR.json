@@ -1,0 +1,194 @@
+[
+  {
+    "fecha": "2026-11-04T13:33:53.283813+00:00",
+    "entorno": "Chromium real; respuestas HTTP y sesión ficticias; sin Supabase remoto",
+    "pruebas": [
+      {
+        "nombre": "UI sin sesión no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "UI HTTP403 no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "Listado representa DTO de usuarios de la API simulada",
+        "aprobada": true
+      },
+      {
+        "nombre": "Paginación envía parámetros esperados",
+        "aprobada": true
+      },
+      {
+        "nombre": "Filtros reinician página y conservan parámetros",
+        "aprobada": true
+      },
+      {
+        "nombre": "Estado vacío representado",
+        "aprobada": true
+      },
+      {
+        "nombre": "503 no muestra éxito, datos anteriores ni detalles sensibles",
+        "aprobada": true
+      },
+      {
+        "nombre": "Reintento recupera el listado en el mismo servicio",
+        "aprobada": true
+      },
+      {
+        "nombre": "Selección de usuario integra el formulario existente y su consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Escritura bloqueada conserva intento sin confirmar éxito",
+        "aprobada": true
+      },
+      {
+        "nombre": "Éxito simulado actualiza el listado mediante nueva consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Pérdida de autorización retira el panel y las cuentas",
+        "aprobada": true
+      },
+      {
+        "nombre": "Navegación móvil y teclado conservados",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 carga retenida no muestra tabla antes de resolver la lectura",
+        "aprobada": false,
+        "error": "AssertionError",
+        "detalleFixture": "El fixture retenido no llegó al arnés"
+      },
+      {
+        "nombre": "DI-153 respuesta antigua de búsqueda no repone cuentas tras un resultado vacío posterior",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 evento SIGNED_OUT ficticio retira cuentas y navegación",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 autorización 200 tardía no monta el panel tras perder la sesión ficticia",
+        "aprobada": false,
+        "error": "AssertionError",
+        "detalleFixture": "El fixture retenido no llegó al arnés"
+      },
+      {
+        "nombre": "DI-153 formulario inválido o sin consentimiento no envía cambios ni ofrece alta profesional",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 200 de otra clave conserva intento y reintenta el mismo contenido sin anunciar éxito",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 403 de autorización en escritura retira el panel sin respuesta privada",
+        "aprobada": true
+      }
+    ],
+    "base": "e9fd2f3f05807ab2f10cab335f57bc817f30c51f",
+    "playwright": "1.62.0",
+    "di153": true,
+    "chromium": "154.0.8037.57",
+    "aprobadas": 18,
+    "fallidas": 2
+  },
+  {
+    "fecha": "2026-11-04T13:35:30.557037+00:00",
+    "entorno": "Chromium real; respuestas HTTP y sesión ficticias; sin Supabase remoto",
+    "pruebas": [
+      {
+        "nombre": "UI sin sesión no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "UI HTTP403 no monta el panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "Listado representa DTO de usuarios de la API simulada",
+        "aprobada": true
+      },
+      {
+        "nombre": "Paginación envía parámetros esperados",
+        "aprobada": true
+      },
+      {
+        "nombre": "Filtros reinician página y conservan parámetros",
+        "aprobada": true
+      },
+      {
+        "nombre": "Estado vacío representado",
+        "aprobada": true
+      },
+      {
+        "nombre": "503 no muestra éxito, datos anteriores ni detalles sensibles",
+        "aprobada": true
+      },
+      {
+        "nombre": "Reintento recupera el listado en el mismo servicio",
+        "aprobada": true
+      },
+      {
+        "nombre": "Selección de usuario integra el formulario existente y su consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Escritura bloqueada conserva intento sin confirmar éxito",
+        "aprobada": true
+      },
+      {
+        "nombre": "Éxito simulado actualiza el listado mediante nueva consulta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Pérdida de autorización retira el panel y las cuentas",
+        "aprobada": true
+      },
+      {
+        "nombre": "Navegación móvil y teclado conservados",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 carga retenida no muestra tabla antes de resolver la lectura",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 respuesta antigua de búsqueda no repone cuentas tras un resultado vacío posterior",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 evento SIGNED_OUT ficticio retira cuentas y navegación",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 autorización 200 tardía no monta el panel tras perder la sesión ficticia",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 formulario inválido o sin consentimiento no envía cambios ni ofrece alta profesional",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 200 de otra clave conserva intento y reintenta el mismo contenido sin anunciar éxito",
+        "aprobada": true
+      },
+      {
+        "nombre": "DI-153 403 de autorización en escritura retira el panel sin respuesta privada",
+        "aprobada": true
+      }
+    ],
+    "base": "e9fd2f3f05807ab2f10cab335f57bc817f30c51f",
+    "playwright": "1.62.0",
+    "di153": true,
+    "chromium": "154.0.8037.57",
+    "retenciones": {
+      "carga": 2,
+      "acceso": 1
+    },
+    "aprobadas": 20,
+    "fallidas": 0
+  }
+]

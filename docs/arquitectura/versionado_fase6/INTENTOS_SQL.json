@@ -1,0 +1,498 @@
+[
+  {
+    "fecha": "2026-11-03",
+    "base": "dentaia_arch_qa_fase5",
+    "pruebas": [
+      {
+        "nombre": "Paciente consulta su historial propio de dos clínicas",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Profesional autorizado consulta dos clínicas con una concesión",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Otro profesional solo consulta el recurso autorizado",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Unión de concesiones incluye ambos recursos autorizados",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Paciente no consulta otro paciente",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Misma clínica sin concesión no concede acceso",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Concesión vencida no concede acceso",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Concesión revocada no concede acceso",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Superusuario no obtiene acceso clínico por ser administrador",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Contexto de otro profesional no se puede declarar propio",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Paciente inexistente e ID manipulado deniegan sin contenido",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "RPC SQL conexión authenticator"
+      },
+      {
+        "nombre": "Profesional suspendido no accede",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Clínica inactiva no permite lectura",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Membresía suspendida no permite lectura",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Nueva verificación rechazada invalida la consulta",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Rol Auth retirado se vuelve a verificar",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "user_metadata no eleva privilegios",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Cuenta suspendida en Auth no accede",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Sesión borrada en Auth se rechaza",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "JWT SQL expirado se rechaza",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Sin claims de sesión no se obtiene historial",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Identidad Auth inexistente se rechaza sin error de FK de auditoría",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Versión textual de roles no sustituye la versión numérica canónica",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Roles duplicados se rechazan como asignación inválida",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Roles desconocidos se rechazan como asignación inválida",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Paciente otorga concesión propia y persistencia interna",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Concesión no permite alcance de otro paciente",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Concesión requiere aceptación explícita",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Concesión requiere versión de política del operador",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Destinatario con asignación inválida no recibe concesión",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Concesión no permite vencimiento pasado",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Concesión rechaza infinito",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Concesión no admite recursos duplicados",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Odontólogo sin rol paciente no otorga permisos por otra cuenta",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Consentimiento fotográfico no concede acceso clínico",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Idempotencia conserva concesión y recursos",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Clave idempotente con otro contenido se rechaza",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Colisión de clave de otro propietario no revela su concesión",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Paciente revoca su propia concesión",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Revocación ajena y desconocida se rechazan igual",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Reintento de revocación conserva el mismo instante",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Revocación impide nuevas consultas",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Concesión repetida después de revocar no se reactiva",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Paginación keyset no duplica ni omite la segunda atención",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Cursor manipulado no amplía el alcance",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Límite de página inválido se rechaza",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Página con demasiados objetos no entrega un historial parcial silencioso",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Campos desconocidos y exámenes ausentes no inventan datos",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "DTO no expone Auth, correos, secretos o rutas Storage",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Auditoría permitida registra concesiones efectivas",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Auditoría denegada preserva contexto propio sin paciente ajeno",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Anon no ejecuta RPC",
+        "aprobado": true,
+        "detalle": "SQLSTATE 42501",
+        "categoria": "ACL"
+      },
+      {
+        "nombre": "Authenticated no consulta directamente tablas clínicas",
+        "aprobado": true,
+        "detalle": "SQLSTATE 42501",
+        "categoria": "ACL"
+      },
+      {
+        "nombre": "Authenticated no edita auditoría",
+        "aprobado": true,
+        "detalle": "SQLSTATE 42501",
+        "categoria": "ACL"
+      },
+      {
+        "nombre": "Authenticated no fabrica auditoría",
+        "aprobado": true,
+        "detalle": "SQLSTATE 42501",
+        "categoria": "ACL"
+      },
+      {
+        "nombre": "Authenticated no adopta el rol ejecutor",
+        "aprobado": true,
+        "detalle": "SQLSTATE 42501",
+        "categoria": "ACL"
+      },
+      {
+        "nombre": "Authenticated no modifica roles Auth",
+        "aprobado": true,
+        "detalle": "SQLSTATE 42501",
+        "categoria": "ACL"
+      },
+      {
+        "nombre": "Helpers privados y secretos quedan fuera de permisos cliente",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "mínimo privilegio"
+      },
+      {
+        "nombre": "Wrappers públicos son INVOKER; servicio privado usa rol mínimo",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "mínimo privilegio"
+      },
+      {
+        "nombre": "Configuración apagada impide lecturas",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Un GUC del cliente no habilita el servicio apagado",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Configuración apagada impide nuevas concesiones",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Apagar nuevas concesiones no impide revocar las propias",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "SQL RPC"
+      },
+      {
+        "nombre": "Cliente no ejecuta configuración reservada al operador",
+        "aprobado": true,
+        "detalle": "SQLSTATE 42501",
+        "categoria": "ACL"
+      },
+      {
+        "nombre": "Fallo de auditoría impide respuesta clínica",
+        "aprobado": true,
+        "detalle": "SQLSTATE P0001",
+        "categoria": "auditoría"
+      },
+      {
+        "nombre": "Fallo de auditoría revierte concesión",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "auditoría"
+      },
+      {
+        "nombre": "Fallo de auditoría revierte revocación",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "auditoría"
+      },
+      {
+        "nombre": "Lectura primero: revocación espera; nueva consulta denegada",
+        "aprobado": true,
+        "detalle": {
+          "espera_observada": true
+        },
+        "categoria": "concurrencia SQL RPC"
+      },
+      {
+        "nombre": "Revocación primero: consulta espera y no entrega contenido",
+        "aprobado": true,
+        "detalle": {
+          "espera_observada": true
+        },
+        "categoria": "concurrencia SQL RPC"
+      },
+      {
+        "nombre": "Dos consultas simultáneas autorizadas son compatibles",
+        "aprobado": true,
+        "detalle": {
+          "dos_sesiones": true
+        },
+        "categoria": "concurrencia SQL RPC"
+      },
+      {
+        "nombre": "Suspensión concurrente de membresía invalida la consulta",
+        "aprobado": true,
+        "detalle": {
+          "espera_observada": true
+        },
+        "categoria": "concurrencia SQL RPC"
+      },
+      {
+        "nombre": "Rechazo profesional concurrente se serializa con la consulta",
+        "aprobado": true,
+        "detalle": {
+          "espera_observada": true
+        },
+        "categoria": "concurrencia SQL RPC"
+      },
+      {
+        "nombre": "Permiso vencido durante espera se rechaza con reloj real",
+        "aprobado": true,
+        "detalle": {
+          "espera_observada": true
+        },
+        "categoria": "concurrencia SQL RPC"
+      },
+      {
+        "nombre": "Expiración SQL del JWT durante espera impide contenido",
+        "aprobado": true,
+        "detalle": {
+          "espera_observada": true
+        },
+        "categoria": "concurrencia SQL RPC"
+      },
+      {
+        "nombre": "Dos concesiones simultáneas con misma clave son idempotentes",
+        "aprobado": true,
+        "detalle": {
+          "espera_observada": true,
+          "filas": "1"
+        },
+        "categoria": "concurrencia SQL RPC"
+      },
+      {
+        "nombre": "Concesión persiste tras COMMIT y funciona en conexión nueva",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "persistencia SQL RPC"
+      },
+      {
+        "nombre": "Revocación persiste tras COMMIT y bloquea una conexión nueva",
+        "aprobado": true,
+        "detalle": null,
+        "categoria": "persistencia SQL RPC"
+      },
+      {
+        "nombre": "Denegación conserva auditoría tras COMMIT real",
+        "aprobado": true,
+        "detalle": {
+          "eventos": "1"
+        },
+        "categoria": "auditoría SQL persistente"
+      }
+    ],
+    "metodo": "SQL con claims sintéticos y SET ROLE; no JWT HTTP",
+    "aprobadas": 78,
+    "fallidas": 0
+  }
+]

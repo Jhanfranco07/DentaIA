@@ -1,0 +1,171 @@
+{
+  "fecha": "2026-11-03",
+  "rama": "docs/auditoria-arquitectura-integral",
+  "headInicial": "55d0683192c7754e690689652246541261f95550",
+  "main": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+  "estadoInicial": "limpio",
+  "pr": {
+    "numero": 19,
+    "estado": "open",
+    "draft": true,
+    "mergeable": true,
+    "sha": "55d0683192c7754e690689652246541261f95550"
+  },
+  "administracion": [
+    {
+      "sha": "f6221d9bff9a3b11edf2f2b814060082668f1868",
+      "autor": "Jhan Franco",
+      "asunto": "DI-148 docs(auth): definir matriz de roles y permisos",
+      "archivos": [
+        "docs/DI-148-matriz-roles-permisos.md"
+      ]
+    },
+    {
+      "sha": "3576c13589169608f69f4b65c745e2c44f230b3e",
+      "autor": "Jhan Franco",
+      "asunto": "DI-149 feat(admin): crear estructura visual inicial del panel",
+      "archivos": [
+        "docs/DI-149-estructura-panel-parte1.md",
+        "src/app/desarrollo/panel-admin/page.tsx",
+        "src/features/administracion/EncabezadoAdministrativo.tsx",
+        "src/features/administracion/LayoutAdministrativo.tsx",
+        "src/features/administracion/NavegacionAdministrativa.tsx",
+        "src/features/administracion/PanelAdministrativoDemo.tsx",
+        "src/features/administracion/TarjetaAdministrativa.tsx",
+        "src/features/administracion/administracion.module.css",
+        "src/features/administracion/estructura.ts"
+      ]
+    },
+    {
+      "sha": "12d54fb9f77109ec354c2b74e3dae72276740353",
+      "autor": "Jhan Franco",
+      "asunto": "DI-149 feat(admin): completar diseño responsive y estados visuales",
+      "archivos": [
+        "docs/DI-149-estructura-panel-parte2.md",
+        "src/features/administracion/EstadoAdministrativo.tsx",
+        "src/features/administracion/LayoutAdministrativo.tsx",
+        "src/features/administracion/PanelAdministrativoDemo.tsx",
+        "src/features/administracion/administracion.module.css"
+      ]
+    },
+    {
+      "sha": "9d4409a12481416867a30483d8df6213156ecf28",
+      "autor": "Jhan Franco",
+      "asunto": "DI-150 feat(auth): incorporar autorización de superusuario en servidor",
+      "archivos": [
+        "docs/DI-150-autenticacion-parte1.md",
+        "package-lock.json",
+        "package.json",
+        "src/app/api/administracion/acceso/route.ts",
+        "src/features/autorizacion/autorizacion.test.mjs",
+        "src/features/autorizacion/autorizacion.ts",
+        "src/features/autorizacion/servidor.test.mjs",
+        "src/features/autorizacion/servidor.ts",
+        "src/lib/supabase/server.ts"
+      ]
+    },
+    {
+      "sha": "fa841a79ae7a1642f9057587035f408afc8904f7",
+      "autor": "Jhan Franco",
+      "asunto": "DI-150 feat(auth): reforzar acceso administrativo y verificación AAL2",
+      "archivos": [
+        "docs/DI-150-autenticacion-parte2.md",
+        "src/features/autorizacion/autorizacion.test.mjs",
+        "src/features/autorizacion/autorizacion.ts",
+        "src/features/autorizacion/controles.test.mjs",
+        "src/features/autorizacion/servidor.test.mjs",
+        "src/features/autorizacion/servidor.ts",
+        "src/lib/supabase/server.ts"
+      ]
+    },
+    {
+      "sha": "e6f68351005149d4104b521a58a356f0f0d5aac9",
+      "autor": "Jhan Franco",
+      "asunto": "DI-151 feat(admin): incorporar listado simulado y validación de propuestas",
+      "archivos": [
+        "docs/DI-151-administracion-parte1.md",
+        "src/app/api/administracion/roles/validar/route.ts",
+        "src/app/api/administracion/usuarios/route.ts",
+        "src/features/administracion/PanelAdministrativoDemo.tsx",
+        "src/features/administracion/PropuestaRolDemo.tsx",
+        "src/features/administracion/UsuariosAdministrativosDemo.tsx",
+        "src/features/administracion/administracion.module.css",
+        "src/features/administracion/api.test.mjs",
+        "src/features/administracion/api.ts",
+        "src/features/administracion/servicios.test.mjs",
+        "src/features/administracion/servicios.ts",
+        "src/features/administracion/servidor.ts",
+        "src/features/autorizacion/autorizacion.ts"
+      ]
+    },
+    {
+      "sha": "8b36f878b285980ff66e3eb739563a93d67f05d7",
+      "autor": "Jhan Franco",
+      "asunto": "DI-151 feat(admin): completar funcionalidades administrativas y validaciones",
+      "archivos": [
+        "docs/DI-151-administracion-parte2.md",
+        "docs/DI-151-contrato-usuarios-reales.md",
+        "docs/DI-151-validacion-lectura-real.md",
+        "next-env.d.ts",
+        "scripts/asignar-superusuario.mjs",
+        "scripts/check-admin-read-config.mjs",
+        "scripts/test-roles-postgres-local.ps1",
+        "scripts/validar-lectura-admin.browser.js",
+        "src/app/api/administracion/roles/route.ts",
+        "src/app/api/administracion/usuarios/reales/route.ts",
+        "src/app/api/desarrollo/validar-lectura-admin/route.ts",
+        "src/app/desarrollo/lectura-admin/page.tsx",
+        "src/app/desarrollo/mfa-admin/page.tsx",
+        "src/app/desarrollo/roles-admin/page.tsx",
+        "src/features/administracion/CambioRolesLocal.tsx",
+        "src/features/administracion/EstadoAdministrativo.tsx",
+        "src/features/administracion/MfaAdminLocal.tsx",
+        "src/features/administracion/PanelAdministrativoDemo.tsx",
+        "src/features/administracion/PropuestaRolDemo.tsx",
+        "src/features/administracion/UsuariosAdministrativos.tsx",
+        "src/features/administracion/UsuariosAdministrativosConectados.tsx",
+        "src/features/administracion/UsuariosAdministrativosDemo.tsx",
+        "src/features/administracion/ValidacionLecturaAdmin.tsx",
+        "src/features/administracion/administracion.module.css",
+        "src/features/administracion/api-usuarios-reales.ts",
+        "src/features/administracion/asignar-superusuario.test.mjs",
+        "src/features/administracion/cambios-roles.test.mjs",
+        "src/features/administracion/cambios-roles.ts",
+        "src/features/administracion/cliente.test.mjs",
+        "src/features/administracion/cliente.ts",
+        "src/features/administracion/configuracion-lectura.test.mjs",
+        "src/features/administracion/escrituras-roles-supabase.test.mjs",
+        "src/features/administracion/escrituras-roles-supabase.ts",
+        "src/features/administracion/lecturas-supabase.test.mjs",
+        "src/features/administracion/lecturas-supabase.ts",
+        "src/features/administracion/mfa-local.module.css",
+        "src/features/administracion/mfa-local.test.mjs",
+        "src/features/administracion/mfa-local.ts",
+        "src/features/administracion/servidor-cambios-roles.ts",
+        "src/features/administracion/servidor-usuarios-reales.ts",
+        "src/features/administracion/usuarios-reales.test.mjs",
+        "src/features/administracion/usuarios-reales.ts",
+        "src/features/administracion/validacion-browser.test.mjs",
+        "src/features/administracion/validacion-lectura-servidor.ts",
+        "src/features/administracion/validacion-lectura.test.mjs",
+        "src/features/administracion/validacion-lectura.ts",
+        "src/features/autorizacion/autorizacion.ts",
+        "supabase/migrations/20261103012414_di151_roles_auditoria_atomica.sql",
+        "supabase/tests/di151-concurrencia-preparar.sql",
+        "supabase/tests/di151-roles.sql",
+        "supabase/tests/fixtures-auth-local.sql"
+      ]
+    },
+    {
+      "sha": "c992a14229d1bc838166dae200559b9aa7f7428c",
+      "autor": "Jhan Franco",
+      "asunto": "DI-151 feat(admin): completar funcionalidades administrativas y validaciones",
+      "archivos": [
+        "docs/DI-151-administracion-parte2.md"
+      ]
+    }
+  ],
+  "prAdministrativoEncontrado": false,
+  "remotoAdministrativo": "origin/feature/superusuario-admin",
+  "sinConflictosMergeTree": true
+}

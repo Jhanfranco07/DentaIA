@@ -1,0 +1,20 @@
+sequenceDiagram
+  participant O as Odontólogo
+  participant S as Next.js clínico propuesto
+  participant D as PostgreSQL
+  O->>S: Paciente, membresía y cursor ligado al contexto
+  S->>S: Verificar sesión, rechazar escenario o actor del cliente
+  S->>D: Lectura auditada, no SELECT directo de contenido
+  D->>D: Bloquear identidad, paciente, contexto y concesiones vigentes
+  D->>D: Validar rol actual, verificación y recursos seleccionados
+  alt Permitido
+    D->>D: INSERT auditoría mínima y preparar página autorizada
+    D-->>S: Commit y proyección sin rutas de objetos
+    S-->>O: Historial permitido con origen y fechas
+  else Denegado
+    D->>D: INSERT auditoría sin contenido ni ID ajeno validado
+    D-->>S: Commit y denegación controlada
+    S-->>O: 403 o 404 genérico
+  end
+  Note over S,D: Fallo de auditoría: no entregar contenido
+  Note over O,D: Revocar bloquea nuevas lecturas, no retira páginas ya autorizadas

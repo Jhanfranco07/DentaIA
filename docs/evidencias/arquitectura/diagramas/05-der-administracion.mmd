@@ -1,0 +1,29 @@
+erDiagram
+    dentaia_admin_revisiones_roles {
+        uuid usuario_id PK
+        integer revision
+    }
+    dentaia_admin_aprobaciones_roles {
+        uuid id PK
+        uuid actor_id
+        uuid objetivo_id
+        uuid aprobado_por
+        text operacion
+        text rol
+        integer revision_esperada
+        jsonb asignacion_esperada
+        timestamptz creada_en
+        timestamptz vence_en
+        uuid consumida_por
+    }
+    dentaia_admin_auditoria_roles {
+        uuid actor_id PK
+        uuid solicitud_id PK
+        uuid objetivo_id
+        uuid aprobacion_id
+        jsonb peticion
+        jsonb anterior
+        jsonb posterior
+        jsonb resultado
+        timestamptz registrada_en
+    }
