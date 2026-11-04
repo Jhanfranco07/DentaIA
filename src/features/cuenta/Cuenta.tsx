@@ -102,7 +102,7 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
             {continuar && <div className="notice"><strong>Tu profesional sigue seleccionado.</strong><p>Ya puedes continuar con tu solicitud de demostración.</p><Link href={continuar} className="action">Continuar mi solicitud</Link></div>}
             <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />
-            <nav aria-label="Continuar mi recorrido" className={styles.accesos}><Link href="/analisis/demo">Explorar la demostración</Link><Link href="/fotografias">Mis fotografías</Link><Link href="/solicitudes">Mis solicitudes</Link></nav>
+            <nav aria-label="Continuar mi recorrido" className={styles.accesos}><Link href="/panel">Mi panel</Link><Link href="/analisis/demo">Explorar la demostración</Link><Link href="/fotografias">Mis fotografías</Link><Link href="/solicitudes">Mis solicitudes</Link>{process.env.NODE_ENV === "development" && <Link href="/desarrollo/panel-admin">Administración · acceso protegido</Link>}</nav>
             <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>
           </> : <>
             <div className={styles.opciones} aria-label="Opciones de acceso">

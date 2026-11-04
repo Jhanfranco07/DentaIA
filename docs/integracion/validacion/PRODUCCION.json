@@ -1,0 +1,45 @@
+{
+  "fecha": "2026-11-04T22:08:14.154Z",
+  "entorno": "Build local production; clínica forzada true para comprobar cierre",
+  "pruebas": [
+    {
+      "nombre": "Cierre production /api/clinical/patients/me",
+      "aprobada": true,
+      "http": 404
+    },
+    {
+      "nombre": "Cierre production /api/clinical/access-grants",
+      "aprobada": true,
+      "http": 404
+    },
+    {
+      "nombre": "Cierre production /api/clinical/patients/00000000-0000-4000-8000-000000000001/history",
+      "aprobada": true,
+      "http": 404
+    },
+    {
+      "nombre": "Cierre production /api/professional/me",
+      "aprobada": true,
+      "http": 404
+    },
+    {
+      "nombre": "Cierre production /api/professional/patients",
+      "aprobada": true,
+      "http": 404
+    },
+    {
+      "nombre": "Cierre production /api/professional/requests",
+      "aprobada": true,
+      "http": 404
+    },
+    {
+      "nombre": "Cierre production /desarrollo/panel-admin",
+      "aprobada": true,
+      "http": 404
+    }
+  ],
+  "escriturasDeNegocio": false,
+  "servidorReutilizado": false,
+  "aprobadas": 7,
+  "fallidas": 0
+}

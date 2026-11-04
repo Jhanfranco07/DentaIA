@@ -1,0 +1,80 @@
+{
+  "consultado": "2026-11-04",
+  "origen": "GitHub connector, consultas de solo lectura",
+  "resultados": [
+    {
+      "sha": "3125b9f50aeee79a66e7126441774abf798ae004",
+      "workflow_runs": [
+        {
+          "id": 41841348545,
+          "name": "Tests",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 88,
+          "jobs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41841348545/jobs",
+          "logs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41841348545/logs",
+          "workflow_id": 397294064
+        },
+        {
+          "id": 41841348790,
+          "name": "Security",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 50,
+          "jobs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41841348790/jobs",
+          "logs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41841348790/logs",
+          "workflow_id": 397222814
+        },
+        {
+          "id": 41841348566,
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 94,
+          "jobs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41841348566/jobs",
+          "logs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41841348566/logs",
+          "workflow_id": 397222812
+        }
+      ]
+    },
+    {
+      "sha": "2f1527dc7d0ef588f59dedbcdb4c968d5a840977",
+      "workflow_runs": [
+        {
+          "id": 41776533149,
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 90,
+          "jobs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41776533149/jobs",
+          "logs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41776533149/logs",
+          "workflow_id": 397222812
+        },
+        {
+          "id": 41776532525,
+          "name": "Security",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 49,
+          "jobs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41776532525/jobs",
+          "logs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41776532525/logs",
+          "workflow_id": 397222814
+        },
+        {
+          "id": 41776532511,
+          "name": "Tests",
+          "status": "completed",
+          "conclusion": "success",
+          "run_number": 84,
+          "jobs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41776532511/jobs",
+          "logs_url": "https://api.github.com/repos/Jhanfranco07/DentaIA/actions/runs/41776532511/logs",
+          "workflow_id": 397294064
+        }
+      ]
+    },
+    {
+      "sha": "67a85d3873c59234261883ef6f414525741c82a9",
+      "workflow_runs": []
+    }
+  ]
+}

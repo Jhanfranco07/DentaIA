@@ -1,0 +1,2036 @@
+TAP version 13
+# (node:17232) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/administracion/api.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: consulta autorizada reutiliza el guard AAL2 y devuelve solo datos sintéticos privados
+ok 1 - consulta autorizada reutiliza el guard AAL2 y devuelve solo datos sintéticos privados
+  ---
+  duration_ms: 45.7912
+  type: 'test'
+  ...
+# Subtest: visitante, token inválido, paciente, odontólogo y AAL1 no llegan a consultar servicios
+ok 2 - visitante, token inválido, paciente, odontólogo y AAL1 no llegan a consultar servicios
+  ---
+  duration_ms: 4.6025
+  type: 'test'
+  ...
+# Subtest: consulta estricta: desconocidos, duplicados y formato de paginación se rechazan
+ok 3 - consulta estricta: desconocidos, duplicados y formato de paginación se rechazan
+  ---
+  duration_ms: 1.5798
+  type: 'test'
+  ...
+# Subtest: proyección de respuesta excluye campos privados adicionales de un proveedor
+ok 4 - proyección de respuesta excluye campos privados adicionales de un proveedor
+  ---
+  duration_ms: 1.9058
+  type: 'test'
+  ...
+# Subtest: propuesta autorizada es validación sin aplicar; la identidad procede del guard
+ok 5 - propuesta autorizada es validación sin aplicar; la identidad procede del guard
+  ---
+  duration_ms: 3.0126
+  type: 'test'
+  ...
+# Subtest: no se aceptan actor/autoridad del cliente, acciones de escritura ni promociones
+ok 6 - no se aceptan actor/autoridad del cliente, acciones de escritura ni promociones
+  ---
+  duration_ms: 1.8773
+  type: 'test'
+  ...
+# Subtest: JSON, tipo de contenido y tamaño de cuerpo se validan tras autorización
+ok 7 - JSON, tipo de contenido y tamaño de cuerpo se validan tras autorización
+  ---
+  duration_ms: 1.3733
+  type: 'test'
+  ...
+# Subtest: escenarios vacíos, errores de servicio y excepciones no filtran detalles
+ok 8 - escenarios vacíos, errores de servicio y excepciones no filtran detalles
+  ---
+  duration_ms: 32.6819
+  type: 'test'
+  ...
+# Subtest: provisión: preparar un resumen no escribe ni imprime datos personales/metadatos
+ok 9 - provisión: preparar un resumen no escribe ni imprime datos personales/metadatos
+  ---
+  duration_ms: 1.8564
+  type: 'test'
+  ...
+# Subtest: provisión: confirmación ausente, genérica o booleana no autoriza
+ok 10 - provisión: confirmación ausente, genérica o booleana no autoriza
+  ---
+  duration_ms: 0.6537
+  type: 'test'
+  ...
+# Subtest: provisión: objetivo privado ligado a la ejecución, sin UUID real embebido ni fallback CLI
+ok 11 - provisión: objetivo privado ligado a la ejecución, sin UUID real embebido ni fallback CLI
+  ---
+  duration_ms: 21.6406
+  type: 'test'
+  ...
+# Subtest: provisión: concesión confirmada preserva metadata anidada y exige nueva lectura
+ok 12 - provisión: concesión confirmada preserva metadata anidada y exige nueva lectura
+  ---
+  duration_ms: 0.6387
+  type: 'test'
+  ...
+# Subtest: provisión: otra identidad, proveedor inesperado, cuenta no confirmada o suspendida bloquean
+ok 13 - provisión: otra identidad, proveedor inesperado, cuenta no confirmada o suspendida bloquean
+  ---
+  duration_ms: 0.5223
+  type: 'test'
+  ...
+# Subtest: provisión: nunca sobrescribe roles o namespaces existentes distintos
+ok 14 - provisión: nunca sobrescribe roles o namespaces existentes distintos
+  ---
+  duration_ms: 0.4308
+  type: 'test'
+  ...
+# Subtest: provisión: estado ya asignado es idempotente sin PUT
+ok 15 - provisión: estado ya asignado es idempotente sin PUT
+  ---
+  duration_ms: 0.2221
+  type: 'test'
+  ...
+# Subtest: provisión: cambio durante confirmación cancela sin escribir
+ok 16 - provisión: cambio durante confirmación cancela sin escribir
+  ---
+  duration_ms: 0.3193
+  type: 'test'
+  ...
+# Subtest: provisión: un update aparentemente correcto no basta sin lectura posterior coincidente
+ok 17 - provisión: un update aparentemente correcto no basta sin lectura posterior coincidente
+  ---
+  duration_ms: 0.4658
+  type: 'test'
+  ...
+# Subtest: provisión: respuesta perdida se comprueba con GET, sin reintento ni rollback
+ok 18 - provisión: respuesta perdida se comprueba con GET, sin reintento ni rollback
+  ---
+  duration_ms: 0.5576
+  type: 'test'
+  ...
+# Subtest: provisión: fallo de lectura posterior produce estado incierto, sin filtrar errores
+ok 19 - provisión: fallo de lectura posterior produce estado incierto, sin filtrar errores
+  ---
+  duration_ms: 0.4612
+  type: 'test'
+  ...
+# Subtest: provisión: transporte SDK real restringe proyecto, UUID, payload y número de escrituras con fetch ficticio
+ok 20 - provisión: transporte SDK real restringe proyecto, UUID, payload y número de escrituras con fetch ficticio
+  ---
+  duration_ms: 2.3962
+  type: 'test'
+  ...
+# Subtest: DI-153 ensamblado real: origen ajeno se rechaza antes del cuerpo; origen correcto conserva bandera apagada
+ok 21 - DI-153 ensamblado real: origen ajeno se rechaza antes del cuerpo; origen correcto conserva bandera apagada
+  ---
+  duration_ms: 1639.2386
+  type: 'test'
+  ...
+# Subtest: DI-153 ensamblado real: valores no exactos de la bandera jamás invocan el RPC aunque haya credencial sintética
+ok 22 - DI-153 ensamblado real: valores no exactos de la bandera jamás invocan el RPC aunque haya credencial sintética
+  ---
+  duration_ms: 227.5083
+  type: 'test'
+  ...
+# Subtest: DI-153 consulta de revisión no elude el bloqueo del ensamblado de escritura ni expone contexto
+ok 23 - DI-153 consulta de revisión no elude el bloqueo del ensamblado de escritura ni expone contexto
+  ---
+  duration_ms: 219.6679
+  type: 'test'
+  ...
+# (node:22952) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/administracion/cambios-roles.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: contrato de cambio estricto: rechaza campos de autoridad, metadatos y revisiones inválidas
+ok 24 - contrato de cambio estricto: rechaza campos de autoridad, metadatos y revisiones inválidas
+  ---
+  duration_ms: 3.6652
+  type: 'test'
+  ...
+# Subtest: transiciones de paciente preservan roles independientes y revocar el último elimina la asignación
+ok 25 - transiciones de paciente preservan roles independientes y revocar el último elimina la asignación
+  ---
+  duration_ms: 0.438
+  type: 'test'
+  ...
+# Subtest: cambios propios, superusuario objetivo y concesiones no aprobadas se deniegan
+ok 26 - cambios propios, superusuario objetivo y concesiones no aprobadas se deniegan
+  ---
+  duration_ms: 0.2572
+  type: 'test'
+  ...
+# Subtest: promoción administrativa requiere aprobación independiente y MFA del objetivo; protege último superusuario
+ok 27 - promoción administrativa requiere aprobación independiente y MFA del objetivo; protege último superusuario
+  ---
+  duration_ms: 0.5633
+  type: 'test'
+  ...
+# Subtest: aprobación administrativa no sustituye verificación profesional; sí permite revocar un rol existente
+ok 28 - aprobación administrativa no sustituye verificación profesional; sí permite revocar un rol existente
+  ---
+  duration_ms: 0.4005
+  type: 'test'
+  ...
+# Subtest: API reutiliza DI-150 y transmite únicamente contexto verificado, transición y clave
+ok 29 - API reutiliza DI-150 y transmite únicamente contexto verificado, transición y clave
+  ---
+  duration_ms: 25.6765
+  type: 'test'
+  ...
+# Subtest: sin sesión, paciente, odontólogo, AAL1 y fallo de Auth no acceden al proveedor
+ok 30 - sin sesión, paciente, odontólogo, AAL1 y fallo de Auth no acceden al proveedor
+  ---
+  duration_ms: 2.267
+  type: 'test'
+  ...
+# Subtest: pérdida de autorización entre solicitudes se revalida y no reutiliza el permiso anterior
+ok 31 - pérdida de autorización entre solicitudes se revalida y no reutiliza el permiso anterior
+  ---
+  duration_ms: 0.727
+  type: 'test'
+  ...
+# Subtest: protección de origen, tipo JSON, clave, longitud y entrada desconocida
+ok 32 - protección de origen, tipo JSON, clave, longitud y entrada desconocida
+  ---
+  duration_ms: 2.7366
+  type: 'test'
+  ...
+# Subtest: consulta de revisión es protegida y no admite campos adicionales o duplicados
+ok 33 - consulta de revisión es protegida y no admite campos adicionales o duplicados
+  ---
+  duration_ms: 1.0341
+  type: 'test'
+  ...
+# Subtest: respuestas perdidas y fallos de auditoría no se presentan como éxito ni rollback confirmado
+ok 34 - respuestas perdidas y fallos de auditoría no se presentan como éxito ni rollback confirmado
+  ---
+  duration_ms: 0.8773
+  type: 'test'
+  ...
+# Subtest: reintento conserva clave y contenido; transporte no decide por sí mismo si hubo commit
+ok 35 - reintento conserva clave y contenido; transporte no decide por sí mismo si hubo commit
+  ---
+  duration_ms: 0.9826
+  type: 'test'
+  ...
+# Subtest: solicitudes simultáneas llegan al puerto con su versión y claves distintas; no simula un lock PostgreSQL
+ok 36 - solicitudes simultáneas llegan al puerto con su versión y claves distintas; no simula un lock PostgreSQL
+  ---
+  duration_ms: 0.556
+  type: 'test'
+  ...
+# Subtest: rechazos de la unidad transaccional se propagan sin afirmar aplicación
+ok 37 - rechazos de la unidad transaccional se propagan sin afirmar aplicación
+  ---
+  duration_ms: 1.6312
+  type: 'test'
+  ...
+# (node:6332) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/administracion/cliente-panel-real.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: DI-152 cliente → endpoint real → guard → puerto simulado conserva filtros/paginación
+ok 38 - DI-152 cliente → endpoint real → guard → puerto simulado conserva filtros/paginación
+  ---
+  duration_ms: 47.3704
+  type: 'test'
+  ...
+# Subtest: DI-152 proveedor puede ajustar página fuera de rango sin fabricar resultados
+ok 39 - DI-152 proveedor puede ajustar página fuera de rango sin fabricar resultados
+  ---
+  duration_ms: 1.1811
+  type: 'test'
+  ...
+# Subtest: DI-152 búsqueda sin resultados mantiene página uno y vacío real del contrato
+ok 40 - DI-152 búsqueda sin resultados mantiene página uno y vacío real del contrato
+  ---
+  duration_ms: 0.7851
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"rol":"paciente"} antes del proveedor
+ok 41 - DI-152 rechazo {"rol":"paciente"} antes del proveedor
+  ---
+  duration_ms: 0.9999
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"rol":"odontologo"} antes del proveedor
+ok 42 - DI-152 rechazo {"rol":"odontologo"} antes del proveedor
+  ---
+  duration_ms: 0.532
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"aal":"aal1"} antes del proveedor
+ok 43 - DI-152 rechazo {"aal":"aal1"} antes del proveedor
+  ---
+  duration_ms: 0.4611
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"invalid":true} antes del proveedor
+ok 44 - DI-152 rechazo {"invalid":true} antes del proveedor
+  ---
+  duration_ms: 0.3396
+  type: 'test'
+  ...
+# Subtest: DI-152 sesión ausente no llama al transporte y lectura apagada nunca se presenta exitosa
+ok 45 - DI-152 sesión ausente no llama al transporte y lectura apagada nunca se presenta exitosa
+  ---
+  duration_ms: 0.8554
+  type: 'test'
+  ...
+# Subtest: DI-152 validación de filtros/identidad impide peticiones manipuladas
+ok 46 - DI-152 validación de filtros/identidad impide peticiones manipuladas
+  ---
+  duration_ms: 0.353
+  type: 'test'
+  ...
+# Subtest: DI-152 DTO conserva estados diferenciados y descarta datos extra
+ok 47 - DI-152 DTO conserva estados diferenciados y descarta datos extra
+  ---
+  duration_ms: 1.1752
+  type: 'test'
+  ...
+# Subtest: DI-152 no acepta una página de otra consulta ni resultados duplicados
+ok 48 - DI-152 no acepta una página de otra consulta ni resultados duplicados
+  ---
+  duration_ms: 0.6258
+  type: 'test'
+  ...
+# Subtest: DI-152 lectura posterior representa el nuevo estado después de respuesta confirmada
+ok 49 - DI-152 lectura posterior representa el nuevo estado después de respuesta confirmada
+  ---
+  duration_ms: 1.3389
+  type: 'test'
+  ...
+# Subtest: DI-152 resultado roles exige operación, código y clave correspondientes
+ok 50 - DI-152 resultado roles exige operación, código y clave correspondientes
+  ---
+  duration_ms: 0.1877
+  type: 'test'
+  ...
+# Subtest: DI-152 HTTP de error/HTML no expone cuerpos sensibles
+ok 51 - DI-152 HTTP de error/HTML no expone cuerpos sensibles
+  ---
+  duration_ms: 0.3021
+  type: 'test'
+  ...
+# (node:17440) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/administracion/api.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: transporte lee token renovado por petición, usa rutas fijas y no cookies ni caché
+ok 52 - transporte lee token renovado por petición, usa rutas fijas y no cookies ni caché
+  ---
+  duration_ms: 17.3594
+  type: 'test'
+  ...
+# Subtest: cliente → API → guard AAL2 → proveedor; lista y valida sin modificar roles
+ok 53 - cliente → API → guard AAL2 → proveedor; lista y valida sin modificar roles
+  ---
+  duration_ms: 40.831
+  type: 'test'
+  ...
+# Subtest: identidad del operador solo procede del servidor y rechaza propuesta propia
+ok 54 - identidad del operador solo procede del servidor y rechaza propuesta propia
+  ---
+  duration_ms: 1.388
+  type: 'test'
+  ...
+# Subtest: paciente, odontólogo, AAL1, suspensión y token inválido no alcanzan el servicio
+ok 55 - paciente, odontólogo, AAL1, suspensión y token inválido no alcanzan el servicio
+  ---
+  duration_ms: 5.4008
+  type: 'test'
+  ...
+# Subtest: ausencia o fallo de sesión no envía una petición ni expone detalles
+ok 56 - ausencia o fallo de sesión no envía una petición ni expone detalles
+  ---
+  duration_ms: 0.541
+  type: 'test'
+  ...
+# Subtest: estados HTTP y fallos de red producen errores seguros, sin fallback a fixtures
+ok 57 - estados HTTP y fallos de red producen errores seguros, sin fallback a fixtures
+  ---
+  duration_ms: 0.8696
+  type: 'test'
+  ...
+# Subtest: respuestas 200 malformadas, HTML, origen incoherente y paginación imposible se rechazan
+ok 58 - respuestas 200 malformadas, HTML, origen incoherente y paginación imposible se rechazan
+  ---
+  duration_ms: 9.8213
+  type: 'test'
+  ...
+# Subtest: proyección cliente excluye campos extra y conserva origen en listas vacías
+ok 59 - proyección cliente excluye campos extra y conserva origen en listas vacías
+  ---
+  duration_ms: 16.397
+  type: 'test'
+  ...
+# Subtest: nunca da éxito a una escritura aplicada ni a respuestas de otro objetivo o rol
+ok 60 - nunca da éxito a una escritura aplicada ni a respuestas de otro objetivo o rol
+  ---
+  duration_ms: 1.0162
+  type: 'test'
+  ...
+# Subtest: filtros y JSON de propuesta se serializan sin autoridad aportada por el cliente
+ok 61 - filtros y JSON de propuesta se serializan sin autoridad aportada por el cliente
+  ---
+  duration_ms: 14.1315
+  type: 'test'
+  ...
+# Subtest: preflight sin red distingue preparación de verificación real y nunca serializa valores
+ok 62 - preflight sin red distingue preparación de verificación real y nunca serializa valores
+  ---
+  duration_ms: 4.1888
+  type: 'test'
+  ...
+# Subtest: preflight exige activación exacta, credencial dedicada, URL HTTPS y clave pública
+ok 63 - preflight exige activación exacta, credencial dedicada, URL HTTPS y clave pública
+  ---
+  duration_ms: 1.2947
+  type: 'test'
+  ...
+# Subtest: preflight detecta secretos modernos y service_role legacy bajo cualquier variable pública
+ok 64 - preflight detecta secretos modernos y service_role legacy bajo cualquier variable pública
+  ---
+  duration_ms: 2.9028
+  type: 'test'
+  ...
+# Subtest: cliente de escritura server-only y apagado sin credencial dedicada; no toma la de lectura
+ok 65 - cliente de escritura server-only y apagado sin credencial dedicada; no toma la de lectura
+  ---
+  duration_ms: 1654.3574
+  type: 'test'
+  ...
+# Subtest: SDK instalado: solo POST al RPC fijo, sin sesión de navegador, caché ni redirecciones
+ok 66 - SDK instalado: solo POST al RPC fijo, sin sesión de navegador, caché ni redirecciones
+  ---
+  duration_ms: 194.4994
+  type: 'test'
+  ...
+# Subtest: errores RPC y campos privados inesperados fallan sin reenviar detalle
+ok 67 - errores RPC y campos privados inesperados fallan sin reenviar detalle
+  ---
+  duration_ms: 204.5876
+  type: 'test'
+  ...
+# Subtest: el adaptador privilegiado no se puede importar en contexto cliente
+ok 68 - el adaptador privilegiado no se puede importar en contexto cliente
+  ---
+  duration_ms: 1262.6159
+  type: 'test'
+  ...
+# Subtest: sin opt-in o credencial dedicada falla sin red; no toma la clave del script de usuarios
+ok 69 - sin opt-in o credencial dedicada falla sin red; no toma la clave del script de usuarios
+  ---
+  duration_ms: 395.7605
+  type: 'test'
+  ...
+# Subtest: SDK real con fetch interceptado: GET Auth y profiles mínimo, sin caché, redirects ni métodos de escritura
+ok 70 - SDK real con fetch interceptado: GET Auth y profiles mínimo, sin caché, redirects ni métodos de escritura
+  ---
+  duration_ms: 195.5656
+  type: 'test'
+  ...
+# Subtest: SDK: errores de Auth/PostgreSQL y truncamiento no se convierten en lista vacía o perfiles ausentes
+ok 71 - SDK: errores de Auth/PostgreSQL y truncamiento no se convierten en lista vacía o perfiles ausentes
+  ---
+  duration_ms: 204.5691
+  type: 'test'
+  ...
+# Subtest: integración API → guard → proveedor → SDK Auth/profiles con transporte interceptado, sin servicio remoto
+ok 72 - integración API → guard → proveedor → SDK Auth/profiles con transporte interceptado, sin servicio remoto
+  ---
+  duration_ms: 178.1518
+  type: 'test'
+  ...
+# (node:24240) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/administracion/mfa-local.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MFA local: consulta no muta y AAL2 informativo no concede administración
+ok 73 - MFA local: consulta no muta y AAL2 informativo no concede administración
+  ---
+  duration_ms: 18.7081
+  type: 'test'
+  ...
+# Subtest: MFA local: bandera y consentimiento se requieren antes de cualquier mutación
+ok 74 - MFA local: bandera y consentimiento se requieren antes de cualquier mutación
+  ---
+  duration_ms: 0.6901
+  type: 'test'
+  ...
+# Subtest: MFA local: identidad ausente o no confirmada no enrola ni consulta el endpoint
+ok 75 - MFA local: identidad ausente o no confirmada no enrola ni consulta el endpoint
+  ---
+  duration_ms: 0.5308
+  type: 'test'
+  ...
+# Subtest: MFA local: enrolamiento explícito proyecta solo QR aislado y factor ID, sin secret/uri/sesión
+ok 76 - MFA local: enrolamiento explícito proyecta solo QR aislado y factor ID, sin secret/uri/sesión
+  ---
+  duration_ms: 0.9957
+  type: 'test'
+  ...
+# Subtest: MFA local: preferir challenge de factor verificado, no enrolar duplicados
+ok 77 - MFA local: preferir challenge de factor verificado, no enrolar duplicados
+  ---
+  duration_ms: 1.2998
+  type: 'test'
+  ...
+# Subtest: MFA local: factor pendiente creado aquí se verifica legítimamente sin cambiar roles
+ok 78 - MFA local: factor pendiente creado aquí se verifica legítimamente sin cambiar roles
+  ---
+  duration_ms: 0.5954
+  type: 'test'
+  ...
+# Subtest: MFA local: código inválido y factor ajeno se rechazan
+ok 79 - MFA local: código inválido y factor ajeno se rechazan
+  ---
+  duration_ms: 0.4344
+  type: 'test'
+  ...
+# Subtest: MFA local: retomar un pendiente propio ya escaneado tras recargar exige challenge real del SDK
+ok 80 - MFA local: retomar un pendiente propio ya escaneado tras recargar exige challenge real del SDK
+  ---
+  duration_ms: 0.8566
+  type: 'test'
+  ...
+# Subtest: MFA local: una identidad distinta no verifica el factor pendiente anterior
+ok 81 - MFA local: una identidad distinta no verifica el factor pendiente anterior
+  ---
+  duration_ms: 0.4075
+  type: 'test'
+  ...
+# Subtest: MFA local: errores SDK sensibles no se propagan y no hay reintento automático
+ok 82 - MFA local: errores SDK sensibles no se propagan y no hay reintento automático
+  ---
+  duration_ms: 0.5422
+  type: 'test'
+  ...
+# Subtest: MFA local: respuesta SDK de verify sin AAL2 posterior no produce éxito
+ok 83 - MFA local: respuesta SDK de verify sin AAL2 posterior no produce éxito
+  ---
+  duration_ms: 0.4315
+  type: 'test'
+  ...
+# Subtest: MFA local: impedir doble enrolamiento y descartar una operación al cambiar sesión
+ok 84 - MFA local: impedir doble enrolamiento y descartar una operación al cambiar sesión
+  ---
+  duration_ms: 5.8478
+  type: 'test'
+  ...
+# Subtest: MFA local: token de otra identidad no se transmite al servidor y respuestas inválidas no autorizan
+ok 85 - MFA local: token de otra identidad no se transmite al servidor y respuestas inválidas no autorizan
+  ---
+  duration_ms: 0.5772
+  type: 'test'
+  ...
+# Subtest: MFA local: temporización de caducidad conservadora sin modificar la sesión remota
+ok 86 - MFA local: temporización de caducidad conservadora sin modificar la sesión remota
+  ---
+  duration_ms: 0.0894
+  type: 'test'
+  ...
+# Subtest: MFA local: sesión caducada impide enrolar y verificar antes de cualquier mutación
+ok 87 - MFA local: sesión caducada impide enrolar y verificar antes de cualquier mutación
+  ---
+  duration_ms: 0.3579
+  type: 'test'
+  ...
+# Subtest: MFA local: código rechazado y desafío caducado permiten reintento manual sin nuevo enrolamiento
+ok 88 - MFA local: código rechazado y desafío caducado permiten reintento manual sin nuevo enrolamiento
+  ---
+  duration_ms: 1.1896
+  type: 'test'
+  ...
+# Subtest: MFA local: proyecto TOTP deshabilitado, rate limit y sesión rechazada usan errores seguros
+ok 89 - MFA local: proyecto TOTP deshabilitado, rate limit y sesión rechazada usan errores seguros
+  ---
+  duration_ms: 0.3581
+  type: 'test'
+  ...
+# Subtest: MFA local: fallo de red de getUser no se confunde con expiración ni permite una mutación
+ok 90 - MFA local: fallo de red de getUser no se confunde con expiración ni permite una mutación
+  ---
+  duration_ms: 0.1565
+  type: 'test'
+  ...
+# Subtest: MFA local: QR SVG oficial, codificado y base64 se muestran como imagen sin publicar secret ni uri
+ok 91 - MFA local: QR SVG oficial, codificado y base64 se muestran como imagen sin publicar secret ni uri
+  ---
+  duration_ms: 0.4354
+  type: 'test'
+  ...
+# Subtest: MFA local: SVG inválido o servidor 401 no producen éxito ni filtración
+ok 92 - MFA local: SVG inválido o servidor 401 no producen éxito ni filtración
+  ---
+  duration_ms: 0.3839
+  type: 'test'
+  ...
+# Subtest: MFA local: SVG de SVGo con declaración XML y comentario inicial es válido
+ok 93 - MFA local: SVG de SVGo con declaración XML y comentario inicial es válido
+  ---
+  duration_ms: 0.2311
+  type: 'test'
+  ...
+# (node:22976) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/administracion/servicios.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: listado paginado sintético, estable y sin información privada
+ok 94 - listado paginado sintético, estable y sin información privada
+  ---
+  duration_ms: 34.6572
+  type: 'test'
+  ...
+# Subtest: búsqueda por alias/UUID y filtros combinados no usan consultas SQL
+ok 95 - búsqueda por alias/UUID y filtros combinados no usan consultas SQL
+  ---
+  duration_ms: 64.0531
+  type: 'test'
+  ...
+# Subtest: consulta estricta rechaza tipos, roles, paginación y campos manipulables
+ok 96 - consulta estricta rechaza tipos, roles, paginación y campos manipulables
+  ---
+  duration_ms: 0.3585
+  type: 'test'
+  ...
+# Subtest: UUID inválido se rechaza; IDs sintéticos y UUID en mayúsculas se aceptan
+ok 97 - UUID inválido se rechaza; IDs sintéticos y UUID en mayúsculas se aceptan
+  ---
+  duration_ms: 0.2726
+  type: 'test'
+  ...
+# Subtest: roles permitidos se validan sin modificar el listado ni persistir cambios
+ok 98 - roles permitidos se validan sin modificar el listado ni persistir cambios
+  ---
+  duration_ms: 34.9386
+  type: 'test'
+  ...
+# Subtest: roles técnicos, visitante y payloads con campos de autoridad son rechazados
+ok 99 - roles técnicos, visitante y payloads con campos de autoridad son rechazados
+  ---
+  duration_ms: 0.3123
+  type: 'test'
+  ...
+# Subtest: autoasignación, promoción y cambios sobre superusuario requieren denegación
+ok 100 - autoasignación, promoción y cambios sobre superusuario requieren denegación
+  ---
+  duration_ms: 15.2249
+  type: 'test'
+  ...
+# Subtest: escenarios vacío/error son explícitos y la cuenta inexistente no se crea
+ok 101 - escenarios vacío/error son explícitos y la cuenta inexistente no se crea
+  ---
+  duration_ms: 49.3376
+  type: 'test'
+  ...
+# Subtest: los resultados son copias; un consumidor no altera el proveedor ni sus roles
+ok 102 - los resultados son copias; un consumidor no altera el proveedor ni sus roles
+  ---
+  duration_ms: 16.8549
+  type: 'test'
+  ...
+# (node:14008) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/administracion/usuarios-reales.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: contrato real: perfiles propios del Auth ID, origen y proyección mínima
+ok 103 - contrato real: perfiles propios del Auth ID, origen y proyección mínima
+  ---
+  duration_ms: 5.4536
+  type: 'test'
+  ...
+# Subtest: perfil ausente no se crea ni se deduce desde user_metadata o correo
+ok 104 - perfil ausente no se crea ni se deduce desde user_metadata o correo
+  ---
+  duration_ms: 0.5187
+  type: 'test'
+  ...
+# Subtest: asignación ausente, inválida y suspendida son estados distintos; no asigna paciente por defecto
+ok 105 - asignación ausente, inválida y suspendida son estados distintos; no asigna paciente por defecto
+  ---
+  duration_ms: 14.2522
+  type: 'test'
+  ...
+# Subtest: estado de Auth es independiente de la asignación del negocio
+ok 106 - estado de Auth es independiente de la asignación del negocio
+  ---
+  duration_ms: 0.6485
+  type: 'test'
+  ...
+# Subtest: fechas falsy malformadas nunca se clasifican como cuenta habilitada
+ok 107 - fechas falsy malformadas nunca se clasifican como cuenta habilitada
+  ---
+  duration_ms: 0.7126
+  type: 'test'
+  ...
+# Subtest: búsqueda y filtros globales incluyen cuentas posteriores a la primera página de Auth
+ok 108 - búsqueda y filtros globales incluyen cuentas posteriores a la primera página de Auth
+  ---
+  duration_ms: 1.146
+  type: 'test'
+  ...
+# Subtest: paginación ordenada por UUID, página fuera de rango y vacío
+ok 109 - paginación ordenada por UUID, página fuera de rango y vacío
+  ---
+  duration_ms: 0.8576
+  type: 'test'
+  ...
+# Subtest: consulta inválida no construye cliente privilegiado
+ok 110 - consulta inválida no construye cliente privilegiado
+  ---
+  duration_ms: 0.3961
+  type: 'test'
+  ...
+# Subtest: errores de Auth y PostgreSQL no devuelven datos parciales ni detalles privados
+ok 111 - errores de Auth y PostgreSQL no devuelven datos parciales ni detalles privados
+  ---
+  duration_ms: 0.8773
+  type: 'test'
+  ...
+# Subtest: cuentas repetidas durante un escaneo se rechazan como lectura inestable
+ok 112 - cuentas repetidas durante un escaneo se rechazan como lectura inestable
+  ---
+  duration_ms: 1.0639
+  type: 'test'
+  ...
+# Subtest: límite de 2000 cuentas falla sin truncar ni fingir un total completo
+ok 113 - límite de 2000 cuentas falla sin truncar ni fingir un total completo
+  ---
+  duration_ms: 5.8362
+  type: 'test'
+  ...
+# Subtest: se admite exactamente el límite únicamente después de comprobar el final de Auth
+ok 114 - se admite exactamente el límite únicamente después de comprobar el final de Auth
+  ---
+  duration_ms: 10.8579
+  type: 'test'
+  ...
+# Subtest: respuestas malformadas, perfiles ajenos y duplicados se rechazan
+ok 115 - respuestas malformadas, perfiles ajenos y duplicados se rechazan
+  ---
+  duration_ms: 0.5966
+  type: 'test'
+  ...
+# Subtest: lecturas concurrentes no comparten snapshot, filtros, resultados ni instancia
+ok 116 - lecturas concurrentes no comparten snapshot, filtros, resultados ni instancia
+  ---
+  duration_ms: 9.8483
+  type: 'test'
+  ...
+# Subtest: API real de lectura exige guard AAL2 por petición y respuesta privada sin caché
+ok 117 - API real de lectura exige guard AAL2 por petición y respuesta privada sin caché
+  ---
+  duration_ms: 28.1408
+  type: 'test'
+  ...
+# Subtest: visitante, paciente, odontólogo, AAL1, suspendido y JWT inválido no crean proveedor real
+ok 118 - visitante, paciente, odontólogo, AAL1, suspendido y JWT inválido no crean proveedor real
+  ---
+  duration_ms: 2.837
+  type: 'test'
+  ...
+# Subtest: API rechaza query duplicada, autoridad/proveedor del cliente y tipos inválidos
+ok 119 - API rechaza query duplicada, autoridad/proveedor del cliente y tipos inválidos
+  ---
+  duration_ms: 2.3964
+  type: 'test'
+  ...
+# Subtest: API proyecta también campos anidados y nunca expone objetos del proveedor
+ok 120 - API proyecta también campos anidados y nunca expone objetos del proveedor
+  ---
+  duration_ms: 0.7504
+  type: 'test'
+  ...
+# Subtest: no hay acción administrativa de escritura habilitada, aunque el actor tenga AAL2
+ok 121 - no hay acción administrativa de escritura habilitada, aunque el actor tenga AAL2
+  ---
+  duration_ms: 0.4592
+  type: 'test'
+  ...
+# Subtest: snippet verifica las cuatro respuestas con fixtures sin reportar datos personales o tokens
+ok 122 - snippet verifica las cuatro respuestas con fixtures sin reportar datos personales o tokens
+  ---
+  duration_ms: 29.9607
+  type: 'test'
+  ...
+# Subtest: snippet requiere rechazo del guard y del endpoint en escenarios negativos, con fixtures
+ok 123 - snippet requiere rechazo del guard y del endpoint en escenarios negativos, con fixtures
+  ---
+  duration_ms: 4.1602
+  type: 'test'
+  ...
+# Subtest: snippet no acepta campos extra, estado inesperado ni datos de otra identidad
+ok 124 - snippet no acepta campos extra, estado inesperado ni datos de otra identidad
+  ---
+  duration_ms: 5.623
+  type: 'test'
+  ...
+# Subtest: snippet no se ejecuta en producción ni confunde ausencia de sesión con aceptación positiva
+ok 125 - snippet no se ejecuta en producción ni confunde ausencia de sesión con aceptación positiva
+  ---
+  duration_ms: 2.8463
+  type: 'test'
+  ...
+# (node:8580) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/administracion/validacion-lectura.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: matriz QA con fixtures: filtros, búsqueda, paginación y reporte sin filas personales
+ok 126 - matriz QA con fixtures: filtros, búsqueda, paginación y reporte sin filas personales
+  ---
+  duration_ms: 73.9848
+  type: 'test'
+  ...
+# Subtest: matriz QA limita el volumen y no presenta una muestra incompleta como validada
+ok 127 - matriz QA limita el volumen y no presenta una muestra incompleta como validada
+  ---
+  duration_ms: 0.9064
+  type: 'test'
+  ...
+# Subtest: matriz QA identifica rechazos 401 y 403 antes de consultar filas
+ok 128 - matriz QA identifica rechazos 401 y 403 antes de consultar filas
+  ---
+  duration_ms: 0.5688
+  type: 'test'
+  ...
+# Subtest: matriz QA rechaza campos adicionales sensibles y errores sin revelar contenido
+ok 129 - matriz QA rechaza campos adicionales sensibles y errores sin revelar contenido
+  ---
+  duration_ms: 0.2531
+  type: 'test'
+  ...
+# (node:21960) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/analisis/casos.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: muestra cuidado-habitual: imagen original válida, hash y resultado fijo
+ok 130 - muestra cuidado-habitual: imagen original válida, hash y resultado fijo
+  ---
+  duration_ms: 169.5391
+  type: 'test'
+  ...
+# Subtest: reporte cuidado-habitual: PDF descargable, advertencia, imagen y xref coherentes
+ok 131 - reporte cuidado-habitual: PDF descargable, advertencia, imagen y xref coherentes
+  ---
+  duration_ms: 25.4484
+  type: 'test'
+  ...
+# Subtest: muestra atencion-preventiva: imagen original válida, hash y resultado fijo
+ok 132 - muestra atencion-preventiva: imagen original válida, hash y resultado fijo
+  ---
+  duration_ms: 59.3556
+  type: 'test'
+  ...
+# Subtest: reporte atencion-preventiva: PDF descargable, advertencia, imagen y xref coherentes
+ok 133 - reporte atencion-preventiva: PDF descargable, advertencia, imagen y xref coherentes
+  ---
+  duration_ms: 4.7893
+  type: 'test'
+  ...
+# Subtest: muestra cuidado-encias: imagen original válida, hash y resultado fijo
+ok 134 - muestra cuidado-encias: imagen original válida, hash y resultado fijo
+  ---
+  duration_ms: 155.6079
+  type: 'test'
+  ...
+# Subtest: reporte cuidado-encias: PDF descargable, advertencia, imagen y xref coherentes
+ok 135 - reporte cuidado-encias: PDF descargable, advertencia, imagen y xref coherentes
+  ---
+  duration_ms: 6.0296
+  type: 'test'
+  ...
+# Subtest: la asociación depende de bytes y nunca del nombre de archivo
+ok 136 - la asociación depende de bytes y nunca del nombre de archivo
+  ---
+  duration_ms: 10.1034
+  type: 'test'
+  ...
+# Subtest: rechaza imágenes desconocidas, vacías o demasiado grandes sin asignar resultados
+ok 137 - rechaza imágenes desconocidas, vacías o demasiado grandes sin asignar resultados
+  ---
+  duration_ms: 2.3022
+  type: 'test'
+  ...
+# Subtest: identificadores estables y regiones acotadas al ejemplo
+ok 138 - identificadores estables y regiones acotadas al ejemplo
+  ---
+  duration_ms: 1.929
+  type: 'test'
+  ...
+# Subtest: el reporte rechaza imagen inválida, dimensiones imposibles y fecha inválida
+ok 139 - el reporte rechaza imagen inválida, dimensiones imposibles y fecha inválida
+  ---
+  duration_ms: 1.0091
+  type: 'test'
+  ...
+# Subtest: el enlace de solicitud acepta solo IDs internos válidos
+ok 140 - el enlace de solicitud acepta solo IDs internos válidos
+  ---
+  duration_ms: 0.6625
+  type: 'test'
+  ...
+# Subtest: las ilustraciones antiguas no se presentan como fotografías ni conservan resultados
+ok 141 - las ilustraciones antiguas no se presentan como fotografías ni conservan resultados
+  ---
+  duration_ms: 7.199
+  type: 'test'
+  ...
+# Subtest: procedencia por archivo y licencias coinciden con el catálogo clínico
+ok 142 - procedencia por archivo y licencias coinciden con el catálogo clínico
+  ---
+  duration_ms: 14.0047
+  type: 'test'
+  ...
+# (node:4368) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/analisis/flujo.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: la vuelta del directorio conserva únicamente una referencia pública al reporte
+ok 143 - la vuelta del directorio conserva únicamente una referencia pública al reporte
+  ---
+  duration_ms: 2.6512
+  type: 'test'
+  ...
+# Subtest: una sesión manipulada, desconocida o inválida nunca restaura resultados
+ok 144 - una sesión manipulada, desconocida o inválida nunca restaura resultados
+  ---
+  duration_ms: 0.3902
+  type: 'test'
+  ...
+# Subtest: una preparación interrumpida vuelve a revisión y omitir mantiene el último paso
+ok 145 - una preparación interrumpida vuelve a revisión y omitir mantiene el último paso
+  ---
+  duration_ms: 0.3067
+  type: 'test'
+  ...
+# (node:22796) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/analisis/casos.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: PDF premium cuidado-habitual: A4, contenido, una imagen y enlace accesible
+ok 146 - PDF premium cuidado-habitual: A4, contenido, una imagen y enlace accesible
+  ---
+  duration_ms: 171.617
+  type: 'test'
+  ...
+# Subtest: PDF premium atencion-preventiva: A4, contenido, una imagen y enlace accesible
+ok 147 - PDF premium atencion-preventiva: A4, contenido, una imagen y enlace accesible
+  ---
+  duration_ms: 27.3834
+  type: 'test'
+  ...
+# Subtest: PDF premium cuidado-encias: A4, contenido, una imagen y enlace accesible
+ok 148 - PDF premium cuidado-encias: A4, contenido, una imagen y enlace accesible
+  ---
+  duration_ms: 57.6462
+  type: 'test'
+  ...
+# Subtest: PDF conserva la proporción de fotografías horizontales y verticales
+ok 149 - PDF conserva la proporción de fotografías horizontales y verticales
+  ---
+  duration_ms: 6.9185
+  type: 'test'
+  ...
+# Subtest: PDF rechaza fechas, dimensiones y regiones no válidas sin producir documentos incompletos
+ok 150 - PDF rechaza fechas, dimensiones y regiones no válidas sin producir documentos incompletos
+  ---
+  duration_ms: 3.4912
+  type: 'test'
+  ...
+# Subtest: PDF solo marca regiones definidas para la referencia y etiqueta el material pendiente con transparencia
+ok 151 - PDF solo marca regiones definidas para la referencia y etiqueta el material pendiente con transparencia
+  ---
+  duration_ms: 5.9286
+  type: 'test'
+  ...
+# Subtest: PDF mantiene autor, licencia y cambios de una fotografía reutilizada con enlaces verificables
+ok 152 - PDF mantiene autor, licencia y cambios de una fotografía reutilizada con enlaces verificables
+  ---
+  duration_ms: 4.1949
+  type: 'test'
+  ...
+# (node:4168) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/autorizacion/autorizacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sin sesión, esquema incorrecto o bearer ambiguo: 401 y no consulta Auth
+ok 153 - sin sesión, esquema incorrecto o bearer ambiguo: 401 y no consulta Auth
+  ---
+  duration_ms: 17.9099
+  type: 'test'
+  ...
+# Subtest: Auth recibe el token exacto; no se decodifica como prueba de identidad
+ok 154 - Auth recibe el token exacto; no se decodifica como prueba de identidad
+  ---
+  duration_ms: 0.6663
+  type: 'test'
+  ...
+# Subtest: sesión inválida, expirada o usuario inexistente: 401 aunque vengan metadatos
+ok 155 - sesión inválida, expirada o usuario inexistente: 401 aunque vengan metadatos
+  ---
+  duration_ms: 0.3246
+  type: 'test'
+  ...
+# Subtest: paciente o profesional autenticado carece de autorización administrativa
+ok 156 - paciente o profesional autenticado carece de autorización administrativa
+  ---
+  duration_ms: 0.2927
+  type: 'test'
+  ...
+# Subtest: autoasignación en user_metadata no concede acceso, ni con namespace idéntico
+ok 157 - autoasignación en user_metadata no concede acceso, ni con namespace idéntico
+  ---
+  duration_ms: 0.204
+  type: 'test'
+  ...
+# Subtest: rol recibido en query, cookies, encabezados o cuerpo no es autoridad
+ok 158 - rol recibido en query, cookies, encabezados o cuerpo no es autoridad
+  ---
+  duration_ms: 3.05
+  type: 'test'
+  ...
+# Subtest: formatos desconocidos, roles inesperados y asignación inactiva se deniegan
+ok 159 - formatos desconocidos, roles inesperados y asignación inactiva se deniegan
+  ---
+  duration_ms: 0.2315
+  type: 'test'
+  ...
+# Subtest: superusuario válido procede únicamente de app_metadata obtenido del proveedor
+ok 160 - superusuario válido procede únicamente de app_metadata obtenido del proveedor
+  ---
+  duration_ms: 1.2179
+  type: 'test'
+  ...
+# Subtest: identidad anónima, sin confirmar, eliminada o suspendida se deniega
+ok 161 - identidad anónima, sin confirmar, eliminada o suspendida se deniega
+  ---
+  duration_ms: 0.5097
+  type: 'test'
+  ...
+# Subtest: revocación de rol se consulta en la siguiente petición, aun con el mismo token
+ok 162 - revocación de rol se consulta en la siguiente petición, aun con el mismo token
+  ---
+  duration_ms: 0.5057
+  type: 'test'
+  ...
+# Subtest: red, configuración, límite de peticiones o caída de Auth: 503 y ninguna concesión
+ok 163 - red, configuración, límite de peticiones o caída de Auth: 503 y ninguna concesión
+  ---
+  duration_ms: 2.4126
+  type: 'test'
+  ...
+# Subtest: todas las respuestas son privadas y mínimas; desafío Bearer solo para 401
+ok 164 - todas las respuestas son privadas y mínimas; desafío Bearer solo para 401
+  ---
+  duration_ms: 1.282
+  type: 'test'
+  ...
+# Subtest: peticiones concurrentes no comparten identidad ni autorización
+ok 165 - peticiones concurrentes no comparten identidad ni autorización
+  ---
+  duration_ms: 0.1779
+  type: 'test'
+  ...
+# (node:16600) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/autorizacion/autorizacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MFA: aal1, ausencia o valor manipulado se deniegan aunque el rol sea válido
+ok 166 - MFA: aal1, ausencia o valor manipulado se deniegan aunque el rol sea válido
+  ---
+  duration_ms: 22.5677
+  type: 'test'
+  ...
+# Subtest: MFA: un factor enrolado no equivale a una sesión aal2
+ok 167 - MFA: un factor enrolado no equivale a una sesión aal2
+  ---
+  duration_ms: 0.4135
+  type: 'test'
+  ...
+# Subtest: MFA: se requiere un factor verificado actual; retirarlo invalida el acceso
+ok 168 - MFA: se requiere un factor verificado actual; retirarlo invalida el acceso
+  ---
+  duration_ms: 0.7634
+  type: 'test'
+  ...
+# Subtest: MFA: identidad y claims verificados deben corresponder al mismo usuario y token
+ok 169 - MFA: identidad y claims verificados deben corresponder al mismo usuario y token
+  ---
+  duration_ms: 0.8485
+  type: 'test'
+  ...
+# Subtest: MFA: cabeceras y metadatos editables no sustituyen la prueba firmada
+ok 170 - MFA: cabeceras y metadatos editables no sustituyen la prueba firmada
+  ---
+  duration_ms: 0.3573
+  type: 'test'
+  ...
+# Subtest: MFA: fallo de firma/caducidad devuelve 401; error de proveedor devuelve 503
+ok 171 - MFA: fallo de firma/caducidad devuelve 401; error de proveedor devuelve 503
+  ---
+  duration_ms: 1.3336
+  type: 'test'
+  ...
+# Subtest: un rol revocado prevalece sobre claims firmados antiguos y evita incluso consultar MFA
+ok 172 - un rol revocado prevalece sobre claims firmados antiguos y evita incluso consultar MFA
+  ---
+  duration_ms: 0.3845
+  type: 'test'
+  ...
+# Subtest: un servicio privado nunca se invoca para visitantes, pacientes, odontólogos o sesiones rechazadas
+ok 173 - un servicio privado nunca se invoca para visitantes, pacientes, odontólogos o sesiones rechazadas
+  ---
+  duration_ms: 7.7399
+  type: 'test'
+  ...
+# Subtest: el contrato ejecuta una vez tras validar rol y MFA; impone no-store a la respuesta del servicio
+ok 174 - el contrato ejecuta una vez tras validar rol y MFA; impone no-store a la respuesta del servicio
+  ---
+  duration_ms: 1.168
+  type: 'test'
+  ...
+# Subtest: operaciones desconocidas, gestión de cuentas y acciones clínicas permanecen denegadas
+ok 175 - operaciones desconocidas, gestión de cuentas y acciones clínicas permanecen denegadas
+  ---
+  duration_ms: 1.5403
+  type: 'test'
+  ...
+# Subtest: revocación o suspensión entre solicitudes impide volver a ejecutar el servicio
+ok 176 - revocación o suspensión entre solicitudes impide volver a ejecutar el servicio
+  ---
+  duration_ms: 1.5369
+  type: 'test'
+  ...
+# Subtest: revocar el rol y rechazar una sesión son fallos distintos
+ok 177 - revocar el rol y rechazar una sesión son fallos distintos
+  ---
+  duration_ms: 0.342
+  type: 'test'
+  ...
+# Subtest: errores del servicio se convierten en respuesta mínima privada
+ok 178 - errores del servicio se convierten en respuesta mínima privada
+  ---
+  duration_ms: 1.0277
+  type: 'test'
+  ...
+# Subtest: no se prepara una respuesta privada mientras la identidad siga pendiente de verificación
+ok 179 - no se prepara una respuesta privada mientras la identidad siga pendiente de verificación
+  ---
+  duration_ms: 0.5013
+  type: 'test'
+  ...
+# Subtest: adaptador real: getUser llama Auth con bearer, sin caché ni cliente privilegiado
+ok 180 - adaptador real: getUser llama Auth con bearer, sin caché ni cliente privilegiado
+  ---
+  duration_ms: 1009.3806
+  type: 'test'
+  ...
+# Subtest: server-only impide importar el adaptador en un contexto ordinario
+ok 181 - server-only impide importar el adaptador en un contexto ordinario
+  ---
+  duration_ms: 123.6404
+  type: 'test'
+  ...
+# Subtest: SDK real: firma criptográfica, caducidad y aal2 sin claves persistidas ni Auth remoto
+ok 182 - SDK real: firma criptográfica, caducidad y aal2 sin claves persistidas ni Auth remoto
+  ---
+  duration_ms: 207.6071
+  type: 'test'
+  ...
+# (node:22856) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/clinica-http/ambiente.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Remoto solo con todos los flags, origen y allowlist exactos
+ok 183 - Remoto solo con todos los flags, origen y allowlist exactos
+  ---
+  duration_ms: 2.783
+  type: 'test'
+  ...
+# Subtest: Falta DENTAIA_CLINICAL_ACADEMIC_ENABLED falla cerrado
+ok 184 - Falta DENTAIA_CLINICAL_ACADEMIC_ENABLED falla cerrado
+  ---
+  duration_ms: 0.4995
+  type: 'test'
+  ...
+# Subtest: Falta DENTAIA_CLINICAL_PROJECT_REF falla cerrado
+ok 185 - Falta DENTAIA_CLINICAL_PROJECT_REF falla cerrado
+  ---
+  duration_ms: 0.2437
+  type: 'test'
+  ...
+# Subtest: Falta DENTAIA_CLINICAL_DEMO_USER_IDS falla cerrado
+ok 186 - Falta DENTAIA_CLINICAL_DEMO_USER_IDS falla cerrado
+  ---
+  duration_ms: 0.2095
+  type: 'test'
+  ...
+# Subtest: Rechaza destino https://otro.supabase.co
+ok 187 - Rechaza destino https://otro.supabase.co
+  ---
+  duration_ms: 0.2671
+  type: 'test'
+  ...
+# Subtest: Rechaza destino http://vwmdknzjyvmsdqpepykz.supabase.co
+ok 188 - Rechaza destino http://vwmdknzjyvmsdqpepykz.supabase.co
+  ---
+  duration_ms: 0.2141
+  type: 'test'
+  ...
+# Subtest: Rechaza destino https://vwmdknzjyvmsdqpepykz.supabase.co/path
+ok 189 - Rechaza destino https://vwmdknzjyvmsdqpepykz.supabase.co/path
+  ---
+  duration_ms: 0.2957
+  type: 'test'
+  ...
+# Subtest: Rechaza destino https://vwmdknzjyvmsdqpepykz.supabase.co?x=1
+ok 190 - Rechaza destino https://vwmdknzjyvmsdqpepykz.supabase.co?x=1
+  ---
+  duration_ms: 1.1747
+  type: 'test'
+  ...
+# Subtest: Bloqueo de despliegue {"NODE_ENV":"production"}
+ok 191 - Bloqueo de despliegue {"NODE_ENV":"production"}
+  ---
+  duration_ms: 0.5467
+  type: 'test'
+  ...
+# Subtest: Bloqueo de despliegue {"VERCEL":"1"}
+ok 192 - Bloqueo de despliegue {"VERCEL":"1"}
+  ---
+  duration_ms: 0.5854
+  type: 'test'
+  ...
+# Subtest: Bloqueo de despliegue {"VERCEL_ENV":"preview"}
+ok 193 - Bloqueo de despliegue {"VERCEL_ENV":"preview"}
+  ---
+  duration_ms: 0.2385
+  type: 'test'
+  ...
+# Subtest: Clave privilegiada no aceptada
+ok 194 - Clave privilegiada no aceptada
+  ---
+  duration_ms: 0.2712
+  type: 'test'
+  ...
+# Subtest: Allowlist con duplicados no aceptada
+ok 195 - Allowlist con duplicados no aceptada
+  ---
+  duration_ms: 0.1268
+  type: 'test'
+  ...
+# Subtest: Solo cuenta en allowlist y marcador app_metadata
+ok 196 - Solo cuenta en allowlist y marcador app_metadata
+  ---
+  duration_ms: 0.1301
+  type: 'test'
+  ...
+# Subtest: Host/origin local y sin cross-site
+ok 197 - Host/origin local y sin cross-site
+  ---
+  duration_ms: 26.2826
+  type: 'test'
+  ...
+# (node:8304) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/clinica-http/cursor.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cursor conserva precisión PostgreSQL y contexto sin normalizar fechas
+ok 198 - cursor conserva precisión PostgreSQL y contexto sin normalizar fechas
+  ---
+  duration_ms: 3.4869
+  type: 'test'
+  ...
+# Subtest: cursor usa cifrado opaco y nonce diferente en cada emisión
+ok 199 - cursor usa cifrado opaco y nonce diferente en cada emisión
+  ---
+  duration_ms: 1.4803
+  type: 'test'
+  ...
+# Subtest: alterar IV, ciphertext, tag o firma rechaza cursor
+ok 200 - alterar IV, ciphertext, tag o firma rechaza cursor
+  ---
+  duration_ms: 1.4639
+  type: 'test'
+  ...
+# Subtest: cursor se vincula a identidad, sesión, paciente, contexto y filtros
+ok 201 - cursor se vincula a identidad, sesión, paciente, contexto y filtros
+  ---
+  duration_ms: 1.4007
+  type: 'test'
+  ...
+# Subtest: cursor vencido o emitido en el futuro se rechaza
+ok 202 - cursor vencido o emitido en el futuro se rechaza
+  ---
+  duration_ms: 0.6222
+  type: 'test'
+  ...
+# Subtest: cursor no supera expiración del JWT y rotar clave invalida anteriores
+ok 203 - cursor no supera expiración del JWT y rotar clave invalida anteriores
+  ---
+  duration_ms: 0.4682
+  type: 'test'
+  ...
+# Subtest: formato o tamaño de cursor inválido se rechazan sin excepciones públicas
+ok 204 - formato o tamaño de cursor inválido se rechazan sin excepciones públicas
+  ---
+  duration_ms: 0.1987
+  type: 'test'
+  ...
+# Subtest: firma no acepta secreto débil ni vigencia fuera de límites
+ok 205 - firma no acepta secreto débil ni vigencia fuera de límites
+  ---
+  duration_ms: 0.2545
+  type: 'test'
+  ...
+# Subtest: representaciones base64url no canónicas también se rechazan
+ok 206 - representaciones base64url no canónicas también se rechazan
+  ---
+  duration_ms: 0.4706
+  type: 'test'
+  ...
+# (node:15384) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/clinica-http/http.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: API desactivada falla cerrada sin llamar Auth ni RPC
+ok 207 - API desactivada falla cerrada sin llamar Auth ni RPC
+  ---
+  duration_ms: 27.7147
+  type: 'test'
+  ...
+# Subtest: sin JWT devuelve 401 y log no incluye token ni datos
+ok 208 - sin JWT devuelve 401 y log no incluye token ni datos
+  ---
+  duration_ms: 1.5599
+  type: 'test'
+  ...
+# Subtest: error de autenticación se conserva y no ejecuta RPC
+ok 209 - error de autenticación se conserva y no ejecuta RPC
+  ---
+  duration_ms: 1.0108
+  type: 'test'
+  ...
+# Subtest: concesión convierte envelope 201 a HTTP 201 y proyecta DTO
+ok 210 - concesión convierte envelope 201 a HTTP 201 y proyecta DTO
+  ---
+  duration_ms: 5.1697
+  type: 'test'
+  ...
+# Subtest: actor y rol no pueden declararse en cuerpo
+ok 211 - actor y rol no pueden declararse en cuerpo
+  ---
+  duration_ms: 3.7933
+  type: 'test'
+  ...
+# Subtest: origen de escritura cruzado se rechaza
+ok 212 - origen de escritura cruzado se rechaza
+  ---
+  duration_ms: 1.1729
+  type: 'test'
+  ...
+# Subtest: clave de idempotencia es obligatoria y UUID
+ok 213 - clave de idempotencia es obligatoria y UUID
+  ---
+  duration_ms: 0.837
+  type: 'test'
+  ...
+# Subtest: error PostgREST se normaliza sin filtrar detalle
+ok 214 - error PostgREST se normaliza sin filtrar detalle
+  ---
+  duration_ms: 1.1628
+  type: 'test'
+  ...
+# Subtest: denegación SQL HTTP 200 se convierte a HTTP 403
+ok 215 - denegación SQL HTTP 200 se convierte a HTTP 403
+  ---
+  duration_ms: 2.4423
+  type: 'test'
+  ...
+# Subtest: payload de otro paciente no sale del adaptador
+ok 216 - payload de otro paciente no sale del adaptador
+  ---
+  duration_ms: 2.2524
+  type: 'test'
+  ...
+# Subtest: consulta duplicada se rechaza antes de RPC
+ok 217 - consulta duplicada se rechaza antes de RPC
+  ---
+  duration_ms: 0.8277
+  type: 'test'
+  ...
+# Subtest: fechas inválidas no pasan y precisión de seis decimales se conserva
+ok 218 - fechas inválidas no pasan y precisión de seis decimales se conserva
+  ---
+  duration_ms: 0.2374
+  type: 'test'
+  ...
+# Subtest: recursos vacíos, duplicados y aceptación falsa se rechazan
+ok 219 - recursos vacíos, duplicados y aceptación falsa se rechazan
+  ---
+  duration_ms: 0.6196
+  type: 'test'
+  ...
+# Subtest: cuerpo por streaming también respeta límite de bytes
+ok 220 - cuerpo por streaming también respeta límite de bytes
+  ---
+  duration_ms: 1.6307
+  type: 'test'
+  ...
+# Subtest: JSON inválido o tipo MIME incorrecto se distinguen
+ok 221 - JSON inválido o tipo MIME incorrecto se distinguen
+  ---
+  duration_ms: 1.0218
+  type: 'test'
+  ...
+# (node:9212) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/clinica-http/workspace.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: paciente propio no acepta ID/rol/escenario arbitrarios
+ok 222 - paciente propio no acepta ID/rol/escenario arbitrarios
+  ---
+  duration_ms: 26.5771
+  type: 'test'
+  ...
+# Subtest: contexto requerido para pacientes y solicitudes profesionales
+ok 223 - contexto requerido para pacientes y solicitudes profesionales
+  ---
+  duration_ms: 0.873
+  type: 'test'
+  ...
+# Subtest: query profesional valida UUID, estados originales y keyset
+ok 224 - query profesional valida UUID, estados originales y keyset
+  ---
+  duration_ms: 1.9715
+  type: 'test'
+  ...
+# Subtest: estado de solicitudes no se admite en otros recursos
+ok 225 - estado de solicitudes no se admite en otros recursos
+  ---
+  duration_ms: 0.3613
+  type: 'test'
+  ...
+# Subtest: DTO identidad solo proyecta ID propio
+ok 226 - DTO identidad solo proyecta ID propio
+  ---
+  duration_ms: 1.3555
+  type: 'test'
+  ...
+# Subtest: DTO rechaza origen/kind/version inconsistentes
+ok 227 - DTO rechaza origen/kind/version inconsistentes
+  ---
+  duration_ms: 0.3427
+  type: 'test'
+  ...
+# Subtest: DTO solicitudes no contiene datos de contacto ni ID Auth del paciente
+ok 228 - DTO solicitudes no contiene datos de contacto ni ID Auth del paciente
+  ---
+  duration_ms: 0.8603
+  type: 'test'
+  ...
+# Subtest: DTO rechaza objetos/filas sin contrato y páginas excesivas
+ok 229 - DTO rechaza objetos/filas sin contrato y páginas excesivas
+  ---
+  duration_ms: 0.2995
+  type: 'test'
+  ...
+# Subtest: lista clínica vacía mantiene contexto y pagina nula
+ok 230 - lista clínica vacía mantiene contexto y pagina nula
+  ---
+  duration_ms: 0.4983
+  type: 'test'
+  ...
+# Subtest: endpoint desactivado no consulta Auth/RPC
+ok 231 - endpoint desactivado no consulta Auth/RPC
+  ---
+  duration_ms: 4.0332
+  type: 'test'
+  ...
+# Subtest: endpoint sin JWT y sin autorización no invoca RPC
+ok 232 - endpoint sin JWT y sin autorización no invoca RPC
+  ---
+  duration_ms: 1.2502
+  type: 'test'
+  ...
+# Subtest: RPC denegado transforma envelope en HTTP 403 sin datos
+ok 233 - RPC denegado transforma envelope en HTTP 403 sin datos
+  ---
+  duration_ms: 2.7235
+  type: 'test'
+  ...
+# Subtest: endpoint proyecta datos y marca no-store
+ok 234 - endpoint proyecta datos y marca no-store
+  ---
+  duration_ms: 1.0424
+  type: 'test'
+  ...
+# Subtest: respuesta RPC con contexto distinto falla cerrada
+ok 235 - respuesta RPC con contexto distinto falla cerrada
+  ---
+  duration_ms: 0.5979
+  type: 'test'
+  ...
+# (node:11752) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/cuenta/validaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: login vacío dirige la corrección al correo; después a la contraseña
+ok 236 - login vacío dirige la corrección al correo; después a la contraseña
+  ---
+  duration_ms: 1.2243
+  type: 'test'
+  ...
+# Subtest: correo mal formado identifica email, sin marcar el nombre oculto del login
+ok 237 - correo mal formado identifica email, sin marcar el nombre oculto del login
+  ---
+  duration_ms: 0.2999
+  type: 'test'
+  ...
+# Subtest: registro identifica el primer campo incorrecto en orden de lectura
+ok 238 - registro identifica el primer campo incorrecto en orden de lectura
+  ---
+  duration_ms: 0.2577
+  type: 'test'
+  ...
+# Subtest: cada error incluye un mensaje y no expone el valor de contraseña
+ok 239 - cada error incluye un mensaje y no expone el valor de contraseña
+  ---
+  duration_ms: 0.3806
+  type: 'test'
+  ...
+# Subtest: campos válidos y contraseña existente corta no reciben estado de error
+ok 240 - campos válidos y contraseña existente corta no reciben estado de error
+  ---
+  duration_ms: 0.2058
+  type: 'test'
+  ...
+# (node:13112) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/cuenta/perfiles.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sin sesión o con otro usuario no consulta ni modifica perfiles
+ok 241 - sin sesión o con otro usuario no consulta ni modifica perfiles
+  ---
+  duration_ms: 2.9535
+  type: 'test'
+  ...
+# Subtest: lectura filtra por el usuario validado; ausencia de perfil se conserva
+ok 242 - lectura filtra por el usuario validado; ausencia de perfil se conserva
+  ---
+  duration_ms: 0.6677
+  type: 'test'
+  ...
+# Subtest: edición envía solo full_name; creación usa el ID verificado
+ok 243 - edición envía solo full_name; creación usa el ID verificado
+  ---
+  duration_ms: 0.8902
+  type: 'test'
+  ...
+# Subtest: propaga errores de RLS o red y rechaza nombres inválidos
+ok 244 - propaga errores de RLS o red y rechaza nombres inválidos
+  ---
+  duration_ms: 0.654
+  type: 'test'
+  ...
+# Subtest: una creación simultánea recupera el perfil existente sin sobrescribirlo
+ok 245 - una creación simultánea recupera el perfil existente sin sobrescribirlo
+  ---
+  duration_ms: 0.5596
+  type: 'test'
+  ...
+# Subtest: no informa éxito si una actualización no devuelve ninguna fila
+ok 246 - no informa éxito si una actualización no devuelve ninguna fila
+  ---
+  duration_ms: 0.4169
+  type: 'test'
+  ...
+# (node:8628) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/cuenta/validaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: rechaza campos vacíos y correo inválido; permite contraseñas existentes cortas al ingresar
+ok 247 - rechaza campos vacíos y correo inválido; permite contraseñas existentes cortas al ingresar
+  ---
+  duration_ms: 1.5348
+  type: 'test'
+  ...
+# Subtest: registro valida nombre, longitud y confirmación
+ok 248 - registro valida nombre, longitud y confirmación
+  ---
+  duration_ms: 0.378
+  type: 'test'
+  ...
+# Subtest: traduce errores sin exponer el mensaje del proveedor
+ok 249 - traduce errores sin exponer el mensaje del proveedor
+  ---
+  duration_ms: 0.4865
+  type: 'test'
+  ...
+# (node:23496) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/directorio/formato.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: formatearPrecio: muestra un precio válido en soles
+ok 250 - formatearPrecio: muestra un precio válido en soles
+  ---
+  duration_ms: 1.7191
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: sin moneda usa soles
+ok 251 - formatearPrecio: sin moneda usa soles
+  ---
+  duration_ms: 0.4694
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: acepta otra moneda válida
+ok 252 - formatearPrecio: acepta otra moneda válida
+  ---
+  duration_ms: 0.3599
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: una moneda inválida cae a soles
+ok 253 - formatearPrecio: una moneda inválida cae a soles
+  ---
+  duration_ms: 0.2807
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: no inventa un precio si el dato no es válido
+ok 254 - formatearPrecio: no inventa un precio si el dato no es válido
+  ---
+  duration_ms: 0.1979
+  type: 'test'
+  ...
+# Subtest: normalizar: quita tildes y pasa a minúsculas
+ok 255 - normalizar: quita tildes y pasa a minúsculas
+  ---
+  duration_ms: 0.2155
+  type: 'test'
+  ...
+# Subtest: normalizar: recorta espacios y maneja texto vacío
+ok 256 - normalizar: recorta espacios y maneja texto vacío
+  ---
+  duration_ms: 0.1407
+  type: 'test'
+  ...
+# Subtest: textoOpcional: devuelve el texto recortado si existe
+ok 257 - textoOpcional: devuelve el texto recortado si existe
+  ---
+  duration_ms: 0.1117
+  type: 'test'
+  ...
+# Subtest: textoOpcional: usa la alternativa si falta o está vacío
+ok 258 - textoOpcional: usa la alternativa si falta o está vacío
+  ---
+  duration_ms: 0.3208
+  type: 'test'
+  ...
+# Subtest: inicialesDe: usa las iniciales guardadas si existen
+ok 259 - inicialesDe: usa las iniciales guardadas si existen
+  ---
+  duration_ms: 0.4886
+  type: 'test'
+  ...
+# Subtest: inicialesDe: las deriva del nombre si vienen vacías
+ok 260 - inicialesDe: las deriva del nombre si vienen vacías
+  ---
+  duration_ms: 0.2689
+  type: 'test'
+  ...
+# Subtest: inicialesDe: devuelve ? si no hay datos
+ok 261 - inicialesDe: devuelve ? si no hay datos
+  ---
+  duration_ms: 0.0949
+  type: 'test'
+  ...
+# (node:21996) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/lib/navegacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: el contexto conserva solo el caso conocido y descarta parámetros arbitrarios
+ok 262 - el contexto conserva solo el caso conocido y descarta parámetros arbitrarios
+  ---
+  duration_ms: 1.4614
+  type: 'test'
+  ...
+# Subtest: la solicitud conserva el profesional validado y el regreso al reporte
+ok 263 - la solicitud conserva el profesional validado y el regreso al reporte
+  ---
+  duration_ms: 0.6188
+  type: 'test'
+  ...
+# Subtest: continuar tras autenticación nunca acepta redirecciones externas ni otras rutas
+ok 264 - continuar tras autenticación nunca acepta redirecciones externas ni otras rutas
+  ---
+  duration_ms: 0.4278
+  type: 'test'
+  ...
+# (node:12408) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/fotografias/eliminar.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: elimina el archivo y luego los metadatos filtrando propietario, ID y ruta
+ok 265 - elimina el archivo y luego los metadatos filtrando propietario, ID y ruta
+  ---
+  duration_ms: 4.3715
+  type: 'test'
+  ...
+# Subtest: archivo inexistente: remove devuelve [] y completa la limpieza de metadatos
+ok 266 - archivo inexistente: remove devuelve [] y completa la limpieza de metadatos
+  ---
+  duration_ms: 0.5921
+  type: 'test'
+  ...
+# Subtest: fallo de Storage conserva ambos recursos y no intenta DELETE de PostgreSQL
+ok 267 - fallo de Storage conserva ambos recursos y no intenta DELETE de PostgreSQL
+  ---
+  duration_ms: 1.1875
+  type: 'test'
+  ...
+# Subtest: excepción de red se traduce sin presentar éxito ni borrar metadatos
+ok 268 - excepción de red se traduce sin presentar éxito ni borrar metadatos
+  ---
+  duration_ms: 0.5854
+  type: 'test'
+  ...
+# Subtest: fallo de PostgreSQL tras borrar archivo conserva el registro y explica el reintento
+ok 269 - fallo de PostgreSQL tras borrar archivo conserva el registro y explica el reintento
+  ---
+  duration_ms: 1.6815
+  type: 'test'
+  ...
+# Subtest: reintento después de fallo parcial completa la limpieza sin re-subir; repetir es inocuo
+ok 270 - reintento después de fallo parcial completa la limpieza sin re-subir; repetir es inocuo
+  ---
+  duration_ms: 0.7919
+  type: 'test'
+  ...
+# Subtest: consentimiento revocado: la eliminación y recuperación no requieren consultarlo ni upload
+ok 271 - consentimiento revocado: la eliminación y recuperación no requieren consultarlo ni upload
+  ---
+  duration_ms: 0.9365
+  type: 'test'
+  ...
+# Subtest: foto de otro propietario es invisible y no se toca Storage ni se informa borrado
+ok 272 - foto de otro propietario es invisible y no se toca Storage ni se informa borrado
+  ---
+  duration_ms: 0.3119
+  type: 'test'
+  ...
+# Subtest: rechaza rutas ajenas, bucket distinto y rutas manipuladas aunque haya metadatos propios
+ok 273 - rechaza rutas ajenas, bucket distinto y rutas manipuladas aunque haya metadatos propios
+  ---
+  duration_ms: 1.0148
+  type: 'test'
+  ...
+# Subtest: sin sesión, JWT inválido o cambio de usuario no se consulta ni modifica ningún recurso
+ok 274 - sin sesión, JWT inválido o cambio de usuario no se consulta ni modifica ningún recurso
+  ---
+  duration_ms: 1.0103
+  type: 'test'
+  ...
+# Subtest: sesión expirada entre servicios conserva los metadatos y permite reintentar al autenticarse
+ok 275 - sesión expirada entre servicios conserva los metadatos y permite reintentar al autenticarse
+  ---
+  duration_ms: 0.5805
+  type: 'test'
+  ...
+# Subtest: Storage 200 sin filas afectadas no es éxito si el objeto sigue listado
+ok 276 - Storage 200 sin filas afectadas no es éxito si el objeto sigue listado
+  ---
+  duration_ms: 0.4312
+  type: 'test'
+  ...
+# Subtest: fallo al comprobar Storage impide borrar el registro
+ok 277 - fallo al comprobar Storage impide borrar el registro
+  ---
+  duration_ms: 0.4622
+  type: 'test'
+  ...
+# Subtest: DELETE de PostgreSQL sin filas y con registro aún presente no informa éxito
+ok 278 - DELETE de PostgreSQL sin filas y con registro aún presente no informa éxito
+  ---
+  duration_ms: 0.3463
+  type: 'test'
+  ...
+# Subtest: borrado concurrente de metadatos se comprueba antes de confirmar finalización
+ok 279 - borrado concurrente de metadatos se comprueba antes de confirmar finalización
+  ---
+  duration_ms: 0.3212
+  type: 'test'
+  ...
+# Subtest: distingue errores de permisos y base de datos sin filtrar mensajes del proveedor
+ok 280 - distingue errores de permisos y base de datos sin filtrar mensajes del proveedor
+  ---
+  duration_ms: 0.5105
+  type: 'test'
+  ...
+# (node:12644) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/fotografias/mensajes.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: los errores del proveedor nunca se muestran crudos al paciente
+ok 281 - los errores del proveedor nunca se muestran crudos al paciente
+  ---
+  duration_ms: 1.0158
+  type: 'test'
+  ...
+# Subtest: la eliminación parcial conserva una instrucción comprensible de reintento
+ok 282 - la eliminación parcial conserva una instrucción comprensible de reintento
+  ---
+  duration_ms: 0.3564
+  type: 'test'
+  ...
+# Subtest: sesión y permisos se diferencian de errores de archivo
+ok 283 - sesión y permisos se diferencian de errores de archivo
+  ---
+  duration_ms: 0.1694
+  type: 'test'
+  ...
+# (node:23100) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/panel/clinica.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Integración: identidad propia del BFF, lecturas sin mutaciones y proyección mínima
+ok 284 - Integración: identidad propia del BFF, lecturas sin mutaciones y proyección mínima
+  ---
+  duration_ms: 38.3595
+  type: 'test'
+  ...
+# Subtest: Integración: no hay petición clínica sin sesión
+ok 285 - Integración: no hay petición clínica sin sesión
+  ---
+  duration_ms: 0.6684
+  type: 'test'
+  ...
+# Subtest: Integración: rechazo 401 no se sustituye por mocks
+ok 286 - Integración: rechazo 401 no se sustituye por mocks
+  ---
+  duration_ms: 0.5519
+  type: 'test'
+  ...
+# Subtest: Integración: rechazo 403 no se sustituye por mocks
+ok 287 - Integración: rechazo 403 no se sustituye por mocks
+  ---
+  duration_ms: 0.4447
+  type: 'test'
+  ...
+# Subtest: Integración: rechazo 404 no se sustituye por mocks
+ok 288 - Integración: rechazo 404 no se sustituye por mocks
+  ---
+  duration_ms: 0.4272
+  type: 'test'
+  ...
+# Subtest: Integración: rechazo 503 no se sustituye por mocks
+ok 289 - Integración: rechazo 503 no se sustituye por mocks
+  ---
+  duration_ms: 0.3063
+  type: 'test'
+  ...
+# Subtest: Integración: respuesta de otro paciente falla cerrada
+ok 290 - Integración: respuesta de otro paciente falla cerrada
+  ---
+  duration_ms: 3.3297
+  type: 'test'
+  ...
+# Subtest: Integración: vacío y límite de página se representan sin inventar totales
+ok 291 - Integración: vacío y límite de página se representan sin inventar totales
+  ---
+  duration_ms: 1.1758
+  type: 'test'
+  ...
+# Subtest: Integración: contenido inválido o desbordado no produce éxito
+ok 292 - Integración: contenido inválido o desbordado no produce éxito
+  ---
+  duration_ms: 2.5906
+  type: 'test'
+  ...
+# (node:13760) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/panel/logica.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: contarSolicitudes: sin solicitudes devuelve ceros
+ok 293 - contarSolicitudes: sin solicitudes devuelve ceros
+  ---
+  duration_ms: 2.0046
+  type: 'test'
+  ...
+# Subtest: contarSolicitudes: solo las solicitadas cuentan como pendientes
+ok 294 - contarSolicitudes: solo las solicitadas cuentan como pendientes
+  ---
+  duration_ms: 0.1808
+  type: 'test'
+  ...
+# Subtest: contarSolicitudes: un estado desconocido no cuenta como pendiente
+ok 295 - contarSolicitudes: un estado desconocido no cuenta como pendiente
+  ---
+  duration_ms: 0.1074
+  type: 'test'
+  ...
+# Subtest: resolverReporte: sin sesión de demostración no hay reporte
+ok 296 - resolverReporte: sin sesión de demostración no hay reporte
+  ---
+  duration_ms: 0.1602
+  type: 'test'
+  ...
+# Subtest: resolverReporte: un caso desconocido no genera reporte
+ok 297 - resolverReporte: un caso desconocido no genera reporte
+  ---
+  duration_ms: 0.1206
+  type: 'test'
+  ...
+# Subtest: resolverReporte: antes de llegar a las recomendaciones no hay reporte
+ok 298 - resolverReporte: antes de llegar a las recomendaciones no hay reporte
+  ---
+  duration_ms: 0.1081
+  type: 'test'
+  ...
+# Subtest: resolverReporte: una etapa desconocida no genera reporte
+ok 299 - resolverReporte: una etapa desconocida no genera reporte
+  ---
+  duration_ms: 0.2183
+  type: 'test'
+  ...
+# Subtest: resolverReporte: desde las recomendaciones devuelve las del caso, sin alterarlas
+ok 300 - resolverReporte: desde las recomendaciones devuelve las del caso, sin alterarlas
+  ---
+  duration_ms: 0.1597
+  type: 'test'
+  ...
+# Subtest: resolverReporte: el reporte no incluye datos de cuenta
+ok 301 - resolverReporte: el reporte no incluye datos de cuenta
+  ---
+  duration_ms: 0.3184
+  type: 'test'
+  ...
+# (node:13788) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/solicitudes/solicitudes.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sin sesión no permite consultar solicitudes
+ok 302 - sin sesión no permite consultar solicitudes
+  ---
+  duration_ms: 2.6877
+  type: 'test'
+  ...
+# Subtest: no permite consultar solicitudes de otro usuario
+ok 303 - no permite consultar solicitudes de otro usuario
+  ---
+  duration_ms: 0.3307
+  type: 'test'
+  ...
+# Subtest: la consulta filtra por usuario y solicitudes demo
+ok 304 - la consulta filtra por usuario y solicitudes demo
+  ---
+  duration_ms: 0.6238
+  type: 'test'
+  ...
+# Subtest: sin solicitudes devuelve una lista vacía
+ok 305 - sin solicitudes devuelve una lista vacía
+  ---
+  duration_ms: 0.2543
+  type: 'test'
+  ...
+# Subtest: la cancelación exige una sesión válida
+ok 306 - la cancelación exige una sesión válida
+  ---
+  duration_ms: 0.7055
+  type: 'test'
+  ...
+# Subtest: solo cancela solicitudes propias, demo y solicitadas
+ok 307 - solo cancela solicitudes propias, demo y solicitadas
+  ---
+  duration_ms: 0.4132
+  type: 'test'
+  ...
+# Subtest: no informa éxito cuando ninguna fila fue cancelada
+ok 308 - no informa éxito cuando ninguna fila fue cancelada
+  ---
+  duration_ms: 0.3675
+  type: 'test'
+  ...
+# Subtest: propaga los errores de consulta y cancelación
+ok 309 - propaga los errores de consulta y cancelación
+  ---
+  duration_ms: 0.3084
+  type: 'test'
+  ...
+# (node:8400) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/PC/Documents/ChatGPT/PROYECTO%20FINAL%20DE%20CARRERA%20III/DentaIA-integration-sprint5-demo/src/features/solicitudes/validaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to C:\\Users\\PC\\Documents\\ChatGPT\\PROYECTO FINAL DE CARRERA III\\DentaIA-integration-sprint5-demo\\package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: acepta una solicitud válida
+ok 310 - acepta una solicitud válida
+  ---
+  duration_ms: 2.5599
+  type: 'test'
+  ...
+# Subtest: rechaza campos obligatorios vacíos
+ok 311 - rechaza campos obligatorios vacíos
+  ---
+  duration_ms: 0.3994
+  type: 'test'
+  ...
+# Subtest: rechaza correos inválidos
+ok 312 - rechaza correos inválidos
+  ---
+  duration_ms: 0.258
+  type: 'test'
+  ...
+# Subtest: rechaza fechas anteriores a hoy
+ok 313 - rechaza fechas anteriores a hoy
+  ---
+  duration_ms: 0.2606
+  type: 'test'
+  ...
+# Subtest: acepta la fecha actual
+ok 314 - acepta la fecha actual
+  ---
+  duration_ms: 0.1946
+  type: 'test'
+  ...
+# Subtest: rechaza mensajes mayores a 1000 caracteres
+ok 315 - rechaza mensajes mayores a 1000 caracteres
+  ---
+  duration_ms: 0.2112
+  type: 'test'
+  ...
+# Subtest: acepta mensajes de 1000 caracteres
+ok 316 - acepta mensajes de 1000 caracteres
+  ---
+  duration_ms: 0.1802
+  type: 'test'
+  ...
+# Subtest: solo permite cancelar solicitudes solicitadas
+ok 317 - solo permite cancelar solicitudes solicitadas
+  ---
+  duration_ms: 0.1527
+  type: 'test'
+  ...
+# Subtest: rechaza fechas inexistentes
+ok 318 - rechaza fechas inexistentes
+  ---
+  duration_ms: 0.6909
+  type: 'test'
+  ...
+# Subtest: acepta el 29 de febrero de un año bisiesto
+ok 319 - acepta el 29 de febrero de un año bisiesto
+  ---
+  duration_ms: 0.6333
+  type: 'test'
+  ...
+1..319
+# tests 319
+# suites 0
+# pass 319
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2389.4852
