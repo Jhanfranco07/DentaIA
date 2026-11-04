@@ -1,0 +1,70 @@
+{
+  "fecha": "2026-11-04T01:55:34.268Z",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "entorno": "Next loopback 3113 + Auth/Admin API/profiles Dental-IA reales",
+  "escriturasAdministrativas": false,
+  "configuracionCompartidaModificada": false,
+  "pruebas": [
+    {
+      "nombre": "Lectura rechazada sin sesión",
+      "aprobada": true,
+      "http": 401
+    },
+    {
+      "nombre": "Lectura rechazada paciente_a",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Lectura rechazada odontologo_a",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Lectura rechazada administrador_qa",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Superusuario AAL2 lee únicamente las cinco cuentas sintéticas filtradas",
+      "aprobada": true,
+      "http": 200,
+      "total": 5,
+      "filas": 5
+    },
+    {
+      "nombre": "Filtros reales por rol y estado",
+      "aprobada": true,
+      "http": 200,
+      "total": 2
+    },
+    {
+      "nombre": "Rol bloqueado no produce mutación ni éxito",
+      "aprobada": false,
+      "error": "EXPECTED_DISABLED_GOT_403_ORIGEN_NO_ADMITIDO"
+    },
+    {
+      "nombre": "Panel Chromium autorizado y listado remoto sin simulación",
+      "aprobada": true,
+      "http": 200,
+      "navegador": "Chromium",
+      "proveedor": "Supabase real"
+    },
+    {
+      "nombre": "Búsqueda y filtro desde el formulario hacia Supabase real",
+      "aprobada": true,
+      "totales": [
+        5,
+        2
+      ]
+    },
+    {
+      "nombre": "Paginación remota desde el panel",
+      "aprobada": true,
+      "pagina": 2,
+      "tamano": 5
+    }
+  ],
+  "aprobadas": 9,
+  "fallidas": 1
+}

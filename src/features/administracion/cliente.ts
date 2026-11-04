@@ -11,7 +11,7 @@ export type ClientePanelAdministrativo = {
 export const esDenegacionDeAcceso = (error: ErrorClienteAdministrativo) => error.status === 401
   || (error.status === 403 && error.codigo === "ERROR_API");
 
-function fallo(status: number, codigo: string): ErrorClienteAdministrativo {
+export function fallo(status: number, codigo: string): ErrorClienteAdministrativo {
   const mensajes: Record<string, string> = {
     CAMBIO_PROPIO_PROHIBIDO: "No puedes proponer cambios de tus propios privilegios.",
     APROBACION_REQUERIDA: "Este cambio requiere aprobación independiente. No se aplicó ninguna modificación.",
@@ -44,8 +44,8 @@ function paginaValida(v: unknown): v is PaginaUsuarios {
       : (u.origenRoles === "persistido" || (u.origenRoles === "sin_asignacion" && u.roles.length === 0))));
 }
 
-/** Transporte a rutas fijas del mismo origen. No autoriza, no decodifica claims ni guarda tokens. */
-export function crearClienteAdministrativo(
+/** Transporte compartido; los adaptadores fijan sus rutas, nunca la entrada del usuario. */
+export function crearTransporteAdministrativo(
   obtenerToken: () => Promise<string | null>,
   solicitar: typeof fetch = fetch,
 ) {
@@ -71,6 +71,12 @@ export function crearClienteAdministrativo(
       return { ok: true, valor: await respuesta.json() };
     } catch { return fallo(503, "CONEXION_NO_DISPONIBLE"); }
   }
+  return enviar;
+}
+
+/** Contrato sintético de DI-151 conservado para sus pruebas y vistas identificadas. */
+export function crearClienteAdministrativo(obtenerToken: () => Promise<string | null>, solicitar: typeof fetch = fetch) {
+  const enviar = crearTransporteAdministrativo(obtenerToken, solicitar);
   return {
     async comprobarAcceso(): Promise<ResultadoCliente<{ autorizado: true }>> {
       const r = await enviar("/api/administracion/acceso");

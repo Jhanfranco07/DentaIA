@@ -3,7 +3,7 @@ import { SECCIONES_ADMINISTRATIVAS, type NavegacionAdministrativaProps } from ".
 import styles from "./administracion.module.css";
 
 export default function NavegacionAdministrativa({ seccion, onSeleccionar }: NavegacionAdministrativaProps) {
-  return <nav aria-label="Secciones del diseño administrativo" className={styles.navegacion}>
+  return <nav aria-label="Secciones del panel administrativo" className={styles.navegacion}>
     {SECCIONES_ADMINISTRATIVAS.map(item => <button
       key={item.id}
       type="button"

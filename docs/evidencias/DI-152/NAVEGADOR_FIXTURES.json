@@ -1,0 +1,60 @@
+{
+  "fecha": "2026-11-04T01:53:26.463694+00:00",
+  "entorno": "Chromium real; respuestas HTTP y sesión ficticias; sin Supabase remoto",
+  "pruebas": [
+    {
+      "nombre": "UI sin sesión no monta el panel",
+      "aprobada": true
+    },
+    {
+      "nombre": "UI HTTP403 no monta el panel",
+      "aprobada": true
+    },
+    {
+      "nombre": "Listado representa DTO de usuarios de la API simulada",
+      "aprobada": true
+    },
+    {
+      "nombre": "Paginación envía parámetros esperados",
+      "aprobada": true
+    },
+    {
+      "nombre": "Filtros reinician página y conservan parámetros",
+      "aprobada": true
+    },
+    {
+      "nombre": "Estado vacío representado",
+      "aprobada": true
+    },
+    {
+      "nombre": "503 no muestra éxito, datos anteriores ni detalles sensibles",
+      "aprobada": true
+    },
+    {
+      "nombre": "Reintento recupera el listado en el mismo servicio",
+      "aprobada": true
+    },
+    {
+      "nombre": "Selección de usuario integra el formulario existente y su consulta",
+      "aprobada": true
+    },
+    {
+      "nombre": "Escritura bloqueada conserva intento sin confirmar éxito",
+      "aprobada": true
+    },
+    {
+      "nombre": "Éxito simulado actualiza el listado mediante nueva consulta",
+      "aprobada": true
+    },
+    {
+      "nombre": "Pérdida de autorización retira el panel y las cuentas",
+      "aprobada": true
+    },
+    {
+      "nombre": "Navegación móvil y teclado conservados",
+      "aprobada": true
+    }
+  ],
+  "aprobadas": 13,
+  "fallidas": 0
+}

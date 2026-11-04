@@ -4,6 +4,9 @@ import { useRef, useState } from "react";
 import { Icono } from "@/components/Identidad";
 import LayoutAdministrativo from "./LayoutAdministrativo";
 import UsuariosAdministrativos from "./UsuariosAdministrativos";
+import CambioRolesLocal from "./CambioRolesLocal";
+import { useAccesoPanel } from "./UsuariosAdministrativosConectados";
+import { fallo } from "./cliente";
 import TarjetaAdministrativa from "./TarjetaAdministrativa";
 import { SECCIONES_ADMINISTRATIVAS, type SeccionAdministrativa } from "./estructura";
 import styles from "./administracion.module.css";
@@ -11,13 +14,16 @@ import styles from "./administracion.module.css";
 const ROLES_PREVISTOS = [
   { nombre: "Visitante", alcance: "Contenido público y demostración educativa.", situacion: "Condición sin sesión" },
   { nombre: "Paciente", alcance: "Perfil, fotografías y solicitudes propios.", situacion: "Capacidades personales existentes" },
-  { nombre: "Odontólogo", alcance: "Atención autorizada, limitada por paciente y clínica.", situacion: "Rol autenticado por incorporar" },
-  { nombre: "Superusuario", alcance: "Administración no clínica de cuentas y roles.", situacion: "Rol autenticado por incorporar" },
+  { nombre: "Odontólogo", alcance: "Atención autorizada, limitada por paciente y clínica.", situacion: "Verificación profesional y autorización clínica independientes" },
+  { nombre: "Superusuario", alcance: "Administración no clínica de cuentas y roles.", situacion: "Sesión autorizada y MFA/AAL2" },
 ] as const;
 
-// Vista solo en desarrollo. La API exige su propia autorización y mantiene datos sintéticos.
+// Nombre histórico de DI-149; la composición actual consume los servicios de DI-151.
 export default function PanelAdministrativoDemo() {
   const [seccion, setSeccion] = useState<SeccionAdministrativa>("inicio");
+  const [objetivo, setObjetivo] = useState("");
+  const [revision, setRevision] = useState(0);
+  const { invalidar } = useAccesoPanel();
   const titulo = useRef<HTMLHeadingElement>(null);
   const actual = SECCIONES_ADMINISTRATIVAS.find(item => item.id === seccion)!;
 
@@ -26,40 +32,40 @@ export default function PanelAdministrativoDemo() {
     requestAnimationFrame(() => titulo.current?.focus());
   }
 
-  return <section className={styles.pagina} aria-label="Demostración local de estructura administrativa">
+  return <section className={styles.pagina} aria-label="Panel administrativo protegido">
     <div className={styles.avisoDemo}>
-      <strong>DI-151 · Administración con datos sintéticos</strong>
-      <p>Vista disponible solo en desarrollo, con demo local y conexión opcional a la API protegida. El proveedor del servidor sigue siendo sintético: no se consultan usuarios reales, no se guardan roles ni se accede a información clínica.</p>
+      <strong>DI-152 · Integración administrativa</strong>
+      <p>Panel local conectado a los servicios administrativos existentes. La configuración académica compartida mantiene lecturas y escrituras desactivadas; una operación bloqueada se muestra como error, nunca como simulación o éxito.</p>
     </div>
     <LayoutAdministrativo seccion={seccion} onSeleccionar={seleccionar}>
       <div className={styles.introduccion}>
-        <span className="eyebrow">PANEL ADMINISTRATIVO · VISTA DE DISEÑO</span>
+        <span className="eyebrow">PANEL ADMINISTRATIVO · ACCESO VERIFICADO POR EL SERVIDOR</span>
         <h1 id="admin-titulo" ref={titulo} tabIndex={-1}>{seccion === "inicio" ? "Un espacio para organizar DentaIA." : actual.titulo}</h1>
         <p>{seccion === "inicio"
-          ? "Una base visual para la futura administración de cuentas y permisos, con responsabilidades claras y acceso mínimo."
-          : actual.descripcion + ". Proveedor simulado: las funciones no están conectadas a cuentas reales."}</p>
+          ? "Consulta perfiles y gestiona únicamente operaciones autorizadas, con responsabilidades claras y acceso mínimo."
+          : actual.descripcion + ". Cada solicitud vuelve a comprobar la autorización del servidor."}</p>
       </div>
 
       {seccion === "inicio" && <>
         <div className={styles.tarjetas}>
           <TarjetaAdministrativa titulo="Usuarios" icono="persona"
             descripcion="Espacio previsto para organizar la identidad y el estado de las cuentas. Sin acceso a fotografías ni historiales."
-            accion="Ver estructura de usuarios" onAbrir={() => seleccionar("usuarios")} />
+            accion="Consultar usuarios" onAbrir={() => seleccionar("usuarios")} />
           <TarjetaAdministrativa titulo="Roles y permisos" icono="escudo"
             descripcion="Referencia de los perfiles del sistema y sus límites, basada en la matriz de permisos de DI-148."
-            accion="Ver estructura de roles" onAbrir={() => seleccionar("roles")} />
+            accion="Consultar roles y permisos" onAbrir={() => seleccionar("roles")} />
         </div>
         <section className={styles.bloque} aria-labelledby="admin-alcance">
-          <h2 id="admin-alcance">Antes de activar la administración</h2>
+          <h2 id="admin-alcance">Servicios y restricciones</h2>
           <ul className={styles.pasos}>
-            <li><span>01</span><div><strong>Estructura visual</strong><p>Layout, navegación y espacios de trabajo. Base de presentación de DI-149, sin funciones de gestión.</p></div></li>
-            <li><span>02</span><div><strong>Continuación del diseño</strong><p>Menú adaptable, estados de carga, vacío y error, y navegación mediante teclado.</p></div></li>
-            <li><span>03</span><div><strong>Acceso administrativo seguro</strong><p>DI-150 aporta el guard de servidor; su aceptación real y la integración productiva siguen pendientes.</p></div></li>
+            <li><span>01</span><div><strong>Usuarios reales</strong><p>Auth y profiles mediante la API protegida. Requiere habilitación de lectura del operador; sin credenciales privadas en React.</p></div></li>
+            <li><span>02</span><div><strong>Cambios controlados</strong><p>Reutilizan revisión, aprobación independiente e idempotencia de DI-151. No se activa la escritura desde esta pantalla.</p></div></li>
+            <li><span>03</span><div><strong>Autorización por operación</strong><p>Superusuario activo y MFA/AAL2. Cambiar una sección o un UUID no concede permisos.</p></div></li>
           </ul>
         </section>
       </>}
 
-      {seccion === "usuarios" && <UsuariosAdministrativos />}
+      {seccion === "usuarios" && <UsuariosAdministrativos revision={revision} onSeleccionar={id => { setObjetivo(id); seleccionar("roles"); }} />}
 
       {seccion === "roles" && <section className={styles.bloque} aria-labelledby="admin-roles">
         <div className={styles.tituloBloque}><h2 id="admin-roles">Perfiles previstos del sistema</h2><span className={styles.indicador}>Referencia de DI-148</span></div>
@@ -67,7 +73,9 @@ export default function PanelAdministrativoDemo() {
         <ul className={styles.roles}>{ROLES_PREVISTOS.map(rol => <li key={rol.nombre}>
           <div><h3>{rol.nombre}</h3><p>{rol.alcance}</p></div><span>{rol.situacion}</span>
         </li>)}</ul>
-        <p className={styles.aclaracion}>La edición y asignación de roles no están disponibles en esta demostración.</p>
+        <CambioRolesLocal key={objetivo} usuarioInicial={objetivo} embebido onCambioConfirmado={() => setRevision(v => v + 1)}
+          onAccesoDenegado={status => invalidar(fallo(status, "ERROR_API"))} />
+        <button type="button" className={styles.accionEstado} onClick={() => seleccionar("usuarios")}>Volver a consultar usuarios</button>
       </section>}
 
       <aside className={styles.limiteClinico} aria-labelledby="admin-limite">
