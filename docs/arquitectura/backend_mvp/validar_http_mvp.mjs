@@ -6,7 +6,7 @@ import {readFileSync,writeFileSync,existsSync}from'node:fs';
 import {dirname,join}from'node:path';
 import {fileURLToPath}from'node:url';
 import {status,sql,command}from'../http_jwt/local.mjs';
-const outputDir=process.argv.includes('--fase7')?join(dirname(fileURLToPath(import.meta.url)),'../qa_fase7'):dirname(fileURLToPath(import.meta.url));
+const outputDir=process.argv.includes('--fase8')?join(dirname(fileURLToPath(import.meta.url)),'../integracion_fase8'):process.argv.includes('--fase7')?join(dirname(fileURLToPath(import.meta.url)),'../qa_fase7'):dirname(fileURLToPath(import.meta.url));
 const here=dirname(fileURLToPath(import.meta.url)),root=join(here,'../../..'),base='http://127.0.0.1:3107';
 const id=n=>`40000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 const report={alcance:process.argv.includes('--solo-datos')?'datos y servicios; no repetir administracion':'integral con MFA real',fecha:'2026-11-03',remoto:false,pruebas:[],bloqueos:[],datos:'solo sintéticos locales',tokensGuardados:false};

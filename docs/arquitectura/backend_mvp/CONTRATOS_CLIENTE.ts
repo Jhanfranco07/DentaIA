@@ -11,14 +11,15 @@ export interface DatosWorkspace {
   patients: { membershipId: UUID; items: { patientId: UUID }[] };
   requests: { professionalId: UUID; membershipId: UUID; items: SolicitudProfesional[] };
 }
-export type Workspace<K extends keyof DatosWorkspace> = { ok: true; apiVersion: "clinical.workspace.v1"; environment: "qa_local"; kind: K; data: DatosWorkspace[K]; nextAfterId: UUID | null; requestId: UUID };
+export type AmbienteClinico = "qa_local" | "academic_remote";
+export type Workspace<K extends keyof DatosWorkspace> = { ok: true; apiVersion: "clinical.workspace.v1"; environment: AmbienteClinico; kind: K; data: DatosWorkspace[K]; nextAfterId: UUID | null; requestId: UUID };
 export interface ConcederSolicitud { membershipId: UUID; encounterIds: UUID[]; expiresAt: ISO; policyVersion: string; accepted: true }
 export interface ConcederRespuesta { ok: true; id: UUID; estado: Concesion["estado"]; expiresAt: ISO; revokedAt: ISO | null; replayed: boolean; requestId: UUID }
 export type RevocarSolicitud = Record<string, never>;
 export interface RevocarRespuesta { ok: true; id: UUID; revokedAt: ISO; requestId: UUID }
 export interface ErrorClinico { ok: false; code: "INVALID_REQUEST" | "INVALID_CURSOR" | "AUTHENTICATION_REQUIRED" | "ACCESS_DENIED" | "NOT_FOUND" | "IDEMPOTENCY_CONFLICT" | "PAYLOAD_TOO_LARGE" | "UNSUPPORTED_MEDIA_TYPE" | "SERVICE_UNAVAILABLE"; requestId: UUID }
 // DTO de historial definido en F4; su proyección y validación se reutilizan, no se duplican.
-export type Historial = { ok: true; nextCursor: string | null; requestId: UUID } & ReturnType<typeof import("../../../src/features/clinica-http/dto").historialDto>["data"];
+export type Historial = { ok: true; environment: AmbienteClinico; nextCursor: string | null; requestId: UUID } & Omit<ReturnType<typeof import("../../../src/features/clinica-http/dto").historialDto>["data"], "environment">;
 export type Respuesta<T> = T | ErrorClinico;
 export const EJEMPLO_PROPIO = {
   ok: true, apiVersion: "clinical.workspace.v1", environment: "qa_local", kind: "patient",

@@ -1,0 +1,239 @@
+{
+  "fecha": "2026-11-03",
+  "destino": "vwmdknzjyvmsdqpepykz",
+  "archivos": [
+    {
+      "archivo": "20261103235358_di36_dentalia_01_administracion.sql",
+      "sha256": "8f5117d6040e6db4190e9e66cd2198bb26f62d6da96065521e51bc505a7c8181",
+      "igualPaqueteYSimulacion": true,
+      "sentencias": {
+        "TransactionStmt": 2,
+        "VariableSetStmt": 2,
+        "DoStmt": 2,
+        "CreateSchemaStmt": 1,
+        "GrantStmt": 7,
+        "CreateStmt": 3,
+        "AlterTableStmt": 3,
+        "CreateFunctionStmt": 5,
+        "CreateTrigStmt": 1
+      },
+      "politicasPublicasNuevas": [],
+      "grantsPublicos": [],
+      "funcionesDefinidas": 5
+    },
+    {
+      "archivo": "20261103235408_di36_dentalia_02_modelo_clinico.sql",
+      "sha256": "19c3253d3b4655e3a812a1740fb8757071dcdab7a2d6d7b812478ea3648cb6f1",
+      "igualPaqueteYSimulacion": true,
+      "sentencias": {
+        "TransactionStmt": 2,
+        "VariableSetStmt": 5,
+        "DoStmt": 2,
+        "CreateSchemaStmt": 2,
+        "CreateExtensionStmt": 1,
+        "GrantStmt": 13,
+        "CreateStmt": 11,
+        "AlterTableStmt": 11,
+        "IndexStmt": 16,
+        "CreateFunctionStmt": 9,
+        "CreateTrigStmt": 16
+      },
+      "politicasPublicasNuevas": [],
+      "grantsPublicos": [],
+      "funcionesDefinidas": 9
+    },
+    {
+      "archivo": "20261103235409_di36_dentalia_03_rpc_clinicos.sql",
+      "sha256": "c32fb15e0d7e774d322a1fcf019a5b35d1317ce8b9ba43895d028fe5f36f4eb9",
+      "igualPaqueteYSimulacion": true,
+      "sentencias": {
+        "TransactionStmt": 2,
+        "VariableSetStmt": 2,
+        "DoStmt": 4,
+        "GrantRoleStmt": 1,
+        "CreateSchemaStmt": 1,
+        "GrantStmt": 20,
+        "CreateFunctionStmt": 14,
+        "CreatePolicyStmt": 1,
+        "AlterOwnerStmt": 6,
+        "CreateTrigStmt": 1
+      },
+      "politicasPublicasNuevas": [
+        {
+          "table": "profiles",
+          "name": "clinical_executor_provenance",
+          "roles": [
+            {
+              "RoleSpec": {
+                "roletype": "ROLESPEC_CSTRING",
+                "rolename": "dentaia_clinical_executor",
+                "location": 10931
+              }
+            }
+          ]
+        }
+      ],
+      "grantsPublicos": [
+        {
+          "table": "profiles",
+          "grant": {
+            "is_grant": true,
+            "targtype": "ACL_TARGET_OBJECT",
+            "objtype": "OBJECT_TABLE",
+            "objects": [
+              {
+                "RangeVar": {
+                  "schemaname": "public",
+                  "relname": "profiles",
+                  "inh": true,
+                  "relpersistence": "p",
+                  "location": 9240
+                }
+              }
+            ],
+            "privileges": [
+              {
+                "AccessPriv": {
+                  "priv_name": "select",
+                  "cols": [
+                    {
+                      "String": {
+                        "sval": "id"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "full_name"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "grantees": [
+              {
+                "RoleSpec": {
+                  "roletype": "ROLESPEC_CSTRING",
+                  "rolename": "dentaia_clinical_executor",
+                  "location": 9259
+                }
+              }
+            ],
+            "behavior": "DROP_RESTRICT"
+          }
+        }
+      ],
+      "funcionesDefinidas": 14
+    },
+    {
+      "archivo": "20261103235411_di36_dentalia_04_workspace.sql",
+      "sha256": "12cdef6a52dd03821a53aa295ead67b6cf39f7c97ad1f5ad0b6a0d6f176156ad",
+      "igualPaqueteYSimulacion": true,
+      "sentencias": {
+        "TransactionStmt": 2,
+        "VariableSetStmt": 2,
+        "DoStmt": 2,
+        "AlterTableStmt": 2,
+        "IndexStmt": 1,
+        "GrantStmt": 7,
+        "CreatePolicyStmt": 1,
+        "CreateFunctionStmt": 2,
+        "AlterOwnerStmt": 1,
+        "NotifyStmt": 1
+      },
+      "politicasPublicasNuevas": [
+        {
+          "table": "appointment_requests",
+          "name": "clinical_executor_requests",
+          "roles": [
+            {
+              "RoleSpec": {
+                "roletype": "ROLESPEC_CSTRING",
+                "rolename": "dentaia_clinical_executor",
+                "location": 4477
+              }
+            }
+          ]
+        }
+      ],
+      "grantsPublicos": [
+        {
+          "table": "appointment_requests",
+          "grant": {
+            "is_grant": true,
+            "targtype": "ACL_TARGET_OBJECT",
+            "objtype": "OBJECT_TABLE",
+            "objects": [
+              {
+                "RangeVar": {
+                  "schemaname": "public",
+                  "relname": "appointment_requests",
+                  "inh": true,
+                  "relpersistence": "p",
+                  "location": 4333
+                }
+              }
+            ],
+            "privileges": [
+              {
+                "AccessPriv": {
+                  "priv_name": "select",
+                  "cols": [
+                    {
+                      "String": {
+                        "sval": "id"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "dentist_id"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "status"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "created_at"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "preferred_date"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "preferred_time"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "is_demo"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "grantees": [
+              {
+                "RoleSpec": {
+                  "roletype": "ROLESPEC_CSTRING",
+                  "rolename": "dentaia_clinical_executor",
+                  "location": 4364
+                }
+              }
+            ],
+            "behavior": "DROP_RESTRICT"
+          }
+        }
+      ],
+      "funcionesDefinidas": 2
+    }
+  ],
+  "cambiosSQLRealizados": false,
+  "escriturasRemotas": 0
+}

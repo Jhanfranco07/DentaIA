@@ -4,7 +4,7 @@ import{join,dirname}from'node:path';
 import{fileURLToPath}from'node:url';
 import{createServer}from'node:net';
 import{command}from'../http_jwt/local.mjs';
-const outputDir=process.argv.includes('--fase7')?join(dirname(fileURLToPath(import.meta.url)),'../qa_fase7'):dirname(fileURLToPath(import.meta.url));
+const outputDir=process.argv.includes('--fase8')?join(dirname(fileURLToPath(import.meta.url)),'../integracion_fase8'):process.argv.includes('--fase7')?join(dirname(fileURLToPath(import.meta.url)),'../qa_fase7'):dirname(fileURLToPath(import.meta.url));
 const here=dirname(fileURLToPath(import.meta.url)),root=join(here,'../../..');
 const report={fecha:'2026-11-03',entorno:'build local NODE_ENV=production; flag=true',pruebas:[]};let child;
 try{

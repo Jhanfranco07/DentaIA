@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { assertLocal, command, container, sql, status, withShortTokens } from '../http_jwt/local.mjs';
 
 const here=dirname(fileURLToPath(import.meta.url)),root=join(here,'../../..');
-const resultsDir=process.argv.includes('--fase7')?join(here,'../qa_fase7'):process.argv.includes('--fase6')?join(here,'../versionado_fase6'):here;mkdirSync(resultsDir,{recursive:true});
+const resultsDir=process.argv.includes('--fase8')?join(here,'../integracion_fase8'):process.argv.includes('--fase7')?join(here,'../qa_fase7'):process.argv.includes('--fase6')?join(here,'../versionado_fase6'):here;mkdirSync(resultsDir,{recursive:true});
 const base='http://127.0.0.1:3104',id=n=>`40000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 const report={fecha:'2026-11-03',inicio:new Date().toISOString(),entorno:'Supabase CLI local + Next.js real',pruebas:[],requests:{auth:0,next:0,rpc:0},tokensGuardados:false,remoto:false};
 let nextProcess,serverLog='',childKey;

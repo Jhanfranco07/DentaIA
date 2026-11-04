@@ -1,0 +1,104 @@
+{
+  "fecha": "2026-11-04T01:09:11.551Z",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "dataset": "fase8-synthetic-v1",
+  "entorno": "Dental-IA remoto; SDK y JWT reales",
+  "pruebas": [
+    {
+      "nombre": "Login y firma JWT paciente_a",
+      "aprobada": true,
+      "http": 200,
+      "rol": "paciente"
+    },
+    {
+      "nombre": "Login y firma JWT paciente_b",
+      "aprobada": true,
+      "http": 200,
+      "rol": "paciente"
+    },
+    {
+      "nombre": "Login y firma JWT odontologo_a",
+      "aprobada": true,
+      "http": 200,
+      "rol": "odontologo"
+    },
+    {
+      "nombre": "Login y firma JWT odontologo_b",
+      "aprobada": true,
+      "http": 200,
+      "rol": "odontologo"
+    },
+    {
+      "nombre": "Login y firma JWT administrador_qa",
+      "aprobada": true,
+      "http": 200,
+      "rol": "superusuario"
+    },
+    {
+      "nombre": "Perfil y solicitudes propias paciente_a",
+      "aprobada": true,
+      "http": [
+        200,
+        200
+      ],
+      "perfiles": 1,
+      "solicitudes": 2
+    },
+    {
+      "nombre": "Perfil y solicitudes propias paciente_b",
+      "aprobada": true,
+      "http": [
+        200,
+        200
+      ],
+      "perfiles": 1,
+      "solicitudes": 1
+    },
+    {
+      "nombre": "RLS cruzado perfiles y solicitudes paciente_a",
+      "aprobada": true,
+      "http": [
+        200,
+        200,
+        200
+      ],
+      "filasLeidas": 0,
+      "filasModificadas": 0,
+      "dosJWTReales": true
+    },
+    {
+      "nombre": "RLS cruzado perfiles y solicitudes paciente_b",
+      "aprobada": true,
+      "http": [
+        200,
+        200,
+        200
+      ],
+      "filasLeidas": 0,
+      "filasModificadas": 0,
+      "dosJWTReales": true
+    },
+    {
+      "nombre": "Catálogo público excluye los dos profesionales demo inactivos",
+      "aprobada": true,
+      "http": 200,
+      "filas": 0
+    },
+    {
+      "nombre": "Lectura de consentimientos propios sin crear registros innecesarios",
+      "aprobada": true,
+      "http": 200,
+      "filas": 0,
+      "revocacionClinica": "probada por RPC aparte; no equivale a consentimiento fotográfico"
+    },
+    {
+      "nombre": "Administrador: enrolamiento y desafío TOTP real AAL2",
+      "aprobada": true,
+      "nivel": "aal2",
+      "factoresVerificados": 1,
+      "secretosSoloEnAlmacenDPAPI": true
+    }
+  ],
+  "aprobadas": 12,
+  "fallidas": 0
+}

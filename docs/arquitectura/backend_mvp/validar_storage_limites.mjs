@@ -4,7 +4,7 @@ import{writeFileSync}from'node:fs';
 import{dirname,join}from'node:path';
 import{fileURLToPath}from'node:url';
 import{status,sql}from'../http_jwt/local.mjs';
-const outputDir=process.argv.includes('--fase7')?join(dirname(fileURLToPath(import.meta.url)),'../qa_fase7'):dirname(fileURLToPath(import.meta.url));
+const outputDir=process.argv.includes('--fase8')?join(dirname(fileURLToPath(import.meta.url)),'../integracion_fase8'):process.argv.includes('--fase7')?join(dirname(fileURLToPath(import.meta.url)),'../qa_fase7'):dirname(fileURLToPath(import.meta.url));
 const here=dirname(fileURLToPath(import.meta.url)),r={fecha:'2026-11-03',remoto:false,pruebas:[]};
 const c=status(),options={auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}},admin=createClient(c.url,c.admin,options),client=createClient(c.url,c.anon,options);let consent;
 try{

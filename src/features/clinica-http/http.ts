@@ -9,6 +9,7 @@ export type IdentidadClinica = { id: string; sessionId: string; exp: number; rol
 export type Autenticacion = { ok: true; usuario: IdentidadClinica; rpc: (name: RpcClinico, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> }
   | { ok: false; status: 401 | 403 | 503 };
 export type DependenciasClinicas = { enabled: boolean; cursorSecret: string; cursorTtl: number;
+  environment?: "academic_remote";
   autenticar: (token: string) => Promise<Autenticacion>;
   registrar?: (event: { requestId: string; operation: string; status: number; code: string }) => void };
 
@@ -56,7 +57,7 @@ export function crearApiClinica(deps: DependenciasClinicas) {
       if (r.denied) return r.denied;
       const dto = workspaceDto(r.raw, kind);
       if (query.p_membership_id !== null && dto.data.membershipId !== query.p_membership_id) throw new Error("INVALID_CONTEXT");
-      return response({ ok: true, ...dto, requestId: r.raw.requestId }, 200, trace);
+      return response({ ok: true, ...dto, environment: deps.environment ?? dto.environment, requestId: r.raw.requestId }, 200, trace);
     }),
     conceder: (request: Request) => execute(request, "grant", async (auth, trace) => {
       if (new URL(request.url).search) throw new ErrorEntrada(400, "INVALID_REQUEST");
@@ -89,7 +90,7 @@ export function crearApiClinica(deps: DependenciasClinicas) {
       const dto = historialDto(r.raw, patientId);
       if (cursor && (cursor.professional !== dto.context.professional || cursor.clinic !== dto.context.clinic)) throw new ErrorEntrada(400, "INVALID_CURSOR");
       const nextCursor = dto.position ? firmarCursor(deps.cursorSecret, binding, dto.context, dto.position, deps.cursorTtl, auth.usuario.exp) : null;
-      return response({ ok: true, ...dto.data, nextCursor, requestId: r.raw.requestId }, 200, trace);
+      return response({ ok: true, ...dto.data, environment: deps.environment ?? dto.data.environment, nextCursor, requestId: r.raw.requestId }, 200, trace);
     }),
   };
 }

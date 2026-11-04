@@ -51,3 +51,9 @@ Consultar también la [matriz por tabla](MATRIZ_AUDITORIA_TABLAS.md) y los [coma
 - [Validación local y bloqueo de QA remoto](VALIDACION_SUPABASE_QA_FASE_7.md).
 - [Guía de integración para Anelis y Angie](GUIA_INTEGRACION_FRONTEND_QA.md).
 - [Evidencias nuevas y plan de migraciones](qa_fase7/README.md).
+
+## Fase 8: entorno académico compartido
+
+- [Resultado real: cuentas, lote, activación acotada y Next local](INTEGRACION_FINAL_SUPABASE_DENTALIA.md).
+- [Guia final del equipo](GUIA_FINAL_EQUIPO_DENTAIA.md).
+- [SQL propuesto, matriz, respaldo y evidencias](integracion_fase8/README.md).

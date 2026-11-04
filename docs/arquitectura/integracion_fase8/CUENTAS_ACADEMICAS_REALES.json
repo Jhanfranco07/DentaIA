@@ -1,0 +1,56 @@
+{
+  "fecha": "2026-11-03",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "dataset": "fase8-synthetic-v1",
+  "cuentas": [
+    {
+      "alias": "paciente_a",
+      "email": "fase8-paciente-a@dentaia.test",
+      "id": "798b53d9-9bfb-483b-8f6e-6d28403a1925",
+      "rol": "paciente",
+      "confirmada": true,
+      "loginReal": true,
+      "jwtVerificado": true
+    },
+    {
+      "alias": "paciente_b",
+      "email": "fase8-paciente-b@dentaia.test",
+      "id": "f244056c-e9bc-44e4-94d6-5b93e610429b",
+      "rol": "paciente",
+      "confirmada": true,
+      "loginReal": true,
+      "jwtVerificado": true
+    },
+    {
+      "alias": "odontologo_a",
+      "email": "fase8-odontologo-a@dentaia.test",
+      "id": "d3374749-74b2-4146-8c40-05a268d57af9",
+      "rol": "odontologo",
+      "confirmada": true,
+      "loginReal": true,
+      "jwtVerificado": true
+    },
+    {
+      "alias": "odontologo_b",
+      "email": "fase8-odontologo-b@dentaia.test",
+      "id": "c7a44fd8-045b-4096-a1db-0df0b46f2969",
+      "rol": "odontologo",
+      "confirmada": true,
+      "loginReal": true,
+      "jwtVerificado": true
+    },
+    {
+      "alias": "administrador_qa",
+      "email": "fase8-admin@dentaia.test",
+      "id": "42ce87d9-0b63-422c-9805-d25b2f681b71",
+      "rol": "superusuario",
+      "confirmada": true,
+      "loginReal": true,
+      "jwtVerificado": true
+    }
+  ],
+  "confirmacion": "Administrativa individual, solo cuentas .test; no prueba de correo",
+  "globalAuthModificado": false,
+  "aprobadas": 5,
+  "credenciales": "DPAPI fuera de Git, ACL usuario actual/SYSTEM; sin contraseñas/tokens en informe"
+}
