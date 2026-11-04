@@ -72,6 +72,30 @@ test("la interfaz muestra vacío sin transportar contenido", async () => {
   assert.deepEqual(vista, { estado: "vacio", resultado: null });
 });
 
+test("cambiar de contenido a acceso denegado limpia el resultado educativo", async () => {
+  const vistaConContenido = resolverVistaResultadosEducativos(
+    await crearProveedorResultadosEducativosSintetico("disponible").consultar(
+      solicitud,
+    ),
+  );
+  assert.equal(vistaConContenido.estado, "contenido");
+  assert.ok(vistaConContenido.resultado);
+
+  // ProfesionalDemo inicia esta vista antes de consultar el siguiente escenario.
+  assert.deepEqual(iniciarVistaResultadosEducativos(), {
+    estado: "cargando",
+    resultado: null,
+  });
+
+  const vistaDenegada = resolverVistaResultadosEducativos(
+    await crearProveedorResultadosEducativosSintetico("denegado").consultar(
+      solicitud,
+    ),
+  );
+
+  assert.deepEqual(vistaDenegada, { estado: "denegado", resultado: null });
+});
+
 test("una fuente educativa no disponible se presenta como error seguro", async () => {
   const respuesta = await crearProveedorResultadosEducativosSintetico(
     "error",

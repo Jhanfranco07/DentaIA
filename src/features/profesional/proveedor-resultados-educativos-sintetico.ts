@@ -7,6 +7,7 @@ import {
 export type EscenarioResultadoEducativoDemo =
   | "disponible"
   | "vacio"
+  | "denegado"
   | "error";
 
 const RESULTADO_EDUCATIVO_DEMO: ResultadoEducativo = {
@@ -40,6 +41,10 @@ export function crearProveedorResultadosEducativosSintetico(
     async consultarResultadoAutorizado() {
       if (escenario === "vacio") {
         return { estado: "sin_datos" };
+      }
+
+      if (escenario === "denegado") {
+        return { estado: "no_autorizado" };
       }
 
       if (escenario === "error") {

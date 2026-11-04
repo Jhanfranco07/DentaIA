@@ -47,6 +47,7 @@ const ESCENARIOS_EDUCATIVOS: ReadonlyArray<{
 }> = [
   { id: "disponible", etiqueta: "Contenido disponible" },
   { id: "vacio", etiqueta: "Sin contenido" },
+  { id: "denegado", etiqueta: "Acceso denegado" },
   { id: "error", etiqueta: "Fuente no disponible" },
 ];
 
