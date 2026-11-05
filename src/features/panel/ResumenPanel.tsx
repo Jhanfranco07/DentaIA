@@ -6,6 +6,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { useSesion } from "@/features/cuenta/useSesion";
 import { leerPerfil } from "@/features/cuenta/perfiles";
 import { obtenerMisSolicitudes } from "@/features/solicitudes/solicitudes";
+import TarjetaMetrica from "@/components/TarjetaMetrica";
 import EstadoPanel from "./EstadoPanel";
 import styles from "./panel.module.css";
 
@@ -54,30 +55,32 @@ export default function ResumenPanel() {
   }, [usuarioId, intento]);
 
   if (cargandoSesion) {
-    return <EstadoPanel tipo="cargando" titulo="Comprobando tu sesión…" />;
+    return <div className={styles.estadoResumen}><EstadoPanel tipo="cargando" titulo="Comprobando tu sesión…" /></div>;
   }
 
   if (errorSesion) {
     return (
+      <div className={styles.estadoResumen}>
       <EstadoPanel
         tipo="error"
         titulo="No pudimos comprobar tu sesión."
         accion={<button type="button" className={styles.boton} onClick={() => void verificar()}>Reintentar</button>}
       >
         Revisa tu conexión y vuelve a intentarlo.
-      </EstadoPanel>
+      </EstadoPanel></div>
     );
   }
 
   if (!usuario) {
     return (
+      <div className={styles.estadoResumen}>
       <EstadoPanel
         tipo="vacio"
         titulo="Inicia sesión para ver tu resumen."
         accion={<Link href="/cuenta" className={styles.enlace}>Ir a mi cuenta →</Link>}
       >
         Tu resumen solo muestra información de tu propia cuenta.
-      </EstadoPanel>
+      </EstadoPanel></div>
     );
   }
 
@@ -100,13 +103,12 @@ export default function ResumenPanel() {
   const { nombre, fotos, solicitudes, pendientes } = estado.datos;
   return (
     <section aria-labelledby="resumen-titulo" className={styles.resumen}>
-      <h2 id="resumen-titulo">Tu resumen</h2>
-      <p>{nombre ? `Hola, ${nombre}.` : "Todavía no registraste tu nombre en tu perfil."}</p>
-      <dl className={styles.datos}>
-        <div><dt>Fotografías guardadas</dt><dd>{fotos}</dd></div>
-        <div><dt>Solicitudes de demostración</dt><dd>{solicitudes}</dd></div>
-        <div><dt>Solicitudes pendientes</dt><dd>{pendientes}</dd></div>
-      </dl>
+      <div className={styles.saludo}><span className={styles.etiquetaResumen}>VISTA GENERAL</span><h2 id="resumen-titulo">{nombre ? `Hola, ${nombre}` : "Tu resumen personal"}</h2><p>{nombre ? "Aquí tienes un vistazo de tu actividad en DentaIA." : "Completa tu perfil para personalizar tu espacio."}</p></div>
+      <div className={styles.metricas} aria-label="Resumen de tu cuenta">
+        <TarjetaMetrica titulo="Fotografías guardadas" valor={fotos} contexto="En tu espacio personal" icono="camara" />
+        <TarjetaMetrica titulo="Solicitudes registradas" valor={solicitudes} contexto="Historial de solicitudes" icono="calendario" />
+        <TarjetaMetrica titulo="Solicitudes pendientes" valor={pendientes} contexto="Por atender" icono="reloj" />
+      </div>
     </section>
   );
 }

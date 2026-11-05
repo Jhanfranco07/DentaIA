@@ -7,10 +7,33 @@ import styles from "./cuenta.module.css";
 import PerfilPaciente from "./PerfilPaciente";
 import { useSesion } from "./useSesion";
 import Link from "next/link";
+import Encabezado from "@/components/Encabezado";
+import Pie from "@/components/Pie";
+import PortalShell, { type EnlacePortal } from "@/components/PortalShell";
 import { Icono } from "@/components/Identidad";
 import { retornoSolicitud } from "@/lib/navegacion";
 import { rolesDelUsuario, rutaPrincipalPorRoles } from "@/features/autorizacion/roles";
 import { useRouter } from "next/navigation";
+
+const NAVEGACION_PACIENTE: readonly EnlacePortal[] = [
+  { href: "/panel", etiqueta: "Resumen", exacto: true, icono: "casa", grupo: "Mi espacio" },
+  { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Mi espacio" },
+  { href: "/fotografias", etiqueta: "Fotografías", icono: "camara", grupo: "Mi espacio" },
+  { href: "/solicitudes", etiqueta: "Solicitudes", icono: "calendario", grupo: "Mi espacio" },
+  { href: "/analisis/demo", etiqueta: "Análisis educativo", icono: "reporte", grupo: "Explorar" },
+  { href: "/directorio", etiqueta: "Odontólogos", icono: "diente", grupo: "Explorar" },
+];
+const NAVEGACION_ODONTOLOGO: readonly EnlacePortal[] = [
+  { href: "/profesional", etiqueta: "Resumen profesional", exacto: true, icono: "casa", grupo: "Clínica" },
+  { href: "/profesional#contexto-clinico", etiqueta: "Mi clínica", icono: "clinica", grupo: "Clínica" },
+  { href: "/profesional#solicitudes-profesionales", etiqueta: "Solicitudes", icono: "calendario", grupo: "Atención" },
+  { href: "/profesional#historial-clinico", etiqueta: "Pacientes e historial", icono: "usuarios", grupo: "Atención" },
+  { href: "/cuenta", etiqueta: "Mi cuenta", icono: "persona", grupo: "Cuenta" },
+];
+const NAVEGACION_ADMIN: readonly EnlacePortal[] = [
+  { href: "/administracion", etiqueta: "Panel administrativo", exacto: true, icono: "casa", grupo: "Administración" },
+  { href: "/cuenta", etiqueta: "Mi cuenta", icono: "persona", grupo: "Cuenta" },
+];
 
 export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean }) {
   const { usuario, cargando, errorSesion, verificar } = useSesion();
@@ -109,10 +132,26 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
     finally { operacion.current = false; if (activo.current) setOcupado(false); }
   }
 
-  return <section className={styles.pagina} aria-labelledby="cuenta-titulo">
-    <header className={styles.cabecera}><span className={styles.etiqueta}>TU ESPACIO EN DENTAIA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>Tu perfil, tus fotografías de prueba y el seguimiento de tus solicitudes, en un solo lugar.</p></header>
-    <div className={styles.panel}>
-      <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32}/></span><h2>Una sonrisa más informada empieza contigo.</h2><p>Conserva tus datos a mano y continúa tu recorrido cuando lo necesites.</p><span className={styles.nota}>Esta versión utiliza profesionales ficticios e imágenes de prueba. La demostración no reemplaza la atención odontológica.</span><Link href="/analisis/demo" className="text-link">Conocer la demostración</Link></aside>
+  const nombreUsuario = usuario?.user_metadata?.full_name;
+  const etiquetaUsuario = typeof nombreUsuario === "string" && nombreUsuario.trim() ? nombreUsuario.trim() : usuario?.email?.split("@")[0] ?? "Tu perfil";
+  const enlacesAcceso = [
+    ...(roles.includes("paciente") ? [
+      { href: "/panel", titulo: "Panel del paciente", detalle: "Consulta tu resumen personal.", icono: "casa" as const },
+      { href: "/fotografias", titulo: "Mis fotografías", detalle: "Administra tus imágenes de prueba.", icono: "camara" as const },
+      { href: "/solicitudes", titulo: "Mis solicitudes", detalle: "Revisa las solicitudes registradas.", icono: "calendario" as const },
+    ] : []),
+    ...(roles.includes("odontologo") ? [{ href: "/profesional", titulo: "Panel profesional", detalle: "Continúa en tu espacio clínico autorizado.", icono: "diente" as const }] : []),
+    ...(roles.includes("superusuario") ? [{ href: "/administracion", titulo: "Panel administrativo", detalle: "Acceso sujeto a MFA/AAL2 y políticas del entorno.", icono: "escudo" as const }] : []),
+    { href: "/analisis/demo", titulo: "Análisis educativo", detalle: "Explora el recorrido de demostración.", icono: "reporte" as const },
+  ];
+  const contenido = <section className={`${styles.pagina} ${usuario ? styles.paginaAutenticada : ""}`} aria-labelledby="cuenta-titulo">
+    {usuario ? <header className={styles.cabeceraPerfil}>
+      <span className={styles.avatarCuenta} aria-hidden="true">{etiquetaUsuario.slice(0, 1).toLocaleUpperCase("es")}</span>
+      <div><span className={styles.etiqueta}>PERFIL DE CUENTA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>{etiquetaUsuario}<span aria-hidden="true"> · </span>{usuario.email ?? "Correo no disponible"}</p></div>
+      <span className={styles.rolCuenta}>{roles.includes("superusuario") ? "Superadministrador" : roles.includes("odontologo") ? "Odontólogo" : roles.includes("paciente") ? "Paciente" : "Sin rol activo"}</span>
+    </header> : <header className={styles.cabecera}><span className={styles.etiqueta}>TU ESPACIO EN DENTAIA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>Accede a tu perfil y continúa tu recorrido en DentaIA.</p></header>}
+    <div className={`${styles.panel} ${usuario ? styles.panelAutenticado : styles.panelPublico}`}>
+      {!usuario && <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32} /></span><h2>Un espacio claro para tu cuidado dental.</h2><p>Inicia sesión para consultar tu cuenta o crea un perfil para comenzar.</p><span className={styles.nota}>La demostración es educativa y no reemplaza una evaluación odontológica.</span><Link href="/analisis/demo" className="text-link">Conocer la demostración</Link></aside>}
       <div className={styles.contenido}>
         {cargando ? <p role="status">Comprobando tu sesión…</p> : <>
           {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}
@@ -121,10 +160,9 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
             {continuar && roles.includes("paciente") && !roles.includes("odontologo") && !roles.includes("superusuario") && <div className="notice"><strong>Tu profesional sigue seleccionado.</strong><p>Ya puedes continuar con tu solicitud de demostración.</p><Link href={continuar} className="action">Continuar mi solicitud</Link></div>}
             {roles.includes("paciente") && <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />}
             {roles.length === 0 ? <p role="alert" className={styles.error}>Esta cuenta no tiene un rol DentaIA activo.</p> : <nav aria-label="Módulos de tu cuenta" className={styles.accesos}>
-              {roles.includes("paciente") && <><Link href="/panel">Panel del paciente</Link><Link href="/fotografias">Mis fotografías</Link><Link href="/solicitudes">Mis solicitudes</Link></>}
-              {roles.includes("odontologo") && <Link href="/profesional">Panel profesional</Link>}
-              {roles.includes("superusuario") && <Link href="/administracion">Panel administrativo · requiere MFA/AAL2</Link>}
-              <Link href="/analisis/demo">Explorar la demostración</Link>
+              {enlacesAcceso.map(({ href, titulo, detalle, icono }) => <Link key={href} href={href} className={styles.enlaceAcceso}>
+                <span className={styles.iconoAcceso}><Icono nombre={icono} size={20} /></span><span><strong>{titulo}</strong><small>{detalle}</small></span><span className={styles.flechaAcceso} aria-hidden="true">→</span>
+              </Link>)}
             </nav>}
             <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>
           </> : <>
@@ -147,4 +185,10 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
       </div>
     </div>
   </section>;
+  if (usuario && roles.length > 0) {
+    const superusuario = roles.includes("superusuario");
+    const odontologo = !superusuario && roles.includes("odontologo");
+    return <PortalShell area={superusuario ? "Administración" : odontologo ? "Odontología" : "Paciente"} descripcion="Perfil y preferencias" enlaces={superusuario ? NAVEGACION_ADMIN : odontologo ? NAVEGACION_ODONTOLOGO : NAVEGACION_PACIENTE}>{contenido}</PortalShell>;
+  }
+  return <><Encabezado /><main id="contenido" tabIndex={-1}>{contenido}</main><Pie /></>;
 }

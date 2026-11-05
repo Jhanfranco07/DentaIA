@@ -9,6 +9,7 @@ import Link from "next/link";
 import ResumenPanel from "./ResumenPanel";
 import ReporteDemo from "./ReporteDemo";
 import styles from "./panel.module.css";
+import { Icono } from "@/components/Identidad";
 
 const SECCIONES = [
   {
@@ -16,22 +17,26 @@ const SECCIONES = [
     href: "/cuenta",
     titulo: "Mi cuenta",
     descripcion: "Consulta tu correo y el nombre de tu perfil, y actualízalo cuando lo necesites.",
-    accion: "Ir a mi cuenta",
+    accion: "Gestionar perfil",
+    icono: "persona" as const,
   },
   {
     id: "fotografias",
     href: "/fotografias",
     titulo: "Mis fotografías",
     descripcion: "Gestiona tu permiso de almacenamiento y tus imágenes de prueba privadas.",
-    accion: "Ir a mis fotografías",
+    accion: "Ver fotografías",
+    icono: "camara" as const,
   },
   {
     id: "solicitudes",
     href: "/solicitudes",
     titulo: "Mis solicitudes",
     descripcion: "Revisa tus solicitudes de demostración y cancela las que sigan pendientes.",
-    accion: "Ir a mis solicitudes",
+    accion: "Ver solicitudes",
+    icono: "calendario" as const,
   },
+  { id: "directorio", href: "/directorio", titulo: "Explorar odontólogos", descripcion: "Conoce el directorio académico y revisa los perfiles disponibles.", accion: "Abrir directorio", icono: "diente" as const },
 ] as const;
 
 export default function PanelPaciente() {
@@ -42,9 +47,9 @@ export default function PanelPaciente() {
         <span className={styles.etiqueta}>Panel del paciente</span>
         <h1>Tu espacio personal</h1>
         <p>
-          Desde aquí accedes a tu cuenta, tus fotografías y tus solicitudes. Este prototipo usa
-          datos <strong>ficticios</strong> y no realiza diagnósticos ni análisis clínicos.
+          Consulta el estado de tu cuenta, continúa una solicitud o explora los recursos educativos de DentaIA.
         </p>
+        <div className={styles.accionesCabecera}><Link href="/solicitudes" className={styles.accionPrincipal}><Icono nombre="calendario" size={17} /> Nueva solicitud</Link><Link href="/directorio" className={styles.accionSecundaria}>Explorar odontólogos <Icono nombre="flecha" size={16} /></Link></div>
       </header>
 
       {cargando ? <EstadoPanel tipo="cargando" titulo="Comprobando tu sesión…" /> : errorSesion ?
@@ -56,6 +61,8 @@ export default function PanelPaciente() {
         <ul className={styles.grilla}>
           {SECCIONES.map((s) => (
             <li key={s.id} className={styles.tarjeta}>
+              <span className={styles.iconoTarjeta}><Icono nombre={s.icono} size={21} /></span>
+              <span className={styles.etiquetaTarjeta}>TU CUENTA</span>
               <h2>{s.titulo}</h2>
               <p>{s.descripcion}</p>
               <Link
@@ -63,7 +70,7 @@ export default function PanelPaciente() {
                 className={styles.enlace}
                 aria-label={`${s.accion}: ${s.titulo}`}
               >
-                {s.accion} →
+                {s.accion} <Icono nombre="flecha" size={15} />
               </Link>
             </li>
           ))}
