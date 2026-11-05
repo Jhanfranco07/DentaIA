@@ -102,7 +102,7 @@ create policy dentist_reviews_create_after_completed_visit
       select 1
       from public.appointment_requests as request
       where request.id = appointment_request_id
-        and request.dentist_id = dentist_id
+        and request.dentist_id = dentist_reviews.dentist_id
         and request.user_id = (select auth.uid())
         and request.is_demo is false
         and request.status = 'completed'

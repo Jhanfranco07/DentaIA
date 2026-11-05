@@ -30,6 +30,8 @@ test("la reseña exige identidad propia, rol paciente activo, una atención real
   assert.match(migracion, /roles'[^\n]*\? 'paciente'/i);
   assert.match(migracion, /roles'[^\n]*\? 'odontologo'/i);
   assert.match(migracion, /request\.user_id = \(select auth\.uid\(\)\)[\s\S]*?request\.is_demo is false[\s\S]*?request\.status = 'completed'/i);
+  assert.match(migracion, /request\.dentist_id\s*=\s*dentist_reviews\.dentist_id/i);
+  assert.doesNotMatch(migracion, /request\.dentist_id\s*=\s*dentist_id\b/i);
   assert.match(migracion, /moderation_status = 'pending'/i);
   assert.match(migracion, /grant insert \(dentist_id, appointment_request_id, rating, comment\)\s+on table public\.dentist_reviews to authenticated/i);
   assert.doesNotMatch(migracion, /grant\s+(update|delete|all)[\s\S]{0,150}dentist_reviews/i);
