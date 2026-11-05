@@ -1,8 +1,8 @@
 # DI-156 — Implementación de la vista profesional
 
-**Proyecto:** DentaIA  
-**Historia relacionada:** DI-145 — Vista del odontólogo  
-**Insumo de requisitos:** [DI-154](./DI-154-analisis-requisitos-vista-profesional.md)  
+**Proyecto:** DentaIA
+**Historia relacionada:** DI-145 — Vista del odontólogo
+**Insumo de requisitos:** [DI-154](./DI-154-analisis-requisitos-vista-profesional.md)
 **Estado:** primera versión funcional de interfaz con datos exclusivamente sintéticos.
 
 ## Objetivo
