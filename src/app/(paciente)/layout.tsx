@@ -7,7 +7,6 @@ const enlaces: readonly EnlacePortal[] = [
   { href: "/fotografias", etiqueta: "Mis fotografías", icono: "camara", grupo: "Principal" },
   { href: "/resultados", etiqueta: "Mis resultados", icono: "reporte", grupo: "Principal" },
   { href: "/solicitudes", etiqueta: "Mis solicitudes", icono: "calendario", grupo: "Principal" },
-  { href: "/analisis/demo", etiqueta: "Guía educativa", icono: "reporte", grupo: "Explorar" },
   { href: "/directorio", etiqueta: "Odontólogos", icono: "diente", grupo: "Explorar" },
   { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Cuenta" },
 ];

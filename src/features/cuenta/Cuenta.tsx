@@ -20,7 +20,7 @@ const NAVEGACION_PACIENTE: readonly EnlacePortal[] = [
   { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Mi espacio" },
   { href: "/fotografias", etiqueta: "Fotografías", icono: "camara", grupo: "Mi espacio" },
   { href: "/solicitudes", etiqueta: "Solicitudes", icono: "calendario", grupo: "Mi espacio" },
-  { href: "/analisis/demo", etiqueta: "Análisis educativo", icono: "reporte", grupo: "Explorar" },
+  { href: "/analisis", etiqueta: "Análisis dental con IA", icono: "destello", grupo: "Principal" },
   { href: "/directorio", etiqueta: "Odontólogos", icono: "diente", grupo: "Explorar" },
 ];
 const NAVEGACION_ODONTOLOGO: readonly EnlacePortal[] = [
@@ -142,7 +142,7 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
     ] : []),
     ...(roles.includes("odontologo") ? [{ href: "/profesional", titulo: "Panel profesional", detalle: "Continúa en tu espacio clínico autorizado.", icono: "diente" as const }] : []),
     ...(roles.includes("superusuario") ? [{ href: "/administracion", titulo: "Panel administrativo", detalle: "Acceso sujeto a MFA/AAL2 y políticas del entorno.", icono: "escudo" as const }] : []),
-    { href: "/analisis/demo", titulo: "Análisis educativo", detalle: "Explora el recorrido de demostración.", icono: "reporte" as const },
+    ...(roles.includes("paciente") ? [{ href: "/analisis", titulo: "Análisis dental con IA", detalle: "Prepara una fotografía local; el motor aún no está conectado.", icono: "destello" as const }] : []),
   ];
   const contenido = <section className={`${styles.pagina} ${usuario ? styles.paginaAutenticada : ""}`} aria-labelledby="cuenta-titulo">
     {usuario ? <header className={styles.cabeceraPerfil}>
@@ -151,7 +151,7 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
       <span className={styles.rolCuenta}>{roles.includes("superusuario") ? "Superadministrador" : roles.includes("odontologo") ? "Odontólogo" : roles.includes("paciente") ? "Paciente" : "Sin rol activo"}</span>
     </header> : <header className={styles.cabecera}><span className={styles.etiqueta}>TU ESPACIO EN DENTAIA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>Accede a tu perfil y continúa tu recorrido en DentaIA.</p></header>}
     <div className={`${styles.panel} ${usuario ? styles.panelAutenticado : styles.panelPublico}`}>
-      {!usuario && <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32} /></span><h2>Un espacio claro para tu cuidado dental.</h2><p>Inicia sesión para consultar tu cuenta o crea un perfil para comenzar.</p><span className={styles.nota}>La demostración es educativa y no reemplaza una evaluación odontológica.</span><Link href="/analisis/demo" className="text-link">Conocer la demostración</Link></aside>}
+      {!usuario && <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32} /></span><h2>Un espacio claro para tu cuidado dental.</h2><p>Inicia sesión para consultar tu cuenta o crea un perfil para comenzar.</p><span className={styles.nota}>El análisis automático está pendiente y no sustituye una evaluación odontológica.</span></aside>}
       <div className={styles.contenido}>
         {cargando ? <p role="status">Comprobando tu sesión…</p> : <>
           {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}

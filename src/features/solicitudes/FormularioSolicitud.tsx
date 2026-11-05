@@ -8,7 +8,7 @@ import { useSesion } from "@/features/cuenta/useSesion";
 import { validarSolicitud } from "./validaciones";
 import styles from "./solicitudes.module.css";
 import Link from "next/link";
-import { contextoReporte, enlaceSolicitud } from "@/lib/navegacion";
+import { enlaceSolicitud } from "@/lib/navegacion";
 
 type Odontologo = Pick<
   Tables<"dentists">,
@@ -16,8 +16,6 @@ type Odontologo = Pick<
 >;
 
 export default function FormularioSolicitud({ odontologoInicial = "" }: { odontologoInicial?: string }) {
-  const [contexto, setContexto] = useState("");
-  useEffect(() => { setContexto(contextoReporte(window.location.search)); }, []);
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [fecha, setFecha] = useState("");
@@ -175,7 +173,6 @@ export default function FormularioSolicitud({ odontologoInicial = "" }: { odonto
 
   return (
     <section className={styles.tarjeta}>
-      {contexto && <p><Link href="/analisis/demo?reporte=1" className="text-link">← Volver a mi reporte</Link></p>}
       <h2 className={styles.tituloSeccion}>Nueva solicitud de demostración</h2>
 
       <p className={styles.subtitulo}>
@@ -336,7 +333,7 @@ export default function FormularioSolicitud({ odontologoInicial = "" }: { odonto
 
         {!cargandoSesion && !usuario && (
           <p className={styles.aviso}>
-            <Link href={odontologoId ? `/cuenta?continuar=${encodeURIComponent(enlaceSolicitud(odontologoId, contexto))}` : "/cuenta"}>Inicia sesión en Mi cuenta</Link> para registrar tu solicitud y consultar su estado.
+            <Link href={odontologoId ? `/cuenta?continuar=${encodeURIComponent(enlaceSolicitud(odontologoId))}` : "/cuenta"}>Inicia sesión en Mi cuenta</Link> para registrar tu solicitud y consultar su estado.
           </p>
         )}
       </form>

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Icono, Marca } from "./Identidad";
 
-const enlaces = [["/", "Inicio"], ["/#como-funciona", "Cómo funciona"], ["/analisis/demo", "Demostración educativa"], ["/directorio", "Directorio"], ["/privacidad", "Privacidad"]] as const;
+const enlaces = [["/", "Inicio"], ["/#como-funciona", "Cómo funciona"], ["/analisis", "Análisis dental con IA"], ["/directorio", "Odontólogos"], ["/privacidad", "Privacidad"]] as const;
 export default function Encabezado() {
   const ruta = usePathname();
   const [abierto, setAbierto] = useState(false);

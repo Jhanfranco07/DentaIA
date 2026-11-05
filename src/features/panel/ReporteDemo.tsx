@@ -50,7 +50,7 @@ export default function ReporteDemo() {
       <EstadoPanel
         tipo="vacio"
         titulo="Todavía no hay un reporte de demostración."
-        accion={<Link href="/analisis/demo" className={styles.enlace}>Explorar el análisis de ejemplo →</Link>}
+        accion={<Link href="/analisis" className={styles.enlace}>Iniciar análisis dental →</Link>}
       >
         Completa el recorrido de ejemplo hasta las recomendaciones para verlas aquí.
       </EstadoPanel>
@@ -69,7 +69,7 @@ export default function ReporteDemo() {
       <p>
         Es una muestra educativa guardada solo en este navegador. No es un resultado de tu cuenta ni un diagnóstico.
       </p>
-      <Link href="/analisis/demo" className={styles.enlace}>Ver el recorrido de ejemplo →</Link>
+      <Link href="/analisis" className={styles.enlace}>Preparar una fotografía →</Link>
     </section>
   );
 }

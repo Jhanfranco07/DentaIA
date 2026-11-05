@@ -272,9 +272,9 @@ export default function Home() {
                 <br />
                 una atención informada.
               </h2>
-              <p>La preparación de fotografías está disponible para pacientes. El análisis automático todavía no: explora la guía educativa claramente identificada como ejemplo.</p>
+              <p>Los pacientes pueden preparar una fotografía desde su dispositivo. El motor de análisis automático aún está pendiente de integración.</p>
             </div>
-            <a className="action" href="/analisis/demo">Explorar demostración educativa <span aria-hidden="true">→</span></a>
+            <a className="action" href="/analisis">Iniciar análisis dental <span aria-hidden="true">→</span></a>
           </section>
         </main>
       )}
@@ -424,7 +424,7 @@ export default function Home() {
           </div>
 
           <div className="center-actions">
-            <a className="action" href="/analisis/demo">Ver demostración educativa →</a>
+            <a className="action" href="/analisis">Preparar una fotografía →</a>
           </div>
         </main>
       )}

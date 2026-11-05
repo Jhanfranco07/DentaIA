@@ -194,7 +194,7 @@ export default function AnalisisDental() {
         <button type="button" className={styles.botonPrimario} onClick={() => void capturarFotografia()}><Icono nombre="camara" size={17} /> Capturar fotografía</button>
       </section>}
       <aside className={styles.privacidad}><Icono nombre="privacidad" size={19} /><div><strong>Tu imagen se mantiene en este dispositivo</strong><p>El flujo no la almacena ni la envía. El consentimiento para guardar fotos en “Mis fotografías” es independiente, igual que el futuro consentimiento para procesarlas con IA.</p></div></aside>
-      <div className={styles.enlacesSecundarios}><Link href="/fotografias">Abrir Mis fotografías guardadas <Icono nombre="flecha" size={16} /></Link><Link href="/analisis/demo">Ver guía educativa separada <Icono nombre="flecha" size={16} /></Link></div>
+      <div className={styles.enlacesSecundarios}><Link href="/fotografias">Abrir Mis fotografías guardadas <Icono nombre="flecha" size={16} /></Link><Link href="/directorio">Encontrar odontólogos <Icono nombre="flecha" size={16} /></Link></div>
     </div>}
 
     {fase === "revision" && archivo && <div className={styles.contenido}>
@@ -216,7 +216,7 @@ export default function AnalisisDental() {
       </div>
       {avisoMotor && <div className={styles.avisoMotor} role="status"><Icono nombre="alerta" size={19} /><p>El módulo de análisis está preparado, pero el motor de inteligencia artificial todavía no está disponible en esta versión.</p></div>}
       <div className={styles.accionesFinales}><button type="button" className={styles.botonSecundario} onClick={() => setFase("revision")}>Volver a la fotografía</button><button type="button" className={styles.botonSecundario} onClick={cambiarFotografia}>Elegir otra</button><button type="button" className={styles.botonPrimario} onClick={() => setAvisoMotor(true)}><Icono nombre="destello" size={17} /> Analizar con IA</button></div>
-      <div className={styles.enlacesSecundarios}><Link href="/resultados">Ir a Mis resultados <Icono nombre="flecha" size={16} /></Link><Link href="/analisis/demo">Explorar la guía educativa <Icono nombre="flecha" size={16} /></Link></div>
+      <div className={styles.enlacesSecundarios}><Link href="/resultados">Ir a Mis resultados <Icono nombre="flecha" size={16} /></Link><Link href="/directorio">Encontrar odontólogos <Icono nombre="flecha" size={16} /></Link></div>
     </div>}
   </section>;
 }

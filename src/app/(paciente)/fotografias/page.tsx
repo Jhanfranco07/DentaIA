@@ -621,7 +621,7 @@ function PhotosPageContent() {
         <p>
           Guarda y consulta tus imágenes de prueba. Tú decides cuándo dar o revocar el permiso de almacenamiento. Aquí no se analizan fotografías ni se realizan diagnósticos.
         </p>
-      <Link href="/analisis/demo" className={styles.secondaryButton}>Explorar imágenes de ejemplo</Link>
+      <Link href="/analisis" className={styles.secondaryButton}>Preparar análisis dental</Link>
       </header>
 
       {error && (

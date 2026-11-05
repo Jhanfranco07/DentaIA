@@ -12,7 +12,7 @@ import { SECCIONES_ADMINISTRATIVAS, type SeccionAdministrativa } from "./estruct
 import styles from "./administracion.module.css";
 
 const ROLES_PREVISTOS = [
-  { nombre: "Visitante", alcance: "Contenido público y demostración educativa.", situacion: "Condición sin sesión" },
+  { nombre: "Visitante", alcance: "Contenido público y directorio odontológico.", situacion: "Condición sin sesión" },
   { nombre: "Paciente", alcance: "Perfil, fotografías y solicitudes propios.", situacion: "Capacidades personales existentes" },
   { nombre: "Odontólogo", alcance: "Atención autorizada, limitada por paciente y clínica.", situacion: "Verificación profesional y autorización clínica independientes" },
   { nombre: "Superusuario", alcance: "Administración no clínica de cuentas y roles.", situacion: "Sesión autorizada y MFA/AAL2" },
