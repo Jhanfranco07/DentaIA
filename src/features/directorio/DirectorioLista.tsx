@@ -13,6 +13,7 @@ import mapStyles from "./mapa-directorio.module.css";
 import { Icono } from "@/components/Identidad";
 import type { ResenaPublica } from "./resenas";
 import { crearMarcadores, tieneUbicacionDentroDelRadio, ubicacionMasCercana } from "./ubicaciones";
+import { adjuntarUbicaciones, normalizarResenas } from "./compatibilidad-esquema";
 
 const MapaDirectorio = dynamic(() => import("./MapaDirectorio"), {
   ssr: false,
@@ -51,29 +52,23 @@ export default function DirectorioLista() {
         if (error) { setCarga({ estado: "error" }); return; }
         const baseDentistas = data ?? [];
         const ids = baseDentistas.map(d => d.id);
-        let ubicacionesDisponibles = true;
-        let ubicaciones: UbicacionPublica[] = [];
+        let respuestaUbicaciones: { data: UbicacionPublica[] | null; error: unknown | null } = { data: [], error: null };
         if (ids.length) {
-          const respuesta = await client.from("dentist_public_locations")
+          respuestaUbicaciones = await client.from("dentist_public_locations")
             .select("id,dentist_id,practice_name,practice_address,latitude,longitude,created_at")
             .in("dentist_id", ids);
-          if (respuesta.error) ubicacionesDisponibles = false;
-          else ubicaciones = (respuesta.data ?? []) as UbicacionPublica[];
         }
-        const dentistas: DentistaDirectorio[] = baseDentistas.map(dentista => ({
-          ...dentista,
-          ubicaciones: ubicaciones.filter(ubicacion => ubicacion.dentist_id === dentista.id),
-        }));
-        let resenasDisponibles = true;
-        let resenas: ResenaPublica[] = [];
+        const ubicacionesResultado = adjuntarUbicaciones(baseDentistas, respuestaUbicaciones);
+        const dentistas = ubicacionesResultado.dentistas as DentistaDirectorio[];
+        let respuestaResenas: { data: ResenaPublica[] | null; error: unknown | null } = { data: [], error: null };
         if (ids.length) {
-          const respuesta = await client.from("dentist_reviews").select("id,dentist_id,rating,comment,created_at").in("dentist_id", ids);
-          if (respuesta.error) resenasDisponibles = false;
-          else resenas = (respuesta.data ?? []) as ResenaPublica[];
+          respuestaResenas = await client.from("dentist_reviews").select("id,dentist_id,rating,comment,created_at").in("dentist_id", ids);
         }
+        const resenasResultado = normalizarResenas(respuestaResenas);
+        const resenas = resenasResultado.resenas as ResenaPublica[];
         if (cancelado) return;
         const sumarios = Object.fromEntries(dentistas.map(dentista => [dentista.id, resumirResenas(resenas.filter(r => r.dentist_id === dentista.id))]));
-        setCarga({ estado: "listo", dentistas, resenas: sumarios, resenasDisponibles, ubicacionesDisponibles });
+        setCarga({ estado: "listo", dentistas, resenas: sumarios, resenasDisponibles: resenasResultado.disponibles, ubicacionesDisponibles: ubicacionesResultado.disponibles });
       } catch { if (!cancelado) setCarga({ estado: "error" }); }
     }
     void cargar();

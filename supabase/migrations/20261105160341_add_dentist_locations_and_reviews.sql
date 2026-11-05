@@ -46,7 +46,7 @@ create policy dentist_public_locations_read_published
   );
 
 comment on table public.dentist_public_locations is
-  'Ubicaciones de consultorios revisadas y publicadas explícitamente. Sin permisos de escritura desde Data API; no almacena ubicación del paciente.';
+  'DentaIA migration 20261105160341_add_dentist_locations_and_reviews. Ubicaciones de consultorios revisadas y publicadas explícitamente. Sin permisos de escritura desde Data API; no almacena ubicación del paciente.';
 comment on column public.dentist_public_locations.clinic_id is
   'Relación interna con clinical.clinics; deliberadamente no se expone en la proyección pública.';
 comment on column public.dentist_public_locations.practice_location is
@@ -55,8 +55,8 @@ comment on column public.dentist_public_locations.practice_location is
 create table public.dentist_reviews (
   id uuid primary key default gen_random_uuid(),
   dentist_id uuid not null references public.dentists(id) on delete restrict,
-  appointment_request_id uuid not null references public.appointment_requests(id) on delete restrict,
-  author_user_id uuid not null default auth.uid() references auth.users(id) on delete restrict,
+  appointment_request_id uuid not null references public.appointment_requests(id) on delete cascade,
+  author_user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
   rating smallint not null check (rating between 1 and 5),
   comment text not null check (length(btrim(comment)) between 10 and 1200),
   moderation_status text not null default 'pending'
@@ -81,13 +81,21 @@ grant insert (dentist_id, appointment_request_id, rating, comment)
 
 create policy dentist_reviews_read_published
   on public.dentist_reviews for select to anon, authenticated
-  using (moderation_status = 'published');
+  using (
+    moderation_status = 'published'
+    and exists (
+      select 1 from public.dentists as dentist
+      where dentist.id = dentist_id and dentist.is_active is true
+    )
+  );
 
 create policy dentist_reviews_create_after_completed_visit
   on public.dentist_reviews for insert to authenticated
   with check (
     author_user_id = (select auth.uid())
     and moderation_status = 'pending'
+    and (auth.jwt() -> 'app_metadata' -> 'dentaia' ->> 'version') = '1'
+    and (auth.jwt() -> 'app_metadata' -> 'dentaia' ->> 'estado') = 'activo'
     and coalesce(auth.jwt() -> 'app_metadata' -> 'dentaia' -> 'roles', '[]'::jsonb) ? 'paciente'
     and not (coalesce(auth.jwt() -> 'app_metadata' -> 'dentaia' -> 'roles', '[]'::jsonb) ? 'odontologo')
     and exists (
@@ -101,10 +109,40 @@ create policy dentist_reviews_create_after_completed_visit
     )
   );
 
+-- Comprueba el vínculo privado autor↔perfil sin conceder acceso al esquema clínico.
+-- La función no queda expuesta como RPC; solo se invoca desde el trigger.
+create function public.prevent_professional_self_review()
+returns trigger
+language plpgsql
+security definer
+set search_path = pg_catalog
+as $function$
+begin
+  if exists (
+    select 1
+    from clinical.professional_accounts as professional
+    where professional.user_id = (select auth.uid())
+      and professional.dentist_id = new.dentist_id
+  ) then
+    raise exception using
+      errcode = '42501',
+      message = 'No se permite reseñar el perfil profesional propio.';
+  end if;
+  return new;
+end
+$function$;
+
+revoke all on function public.prevent_professional_self_review() from public, anon, authenticated, service_role;
+comment on function public.prevent_professional_self_review() is
+  'DentaIA migration 20261105160341_add_dentist_locations_and_reviews. Trigger-only check that blocks review of the author’s own professional profile.';
+create trigger dentist_reviews_prevent_self_review
+  before insert on public.dentist_reviews
+  for each row execute function public.prevent_professional_self_review();
+
 create table public.dentist_review_reports (
   id uuid primary key default gen_random_uuid(),
-  review_id uuid not null references public.dentist_reviews(id) on delete restrict,
-  reporter_user_id uuid not null default auth.uid() references auth.users(id) on delete restrict,
+  review_id uuid not null references public.dentist_reviews(id) on delete cascade,
+  reporter_user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
   category text not null check (category in ('inapropiado', 'spam', 'suplantacion', 'otro')),
   details text not null default '' check (length(details) <= 500),
   moderation_status text not null default 'pending'
@@ -131,8 +169,7 @@ create policy dentist_review_reports_create_for_published_review
   );
 
 comment on table public.dentist_reviews is
-  'Una reseña por solicitud elegible; publicación controlada por moderación confiable. Las solicitudes académicas no califican.';
+  'DentaIA migration 20261105160341_add_dentist_locations_and_reviews. Una reseña por solicitud elegible; publicación controlada por moderación confiable. Solo se aceptan solicitudes propias no demo y completed. El esquema académico actual admite exclusivamente is_demo=true y requested/cancelled, por lo que no hay interacciones elegibles hasta implementar una fuente de atenciones reales validada. La reseña y sus reportes se eliminan al borrar la cuenta o la solicitud asociada.';
 comment on table public.dentist_review_reports is
-  'Reportes privados de reseñas publicadas. No contiene datos clínicos y no es legible desde el cliente.';
-
+  'DentaIA migration 20261105160341_add_dentist_locations_and_reviews. Reportes privados de reseñas publicadas. No contiene datos clínicos y no es legible desde el cliente.';
 commit;
