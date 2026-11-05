@@ -16,7 +16,7 @@ test('sin sesión, esquema incorrecto o bearer ambiguo: 401 y no consulta Auth',
   for(const authorization of [null,'','Basic abc','Bearer','Bearer uno dos','Bearer uno, Bearer dos','Bearer '+ 'a'.repeat(8193)]) {
     const h=new Headers(); if(authorization!==null) h.set('authorization',authorization);
     const p=proveedor();
-    assert.deepEqual(await autorizarSolicitudAdministrativa(h,p.crear),{autorizado:false,status:401});
+    assert.deepEqual(await autorizarSolicitudAdministrativa(h,p.crear),{autorizado:false,status:401,codigo:'SESION_INVALIDA'});
     assert.deepEqual(p.llamadas,[]);
   }
 });
@@ -27,17 +27,17 @@ test('Auth recibe el token exacto; no se decodifica como prueba de identidad',as
 });
 test('sesión inválida, expirada o usuario inexistente: 401 aunque vengan metadatos',async()=>{
   for(const [user,error] of [[null,null],[usuario(),{status:401}],[usuario(),{status:403}]]) {
-    assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),proveedor(user,error).crear),{autorizado:false,status:401});
+    assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),proveedor(user,error).crear),{autorizado:false,status:401,codigo:'SESION_INVALIDA'});
   }
 });
 test('paciente o profesional autenticado carece de autorización administrativa',async()=>{
   for(const app_metadata of [{},{role:'superusuario'},{dentaia:{...asignacion,roles:['paciente']}},{dentaia:{...asignacion,roles:['odontologo']}}]) {
-    assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),proveedor(usuario({app_metadata})).crear),{autorizado:false,status:403});
+    assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),proveedor(usuario({app_metadata})).crear),{autorizado:false,status:403,codigo:'ROL_INSUFICIENTE'});
   }
 });
 test('autoasignación en user_metadata no concede acceso, ni con namespace idéntico',async()=>{
   const p=proveedor(usuario({app_metadata:{},user_metadata:{role:'superusuario',dentaia:asignacion,app_metadata:{dentaia:asignacion}}}));
-  assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),p.crear),{autorizado:false,status:403});
+  assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),p.crear),{autorizado:false,status:403,codigo:'ROL_INSUFICIENTE'});
 });
 test('rol recibido en query, cookies, encabezados o cuerpo no es autoridad',async()=>{
   const request=new Request('https://dentaia.example.test/api/administracion/acceso?role=superusuario&access_token=token-sintetico',{
@@ -66,7 +66,7 @@ test('superusuario válido procede únicamente de app_metadata obtenido del prov
 test('identidad anónima, sin confirmar, eliminada o suspendida se deniega',async()=>{
   for(const extra of [{is_anonymous:true},{confirmed_at:undefined},{deleted_at:'2026-10-31T00:00:00Z'},
     {banned_until:'2999-01-01T00:00:00Z'},{banned_until:'fecha-invalida'},{aud:'service_role'},{id:''}]) {
-    assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),proveedor(usuario(extra)).crear),{autorizado:false,status:403});
+    assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),proveedor(usuario(extra)).crear),{autorizado:false,status:403,codigo:'CUENTA_NO_HABILITADA'});
   }
 });
 test('revocación de rol se consulta en la siguiente petición, aun con el mismo token',async()=>{
@@ -74,9 +74,9 @@ test('revocación de rol se consulta en la siguiente petición, aun con el mismo
   const crear=()=>({auth:{...proveedor().crear().auth,getUser:async()=>{llamadas++;return {data:{user:actual},error:null};}}});
   assert.equal((await autorizarSolicitudAdministrativa(headers(),crear)).autorizado,true);
   actual=usuario({app_metadata:{dentaia:{...asignacion,estado:'suspendido'}}});
-  assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),crear),{autorizado:false,status:403});
+  assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),crear),{autorizado:false,status:403,codigo:'ROL_INSUFICIENTE'});
   actual=usuario({app_metadata:{}});
-  assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),crear),{autorizado:false,status:403});
+  assert.deepEqual(await autorizarSolicitudAdministrativa(headers(),crear),{autorizado:false,status:403,codigo:'ROL_INSUFICIENTE'});
   assert.equal(llamadas,3);
 });
 test('red, configuración, límite de peticiones o caída de Auth: 503 y ninguna concesión',async()=>{
@@ -85,7 +85,7 @@ test('red, configuración, límite de peticiones o caída de Auth: 503 y ninguna
     proveedor(usuario(),{status:0,name:'AuthRetryableFetchError'}).crear,proveedor(usuario(),{}).crear];
   for(const crear of factories) {
     const res=await responderComprobacionAdministrativa(new Request('https://dentaia.example.test',{headers:headers()}),crear);
-    assert.equal(res.status,503); assert.deepEqual(await res.json(),{error:'Verificación no disponible.'});
+    assert.equal(res.status,503); assert.deepEqual(await res.json(),{error:'Verificación no disponible.',codigo:'IDENTIDAD_NO_DISPONIBLE'});
   }
 });
 test('todas las respuestas son privadas y mínimas; desafío Bearer solo para 401',async()=>{
@@ -105,5 +105,5 @@ test('peticiones concurrentes no comparten identidad ni autorización',async()=>
     autorizarSolicitudAdministrativa(headers(),proveedor().crear),
     autorizarSolicitudAdministrativa(headers(),proveedor(usuario({app_metadata:{}})).crear),
   ]);
-  assert.equal(admin.autorizado,true); assert.deepEqual(paciente,{autorizado:false,status:403});
+  assert.equal(admin.autorizado,true); assert.deepEqual(paciente,{autorizado:false,status:403,codigo:'ROL_INSUFICIENTE'});
 });

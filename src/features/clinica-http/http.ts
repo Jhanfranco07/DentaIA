@@ -7,9 +7,10 @@ import { clavesExactas, consultaHistorial, entradaConcesion, ErrorEntrada, esObj
 export type RpcClinico = "grant_clinical_access" | "revoke_clinical_access" | "get_authorized_clinical_history" | "get_clinical_workspace";
 export type IdentidadClinica = { id: string; sessionId: string; exp: number; roles: readonly string[] };
 export type Autenticacion = { ok: true; usuario: IdentidadClinica; rpc: (name: RpcClinico, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> }
-  | { ok: false; status: 401 | 403 | 503 };
+  | { ok: false; status: 401 | 403 | 503; diagnostico?: "CONFIGURACION_INVALIDA" | "PROVEEDOR_IDENTIDAD_NO_DISPONIBLE" | "SESION_INVALIDA" | "CUENTA_FUERA_DE_ALLOWLIST" | "ROL_INSUFICIENTE" };
 export type DependenciasClinicas = { enabled: boolean; cursorSecret: string; cursorTtl: number;
   environment?: "academic_remote";
+  diagnosticoConfiguracion?: "ENTORNO_NO_PERMITIDO" | "BFF_DESHABILITADO" | "CONFIGURACION_INVALIDA";
   autenticar: (token: string) => Promise<Autenticacion>;
   registrar?: (event: { requestId: string; operation: string; status: number; code: string }) => void };
 
@@ -21,17 +22,17 @@ function response(body: Record<string, unknown>, status: number, trace: string) 
 export function crearApiClinica(deps: DependenciasClinicas) {
   async function execute(request: Request, operation: string, handler: (auth: Extract<Autenticacion, { ok: true }>, trace: string) => Promise<Response>) {
     const trace = randomUUID();
-    const fail = (status: number, code = codes[status]) => {
+    const fail = (status: number, code = codes[status], diagnostico = code) => {
       // Nunca headers, token, URL/IDs de paciente ni contenido clínico en logs.
-      deps.registrar?.({ requestId: trace, operation, status, code });
+      deps.registrar?.({ requestId: trace, operation, status, code: diagnostico });
       return response({ ok: false, code, requestId: trace }, status, trace);
     };
     try {
-      if (!deps.enabled) return fail(404);
+      if (!deps.enabled) return fail(404, codes[404], deps.diagnosticoConfiguracion ?? "ENTORNO_NO_PERMITIDO");
       const header = request.headers.get("authorization");
       if (!header || header.length > 8192 || !/^Bearer [A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(header)) return fail(401);
       const auth = await deps.autenticar(header.slice(7));
-      if (!auth.ok) return fail(auth.status);
+      if (!auth.ok) return fail(auth.status, codes[auth.status], auth.diagnostico ?? codes[auth.status]);
       if (operation !== "history" && !operation.startsWith("workspace_")) {
         const origin = request.headers.get("origin"), site = request.headers.get("sec-fetch-site");
         if ((origin && origin !== new URL(request.url).origin) || site === "cross-site") return fail(403);

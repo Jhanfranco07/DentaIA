@@ -15,7 +15,7 @@ type ClienteIdentidad = { auth: Pick<SupabaseClient["auth"], "getUser" | "getCla
 export type CrearClienteIdentidad = () => ClienteIdentidad;
 export type AccesoAdministrativo =
   | { autorizado: true; usuarioId: string }
-  | { autorizado: false; status: 401 | 403 | 503 };
+  | { autorizado: false; status: 401 | 403 | 503; codigo: "SESION_INVALIDA" | "IDENTIDAD_NO_DISPONIBLE" | "CUENTA_NO_HABILITADA" | "ROL_INSUFICIENTE" | "MFA_AAL2_PENDIENTE" };
 
 function objeto(valor: unknown): valor is Record<string, unknown> {
   return typeof valor === "object" && valor !== null && !Array.isArray(valor);
@@ -47,39 +47,40 @@ export async function autorizarSolicitudAdministrativa(
 ): Promise<AccesoAdministrativo> {
   const cabecera = headers.get("authorization");
   // No leer token desde URL, body, cookies, IDs, email o roles enviados por el cliente.
-  if (!cabecera || cabecera.length > 8192) return { autorizado: false, status: 401 };
+  if (!cabecera || cabecera.length > 8192) return { autorizado: false, status: 401, codigo: "SESION_INVALIDA" };
   const token = /^Bearer ([A-Za-z0-9._~+/-]+=*)$/i.exec(cabecera)?.[1];
-  if (!token) return { autorizado: false, status: 401 };
+  if (!token) return { autorizado: false, status: 401, codigo: "SESION_INVALIDA" };
   try {
     const cliente = crearCliente();
     const { data, error } = await cliente.auth.getUser(token);
     if (error) {
       // AuthRetryableFetchError puede llegar sin status o con status 0.
       const sesionInvalida = error.status === 400 || error.status === 401 || error.status === 403 || error.status === 422;
-      return { autorizado: false, status: sesionInvalida ? 401 : 503 };
+      return { autorizado: false, status: sesionInvalida ? 401 : 503, codigo: sesionInvalida ? "SESION_INVALIDA" : "IDENTIDAD_NO_DISPONIBLE" };
     }
-    if (!data.user) return { autorizado: false, status: 401 };
-    if (!cuentaHabilitada(data.user)) return { autorizado: false, status: 403 };
+    if (!data.user) return { autorizado: false, status: 401, codigo: "SESION_INVALIDA" };
+    if (!cuentaHabilitada(data.user)) return { autorizado: false, status: 403, codigo: "CUENTA_NO_HABILITADA" };
     // Lectura fresca en cada petición: no usar los claims antiguos del access token.
     const asignacion = leerAsignacionAdministrativa(data.user.app_metadata);
-    if (!asignacion?.roles.includes("superusuario")) return { autorizado: false, status: 403 };
+    if (!asignacion?.roles.includes("superusuario")) return { autorizado: false, status: 403, codigo: "ROL_INSUFICIENTE" };
     // Solo el SDK verifica firma/caducidad. Nunca interpretar aal desde un JWT sin verificar.
     const verificacion = await cliente.auth.getClaims(token);
     if (verificacion.error) {
       const status = verificacion.error.status;
-      return { autorizado: false, status: status === 400 || status === 401 || status === 403 || status === 422 ? 401 : 503 };
+      const invalida = status === 400 || status === 401 || status === 403 || status === 422;
+      return { autorizado: false, status: invalida ? 401 : 503, codigo: invalida ? "SESION_INVALIDA" : "IDENTIDAD_NO_DISPONIBLE" };
     }
     const claims = verificacion.data?.claims;
     if (!claims || claims.sub !== data.user.id || claims.role !== "authenticated"
       || typeof claims.exp !== "number" || !Number.isFinite(claims.exp) || claims.exp <= Date.now() / 1000
-      || typeof claims.session_id !== "string" || !claims.session_id) return { autorizado: false, status: 401 };
+      || typeof claims.session_id !== "string" || !claims.session_id) return { autorizado: false, status: 401, codigo: "SESION_INVALIDA" };
     if (claims.aal !== "aal2" || !data.user.factors?.some(factor => factor.status === "verified")) {
-      return { autorizado: false, status: 403 };
+      return { autorizado: false, status: 403, codigo: "MFA_AAL2_PENDIENTE" };
     }
     return { autorizado: true, usuarioId: data.user.id };
   } catch {
     // Error de configuración/red/proveedor: nunca permitir ni filtrar el detalle técnico.
-    return { autorizado: false, status: 503 };
+    return { autorizado: false, status: 503, codigo: "IDENTIDAD_NO_DISPONIBLE" };
   }
 }
 
@@ -97,11 +98,14 @@ function respuestaPrivada(response: Response): Response {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
-function respuestaDenegada(status: 401 | 403 | 500 | 503): Response {
+function respuestaDenegada(status: 401 | 403 | 500 | 503, codigo?: string): Response {
   const headers = new Headers();
   if (status === 401) headers.set("WWW-Authenticate", "Bearer");
+  const seguro = codigo && ["SESION_INVALIDA", "IDENTIDAD_NO_DISPONIBLE", "CUENTA_NO_HABILITADA", "ROL_INSUFICIENTE", "MFA_AAL2_PENDIENTE"].includes(codigo)
+    ? codigo : status === 500 ? "ERROR_INTERNO" : "ACCESO_DENEGADO";
   return respuestaPrivada(Response.json({
     error: status === 401 ? "Autenticación requerida." : status === 403 ? "Acceso denegado." : "Verificación no disponible.",
+    codigo: seguro,
   }, { status, headers }));
 }
 
@@ -110,13 +114,17 @@ export async function ejecutarOperacionAdministrativa(
   request: Request, accion: AccionAdministrativa, crearCliente: CrearClienteIdentidad, operacion: OperacionAdministrativa,
 ): Promise<Response> {
   const acceso = await autorizarSolicitudAdministrativa(request.headers, crearCliente);
-  if (!acceso.autorizado) return respuestaDenegada(acceso.status);
-  if (!ACCIONES_ADMINISTRATIVAS.includes(accion)) return respuestaDenegada(403);
+  if (!acceso.autorizado) {
+    console.info("administrative_security", JSON.stringify({ status: acceso.status, code: acceso.codigo }));
+    return respuestaDenegada(acceso.status, acceso.codigo);
+  }
+  if (!ACCIONES_ADMINISTRATIVAS.includes(accion)) return respuestaDenegada(403, "ROL_INSUFICIENTE");
   try {
     // Nunca aceptar el contexto desde el cuerpo, la URL o una autorización anterior.
     return respuestaPrivada(await operacion(Object.freeze({ usuarioId: acceso.usuarioId, accion })));
   } catch {
-    return respuestaDenegada(500);
+    console.info("administrative_security", JSON.stringify({ status: 500, code: "ERROR_INTERNO" }));
+    return respuestaDenegada(500, "ERROR_INTERNO");
   }
 }
 

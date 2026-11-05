@@ -9,12 +9,25 @@ export type ClientePanelAdministrativo = {
 };
 
 export const esDenegacionDeAcceso = (error: ErrorClienteAdministrativo) => error.status === 401
-  || (error.status === 403 && error.codigo === "ERROR_API");
+  || (error.status === 403 && ["ERROR_API", "ROL_INSUFICIENTE", "CUENTA_NO_HABILITADA", "MFA_AAL2_PENDIENTE"].includes(error.codigo));
 
 export function fallo(status: number, codigo: string): ErrorClienteAdministrativo {
   const mensajes: Record<string, string> = {
     CAMBIO_PROPIO_PROHIBIDO: "No puedes proponer cambios de tus propios privilegios.",
     APROBACION_REQUERIDA: "Este cambio requiere aprobación independiente. No se aplicó ninguna modificación.",
+    SESION_INVALIDA: "Tu sesión venció o no pudo validarse. Inicia sesión nuevamente.",
+    IDENTIDAD_NO_DISPONIBLE: "No pudimos validar tu identidad con el servicio de autenticación. Inténtalo más tarde.",
+    CUENTA_NO_HABILITADA: "La cuenta no está habilitada para acceder a la administración.",
+    ROL_INSUFICIENTE: "Esta cuenta no tiene el rol superusuario activo.",
+    MFA_AAL2_PENDIENTE: "Completa la verificación MFA para continuar con la administración.",
+    LECTURA_ADMINISTRATIVA_NO_DISPONIBLE: "La consulta real de usuarios no está habilitada en este entorno.",
+    RESPUESTA_AUTH_INVALIDA: "Auth devolvió una respuesta administrativa incompatible. No se muestran datos parciales.",
+    RESPUESTA_PERFILES_INVALIDA: "La respuesta de perfiles no pudo validarse. No se muestran datos parciales.",
+    LECTURA_INESTABLE: "La lista cambió durante la consulta. Vuelve a consultar para obtener un resultado completo.",
+    LIMITE_LECTURA_REAL: "La consulta superó el límite seguro de lectura. Ajusta los filtros o solicita soporte.",
+    LECTURA_NO_DISPONIBLE: "La fuente administrativa no está disponible en este momento.",
+    LECTURA_REAL_NO_DISPONIBLE: "La fuente administrativa no está disponible en este momento.",
+    CONEXION_NO_DISPONIBLE: "No se pudo conectar con la API administrativa. Inténtalo nuevamente.",
   };
   return { ok: false, status, codigo, mensaje: mensajes[codigo] ?? (
     status === 401 ? "Inicia sesión de nuevo en Mi cuenta para consultar la API administrativa."
@@ -60,11 +73,15 @@ export function crearTransporteAdministrativo(
         signal: AbortSignal.timeout(10000),
       });
       if (!respuesta.ok) {
-        // No representar mensajes crudos del proveedor, HTML de intermediarios o cuerpos de error.
+        // Aceptar únicamente códigos públicos conocidos; ignorar cuerpo, correo y detalles del proveedor.
         let codigo = "ERROR_API";
-        if (respuesta.status === 403) {
-          try { const cuerpo: unknown = await respuesta.json(); if (objeto(cuerpo) && ["CAMBIO_PROPIO_PROHIBIDO", "APROBACION_REQUERIDA"].includes(String(cuerpo.codigo))) codigo = String(cuerpo.codigo); } catch { /* Mensaje seguro por estado. */ }
-        }
+        try {
+          const cuerpo: unknown = await respuesta.json();
+          const permitidos = ["CAMBIO_PROPIO_PROHIBIDO", "APROBACION_REQUERIDA", "SESION_INVALIDA", "IDENTIDAD_NO_DISPONIBLE",
+            "CUENTA_NO_HABILITADA", "ROL_INSUFICIENTE", "MFA_AAL2_PENDIENTE", "LECTURA_ADMINISTRATIVA_NO_DISPONIBLE",
+            "RESPUESTA_AUTH_INVALIDA", "RESPUESTA_PERFILES_INVALIDA", "LECTURA_INESTABLE", "LIMITE_LECTURA_REAL", "LECTURA_NO_DISPONIBLE", "LECTURA_REAL_NO_DISPONIBLE"];
+          if (objeto(cuerpo) && permitidos.includes(String(cuerpo.codigo))) codigo = String(cuerpo.codigo);
+        } catch { /* La respuesta no es JSON; conservar un mensaje seguro por estado. */ }
         return fallo(respuesta.status, codigo);
       }
       if (!respuesta.headers.get("content-type")?.toLowerCase().includes("application/json")) return fallo(502, "RESPUESTA_INVALIDA");

@@ -77,17 +77,17 @@ test('SDK real: firma criptográfica, caducidad y aal2 sin claves persistidas ni
     const valido=await firmar(base);
     assert.equal((await comprobar(valido)).autorizado,true);
     const aal1=await firmar({...base,aal:'aal1'});
-    assert.deepEqual(await comprobar(aal1),{autorizado:false,status:403});
+    assert.deepEqual(await comprobar(aal1),{autorizado:false,status:403,codigo:'MFA_AAL2_PENDIENTE'});
     // Cambio manipulable del payload sin volver a firmar.
     const partes=aal1.split('.');
     partes[1]=codificar({...base,aal:'aal2'});
-    assert.deepEqual(await comprobar(partes.join('.')),{autorizado:false,status:401});
-    assert.deepEqual(await comprobar(await firmar({...base,exp:Math.floor(Date.now()/1000)-1})),{autorizado:false,status:401});
-    assert.deepEqual(await comprobar(await firmar({...base,sub:'otro-usuario'})),{autorizado:false,status:401});
+    assert.deepEqual(await comprobar(partes.join('.')),{autorizado:false,status:401,codigo:'SESION_INVALIDA'});
+    assert.deepEqual(await comprobar(await firmar({...base,exp:Math.floor(Date.now()/1000)-1})),{autorizado:false,status:401,codigo:'SESION_INVALIDA'});
+    assert.deepEqual(await comprobar(await firmar({...base,sub:'otro-usuario'})),{autorizado:false,status:401,codigo:'SESION_INVALIDA'});
     metadata={dentaia:{version:1,estado:'suspendido',roles:['superusuario']}};
-    assert.deepEqual(await comprobar(valido),{autorizado:false,status:403});
+    assert.deepEqual(await comprobar(valido),{autorizado:false,status:403,codigo:'ROL_INSUFICIENTE'});
     metadata={dentaia:{version:1,estado:'activo',roles:['superusuario']}};factors=[];
-    assert.deepEqual(await comprobar(valido),{autorizado:false,status:403});
+    assert.deepEqual(await comprobar(valido),{autorizado:false,status:403,codigo:'MFA_AAL2_PENDIENTE'});
   `;
   const result=spawnSync(process.execPath,['--conditions=react-server','--experimental-strip-types','--input-type=module','-e',code],{cwd:raiz,encoding:'utf8',timeout:15000});
   assert.equal(result.status,0,result.stderr);

@@ -19,8 +19,14 @@ function prepare(result={data:good,error:null},options={}){
 }
 const req=(body=grantBody,extra={})=>new Request('http://localhost/api/clinical/access-grants',{method:'POST',headers:{Authorization:'Bearer a.b.c','Content-Type':'application/json','Idempotency-Key':id(71),...extra},body:JSON.stringify(body)});
 test('API desactivada falla cerrada sin llamar Auth ni RPC',async()=>{const p=prepare(undefined,{enabled:false});assert.equal((await p.api.conceder(req())).status,404);assert.equal(p.authCalls,0);});
+test('diagnóstico de configuración queda solo en el registro controlado, sin exponer valores',async()=>{
+ const p=prepare(undefined,{enabled:false,diagnosticoConfiguracion:'CONFIGURACION_INVALIDA'});
+ const r=await p.api.workspace(new Request('http://localhost/api/professional/me',{headers:{Authorization:'Bearer a.b.c'}}),'professional');
+ assert.equal(r.status,404);assert.equal((await r.json()).code,'NOT_FOUND');
+ assert.equal(p.events[0].code,'CONFIGURACION_INVALIDA');assert.deepEqual(Object.keys(p.events[0]).sort(),['code','operation','requestId','status']);
+});
 test('sin JWT devuelve 401 y log no incluye token ni datos',async()=>{const p=prepare();const r=await p.api.conceder(req(grantBody,{Authorization:''}));assert.equal(r.status,401);assert.equal(p.rpcCalls.length,0);assert.deepEqual(Object.keys(p.events[0]).sort(),['code','operation','requestId','status']);});
-test('error de autenticación se conserva y no ejecuta RPC',async()=>{const p=prepare(undefined,{autenticar:async()=>({ok:false,status:401})});assert.equal((await p.api.conceder(req())).status,401);assert.equal(p.rpcCalls.length,0);});
+test('error de autenticación se conserva y no ejecuta RPC',async()=>{const p=prepare(undefined,{autenticar:async()=>({ok:false,status:403,diagnostico:'ROL_INSUFICIENTE'})});const r=await p.api.conceder(req());assert.equal(r.status,403);assert.equal((await r.json()).code,'ACCESS_DENIED');assert.equal(p.events[0].code,'ROL_INSUFICIENTE');assert.equal(p.rpcCalls.length,0);});
 test('concesión convierte envelope 201 a HTTP 201 y proyecta DTO',async()=>{const p=prepare();const r=await p.api.conceder(req());assert.equal(r.status,201);assert.equal((await r.json()).privateKey,undefined);assert.ok(r.headers.get('cache-control').includes('no-store'));assert.equal(r.headers.get('vary'),'Authorization');assert.equal(p.rpcCalls[0].args.p_accepted,true);assert.ok(!('p_actor_id'in p.rpcCalls[0].args));});
 test('actor y rol no pueden declararse en cuerpo',async()=>{for(const k of ['actorId','roles','patientId','purpose']){const p=prepare();assert.equal((await p.api.conceder(req({...grantBody,[k]:id(2)}))).status,400);assert.equal(p.rpcCalls.length,0);}});
 test('origen de escritura cruzado se rechaza',async()=>{const p=prepare();assert.equal((await p.api.conceder(req(grantBody,{Origin:'https://example.invalid'}))).status,403);assert.equal(p.rpcCalls.length,0);});

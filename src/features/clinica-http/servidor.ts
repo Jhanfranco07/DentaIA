@@ -11,6 +11,12 @@ function errorIdentidad(error: unknown): 401 | 503 {
   return 401;
 }
 
+function diagnosticoConfiguracion(config: ReturnType<typeof configurarClinica>): "ENTORNO_NO_PERMITIDO" | "BFF_DESHABILITADO" | "CONFIGURACION_INVALIDA" {
+  if (!config.preview && process.env.NODE_ENV !== "development") return "ENTORNO_NO_PERMITIDO";
+  if (!config.enabled && config.valid) return "BFF_DESHABILITADO";
+  return "CONFIGURACION_INVALIDA";
+}
+
 function clavePublicable(key: string) {
   if (key.startsWith("sb_publishable_")) return true;
   try { return JSON.parse(Buffer.from(key.split(".")[1], "base64url").toString("utf8")).role === "anon"; }
@@ -23,12 +29,13 @@ function api(request: Request) {
     : origenLocalAutorizado(request);
   const enabled = config.enabled && (!config.remote || originAllowed);
   return crearApiClinica({ enabled, cursorSecret: config.secret, cursorTtl: config.ttl,
+    ...(!enabled ? { diagnosticoConfiguracion: diagnosticoConfiguracion(config) } : {}),
     ...(config.remote ? { environment: "academic_remote" as const } : {}),
     registrar: event => console.info("clinical_security", JSON.stringify(event)),
     autenticar: async (token): Promise<Autenticacion> => {
       let client;
       try {
-        if (!config.valid || !clavePublicable(config.key)) return { ok: false, status: 503 };
+        if (!config.valid || !clavePublicable(config.key)) return { ok: false, status: 503, diagnostico: "CONFIGURACION_INVALIDA" };
         client = createClient(config.origin, config.key, {
           auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
           global: { headers: { Authorization: `Bearer ${token}` }, fetch: (input, init) => fetch(input, {
@@ -39,21 +46,28 @@ function api(request: Request) {
       try {
         // Verificación SDK (JWKS o Auth para HS256), no un simple decode de JWT.
         const verified = await client.auth.getClaims(token);
-        if (verified.error || !verified.data) return { ok: false, status: errorIdentidad(verified.error) };
+        if (verified.error || !verified.data) {
+          const status = errorIdentidad(verified.error);
+          return { ok: false, status, diagnostico: status === 503 ? "PROVEEDOR_IDENTIDAD_NO_DISPONIBLE" : "SESION_INVALIDA" };
+        }
         const claims = verified.data.claims;
         const current = await client.auth.getUser(token);
-        if (current.error || !current.data.user) return { ok: false, status: errorIdentidad(current.error) };
+        if (current.error || !current.data.user) {
+          const status = errorIdentidad(current.error);
+          return { ok: false, status, diagnostico: status === 503 ? "PROVEEDOR_IDENTIDAD_NO_DISPONIBLE" : "SESION_INVALIDA" };
+        }
         const user = current.data.user;
-        if (config.remote && !cuentaAcademicaPermitida(user.id, user.app_metadata, config.users)) return { ok: false, status: 403 };
+        if (config.remote && !cuentaAcademicaPermitida(user.id, user.app_metadata, config.users)) return { ok: false, status: 403, diagnostico: "CUENTA_FUERA_DE_ALLOWLIST" };
         if (!esUuid(user.id) || claims.sub !== user.id || claims.role !== "authenticated" || !esUuid(claims.session_id)
-          || typeof claims.exp !== "number" || claims.exp <= Math.floor(Date.now() / 1000) || user.is_anonymous === true || user.aud !== "authenticated" || !user.confirmed_at) return { ok: false, status: 401 };
+          || typeof claims.exp !== "number" || claims.exp <= Math.floor(Date.now() / 1000) || user.is_anonymous === true || user.aud !== "authenticated" || !user.confirmed_at) return { ok: false, status: 401, diagnostico: "SESION_INVALIDA" };
         // Reutiliza el contrato de DI-150, sin su autorización administrativa/AAL2.
         const assignment = leerAsignacionAdministrativa(user.app_metadata);
-        if (!assignment || assignment.roles.length > 3 || new Set(assignment.roles).size !== assignment.roles.length) return { ok: false, status: 403 };
+        if (!assignment || assignment.roles.length > 3 || new Set(assignment.roles).size !== assignment.roles.length) return { ok: false, status: 403, diagnostico: "ROL_INSUFICIENTE" };
         // La decisión clínica por acción se conserva en el RPC para auditar denegaciones.
         return { ok: true, usuario: { id: user.id, sessionId: claims.session_id, exp: claims.exp, roles: assignment.roles },
           rpc: async (name, args) => { const { data, error } = await client.rpc(name, args); return { data, error }; } };
-      } catch (error) { return { ok: false, status: errorIdentidad(error) }; }
+      } catch (error) { const status = errorIdentidad(error); return { ok: false, status,
+        diagnostico: status === 503 ? "PROVEEDOR_IDENTIDAD_NO_DISPONIBLE" : "SESION_INVALIDA" }; }
     },
   });
 }
