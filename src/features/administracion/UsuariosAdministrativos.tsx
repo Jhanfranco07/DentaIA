@@ -58,8 +58,8 @@ export default function UsuariosAdministrativos({ onSeleccionar, revision }: { o
           <tbody>{resultado.usuarios.map(u => <tr key={u.id}>
             <td><strong>{u.perfil.nombre || (u.perfil.estado === "ausente" ? "Sin perfil" : "Perfil sin nombre")}</strong><small>{u.id}</small>
               <button type="button" className={styles.enlaceBoton} onClick={() => onSeleccionar(u.id)}>Consultar roles de {u.perfil.nombre || "esta cuenta"}</button></td>
-            <td>{u.asignacion.roles.length ? u.asignacion.roles.join(", ") : "Sin roles válidos"}<small>{ESTADOS_ASIGNACION[u.asignacion.estado]}</small></td>
-            <td>{ESTADOS_CUENTA[u.cuenta]}</td>
+            <td><span className={styles.chipsRoles}>{u.asignacion.roles.length ? u.asignacion.roles.map(rol => <span key={rol}>{rol}</span>) : <span>Sin roles válidos</span>}</span><small>{ESTADOS_ASIGNACION[u.asignacion.estado]}</small></td>
+            <td><span className={styles.estadoCuenta} data-estado={u.cuenta}>{ESTADOS_CUENTA[u.cuenta]}</span></td>
           </tr>)}</tbody>
         </table>
       </div>}

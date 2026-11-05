@@ -9,6 +9,8 @@ import NavegacionAdministrativa from "./NavegacionAdministrativa";
 import EncabezadoAdministrativo from "./EncabezadoAdministrativo";
 import { SECCIONES_ADMINISTRATIVAS, type NavegacionAdministrativaProps } from "./estructura";
 import styles from "./administracion.module.css";
+import { useSesion } from "@/features/cuenta/useSesion";
+import { rolesDelUsuario } from "@/features/autorizacion/roles";
 
 type Props = NavegacionAdministrativaProps & { children: ReactNode };
 
@@ -18,6 +20,11 @@ export default function LayoutAdministrativo({ children, seccion, onSeleccionar 
   const botonMenu = useRef<HTMLButtonElement>(null);
   const lateral = useRef<HTMLElement>(null);
   const actual = SECCIONES_ADMINISTRATIVAS.find(item => item.id === seccion)!;
+  const { usuario } = useSesion();
+  const nombre = usuario?.user_metadata?.full_name;
+  const nombreUsuario = typeof nombre === "string" && nombre.trim() ? nombre.trim() : usuario?.email?.split("@")[0] ?? "Cuenta";
+  const roles = rolesDelUsuario(usuario);
+  const rolUsuario = roles.includes("superusuario") ? "Superadministrador" : "Cuenta administrativa";
   const [errorSalida, setErrorSalida] = useState("");
   const [saliendo, setSaliendo] = useState(false);
 
@@ -86,7 +93,7 @@ export default function LayoutAdministrativo({ children, seccion, onSeleccionar 
     </aside>
     <div className={styles.trabajo}>
       <a href="#admin-titulo" className={styles.saltarContenido}>Saltar al contenido del panel</a>
-      <EncabezadoAdministrativo seccion={actual.titulo} />
+      <EncabezadoAdministrativo seccion={actual.titulo} nombre={nombreUsuario} rol={rolUsuario} />
       <div className={styles.contenido}>{children}</div>
     </div>
   </div>;

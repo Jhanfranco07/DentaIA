@@ -30,6 +30,7 @@ import EstadoHistorialClinico, {
   type VistaHistorialClinico,
 } from "./EstadoHistorialClinico";
 import styles from "./profesional.module.css";
+import { Icono } from "@/components/Identidad";
 
 const INTERVALO_REVALIDACION_HISTORIAL_MS = 60_000;
 
@@ -775,20 +776,11 @@ export default function ProfesionalClinico() {
       </header>
 
       <aside className={styles.avisoClinico} aria-label="Protección de datos clínicos">
-        <strong>Consulta clínica protegida</strong>
-        <p>
-          El servidor valida la sesión, el rol, la membresía y la autorización
-          vigente antes de entregar cualquier historial. Esta vista no usa datos
-          de demostración como reemplazo.
-        </p>
+        <span className={styles.iconoProteccion}><Icono nombre="escudo" size={19} /></span>
+        <div><strong>Consulta clínica protegida</strong>
+          <p>El servidor valida sesión, rol, membresía y consentimiento vigente antes de entregar historial.</p>
+        </div>
       </aside>
-
-      <nav className={styles.navegacion} aria-label="Navegación profesional">
-        <a href="#contexto-clinico">Contexto clínico</a>
-        <a href="#solicitudes-profesionales">Solicitudes</a>
-        <a href="#historial-clinico">Historial clínico</a>
-        <Link href="/">Inicio</Link>
-      </nav>
 
       {cargandoSesion && (
         <div className={styles.estadoCarga} role="status" aria-live="polite">
