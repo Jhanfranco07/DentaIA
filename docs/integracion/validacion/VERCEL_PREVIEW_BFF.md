@@ -47,8 +47,8 @@ Estas son pruebas locales automatizadas, no verifican Supabase remoto ni el runt
 ### Bloqueadas o pendientes
 
 - No se configuraron variables en Vercel ni se generó el secreto de cursor porque la conexión Vercel disponible no tiene acceso al proyecto `dent-ai`: solo lista `warmi-digital` y la lectura de `dent-ai` devuelve 404. No se intentó usar credenciales o un contexto alternativo.
-- El check `Vercel` de GitHub para el SHA publicado permanece `pending`; el deployment no está confirmado como `READY`.
+- El check `Vercel` de GitHub para el SHA `f91a445816a77bd0fb30a02db6adf7b068002c55` figura `success` (target de check: `https://vercel.com/jhan-francos-projects/dent-ai/5fjg5XwCSRwtJGK5nBomZDPgBeKu`). Sin embargo, la API de Vercel bajo el acceso conectado devuelve 404 para el proyecto `dent-ai` y el deployment, y la lista de deployments de esa rama aparece vacía. Por ello no se pudo verificar independientemente el estado `READY`, obtener una URL de Preview ni revisar la configuración efectiva de variables.
 - No se verificó la configuración de variables ni Deployment Protection del proyecto.
 - No se ejecutaron pruebas HTTP contra Preview, login real ni E2E con cuentas QA. Tampoco hubo escrituras en Supabase.
 
-Para terminar, el administrador autorizado debe habilitar acceso a las variables de sistema y configurar la lista anterior en Preview, solo para la rama indicada. Luego se debe volver a desplegar y comprobar `READY`, el alcance de variables sin revelar valores, respuestas HTTP 401/403/404 esperadas sin sesión/rol/autorización, y el flujo autenticado con las cuentas QA si se proporciona un mecanismo seguro.
+Para terminar, un administrador con acceso al proyecto `dent-ai` debe habilitar las variables de sistema y configurar la lista anterior en Preview, solo para la rama indicada. Luego debe confirmar que el deployment del SHA publicado está `READY`, revisar el alcance de variables sin revelar valores, ejecutar respuestas HTTP 401/403/404 esperadas sin sesión/rol/autorización y probar el flujo autenticado con cuentas QA si se proporciona un mecanismo seguro.
