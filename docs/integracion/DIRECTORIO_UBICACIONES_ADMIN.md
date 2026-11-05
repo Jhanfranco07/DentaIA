@@ -1,10 +1,10 @@
 # Preparación de ubicaciones verificadas del directorio
 
-Fecha de validación: 2026-11-05. Rama local: `develop`. Esta documentación describe código y pruebas locales; **la migración aún no se ha aplicado en Supabase Dental-IA**.
+Fecha de actualización: 2026-11-05. Rama: `develop`. Las migraciones de ubicaciones/reseñas y flujos administrativos ya están aplicadas en Supabase Dental-IA; se conserva el resto de esta guía como procedimiento de operación.
 
 ## Estado de datos y elegibilidad
 
-La inspección remota de metadatos confirmó PostgreSQL 17.11, las tablas base y sus campos usados por la migración. La migración `20261105160341` no aparece en el historial remoto. PostGIS está disponible como extensión, pero no instalado en la base (`pg_extension` no contiene `postgis`). La migración lo solicita en el esquema `extensions` que ya usa el proyecto.
+La inspección remota confirmó PostgreSQL 17.11 y PostGIS 3.3.7. El historial registra ubicaciones/reseñas como `20261105210643` y flujos administrativos como `20261105220152`. Las tres tablas públicas y el esquema privado de flujos administrativos están presentes.
 
 El esquema actual fija `dentists.is_demo = true` y `appointment_requests.is_demo = true`, con estados académicos de solicitud que no representan una atención completada. Por tanto, hoy no hay profesionales ni solicitudes publicables/elegibles para reseñas. Los perfiles académicos y consultorios ficticios no deben convertirse en ubicaciones públicas.
 
@@ -17,7 +17,7 @@ La verificación de registros conocida encontró cuatro perfiles públicos acad�
 3. Confirmar que el perfil público está activo y no es de demostración. El estado `is_demo` no se cambia como parte de esta asociación.
 4. No insertar ni cambiar asociaciones durante esta preparación. Si no hay evidencia autorizada o el perfil sigue marcado demo/inactivo, dejarlo pendiente y solicitar una decisión del responsable de datos.
 
-El código actual no tiene una API administrativa para crear o cambiar `clinic_memberships`; esta entrega solo valida una membresía ya existente. Si una cuenta carece de membresía, primero debe aprobarse e implementarse un flujo de vinculación con identidad verificada, autorización administrativa, validación de clínica y auditoría. No sustituirlo con SQL ad hoc ni reasignar `professional_accounts.dentist_id` por similitud nominal.
+La ruta administrativa `POST /api/administracion/vinculaciones` utiliza las RPC auditadas para crear o revocar una membresía, después de validar sesión de superusuario AAL2, profesional verificado, clínica activa e identidad enlazada. El proceso debe ejecutarse con una sesión autorizada; no sustituirlo con SQL ad hoc ni reasignar `professional_accounts.dentist_id` por similitud nominal.
 
 ## Registro, verificación y publicación
 
@@ -38,7 +38,7 @@ El cliente consulta `dentists`, `dentist_public_locations` y `dentist_reviews` p
 
 ## Migración, respaldo y ejecución controlada
 
-SQL definitivo: `supabase/migrations/20261105160341_add_dentist_locations_and_reviews.sql`. No se ejecutó en remoto. Antes de aplicarla:
+SQL aplicado: `supabase/migrations/20261105210643_add_dentist_locations_and_reviews.sql` y `supabase/migrations/20261105220152_admin_workflows_clinics_and_reviews.sql`. La primera instala ubicaciones/reseñas; la segunda añade funciones administrativas auditadas. El volcado privado de PostgreSQL 17 se verificó y la migración se aplicó en el proyecto autorizado. Para cambios futuros:
 
 1. Confirmar ventana de cambio y versión actual de migraciones/PostgreSQL/PostGIS.
 2. Tomar respaldo de Supabase con recuperación point-in-time disponible y exportar metadatos de esquema, extensiones, privilegios, RLS y migraciones.
