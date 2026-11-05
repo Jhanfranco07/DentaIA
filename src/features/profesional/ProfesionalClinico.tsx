@@ -819,6 +819,10 @@ export default function ProfesionalClinico() {
               <p>Selecciona una membresía activa devuelta por el servidor.</p>
             </header>
 
+            {perfil.perfil?.dentistId
+              ? <p className={styles.ayudaResultado}>Vista pública del perfil: <Link href={`/directorio/${encodeURIComponent(perfil.perfil.dentistId)}`}>ver cómo aparece en el directorio</Link>. Los datos solo se pueden modificar mediante el flujo autorizado del profesional.</p>
+              : perfil.estado === "listo" && <p className={styles.estadoVacio}>Esta cuenta todavía no tiene un perfil público de odontólogo vinculado.</p>}
+
             {perfil.estado === "cargando" && <div className={styles.estadoCarga} role="status">Cargando membresías clínicas…</div>}
             {perfil.estado === "denegado" && <div className={styles.estadoDenegado} role="alert">{perfil.mensaje}</div>}
             {perfil.estado === "error" && <div className={styles.estadoError} role="alert">{perfil.mensaje}</div>}
