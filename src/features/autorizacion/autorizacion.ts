@@ -85,7 +85,7 @@ export async function autorizarSolicitudAdministrativa(
 }
 
 // Lista deliberadamente cerrada. DI-151/DI-152 deberán añadir permisos específicos revisados.
-export const ACCIONES_ADMINISTRATIVAS = ["comprobar_acceso", "usuarios.consultar_demo", "usuarios.consultar_reales", "roles.validar_propuesta", "roles.actualizar", "ubicaciones.gestionar"] as const;
+export const ACCIONES_ADMINISTRATIVAS = ["comprobar_acceso", "usuarios.consultar_demo", "usuarios.consultar_reales", "roles.validar_propuesta", "roles.actualizar", "ubicaciones.gestionar", "membresias.gestionar", "resenas.moderar"] as const;
 export type AccionAdministrativa = typeof ACCIONES_ADMINISTRATIVAS[number];
 export type ContextoAdministrativo = Readonly<{ usuarioId: string; accion: AccionAdministrativa }>;
 export type OperacionAdministrativa = (contexto: ContextoAdministrativo) => Promise<Response> | Response;

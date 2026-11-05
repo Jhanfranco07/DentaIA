@@ -4,8 +4,8 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const raiz = new URL("../../../", import.meta.url);
-const migracion = readFileSync(fileURLToPath(new URL("supabase/migrations/20261105160341_add_dentist_locations_and_reviews.sql", raiz)), "utf8");
-const rollback = readFileSync(fileURLToPath(new URL("supabase/migrations/20261105160341_add_dentist_locations_and_reviews.rollback.sql", raiz)), "utf8");
+const migracion = readFileSync(fileURLToPath(new URL("supabase/migrations/20261105210643_add_dentist_locations_and_reviews.sql", raiz)), "utf8");
+const rollback = readFileSync(fileURLToPath(new URL("supabase/rollbacks/20261105210643_add_dentist_locations_and_reviews.sql", raiz)), "utf8");
 
 test("la migración solo crea tablas nuevas y no altera el esquema clínico existente", () => {
   for (const table of ["dentist_public_locations", "dentist_reviews", "dentist_review_reports"]) {

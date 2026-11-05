@@ -330,6 +330,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      dentaia_manage_clinic_membership_v1: {
+        Args: { p_request_id: string | null; p_operation: string; p_professional_id: string | null; p_clinic_id: string | null; p_membership_id: string | null }
+        Returns: Json
+      }
       dentaia_gestionar_ubicacion_v1: {
         Args: {
           p_solicitud: string
@@ -343,6 +347,10 @@ export type Database = {
           p_longitude: number | null
           p_verification_reference: string | null
         }
+        Returns: Json
+      }
+      dentaia_moderate_reviews_v1: {
+        Args: { p_request_id: string | null; p_operation: string; p_review_id: string | null; p_report_id: string | null; p_status: string | null }
         Returns: Json
       }
     }

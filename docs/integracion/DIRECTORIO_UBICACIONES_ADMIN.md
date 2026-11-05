@@ -47,7 +47,7 @@ SQL definitivo: `supabase/migrations/20261105160341_add_dentist_locations_and_re
 5. Aplicar en el proyecto objetivo mediante migración aprobada; revisar logs/advisories y una consulta anónima de solo lectura.
 6. Registrar ubicaciones solo después de verificar identidad, membresía vigente y evidencia de dirección/coordenadas. Publicar una sede de prueba autorizada y confirmar lectura pública; luego ocultarla/retirarla conforme al plan aprobado.
 
-Rollback: `supabase/migrations/20261105160341_add_dentist_locations_and_reviews.rollback.sql` (copia informativa en `docs/integracion/rollback_geolocalizacion_resenas.sql`). El rollback verifica comentarios de propiedad y se detiene si cualquiera de las tablas propias contiene filas. No elimina la extensión PostGIS ni toca tablas preexistentes. Si hay ubicaciones/reseñas/auditoría reales, no revertir automáticamente: exportar, revisar retención/consentimiento y definir recuperación antes de intervención manual.
+Migración fuente: `supabase/migrations/20261105210643_add_dentist_locations_and_reviews.sql`, cuyo prefijo coincide con el historial remoto; el nombre original de la propuesta se conserva en comentarios y pruebas. Rollback: `supabase/rollbacks/20261105210643_add_dentist_locations_and_reviews.sql` (copia informativa en `docs/integracion/rollback_geolocalizacion_resenas.sql`). El rollback verifica comentarios de propiedad y se detiene si cualquiera de las tablas propias contiene filas. No elimina la extensión PostGIS ni toca tablas preexistentes. Si hay ubicaciones/reseñas/auditoría reales, no revertir automáticamente: exportar, revisar retención/consentimiento y definir recuperación antes de intervención manual.
 
 ## Evidencia local de esta revisión
 

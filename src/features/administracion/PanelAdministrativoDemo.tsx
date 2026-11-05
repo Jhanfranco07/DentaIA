@@ -6,6 +6,8 @@ import LayoutAdministrativo from "./LayoutAdministrativo";
 import UsuariosAdministrativos from "./UsuariosAdministrativos";
 import CambioRolesLocal from "./CambioRolesLocal";
 import GestorUbicaciones from "./GestorUbicaciones";
+import GestorVinculaciones from "./GestorVinculaciones";
+import ModeracionResenas from "./ModeracionResenas";
 import { useAccesoPanel } from "./UsuariosAdministrativosConectados";
 import { fallo } from "./cliente";
 import TarjetaAdministrativa from "./TarjetaAdministrativa";
@@ -58,6 +60,12 @@ export default function PanelAdministrativoDemo() {
           <TarjetaAdministrativa titulo="Consultorios" icono="clinica"
             descripcion="Registra y publica sedes verificadas. La publicación exige identidad profesional, membresía vigente y autorización AAL2 en el servidor."
             accion="Gestionar consultorios" onAbrir={() => seleccionar("ubicaciones")} />
+          <TarjetaAdministrativa titulo="Vinculaciones" icono="persona"
+            descripcion="Asocia profesionales verificados con clínicas activas mediante una operación auditada y revocable."
+            accion="Gestionar membresías" onAbrir={() => seleccionar("vinculaciones")} />
+          <TarjetaAdministrativa titulo="Reseñas" icono="escudo"
+            descripcion="Revisa contenido y reportes recibidos; no se inventan calificaciones ni interacciones."
+            accion="Moderar reseñas" onAbrir={() => seleccionar("resenas")} />
         </div>
         <section className={styles.bloque} aria-labelledby="admin-alcance">
           <h2 id="admin-alcance">Servicios y restricciones</h2>
@@ -83,6 +91,8 @@ export default function PanelAdministrativoDemo() {
       </section>}
 
       {seccion === "ubicaciones" && <GestorUbicaciones />}
+      {seccion === "vinculaciones" && <GestorVinculaciones />}
+      {seccion === "resenas" && <ModeracionResenas />}
 
       <aside className={styles.limiteClinico} aria-labelledby="admin-limite">
         <Icono nombre="escudo" size={23} />

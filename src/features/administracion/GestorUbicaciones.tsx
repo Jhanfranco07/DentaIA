@@ -2,19 +2,24 @@
 
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { tablaUbicacionesAusente, validarResultadoUbicacion } from "./ubicaciones";
+import { validarResultadoUbicacion } from "./ubicaciones";
 import styles from "./administracion.module.css";
 
 type SedePublicada = {
   id: string;
   dentist_id: string;
+  dentist_name: string;
+  clinic_id: string;
+  clinic_name: string;
   practice_name: string;
   practice_address: string;
   latitude: number;
   longitude: number;
+  publication_status: string;
   created_at: string;
 };
-type EstadoCarga = "cargando" | "disponible" | "esquema_no_disponible" | "error";
+type ProfesionalElegible = { professionalId: string; dentistId: string; dentistName: string; specialty: string; clinicId: string | null; clinicName: string | null; membershipId: string | null; membershipStatus: string | null };
+type EstadoCarga = "cargando" | "disponible" | "error";
 type Operacion = "guardar" | "publicar" | "ocultar" | "retirar";
 
 /** UI delgada: las decisiones de rol, AAL2, membresía, verificación y auditoría
@@ -22,6 +27,7 @@ type Operacion = "guardar" | "publicar" | "ocultar" | "retirar";
 export default function GestorUbicaciones() {
   const [estado, setEstado] = useState<EstadoCarga>("cargando");
   const [sedes, setSedes] = useState<SedePublicada[]>([]);
+  const [profesionales, setProfesionales] = useState<ProfesionalElegible[]>([]);
   const [mensaje, setMensaje] = useState("");
   const [error, setError] = useState("");
   const [ocupado, setOcupado] = useState(false);
@@ -38,26 +44,21 @@ export default function GestorUbicaciones() {
     setEstado("cargando");
     setError("");
     try {
-      // RLS solo devuelve sedes publicadas y vigentes. El sondeo también detecta
-      // la migración ausente sin intentar ninguna escritura.
-      const respuesta = await getSupabaseBrowserClient().from("dentist_public_locations")
-        .select("id,dentist_id,practice_name,practice_address,latitude,longitude,created_at")
-        .order("created_at", { ascending: false }).limit(100);
-      if (respuesta.error) {
-        if (tablaUbicacionesAusente(respuesta.error)) {
-          setSedes([]);
-          setEstado("esquema_no_disponible");
-        } else {
-          setEstado("error");
-          setError("No se pudo comprobar el servicio de ubicaciones. No se muestran datos parciales.");
-        }
-        return;
-      }
-      setSedes(respuesta.data ?? []);
+      const { data: sesion } = await getSupabaseBrowserClient().auth.getSession();
+      if (!sesion.session?.access_token) throw new Error("SESION_INVALIDA");
+      const vinculaciones = await fetch("/api/administracion/vinculaciones", { headers: { Authorization: `Bearer ${sesion.session.access_token}` }, cache: "no-store", credentials: "same-origin" });
+      const lista: unknown = await vinculaciones.json();
+      if (!vinculaciones.ok || !lista || typeof lista !== "object" || !("ok" in lista) || lista.ok !== true
+        || !("profesionales" in lista) || !Array.isArray(lista.profesionales) || !("ubicaciones" in lista) || !Array.isArray(lista.ubicaciones)) throw new Error("LECTURA_NO_DISPONIBLE");
+      const elegibles = lista.profesionales as ProfesionalElegible[];
+      setProfesionales(elegibles);
+      setSedes((lista.ubicaciones as Array<Record<string, unknown>>).map(item => ({ id: String(item.id), dentist_id: String(item.dentistId), dentist_name: String(item.dentistName), clinic_id: String(item.clinicId), clinic_name: String(item.clinicName), practice_name: String(item.practiceName), practice_address: String(item.practiceAddress), latitude: Number(item.latitude), longitude: Number(item.longitude), publication_status: String(item.status), created_at: String(item.createdAt) })));
+      if (elegibles[0]) setDentistId(current => current || elegibles[0].dentistId);
+      if (elegibles[0]?.clinicId) setClinicId(current => current || elegibles[0].clinicId!);
       setEstado("disponible");
     } catch {
       setEstado("error");
-      setError("No se pudo conectar con el servicio de ubicaciones.");
+      setError("No se pudo consultar la gestión administrativa de sedes. Se requiere sesión superusuario con MFA/AAL2.");
     }
   }, []);
 
@@ -138,24 +139,24 @@ export default function GestorUbicaciones() {
     <div className={styles.tituloBloque}><h2 id="gestor-ubicaciones-titulo">Gestión de consultorios</h2><span className={styles.indicador}>API administrativa protegida</span></div>
     <p>Una sede por combinación profesional-clínica; un mismo profesional puede registrar varias clínicas. Las coordenadas deben corresponder a una dirección comprobada. No se asignan puntos aproximados ni se publican ubicaciones ficticias.</p>
 
-    {estado === "cargando" && <p role="status">Comprobando tablas y permisos de lectura…</p>}
-    {estado === "esquema_no_disponible" && <div className={styles.avisoDemo} role="status"><strong>Servicio de ubicaciones no disponible</strong><p>PostgREST no encuentra la tabla esperada. La migración puede estar pendiente o el esquema aún no estar actualizado. El formulario queda bloqueado y no se enviaron cambios a Supabase. Verifica la instalación antes de volver a intentar.</p></div>}
+    {estado === "cargando" && <p role="status">Consultando ubicaciones, profesionales y clínicas protegidas…</p>}
     {estado === "error" && <div role="alert" className={styles.errorAdmin}><p>{error}</p><button type="button" className={styles.accionEstado} onClick={() => void cargar()}>Reintentar</button></div>}
     {estado === "disponible" && <>
-      <div className={styles.avisoDemo}><strong>La base permite leer ubicaciones públicas.</strong><p>La lista contiene únicamente sedes publicadas por RLS. Las operaciones de escritura siempre vuelven a comprobar autorización, identidad profesional, clínica y membresía en el servidor.</p></div>
+      <div className={styles.avisoDemo}><strong>Gestión administrativa de ubicaciones.</strong><p>La lista protegida permite revisar sedes pendientes, publicadas, ocultas o retiradas. El directorio público sigue limitado a sedes publicadas por RLS.</p></div>
       <form className={styles.formularioAdmin} onSubmit={guardar} aria-label="Registrar o editar sede odontológica">
         <h3>Registrar o actualizar sede</h3>
         <p>Actualizar la misma pareja odontólogo-clínica vuelve a dejar la sede pendiente de verificación antes de publicarla.</p>
-        <label>UUID del perfil odontológico<input required value={dentistId} onChange={e => setDentistId(e.target.value)} autoComplete="off" spellCheck={false} maxLength={36} /></label>
-        <label>UUID de la clínica<input required value={clinicId} onChange={e => setClinicId(e.target.value)} autoComplete="off" spellCheck={false} maxLength={36} /></label>
+        <label>Odontólogo verificado<select required value={dentistId} onChange={e => setDentistId(e.target.value)} disabled={profesionales.length === 0}><option value="">Selecciona un profesional</option>{Array.from(new Map(profesionales.map(p => [p.dentistId, p])).values()).map(p => <option key={p.dentistId} value={p.dentistId}>{p.dentistName} · {p.specialty}</option>)}</select></label>
+        <label>Clínica con membresía vigente<select required value={clinicId} onChange={e => setClinicId(e.target.value)} disabled={!dentistId}><option value="">Selecciona una clínica vinculada</option>{profesionales.filter(p => p.dentistId === dentistId && p.clinicId && p.membershipStatus === "active").map(p => <option key={p.clinicId} value={p.clinicId!}>{p.clinicName}</option>)}</select></label>
         <label>Nombre de la sede<input required value={nombreSede} onChange={e => setNombreSede(e.target.value)} maxLength={160} /></label>
         <label>Dirección verificada<input required value={direccion} onChange={e => setDireccion(e.target.value)} maxLength={300} autoComplete="street-address" /></label>
         <div className={styles.filtrosAdmin}>
           <label>Latitud<input required type="number" step="any" min={-90} max={90} value={latitud} onChange={e => setLatitud(e.target.value)} /></label>
           <label>Longitud<input required type="number" step="any" min={-180} max={180} value={longitud} onChange={e => setLongitud(e.target.value)} /></label>
         </div>
-        <p>El servidor rechaza perfiles de demostración, profesionales no verificados o membresías inactivas. El formulario no puede crear ni vincular esas relaciones.</p>
-        <button type="submit" className={styles.accionEstado} disabled={ocupado}>{ocupado ? "Guardando…" : "Guardar sede pendiente"}</button>
+        <p>El servidor vuelve a comprobar perfil no demo, verificación profesional, clínica activa y membresía vigente. La coordenada debe corresponder a la dirección revisada.</p>
+        {profesionales.length === 0 && <p role="status">No hay profesionales reales elegibles; completa primero una vinculación verificada. Los perfiles académicos no pueden publicar ubicaciones.</p>}
+        <button type="submit" className={styles.accionEstado} disabled={ocupado || !dentistId || !clinicId}>{ocupado ? "Guardando…" : "Guardar sede pendiente"}</button>
       </form>
 
       {ubicacionId && <section className={styles.propuesta} aria-labelledby="publicar-sede-titulo">
@@ -175,8 +176,8 @@ export default function GestorUbicaciones() {
       </section>
 
       <section className={styles.propuesta} aria-labelledby="sedes-publicadas-titulo">
-        <h3 id="sedes-publicadas-titulo">Sedes publicadas visibles</h3>
-        {sedes.length === 0 ? <p role="status">No hay sedes publicadas que RLS permita mostrar todavía.</p> : <div className={styles.tablaUsuarios}><table><thead><tr><th>Sede y dirección</th><th>Odontólogo</th><th>Coordenadas</th><th>UUID</th></tr></thead><tbody>{sedes.map(sede => <tr key={sede.id}><td><strong>{sede.practice_name}</strong><small>{sede.practice_address}</small></td><td><code>{sede.dentist_id}</code></td><td>{sede.latitude}, {sede.longitude}</td><td><code>{sede.id}</code></td></tr>)}</tbody></table></div>}
+        <h3 id="sedes-publicadas-titulo">Sedes registradas</h3>
+        {sedes.length === 0 ? <p role="status">Todavía no hay ubicaciones registradas para profesionales no ficticios.</p> : <div className={styles.tablaUsuarios}><table><thead><tr><th>Sede y dirección</th><th>Odontólogo y clínica</th><th>Estado</th><th>Coordenadas</th><th>Acciones</th></tr></thead><tbody>{sedes.map(sede => <tr key={sede.id}><td><strong>{sede.practice_name}</strong><small>{sede.practice_address}</small></td><td>{sede.dentist_name}<small>{sede.clinic_name}</small></td><td>{sede.publication_status}</td><td>{sede.latitude}, {sede.longitude}</td><td><button type="button" className={styles.accionEstado} onClick={() => { setUbicacionId(sede.id); setDentistId(sede.dentist_id); setClinicId(sede.clinic_id); setNombreSede(sede.practice_name); setDireccion(sede.practice_address); setLatitud(String(sede.latitude)); setLongitud(String(sede.longitude)); }}>Editar con nueva verificación</button></td></tr>)}</tbody></table></div>}
       </section>
     </>}
 
