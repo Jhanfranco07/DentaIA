@@ -25,7 +25,7 @@ test('DI-152 cliente → endpoint real → guard → puerto simulado conserva fi
  assert(a.ok);assert.equal(a.valor.total,4);assert(a.valor.usuarios.every(x=>x.asignacion.roles.includes('paciente')));
  const b=await p.cliente.listar({pagina:2,tamano:5});assert(b.ok);assert.equal(b.valor.pagina,2);assert.equal(b.valor.usuarios.length,3);
  const url=new URL(p.peticiones[0].url,'https://dentaia.test');assert.equal(url.pathname,'/api/administracion/usuarios/reales');assert.equal(url.searchParams.get('q'),'Perfil');assert.equal(url.searchParams.get('rol'),'paciente');
- assert.equal(p.peticiones[0].init.credentials,'omit');assert.equal(p.peticiones[0].init.cache,'no-store');
+ assert.equal(p.peticiones[0].init.credentials,'same-origin');assert.equal(p.peticiones[0].init.cache,'no-store');
 });
 test('DI-152 proveedor puede ajustar página fuera de rango sin fabricar resultados',async()=>{const r=await preparar().cliente.listar({pagina:8,tamano:5});assert(r.ok);assert.equal(r.valor.pagina,2);});
 test('DI-152 búsqueda sin resultados mantiene página uno y vacío real del contrato',async()=>{const r=await preparar().cliente.listar({q:'no-existe'});assert(r.ok);assert.equal(r.valor.total,0);assert.equal(r.valor.pagina,1);});
