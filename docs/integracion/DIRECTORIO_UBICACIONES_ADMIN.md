@@ -17,6 +17,8 @@ La verificación de registros conocida encontró cuatro perfiles públicos acad�
 3. Confirmar que el perfil público está activo y no es de demostración. El estado `is_demo` no se cambia como parte de esta asociación.
 4. No insertar ni cambiar asociaciones durante esta preparación. Si no hay evidencia autorizada o el perfil sigue marcado demo/inactivo, dejarlo pendiente y solicitar una decisión del responsable de datos.
 
+El código actual no tiene una API administrativa para crear o cambiar `clinic_memberships`; esta entrega solo valida una membresía ya existente. Si una cuenta carece de membresía, primero debe aprobarse e implementarse un flujo de vinculación con identidad verificada, autorización administrativa, validación de clínica y auditoría. No sustituirlo con SQL ad hoc ni reasignar `professional_accounts.dentist_id` por similitud nominal.
+
 ## Registro, verificación y publicación
 
 Tras aplicar la migración, una cuenta `superusuario` con sesión AAL2 administra las sedes en `POST /api/administracion/ubicaciones`. La API vuelve a verificar identidad y claims con Auth; exige origen del mismo sitio, contenido JSON limitado e idempotency key. La escritura está cerrada por defecto y solo puede habilitarse explícitamente en desarrollo local o Preview `develop` con `DENTAIA_LOCATION_WRITES_ENABLED=true`. La función Postgres usa la sesión JWT del usuario y la clave publicable; no usa `service_role`.
