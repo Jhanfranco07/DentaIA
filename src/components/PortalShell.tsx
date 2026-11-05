@@ -18,11 +18,12 @@ function etiquetaRol(roles: string[]) {
   return "Cuenta DentaIA";
 }
 
-export default function PortalShell({ area, descripcion, enlaces, children }: {
+export default function PortalShell({ area, descripcion, enlaces, children, mostrarCuentaHeader = true }: {
   area: string;
   descripcion: string;
   enlaces: readonly EnlacePortal[];
   children: ReactNode;
+  mostrarCuentaHeader?: boolean;
 }) {
   const ruta = usePathname();
   const router = useRouter();
@@ -97,7 +98,7 @@ export default function PortalShell({ area, descripcion, enlaces, children }: {
         </button>
         <div className={styles.tituloPagina}><span>{descripcion}</span><strong>{pagina?.etiqueta ?? area}</strong></div>
         <div className={styles.usuario}><span className={styles.avatar} aria-hidden="true">{nombreUsuario.slice(0, 1).toLocaleUpperCase("es")}</span><span className={styles.usuarioDatos}><strong>{nombreUsuario}</strong><span>{etiquetaRol(roles)}</span></span></div>
-        <Link href="/cuenta" className={styles.cuenta}><Icono nombre="persona" size={17} /><span>Mi cuenta</span></Link>
+        {mostrarCuentaHeader && <Link href="/cuenta" className={styles.cuenta}><Icono nombre="persona" size={17} /><span>Mi cuenta</span></Link>}
         <button type="button" className={styles.salir} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>
           <Icono nombre="salir" size={17} /><span>{saliendo ? "Cerrando…" : "Salir"}</span>
         </button>

@@ -4,13 +4,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { useSesion } from "@/features/cuenta/useSesion";
-import { leerPerfil } from "@/features/cuenta/perfiles";
 import { obtenerMisSolicitudes } from "@/features/solicitudes/solicitudes";
 import TarjetaMetrica from "@/components/TarjetaMetrica";
 import EstadoPanel from "./EstadoPanel";
 import styles from "./panel.module.css";
 
-type Datos = { nombre: string | null; fotos: number; solicitudes: number; pendientes: number };
+type Datos = { fotos: number; solicitudes: number; pendientes: number };
 type Estado =
   | { tipo: "cargando" }
   | { tipo: "error" }
@@ -30,8 +29,7 @@ export default function ResumenPanel() {
     async function cargar(id: string) {
       try {
         const client = getSupabaseBrowserClient();
-        const [perfil, solicitudes, fotos] = await Promise.all([
-          leerPerfil(client, id),
+        const [solicitudes, fotos] = await Promise.all([
           obtenerMisSolicitudes(client, id),
           client.from("dental_photos").select("id", { count: "exact", head: true }).eq("user_id", id),
         ]);
@@ -40,7 +38,6 @@ export default function ResumenPanel() {
         setEstado({
           tipo: "listo",
           datos: {
-            nombre: perfil?.full_name ?? null,
             fotos: fotos.count ?? 0,
             ...contarSolicitudes(solicitudes),
           },
@@ -100,14 +97,14 @@ export default function ResumenPanel() {
     );
   }
 
-  const { nombre, fotos, solicitudes, pendientes } = estado.datos;
+  const { fotos, solicitudes, pendientes } = estado.datos;
   return (
-    <section aria-labelledby="resumen-titulo" className={styles.resumen}>
-      <div className={styles.saludo}><span className={styles.etiquetaResumen}>VISTA GENERAL</span><h2 id="resumen-titulo">{nombre ? `Hola, ${nombre}` : "Tu resumen personal"}</h2><p>{nombre ? "Aquí tienes un vistazo de tu actividad en DentaIA." : "Completa tu perfil para personalizar tu espacio."}</p></div>
+    <section aria-label="Indicadores de tu actividad" className={styles.resumen}>
       <div className={styles.metricas} aria-label="Resumen de tu cuenta">
         <TarjetaMetrica titulo="Fotografías guardadas" valor={fotos} contexto="En tu espacio personal" icono="camara" />
         <TarjetaMetrica titulo="Solicitudes registradas" valor={solicitudes} contexto="Historial de solicitudes" icono="calendario" />
         <TarjetaMetrica titulo="Solicitudes pendientes" valor={pendientes} contexto="Por atender" icono="reloj" />
+        <TarjetaMetrica titulo="Resultados de análisis" valor="—" contexto="Motor pendiente de integración" icono="destello" />
       </div>
     </section>
   );

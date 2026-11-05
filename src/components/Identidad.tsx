@@ -1,4 +1,4 @@
-export type NombreIcono = "diente" | "flecha" | "escudo" | "reporte" | "persona" | "casa" | "camara" | "calendario" | "clinica" | "usuarios" | "salir" | "buscar" | "llave" | "reloj" | "menu" | "cerrar" | "enlace";
+export type NombreIcono = "diente" | "flecha" | "escudo" | "reporte" | "persona" | "casa" | "camara" | "calendario" | "clinica" | "usuarios" | "salir" | "buscar" | "llave" | "reloj" | "menu" | "cerrar" | "enlace" | "subir" | "destello" | "imagen" | "check" | "alerta" | "privacidad" | "reloj-lista" | "actualizar";
 
 export function Icono({ nombre = "diente", size = 24 }: { nombre?: NombreIcono; size?: number }) {
   const trazos = {
@@ -17,6 +17,14 @@ export function Icono({ nombre = "diente", size = 24 }: { nombre?: NombreIcono; 
     menu: "M4 6h16M4 12h16M4 18h16",
     cerrar: "M18 6 6 18M6 6l12 12",
     enlace: "M10 13a5 5 0 0 0 7.1 0l3-3A5 5 0 0 0 13 2.9l-1.7 1.7m2.7 6.4a5 5 0 0 0-7.1 0l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7",
+    subir: "M12 16V4m0 0L7 9m5-5 5 5M4 16v4h16v-4",
+    destello: "m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2L12 3Zm7 12 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z",
+    imagen: "M4 5h16v14H4zM8 10h.01M4 16l5-5 4 4 3-3 4 4",
+    check: "m5 12 4 4L19 6",
+    alerta: "M12 9v4m0 4h.01M10.3 3.9 2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z",
+    privacidad: "M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Zm-3-11 2 2 4-4",
+    "reloj-lista": "M12 8v4l3 2M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5",
+    actualizar: "M20 7v5h-5M4 17v-5h5m-5 0a8 8 0 0 1 14-5l2 2m-16 6 2 2a8 8 0 0 0 14-5",
   };
   return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={trazos[nombre]} /></svg>;
 }

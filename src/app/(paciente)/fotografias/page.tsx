@@ -12,6 +12,9 @@ import Link from "next/link";
 import { mensajeFotografia } from "@/features/fotografias/mensajes";
 import { eliminarFotografia, ErrorEliminacionFoto } from "@/features/fotografias/eliminar";
 import AccesoRol from "@/features/autorizacion/AccesoRol";
+import { useRouter } from "next/navigation";
+import { useFotografiaPreparacion } from "@/features/analisis/FotografiaPreparacionContexto";
+import { mensajeValidacionFotografia, validarFotografia } from "@/features/analisis/fotografia";
 
 const BUCKET = "dental-photos";
 const POLICY_VERSION = "1.0";
@@ -92,6 +95,8 @@ async function validateImage(file: File) {
 }
 
 function PhotosPageContent() {
+  const router = useRouter();
+  const { establecerFotografia } = useFotografiaPreparacion();
   const [userId, setUserId] = useState<string | null>(null);
   const [consentId, setConsentId] = useState<string | null>(null);
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -466,6 +471,32 @@ function PhotosPageContent() {
     }
   }
 
+  async function prepararAnalisis(photo: Photo) {
+    clearMessages();
+    if (!consentId) {
+      setError("Necesitas un consentimiento de almacenamiento vigente para volver a abrir una fotografía guardada.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const client = getSupabaseBrowserClient();
+      const { data, error: downloadError } = await client.storage.from(BUCKET).download(photo.object_path);
+      if (downloadError) throw downloadError;
+      const archivo = new File([data], photo.original_filename, { type: photo.mime_type || data.type });
+      const validacion = validarFotografia(archivo);
+      if (!validacion.valido) throw new Error(mensajeValidacionFotografia(validacion.motivo));
+      establecerFotografia(archivo);
+      router.push("/analisis");
+    } catch (err) {
+      const mensaje = err instanceof Error && err.message.startsWith("La fotografía")
+        ? err.message
+        : mensajeFotografia(err, "No se pudo abrir la fotografía guardada para preparar el análisis.");
+      setError(mensaje);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function removePreview(photoId: string) {
     setPreviews((current) => {
       const preview = current.find((item) => item.photoId === photoId);
@@ -786,6 +817,16 @@ function PhotosPageContent() {
                           Ver fotografía
                         </button>
                       )}
+
+                      <button
+                        type="button"
+                        className={styles.secondaryButton}
+                        disabled={busy || !consentId}
+                        title={!consentId ? "Hace falta un consentimiento de almacenamiento vigente." : undefined}
+                        onClick={() => void prepararAnalisis(photo)}
+                      >
+                        Preparar análisis
+                      </button>
 
                       <button
                         type="button"

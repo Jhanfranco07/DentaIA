@@ -1,14 +1,17 @@
 import PortalShell, { type EnlacePortal } from "@/components/PortalShell";
+import { FotografiaPreparacionProvider } from "@/features/analisis/FotografiaPreparacionContexto";
 
 const enlaces: readonly EnlacePortal[] = [
-  { href: "/panel", etiqueta: "Resumen", icono: "casa", exacto: true, grupo: "Mi espacio" },
-  { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Mi espacio" },
-  { href: "/fotografias", etiqueta: "Fotografías", icono: "camara", grupo: "Mi espacio" },
-  { href: "/solicitudes", etiqueta: "Solicitudes", icono: "calendario", grupo: "Mi espacio" },
-  { href: "/analisis/demo", etiqueta: "Análisis educativo", icono: "reporte", grupo: "Explorar" },
+  { href: "/panel", etiqueta: "Inicio", icono: "casa", exacto: true, grupo: "Principal" },
+  { href: "/analisis", etiqueta: "Análisis dental con IA", icono: "destello", grupo: "Principal" },
+  { href: "/fotografias", etiqueta: "Mis fotografías", icono: "camara", grupo: "Principal" },
+  { href: "/resultados", etiqueta: "Mis resultados", icono: "reporte", grupo: "Principal" },
+  { href: "/solicitudes", etiqueta: "Mis solicitudes", icono: "calendario", grupo: "Principal" },
+  { href: "/analisis/demo", etiqueta: "Guía educativa", icono: "reporte", grupo: "Explorar" },
   { href: "/directorio", etiqueta: "Odontólogos", icono: "diente", grupo: "Explorar" },
+  { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Cuenta" },
 ];
 
 export default function PortalPacienteLayout({ children }: { children: React.ReactNode }) {
-  return <PortalShell area="Paciente" descripcion="Tu espacio personal" enlaces={enlaces}>{children}</PortalShell>;
+  return <FotografiaPreparacionProvider><PortalShell area="Paciente" descripcion="Tu espacio personal" enlaces={enlaces} mostrarCuentaHeader={false}>{children}</PortalShell></FotografiaPreparacionProvider>;
 }
