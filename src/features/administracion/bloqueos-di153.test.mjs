@@ -64,6 +64,12 @@ test('DI-153 ensamblado real: valores no exactos de la bandera jamás invocan el
  assert.equal(otros,0);
 `));
 
+test('DI-153 ensamblado real: Preview de Vercel bloquea escrituras aunque la bandera esté activada', () => ejecutar(`
+ process.env.VERCEL='1';process.env.VERCEL_ENV='preview';process.env.DENTAIA_ROLE_WRITES_ENABLED='true';
+ const r=await gestionarRoles(peticion());assert.equal(r.status,503);
+ assert.equal((await r.json()).codigo,'ESCRITURAS_DESACTIVADAS');assert.equal(otros,0);
+`));
+
 test('DI-153 consulta de revisión no elude el bloqueo del ensamblado de escritura ni expone contexto', () => ejecutar(`
  const r=await gestionarRoles(new Request('http://localhost:3000/api/administracion/roles?usuarioId='+id(2),{headers:{authorization:'Bearer '+token}}));
  assert.equal(r.status,503);const cuerpo=await r.text();assert.match(cuerpo,/ESCRITURAS_DESACTIVADAS/);

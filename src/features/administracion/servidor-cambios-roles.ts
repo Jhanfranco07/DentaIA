@@ -14,7 +14,8 @@ export const gestionarRoles = crearApiCambiosRoles(conAccesoAdministrativo, asyn
     || typeof c.exp !== "number" || !Number.isSafeInteger(c.exp) || c.exp <= Date.now() / 1000) return null;
   return { actorId, sesionId: c.session_id, expira: c.exp };
 }, { ejecutar: async (...args) => {
-  if (process.env.DENTAIA_ROLE_WRITES_ENABLED !== "true") return {
+  // No habilitar escrituras administrativas en Preview ni Production, incluso si una variable se configura por error.
+  if (process.env.VERCEL === "1" || process.env.NODE_ENV !== "development" || process.env.DENTAIA_ROLE_WRITES_ENABLED !== "true") return {
     status: 503, codigo: "ESCRITURAS_DESACTIVADAS", resultado: "rechazado", revision: null, asignacion: null,
   };
   return crearEscriturasRolesSupabase().ejecutar(...args);

@@ -3,9 +3,16 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../../lib/supabase/database.types";
 import type { LecturasUsuariosReales } from "./usuarios-reales";
 
+function habilitacionLecturasAdministrativas(): boolean {
+  const local = process.env.NODE_ENV === "development" && !process.env.VERCEL && !process.env.VERCEL_ENV;
+  const preview = process.env.VERCEL === "1" && process.env.VERCEL_ENV === "preview"
+    && process.env.VERCEL_GIT_COMMIT_REF === "develop" && process.env.DENTAIA_ADMIN_PREVIEW_ENABLED === "true";
+  return process.env.DENTAIA_ADMIN_READS_ENABLED === "true" && (local || preview);
+}
+
 /** No importar desde React. Activación explícita del propietario, nunca desde una petición. */
 export function crearLecturasSupabase(): LecturasUsuariosReales {
-  const habilitado = process.env.DENTAIA_ADMIN_READS_ENABLED === "true";
+  const habilitado = habilitacionLecturasAdministrativas();
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const secret = process.env.DENTAIA_SUPABASE_ADMIN_READ_SECRET;
   if (!habilitado || !url || !secret || !url.startsWith("https://")) {

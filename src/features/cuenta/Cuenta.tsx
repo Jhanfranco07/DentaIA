@@ -9,9 +9,13 @@ import { useSesion } from "./useSesion";
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
 import { retornoSolicitud } from "@/lib/navegacion";
+import { rolesDelUsuario, rutaPrincipalPorRoles } from "@/features/autorizacion/roles";
+import { useRouter } from "next/navigation";
 
 export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean }) {
   const { usuario, cargando, errorSesion, verificar } = useSesion();
+  const router = useRouter();
+  const roles = rolesDelUsuario(usuario);
   const operacion = useRef(false);
   const activo = useRef(true);
   const [registro, setRegistro] = useState(modoInicial);
@@ -66,7 +70,21 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
       if (error) throw error;
       if (!activo.current) return;
       if (data.session) {
-        await verificar();
+        const verificado = await verificar();
+        if (!activo.current) return;
+        if (!verificado) {
+          setError("No pudimos volver a confirmar tu sesión. Comprueba la conexión y vuelve a iniciar sesión.");
+          return;
+        }
+        const rolesVerificados = rolesDelUsuario(verificado);
+        const destino = rutaPrincipalPorRoles(rolesVerificados);
+        if (!destino) {
+          setError("La cuenta inició sesión, pero no tiene un rol DentaIA activo. Contacta al administrador del proyecto.");
+          return;
+        }
+        // El retorno de una solicitud solo aplica al paciente sin otros roles.
+        const soloPaciente = rolesVerificados.length === 1 && rolesVerificados[0] === "paciente";
+        router.replace(soloPaciente ? continuar ?? destino : destino);
       } else {
         setAviso("Si el registro puede completarse, recibirás un correo de confirmación. Revisa tu bandeja de entrada y spam, confirma el correo y vuelve para iniciar sesión.");
         setRegistro(false);
@@ -100,9 +118,14 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
           {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}
           {aviso && <p className={styles.aviso} role="status">{aviso}</p>}
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
-            {continuar && <div className="notice"><strong>Tu profesional sigue seleccionado.</strong><p>Ya puedes continuar con tu solicitud de demostración.</p><Link href={continuar} className="action">Continuar mi solicitud</Link></div>}
-            <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />
-            <nav aria-label="Continuar mi recorrido" className={styles.accesos}><Link href="/panel">Mi panel</Link><Link href="/analisis/demo">Explorar la demostración</Link><Link href="/fotografias">Mis fotografías</Link><Link href="/solicitudes">Mis solicitudes</Link>{process.env.NODE_ENV === "development" && <Link href="/desarrollo/panel-admin">Administración · acceso protegido</Link>}</nav>
+            {continuar && roles.includes("paciente") && !roles.includes("odontologo") && !roles.includes("superusuario") && <div className="notice"><strong>Tu profesional sigue seleccionado.</strong><p>Ya puedes continuar con tu solicitud de demostración.</p><Link href={continuar} className="action">Continuar mi solicitud</Link></div>}
+            {roles.includes("paciente") && <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />}
+            {roles.length === 0 ? <p role="alert" className={styles.error}>Esta cuenta no tiene un rol DentaIA activo.</p> : <nav aria-label="Módulos de tu cuenta" className={styles.accesos}>
+              {roles.includes("paciente") && <><Link href="/panel">Panel del paciente</Link><Link href="/fotografias">Mis fotografías</Link><Link href="/solicitudes">Mis solicitudes</Link></>}
+              {roles.includes("odontologo") && <Link href="/profesional">Panel profesional</Link>}
+              {roles.includes("superusuario") && <Link href="/administracion">Panel administrativo · requiere MFA/AAL2</Link>}
+              <Link href="/analisis/demo">Explorar la demostración</Link>
+            </nav>}
             <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>
           </> : <>
             <div className={styles.opciones} aria-label="Opciones de acceso">

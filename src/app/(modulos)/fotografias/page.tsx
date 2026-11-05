@@ -11,6 +11,7 @@ import styles from "./page.module.css";
 import Link from "next/link";
 import { mensajeFotografia } from "@/features/fotografias/mensajes";
 import { eliminarFotografia, ErrorEliminacionFoto } from "@/features/fotografias/eliminar";
+import AccesoRol from "@/features/autorizacion/AccesoRol";
 
 const BUCKET = "dental-photos";
 const POLICY_VERSION = "1.0";
@@ -90,7 +91,7 @@ async function validateImage(file: File) {
   }
 }
 
-export default function PhotosPage() {
+function PhotosPageContent() {
   const [userId, setUserId] = useState<string | null>(null);
   const [consentId, setConsentId] = useState<string | null>(null);
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -804,4 +805,8 @@ export default function PhotosPage() {
       </section>
     </section>
   );
+}
+
+export default function PhotosPage() {
+  return <AccesoRol rolesRequeridos={["paciente"]} modulo="las fotografías del paciente"><PhotosPageContent /></AccesoRol>;
 }

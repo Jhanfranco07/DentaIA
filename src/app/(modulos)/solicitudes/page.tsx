@@ -2,10 +2,11 @@
 import FormularioSolicitud from "@/features/solicitudes/FormularioSolicitud";
 import MisSolicitudes from "@/features/solicitudes/MisSolicitudes";
 import styles from "@/features/solicitudes/solicitudes.module.css";
+import AccesoRol from "@/features/autorizacion/AccesoRol";
 
 export default async function RequestsPage({ searchParams }: { searchParams: Promise<{ odontologo?: string }> }) {
   const { odontologo } = await searchParams;
-  return (
+  return <AccesoRol rolesRequeridos={["paciente"]} modulo="las solicitudes del paciente">
     <section className={styles.contenedor}>
       <header className={styles.encabezado}>
         <p className={styles.etiquetaSuperior}>
@@ -27,5 +28,5 @@ export default async function RequestsPage({ searchParams }: { searchParams: Pro
       <FormularioSolicitud odontologoInicial={odontologo ?? ""} />
       <MisSolicitudes />
     </section>
-  );
+  </AccesoRol>;
 }

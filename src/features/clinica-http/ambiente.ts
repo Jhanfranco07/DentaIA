@@ -1,7 +1,7 @@
 // Configuración sin secretos privilegiados; solo BFF local y credencial publicable.
 export const DENTALIA_REF="vwmdknzjyvmsdqpepykz";
 export const DATASET_ACADEMICO="fase8-synthetic-v1";
-export const DENTALIA_PREVIEW_BRANCH="feature/preview-clinical-backend";
+export const DENTALIA_PREVIEW_BRANCH="develop";
 type Env=Record<string,string|undefined>;
 export function configurarClinica(env:Env){
  const local=!env.VERCEL&&!env.VERCEL_ENV&&env.NODE_ENV==="development";

@@ -10,6 +10,11 @@ const preview={...env,NODE_ENV:'production',VERCEL:'1',VERCEL_ENV:'preview',VERC
 test('Preview académico habilitado solo con runtime, rama y flags exactos',()=>{const c=configurarClinica(preview);assert.equal(c.enabled,true);assert.equal(c.valid,true);assert.equal(c.preview,true);});
 for(const changes of [{DENTAIA_CLINICAL_PREVIEW_ENABLED:''},{VERCEL_ENV:'production'},{VERCEL_GIT_COMMIT_REF:'integration/sprint5-demo'},{VERCEL:undefined}])test('Preview denegado con condición ausente o distinta '+JSON.stringify(changes),()=>assert.equal(configurarClinica({...preview,...changes}).enabled,false));
 test('Preview no acepta configuración académica ajena al proyecto',()=>assert.equal(configurarClinica({...preview,DENTAIA_CLINICAL_PROJECT_REF:'otro-proyecto'}).valid,false));
+test('Preview clínico acepta solo develop y rechaza la rama experimental y cualquier otra rama',()=>{
+ assert.equal(configurarClinica({...preview,VERCEL_GIT_COMMIT_REF:'develop'}).enabled,true);
+ for(const branch of ['feature/preview-clinical-backend','main','integration/sprint5-demo',''])
+  assert.equal(configurarClinica({...preview,VERCEL_GIT_COMMIT_REF:branch}).enabled,false);
+});
 test('Clave privilegiada no aceptada',()=>assert.equal(configurarClinica({...env,DENTAIA_CLINICAL_SUPABASE_PUBLISHABLE_KEY:'sb_secret_fixture'}).valid,false));
 test('Allowlist con duplicados no aceptada',()=>assert.equal(configurarClinica({...env,DENTAIA_CLINICAL_DEMO_USER_IDS:Array(5).fill(ids[0]).join(',')}).valid,false));
 test('Solo cuenta en allowlist y marcador app_metadata',()=>{assert.equal(cuentaAcademicaPermitida(ids[0],{dentaia_development:{dataset:DATASET_ACADEMICO}},ids),true);assert.equal(cuentaAcademicaPermitida(ids[0],{},ids),false);assert.equal(cuentaAcademicaPermitida('ajeno',{dentaia_development:{dataset:DATASET_ACADEMICO}},ids),false);});

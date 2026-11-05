@@ -10,6 +10,9 @@ function ejecutar(codigo,servidor=true) {
     '--experimental-strip-types','--input-type=module','-e',codigo],{cwd:raiz,encoding:'utf8',timeout:15000});
 }
 const configuracion=`
+  process.env.NODE_ENV='development';
+  delete process.env.VERCEL;delete process.env.VERCEL_ENV;delete process.env.VERCEL_GIT_COMMIT_REF;
+  delete process.env.DENTAIA_ADMIN_PREVIEW_ENABLED;
   process.env.DENTAIA_ADMIN_READS_ENABLED='true';
   process.env.NEXT_PUBLIC_SUPABASE_URL='https://admin.example.test';
   process.env.DENTAIA_SUPABASE_ADMIN_READ_SECRET='credencial-sintetica-exclusiva-de-prueba';
@@ -31,6 +34,10 @@ test('sin opt-in o credencial dedicada falla sin red; no toma la clave del scrip
     ${configuracion}
     delete process.env.DENTAIA_SUPABASE_ADMIN_READ_SECRET;
     assert.throws(()=>crearLecturasSupabase(),/no configurada/);
+    ${configuracion}
+    process.env.VERCEL='1';process.env.VERCEL_ENV='production';
+    assert.throws(()=>crearLecturasSupabase(),/no configurada/);
+    delete process.env.VERCEL;delete process.env.VERCEL_ENV;
     ${configuracion}
     process.env.NEXT_PUBLIC_SUPABASE_URL='http://admin.example.test';
     assert.throws(()=>crearLecturasSupabase(),/no configurada/);
