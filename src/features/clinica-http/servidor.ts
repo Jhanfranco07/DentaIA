@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { leerAsignacionAdministrativa } from "../autorizacion/autorizacion";
 import { crearApiClinica, type Autenticacion } from "./http";
 import { esUuid } from "./validaciones";
-import { configurarClinica, origenLocalAutorizado, cuentaAcademicaPermitida } from "./ambiente";
+import { configurarClinica, origenLocalAutorizado, origenPreviewAutorizado, cuentaAcademicaPermitida } from "./ambiente";
 
 function errorIdentidad(error: unknown): 401 | 503 {
   if (error instanceof TypeError || (error instanceof Error && ["TimeoutError", "AbortError", "AuthRetryableFetchError"].includes(error.name))) return 503;
@@ -18,7 +18,10 @@ function clavePublicable(key: string) {
 }
 function api(request: Request) {
   const config = configurarClinica(process.env);
-  const enabled = config.enabled && (!config.remote || origenLocalAutorizado(request));
+  const originAllowed = config.preview
+    ? origenPreviewAutorizado(request, process.env)
+    : origenLocalAutorizado(request);
+  const enabled = config.enabled && (!config.remote || originAllowed);
   return crearApiClinica({ enabled, cursorSecret: config.secret, cursorTtl: config.ttl,
     ...(config.remote ? { environment: "academic_remote" as const } : {}),
     registrar: event => console.info("clinical_security", JSON.stringify(event)),
