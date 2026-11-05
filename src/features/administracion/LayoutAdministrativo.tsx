@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Icono } from "@/components/Identidad";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import NavegacionAdministrativa from "./NavegacionAdministrativa";
 import EncabezadoAdministrativo from "./EncabezadoAdministrativo";
 import { SECCIONES_ADMINISTRATIVAS, type NavegacionAdministrativaProps } from "./estructura";
@@ -11,10 +13,26 @@ import styles from "./administracion.module.css";
 type Props = NavegacionAdministrativaProps & { children: ReactNode };
 
 export default function LayoutAdministrativo({ children, seccion, onSeleccionar }: Props) {
+  const router = useRouter();
   const [menuAbierto, setMenuAbierto] = useState(false);
   const botonMenu = useRef<HTMLButtonElement>(null);
   const lateral = useRef<HTMLElement>(null);
   const actual = SECCIONES_ADMINISTRATIVAS.find(item => item.id === seccion)!;
+  const [errorSalida, setErrorSalida] = useState("");
+  const [saliendo, setSaliendo] = useState(false);
+
+  async function cerrarSesion() {
+    if (saliendo) return;
+    setSaliendo(true); setErrorSalida("");
+    try {
+      const { error } = await getSupabaseBrowserClient().auth.signOut({ scope: "local" });
+      if (error) throw error;
+      router.replace("/cuenta"); router.refresh();
+    } catch {
+      setErrorSalida("No se pudo cerrar la sesión en este navegador. Vuelve a intentarlo.");
+      setSaliendo(false);
+    }
+  }
 
   useEffect(() => {
     const movil = window.matchMedia("(max-width: 800px)");
@@ -56,9 +74,14 @@ export default function LayoutAdministrativo({ children, seccion, onSeleccionar 
         onSeleccionar(destino);
       }} />
       <div className={styles.notaLateral}>
-        <strong>Diseño, sin datos reales</strong>
-        <p>Esta vista no representa una sesión de superusuario ni permite administrar cuentas.</p>
+        <strong>Acceso administrativo protegido</strong>
+        <p>Las lecturas dependen de habilitación del entorno. Los cambios de roles permanecen desactivados en Vercel.</p>
       </div>
+      <Link href="/cuenta" className={styles.volver}>Mi cuenta</Link>
+      <button type="button" className={styles.volver} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>
+        {saliendo ? "Cerrando sesión…" : "Cerrar sesión"}
+      </button>
+      {errorSalida && <p role="alert" className={styles.errorAdmin}>{errorSalida}</p>}
       <Link href="/" className={styles.volver}>Volver a DentaIA <span aria-hidden="true">↗</span></Link>
     </aside>
     <div className={styles.trabajo}>

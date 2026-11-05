@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Icono, Marca } from "./Identidad";
 
-const enlaces = [["/panel", "Mi panel"], ["/analisis/demo", "Análisis de ejemplo"], ["/directorio", "Odontólogos"], ["/fotografias", "Mis fotografías"], ["/solicitudes", "Mis solicitudes"]] as const;
+const enlaces = [["/", "Inicio"], ["/#como-funciona", "Cómo funciona"], ["/directorio", "Directorio"], ["/privacidad", "Privacidad"]] as const;
 export default function Encabezado() {
   const ruta = usePathname();
   const [abierto, setAbierto] = useState(false);
@@ -24,7 +24,10 @@ export default function Encabezado() {
     <span className="header-divider" aria-hidden="true" />
     <button ref={toggle} type="button" className={`menu-toggle ${abierto ? "is-open" : ""}`} aria-label={abierto ? "Cerrar menú" : "Abrir menú"} aria-expanded={abierto} aria-controls="navegacion-principal" onClick={() => setAbierto(!abierto)}><span className="menu-bars" aria-hidden="true"><i /><i /><i /></span><span>Menú</span></button>
     <nav id="navegacion-principal" aria-label="Navegación principal" className={`site-nav ${abierto ? "is-open" : ""}`}>
-      {enlaces.map(([href, texto]) => <Link key={href} href={href} onClick={() => setAbierto(false)} aria-current={ruta.startsWith(href) ? "page" : undefined}>{texto}</Link>)}
+      {enlaces.map(([href, texto]) => {
+        const activo = href === "/" ? ruta === "/" : href.includes("#") ? false : ruta === href || ruta.startsWith(`${href}/`);
+        return <Link key={href} href={href} onClick={() => setAbierto(false)} aria-current={activo ? "page" : undefined}>{texto}</Link>;
+      })}
     </nav><Link href="/cuenta" className="action action-small action-account" aria-current={ruta === "/cuenta" ? "page" : undefined}><Icono nombre="persona" size={17} /> Mi cuenta</Link>
   </div></header>;
 }
