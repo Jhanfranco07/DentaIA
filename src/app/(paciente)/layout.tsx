@@ -1,12 +1,12 @@
-import PortalShell from "@/components/PortalShell";
+import PortalShell, { type EnlacePortal } from "@/components/PortalShell";
 
-const enlaces = [
-  { href: "/panel", etiqueta: "Mi panel" },
-  { href: "/cuenta", etiqueta: "Mi perfil" },
-  { href: "/fotografias", etiqueta: "Mis fotografías" },
-  { href: "/analisis/demo", etiqueta: "Análisis educativo" },
-  { href: "/solicitudes", etiqueta: "Mis solicitudes" },
-  { href: "/directorio", etiqueta: "Odontólogos" },
+const enlaces: readonly EnlacePortal[] = [
+  { href: "/panel", etiqueta: "Resumen", icono: "casa", exacto: true, grupo: "Mi espacio" },
+  { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Mi espacio" },
+  { href: "/fotografias", etiqueta: "Fotografías", icono: "camara", grupo: "Mi espacio" },
+  { href: "/solicitudes", etiqueta: "Solicitudes", icono: "calendario", grupo: "Mi espacio" },
+  { href: "/analisis/demo", etiqueta: "Análisis educativo", icono: "reporte", grupo: "Explorar" },
+  { href: "/directorio", etiqueta: "Odontólogos", icono: "diente", grupo: "Explorar" },
 ];
 
 export default function PortalPacienteLayout({ children }: { children: React.ReactNode }) {
