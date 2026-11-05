@@ -25,7 +25,7 @@ export async function obtenerMisSolicitudes(
 
   const { data, error } = await cliente
     .from("appointment_requests")
-    .select("*")
+    .select("*, dentists(name)")
     .eq("user_id", identidad.user.id)
     .eq("is_demo", true)
     .order("created_at", { ascending: false });

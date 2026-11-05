@@ -11,10 +11,12 @@ import {
 import type { Tables } from "@/lib/supabase/database.types";
 import styles from "./solicitudes.module.css";
 import Link from "next/link";
+import { Icono } from "@/components/Identidad";
 
-type Solicitud = Tables<"appointment_requests">;
+type Solicitud = Tables<"appointment_requests"> & { dentists: Pick<Tables<"dentists">, "name"> | null };
+type FiltroEstado = "todas" | "requested" | "cancelled";
 
-export default function MisSolicitudes() {
+export default function MisSolicitudes({ compacto = false }: { compacto?: boolean }) {
   const { usuario, cargando: cargandoSesion } = useSesion();
 
   const [solicitudes, setSolicitudes] = useState<Solicitud[]>([]);
@@ -23,6 +25,8 @@ export default function MisSolicitudes() {
 
   const [cancelandoId, setCancelandoId] = useState<string | null>(null);
   const [mensajeAccion, setMensajeAccion] = useState("");
+  const [confirmacionId, setConfirmacionId] = useState<string | null>(null);
+  const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todas");
 
   useEffect(() => {
     let activo = true;
@@ -86,16 +90,12 @@ export default function MisSolicitudes() {
 
   async function cancelarSolicitud(id: string) {
     if (!usuario || cancelandoId) return;
-
-    const confirmar = window.confirm(
-      "¿Deseas cancelar esta solicitud de demostración?",
-    );
-
-    if (!confirmar) return;
+    if (confirmacionId !== id) return;
 
     setCancelandoId(id);
     setError("");
     setMensajeAccion("");
+    setConfirmacionId(null);
 
     try {
     const cliente = getSupabaseBrowserClient();
@@ -121,13 +121,14 @@ export default function MisSolicitudes() {
     }
   }
 
-  return (
-    <section className={styles.tarjeta} id="mis-solicitudes">
-      <h2 className={styles.tituloSeccion}>Mis solicitudes</h2>
+  const solicitudesFiltradas = solicitudes.filter(solicitud => filtroEstado === "todas" || solicitud.status === filtroEstado);
 
-      <p className={styles.subtitulo}>
-        Consulta el historial y el estado de tus solicitudes de demostración.
-      </p>
+  return (
+    <section className={`${styles.tarjeta} ${compacto ? styles.compacto : ""}`} id="mis-solicitudes">
+      <header className={styles.encabezadoSolicitudes}>
+        <div><h2 className={styles.tituloSeccion}>Mis solicitudes</h2><p className={styles.subtitulo}>Solicitudes de orientación de demostración; no representan citas clínicas confirmadas.</p></div>
+        {compacto && <Link className={styles.verTodas} href="/solicitudes">Ver todas <span aria-hidden="true">→</span></Link>}
+      </header>
 
       {mensajeAccion && (
         <p className={styles.exito} role="status">
@@ -135,7 +136,7 @@ export default function MisSolicitudes() {
         </p>
       )}
 
-      {cargando && <p role="status">Cargando tus solicitudes…</p>}
+      {cargando && <div className={styles.esqueletoSolicitudes} role="status"><span className="sr-only">Cargando tus solicitudes…</span><i /><i /><i /></div>}
 
       {error && (
         <p className={styles.error} role="alert">
@@ -145,25 +146,24 @@ export default function MisSolicitudes() {
 
       {!cargando && !error && solicitudes.length === 0 && (
         <div className={styles.vacio}>
-          {usuario ? "Todavía no tienes solicitudes. Puedes registrar una de demostración en el formulario de arriba." : <><p>Inicia sesión para consultar tus solicitudes personales.</p><Link href="/cuenta">Ir a Mi cuenta</Link></>}
+          {usuario ? <>{compacto ? "Todavía no tienes solicitudes registradas." : "Todavía no tienes solicitudes. Puedes registrar una desde el formulario."} {compacto && <Link href="/directorio">Explorar odontólogos</Link>}</> : <><p>Inicia sesión para consultar tus solicitudes personales.</p><Link href="/cuenta">Ir a Mi perfil</Link></>}
         </div>
       )}
 
-      {!cargando && !error && solicitudes.length > 0 && (
+      {!compacto && solicitudes.length > 1 && <div className={styles.filtroSolicitudes}><label htmlFor="filtro-estado-solicitudes">Filtrar por estado</label><select id="filtro-estado-solicitudes" value={filtroEstado} onChange={evento => setFiltroEstado(evento.target.value as FiltroEstado)}><option value="todas">Todas</option><option value="requested">Solicitadas</option><option value="cancelled">Canceladas</option></select><span>{solicitudesFiltradas.length} de {solicitudes.length}</span></div>}
+
+      {!cargando && !error && solicitudes.length > 0 && solicitudesFiltradas.length === 0 && <div className={styles.vacio} role="status">No hay solicitudes con este estado.</div>}
+
+      {!cargando && !error && solicitudesFiltradas.length > 0 && (
         <div className={styles.lista}>
-          {solicitudes.map((solicitud) => (
+          {(compacto ? solicitudesFiltradas.slice(0, 3) : solicitudesFiltradas).map((solicitud) => (
             <article key={solicitud.id} className={styles.solicitud}>
               <div className={styles.solicitudCabecera}>
-                <h3 className={styles.solicitudTitulo}>
-                  Solicitud de demostración
-                </h3>
+                <div className={styles.solicitudResumen}><span className={styles.iconoSolicitud}><Icono nombre={solicitud.status === "cancelled" ? "cerrar" : "reloj"} size={16} /></span><div><h3 className={styles.solicitudTitulo}>{solicitud.dentists?.name ?? "Profesional no disponible"}</h3><p>Orientación · <time dateTime={solicitud.preferred_date}>{solicitud.preferred_date}</time>{solicitud.preferred_time ? ` · ${solicitud.preferred_time}` : ""}</p></div></div>
 
                 <span
-                  className={`${styles.estado} ${
-                    solicitud.status === "cancelled"
-                      ? styles.estadoCancelado
-                      : ""
-                  }`}
+                  className={`${styles.estado} ${solicitud.status === "cancelled" ? styles.estadoCancelado : styles.estadoSolicitada}`}
+                  aria-label={`Estado: ${solicitud.status === "requested" ? "Solicitada" : solicitud.status === "cancelled" ? "Cancelada" : solicitud.status}`}
                 >
                   {solicitud.status === "requested"
                     ? "Solicitada"
@@ -173,52 +173,22 @@ export default function MisSolicitudes() {
                 </span>
               </div>
 
-              <div className={styles.detalles}>
-                <div className={styles.detalle}>
-                  <strong>Nombre</strong>
-                  {solicitud.contact_name}
-                </div>
-
-                <div className={styles.detalle}>
-                  <strong>Correo electrónico</strong>
-                  {solicitud.contact_email}
-                </div>
-
-                <div className={styles.detalle}>
-                  <strong>Fecha preferida</strong>
-                  {solicitud.preferred_date}
-                </div>
-
-                <div className={styles.detalle}>
-                  <strong>Hora preferida</strong>
-                  {solicitud.preferred_time || "No indicada"}
-                </div>
-
-                <div
-                  className={styles.detalle}
-                  style={{ gridColumn: "1 / -1" }}
-                >
-                  <strong>Mensaje</strong>
-                  {solicitud.message || "Sin mensaje"}
-                </div>
-              </div>
+              <details className={styles.detallesExpandibles}><summary>Ver detalles de solicitud</summary><dl className={styles.detalles}>
+                <div className={styles.detalle}><dt>Nombre de contacto</dt><dd>{solicitud.contact_name}</dd></div>
+                <div className={styles.detalle}><dt>Correo</dt><dd>{solicitud.contact_email}</dd></div>
+                <div className={styles.detalle}><dt>Fecha preferida</dt><dd>{solicitud.preferred_date}</dd></div>
+                <div className={styles.detalle}><dt>Hora preferida</dt><dd>{solicitud.preferred_time || "No indicada"}</dd></div>
+                <div className={`${styles.detalle} ${styles.detalleCompleto}`}><dt>Mensaje</dt><dd>{solicitud.message || "Sin mensaje"}</dd></div>
+              </dl></details>
 
               {puedeCancelarSolicitud(solicitud.status) && (
-                <button
-                  className={styles.botonCancelar}
-                  type="button"
-                  onClick={() => void cancelarSolicitud(solicitud.id)}
-                  disabled={cancelandoId !== null}
-                >
-                  {cancelandoId === solicitud.id
-                    ? "Cancelando..."
-                    : "Cancelar solicitud"}
-                </button>
+                confirmacionId === solicitud.id ? <div className={styles.confirmacion} role="group" aria-label="Confirmar cancelación de solicitud"><span>¿Cancelar esta solicitud?</span><button type="button" className={styles.botonCancelar} onClick={() => void cancelarSolicitud(solicitud.id)} disabled={cancelandoId !== null}>{cancelandoId === solicitud.id ? "Cancelando…" : "Sí, cancelar"}</button><button type="button" className={styles.botonNeutral} onClick={() => setConfirmacionId(null)} disabled={cancelandoId !== null}>Conservar solicitud</button></div> : <button className={styles.botonCancelar} type="button" onClick={() => setConfirmacionId(solicitud.id)} disabled={cancelandoId !== null}>Cancelar solicitud</button>
               )}
             </article>
           ))}
         </div>
       )}
+      {compacto && !cargando && !error && solicitudesFiltradas.length > 3 && <p className={styles.mensajeCompacto}>Se muestran las tres solicitudes más recientes. <Link href="/solicitudes">Abrir el historial completo</Link>.</p>}
     </section>
   );
 }

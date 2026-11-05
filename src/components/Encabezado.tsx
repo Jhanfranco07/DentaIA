@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Icono, Marca } from "./Identidad";
 
-const enlaces = [["/", "Inicio"], ["/#como-funciona", "Cómo funciona"], ["/directorio", "Directorio"], ["/privacidad", "Privacidad"]] as const;
+const enlaces = [["/", "Inicio"], ["/#como-funciona", "Cómo funciona"], ["/analisis/demo", "Demostración educativa"], ["/directorio", "Directorio"], ["/privacidad", "Privacidad"]] as const;
 export default function Encabezado() {
   const ruta = usePathname();
   const [abierto, setAbierto] = useState(false);
@@ -28,6 +28,6 @@ export default function Encabezado() {
         const activo = href === "/" ? ruta === "/" : href.includes("#") ? false : ruta === href || ruta.startsWith(`${href}/`);
         return <Link key={href} href={href} onClick={() => setAbierto(false)} aria-current={activo ? "page" : undefined}>{texto}</Link>;
       })}
-    </nav><Link href="/cuenta" className="action action-small action-account" aria-current={ruta === "/cuenta" ? "page" : undefined}><Icono nombre="persona" size={17} /> Mi cuenta</Link>
+    </nav><Link href="/cuenta" className="action action-small action-account" aria-label="Iniciar sesión o crear una cuenta" aria-current={ruta === "/cuenta" ? "page" : undefined}><Icono nombre="persona" size={17} /> Iniciar sesión</Link>
   </div></header>;
 }

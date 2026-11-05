@@ -1,13 +1,10 @@
 "use client";
 
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { useState } from "react";
 import HeroCarousel from "@/components/HeroCarousel";
 
 type Vista =
   | "inicio"
-  | "analizar"
-  | "resultados"
   | "odontologos"
   | "como"
   | "privacidad";
@@ -51,50 +48,15 @@ const doctores = [
   },
 ];
 
-const POLICY_VERSION = "1.0";
-
-const CONSENT_TEXT = `Acepto de forma expresa que las fotografías
-sintéticas o de prueba que seleccione sean almacenadas de forma privada en Supabase dentro del prototipo académico
-DentAI. La finalidad es demostrar el almacenamiento, consulta y eliminación segura de fotografías dentro del proyecto.
-La fotografía se almacenará en un bucket privado y podrá ser consultada o eliminada por el propietario. No se
-realizará análisis automatizado, diagnóstico clínico, entrenamiento de modelos de inteligencia artificial ni uso de
-las fotografías para otros fines. Puedo revocar este consentimiento y eliminar posteriormente las fotografías
-almacenadas.`;
-
-function Logo() {
-  return (
-    <span className="marca">
-      <span className="marca-icono">✦</span>
-      <span>
-        Dent<span className="marca-acento">AI</span>
-      </span>
-    </span>
-  );
-}
-
 function Pill({ children }: { children: React.ReactNode }) {
   return <span className="pill">{children}</span>;
 }
 
 export default function Home() {
   const [vista, setVista] = useState<Vista>("inicio");
-  const [consent, setConsent] = useState(false);
-  const [img, setImg] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
-  const [err, setErr] = useState("");
-  const [done, setDone] = useState(false);
   const [search, setSearch] = useState("");
   const [zona, setZona] = useState("Todas");
   const [perfil, setPerfil] = useState<string | null>(null);
-  const [savingConsent, setSavingConsent] = useState(false);
-
-  const input = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    return () => {
-      if (img) URL.revokeObjectURL(img);
-    };
-  }, [img]);
 
   function nav(v: Vista) {
     setVista(v);
@@ -107,118 +69,6 @@ export default function Home() {
   function go(e: React.MouseEvent<HTMLAnchorElement>, v: Vista) {
     e.preventDefault();
     nav(v);
-  }
-
-  function load(e: ChangeEvent<HTMLInputElement>) {
-    const f = e.target.files?.[0];
-
-    if (!f) return;
-
-    setErr("");
-    setDone(false);
-
-    if (!["image/jpeg", "image/png", "image/webp"].includes(f.type)) {
-      setErr("Solo puedes usar JPG, PNG o WebP.");
-      return;
-    }
-
-    if (f.size > 8 * 1024 * 1024) {
-      setErr("El archivo supera 8 MB.");
-      return;
-    }
-
-    if (img) URL.revokeObjectURL(img);
-
-    setFile(f);
-    setImg(URL.createObjectURL(f));
-
-    e.target.value = "";
-  }
-
-  function reset() {
-    if (img) URL.revokeObjectURL(img);
-
-    setImg(null);
-    setFile(null);
-    setDone(false);
-    setErr("");
-    setConsent(false);
-  }
-
-  async function handleConsent() {
-    setErr("");
-    setDone(false);
-
-    if (!img || !file || !consent) {
-      setErr(
-        "Selecciona una imagen y confirma el consentimiento antes de continuar."
-      );
-      return;
-    }
-
-    setSavingConsent(true);
-
-    try {
-      const client = getSupabaseBrowserClient();
-
-      const {
-        data: { user },
-        error: userError,
-      } = await client.auth.getUser();
-
-      if (userError) {
-        throw new Error(
-          `No se pudo obtener la sesión del usuario: ${userError.message}`
-        );
-      }
-
-      if (!user) {
-        throw new Error(
-          "No hay una sesión iniciada. Ingresa con un usuario de prueba antes de registrar el consentimiento."
-        );
-      }
-
-      const { data, error: consentError } = await client
-        .from("patient_consents")
-        .insert({
-          user_id: user.id,
-          policy_version: POLICY_VERSION,
-          consent_text: CONSENT_TEXT,
-
-          // PRUEBA CONTROLADA:
-          // Se envía NULL para comprobar si el DEFAULT de purpose
-          // está provocando el CHECK constraint de Supabase.
-          purpose: null as unknown as string,
-        })
-        .select("id")
-        .single();
-
-      if (consentError) {
-        throw new Error(
-          `No se pudo registrar el consentimiento: ${consentError.message}`
-        );
-      }
-
-      if (!data?.id) {
-        throw new Error(
-          "Supabase no devolvió el ID del consentimiento registrado."
-        );
-      }
-
-      console.log("Consentimiento registrado:", data.id);
-
-      setDone(true);
-    } catch (error) {
-      console.error("Error registrando consentimiento:", error);
-
-      setErr(
-        error instanceof Error
-          ? error.message
-          : "Ocurrió un error al registrar el consentimiento."
-      );
-    } finally {
-      setSavingConsent(false);
-    }
   }
 
   const match = doctores.filter(
@@ -256,7 +106,7 @@ export default function Home() {
                 <div className="actions">
                   <button
                     className="action"
-                    onClick={() => nav("analizar")}
+                    onClick={() => nav("como")}
                   >
                     Conocer DentAI <span aria-hidden="true">→</span>
                   </button>
@@ -371,8 +221,8 @@ export default function Home() {
                   icon: "✧",
                   title: "Obtén orientación",
                   text: "Accede a información clara y recursos pensados para ayudarte a conocer mejor tu salud bucal.",
-                  link: "Probar el recorrido",
-                  to: "analizar" as Vista,
+                  link: "Cómo funciona",
+                  to: "como" as Vista,
                 },
                 {
                   n: "02",
@@ -422,252 +272,10 @@ export default function Home() {
                 <br />
                 una atención informada.
               </h2>
-              <p>
-                Explora el recorrido de DentAI en una demostración segura y
-                sencilla.
-              </p>
+              <p>La preparación de fotografías está disponible para pacientes. El análisis automático todavía no: explora la guía educativa claramente identificada como ejemplo.</p>
             </div>
-
-            <button className="action" onClick={() => nav("analizar")}>
-              Probar el recorrido <span aria-hidden="true">→</span>
-            </button>
+            <a className="action" href="/analisis/demo">Explorar demostración educativa <span aria-hidden="true">→</span></a>
           </section>
-        </main>
-      )}
-
-      {/* ───────────── ANALIZAR ───────────── */}
-      {vista === "analizar" && (
-        <main id="contenido" className="module-shell">
-          <div className="page-intro">
-            <Pill>PASO 01 · FOTOGRAFÍA</Pill>
-
-            <h1>
-              Empecemos con <span className="marca-acento">tu sonrisa.</span>
-            </h1>
-
-            <p>
-              Esta demostración no utiliza IA: la imagen se muestra solo en tu
-              navegador y no se guarda ni se envía.
-            </p>
-          </div>
-
-          <div className="upload-grid">
-            <section className="surface panel">
-              <div className="panel-title">
-                <span className="panel-icon" aria-hidden="true">
-                  ▧
-                </span>
-
-                <div>
-                  <h2>Tu fotografía dental</h2>
-                  <p>Procura que los dientes estén iluminados y enfocados.</p>
-                </div>
-              </div>
-
-              {!img ? (
-                <div
-                  className="drop"
-                  onClick={() => input.current?.click()}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && input.current?.click()
-                  }
-                >
-                  <div className="upload-symbol" aria-hidden="true">
-                    ↥
-                  </div>
-
-                  <strong>Selecciona una fotografía</strong>
-
-                  <span>Desde tu celular o computadora</span>
-
-                  <button
-                    className="action action-secondary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      input.current?.click();
-                    }}
-                  >
-                    Elegir archivo
-                  </button>
-
-                  <small>JPG, PNG, WebP · Máximo 8 MB</small>
-                </div>
-              ) : (
-                <div className="preview">
-                  <img
-                    src={img}
-                    alt="Fotografía seleccionada para vista previa local"
-                  />
-
-                  <div className="preview-caption">
-                    <span>{file?.name}</span>
-
-                    <button onClick={reset}>Quitar foto ✕</button>
-                  </div>
-                </div>
-              )}
-
-              <input
-                ref={input}
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                onChange={load}
-                className="sr-only"
-                aria-label="Seleccionar fotografía"
-              />
-
-              <label className="check">
-                <input
-                  type="checkbox"
-                  checked={consent}
-                  onChange={(e) => setConsent(e.target.checked)}
-                />
-
-                <span>
-                  Entiendo que esta es una <b>demostración educativa</b>, no un
-                  diagnóstico. La fotografía permanece en este dispositivo.{" "}
-                  <button
-                    className="link-inline"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      nav("privacidad");
-                    }}
-                  >
-                    Ver privacidad.
-                  </button>
-                </span>
-              </label>
-
-              {err && (
-                <p className="notice notice-error" role="alert">
-                  {err}
-                </p>
-              )}
-
-              <button
-                className="action action-full"
-                disabled={!img || !consent || savingConsent}
-                onClick={handleConsent}
-              >
-                {savingConsent
-                  ? "Registrando consentimiento..."
-                  : "Dar consentimiento →"}
-              </button>
-
-              {done && (
-                <div className="notice">
-                  <strong>¡Consentimiento registrado!</strong>
-
-                  <p>
-                    El consentimiento fue registrado correctamente en
-                    Supabase. La imagen todavía no se ha subido.
-                  </p>
-
-                  <button
-                    className="action action-small"
-                    onClick={() => nav("resultados")}
-                  >
-                    Ver reporte de ejemplo →
-                  </button>
-                </div>
-              )}
-            </section>
-
-            <aside className="sidebar">
-              <div className="tip-panel">
-                <h3>✧ Consejos para tu foto</h3>
-
-                <p>◉ Usa buena iluminación.</p>
-                <p>◉ Evita imágenes borrosas.</p>
-                <p>◉ Enfoca claramente tus dientes.</p>
-                <p>◉ No muestres a otras personas.</p>
-              </div>
-
-              <div className="tip-panel neutral">
-                <h3>◈ Información importante</h3>
-
-                <p>
-                  Este prototipo <b>no detecta enfermedades</b> y no sustituye
-                  la consulta profesional.
-                </p>
-              </div>
-            </aside>
-          </div>
-        </main>
-      )}
-
-      {/* ───────────── RESULTADOS ───────────── */}
-      {vista === "resultados" && (
-        <main id="contenido" className="module-shell">
-          <div className="page-intro">
-            <Pill>INFORME DEMOSTRATIVO</Pill>
-
-            <h1>
-              Conocer es el <span className="marca-acento">primer paso.</span>
-            </h1>
-
-            <p>
-              Así podría presentarse una guía educativa.{" "}
-              <b>
-                No se ha procesado tu fotografía ni generado un diagnóstico.
-              </b>
-            </p>
-          </div>
-
-          <div className="notice">
-            <strong>Reporte de demostración — datos ficticios</strong>
-
-            <p>
-              Los ejemplos siguientes son información general. No indican que
-              tengas alguna condición.
-            </p>
-          </div>
-
-          <div className="result-grid">
-            {[
-              {
-                icon: "♡",
-                title: "Hábitos de higiene",
-                body: "Una rutina consistente de cepillado e higiene interdental contribuye al cuidado de la boca.",
-              },
-              {
-                icon: "✧",
-                title: "Observación preventiva",
-                body: "Si notas molestias, cambios o dolor, un odontólogo es quien debe realizar la evaluación.",
-              },
-              {
-                icon: "⌖",
-                title: "Tu siguiente paso",
-                body: "Puedes comparar opciones de atención y buscar orientación profesional cuando la necesites.",
-              },
-            ].map((v) => (
-              <article className="surface panel result-card" key={v.title}>
-                <span className="result-icon" aria-hidden="true">
-                  {v.icon}
-                </span>
-                <h3>{v.title}</h3>
-                <p>{v.body}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="result-actions">
-            <button className="action" onClick={() => nav("odontologos")}>
-              Encontrar odontólogos →
-            </button>
-
-            <button
-              className="action action-secondary"
-              onClick={() => {
-                reset();
-                nav("analizar");
-              }}
-            >
-              Iniciar otra demostración
-            </button>
-          </div>
         </main>
       )}
 
@@ -816,9 +424,7 @@ export default function Home() {
           </div>
 
           <div className="center-actions">
-            <button className="action" onClick={() => nav("analizar")}>
-              Probar el recorrido →
-            </button>
+            <a className="action" href="/analisis/demo">Ver demostración educativa →</a>
           </div>
         </main>
       )}
@@ -876,56 +482,7 @@ export default function Home() {
         </main>
       )}
 
-      {/* ───────────── FOOTER ───────────── */}
-      <footer className="site-footer">
-        <div className="site-footer-inner">
-          <div className="footer-brand">
-            <a
-              className="marca-enlace"
-              href="#"
-              onClick={(e) => go(e, "inicio")}
-              aria-label="Ir al inicio"
-            >
-              <Logo />
-            </a>
 
-            <p>Una nueva forma de explorar la orientación preventiva bucal.</p>
-
-            <span className="footer-educational">
-              ✦ Demostración académica
-            </span>
-          </div>
-
-          <nav aria-label="Explorar">
-            <strong>EXPLORAR</strong>
-
-            <a href="#" onClick={(e) => go(e, "como")}>
-              Cómo funciona
-            </a>
-            <a href="#" onClick={(e) => go(e, "odontologos")}>
-              Odontólogos
-            </a>
-            <a href="#" onClick={(e) => go(e, "privacidad")}>
-              Privacidad
-            </a>
-          </nav>
-
-          <nav aria-label="Información">
-            <strong>INFORMACIÓN</strong>
-
-            <span>Proyecto Final de Carrera III</span>
-            <span>Prototipo académico · 2026</span>
-          </nav>
-        </div>
-
-        <div className="footer-note">
-          <span>© DentAI</span>
-          <p>
-            Demostración académica. No es un dispositivo médico ni ofrece
-            diagnóstico.
-          </p>
-        </div>
-      </footer>
     </>
   );
 }

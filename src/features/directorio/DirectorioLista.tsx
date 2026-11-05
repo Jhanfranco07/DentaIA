@@ -7,6 +7,7 @@ import { formatearPrecio, inicialesDe, normalizar, textoOpcional } from "./forma
 import type { Dentista } from "./tipos";
 import styles from "./directorio.module.css";
 import { contextoReporte } from "@/lib/navegacion";
+import { Icono } from "@/components/Identidad";
 
 type Carga =
   | { estado: "cargando" }
@@ -164,15 +165,15 @@ export default function DirectorioLista() {
                     <h2>{textoOpcional(d.name, "Nombre no disponible")}</h2>
                     <p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
                     <div className={styles.meta}>
-                      <span>Distrito: {textoOpcional(d.district, "no indicado")}</span>
-                      <span>Consulta: {formatearPrecio(d.consultation_price, d.currency)}</span>
+                      <span><Icono nombre="clinica" size={15} /> Distrito: {textoOpcional(d.district, "no indicado")}</span>
+                      <span><Icono nombre="reloj" size={15} /> Precio referencial: {formatearPrecio(d.consultation_price, d.currency)}</span>
                     </div>
                     <Link
                        href={`/directorio/${d.id}${contexto ? `?${contexto}` : ""}`}
                        className={styles.enlace}
                        aria-label={`Ver detalle de ${d.name.trim() || "profesional"}`}
                     >
-                        Conocer al profesional →
+                        Ver perfil <Icono nombre="flecha" size={15} />
                      </Link>
                   </div>
                 </li>
