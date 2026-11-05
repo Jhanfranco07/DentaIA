@@ -156,6 +156,118 @@ export type Database = {
         }
         Relationships: []
       }
+      dentist_public_locations: {
+        Row: {
+          clinic_id: string
+          created_at: string
+          dentist_id: string
+          id: string
+          latitude: number
+          longitude: number
+          practice_address: string
+          practice_location: string
+          practice_name: string
+          publication_status: string
+          updated_at: string
+        }
+        Insert: {
+          clinic_id: string
+          created_at?: string
+          dentist_id: string
+          id?: string
+          latitude: number
+          longitude: number
+          practice_address: string
+          practice_location?: never
+          practice_name: string
+          publication_status?: string
+          updated_at?: string
+        }
+        Update: {
+          clinic_id?: string
+          created_at?: string
+          dentist_id?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          practice_address?: string
+          practice_location?: never
+          practice_name?: string
+          publication_status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          { foreignKeyName: "dentist_public_locations_dentist_id_fkey"; columns: ["dentist_id"]; isOneToOne: false; referencedRelation: "dentists"; referencedColumns: ["id"] },
+        ]
+      }
+      dentist_reviews: {
+        Row: {
+          appointment_request_id: string
+          author_user_id: string
+          comment: string
+          created_at: string
+          dentist_id: string
+          id: string
+          moderation_status: string
+          rating: number
+        }
+        Insert: {
+          appointment_request_id: string
+          author_user_id?: string
+          comment: string
+          created_at?: string
+          dentist_id: string
+          id?: string
+          moderation_status?: string
+          rating: number
+        }
+        Update: {
+          appointment_request_id?: string
+          author_user_id?: string
+          comment?: string
+          created_at?: string
+          dentist_id?: string
+          id?: string
+          moderation_status?: string
+          rating?: number
+        }
+        Relationships: [
+          { foreignKeyName: "dentist_reviews_dentist_id_fkey"; columns: ["dentist_id"]; isOneToOne: false; referencedRelation: "dentists"; referencedColumns: ["id"] },
+          { foreignKeyName: "dentist_reviews_appointment_request_id_fkey"; columns: ["appointment_request_id"]; isOneToOne: true; referencedRelation: "appointment_requests"; referencedColumns: ["id"] },
+        ]
+      }
+      dentist_review_reports: {
+        Row: {
+          category: string
+          created_at: string
+          details: string
+          id: string
+          moderation_status: string
+          reporter_user_id: string
+          review_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          details?: string
+          id?: string
+          moderation_status?: string
+          reporter_user_id?: string
+          review_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          details?: string
+          id?: string
+          moderation_status?: string
+          reporter_user_id?: string
+          review_id?: string
+        }
+        Relationships: [
+          { foreignKeyName: "dentist_review_reports_review_id_fkey"; columns: ["review_id"]; isOneToOne: false; referencedRelation: "dentist_reviews"; referencedColumns: ["id"] },
+        ]
+      }
       patient_consents: {
         Row: {
           accepted_at: string
