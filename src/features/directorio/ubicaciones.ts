@@ -1,8 +1,13 @@
-import { distanciaEnKm, type PuntoGeografico } from "./geolocalizacion.ts";
+import { coordenadasValidas, distanciaEnKm, type PuntoGeografico } from "./geolocalizacion.ts";
 import type { DentistaDirectorio, MarcadorConsultorio, UbicacionPublica } from "./tipos";
 
+export function ubicacionConCoordenadasValidas(ubicacion: UbicacionPublica): boolean {
+  return coordenadasValidas(ubicacion.latitude, ubicacion.longitude);
+}
+
 export function ubicacionMasCercana(ubicaciones: readonly UbicacionPublica[], origen: PuntoGeografico | null) {
-  const puntos = ubicaciones.map(ubicacion => ({ ubicacion, distancia: origen ? distanciaEnKm(origen, ubicacion) : null }));
+  const puntos = ubicaciones.filter(ubicacionConCoordenadasValidas)
+    .map(ubicacion => ({ ubicacion, distancia: origen ? distanciaEnKm(origen, ubicacion) : null }));
   puntos.sort((a, b) => (a.distancia ?? Number.POSITIVE_INFINITY) - (b.distancia ?? Number.POSITIVE_INFINITY));
   return puntos[0] ?? null;
 }
@@ -18,7 +23,7 @@ export function tieneUbicacionDentroDelRadio(
 }
 
 export function crearMarcadores(dentistas: readonly DentistaDirectorio[]): MarcadorConsultorio[] {
-  return dentistas.flatMap(dentista => dentista.ubicaciones.map(ubicacion => ({
+  return dentistas.flatMap(dentista => dentista.ubicaciones.filter(ubicacionConCoordenadasValidas).map(ubicacion => ({
     ...ubicacion,
     dentista: { id: dentista.id, name: dentista.name, is_demo: dentista.is_demo },
   })));

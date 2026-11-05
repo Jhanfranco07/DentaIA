@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { crearMarcadores, tieneUbicacionDentroDelRadio, ubicacionMasCercana } from "./ubicaciones.ts";
+import { crearMarcadores, tieneUbicacionDentroDelRadio, ubicacionConCoordenadasValidas, ubicacionMasCercana } from "./ubicaciones.ts";
 
 const consultorio = (id, latitude, longitude) => ({
   id, dentist_id: "dentista-1", practice_name: `Consultorio ${id}`, practice_address: "Dirección publicada",
@@ -31,4 +31,16 @@ test("crea un marcador por ubicación y mantiene vínculo al perfil, sin incluir
   assert.equal(marcadores[0].dentista.is_demo, true);
   assert.equal("clinic_id" in marcadores[0], false);
   assert.equal(crearMarcadores([{ ...odontologo, ubicaciones: [] }]).length, 0);
+});
+
+test("descarta ubicaciones con coordenadas ausentes, no finitas o fuera de rango", () => {
+  const validas = [consultorio("valida", -12.05, -77.04)];
+  const invalidas = [consultorio("nan", NaN, -77), consultorio("latitud", 91, 0), consultorio("longitud", 0, 181)];
+  const todas = [...validas, ...invalidas];
+
+  assert.equal(ubicacionConCoordenadasValidas(validas[0]), true);
+  invalidas.forEach(ubicacion => assert.equal(ubicacionConCoordenadasValidas(ubicacion), false));
+  assert.deepEqual(ubicacionMasCercana(todas, null)?.ubicacion.id, "valida");
+  assert.deepEqual(crearMarcadores([{ ...odontologo, ubicaciones: todas }]).map(m => m.id), ["valida"]);
+  assert.equal(ubicacionMasCercana(invalidas, null), null);
 });

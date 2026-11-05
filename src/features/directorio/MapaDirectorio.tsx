@@ -5,6 +5,7 @@ import { Map, Marker, NavigationControl, Popup, setWorkerUrl, type Map as MapIns
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { MarcadorConsultorio } from "./tipos";
 import type { PuntoGeografico } from "./geolocalizacion";
+import { ubicacionConCoordenadasValidas } from "./ubicaciones";
 import styles from "./mapa-directorio.module.css";
 
 const LIMA = { longitude: -77.0428, latitude: -12.0464 };
@@ -54,10 +55,9 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
     if (!listo || !mapa.current) return;
     marcadores.current.forEach(marcador => marcador.remove());
     marcadores.current = [];
+    const ubicacionesValidas = ubicaciones.filter(ubicacionConCoordenadasValidas);
 
-    for (const consultorio of ubicaciones) {
-      if (typeof consultorio.latitude !== "number" || typeof consultorio.longitude !== "number"
-        || !Number.isFinite(consultorio.latitude) || !Number.isFinite(consultorio.longitude)) continue;
+    for (const consultorio of ubicacionesValidas) {
       const popupRoot = document.createElement("div");
       const nombre = document.createElement("strong");
       nombre.textContent = consultorio.dentista.name || "Profesional";
@@ -100,11 +100,11 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
         .setPopup(new Popup({ offset: 15 }).setText("Ubicación aproximada de este dispositivo; no se guarda."))
         .addTo(mapa.current));
       mapa.current.flyTo({ center: [ubicacion.longitude, ubicacion.latitude], zoom: 13, duration: 650 });
-    } else if (ubicaciones.length > 0) {
-      if (ubicaciones.length === 1) mapa.current.flyTo({ center: [ubicaciones[0].longitude, ubicaciones[0].latitude], zoom: 13, duration: 500 });
-      else if (ubicaciones.length > 1) {
-        const longitudes = ubicaciones.map(d => d.longitude);
-        const latitudes = ubicaciones.map(d => d.latitude);
+    } else if (ubicacionesValidas.length > 0) {
+      if (ubicacionesValidas.length === 1) mapa.current.flyTo({ center: [ubicacionesValidas[0].longitude, ubicacionesValidas[0].latitude], zoom: 13, duration: 500 });
+      else if (ubicacionesValidas.length > 1) {
+        const longitudes = ubicacionesValidas.map(d => d.longitude);
+        const latitudes = ubicacionesValidas.map(d => d.latitude);
         mapa.current.fitBounds([[Math.min(...longitudes), Math.min(...latitudes)], [Math.max(...longitudes), Math.max(...latitudes)]], { padding: 52, maxZoom: 14, duration: 500 });
       }
     }
