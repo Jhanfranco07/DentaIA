@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const raiz = new URL("../../../", import.meta.url);
 const migracion = readFileSync(fileURLToPath(new URL("supabase/migrations/20261105160341_add_dentist_locations_and_reviews.sql", raiz)), "utf8");
-const rollback = readFileSync(fileURLToPath(new URL("docs/integracion/rollback_geolocalizacion_resenas.sql", raiz)), "utf8");
+const rollback = readFileSync(fileURLToPath(new URL("supabase/migrations/20261105160341_add_dentist_locations_and_reviews.rollback.sql", raiz)), "utf8");
 
 test("la migración solo crea tablas nuevas y no altera el esquema clínico existente", () => {
   for (const table of ["dentist_public_locations", "dentist_reviews", "dentist_review_reports"]) {
@@ -54,11 +54,11 @@ test("autor solo puede leer campos públicos publicados; reportes quedan privado
   assert.match(migracion, /reporter_user_id uuid not null default auth\.uid\(\) references auth\.users\(id\) on delete cascade/i);
 });
 
-test("el rollback verifica propiedad de la migración y rehúsa borrar cualquier tabla con datos", () => {
-  assert.match(rollback, /ownership_marker[\s\S]*position\(ownership_marker in object_comment\) = 0/i);
-  assert.match(rollback, /if has_rows then\s+raise exception/i);
-  assert.match(rollback, /to_regprocedure\('public\.prevent_professional_self_review\(\)'\)[\s\S]*obj_description\(function_oid, 'pg_proc'\)/i);
-  assert.match(rollback, /drop function if exists public\.prevent_professional_self_review\(\)/i);
+test("el rollback verifica propiedad y se niega a borrar información", () => {
+  assert.match(rollback, /ROLLBACK_BLOQUEADO: % no pertenece a esta migración/i);
+  assert.match(rollback, /ROLLBACK_BLOQUEADO: dentist_public_locations contiene datos/i);
+  assert.match(rollback, /ROLLBACK_BLOQUEADO: dentist_reviews contiene datos/i);
+  assert.match(rollback, /drop policy if exists dentist_public_locations_read_published/i);
   assert.doesNotMatch(rollback, /drop\s+table[^;]*cascade/i);
   assert.doesNotMatch(rollback, /drop\s+extension/i);
 });

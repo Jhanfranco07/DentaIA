@@ -169,6 +169,9 @@ export type Database = {
           practice_name: string
           publication_status: string
           updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+          verification_reference: string | null
         }
         Insert: {
           clinic_id: string
@@ -182,6 +185,9 @@ export type Database = {
           practice_name: string
           publication_status?: string
           updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          verification_reference?: string | null
         }
         Update: {
           clinic_id?: string
@@ -195,6 +201,9 @@ export type Database = {
           practice_name?: string
           publication_status?: string
           updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          verification_reference?: string | null
         }
         Relationships: [
           { foreignKeyName: "dentist_public_locations_dentist_id_fkey"; columns: ["dentist_id"]; isOneToOne: false; referencedRelation: "dentists"; referencedColumns: ["id"] },
@@ -321,7 +330,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      dentaia_gestionar_ubicacion_v1: {
+        Args: {
+          p_solicitud: string
+          p_operacion: string
+          p_ubicacion_id: string | null
+          p_dentist_id: string | null
+          p_clinic_id: string | null
+          p_practice_name: string | null
+          p_practice_address: string | null
+          p_latitude: number | null
+          p_longitude: number | null
+          p_verification_reference: string | null
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
