@@ -1,0 +1,22 @@
+# TEMPLATE ONLY. Do not apply before Linux validation and license review.
+# A Render Free web service is internet-reachable, not a private-network service.
+services:
+  - type: web
+    name: dentaia-vision-poc-evaluation
+    runtime: docker
+    plan: free
+    branch: feature/vision-artificial-poc
+    rootDir: services/dental-vision
+    dockerfilePath: ./Dockerfile.onnx
+    dockerContext: .
+    autoDeployTrigger: "off"
+    healthCheckPath: /health
+    envVars:
+      - key: MODEL_BACKEND
+        value: onnx
+      - key: MODEL_PATH
+        value: models/best.onnx
+      - key: MODEL_MANIFEST_PATH
+        value: models/best.onnx.json
+      - key: DENTAL_VISION_SERVICE_SECRET
+        sync: false

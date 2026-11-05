@@ -3,7 +3,7 @@
 __pycache__
 .pytest_cache
 models
-evidence
-tests
+evidence/private
+evidence/linux
 Ultralytics
 **/__pycache__

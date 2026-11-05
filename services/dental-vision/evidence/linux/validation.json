@@ -1,0 +1,31 @@
+{
+  "status": "blocked_or_failed",
+  "base_commit": "363d5e6",
+  "requests": [],
+  "method": "Linux Docker, real localhost HTTP, one worker; /proc/1 VmHWM kernel high-water RSS; cgroup memory.peak includes file cache and stdlib probes",
+  "limits": {
+    "memory_bytes": 536870912,
+    "swap_bytes": 0,
+    "cpus": 0.1
+  },
+  "docker": {
+    "Version": "29.9.2",
+    "Os": "linux",
+    "Arch": "amd64",
+    "KernelVersion": "6.6.87.2-microsoft-standard-WSL2",
+    "Platform": {
+      "Name": "Docker Desktop 4.98.0 (245422)"
+    }
+  },
+  "suite_exit_code": 0,
+  "suite_execution": "Docker BuildKit RUN --network=none; fresh test-execution stage; only JUnit exported",
+  "suite": {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "blocker": "KeyboardInterrupt: ",
+  "oom_killed": false,
+  "container_exit_code": 0
+}

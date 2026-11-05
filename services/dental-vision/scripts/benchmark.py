@@ -30,8 +30,9 @@ def main():
     monitor = threading.Thread(target=sample_memory, daemon=True)
     monitor.start()
     manifest = json.loads(Path("evidence/samples.json").read_text())
-    backend = os.environ.get("MODEL_BACKEND", "torch")
-    packages = ("torch", "torchvision", "ultralytics", "fastapi", "starlette", "Pillow", "numpy") if backend == "torch" else ("onnxruntime", "fastapi", "starlette", "Pillow", "numpy", "opencv-python")
+    backend = os.environ.get("MODEL_BACKEND", "onnx")
+    cv_package = "opencv-python" if importlib.metadata.packages_distributions().get("cv2") == ["opencv-python"] else "opencv-python-headless"
+    packages = ("torch", "torchvision", "ultralytics", "fastapi", "starlette", "Pillow", "numpy") if backend == "torch" else ("onnxruntime", "fastapi", "starlette", "Pillow", "numpy", cv_package)
     report = {"real_inference": True, "platform": platform.platform(), "backend": backend,
               "python": platform.python_version(), "cpu": platform.processor(),
               "physical_cores": psutil.cpu_count(logical=False), "device": "cpu",

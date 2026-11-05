@@ -72,3 +72,13 @@ La instalación inicial de ONNX encontró WinError 206 por la longitud de rutas;
 Suite final ejecutada con `RUN_REAL_INFERENCE=1`: **21 passed**, 19 pruebas con mocks/unidades de validación y 2 integraciones reales (PyTorch y ONNX, dos fotos cada una). Informe `evidence/tests-all.xml`. El informe independiente `tests-mock.xml` contiene 19 pruebas y excluye las reales. La única advertencia de la suite es la deprecación de HTTPX en Starlette TestClient; no es un fallo ni una detección. Los benchmarks de memoria se ejecutaron en procesos separados de esta suite para no sumar ambos modelos.
 
 La sintaxis Python y la comprobación de espacios de Git pasaron. No se ejecutó build de Next.js porque no se cambió esa aplicación. Los Dockerfiles no se ejecutaron: su validación Linux/Render sigue pendiente, junto con el cumplimiento de licencia para publicación. Las fotografías y los pesos permanecen excluidos de Git; la descarga de ambos se puede reproducir con los scripts y hashes incluidos.
+
+## Continuación desde 363d5e6 y pausa para traslado
+
+Los apartados anteriores conservan la evidencia histórica inicial. En la continuación se inició Docker Linux y se construyó `Dockerfile.onnx`, con producción headless sin PyTorch/Ultralytics y exportación separada mediante la variante oficial headless 8.4.104. La descarga original, el ONNX checker, la ausencia de pesos externos, el metadato AGPL y la carga de una sesión CPU fueron verificados. Hash ONNX Linux: `2c9f66d4b7547dcab625539ceb7ad8870fb93e4171c4863e4c4a29a0cbace4d50`, tamaño 80 380 309 bytes.
+
+Se ejecutaron las **21 pruebas Linux**, con cero errores, fallos u omisiones, en Docker BuildKit sin red durante las pruebas. El JUnit (`evidence/linux/tests-linux.xml`) registra 24.70 s de ejecución. La suite se completó justo antes de que se atendiera la petición de detener las validaciones largas.
+
+**La validación Linux completa del runtime con 512 MiB/0.1 CPU sigue pendiente.** No se obtuvo una medición de memoria máxima ni latencia bajo esos límites; `evidence/linux/validation.json` conserva `KeyboardInterrupt` y no certifica compatibilidad. No se iniciarán más construcciones en esta sesión. La exportación y las pruebas de integración no equivalen a completar esa medición.
+
+Se redujo una copia RGB innecesaria, ONNX pasó a ser el backend predeterminado y `/health` añade tiempo de carga. Se prepararon scripts reproducibles, plantilla Render inactiva y avisos/licencia; la aprobación para publicar el servicio/modelos permanece pendiente. Se autoriza únicamente preservar y subir la rama con código revisado, sin pesos, fotos ni imágenes Docker. Consultar `HANDOFF.md` para continuar desde la laptop.

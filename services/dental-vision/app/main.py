@@ -57,7 +57,8 @@ def decode_image(data: bytes, media_type: str):
                 source.verify()
             with Image.open(io.BytesIO(data)) as source:
                 source.load()
-                return ImageOps.exif_transpose(source).convert("RGB")
+                ImageOps.exif_transpose(source, in_place=True)
+                return source.copy() if source.mode == "RGB" else source.convert("RGB")
     except (Image.DecompressionBombError, Image.DecompressionBombWarning):
         raise HTTPException(413, "Image exceeds pixel limit") from None
     except (UnidentifiedImageError, OSError, ValueError, SyntaxError):
@@ -73,10 +74,11 @@ def create_app(detector_factory=None):
         app.state.secret = secret
         app.state.detector = None
         app.state.busy = asyncio.Lock()
-        backend = os.environ.get("MODEL_BACKEND", "torch")
+        backend = os.environ.get("MODEL_BACKEND", "onnx")
         if backend not in ("torch", "onnx"):
             raise RuntimeError("MODEL_BACKEND must be torch or onnx")
         app.state.backend = backend
+        started = time.perf_counter()
         try:
             factory = detector_factory
             if factory is None:
@@ -91,6 +93,7 @@ def create_app(detector_factory=None):
         except Exception:
             # Do not log paths, secrets, bodies or exception strings.
             logger.error("Model unavailable; check verified weights and runtime dependencies")
+        app.state.model_load_seconds = round(time.perf_counter() - started, 6)
         yield
         app.state.detector = None
 
@@ -110,7 +113,8 @@ def create_app(detector_factory=None):
         available = app.state.detector is not None
         return JSONResponse({"status": "ok" if available else "degraded",
                              "model_available": available, "device": "cpu",
-                             "backend": app.state.backend},
+                             "backend": app.state.backend,
+                             "model_load_seconds": app.state.model_load_seconds},
                             status_code=200 if available else 503)
 
     @app.post("/predict", response_model=Prediction)

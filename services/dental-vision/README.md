@@ -6,7 +6,7 @@ Servicio independiente de Next.js y Supabase. Usa exclusivamente el detector YOL
 
 Consultar [evaluación técnica](TECHNICAL_REVIEW.md) y los JSON de `evidence/` para resultados medidos y bloqueos. Un smoke test con dos fotografías no valida precisión, seguridad clínica ni generalización. Las clases se devuelven literalmente como `d` y `D`: no se convierten en diagnósticos, gravedad ni recomendaciones.
 
-La API ONNX de menor memoria midió **329 MiB de pico aproximado y 2.01 s de mediana caliente**. Es el candidato preparado para evaluar Render Free. La variante PyTorch midió 724 MiB y no se recomienda para sus 512 MB. Estas mediciones son de Windows: **el funcionamiento en Render Free todavía no está confirmado**; falta comprobar el contenedor Linux, sus límites y el arranque frío.
+La API ONNX de menor memoria midió **329 MiB de pico aproximado y 2.01 s de mediana caliente en Windows**. En la continuación se construyó la imagen Linux, se validó la exportación ONNX y pasaron las 21 pruebas Linux. **La validación Linux integral por HTTP con 512 MiB/0.1 CPU y sus mediciones siguen pendientes**: se detuvo el flujo por petición del usuario. No está confirmado el funcionamiento en Render Free. Ver [traspaso a otra computadora](HANDOFF.md).
 
 ## Instalación local
 
@@ -17,13 +17,14 @@ python -m venv "$env:USERPROFILE/.venvs/dentaia-vision"
 $visionPython = "$env:USERPROFILE/.venvs/dentaia-vision/Scripts/python.exe"
 & $visionPython -m pip install --no-compile -r requirements-dev.txt
 & $visionPython scripts/download_model.py
+& $visionPython scripts/export_onnx.py
 $env:DENTAL_VISION_SERVICE_SECRET = (& $visionPython -c "import secrets; print(secrets.token_hex(32))")
 & $visionPython -m uvicorn app.main:app --host 127.0.0.1 --port 10000 --workers 1 --limit-concurrency 4 --no-access-log
 ```
 
 En Windows usar una ruta corta para el entorno: ONNX incluye rutas internas largas y puede fallar con WinError 206 dentro de este directorio. En Linux crear `.venv`, instalar `requirements-dev.txt`, activar `.venv/bin/activate` y usar `python` para los comandos. El secreto es obligatorio, ASCII y de al menos 32 bytes. Se configura en el entorno, nunca se incluye en Git ni en variables `NEXT_PUBLIC_`.
 
-`MODEL_BACKEND=torch` es el valor local por defecto; `MODEL_BACKEND=onnx` selecciona la sesión ONNX de menor memoria. `MODEL_PATH` predeterminado es `models/best.pt` o `models/best.onnx` según el backend. ONNX requiere su manifiesto de exportación `models/best.onnx.json` (o `MODEL_MANIFEST_PATH`), que vincula el artefacto por hash a los pesos originales. Los archivos y el manifiesto deben proceder del build confiable, nunca de una petición. El exportador genera ambos. Un detector se carga una vez por proceso; si falta o falla, el servicio queda degradado. No hay sustitución silenciosa entre backends: corregir y reiniciar.
+`MODEL_BACKEND=onnx` es el valor por defecto y selecciona la sesión ONNX de menor memoria. `MODEL_BACKEND=torch` se conserva para comparar con los pesos originales, exclusivamente en el entorno de evaluación. `MODEL_PATH` predeterminado es `models/best.pt` o `models/best.onnx` según el backend. ONNX requiere su manifiesto de exportación `models/best.onnx.json` (o `MODEL_MANIFEST_PATH`), que vincula el artefacto por hash a los pesos originales. Los archivos y el manifiesto deben proceder del build confiable, nunca de una petición. El exportador genera ambos. Un detector se carga una vez por proceso; si falta o falla, el servicio queda degradado. No hay sustitución silenciosa entre backends: corregir y reiniciar.
 
 ## Contrato HTTP
 
@@ -63,16 +64,18 @@ $env:MODEL_BACKEND = 'onnx'
 
 Para ejecutar únicamente ONNX fuera del entorno de evaluación, instalar `requirements-onnx.txt` y obtener `best.onnx` más su manifiesto de una exportación confiable. No instalar `requirements.txt`: incorpora PyTorch. `Dockerfile.onnx` realiza esta separación automáticamente mediante dos etapas; el runtime final no contiene PyTorch ni Ultralytics.
 
+La producción utiliza `opencv-python-headless`, sin Qt ni dependencias gráficas. La etapa Linux de exportación utiliza la variante oficial `ultralytics-opencv-headless==8.4.104`, con la misma API, también sin bibliotecas gráficas. La imagen `tests` contiene las dependencias de exportación/PyTorch necesarias para ejecutar las 21 pruebas; no es la imagen que debe desplegarse. [Validación Linux reproducible](LINUX_VALIDATION.md) documenta la separación, las métricas y los comandos HTTP. [Revisión de licencia](LICENSE_REVIEW.md) enumera las obligaciones pendientes. `render.evaluation.yaml.example` es una plantilla inactiva y no debe aplicarse todavía.
+
 ## Preparación de Render (sin despliegue automático)
 
 1. Revisar primero los bloqueos y la memoria en `TECHNICAL_REVIEW.md`. No contratar recursos ni asumir que Free soporta YOLO11m.
-2. Cuando se decida publicar esta rama, subir **solo** `feature/vision-artificial-poc`; este trabajo no hizo push. Crear un Web Service nuevo, sin vincularlo a la aplicación principal.
+2. La rama `feature/vision-artificial-poc` se prepara para publicar únicamente código, documentación y recibos revisados; no pesos, fotos ni imágenes Docker. No crear todavía el servicio Render. Tras resolver licencia y validación pendiente, crear un Web Service independiente de la aplicación principal.
 3. Seleccionar esa rama y Root Directory `services/dental-vision`, runtime Docker y Dockerfile `./Dockerfile.onnx`. Desactivar Auto Deploy. El build descarga el objeto inmutable LFS, verifica tamaño/hash y exporta ONNX en una etapa que contiene PyTorch. Copia solo el grafo y su manifiesto al runtime ligero. Una cuota LFS o descarga fallida detiene el build. `./Dockerfile` conserva la variante PyTorch para comparación; no es la opción propuesta para Free.
 4. Configurar `DENTAL_VISION_SERVICE_SECRET` como secreto del servicio (generar un valor aleatorio propio, no reutilizar valores de pruebas). `PORT` lo proporciona Render. Docker Build Context Directory `.` relativo al Root Directory; conservar el CMD del Dockerfile. Health Check Path `/health`. Un proceso, CPU, sin discos ni Supabase. Consultar [Docker en Render](https://render.com/docs/docker) y [rutas de monorepo](https://render.com/docs/monorepo-support).
 5. Seleccionar exclusivamente Free, sin contratar recursos. El Dockerfile ONNX configura `MODEL_BACKEND=onnx`; `/health` debe confirmarlo. Si el build, el arranque o la inferencia superan los recursos, detenerse y registrar el bloqueo; no pasar a un plan de pago automáticamente.
 6. Tras un despliegue futuro, verificar `/health`, peticiones sin secreto, formatos inválidos y fotos autorizadas; medir arranque frío y memoria del contenedor. No hay un despliegue Render ejecutado en esta entrega.
 
-Ambos Dockerfiles incluyen el artefacto del modelo en la imagen, sin descargas durante el arranque o después del reposo. No se pudieron construir aquí porque Docker no está disponible. Render Free tiene sistema de archivos efímero, reposo tras 15 minutos y un arranque frío que debe contemplarse en el timeout del futuro backend. Fuentes: [Free](https://render.com/docs/free), [compute plans](https://render.com/docs/compute-plans).
+Ambos Dockerfiles preparan el artefacto del modelo dentro de la imagen, sin descargas durante el arranque. La variante `Dockerfile.onnx` fue construida y su exportación validada en Linux; la medición del runtime limitado quedó pendiente. Render Free tiene disco efímero, reposo tras 15 minutos y arranque frío. Fuentes: [Free](https://render.com/docs/free), [compute plans](https://render.com/docs/compute-plans).
 
 Antes de desplegar, en un equipo con Docker se puede aproximar el límite del runtime y repetir las peticiones autorizadas. Estos comandos se entregan para validación posterior; no se ejecutaron aquí:
 
