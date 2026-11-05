@@ -1,5 +1,5 @@
-import ProfesionalDemo from "@/features/profesional/ProfesionalDemo";
+import ProfesionalClinico from "@/features/profesional/ProfesionalClinico";
 
 export default function ProfesionalPage() {
-  return <ProfesionalDemo />;
+  return <ProfesionalClinico />;
 }

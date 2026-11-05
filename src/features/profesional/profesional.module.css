@@ -54,6 +54,26 @@
   font-size: 14px;
 }
 
+.avisoClinico {
+  margin-bottom: 24px;
+  padding: 18px 20px;
+  border: 1px solid #c7e5e5;
+  border-radius: 14px;
+  background: #e8f6f7;
+}
+
+.avisoClinico strong {
+  color: var(--teal-dark);
+}
+
+.avisoClinico p {
+  max-width: 80ch;
+  margin: 5px 0 0;
+  color: #24594d;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .navegacion {
   display: flex;
   flex-wrap: wrap;
@@ -207,6 +227,43 @@
 .estadoDenegado p,
 .estadoError p {
   margin: 5px 0 0;
+}
+
+.accionesEstado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.botonSecundario {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #8bb8b6;
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--teal-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.botonSecundario:hover:not(:disabled) {
+  border-color: var(--teal-dark);
+  background: #f0f8f7;
+}
+
+.botonSecundario:focus-visible,
+.campo select:focus-visible {
+  outline: 3px solid rgba(15, 133, 129, 0.35);
+  outline-offset: 2px;
+}
+
+.botonSecundario:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
 }
 
 .resultadoHistorial {
@@ -464,6 +521,45 @@
   font-weight: 650;
 }
 
+.listaSolicitudes {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.solicitudProfesional {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px;
+  border: 1px solid #dce8e8;
+  border-radius: 11px;
+  background: #fbfdfd;
+}
+
+.solicitudProfesional div {
+  display: grid;
+  gap: 4px;
+}
+
+.solicitudProfesional strong {
+  color: var(--ink);
+}
+
+.solicitudProfesional span:not(.identificador),
+.mensajeSecundario {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.mensajeSecundario {
+  margin: 10px 0 0;
+}
+
 @media (max-width: 760px) {
   .tarjeta {
     padding: 22px 18px;
@@ -482,6 +578,10 @@
   .resumenCaso dl {
     grid-template-columns: 1fr;
     min-width: 0;
+  }
+
+  .solicitudProfesional {
+    display: grid;
   }
 }
 
