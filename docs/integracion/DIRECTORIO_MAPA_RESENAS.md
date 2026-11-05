@@ -1,8 +1,8 @@
 # Directorio, mapa y reseñas — alcance y validación local
 
-**Fecha:** 2026-11-05  
-**Rama:** `develop`  
-**Base revisada:** `53a3df135191f8a21924ad200f5e088676834b8e`  
+**Fecha:** 2026-11-05
+**Rama:** `develop`
+**Base revisada:** `53a3df135191f8a21924ad200f5e088676834b8e`
 **Entorno:** Windows local, Node.js 22.17.0, Next.js 15.5.28. No se cargaron credenciales ni se accedió a Supabase remoto desde esta ejecución.
 
 ## Cambios preparados
