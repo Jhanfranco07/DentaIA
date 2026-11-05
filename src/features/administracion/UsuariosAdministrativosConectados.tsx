@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { crearClienteAdministrativo, type ErrorClienteAdministrativo } from "./cliente";
 import EstadoAdministrativo from "./EstadoAdministrativo";
+import DesafioMfaAdministrativo from "./DesafioMfaAdministrativo";
 import styles from "./administracion.module.css";
 
 const ContextoAcceso = createContext<{ invalidar: (error: ErrorClienteAdministrativo) => void } | null>(null);
@@ -44,7 +45,10 @@ export default function UsuariosAdministrativosConectados({ children }: { childr
   if (acceso === "comprobando") return <EstadoAdministrativo estado="carga" />;
   if (acceso !== "permitido") return <section className={styles.bloque} aria-label="Resultado del acceso administrativo">
     <h2>Acceso a la API protegida</h2><p role="alert" className={styles.errorAdmin}>{acceso.mensaje}</p>
-    <p>No se muestran cuentas. Esta vista no habilita ni modifica MFA, roles o permisos.</p>
+    <p>No se muestran cuentas. La verificación MFA solo eleva la sesión actual; el servidor conserva la decisión sobre roles y permisos.</p>
+    {acceso.codigo === "MFA_AAL2_PENDIENTE" && <DesafioMfaAdministrativo alCompletar={() => {
+      setAcceso("comprobando"); setRevision(v => v + 1);
+    }} />}
     <div className="actions"><button type="button" className={styles.accionEstado} onClick={() => { setAcceso("comprobando"); setRevision(v => v + 1); }}>Volver a comprobar acceso</button>
       {acceso.status === 401 && <Link href="/cuenta">Ir a Mi cuenta</Link>}</div>
   </section>;

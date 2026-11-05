@@ -11,7 +11,7 @@ import {ejecutarOperacionAdministrativa} from '../autorizacion/autorizacion.ts';
 const codigo=await readFile(new URL('./cliente.ts',import.meta.url),'utf8');
 const {outputText}=ts.transpileModule(codigo,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}});
 const modulo=outputText.replace('from "./servicios"',`from "${new URL('./servicios.ts',import.meta.url).href}"`);
-const {crearClienteAdministrativo,esDenegacionDeAcceso}=await import('data:text/javascript;base64,'+Buffer.from(modulo).toString('base64'));
+const {crearClienteAdministrativo,esDenegacionDeAcceso,fallo}=await import('data:text/javascript;base64,'+Buffer.from(modulo).toString('base64'));
 const destino='00000000-0000-4000-8000-000000000002';
 const propuesta={operacion:'validar_cambio_rol',usuarioId:destino,rol:'odontologo'};
 function identidad({rol='superusuario',aal='aal2',estado='activo',error=null,id=ACTOR_ADMINISTRATIVO_DEMO}={}) {
@@ -27,12 +27,12 @@ function integrar(opciones={},p=crearProveedorAdministrativoSimulado()) {
  });
 }
 
-test('transporte lee token renovado por petición, usa rutas fijas y no cookies ni caché',async()=>{
+test('transporte lee token renovado, usa rutas fijas y solo cookies same-origin sin caché',async()=>{
  const llamadas=[];let n=0;
  const c=crearClienteAdministrativo(async()=>`fixture-${++n}`,async(url,init)=>{llamadas.push({url,init});return Response.json({autorizado:true});});
  assert.equal((await c.comprobarAcceso()).ok,true);await c.comprobarAcceso();
  assert.deepEqual(llamadas.map(x=>x.init.headers.Authorization),['Bearer fixture-1','Bearer fixture-2']);
- for(const x of llamadas){assert.equal(x.url,'/api/administracion/acceso');assert.equal(x.init.credentials,'omit');assert.equal(x.init.cache,'no-store');assert.equal(x.init.redirect,'error');assert(!x.url.includes('fixture'));}
+ for(const x of llamadas){assert.equal(x.url,'/api/administracion/acceso');assert.equal(x.init.credentials,'same-origin');assert.equal(x.init.cache,'no-store');assert.equal(x.init.redirect,'error');assert(!x.url.includes('fixture'));}
 });
 
 test('cliente → API → guard AAL2 → proveedor; lista y valida sin modificar roles',async()=>{
@@ -54,6 +54,13 @@ test('paciente, odontólogo, AAL1, suspensión y token inválido no alcanzan el 
   for(const r of [await c.listar({}),await c.validarPropuesta(propuesta)]){assert.equal(r.status,status);assert(esDenegacionDeAcceso(r));}
   assert.equal(llamadas,0);
  }
+});
+
+test('AAL1 muestra el paso MFA requerido y el servidor mantiene la denegación',async()=>{
+ const r=await integrar({aal:'aal1'}).comprobarAcceso();
+ assert.equal(r.ok,false);assert.equal(r.status,403);assert.equal(r.codigo,'MFA_AAL2_PENDIENTE');
+ assert.match(r.mensaje,/Completa la verificación MFA/);
+ assert.match(fallo(403,'MFA_AAL2_PENDIENTE').mensaje,/Completa la verificación MFA/);
 });
 
 test('ausencia o fallo de sesión no envía una petición ni expone detalles',async()=>{

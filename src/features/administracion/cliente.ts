@@ -69,7 +69,9 @@ export function crearTransporteAdministrativo(
       if (!token || /\s/.test(token)) return fallo(401, "SESION_REQUERIDA");
       const respuesta = await solicitar(ruta, {
         ...init, headers: { ...init.headers, Authorization: `Bearer ${token}` },
-        credentials: "omit", cache: "no-store", redirect: "error", referrerPolicy: "no-referrer",
+        // La ruta es same-origin: permite que Vercel Deployment Protection reciba su
+        // cookie para este hostname. Nunca se envían cookies a otros orígenes.
+        credentials: "same-origin", cache: "no-store", redirect: "error", referrerPolicy: "no-referrer",
         signal: AbortSignal.timeout(10000),
       });
       if (!respuesta.ok) {
