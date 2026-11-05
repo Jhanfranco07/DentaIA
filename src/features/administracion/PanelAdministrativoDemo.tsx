@@ -5,6 +5,7 @@ import { Icono } from "@/components/Identidad";
 import LayoutAdministrativo from "./LayoutAdministrativo";
 import UsuariosAdministrativos from "./UsuariosAdministrativos";
 import CambioRolesLocal from "./CambioRolesLocal";
+import GestorUbicaciones from "./GestorUbicaciones";
 import { useAccesoPanel } from "./UsuariosAdministrativosConectados";
 import { fallo } from "./cliente";
 import TarjetaAdministrativa from "./TarjetaAdministrativa";
@@ -54,6 +55,9 @@ export default function PanelAdministrativoDemo() {
           <TarjetaAdministrativa titulo="Roles y permisos" icono="escudo"
             descripcion="Referencia de los perfiles del sistema y sus límites, basada en la matriz de permisos de DI-148."
             accion="Consultar roles y permisos" onAbrir={() => seleccionar("roles")} />
+          <TarjetaAdministrativa titulo="Consultorios" icono="clinica"
+            descripcion="Registra y publica sedes verificadas. La publicación exige identidad profesional, membresía vigente y autorización AAL2 en el servidor."
+            accion="Gestionar consultorios" onAbrir={() => seleccionar("ubicaciones")} />
         </div>
         <section className={styles.bloque} aria-labelledby="admin-alcance">
           <h2 id="admin-alcance">Servicios y restricciones</h2>
@@ -77,6 +81,8 @@ export default function PanelAdministrativoDemo() {
           onAccesoDenegado={status => invalidar(fallo(status, "ERROR_API"))} />
         <button type="button" className={styles.accionEstado} onClick={() => seleccionar("usuarios")}>Volver a consultar usuarios</button>
       </section>}
+
+      {seccion === "ubicaciones" && <GestorUbicaciones />}
 
       <aside className={styles.limiteClinico} aria-labelledby="admin-limite">
         <Icono nombre="escudo" size={23} />

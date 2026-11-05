@@ -19,6 +19,12 @@ const esObjeto = (v: unknown): v is Record<string, unknown> => typeof v === "obj
 const clavesExactas = (v: Record<string, unknown>, permitidas: readonly string[]) => Object.keys(v).length === permitidas.length && Object.keys(v).every(k => permitidas.includes(k));
 const uuid = (v: unknown): v is string => typeof v === "string" && UUID.test(v);
 
+/** Distingue una migración aún no instalada de una caída o denegación de RLS. */
+export function tablaUbicacionesAusente(error: unknown): boolean {
+  if (!esObjeto(error) || typeof error.code !== "string") return false;
+  return error.code === "42P01" || error.code === "PGRST205";
+}
+
 export function leerOperacionUbicacion(v: unknown): OperacionUbicacion {
   if (!esObjeto(v) || typeof v.operacion !== "string") throw new ErrorEntradaUbicacion();
   if (v.operacion === "guardar") {

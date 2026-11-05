@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { leerOperacionUbicacion, validarResultadoUbicacion } from "./ubicaciones.ts";
+import { leerOperacionUbicacion, tablaUbicacionesAusente, validarResultadoUbicacion } from "./ubicaciones.ts";
 
 const guardar = {
   operacion: "guardar", dentistId: "44444444-4444-4444-8444-444444444444", clinicId: "77777777-7777-4777-8777-777777777777",
@@ -27,4 +27,12 @@ test("acepta solo respuestas RPC acotadas sin filtrar campos inesperados", () =>
   assert.equal(validarResultadoUbicacion({ ok: false, status: 403, codigo: "ACCESO_DENEGADO" }).status, 403);
   assert.throws(() => validarResultadoUbicacion({ ok: false, status: 403, codigo: "TOKEN_PRIVADO", token: "no" }));
   assert.throws(() => validarResultadoUbicacion({ ok: true, status: 200, codigo: "OK", ubicacionId: "not-uuid" }));
+});
+
+test("identifica errores de tabla no expuesta sin confundirlos con denegación o caída", () => {
+  assert.equal(tablaUbicacionesAusente({ code: "42P01" }), true);
+  assert.equal(tablaUbicacionesAusente({ code: "PGRST205" }), true);
+  assert.equal(tablaUbicacionesAusente({ code: "42501" }), false);
+  assert.equal(tablaUbicacionesAusente({ code: "08006" }), false);
+  assert.equal(tablaUbicacionesAusente(null), false);
 });

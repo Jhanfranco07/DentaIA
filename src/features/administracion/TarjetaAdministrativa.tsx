@@ -4,7 +4,7 @@ import styles from "./administracion.module.css";
 type Props = {
   titulo: string;
   descripcion: string;
-  icono: "persona" | "escudo";
+  icono: "persona" | "escudo" | "clinica";
   accion: string;
   onAbrir: () => void;
 };
