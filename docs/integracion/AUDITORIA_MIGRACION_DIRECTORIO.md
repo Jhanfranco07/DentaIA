@@ -42,9 +42,11 @@ El rollback ahora requiere la marca de esta migración en cada tabla y función,
 
 ## Posibilidad de validación local
 
-Una prueba aislada con Supabase Local es técnicamente posible con Docker y una línea base de esquema reproducible. Este entorno no está listo: `docker info` no encuentra el daemon de Docker; el repositorio no contiene `supabase/config.toml` y solo tiene dos migraciones locales frente a siete versiones registradas en el proyecto remoto. Sin restaurar el esquema base y ejecutar Docker, no se puede afirmar que un `supabase start/db reset/db lint` reproduzca la base actual. No se creó una rama remota de Supabase ni se exportaron datos.
+Docker Desktop está instalado, pero su daemon no inicia en esta sesión: el servicio `com.docker.service` está detenido y el proceso no tiene privilegios para iniciarlo. No hay distribución WSL ni servidor PostgreSQL local. El repositorio no contiene `supabase/config.toml` y solo tiene dos migraciones locales frente a siete versiones registradas en el proyecto remoto; por ello `supabase start/db reset/db lint` no reproduciría por sí solo la línea base remota.
 
-Para una validación fiel: restaurar/iniciar Docker; preparar una base local vacía con la línea base aprobada de `public`, `clinical` y los stubs de `auth`; aplicar únicamente migraciones locales versionadas; ejecutar la migración; verificar catálogos, grants, RLS y trigger con roles `anon`/`authenticated`; probar rollback vacío y la negativa ante datos; destruir exclusivamente esa base efímera. Esta prueba local debe preceder cualquier aplicación remota futura.
+Como alternativa aislada se instaló fuera del repositorio PGlite 0.5.15 y `@electric-sql/pglite-postgis` 0.2.15, que incorpora PostGIS 3.6.2 en WebAssembly. Ejecuté el SQL exacto de la migración y el rollback en dos instancias efímeras, sobre stubs sintéticos mínimos de `auth`, `public` y `clinical` que conservan las restricciones académicas relevantes. Pasaron 13 aserciones: creación de objetos y cuatro índices; RLS; lectura pública limitada a ubicaciones publicadas de profesionales activos; denegación de lectura de `clinic_id`, autor y reportes; denegación de inserción de ubicación; elegibilidad académica no satisfacible; rechazo del rollback con datos y preservación de filas tras revertir la transacción abortada; rollback vacío y conservación de PostGIS.
+
+Esta es ejecución PostgreSQL/PostGIS real dentro de PGlite, no una prueba estática, pero no equivale a Supabase Local ni a la instancia remota: PGlite/PostGIS está marcado experimental, usa versiones distintas (PostGIS remoto 3.3.7 y PGlite 3.6.2) y el esquema de prueba es mínimo, no una restauración integral de las siete migraciones remotas. No valida diferencias específicas del gateway/PostgREST de Supabase ni todos los claims y políticas de producción. La base de prueba solo contuvo datos ficticios en memoria; no se exportaron datos ni se escribió remotamente.
 
 ## Correcciones locales y pruebas
 
@@ -54,7 +56,7 @@ Para una validación fiel: restaurar/iniciar Docker; preparar una base local vac
 - El rollback comprueba marcas de propiedad y contenido antes de eliminar objetos.
 - Se extrajeron helpers de compatibilidad del directorio y se añadieron pruebas para tablas ausentes/vacías y contratos de grants, RLS, elegibilidad, autorreseña y rollback.
 
-Validaciones locales: `npm run typecheck` aprobado; `npm run build` aprobado; suite `node --experimental-strip-types --test` sobre los archivos `src/**/*.test.mjs`: **426 aprobadas, 0 fallidas**; `git diff --check` aprobado. Las pruebas SQL son de contrato estático: no sustituyen un `db lint`, ejecución transaccional ni prueba RLS real.
+Validaciones locales de código: `npm run typecheck` aprobado; `npm run build` aprobado; suite `node --experimental-strip-types --test` sobre los archivos `src/**/*.test.mjs`: **426 aprobadas, 0 fallidas**; `git diff --check` aprobado. Validación SQL aislada adicional: **13 aserciones aprobadas, 0 fallidas** mediante ejecución de la migración y el rollback en PGlite/PostGIS con el alcance y las limitaciones descritas arriba.
 
 ## Orden seguro de despliegue
 
