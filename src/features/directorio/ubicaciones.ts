@@ -23,8 +23,9 @@ export function tieneUbicacionDentroDelRadio(
 }
 
 export function crearMarcadores(dentistas: readonly DentistaDirectorio[]): MarcadorConsultorio[] {
-  return dentistas.flatMap(dentista => dentista.ubicaciones.filter(ubicacionConCoordenadasValidas).map(ubicacion => ({
+  return dentistas.filter(dentista => dentista.is_demo === false).flatMap(dentista => dentista.ubicaciones.filter(ubicacionConCoordenadasValidas).map(ubicacion => ({
     ...ubicacion,
+    tipo: "consultorio" as const,
     dentista: { id: dentista.id, name: dentista.name, is_demo: dentista.is_demo },
   })));
 }

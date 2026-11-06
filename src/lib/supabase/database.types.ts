@@ -209,6 +209,54 @@ export type Database = {
           { foreignKeyName: "dentist_public_locations_dentist_id_fkey"; columns: ["dentist_id"]; isOneToOne: false; referencedRelation: "dentists"; referencedColumns: ["id"] },
         ]
       }
+      directory_demo_locations: {
+        Row: {
+          city: string
+          country: string
+          created_at: string
+          district: string
+          id: string
+          is_demo: boolean
+          is_published: boolean
+          latitude: number
+          longitude: number
+          name: string
+          public_label: string
+          requests_enabled: boolean
+          slug: string
+        }
+        Insert: {
+          city: string
+          country: string
+          created_at?: string
+          district: string
+          id?: string
+          is_demo?: boolean
+          is_published?: boolean
+          latitude: number
+          longitude: number
+          name: string
+          public_label: string
+          requests_enabled?: boolean
+          slug: string
+        }
+        Update: {
+          city?: string
+          country?: string
+          created_at?: string
+          district?: string
+          id?: string
+          is_demo?: boolean
+          is_published?: boolean
+          latitude?: number
+          longitude?: number
+          name?: string
+          public_label?: string
+          requests_enabled?: boolean
+          slug?: string
+        }
+        Relationships: []
+      }
       dentist_reviews: {
         Row: {
           appointment_request_id: string

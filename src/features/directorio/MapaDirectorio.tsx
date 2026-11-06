@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Map, Marker, NavigationControl, Popup, setWorkerUrl, type Map as MapInstance, type StyleSpecification } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import type { MarcadorConsultorio } from "./tipos";
+import type { MarcadorConsultorio, MarcadorDemo, MarcadorDirectorio } from "./tipos";
 import type { PuntoGeografico } from "./geolocalizacion";
 import { ubicacionConCoordenadasValidas } from "./ubicaciones";
 import styles from "./mapa-directorio.module.css";
@@ -16,7 +16,7 @@ function obtenerTeselas() {
 }
 
 export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }: {
-  ubicaciones: MarcadorConsultorio[];
+  ubicaciones: MarcadorDirectorio[];
   ubicacion: PuntoGeografico | null;
   alSeleccionar?: (id: string) => void;
 }) {
@@ -55,7 +55,9 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
     if (!listo || !mapa.current) return;
     marcadores.current.forEach(marcador => marcador.remove());
     marcadores.current = [];
-    const ubicacionesValidas = ubicaciones.filter(ubicacionConCoordenadasValidas);
+    const ubicacionesValidas = ubicaciones.filter((ubicacion): ubicacion is MarcadorConsultorio => ubicacion.tipo === "consultorio" && ubicacionConCoordenadasValidas(ubicacion));
+    const demosValidas = ubicaciones.filter((ubicacion): ubicacion is MarcadorDemo => ubicacion.tipo === "demo" && Number.isFinite(ubicacion.latitude) && Number.isFinite(ubicacion.longitude)
+      && ubicacion.latitude >= -90 && ubicacion.latitude <= 90 && ubicacion.longitude >= -180 && ubicacion.longitude <= 180);
 
     for (const consultorio of ubicacionesValidas) {
       const popupRoot = document.createElement("div");
@@ -74,11 +76,6 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
       enlace.href = `/directorio/${encodeURIComponent(consultorio.dentist_id)}`;
       enlace.textContent = "Ver perfil";
       popupRoot.append(enlace);
-      if (consultorio.dentista.is_demo) {
-        const aviso = document.createElement("small");
-        aviso.textContent = "Perfil académico ficticio";
-        popupRoot.append(aviso);
-      }
       const elemento = document.createElement("button");
       elemento.type = "button";
       elemento.className = styles.marcadorDentista;
@@ -86,6 +83,32 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
       elemento.addEventListener("click", () => alSeleccionar?.(consultorio.dentist_id));
       const marcador = new Marker({ element: elemento, anchor: "bottom" })
         .setLngLat([consultorio.longitude, consultorio.latitude])
+        .setPopup(new Popup({ offset: 28 }).setDOMContent(popupRoot))
+        .addTo(mapa.current);
+      marcadores.current.push(marcador);
+    }
+
+    for (const demo of demosValidas) {
+      const popupRoot = document.createElement("div");
+      const nombre = document.createElement("strong");
+      nombre.textContent = demo.name;
+      popupRoot.append(nombre);
+      const etiqueta = document.createElement("p");
+      etiqueta.textContent = demo.public_label;
+      popupRoot.append(etiqueta);
+      const distrito = document.createElement("p");
+      distrito.textContent = `${demo.district}, ${demo.city}, ${demo.country}`;
+      popupRoot.append(distrito);
+      const nota = document.createElement("small");
+      nota.textContent = "Coordenada representativa de demostración; no identifica un consultorio ni una dirección real.";
+      popupRoot.append(nota);
+      const elemento = document.createElement("button");
+      elemento.type = "button";
+      elemento.className = styles.marcadorDemo;
+      elemento.textContent = "DEMO";
+      elemento.setAttribute("aria-label", `${demo.public_label}, ${demo.district}`);
+      const marcador = new Marker({ element: elemento, anchor: "bottom" })
+        .setLngLat([demo.longitude, demo.latitude])
         .setPopup(new Popup({ offset: 28 }).setDOMContent(popupRoot))
         .addTo(mapa.current);
       marcadores.current.push(marcador);
@@ -100,11 +123,12 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
         .setPopup(new Popup({ offset: 15 }).setText("Ubicación aproximada de este dispositivo; no se guarda."))
         .addTo(mapa.current));
       mapa.current.flyTo({ center: [ubicacion.longitude, ubicacion.latitude], zoom: 13, duration: 650 });
-    } else if (ubicacionesValidas.length > 0) {
-      if (ubicacionesValidas.length === 1) mapa.current.flyTo({ center: [ubicacionesValidas[0].longitude, ubicacionesValidas[0].latitude], zoom: 13, duration: 500 });
-      else if (ubicacionesValidas.length > 1) {
-        const longitudes = ubicacionesValidas.map(d => d.longitude);
-        const latitudes = ubicacionesValidas.map(d => d.latitude);
+    } else if (ubicacionesValidas.length + demosValidas.length > 0) {
+      const puntos = [...ubicacionesValidas, ...demosValidas];
+      if (puntos.length === 1) mapa.current.flyTo({ center: [puntos[0].longitude, puntos[0].latitude], zoom: 13, duration: 500 });
+      else {
+        const longitudes = puntos.map(d => d.longitude);
+        const latitudes = puntos.map(d => d.latitude);
         mapa.current.fitBounds([[Math.min(...longitudes), Math.min(...latitudes)], [Math.max(...longitudes), Math.max(...latitudes)]], { padding: 52, maxZoom: 14, duration: 500 });
       }
     }

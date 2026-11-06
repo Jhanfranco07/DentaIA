@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatearPrecio, inicialesDe, normalizar, textoOpcional } from "./formato";
-import type { DentistaDirectorio, UbicacionPublica } from "./tipos";
+import type { DemoLocationPublica, DentistaDirectorio, MarcadorDemo, UbicacionPublica } from "./tipos";
 import { distanciaEnKm, formatearDistancia, mensajeErrorUbicacion, obtenerUbicacionActual, type PuntoGeografico } from "./geolocalizacion";
 import { resumirResenas } from "./resenas";
 import styles from "./directorio.module.css";
@@ -14,6 +14,7 @@ import { Icono } from "@/components/Identidad";
 import type { ResenaPublica } from "./resenas";
 import { crearMarcadores, tieneUbicacionDentroDelRadio, ubicacionMasCercana } from "./ubicaciones";
 import { adjuntarUbicaciones, normalizarResenas } from "./compatibilidad-esquema";
+import { crearMarcadorDemo } from "./demo";
 
 const MapaDirectorio = dynamic(() => import("./MapaDirectorio"), {
   ssr: false,
@@ -25,7 +26,7 @@ type Vista = "lista" | "mapa";
 type Carga =
   | { estado: "cargando" }
   | { estado: "error" }
-  | { estado: "listo"; dentistas: DentistaDirectorio[]; resenas: Record<string, ReturnType<typeof resumirResenas>>; resenasDisponibles: boolean; ubicacionesDisponibles: boolean };
+  | { estado: "listo"; dentistas: DentistaDirectorio[]; demos: DemoLocationPublica[]; demoDisponible: boolean; resenas: Record<string, ReturnType<typeof resumirResenas>>; resenasDisponibles: boolean; ubicacionesDisponibles: boolean };
 
 export default function DirectorioLista() {
   const [carga, setCarga] = useState<Carga>({ estado: "cargando" });
@@ -40,6 +41,7 @@ export default function DirectorioLista() {
   const [orden, setOrden] = useState<Orden>("nombre");
   const [vistaMovil, setVistaMovil] = useState<Vista>("lista");
   const [seleccionado, setSeleccionado] = useState("");
+  const [mostrarDemo, setMostrarDemo] = useState(true);
   const busquedaRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -66,9 +68,13 @@ export default function DirectorioLista() {
         }
         const resenasResultado = normalizarResenas(respuestaResenas);
         const resenas = resenasResultado.resenas as ResenaPublica[];
+        const respuestaDemo = await client.from("directory_demo_locations")
+          .select("id,slug,name,district,city,country,latitude,longitude,is_demo,is_published,requests_enabled,public_label")
+          .eq("is_demo", true).eq("is_published", true).eq("requests_enabled", false);
+        const demos = (respuestaDemo.data ?? []) as DemoLocationPublica[];
         if (cancelado) return;
         const sumarios = Object.fromEntries(dentistas.map(dentista => [dentista.id, resumirResenas(resenas.filter(r => r.dentist_id === dentista.id))]));
-        setCarga({ estado: "listo", dentistas, resenas: sumarios, resenasDisponibles: resenasResultado.disponibles, ubicacionesDisponibles: ubicacionesResultado.disponibles });
+        setCarga({ estado: "listo", dentistas, demos, demoDisponible: !respuestaDemo.error, resenas: sumarios, resenasDisponibles: resenasResultado.disponibles, ubicacionesDisponibles: ubicacionesResultado.disponibles });
       } catch { if (!cancelado) setCarga({ estado: "error" }); }
     }
     void cargar();
@@ -98,6 +104,10 @@ export default function DirectorioLista() {
   }, [busqueda, carga, dentistas, distrito, especialidad, orden, radioKm, ubicacion]);
 
   const ubicacionesVisibles = crearMarcadores(visibles);
+  const marcadoresDemo = carga.estado === "listo"
+    ? carga.demos.map(crearMarcadorDemo).filter((marcador): marcador is MarcadorDemo => marcador !== null)
+    : [];
+  const ubicacionesMapa = [...ubicacionesVisibles, ...(mostrarDemo ? marcadoresDemo : [])];
 
   async function usarUbicacion() {
     setErrorUbicacion("");
@@ -130,9 +140,18 @@ export default function DirectorioLista() {
 
     {carga.estado === "cargando" && <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i /><i /><i /></div></div>}
     {carga.estado === "error" && <div className={`${styles.aviso} ${styles.avisoError}`} role="alert"><strong>No pudimos cargar el directorio.</strong><p>Comprueba la conexión y vuelve a intentarlo.</p><button type="button" className={styles.boton} onClick={() => { setCarga({ estado: "cargando" }); setIntento(n => n + 1); }}>Reintentar</button></div>}
-    {carga.estado === "listo" && dentistas.length === 0 && <div className={styles.aviso} role="status">Por ahora no hay odontólogos activos en el directorio.</div>}
+    {carga.estado === "listo" && <section className={styles.tarjetaDemo} aria-label="Establecimiento académico de demostración">
+      <span className={styles.etiquetaDemo}>DEMO</span>
+      <div><h2>{carga.demos[0]?.name ?? "Clínica de demostración"}</h2>
+        <strong>{carga.demos[0]?.public_label ?? "DEMO — Clínica ficticia, no ofrece atención real"}</strong>
+        <p>{carga.demos[0] ? `${carga.demos[0].district}, ${carga.demos[0].city}, ${carga.demos[0].country}` : carga.demoDisponible ? "No hay ubicaciones DEMO publicadas." : "La ubicación DEMO no está disponible en este entorno."}</p>
+        {carga.demos[0] && <p>El punto del mapa es una coordenada representativa de demostración; no indica un consultorio ni una dirección real.</p>}
+      </div>
+      {marcadoresDemo.length > 0 && <button type="button" aria-pressed={mostrarDemo} className={styles.botonDemo} onClick={() => setMostrarDemo(value => !value)}>{mostrarDemo ? "Ocultar en el mapa" : "Mostrar en el mapa"}</button>}
+    </section>}
+    {carga.estado === "listo" && dentistas.length === 0 && marcadoresDemo.length === 0 && <div className={styles.aviso} role="status">Por ahora no hay odontólogos activos ni ubicaciones publicadas en el directorio.</div>}
 
-    {carga.estado === "listo" && dentistas.length > 0 && <>
+    {carga.estado === "listo" && (dentistas.length > 0 || marcadoresDemo.length > 0) && <>
       <div className={styles.accionesMapa}><button type="button" onClick={() => void usarUbicacion()} disabled={cargandoUbicacion} className={styles.botonUbicacion}><Icono nombre="buscar" size={16} />{cargandoUbicacion ? "Buscando ubicación…" : ubicacion ? "Actualizar mi ubicación" : "Usar mi ubicación"}</button><span>El permiso solo se solicita al pulsar el botón. El punto se mantiene en esta sesión y no se guarda; el proveedor de mapas recibe solicitudes normales de teselas para el área visible.</span></div>
       {errorUbicacion && <p className={styles.errorUbicacion} role="alert">{errorUbicacion}</p>}
       {ubicacion && <p className={styles.privacidadUbicacion} role="status">Ubicación temporal recibida (precisión aproximada de {Math.round(ubicacion.accuracy ?? 0)} m). Se usa para ordenar y calcular distancias en línea recta.</p>}
@@ -168,8 +187,8 @@ export default function DirectorioLista() {
           </ul>}
         </section>
         <section className={`${styles.mapaPanel} ${vistaMovil === "lista" ? styles.ocultarEnMovil : ""}`} aria-label="Mapa de consultorios">
-          {conUbicacion.length === 0 && <p className={styles.avisoMapa}>{carga.estado === "listo" && carga.ubicacionesDisponibles ? "No hay consultorios con ubicación registrada. El mapa no asigna puntos a perfiles sin coordenadas verificadas." : "El servicio de ubicaciones no está disponible en este entorno. El directorio por lista sigue disponible."}</p>}
-          <MapaDirectorio ubicaciones={ubicacionesVisibles} ubicacion={ubicacion} alSeleccionar={setSeleccionado} />
+          {conUbicacion.length === 0 && marcadoresDemo.length === 0 && <p className={styles.avisoMapa}>{carga.estado === "listo" && carga.ubicacionesDisponibles ? "No hay consultorios con ubicación registrada. El mapa no asigna puntos a perfiles sin coordenadas verificadas." : "El servicio de ubicaciones no está disponible en este entorno. El directorio por lista sigue disponible."}</p>}
+          <MapaDirectorio ubicaciones={ubicacionesMapa} ubicacion={ubicacion} alSeleccionar={setSeleccionado} />
         </section>
       </div>
     </>}

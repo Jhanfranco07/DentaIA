@@ -6,7 +6,7 @@ const consultorio = (id, latitude, longitude) => ({
   id, dentist_id: "dentista-1", practice_name: `Consultorio ${id}`, practice_address: "Dirección publicada",
   latitude, longitude, created_at: "2026-01-01T00:00:00Z",
 });
-const odontologo = { id: "dentista-1", name: "Perfil académico", is_demo: true, ubicaciones: [
+const odontologo = { id: "dentista-1", name: "Perfil profesional", is_demo: false, ubicaciones: [
   consultorio("lejano", -12.2, -77.1), consultorio("cercano", -12.05, -77.04),
 ] };
 
@@ -28,9 +28,13 @@ test("crea un marcador por ubicación y mantiene vínculo al perfil, sin incluir
   const marcadores = crearMarcadores([odontologo]);
   assert.equal(marcadores.length, 2);
   assert.equal(marcadores[0].dentist_id, "dentista-1");
-  assert.equal(marcadores[0].dentista.is_demo, true);
+  assert.equal(marcadores[0].dentista.is_demo, false);
   assert.equal("clinic_id" in marcadores[0], false);
   assert.equal(crearMarcadores([{ ...odontologo, ubicaciones: [] }]).length, 0);
+});
+
+test("no promueve perfiles académicos ficticios a marcadores de consultorio aunque traigan ubicaciones", () => {
+  assert.deepEqual(crearMarcadores([{ ...odontologo, is_demo: true }]), []);
 });
 
 test("descarta ubicaciones con coordenadas ausentes, no finitas o fuera de rango", () => {
