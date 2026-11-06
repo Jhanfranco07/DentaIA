@@ -1,0 +1,25 @@
+{
+  "lcpMs": 248,
+  "images": [
+    {
+      "url": "http://127.0.0.1:3181/_next/image?url=%2Fhero%2Fhero-1.jpg&w=1920&q=75",
+      "bytes": 68874,
+      "durationMs": 30
+    },
+    {
+      "url": "http://127.0.0.1:3181/_next/image?url=%2Fhero%2Fhero-2.jpg&w=1920&q=75",
+      "bytes": 132466,
+      "durationMs": 99.60000000009313
+    },
+    {
+      "url": "http://127.0.0.1:3181/_next/image?url=%2Fhero%2Fhero-3.jpg&w=1920&q=75",
+      "bytes": 75346,
+      "durationMs": 102.80000000004657
+    },
+    {
+      "url": "http://127.0.0.1:3181/_next/image?url=%2Fhero%2Fhero-4.jpg&w=1920&q=75",
+      "bytes": 107900,
+      "durationMs": 124.09999999997672
+    }
+  ]
+}
