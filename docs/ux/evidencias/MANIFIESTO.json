@@ -1,0 +1,59 @@
+{
+  "base": "5715c90501aa86af13cbf1904cd56e6a4c1838f2",
+  "develop": "7c0244fa247eb5f020156b71d42bddaed7a6d524",
+  "rama": "refactor/ux-experiencia-integrada",
+  "node": "22.23.4",
+  "resultados": {
+    "node": {
+      "aprobadas": 451,
+      "fallidas": 0,
+      "omitidas": 0
+    },
+    "navegador_desarrollo_fixtures": {
+      "aprobadas": 76,
+      "fallidas": 0
+    },
+    "http_build_produccion_sin_sesion": {
+      "aprobadas": 14,
+      "fallidas": 0
+    },
+    "typecheck_exit": 0,
+    "build_exit": 0,
+    "audit_vulnerabilidades": 0
+  },
+  "remoto_supabase_ejecutado": false,
+  "escrituras_remotas_ejecutadas": false,
+  "normalizacion_logs": "Solo se normalizan retornos de carro, espacios y líneas vacías finales; se conserva el contenido de resultados.",
+  "sha256_fuentes": {
+    "src/app/(odontologo)/layout.tsx": "09e5dcbcf7e32296fdc8c89dda804a433d5619a6377443b11e142494ad774b00",
+    "src/app/(paciente)/layout.tsx": "66a3b76e046e639b0754d80651546dd01c25f79d1e3a464057e4575d7f30e359",
+    "src/app/(public)/page.tsx": "e7730feeb847289144623a6422f699de7b72b83558b38aff51e4f14ffaca2355",
+    "src/app/(public)/privacidad/page.tsx": "608e1139541508e9c712dd81535cc53cc470bd9327822c7d7a28b926a75616c6",
+    "src/app/globals.css": "b47a19a895803052b8dd96fe404b9104c6bce43d975e114cf74c6eb8318c59a2",
+    "src/app/layout.tsx": "d91f242244011ddf7f21d449066912dd3f0d4718709198c3ad20fe280df78958",
+    "src/components/Encabezado.tsx": "e49cfe94d3fef474c12a3114b1f82de6db9ceb31d777e1afffa676f907da037b",
+    "src/components/Pie.tsx": "8d1804ed2b8435607fd8f35e337e1c709be693e97083198b023bdc463eb36a7e",
+    "src/components/PortalShell.tsx": "8d95a612afe5f190f8749e207253bc00b03800df6c92e234c346256fa292e710",
+    "src/components/portal-shell.module.css": "73bf27db0e0c5eaceab78a7b9f5f3d347dd0440fd31c14e9b2354df9926429a4",
+    "src/features/administracion/EstadoAdministrativo.tsx": "bc2d1b52f8e8faa24f02c8903a890b428d62a4b47cc9837b9c4917051868cb77",
+    "src/features/administracion/LayoutAdministrativo.tsx": "bacd90f1cf20a3c377c57bd0a29de68576b26df55f4f7573b72194979ef4db52",
+    "src/features/administracion/PanelAdministrativoDemo.tsx": "ce31f9c2d0abcde2b1fc22cffe3544e97dcb0d23f41f55fa1359459bafaa8625",
+    "src/features/administracion/administracion.module.css": "a6dbd21a66e41f048f995ce29fdc778c2f30c012593f221715fb10b81beb0027",
+    "src/features/analisis/AnalisisDental.tsx": "896c30748996badf48cc1269c1a0e34425f50ee7581c96468705fb6fa45391c4",
+    "src/features/analisis/MisResultados.tsx": "e6dca0032717c29e6fd27af756aad9772d668f8747749fe4c47ba786961a67f9",
+    "src/features/cuenta/Cuenta.tsx": "fc879425e4aad430932fefb6809b09f8a3b41a81d08673958f2a2ce1d76cf19c",
+    "src/features/cuenta/cuenta.module.css": "d4e371e17592a142c74cbf529095e58cafc824fad6ab8ac05ebed366fd0a9a67",
+    "src/features/directorio/DentistaDetalle.tsx": "d4b20f269e58a1dfbab03c67a31faae42579653c11803a8fe30cc4879fb16bcb",
+    "src/features/directorio/DirectorioLista.tsx": "dc89447db263b5cae3afeb6746e3a6df7e923228b0c4cab377242b5f5a26b963",
+    "src/features/directorio/ResenasOdontologo.tsx": "d2a20eb833d99a4d3ca78f1a4771ad6ab5bd44adeb381d363d4dd0f34d9ffc53",
+    "src/features/panel/ClinicaPanel.tsx": "1b98536cba67c4e04f386d4f335fcdfe81e3b1a1631343a47fc587bc40859e29",
+    "src/features/panel/PanelPaciente.tsx": "293000495d0e5c89f27cc70da90464a733ccc918a41bf8eaa13906c1485de8df",
+    "src/features/panel/ResumenPanel.tsx": "6f234f230545b5d3f56458e0738cc0315d33b315eec326dd248641fde61f075a",
+    "src/features/panel/panel.module.css": "a26856803529d520dc8026ed86d54978301bdb2c3e99927d5f4341b0f01f85b7",
+    "src/features/profesional/profesional.module.css": "7b2cae0237c9b9c0d2e8177ba8778727652d17518dfe9cf68780e2ac1c2b4481",
+    "src/app/(public)/home.module.css": "229c226d6bb7a047c5f47fbb1920c899de71fc357f6298c293b3b7f74053fa65",
+    "src/components/navegacion-portal.ts": "74b7669613e1268299f75ba79278e59bf0301d1fc39689739e852d2a8416fb23",
+    "scripts/qa-ux.py": "f9010748d5450a1d7c04d629acea1c50f94154d2bec12d54abcd16d8480061e9",
+    "scripts/qa-ux-http.py": "d88ac3410a94e6a51b2ccb6ed50a3f63dffd630a7bca08a30b91f151d3235417"
+  }
+}

@@ -37,8 +37,8 @@ export default function PanelAdministrativoDemo() {
 
   return <section className={styles.pagina} aria-label="Panel administrativo protegido">
     <div className={styles.avisoDemo}>
-      <strong>DI-152 · Integración administrativa</strong>
-      <p>Panel local conectado a los servicios administrativos existentes. La configuración académica compartida mantiene lecturas y escrituras desactivadas; una operación bloqueada se muestra como error, nunca como simulación o éxito.</p>
+      <strong>Administración con permisos verificados</strong>
+      <p>Las operaciones disponibles dependen de la configuración del entorno y de tus permisos. Los cambios de roles permanecen desactivados en el despliegue actual.</p>
     </div>
     <LayoutAdministrativo seccion={seccion} onSeleccionar={seleccionar}>
       <div className={styles.introduccion}>
@@ -52,23 +52,14 @@ export default function PanelAdministrativoDemo() {
       {seccion === "inicio" && <>
         <div className={styles.tarjetas}>
           <TarjetaAdministrativa titulo="Usuarios" icono="persona"
-            descripcion="Espacio previsto para organizar la identidad y el estado de las cuentas. Sin acceso a fotografías ni historiales."
+            descripcion="Consulta la identidad y el estado de las cuentas. Sin acceso a fotografías ni historiales."
             accion="Consultar usuarios" onAbrir={() => seleccionar("usuarios")} />
-          <TarjetaAdministrativa titulo="Roles y permisos" icono="escudo"
-            descripcion="Referencia de los perfiles del sistema y sus límites, basada en la matriz de permisos de DI-148."
-            accion="Consultar roles y permisos" onAbrir={() => seleccionar("roles")} />
           <TarjetaAdministrativa titulo="Consultorios" icono="clinica"
             descripcion="Registra y publica sedes verificadas. La publicación exige identidad profesional, membresía vigente y autorización AAL2 en el servidor."
             accion="Gestionar consultorios" onAbrir={() => seleccionar("ubicaciones")} />
-          <TarjetaAdministrativa titulo="Vinculaciones" icono="persona"
-            descripcion="Asocia profesionales verificados con clínicas activas mediante una operación auditada y revocable."
-            accion="Gestionar membresías" onAbrir={() => seleccionar("vinculaciones")} />
-          <TarjetaAdministrativa titulo="Reseñas" icono="escudo"
-            descripcion="Revisa contenido y reportes recibidos; no se inventan calificaciones ni interacciones."
-            accion="Moderar reseñas" onAbrir={() => seleccionar("resenas")} />
         </div>
         <section className={styles.bloque} aria-labelledby="admin-alcance">
-          <h2 id="admin-alcance">Servicios y restricciones</h2>
+          <h2 id="admin-alcance">Antes de realizar una operación</h2>
           <ul className={styles.pasos}>
             <li><span>01</span><div><strong>Usuarios reales</strong><p>Auth y profiles mediante la API protegida. Requiere habilitación de lectura del operador; sin credenciales privadas en React.</p></div></li>
             <li><span>02</span><div><strong>Cambios controlados</strong><p>Reutilizan revisión, aprobación independiente e idempotencia de DI-151. No se activa la escritura desde esta pantalla.</p></div></li>

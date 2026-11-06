@@ -104,7 +104,6 @@ export default function ResumenPanel() {
         <TarjetaMetrica titulo="Fotografías guardadas" valor={fotos} contexto="En tu espacio personal" icono="camara" />
         <TarjetaMetrica titulo="Solicitudes registradas" valor={solicitudes} contexto="Historial de solicitudes" icono="calendario" />
         <TarjetaMetrica titulo="Solicitudes pendientes" valor={pendientes} contexto="Por atender" icono="reloj" />
-        <TarjetaMetrica titulo="Resultados de análisis" valor="—" contexto="Motor pendiente de integración" icono="destello" />
       </div>
     </section>
   );

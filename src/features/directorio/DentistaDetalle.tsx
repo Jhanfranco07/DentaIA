@@ -127,7 +127,7 @@ export default function DentistaDetalle({ id }: { id: string }) {
             <p>{textoOpcional(carga.dentista.description, "Este profesional aún no ha publicado una descripción.")}</p>
 
             {carga.dentista.is_demo && <p className={styles.nota}>
-              Este perfil y sus tarifas son ilustrativos. La solicitud académica no confirma una cita ni se envía a una clínica.
+              Este perfil y sus tarifas son ilustrativos. La solicitud de demostración no confirma una cita ni se envía a una clínica.
             </p>}
             {carga.dentista.is_demo && <Link className={styles.solicitar} href={enlaceSolicitud(carga.dentista.id)}>Solicitar orientación</Link>}
             {!carga.dentista.is_demo && <p className={styles.nota}>Este perfil no tiene activo un flujo de solicitudes desde DentaIA.</p>}

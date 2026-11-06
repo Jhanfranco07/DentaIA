@@ -135,12 +135,12 @@ export default function DirectorioLista() {
       <span className={styles.etiqueta}>Directorio odontológico</span>
       <h1>Encuentra orientación odontológica</h1>
       <p>Busca por nombre, especialidad o distrito, o consulta la ubicación de profesionales que hayan registrado un consultorio.</p>
-      <span className={styles.avisoDemo}>Este directorio es académico. Los perfiles marcados como ficticios no representan profesionales ni consultorios reales; una solicitud no confirma una cita.</span>
+      <span className={styles.avisoDemo}>Consulta el alcance de cada perfil. Los marcados como ficticios no ofrecen atención real y una solicitud no confirma una cita.</span>
     </header>
 
     {carga.estado === "cargando" && <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i /><i /><i /></div></div>}
     {carga.estado === "error" && <div className={`${styles.aviso} ${styles.avisoError}`} role="alert"><strong>No pudimos cargar el directorio.</strong><p>Comprueba la conexión y vuelve a intentarlo.</p><button type="button" className={styles.boton} onClick={() => { setCarga({ estado: "cargando" }); setIntento(n => n + 1); }}>Reintentar</button></div>}
-    {carga.estado === "listo" && <section className={styles.tarjetaDemo} aria-label="Establecimiento académico de demostración">
+    {carga.estado === "listo" && carga.demos.length > 0 && <section className={styles.tarjetaDemo} aria-label="Establecimiento de demostración">
       <span className={styles.etiquetaDemo}>DEMO</span>
       <div><h2>{carga.demos[0]?.name ?? "Clínica de demostración"}</h2>
         <strong>{carga.demos[0]?.public_label ?? "DEMO — Clínica ficticia, no ofrece atención real"}</strong>
@@ -174,7 +174,7 @@ export default function DirectorioLista() {
               const km = punto?.distancia ?? null;
               return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`} onMouseEnter={() => setSeleccionado(d.id)} onFocus={() => setSeleccionado(d.id)}>
                 <div className={styles.avatar} style={{ background: d.avatar_color?.trim() || "#e3f6f0" }} aria-hidden="true">{inicialesDe(d.initials, d.name)}</div>
-                <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>Perfil académico ficticio</span>}<h2>{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
+                <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>Perfil de ejemplo · ficticio</span>}<h2>{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
                   <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.ubicacionesDisponibles ? "Ubicación no registrada" : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}<span>{formatearPrecio(d.consultation_price, d.currency)}</span></div>
                   <p className={styles.rating} aria-label={resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : `${resumen.promedio.toFixed(1)} de cinco, ${resumen.total} reseñas`}>
                     {resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : <>★ {resumen.promedio.toFixed(1)} · {resumen.total} {resumen.total === 1 ? "reseña" : "reseñas"}</>}

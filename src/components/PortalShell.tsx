@@ -33,12 +33,19 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const [saliendo, setSaliendo] = useState(false);
   const [error, setError] = useState("");
   const boton = useRef<HTMLButtonElement>(null);
-  const pagina = enlaces.find(({ href, exacto }) => exacto ? ruta === href : ruta === href || ruta.startsWith(`${href}/`));
+  const lateral = useRef<HTMLElement>(null);
+  const [fragmento, setFragmento] = useState("");
+  const hrefActual = enlaces.find(e => e.href === ruta + fragmento)?.href;
+  const pagina = enlaces.find(e => e.href === hrefActual) ?? enlaces.find(({ href, exacto }) => exacto ? ruta === href : ruta === href || ruta.startsWith(`${href}/`));
   const nombre = usuario?.user_metadata?.full_name;
   const nombreUsuario = typeof nombre === "string" && nombre.trim() ? nombre.trim() : usuario?.email?.split("@")[0] ?? "Cuenta";
   const roles = rolesDelUsuario(usuario);
 
-  useEffect(() => setAbierto(false), [ruta]);
+  useEffect(() => {
+    const actualizar = () => { setFragmento(window.location.hash); setAbierto(false); };
+    actualizar(); window.addEventListener("hashchange", actualizar);
+    return () => window.removeEventListener("hashchange", actualizar);
+  }, [ruta]);
   useEffect(() => {
     const consulta = window.matchMedia("(max-width: 760px)");
     const actualizar = () => { setMovil(consulta.matches); setAbierto(false); };
@@ -47,13 +54,23 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
     return () => consulta.removeEventListener("change", actualizar);
   }, []);
   useEffect(() => {
-    if (!abierto) return;
-    const cerrarConEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") { setAbierto(false); boton.current?.focus(); }
+    if (!abierto || !movil) return;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    lateral.current?.querySelector<HTMLButtonElement>("button")?.focus();
+    const teclado = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { event.preventDefault(); setAbierto(false); boton.current?.focus(); }
+      if (event.key === "Tab") {
+        const controles = lateral.current?.querySelectorAll<HTMLElement>('a[href], button:not(:disabled)');
+        if (!controles?.length) return;
+        const primero = controles[0], ultimo = controles[controles.length - 1];
+        if (event.shiftKey && document.activeElement === primero) { event.preventDefault(); ultimo.focus(); }
+        else if (!event.shiftKey && document.activeElement === ultimo) { event.preventDefault(); primero.focus(); }
+      }
     };
-    document.addEventListener("keydown", cerrarConEscape);
-    return () => document.removeEventListener("keydown", cerrarConEscape);
-  }, [abierto]);
+    document.addEventListener("keydown", teclado);
+    return () => { document.body.style.overflow = overflow; document.removeEventListener("keydown", teclado); boton.current?.focus(); };
+  }, [abierto, movil]);
 
   async function cerrarSesion() {
     if (saliendo) return;
@@ -71,35 +88,35 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
 
   let grupoAnterior = "";
   return <div className={styles.shell}>
-    <aside id="navegacion-portal" className={styles.lateral} data-abierto={abierto} aria-hidden={movil && !abierto} inert={movil && !abierto ? true : undefined} aria-label={`Navegación del portal ${area}`}>
+    <aside ref={lateral} id="navegacion-portal" className={styles.lateral} data-abierto={abierto} aria-hidden={movil && !abierto} inert={movil && !abierto ? true : undefined} aria-label={`Navegación del portal ${area}`}>
       <div className={styles.cabeceraLateral}><Link href="/" className={styles.marca} aria-label="DentaIA, página de inicio"><Marca /></Link><button type="button" className={styles.cerrarMenu} aria-label="Cerrar navegación" onClick={() => { setAbierto(false); boton.current?.focus(); }}><Icono nombre="cerrar" size={18} /></button></div>
       <div className={styles.portalMarca}><span className={styles.portalIcono}><Icono nombre={area === "Odontología" ? "diente" : area === "Administración" ? "escudo" : "persona"} size={19} /></span><div><strong>{area}</strong><span>Espacio de trabajo</span></div></div>
       <p className={styles.tituloNavegacion}>Menú principal</p>
       <nav aria-label={`Secciones de ${area}`}>
         {enlaces.map(({ href, etiqueta, exacto, icono, grupo }) => {
-          const activo = exacto ? ruta === href : ruta === href || ruta.startsWith(`${href}/`);
+          const activo = hrefActual ? href === hrefActual : exacto ? ruta === href : ruta === href || ruta.startsWith(`${href}/`);
           const encabezadoGrupo = grupo && grupo !== grupoAnterior;
           if (grupo) grupoAnterior = grupo;
           return <span className={styles.itemNavegacion} key={href}>
             {encabezadoGrupo && <span className={styles.grupo}>{grupo}</span>}
-            <Link href={href} aria-current={activo ? "page" : undefined} className={styles.enlace}>
+            <Link href={href} onClick={() => { setAbierto(false); if (href.includes("#")) setFragmento(href.slice(href.indexOf("#"))); }} aria-current={activo ? "page" : undefined} className={styles.enlace}>
               <Icono nombre={icono ?? "flecha"} size={18} /><span>{etiqueta}</span>{activo && <span className={styles.marcaActiva} aria-hidden="true" />}
             </Link>
           </span>;
         })}
       </nav>
-      <div className={styles.pieLateral}><span className={styles.estadoPrivado}><span aria-hidden="true" /> Sesión protegida</span><Link href="/" className={styles.volver}>Ir a DentaIA pública <Icono nombre="enlace" size={15} /></Link></div>
+      <div className={styles.pieLateral}><span className={styles.estadoPrivado}><span aria-hidden="true" /> Acceso sujeto a permisos</span><Link href="/" className={styles.volver}>Ir a DentaIA pública <Icono nombre="enlace" size={15} /></Link></div>
     </aside>
     {abierto && <button type="button" className={styles.fondoMovil} aria-label="Cerrar menú" onClick={() => { setAbierto(false); boton.current?.focus(); }} />}
-    <div className={styles.areaPrincipal}>
+    <div className={styles.areaPrincipal} inert={movil && abierto ? true : undefined}>
       <header className={styles.encabezado}>
         <button ref={boton} type="button" className={styles.botonMenu} aria-expanded={abierto} aria-controls="navegacion-portal" aria-label={abierto ? "Cerrar navegación" : "Abrir navegación"} onClick={() => setAbierto(valor => !valor)}>
           <Icono nombre={abierto ? "cerrar" : "menu"} size={20} />
         </button>
         <div className={styles.tituloPagina}><span>{descripcion}</span><strong>{pagina?.etiqueta ?? area}</strong></div>
         <div className={styles.usuario}><span className={styles.avatar} aria-hidden="true">{nombreUsuario.slice(0, 1).toLocaleUpperCase("es")}</span><span className={styles.usuarioDatos}><strong>{nombreUsuario}</strong><span>{etiquetaRol(roles)}</span></span></div>
-        {mostrarCuentaHeader && <Link href="/cuenta" className={styles.cuenta}><Icono nombre="persona" size={17} /><span>Mi cuenta</span></Link>}
-        <button type="button" className={styles.salir} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>
+        {mostrarCuentaHeader && !enlaces.some(e => e.href === "/cuenta") && <Link href="/cuenta" className={styles.cuenta}><Icono nombre="persona" size={17} /><span>Mi cuenta</span></Link>}
+        <button type="button" className={styles.salir} aria-label={saliendo ? "Cerrando sesión" : "Cerrar sesión"} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>
           <Icono nombre="salir" size={17} /><span>{saliendo ? "Cerrando…" : "Salir"}</span>
         </button>
       </header>

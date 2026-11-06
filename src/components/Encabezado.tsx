@@ -2,11 +2,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useSesion } from "@/features/cuenta/useSesion";
+import { rolesDelUsuario, rutaPrincipalPorRoles } from "@/features/autorizacion/roles";
 import { Icono, Marca } from "./Identidad";
 
-const enlaces = [["/", "Inicio"], ["/#como-funciona", "Cómo funciona"], ["/analisis", "Análisis dental con IA"], ["/directorio", "Odontólogos"], ["/privacidad", "Privacidad"]] as const;
+const enlaces = [["/", "Inicio"], ["/#como-funciona", "Cómo funciona"], ["/#funcionalidades", "Funcionalidades"], ["/directorio", "Odontólogos"], ["/privacidad", "Privacidad"]] as const;
 export default function Encabezado() {
   const ruta = usePathname();
+  const { usuario } = useSesion();
+  const destino = usuario ? rutaPrincipalPorRoles(rolesDelUsuario(usuario)) ?? "/cuenta" : "/cuenta";
   const [abierto, setAbierto] = useState(false);
   const header = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -28,6 +32,6 @@ export default function Encabezado() {
         const activo = href === "/" ? ruta === "/" : href.includes("#") ? false : ruta === href || ruta.startsWith(`${href}/`);
         return <Link key={href} href={href} onClick={() => setAbierto(false)} aria-current={activo ? "page" : undefined}>{texto}</Link>;
       })}
-    </nav><Link href="/cuenta" className="action action-small action-account" aria-label="Iniciar sesión o crear una cuenta" aria-current={ruta === "/cuenta" ? "page" : undefined}><Icono nombre="persona" size={17} /> Iniciar sesión</Link>
+    </nav><Link href={destino} className="action action-small action-account" aria-label={usuario ? "Ir a mi espacio" : "Iniciar sesión o crear una cuenta"} aria-current={ruta === "/cuenta" ? "page" : undefined}><Icono nombre="persona" size={17} /> {usuario ? "Mi espacio" : "Iniciar sesión"}</Link>
   </div></header>;
 }
