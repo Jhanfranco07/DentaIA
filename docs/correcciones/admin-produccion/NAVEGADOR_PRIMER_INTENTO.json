@@ -1,0 +1,45 @@
+{
+  "fecha": "2026-11-06T02:10:44.220869+00:00",
+  "entorno": "Build Next local; VERCEL=1, VERCEL_ENV=production, ref=main. Chromium real y Auth/API sintéticos; no Supabase remoto.",
+  "pruebas": [
+    {
+      "nombre": "Visitante: la ruta existe y no monta datos administrativos",
+      "aprobada": true
+    },
+    {
+      "nombre": "Login sintético de superusuario navega a Administración sin 404",
+      "aprobada": false,
+      "detalle": "Page URL expected to be 'http://127.0.0.1:3181/administracion'\nActual value: http://127.0.0.1:3181/cuenta \nCall log:\n  - Expect \"to_have_url\" with timeout 5000ms\n    14 × locator resolved to <html lang=\"es\">…</html>\n       - unexpected value \"http://127.0.0.1:3181/cuenta\"\n\nAria snapshot:\n- link \"Ir al contenido\":\n  - /url: \"#contenido\"\n- alert\n- complementary \"Navegación del portal Administración\":\n  - link \"DentaIA, página de inicio\":\n    - /url: /\n    - text: DentaIA\n  - strong: Administración\n  - text: Espacio de trabajo\n  - paragraph: Menú principal\n  - navigation \"Secciones de Administración\":\n    - text: Administración\n    - link \"Panel administrativo\":\n      - /url: /administracion\n    - text: Cuenta\n    - link \"Mi cuenta\":\n      - /url: /cuenta\n  - text: Acceso sujeto a permisos\n  - link \"Ir a DentaIA pública\":\n    - /url: /\n- banner:\n  - text: Perfil y preferencias\n  - strong: Mi cuenta\n  - strong: Cuenta sintética QA\n  - text: Superadministrador\n  - button \"Cerrar sesión\": Salir\n- main:\n  - region \"Mi cuenta\":\n    - text: PERFIL DE CUENTA\n    - heading \"Mi cuenta\" [level=1]\n    - paragraph: Cuenta sintética QAfixture@example.test\n    - text: Superadministrador\n    - parag"
+    },
+    {
+      "nombre": "Regresión: cuenta → enlace Panel administrativo → panel existente",
+      "aprobada": true
+    },
+    {
+      "nombre": "Listado y búsqueda sintéticos; responsive en cinco tamaños",
+      "aprobada": true
+    },
+    {
+      "nombre": "El recorrido no emite escrituras ni errores JavaScript",
+      "aprobada": true
+    },
+    {
+      "nombre": "UI denegada con fixture: paciente, AAL2=True",
+      "aprobada": false,
+      "detalle": "Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"http://127.0.0.1:3181/panel\" until 'load'\n============================================================"
+    },
+    {
+      "nombre": "UI denegada con fixture: odontologo, AAL2=True",
+      "aprobada": false,
+      "detalle": "Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"http://127.0.0.1:3181/profesional\" until 'load'\n============================================================"
+    },
+    {
+      "nombre": "UI denegada con fixture: superusuario, AAL2=False",
+      "aprobada": false,
+      "detalle": "Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"http://127.0.0.1:3181/administracion\" until 'load'\n============================================================"
+    }
+  ],
+  "chromium": "154.0.8037.57",
+  "aprobadas": 4,
+  "fallidas": 4
+}

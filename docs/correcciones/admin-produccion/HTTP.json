@@ -1,0 +1,49 @@
+{
+  "entorno": "Next build local con Vercel Production/main; HTTP real sin sesión y sin Supabase",
+  "pruebas": [
+    {
+      "ruta": "/administracion",
+      "esperado": 200,
+      "recibido": 200,
+      "aprobada": true
+    },
+    {
+      "ruta": "/cuenta",
+      "esperado": 200,
+      "recibido": 200,
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/acceso",
+      "esperado": 401,
+      "recibido": 401,
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/usuarios/reales",
+      "esperado": 401,
+      "recibido": 401,
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/roles",
+      "esperado": 401,
+      "recibido": 401,
+      "aprobada": true
+    },
+    {
+      "ruta": "/desarrollo/panel-admin",
+      "esperado": 404,
+      "recibido": 404,
+      "aprobada": true
+    },
+    {
+      "ruta": "/desarrollo/mfa-admin",
+      "esperado": 404,
+      "recibido": 404,
+      "aprobada": true
+    }
+  ],
+  "aprobadas": 7,
+  "fallidas": 0
+}
