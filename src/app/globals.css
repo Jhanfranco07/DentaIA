@@ -371,13 +371,16 @@ input, select, textarea { max-width: 100%; min-width: 0; }
 }
 
 /* =========================================================
-   HERO: CARRUSEL DE FONDO CINEMATOGRÁFICO
+   HERO: CARRUSEL DE FONDO CINEMATOGRÁFICO + ETIQUETA DE VIDRIO
    ========================================================= */
 .home-hero { position: relative; }
 
 /* El contenido queda siempre por encima del carrusel */
 .home-hero-inner,
 .home-principles { position: relative; z-index: 1; }
+
+/* Sin tarjeta central, el hero ya no toma su altura de ella: se la fijamos */
+.home-hero-inner { min-height: clamp(540px, 72vh, 720px); }
 
 .hero-carousel { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 
@@ -420,8 +423,35 @@ input, select, textarea { max-width: 100%; min-width: 0; }
     radial-gradient(ellipse at center, transparent 55%, rgba(16, 42, 67, .18) 100%);
 }
 
-/* En pantallas angostas el texto ocupa todo el ancho: velo uniforme */
+/* Etiqueta de vidrio en la esquina inferior derecha, sobre la foto */
+.hero-tag {
+  position: absolute;
+  right: 0;
+  bottom: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 0;
+  padding: 14px 18px;
+  text-align: left;
+  color: var(--ink);
+  background: rgba(255, 255, 255, .84);
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 14px;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(16, 42, 67, .14);
+  transition: background .2s, transform .2s;
+}
+.hero-tag:hover { background: rgba(255, 255, 255, .94); transform: translateY(-2px); }
+.hero-tag-title { font-size: 15px; font-weight: 700; letter-spacing: -.01em; color: var(--teal-dark); }
+.hero-tag-text { font-size: 12px; color: var(--muted); }
+
+/* En pantallas angostas el texto ocupa todo el ancho:
+   velo uniforme y la etiqueta pasa a ir debajo del texto, sin tapar nada */
 @media (max-width: 900px) {
+  .home-hero-inner { min-height: 0; }
   .hero-carousel-scrim {
     background:
       linear-gradient(180deg,
@@ -429,4 +459,5 @@ input, select, textarea { max-width: 100%; min-width: 0; }
         rgba(246, 249, 252, .86) 55%,
         rgba(246, 249, 252, .72) 100%);
   }
+  .hero-tag { position: static; justify-self: start; }
 }

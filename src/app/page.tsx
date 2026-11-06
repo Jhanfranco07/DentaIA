@@ -281,58 +281,13 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="hero-visual">
-                <div className="hero-visual-decoration" aria-hidden="true" />
-
-                <div className="hero-photo-card">
-                  <div className="hero-photo-heading">
-                    <span aria-hidden="true">✦</span>
-                    <span className="hero-live-label">
-                      <span aria-hidden="true" />
-                      UNA SONRISA MÁS INFORMADA
-                    </span>
-                  </div>
-
-                  {/* Para usar una foto real: reemplaza este bloque por
-                      <div className="hero-photo"><img src="/tu-foto.jpg" alt="..." /></div> */}
-                  <div
-                    className="hero-photo hero-photo-placeholder"
-                    aria-hidden="true"
-                  >
-                    ✦
-                  </div>
-
-                  <div className="hero-photo-details">
-                    <span className="hero-detail-icon" aria-hidden="true">
-                      ✦
-                    </span>
-                    <div>
-                      <span className="eyebrow">TODO EN UN SOLO LUGAR</span>
-                      <h2>Herramientas para cuidar tu sonrisa</h2>
-                      <p>Orientación, profesionales y privacidad.</p>
-                    </div>
-                  </div>
-
-                  <a
-                    className="hero-card-link"
-                    href="#"
-                    onClick={(e) => go(e, "como")}
-                  >
-                    Descubre lo que puedes hacer{" "}
-                    <span aria-hidden="true">→</span>
-                  </a>
-                </div>
-
-                <div className="hero-floating-note">
-                  <span className="floating-check" aria-hidden="true">
-                    ✓
-                  </span>
-                  <div>
-                    <strong>Hecho para ti</strong>
-                    <span>Una experiencia digital pensada para ti</span>
-                  </div>
-                </div>
-              </div>
+              <button className="hero-tag" onClick={() => nav("analizar")}>
+                <span className="hero-tag-title">Prueba DentAI ahora</span>
+                <span className="hero-tag-text">
+                  Recorre la demostración paso a paso{" "}
+                  <span aria-hidden="true">→</span>
+                </span>
+              </button>
             </div>
 
             <div className="home-principles">
