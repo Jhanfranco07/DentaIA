@@ -1,18 +1,14 @@
 :root {
   --ink: #102a43;
   --muted: #526577;
-  --teal: #087f8c;
+  --teal: #087e8b;
   --teal-dark: #06636e;
   --blue: #275fa4;
-  --canvas: #f4f8fc;
+  --canvas: #f6f9fc;
   --line: #dce6ec;
-  --soft: #dff4f3;
-  --soft-blue: #eaf2ff;
-  --success: #247a59;
-  --warning: #875d12;
+  --soft: #e8f7f6;
   --danger: #a52e37;
-  --shadow: 0 12px 32px #16364a0b;
-  --shadow-card: 0 6px 18px #16364a0a;
+  --shadow: 0 8px 32px #16364a07;
   --radius: 20px;
 }
 * { box-sizing: border-box; }
@@ -33,9 +29,6 @@ p { overflow-wrap: anywhere; }
 main:focus { outline: none; }
 input, select, textarea { max-width: 100%; min-width: 0; }
 ::selection { background: #bde4e3; color: var(--ink); }
-.surface { border-color: var(--line); box-shadow: var(--shadow-card); }
-button, a, input, select, textarea { transition-duration: .16s; }
-.action:focus-visible, .text-link:focus-visible { outline-color: var(--blue) !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .skip-link { position: fixed; top: 8px; left: 16px; transform: translateY(-150%); background: var(--ink); color: #fff; padding: 12px 20px; border-radius: 8px; z-index: 1000; }
 .skip-link:focus { transform: none; }
@@ -229,10 +222,6 @@ button, a, input, select, textarea { transition-duration: .16s; }
   .home-invitation { padding: 35px; margin-bottom: 60px; }
   .site-footer-inner { gap: 35px; grid-template-columns: 1.2fr 1fr 1fr; }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-}
 @media (max-width: 650px) {
   .site-header-inner, .home-hero-inner, .home-section, .site-footer-inner, .module-shell, .home-principles, .home-invitation, .footer-note { width: calc(100% - 36px); }
   .site-header-inner { gap: 4px; min-height: 71px; }
@@ -382,13 +371,16 @@ button, a, input, select, textarea { transition-duration: .16s; }
 }
 
 /* =========================================================
-   HERO: CARRUSEL DE FONDO CINEMATOGRÁFICO
+   HERO: CARRUSEL DE FONDO CINEMATOGRÁFICO + ETIQUETA DE VIDRIO
    ========================================================= */
 .home-hero { position: relative; }
 
 /* El contenido queda siempre por encima del carrusel */
 .home-hero-inner,
 .home-principles { position: relative; z-index: 1; }
+
+/* Sin tarjeta central, el hero ya no toma su altura de ella: se la fijamos */
+.home-hero-inner { min-height: clamp(540px, 72vh, 720px); }
 
 .hero-carousel { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 
@@ -431,8 +423,35 @@ button, a, input, select, textarea { transition-duration: .16s; }
     radial-gradient(ellipse at center, transparent 55%, rgba(16, 42, 67, .18) 100%);
 }
 
-/* En pantallas angostas el texto ocupa todo el ancho: velo uniforme */
+/* Etiqueta de vidrio en la esquina inferior derecha, sobre la foto */
+.hero-tag {
+  position: absolute;
+  right: 0;
+  bottom: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 0;
+  padding: 14px 18px;
+  text-align: left;
+  color: var(--ink);
+  background: rgba(255, 255, 255, .84);
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 14px;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(16, 42, 67, .14);
+  transition: background .2s, transform .2s;
+}
+.hero-tag:hover { background: rgba(255, 255, 255, .94); transform: translateY(-2px); }
+.hero-tag-title { font-size: 15px; font-weight: 700; letter-spacing: -.01em; color: var(--teal-dark); }
+.hero-tag-text { font-size: 12px; color: var(--muted); }
+
+/* En pantallas angostas el texto ocupa todo el ancho:
+   velo uniforme y la etiqueta pasa a ir debajo del texto, sin tapar nada */
 @media (max-width: 900px) {
+  .home-hero-inner { min-height: 0; }
   .hero-carousel-scrim {
     background:
       linear-gradient(180deg,
@@ -440,4 +459,5 @@ button, a, input, select, textarea { transition-duration: .16s; }
         rgba(246, 249, 252, .86) 55%,
         rgba(246, 249, 252, .72) 100%);
   }
+  .hero-tag { position: static; justify-self: start; }
 }
