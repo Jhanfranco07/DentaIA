@@ -1,0 +1,55 @@
+name: DevSecOps
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  tests:
+    name: Tests
+    uses: ./.github/workflows/tests.yml
+
+  security:
+    name: Security
+    uses: ./.github/workflows/security.yml
+
+  validacion-final:
+    name: Validación final
+    needs: [ci, tests, security]
+    # Evaluar también fallos, cancelaciones y jobs omitidos; no dar verde por omisión.
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Comprobar todas las verificaciones obligatorias
+        env:
+          CI_RESULT: ${{ needs.ci.result }}
+          TESTS_RESULT: ${{ needs.tests.result }}
+          SECURITY_RESULT: ${{ needs.security.result }}
+        shell: bash
+        run: |
+          {
+            echo '## Validación DevSecOps'
+            echo '| Verificación | Resultado |'
+            echo '| --- | --- |'
+            printf '| CI | %s |\n' "$CI_RESULT"
+            printf '| Tests | %s |\n' "$TESTS_RESULT"
+            printf '| Security | %s |\n' "$SECURITY_RESULT"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [[ "$CI_RESULT" != 'success' || "$TESTS_RESULT" != 'success' || "$SECURITY_RESULT" != 'success' ]]; then
+            echo '::error::Todas las verificaciones obligatorias deben terminar en success.'
+            exit 1
+          fi
+
+          echo 'Todas las verificaciones obligatorias aprobaron.'
