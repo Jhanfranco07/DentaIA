@@ -21,9 +21,8 @@ export default function PanelPaciente() {
       <h1>{primerNombre ? `Hola, ${primerNombre}` : "Bienvenido a DentaIA"}</h1>
       <p>Prepara una fotografía, revisa tus solicitudes y encuentra orientación profesional desde un solo lugar.</p>
       <div className={styles.accionesCabecera}>
-        <Link href="/analisis" className={styles.accionPrincipal}><Icono nombre="destello" size={17} /> Iniciar análisis dental</Link>
+        <Link href="/analisis" className={styles.accionPrincipal}><Icono nombre="destello" size={17} /> Preparar una fotografía</Link>
         <Link href="/directorio" className={styles.accionSecundaria}>Encontrar odontólogos <Icono nombre="diente" size={16} /></Link>
-        <Link href="/solicitudes" className={styles.accionSecundaria}>Consultar solicitudes <Icono nombre="calendario" size={16} /></Link>
       </div>
       <span className={styles.avisoMotor}>Motor de IA pendiente · sin diagnósticos automatizados</span>
     </header>

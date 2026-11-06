@@ -119,7 +119,7 @@ export default function ResenasOdontologo({ dentistId }: { dentistId: string }) 
       <fieldset><legend>Calificación</legend><div className={styles.estrellas}>{[1,2,3,4,5].map(value => <label key={value}><input type="radio" name="rating" value={value} checked={rating === value} onChange={() => setRating(value)} /><span aria-hidden="true">{value <= rating ? "★" : "☆"}</span><span className="sr-only">{value} {value === 1 ? "estrella" : "estrellas"}</span></label>)}</div></fieldset>
       <label>Comentario<textarea required minLength={10} maxLength={1200} value={comentario} onChange={e => setComentario(e.target.value)} /></label><small>{comentario.length}/1200 · No incluyas información clínica sensible.</small>
       <button type="submit" disabled={ocupada || !solicitudResena || !rating}>{ocupada ? "Enviando…" : "Enviar para moderación"}</button>
-    </form> : usuario && <p className={styles.aviso}>Todavía no tienes una atención real completada y verificable para este profesional. Las solicitudes académicas no permiten publicar reseñas.</p> : !usuario && <p className={styles.aviso}>Inicia sesión para enviar una reseña cuando tengas una atención real completada y verificable.</p>}
+    </form> : usuario && <p className={styles.aviso}>Todavía no tienes una atención real completada y verificable para este profesional. Las solicitudes de demostración no permiten publicar reseñas.</p> : !usuario && <p className={styles.aviso}>Inicia sesión para enviar una reseña cuando tengas una atención real completada y verificable.</p>}
     {error && <p className={styles.error} role="alert">{error}</p>}{mensaje && <p className={styles.exito} role="status">{mensaje}</p>}
   </section>;
 }

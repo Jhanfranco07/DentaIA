@@ -70,7 +70,7 @@ export default function LayoutAdministrativo({ children, seccion, onSeleccionar 
       <span aria-hidden="true">{menuAbierto ? "−" : "+"}</span>
     </button>
     <aside ref={lateral} id="admin-menu" className={styles.lateral} data-abierto={menuAbierto}
-      aria-label="Espacio administrativo de demostración">
+      aria-label="Espacio administrativo">
       <div className={styles.identidad}>
         <span className={styles.simbolo}><Icono nombre="escudo" size={25} /></span>
         <div><strong>DentaIA</strong><span>Administración</span></div>

@@ -441,3 +441,7 @@ button, a, input, select, textarea { transition-duration: .16s; }
         rgba(246, 249, 252, .72) 100%);
   }
 }
+/* Consistencia de lectura y navegación en el producto integrado. */
+main{min-width:0}input,select,textarea{font-size:16px}summary{cursor:pointer;min-height:44px}fieldset{min-width:0}.footer-educational{color:#a7deda}
+@media(max-width:360px){.site-header-inner{width:calc(100% - 24px);gap:10px}.site-header .marca{font-size:22px}.site-header .marca-icono{width:36px;height:36px}.action-account{padding-inline:10px;font-size:12px}.menu-toggle{gap:6px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

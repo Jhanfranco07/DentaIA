@@ -1,0 +1,313 @@
+{
+  "fecha": "2026-11-06T01:56:56.199787+00:00",
+  "entorno": "Chromium real local; sesión, perfiles y HTTP sintéticos; ninguna conexión Supabase remota",
+  "pruebas": [
+    {
+      "nombre": "Landing: rutas reales, una jerarquía principal y límite de IA explícito",
+      "aprobada": true
+    },
+    {
+      "nombre": "Landing responsive 320px: fotografía visible y sin elementos encima",
+      "aprobada": true
+    },
+    {
+      "nombre": "Landing responsive 390px: fotografía visible y sin elementos encima",
+      "aprobada": true
+    },
+    {
+      "nombre": "Landing responsive 768px: fotografía visible y sin elementos encima",
+      "aprobada": true
+    },
+    {
+      "nombre": "Landing responsive 1024px: fotografía visible y sin elementos encima",
+      "aprobada": true
+    },
+    {
+      "nombre": "Landing responsive 1440px: fotografía visible y sin elementos encima",
+      "aprobada": true
+    },
+    {
+      "nombre": "Menú público móvil: Escape devuelve el foco",
+      "aprobada": true
+    },
+    {
+      "nombre": "Visitante: /cuenta?modo=registro",
+      "aprobada": true
+    },
+    {
+      "nombre": "Visitante: /directorio",
+      "aprobada": true
+    },
+    {
+      "nombre": "Visitante: /privacidad",
+      "aprobada": true
+    },
+    {
+      "nombre": "Visitante: /panel",
+      "aprobada": true
+    },
+    {
+      "nombre": "Visitante: /profesional",
+      "aprobada": true
+    },
+    {
+      "nombre": "Visitante: /administracion",
+      "aprobada": true
+    },
+    {
+      "nombre": "Directorio: error recuperable y estado vacío sin inventar perfiles",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /panel: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /panel: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /panel: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /panel: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /panel: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /cuenta: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /cuenta: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /cuenta: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /cuenta: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /cuenta: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /analisis: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /analisis: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /analisis: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /analisis: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /analisis: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /resultados: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /resultados: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /resultados: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /resultados: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /resultados: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /fotografias: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /fotografias: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /fotografias: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /fotografias: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /fotografias: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /solicitudes: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /solicitudes: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /solicitudes: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /solicitudes: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente /solicitudes: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "Fotografía sintética: revisión local y aviso honesto de IA, sin envío",
+      "aprobada": true
+    },
+    {
+      "nombre": "Perfil: validación accesible conserva el formulario y no envía datos inválidos",
+      "aprobada": true
+    },
+    {
+      "nombre": "Portal móvil: foco contenido, Escape y restauración de desplazamiento",
+      "aprobada": true
+    },
+    {
+      "nombre": "Paciente: panel profesional y administración siguen restringidos (fixture)",
+      "aprobada": true
+    },
+    {
+      "nombre": "paciente: sin escrituras ni errores de JavaScript",
+      "aprobada": true
+    },
+    {
+      "nombre": "Profesional: membresía sintética compatible y selector de clínica disponible",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /profesional: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /profesional: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /profesional: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /profesional: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /profesional: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /cuenta: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /cuenta: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /cuenta: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /cuenta: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo /cuenta: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "Profesional: anclas existentes y una única sección activa",
+      "aprobada": true
+    },
+    {
+      "nombre": "odontologo: sin escrituras ni errores de JavaScript",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /administracion: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /administracion: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /administracion: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /administracion: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /administracion: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /cuenta: responsive 320px",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /cuenta: responsive 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /cuenta: responsive 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /cuenta: responsive 1024px",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario /cuenta: responsive 1440px",
+      "aprobada": true
+    },
+    {
+      "nombre": "Administración: listado y búsqueda vacía con servicios simulados",
+      "aprobada": true
+    },
+    {
+      "nombre": "superusuario: sin escrituras ni errores de JavaScript",
+      "aprobada": true
+    },
+    {
+      "nombre": "Cuenta sin rol: conserva alternativa para cerrar sesión",
+      "aprobada": true
+    },
+    {
+      "nombre": "Cuenta multirrol: conserva acceso contextual a sus otros espacios",
+      "aprobada": true
+    }
+  ],
+  "chromium": "154.0.8037.57",
+  "aprobadas": 76,
+  "fallidas": 0
+}

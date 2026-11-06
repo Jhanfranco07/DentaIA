@@ -31,7 +31,7 @@ export default function ClinicaPanel() {
     {estado.error === 401 ? "La sesión debe verificarse de nuevo en Mi cuenta." : estado.error === 403 ? "Tu sesión no tiene permiso para esta lectura." : estado.error === 404 || estado.error === 503 ? "El servicio está cerrado o no disponible en este entorno. No se muestran datos simulados." : "No se pudo comprobar la respuesta del servicio."}
   </EstadoPanel>;
   return <section className={styles.resumen} aria-labelledby="clinica-propia-titulo">
-    <h2 id="clinica-propia-titulo">Autorizaciones e historial académico</h2>
+    <h2 id="clinica-propia-titulo">Autorizaciones e historial de prueba</h2>
     <p>Datos sintéticos leídos de Supabase con permisos reales. No son el reporte preventivo de demostración ni el historial de solicitudes.</p>
     <h3>Autorizaciones clínicas</h3>
     {estado.datos.autorizaciones.length ? <ul>{estado.datos.autorizaciones.map(a => <li key={a.id}>{ESTADOS[a.estado]} · vence <time dateTime={a.vence}>{new Date(a.vence).toLocaleDateString("es-PE")}</time></li>)}</ul> : <p>No tienes autorizaciones registradas.</p>}

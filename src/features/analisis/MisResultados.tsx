@@ -13,7 +13,7 @@ export default function MisResultados() {
       <span className={styles.icono}><Icono nombre="imagen" size={30} /></span>
       <span className={styles.estado}>SIN ANÁLISIS REGISTRADOS</span>
       <h2 id="resultados-vacios">Aún no tienes análisis realizados</h2>
-      <p>Aún no tienes análisis realizados. Esta funcionalidad estará disponible cuando se integre el motor de IA. No se mostrarán resultados educativos como si fueran análisis de tu fotografía.</p>
+      <p>Esta funcionalidad estará disponible cuando se integre el motor de IA. No se mostrarán resultados educativos como si fueran análisis de tu fotografía.</p>
       <div className={styles.acciones}><Link href="/analisis" className={styles.primario}><Icono nombre="destello" size={17} /> Preparar una fotografía</Link><Link href="/directorio" className={styles.secundario}>Encontrar odontólogos <Icono nombre="flecha" size={16} /></Link></div>
     </section>
   </section>;

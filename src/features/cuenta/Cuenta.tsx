@@ -9,31 +9,12 @@ import { useSesion } from "./useSesion";
 import Link from "next/link";
 import Encabezado from "@/components/Encabezado";
 import Pie from "@/components/Pie";
-import PortalShell, { type EnlacePortal } from "@/components/PortalShell";
+import PortalShell from "@/components/PortalShell";
+import { NAVEGACION_PACIENTE, NAVEGACION_ODONTOLOGO, NAVEGACION_ADMIN } from "@/components/navegacion-portal";
 import { Icono } from "@/components/Identidad";
 import { retornoSolicitud } from "@/lib/navegacion";
 import { rolesDelUsuario, rutaPrincipalPorRoles } from "@/features/autorizacion/roles";
 import { useRouter } from "next/navigation";
-
-const NAVEGACION_PACIENTE: readonly EnlacePortal[] = [
-  { href: "/panel", etiqueta: "Resumen", exacto: true, icono: "casa", grupo: "Mi espacio" },
-  { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Mi espacio" },
-  { href: "/fotografias", etiqueta: "Fotografías", icono: "camara", grupo: "Mi espacio" },
-  { href: "/solicitudes", etiqueta: "Solicitudes", icono: "calendario", grupo: "Mi espacio" },
-  { href: "/analisis", etiqueta: "Análisis dental con IA", icono: "destello", grupo: "Principal" },
-  { href: "/directorio", etiqueta: "Odontólogos", icono: "diente", grupo: "Explorar" },
-];
-const NAVEGACION_ODONTOLOGO: readonly EnlacePortal[] = [
-  { href: "/profesional", etiqueta: "Resumen profesional", exacto: true, icono: "casa", grupo: "Clínica" },
-  { href: "/profesional#contexto-clinico", etiqueta: "Mi clínica", icono: "clinica", grupo: "Clínica" },
-  { href: "/profesional#solicitudes-profesionales", etiqueta: "Solicitudes", icono: "calendario", grupo: "Atención" },
-  { href: "/profesional#historial-clinico", etiqueta: "Pacientes e historial", icono: "usuarios", grupo: "Atención" },
-  { href: "/cuenta", etiqueta: "Mi cuenta", icono: "persona", grupo: "Cuenta" },
-];
-const NAVEGACION_ADMIN: readonly EnlacePortal[] = [
-  { href: "/administracion", etiqueta: "Panel administrativo", exacto: true, icono: "casa", grupo: "Administración" },
-  { href: "/cuenta", etiqueta: "Mi cuenta", icono: "persona", grupo: "Cuenta" },
-];
 
 export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean }) {
   const { usuario, cargando, errorSesion, verificar } = useSesion();
@@ -102,7 +83,7 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
         const rolesVerificados = rolesDelUsuario(verificado);
         const destino = rutaPrincipalPorRoles(rolesVerificados);
         if (!destino) {
-          setError("La cuenta inició sesión, pero no tiene un rol DentaIA activo. Contacta al administrador del proyecto.");
+          setError("La cuenta inició sesión, pero no tiene un rol DentaIA activo. Contacta con la administración.");
           return;
         }
         // El retorno de una solicitud solo aplica al paciente sin otros roles.
@@ -134,15 +115,9 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
 
   const nombreUsuario = usuario?.user_metadata?.full_name;
   const etiquetaUsuario = typeof nombreUsuario === "string" && nombreUsuario.trim() ? nombreUsuario.trim() : usuario?.email?.split("@")[0] ?? "Tu perfil";
-  const enlacesAcceso = [
-    ...(roles.includes("paciente") ? [
-      { href: "/panel", titulo: "Panel del paciente", detalle: "Consulta tu resumen personal.", icono: "casa" as const },
-      { href: "/fotografias", titulo: "Mis fotografías", detalle: "Administra tus imágenes de prueba.", icono: "camara" as const },
-      { href: "/solicitudes", titulo: "Mis solicitudes", detalle: "Revisa las solicitudes registradas.", icono: "calendario" as const },
-    ] : []),
-    ...(roles.includes("odontologo") ? [{ href: "/profesional", titulo: "Panel profesional", detalle: "Continúa en tu espacio clínico autorizado.", icono: "diente" as const }] : []),
-    ...(roles.includes("superusuario") ? [{ href: "/administracion", titulo: "Panel administrativo", detalle: "Acceso sujeto a MFA/AAL2 y políticas del entorno.", icono: "escudo" as const }] : []),
-    ...(roles.includes("paciente") ? [{ href: "/analisis", titulo: "Análisis dental con IA", detalle: "Prepara una fotografía local; el motor aún no está conectado.", icono: "destello" as const }] : []),
+  const otrosEspacios = [
+    ...(roles.includes("superusuario") && roles.includes("odontologo") ? [{ href: "/profesional", titulo: "Espacio profesional" }] : []),
+    ...(roles.includes("paciente") && (roles.includes("odontologo") || roles.includes("superusuario")) ? [{ href: "/panel", titulo: "Espacio del paciente" }] : []),
   ];
   const contenido = <section className={`${styles.pagina} ${usuario ? styles.paginaAutenticada : ""}`} aria-labelledby="cuenta-titulo">
     {usuario ? <header className={styles.cabeceraPerfil}>
@@ -159,12 +134,10 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
             {continuar && roles.includes("paciente") && !roles.includes("odontologo") && !roles.includes("superusuario") && <div className="notice"><strong>Tu profesional sigue seleccionado.</strong><p>Ya puedes continuar con tu solicitud de demostración.</p><Link href={continuar} className="action">Continuar mi solicitud</Link></div>}
             {roles.includes("paciente") && <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />}
-            {roles.length === 0 ? <p role="alert" className={styles.error}>Esta cuenta no tiene un rol DentaIA activo.</p> : <nav aria-label="Módulos de tu cuenta" className={styles.accesos}>
-              {enlacesAcceso.map(({ href, titulo, detalle, icono }) => <Link key={href} href={href} className={styles.enlaceAcceso}>
-                <span className={styles.iconoAcceso}><Icono nombre={icono} size={20} /></span><span><strong>{titulo}</strong><small>{detalle}</small></span><span className={styles.flechaAcceso} aria-hidden="true">→</span>
-              </Link>)}
-            </nav>}
-            <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>
+            {roles.length === 0 && <p role="alert" className={styles.error}>Esta cuenta no tiene un rol DentaIA activo.</p>}
+            {otrosEspacios.length > 0 && <section className={styles.otrosEspacios} aria-label="Otros espacios de tu cuenta"><h2>Otros espacios autorizados</h2><p>Tu cuenta tiene más de un rol. Puedes cambiar de espacio sin cerrar sesión.</p>{otrosEspacios.map(({href,titulo}) => <Link key={href} href={href} className="text-link">{titulo} →</Link>)}</section>}
+            {roles.length > 0 ? <p className={styles.nota}>Para cambiar de sección o cerrar sesión, utiliza la navegación de tu espacio. Los permisos de la cuenta se verifican en el servidor.</p>
+              : <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>}
           </> : <>
             <div className={styles.opciones} aria-label="Opciones de acceso">
               <button type="button" aria-pressed={!registro} disabled={ocupado} onClick={() => cambiarModo(false)}>Iniciar sesión</button>

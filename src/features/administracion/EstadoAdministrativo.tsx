@@ -6,7 +6,7 @@ export type EstadoAdministrativoTipo = "carga" | "vacio" | "error";
 type Props = { estado: EstadoAdministrativoTipo; onReintentar?: () => void; reintentarTexto?: string };
 
 // Estados de presentación: no realizan consultas ni representan respuestas del servidor.
-export default function EstadoAdministrativo({ estado, onReintentar, reintentarTexto = "Reintentar simulación" }: Props) {
+export default function EstadoAdministrativo({ estado, onReintentar, reintentarTexto = "Volver a consultar" }: Props) {
   return <div className={styles.estado} data-estado={estado}>
     <span className={styles.iconoEstado} aria-hidden="true">
       {estado === "carga" ? <span className={styles.cargando} />

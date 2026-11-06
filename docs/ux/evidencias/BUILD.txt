@@ -1,0 +1,63 @@
+
+> dentaia@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.28
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.6s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/14) ...
+   Generating static pages (3/14)
+   Generating static pages (6/14)
+   Generating static pages (10/14)
+ ✓ Generating static pages (14/14)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                        Size  First Load JS
+┌ ○ /                                           5.58 kB         112 kB
+├ ○ /_not-found                                    1 kB         105 kB
+├ ƒ /administracion                               141 B         194 kB
+├ ○ /analisis                                   8.44 kB         180 kB
+├ ○ /analisis/demo                                180 B         104 kB
+├ ƒ /api/administracion/acceso                    180 B         104 kB
+├ ƒ /api/administracion/resenas                   180 B         104 kB
+├ ƒ /api/administracion/roles                     180 B         104 kB
+├ ƒ /api/administracion/roles/validar             180 B         104 kB
+├ ƒ /api/administracion/ubicaciones               180 B         104 kB
+├ ƒ /api/administracion/usuarios                  180 B         104 kB
+├ ƒ /api/administracion/usuarios/reales           180 B         104 kB
+├ ƒ /api/administracion/vinculaciones             180 B         104 kB
+├ ƒ /api/clinical/access-grants                   180 B         104 kB
+├ ƒ /api/clinical/access-grants/[id]/revoke       180 B         104 kB
+├ ƒ /api/clinical/patients/[patientId]/history    180 B         104 kB
+├ ƒ /api/clinical/patients/me                     180 B         104 kB
+├ ƒ /api/desarrollo/validar-lectura-admin         180 B         104 kB
+├ ƒ /api/professional/me                          180 B         104 kB
+├ ƒ /api/professional/patients                    180 B         104 kB
+├ ƒ /api/professional/requests                    180 B         104 kB
+├ ƒ /cuenta                                     6.52 kB         184 kB
+├ ƒ /desarrollo/acceso                          1.76 kB         173 kB
+├ ƒ /desarrollo/lectura-admin                   2.21 kB         174 kB
+├ ƒ /desarrollo/mfa-admin                       5.58 kB         177 kB
+├ ƒ /desarrollo/panel-admin                       142 B         194 kB
+├ ƒ /desarrollo/roles-admin                       176 B         178 kB
+├ ○ /directorio                                 9.01 kB         180 kB
+├ ƒ /directorio/[id]                            8.74 kB         180 kB
+├ ○ /fotografias                                8.68 kB         180 kB
+├ ○ /panel                                      4.11 kB         182 kB
+├ ○ /privacidad                                   166 B         107 kB
+├ ○ /profesional                                12.5 kB         184 kB
+├ ○ /resultados                                 2.64 kB         174 kB
+└ ƒ /solicitudes                                2.57 kB         181 kB
++ First Load JS shared by all                    104 kB
+  ├ chunks/1255-dc3ddf72a1dc71a7.js             46.6 kB
+  ├ chunks/4bd1b696-f785427dddbba9fb.js         54.2 kB
+  └ other shared chunks (total)                  2.7 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
