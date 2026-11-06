@@ -134,3 +134,25 @@ test('integración API → guard → proveedor → SDK Auth/profiles con transpo
   `);
   assert.equal(r.status,0,r.stderr);
 });
+
+
+test('Production main: opt-in y credencial dedicada habilitan solo el puerto GET; sin credencial no hay red',()=>{
+  const r=ejecutar(`
+    import assert from 'node:assert/strict';
+    ${configuracion}
+    process.env.NODE_ENV='production';process.env.VERCEL='1';process.env.VERCEL_ENV='production';process.env.VERCEL_GIT_COMMIT_REF='main';
+    let llamadas=0;
+    globalThis.fetch=async(input,init)=>{
+      llamadas++;assert.equal(init.method,'GET');assert.equal(init.cache,'no-store');assert.equal(init.redirect,'error');
+      assert.equal(new URL(String(input)).pathname,'/auth/v1/admin/users');
+      return Response.json({users:[]});
+    };
+    const {crearLecturasSupabase}=await import(${JSON.stringify(archivo)});
+    delete process.env.DENTAIA_SUPABASE_ADMIN_READ_SECRET;
+    assert.throws(()=>crearLecturasSupabase(),/no configurada/);assert.equal(llamadas,0);
+    process.env.DENTAIA_SUPABASE_ADMIN_READ_SECRET='credencial-sintetica-exclusiva-de-prueba';
+    const puerto=crearLecturasSupabase();assert.deepEqual(Object.keys(puerto),['listarCuentas','consultarPerfiles']);
+    assert.deepEqual(await puerto.listarCuentas(1,5),{usuarios:[]});assert.equal(llamadas,1);
+  `);
+  assert.equal(r.status,0,r.stderr);
+});

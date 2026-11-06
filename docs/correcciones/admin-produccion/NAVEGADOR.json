@@ -1,0 +1,41 @@
+{
+  "fecha": "2026-11-06T02:12:04.168019+00:00",
+  "entorno": "Build Next local; VERCEL=1, VERCEL_ENV=production, ref=main. Chromium real y Auth/API sintéticos; no Supabase remoto.",
+  "pruebas": [
+    {
+      "nombre": "Visitante: la ruta existe y no monta datos administrativos",
+      "aprobada": true
+    },
+    {
+      "nombre": "Login sintético y selección del panel administrativo sin 404",
+      "aprobada": true
+    },
+    {
+      "nombre": "Regresión: cuenta → enlace Panel administrativo → panel existente",
+      "aprobada": true
+    },
+    {
+      "nombre": "Listado y búsqueda sintéticos; responsive en cinco tamaños",
+      "aprobada": true
+    },
+    {
+      "nombre": "El recorrido no emite escrituras ni errores JavaScript",
+      "aprobada": true
+    },
+    {
+      "nombre": "UI denegada con fixture: paciente, AAL2=True",
+      "aprobada": true
+    },
+    {
+      "nombre": "UI denegada con fixture: odontologo, AAL2=True",
+      "aprobada": true
+    },
+    {
+      "nombre": "UI denegada con fixture: superusuario, AAL2=False",
+      "aprobada": true
+    }
+  ],
+  "chromium": "154.0.8037.57",
+  "aprobadas": 8,
+  "fallidas": 0
+}
