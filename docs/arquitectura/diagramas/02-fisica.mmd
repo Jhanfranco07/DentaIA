@@ -1,0 +1,8 @@
+flowchart TD
+  B["Navegador"] -->|HTTPS| V["Vercel: aplicación Next.js integrada"]
+  B -->|HTTPS + JWT propio| SB["Supabase: Auth, Data API y Storage"]
+  V -. "al integrar administración" .-> SB
+  GH["GitHub: main y ramas"] --> AC["GitHub Actions: CI, Tests y Security"]
+  GH -->|integración de despliegue observada| V
+  V -. "futuro; proveedor sin decidir" .-> AI["Servicio de visión"]
+  AI -. "acceso mínimo; no bucket público" .-> SB

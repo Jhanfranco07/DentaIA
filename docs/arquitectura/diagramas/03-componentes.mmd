@@ -1,0 +1,12 @@
+flowchart TD
+  APP["App Router"] --> PUB["Inicio, privacidad y directorio"]
+  APP --> CU["Cuenta y sesión"]
+  CU --> PA["Panel paciente en rama"]
+  PA --> F["Fotografías y solicitudes personales"]
+  APP --> PRO["Vista profesional: demo integrada / historial en rama"]
+  PRO -.-> CL["Contrato clínico futuro"]
+  APP --> AD["Administración en rama"]
+  AD --> GU["Guard DI-150"]
+  GU --> RE["Lectura Auth Admin + profiles"]
+  GU --> WR["RPC de roles; bandera y migración requeridas"]
+  CL -.-> AUD["Permisos por paciente y auditoría clínica"]

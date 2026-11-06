@@ -1,0 +1,12 @@
+flowchart TD
+  U["Navegador: público, paciente y profesional"] --> P["Next.js: presentación existente"]
+  P --> SDK["SDK personal existente: JWT propio"]
+  SDK --> R["Supabase Auth / Data API / Storage con RLS"]
+  P --> A["Administración: código en rama, no integrado"]
+  A --> G["DI-150: identidad, rol actual y AAL2"]
+  G --> S["Adaptadores server-only; opt-in"]
+  S --> DB["Auth Admin / RPC DI-151; requiere migración"]
+  P -. "propuesto" .-> H["Next.js: servicio clínico autorizado"]
+  H -.-> TX["PostgreSQL: permiso y auditoría antes de entregar"]
+  P -. "futuro" .-> IA["Trabajo exploratorio de visión"]
+  IA -.-> ML["Dataset, modelo y evaluación; sin diagnóstico"]

@@ -1,0 +1,18 @@
+sequenceDiagram
+  participant O as Odontólogo
+  participant S as Servicio clínico propuesto
+  participant D as PostgreSQL
+  O->>S: Paciente y contexto de clínica
+  S->>S: Identidad verificada, sin confiar en IDs del cliente
+  S->>D: RPC lectura autorizada con límite
+  D->>D: Bloquear concesión; verificar membresía, vigencia y recursos
+  alt Permitido
+    D->>D: Registrar acceso y preparar entradas autorizadas
+    D-->>S: Commit y resultado mínimo con procedencia
+    S-->>O: Historial permitido
+  else Denegado
+    D->>D: Registrar denegación sin contenido clínico
+    D-->>S: Resultado denegado, no excepción que revierta auditoría
+    S-->>O: Rechazo genérico
+  end
+  Note over S,D: Si falla auditoría: sin historial; error controlado

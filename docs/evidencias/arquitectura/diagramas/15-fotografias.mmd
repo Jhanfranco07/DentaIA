@@ -1,0 +1,10 @@
+flowchart TD
+  I["Archivo local"] --> V["Validar formato, tamaño y decodificación"]
+  V --> CH{"Finalidad elegida"}
+  CH -->|demo local| DE["Caso reconocido: observación preparada y PDF educativo"]
+  CH -->|almacenamiento| CO["Sesión y consentimiento académico vigente"]
+  CO --> ST["Storage privado: propietario/consentimiento/objeto"]
+  ST --> ME["Registrar metadatos; compensar si falla"]
+  ME --> EL["Borrado reintentable: archivo y luego metadatos"]
+  ME -. "futuro; consentimiento distinto" .-> IA["Validación de calidad y trabajo de visión"]
+  IA -.-> RE["Resultado orientativo versionado; sin diagnóstico"]

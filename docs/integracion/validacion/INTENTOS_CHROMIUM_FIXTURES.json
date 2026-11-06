@@ -1,0 +1,142 @@
+[
+  {
+    "fecha": "2026-11-04T22:08:31.327762+00:00",
+    "head": "67a85d3873c59234261883ef6f414525741c82a9",
+    "entorno": "Chromium real; Auth y HTTP interceptados; red externa bloqueada; sin Supabase remoto",
+    "pruebas": [
+      {
+        "nombre": "Panel anónimo oculta contenido personal",
+        "aprobada": false,
+        "detalle": "Page.goto: Timeout 15000ms exceeded.\nCall log:\n  - navigating to \"http://127.0.0.1:3140/panel\", waiting until \"load\"\n"
+      },
+      {
+        "nombre": "Cuenta: login por interfaz y perfil propio",
+        "aprobada": false,
+        "detalle": "Locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"link\", name=\"Ir a mi cuenta\", exact=True)\n"
+      },
+      {
+        "nombre": "Cuenta → panel: resumen, solicitudes y clínica separados del reporte demo",
+        "aprobada": false,
+        "detalle": "Locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"navigation\", name=\"Continuar mi recorrido\").get_by_role(\"link\", name=\"Mi panel\", exact=True)\n"
+      }
+    ],
+    "chromium": "149.0.7827.55",
+    "bloqueo": "'charmap' codec can't encode character '\\u2192' in position 12: character maps to <undefined>",
+    "aprobadas": 0,
+    "fallidas": 3
+  },
+  {
+    "fecha": "2026-11-04T22:10:51.684725+00:00",
+    "head": "67a85d3873c59234261883ef6f414525741c82a9",
+    "entorno": "Chromium real; Auth y HTTP interceptados; red externa bloqueada; sin Supabase remoto",
+    "pruebas": [
+      {
+        "nombre": "Panel anónimo oculta contenido personal",
+        "aprobada": true
+      },
+      {
+        "nombre": "Cuenta: login por interfaz y perfil propio",
+        "aprobada": true
+      },
+      {
+        "nombre": "Cuenta → panel: resumen, solicitudes y clínica separados del reporte demo",
+        "aprobada": false,
+        "detalle": "Locator expected to be visible\nActual value: None\nError: strict mode violation: get_by_role(\"heading\", name=\"Mis solicitudes\", exact=True) resolved to 2 elements:\n    1) <h2>Mis solicitudes</h2> aka get_by_label(\"Secciones del panel del\").get_by_role(\"heading\", name=\"Mis solicitudes\")\n    2) <h2 class=\"solicitudes_tituloSeccion__UJ3Lu\">Mis solicitudes</h2> aka locator(\"#mis-solicitudes\").get_by_role(\"heading\", name=\"Mis solicitudes\")\n \nCall log:\n  - Expect \"to_be_visible\" with timeout 5000ms\n  - waiting for get_by_role(\"heading\", name=\"Mis solicitudes\", exact=True)\n"
+      },
+      {
+        "nombre": "Panel cargado sin desbordamiento a 375, 1024 y 1280",
+        "aprobada": true
+      },
+      {
+        "nombre": "Menú móvil, Escape y teclado hacia cuenta",
+        "aprobada": true
+      },
+      {
+        "nombre": "Ruta existente /",
+        "aprobada": true
+      },
+      {
+        "nombre": "Ruta existente /directorio",
+        "aprobada": true
+      },
+      {
+        "nombre": "Ruta existente /solicitudes",
+        "aprobada": true
+      },
+      {
+        "nombre": "Ruta existente /fotografias",
+        "aprobada": true
+      },
+      {
+        "nombre": "Ruta existente /analisis/demo",
+        "aprobada": true
+      },
+      {
+        "nombre": "Ruta existente /privacidad",
+        "aprobada": true
+      },
+      {
+        "nombre": "Fotografías presenta consentimiento sin subir ni eliminar",
+        "aprobada": true
+      },
+      {
+        "nombre": "Paciente sin acceso a interfaz administrativa",
+        "aprobada": true
+      },
+      {
+        "nombre": "Clínica falla cerrada con HTTP 401",
+        "aprobada": true
+      },
+      {
+        "nombre": "Clínica falla cerrada con HTTP 403",
+        "aprobada": true
+      },
+      {
+        "nombre": "Clínica falla cerrada con HTTP 404",
+        "aprobada": true
+      },
+      {
+        "nombre": "Clínica falla cerrada con HTTP 503",
+        "aprobada": true
+      },
+      {
+        "nombre": "Recuperación clínica mediante reintento",
+        "aprobada": true
+      },
+      {
+        "nombre": "Logout elimina acceso al panel",
+        "aprobada": true
+      },
+      {
+        "nombre": "Sesión almacenada inválida no muestra datos",
+        "aprobada": true
+      },
+      {
+        "nombre": "Sin errores JS, escrituras de negocio ni solicitudes sin controlar",
+        "aprobada": true
+      }
+    ],
+    "chromium": "155.0.8059.40",
+    "redExternaBloqueada": [],
+    "erroresJS": [],
+    "aprobadas": 20,
+    "fallidas": 1
+  },
+  {
+    "fecha": "2026-11-04T22:11:57.733501+00:00",
+    "head": "67a85d3873c59234261883ef6f414525741c82a9",
+    "entorno": "Chromium real; Auth y HTTP interceptados; red externa bloqueada; sin Supabase remoto",
+    "pruebas": [
+      {
+        "nombre": "Cuenta → panel: resumen, solicitudes y clínica separados del reporte demo",
+        "aprobada": true
+      }
+    ],
+    "chromium": "155.0.8059.40",
+    "redExternaBloqueada": [],
+    "erroresJS": [],
+    "aprobadas": 1,
+    "fallidas": 0,
+    "repeticionFocalizada": true
+  }
+]

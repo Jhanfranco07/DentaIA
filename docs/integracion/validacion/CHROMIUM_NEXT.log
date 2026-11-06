@@ -1,0 +1,15 @@
+   ▲ Next.js 15.5.28
+   - Local:        http://127.0.0.1:3140
+   - Network:      http://127.0.0.1:3140
+   - Environments: .env.development.local
+
+ ✓ Starting...
+ ✓ Ready in 2.1s
+ ○ Compiling /cuenta ...
+ ✓ Compiled /cuenta in 865ms (716 modules)
+ GET /cuenta 200 in 1505ms
+ GET /cuenta 200 in 269ms
+ GET /cuenta 200 in 123ms
+ ○ Compiling /panel ...
+ ✓ Compiled /panel in 1526ms (752 modules)
+ GET /panel 200 in 1735ms

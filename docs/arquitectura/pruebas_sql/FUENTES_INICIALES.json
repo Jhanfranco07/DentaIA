@@ -1,0 +1,62 @@
+{
+  "docs/arquitectura/README.md": {
+    "sha256": "d8e026778262298bda14c40c0b01d2cb8b72ecf070e2a659cf4d903fb446016b",
+    "bytes": 3854
+  },
+  "docs/arquitectura/AUDITORIA_INTEGRAL.md": {
+    "sha256": "ecd62f2ae25c2ebe81cbfed012a0145019dc25c12150922b910e4eb9615a9c0e",
+    "bytes": 11008
+  },
+  "docs/arquitectura/MODELO_FISICO.md": {
+    "sha256": "784c056d315bfbcc99dac983358b230722f333316289b3a5dfaa0399bb8f7824",
+    "bytes": 3981
+  },
+  "docs/arquitectura/MODELO_LOGICO.md": {
+    "sha256": "8949c8966877ac7d1fa42f31fa85a420cc5bc85dca164667851b91b60ecd6a03",
+    "bytes": 3818
+  },
+  "docs/arquitectura/DICCIONARIO_DATOS.md": {
+    "sha256": "6d7ce7c564cf7d838bd0ae93984e51a397b9d9f1fa6f37203644a13b20d24b1f",
+    "bytes": 60135
+  },
+  "docs/arquitectura/SEGURIDAD_Y_ROLES.md": {
+    "sha256": "3214bd4bcf88e218f09caa0e3969591286df2038f8000eb03443c2a784720ada",
+    "bytes": 9234
+  },
+  "docs/arquitectura/POLITICAS_POR_TABLA.md": {
+    "sha256": "7137764bd4d9fc4d57bebad5cdcb19991e4a9896e1a0db002dd2abcbc6f9e73a",
+    "bytes": 18608
+  },
+  "docs/arquitectura/CONTRATOS_API.md": {
+    "sha256": "d84f758c0f51568e0f636a40eec51f3ac9dc3103d0852b932ee2bda8c7e42de4",
+    "bytes": 18814
+  },
+  "docs/arquitectura/borradores_sql/01_clinical_identidad.sql": {
+    "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+    "bytes": 4537
+  },
+  "docs/arquitectura/borradores_sql/02_clinical_contenido.sql": {
+    "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+    "bytes": 4903
+  },
+  "docs/arquitectura/borradores_sql/03_clinical_permisos_auditoria.sql": {
+    "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+    "bytes": 3981
+  },
+  "docs/arquitectura/borradores_sql/04_clinical_integridad.sql": {
+    "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+    "bytes": 8703
+  },
+  "docs/arquitectura/borradores_sql/05_ia_investigacion.sql": {
+    "sha256": "045ac6a52109779a3d42dde5aa56d62a227531d77a16c5d726386ddcee382f0e",
+    "bytes": 5741
+  },
+  "docs/arquitectura/borradores_sql/06_ia_analisis.sql": {
+    "sha256": "bfb2cd70a5e0631be3a084bf7b57ddce906afe466d65b72d53f49253a4569079",
+    "bytes": 5512
+  },
+  "docs/arquitectura/borradores_sql/07_ia_integridad.sql": {
+    "sha256": "3388f091564c14e2d515a9b8e91ebd83ac47cbfb2b2738283e7e842c05968aff",
+    "bytes": 8520
+  }
+}

@@ -1,0 +1,301 @@
+[
+  {
+    "nombre": "21 tablas propuestas con RLS habilitada",
+    "sql": "DO $$ BEGIN ASSERT (SELECT count(*)=21 AND bool_and(relrowsecurity) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('clinical','ml') AND c.relkind='r'); END $$;",
+    "categoria": "integridad"
+  },
+  {
+    "nombre": "Relaciones válidas: dos pacientes, dos clínicas, dos orígenes",
+    "sql": "DO $$ BEGIN ASSERT (SELECT count(*)=3 FROM clinical.clinical_encounters); ASSERT (SELECT count(*)=2 FROM clinical.patient_records); END $$;",
+    "categoria": "integridad"
+  },
+  {
+    "nombre": "Clínica inexistente rechazada",
+    "sql": "INSERT INTO clinical.clinic_memberships(clinic_id,professional_id) VALUES(qa.id(999),qa.id(23));",
+    "categoria": "integridad",
+    "sqlstate": "23503"
+  },
+  {
+    "nombre": "Paciente inexistente rechazado",
+    "sql": "INSERT INTO clinical.clinical_encounters(patient_id,membership_id,attended_at) VALUES(qa.id(999),qa.id(33),now());",
+    "categoria": "integridad",
+    "sqlstate": "23503"
+  },
+  {
+    "nombre": "Corrección de atención con otro paciente rechazada",
+    "sql": "INSERT INTO clinical.clinical_encounters(patient_id,membership_id,attended_at,replaces_id,correction_reason) VALUES(qa.id(42),qa.id(33),now(),qa.id(51),'QA');",
+    "categoria": "integridad",
+    "sqlstate": "23503"
+  },
+  {
+    "nombre": "Corrección de atención con otro origen rechazada",
+    "sql": "INSERT INTO clinical.clinical_encounters(patient_id,membership_id,attended_at,replaces_id,correction_reason) VALUES(qa.id(41),qa.id(34),now(),qa.id(51),'QA');",
+    "categoria": "integridad",
+    "sqlstate": "23503"
+  },
+  {
+    "nombre": "Corrección sin motivo rechazada",
+    "sql": "INSERT INTO clinical.clinical_encounters(patient_id,membership_id,attended_at,replaces_id) VALUES(qa.id(41),qa.id(33),now(),qa.id(51));",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Corrección válida append-only",
+    "sql": "INSERT INTO clinical.clinical_encounters(patient_id,membership_id,attended_at,replaces_id,correction_reason) VALUES(qa.id(41),qa.id(33),now(),qa.id(51),'Correccion sintetica');",
+    "categoria": "integridad"
+  },
+  {
+    "nombre": "Bifurcación de correcciones rechazada",
+    "sql": "INSERT INTO clinical.clinical_encounters(patient_id,membership_id,attended_at,replaces_id,correction_reason) SELECT qa.id(41),qa.id(33),now(),qa.id(51),'QA' FROM generate_series(1,2);",
+    "categoria": "integridad",
+    "sqlstate": "23505"
+  },
+  {
+    "nombre": "Entrada reemplazada de otra atención rechazada",
+    "sql": "INSERT INTO clinical.clinical_entries(encounter_id,kind,information_state,description,replaces_id,correction_reason) VALUES(qa.id(53),'background','recorded','QA',qa.id(61),'QA');",
+    "categoria": "integridad",
+    "sqlstate": "23503"
+  },
+  {
+    "nombre": "Dato desconocido no puede aparentar descripción real",
+    "sql": "INSERT INTO clinical.clinical_entries(encounter_id,kind,information_state,description) VALUES(qa.id(51),'diagnosis','unknown','QA');",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Concesión de otro paciente no admite recurso manipulado",
+    "sql": "INSERT INTO clinical.clinical_grant_resources VALUES(qa.id(71),qa.id(53));",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Recurso autorizado duplicado rechazado",
+    "sql": "INSERT INTO clinical.clinical_grant_resources VALUES(qa.id(71),qa.id(51));",
+    "categoria": "integridad",
+    "sqlstate": "23505"
+  },
+  {
+    "nombre": "Reasignación de paciente bloqueada",
+    "sql": "UPDATE clinical.patient_records SET user_id=qa.id(5) WHERE id=qa.id(41);",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Reasignación de membresía bloqueada",
+    "sql": "UPDATE clinical.clinic_memberships SET clinic_id=qa.id(12) WHERE id=qa.id(33);",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Cambio de destinatario de concesión bloqueado",
+    "sql": "UPDATE clinical.clinical_access_grants SET membership_id=qa.id(35) WHERE id=qa.id(71);",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Revocación irreversible",
+    "sql": "UPDATE clinical.clinical_access_grants SET revoked_at=NULL WHERE id=qa.id(73);",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Borrado de contenido histórico bloqueado",
+    "sql": "DELETE FROM clinical.clinical_entries WHERE id=qa.id(61);",
+    "categoria": "integridad",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Edición de atención bloqueada",
+    "sql": "UPDATE clinical.clinical_encounters SET status='voided' WHERE id=qa.id(51);",
+    "categoria": "integridad",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Autoacreditación profesional rechazada",
+    "sql": "INSERT INTO clinical.professional_verifications(professional_id,reviewed_by,decision,reference,reason) VALUES(qa.id(23),qa.id(3),'approved','QA','QA');",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Profesional no aprobado no puede quedar verificado",
+    "sql": "INSERT INTO clinical.professional_accounts(user_id,status) VALUES(qa.id(1),'verified');",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Membresías activas solapadas rechazadas",
+    "sql": "INSERT INTO clinical.clinic_memberships(clinic_id,professional_id,valid_from) VALUES(qa.id(11),qa.id(23),now());",
+    "categoria": "integridad",
+    "sqlstate": "23P01"
+  },
+  {
+    "nombre": "Documento no puede apuntar a otro paciente",
+    "sql": "INSERT INTO clinical.clinical_documents(encounter_id,kind,title,availability,bucket_id,object_path,mime_type,size_bytes) VALUES(qa.id(51),'exam','QA','available','dentaia-clinical-documents',qa.id(42)||'/'||qa.id(51)||'/qa.png','image/png',100);",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Conservación clínica impide borrar identidad referenciada",
+    "sql": "DELETE FROM auth.users WHERE id=qa.id(1);",
+    "categoria": "integridad",
+    "sqlstate": "23503"
+  },
+  {
+    "nombre": "Matriz de confusión válida coincide con tamaño de muestra",
+    "sql": "INSERT INTO ml.evaluation_metrics(run_id,name,matrix) VALUES(qa.id(84),'confusion_matrix','[[1,0],[0,1]]');",
+    "categoria": "integridad"
+  },
+  {
+    "nombre": "Matriz con valores negativos rechazada",
+    "sql": "INSERT INTO ml.evaluation_metrics(run_id,name,matrix) VALUES(qa.id(84),'confusion_matrix','[[-1,0],[0,3]]');",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Matriz con suma incorrecta rechazada",
+    "sql": "INSERT INTO ml.evaluation_metrics(run_id,name,matrix) VALUES(qa.id(84),'confusion_matrix','[[1,1],[1,1]]');",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Modelo sin métricas no puede declararse evaluado",
+    "sql": "UPDATE ml.model_versions SET status='evaluated' WHERE id=qa.id(83);",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Dataset asociado a modelo no admite edición",
+    "sql": "UPDATE ml.dataset_items SET label='otra' WHERE id=qa.id(82);",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Evaluación no se puede reescribir",
+    "sql": "UPDATE ml.evaluation_runs SET sample_size=99 WHERE id=qa.id(84);",
+    "categoria": "integridad",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "FK de análisis rechaza propietario distinto de la foto",
+    "sql": "INSERT INTO ml.analysis_authorizations(owner_user_id,photo_id,policy_version,consent_text,expires_at) VALUES(qa.id(2),qa.id(92),'qa-v1','Autorizacion sintetica de prueba QA',now()+interval '1 day');",
+    "categoria": "integridad",
+    "sqlstate": "23503"
+  },
+  {
+    "nombre": "FK del job rechaza autorización y propietario cruzados",
+    "sql": "INSERT INTO ml.analysis_jobs(photo_id,model_id,owner_user_id,authorization_id,idempotency_key) VALUES(qa.id(92),qa.id(83),qa.id(2),qa.id(93),qa.id(999));",
+    "categoria": "integridad",
+    "sqlstate": "23503"
+  },
+  {
+    "nombre": "Idempotencia de job rechaza duplicado de propietario y clave",
+    "sql": "INSERT INTO ml.analysis_jobs(photo_id,model_id,owner_user_id,authorization_id,idempotency_key) VALUES(qa.id(92),qa.id(83),qa.id(1),qa.id(93),qa.id(95));",
+    "categoria": "integridad",
+    "sqlstate": "23505"
+  },
+  {
+    "nombre": "Job no puede quedar exitoso sin resultado",
+    "sql": "UPDATE ml.analysis_jobs SET status='running',lease_id=qa.id(96),lease_expires_at=clock_timestamp()+interval '1 hour',attempt_count=1 WHERE id=qa.id(94); UPDATE ml.analysis_jobs SET status='succeeded',lease_id=NULL,lease_expires_at=NULL,finished_at=clock_timestamp() WHERE id=qa.id(94);",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Job y resultado no evaluable se completan atómicamente",
+    "sql": "UPDATE ml.analysis_jobs SET status='running',lease_id=qa.id(96),lease_expires_at=clock_timestamp()+interval '1 hour',attempt_count=1 WHERE id=qa.id(94); INSERT INTO ml.analysis_results(job_id,limitations,disclaimer_version,quality_status) VALUES(qa.id(94),'Solo QA','qa-v1','not_evaluable'); UPDATE ml.analysis_jobs SET status='succeeded',lease_id=NULL,lease_expires_at=NULL,finished_at=clock_timestamp() WHERE id=qa.id(94);",
+    "categoria": "integridad"
+  },
+  {
+    "nombre": "Worker no puede tomar lease todavía vigente",
+    "sql": "UPDATE ml.analysis_jobs SET status='running',lease_id=qa.id(96),lease_expires_at=clock_timestamp()+interval '1 hour',attempt_count=1 WHERE id=qa.id(94); UPDATE ml.analysis_jobs SET lease_id=qa.id(97),attempt_count=2 WHERE id=qa.id(94);",
+    "categoria": "integridad",
+    "sqlstate": "23514"
+  },
+  {
+    "nombre": "Foto revocada sigue pudiendo eliminar metadata y análisis propios",
+    "sql": "UPDATE public.patient_consents SET revoked_at=clock_timestamp() WHERE id=qa.id(91); DELETE FROM public.dental_photos WHERE id=qa.id(92); DO $$ BEGIN ASSERT NOT EXISTS(SELECT 1 FROM ml.analysis_authorizations WHERE id=qa.id(93)); ASSERT NOT EXISTS(SELECT 1 FROM ml.analysis_jobs WHERE id=qa.id(94)); END $$;",
+    "categoria": "integridad"
+  },
+  {
+    "nombre": "Paciente puede borrar metadata propia tras revocar con RLS existente",
+    "sql": "UPDATE public.patient_consents SET revoked_at=clock_timestamp() WHERE id=qa.id(91); SELECT qa.identity(1); SET LOCAL ROLE authenticated; DELETE FROM public.dental_photos WHERE id=qa.id(92); RESET ROLE; DO $$ BEGIN ASSERT NOT EXISTS(SELECT 1 FROM public.dental_photos WHERE id=qa.id(92)); END $$;",
+    "categoria": "RLS existente y compatibilidad CASCADE"
+  },
+  {
+    "nombre": "Paciente lee solo su perfil por RLS",
+    "sql": "SELECT qa.identity(1); SET LOCAL ROLE authenticated; DO $$ BEGIN ASSERT (SELECT count(*)=1 FROM public.profiles); ASSERT (SELECT count(*)=0 FROM public.profiles WHERE id=qa.id(2)); END $$;",
+    "categoria": "RLS existente"
+  },
+  {
+    "nombre": "Paciente no puede modificar perfil ajeno",
+    "sql": "SELECT qa.identity(1); SET LOCAL ROLE authenticated; DO $$ DECLARE n integer; BEGIN UPDATE public.profiles SET full_name='QA' WHERE id=qa.id(2); GET DIAGNOSTICS n=ROW_COUNT; ASSERT n=0; END $$;",
+    "categoria": "RLS existente"
+  },
+  {
+    "nombre": "Cliente no puede editar app_metadata ni elevar rol",
+    "sql": "SELECT qa.identity(1); SET LOCAL ROLE authenticated; UPDATE auth.users SET raw_app_meta_data='{}' WHERE id=qa.id(1);",
+    "categoria": "permisos SQL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "visitante: ACL clínica bloquea acceso directo",
+    "sql": "SELECT qa.identity(1,'paciente'); SET LOCAL ROLE anon; SELECT * FROM clinical.clinical_encounters;",
+    "categoria": "permisos SQL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "visitante: RLS deniega las 21 tablas aun con SELECT temporal",
+    "sql": "GRANT USAGE ON SCHEMA clinical,ml TO anon; GRANT SELECT ON ALL TABLES IN SCHEMA clinical,ml TO anon; SELECT qa.identity(1,'paciente'); SET LOCAL ROLE anon; DO $$ DECLARE t record; n bigint; BEGIN FOR t IN SELECT schemaname,tablename FROM pg_tables WHERE schemaname IN ('clinical','ml') LOOP EXECUTE format('SELECT count(*) FROM %I.%I',t.schemaname,t.tablename) INTO n; ASSERT n=0; END LOOP; END $$;",
+    "categoria": "RLS propuesta default-deny"
+  },
+  {
+    "nombre": "paciente: ACL clínica bloquea acceso directo",
+    "sql": "SELECT qa.identity(1,'paciente'); SET LOCAL ROLE authenticated; SELECT * FROM clinical.clinical_encounters;",
+    "categoria": "permisos SQL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "paciente: RLS deniega las 21 tablas aun con SELECT temporal",
+    "sql": "GRANT USAGE ON SCHEMA clinical,ml TO authenticated; GRANT SELECT ON ALL TABLES IN SCHEMA clinical,ml TO authenticated; SELECT qa.identity(1,'paciente'); SET LOCAL ROLE authenticated; DO $$ DECLARE t record; n bigint; BEGIN FOR t IN SELECT schemaname,tablename FROM pg_tables WHERE schemaname IN ('clinical','ml') LOOP EXECUTE format('SELECT count(*) FROM %I.%I',t.schemaname,t.tablename) INTO n; ASSERT n=0; END LOOP; END $$;",
+    "categoria": "RLS propuesta default-deny"
+  },
+  {
+    "nombre": "odontólogo: ACL clínica bloquea acceso directo",
+    "sql": "SELECT qa.identity(4,'odontologo'); SET LOCAL ROLE authenticated; SELECT * FROM clinical.clinical_encounters;",
+    "categoria": "permisos SQL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "odontólogo: RLS deniega las 21 tablas aun con SELECT temporal",
+    "sql": "GRANT USAGE ON SCHEMA clinical,ml TO authenticated; GRANT SELECT ON ALL TABLES IN SCHEMA clinical,ml TO authenticated; SELECT qa.identity(4,'odontologo'); SET LOCAL ROLE authenticated; DO $$ DECLARE t record; n bigint; BEGIN FOR t IN SELECT schemaname,tablename FROM pg_tables WHERE schemaname IN ('clinical','ml') LOOP EXECUTE format('SELECT count(*) FROM %I.%I',t.schemaname,t.tablename) INTO n; ASSERT n=0; END LOOP; END $$;",
+    "categoria": "RLS propuesta default-deny"
+  },
+  {
+    "nombre": "superusuario: ACL clínica bloquea acceso directo",
+    "sql": "SELECT qa.identity(6,'superusuario'); SET LOCAL ROLE authenticated; SELECT * FROM clinical.clinical_encounters;",
+    "categoria": "permisos SQL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "superusuario: RLS deniega las 21 tablas aun con SELECT temporal",
+    "sql": "GRANT USAGE ON SCHEMA clinical,ml TO authenticated; GRANT SELECT ON ALL TABLES IN SCHEMA clinical,ml TO authenticated; SELECT qa.identity(6,'superusuario'); SET LOCAL ROLE authenticated; DO $$ DECLARE t record; n bigint; BEGIN FOR t IN SELECT schemaname,tablename FROM pg_tables WHERE schemaname IN ('clinical','ml') LOOP EXECUTE format('SELECT count(*) FROM %I.%I',t.schemaname,t.tablename) INTO n; ASSERT n=0; END LOOP; END $$;",
+    "categoria": "RLS propuesta default-deny"
+  },
+  {
+    "nombre": "INSERT clínico queda bloqueado por RLS con privilegio temporal",
+    "sql": "GRANT USAGE ON SCHEMA clinical TO authenticated; GRANT INSERT ON clinical.clinics TO authenticated; SELECT qa.identity(6,'superusuario'); SET LOCAL ROLE authenticated; INSERT INTO clinical.clinics(id,name) VALUES(qa.id(999),'QA');",
+    "categoria": "RLS propuesta default-deny",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Superusuario no puede modificar auditoría clínica",
+    "sql": "SELECT qa.identity(6,'superusuario'); SET LOCAL ROLE authenticated; UPDATE clinical.clinical_access_audit SET outcome='allowed';",
+    "categoria": "permisos SQL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "service_role no recibe acceso clínico por ACL",
+    "sql": "SET LOCAL ROLE service_role; SELECT * FROM clinical.clinical_encounters;",
+    "categoria": "permisos SQL; no evidencia RLS",
+    "sqlstate": "42501"
+  }
+]

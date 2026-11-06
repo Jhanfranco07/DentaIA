@@ -1,0 +1,70 @@
+{
+  "base": "e9fd2f3f05807ab2f10cab335f57bc817f30c51f",
+  "rama": "docs/auditoria-arquitectura-integral",
+  "jira": "https://jhanfranco.atlassian.net/browse/DI-153",
+  "entorno": "Codex Cloud; ejecuciones locales 2026-11-04 UTC",
+  "node_comprobaciones": "22.23.4",
+  "node_linea_base": "24.19.0",
+  "archivos_qa_sha256": {
+    "scripts/qa-di152-panel.py": "41409d3ec5e3a1ce24977cb2fbb0000ad7018aa3a10dfd7c0aeb3c3ad1ead51b",
+    "scripts/qa-di153-postgres.py": "950c96335a5fd112bf64d0292f8cf133e4ada3f133a7424b9e2c117369572519",
+    "src/features/administracion/bloqueos-di153.test.mjs": "17641fa1f267bec9ec2ad002f0d9ae321dc8502dcdc7769053591cc1286ea58b"
+  },
+  "comandos": [
+    {
+      "comando": "node --experimental-strip-types --test --test-reporter=tap \"src/features/administracion/*.test.mjs\" \"src/features/autorizacion/*.test.mjs\"",
+      "node": "24.19.0",
+      "exit": 0,
+      "aprobadas": 156,
+      "fallidas": 0,
+      "omitidas": 0,
+      "evidencia": "BASE_ADMIN_NODE24.tap"
+    },
+    {
+      "comando": "node --experimental-strip-types --test --test-reporter=tap \"src/features/**/*.test.mjs\"",
+      "node": "22.23.4",
+      "exit": 0,
+      "aprobadas": 301,
+      "fallidas": 0,
+      "omitidas": 0,
+      "evidencia": "NODE22.tap"
+    },
+    {
+      "comando": "npm run build",
+      "node": "22.23.4",
+      "exit": 0,
+      "evidencia": "BUILD_NODE22.log"
+    },
+    {
+      "comando": "npm run typecheck (después del build)",
+      "node": "22.23.4",
+      "exit": 0,
+      "evidencia": "TYPECHECK.log"
+    },
+    {
+      "comando": "python3 scripts/qa-di152-panel.py --di153 --chromium /usr/bin/chromium --output /tmp/di153-browser",
+      "exit": 0,
+      "aprobadas": 20,
+      "fallidas": 0,
+      "evidencia": "NAVEGADOR_FIXTURES.json"
+    },
+    {
+      "comando": "python3 scripts/qa-di153-postgres.py --confirmar-base-desechable --output /tmp/di153-postgres.json",
+      "exit": 0,
+      "aprobadas": 4,
+      "fallidas": 0,
+      "evidencia": "POSTGRES_LOCAL.json"
+    }
+  ],
+  "intentos_previos": {
+    "navegador": "18 aprobadas/2 fallidas del arnés; después 20/0. Ver historial completo.",
+    "typecheck": "Primer intento concurrente con next build: exit 2 por .next/types en regeneración. Repetición secuencial: exit 0."
+  },
+  "remoto": {
+    "ejecutado": false,
+    "mfa_o_revocacion_certificados": false,
+    "supabase_modificado": false,
+    "motivo": "Sin credenciales administrativas dedicadas ni sesión autorizada; escrituras prohibidas y deshabilitadas."
+  },
+  "normalizacion_logs": "BUILD_NODE22.log y TYPECHECK.log: solo retorno de carro, espacios finales y líneas vacías finales eliminados para git diff --check; contenido de resultados conservado."
+}

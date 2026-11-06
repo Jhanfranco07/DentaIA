@@ -1,0 +1,13 @@
+{
+  "fecha": "2026-11-04T01:21:23.355Z",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "archivo": "docs/arquitectura/integracion_fase8/activacion/20261104010040_di36_activacion_sintetica_fase8.sql",
+  "sha256": "df245dfdc87021632aef53581db995cef7e440fc89e85bd25c1575391a013700",
+  "nombre": "di36_activacion_sintetica_fase8",
+  "versionRemota": "20261104010757",
+  "resultado": "APLICADA_Y_VERIFICADA",
+  "autorizacion": "Confirmación explícita del responsable para el archivo y SHA-256, recibida antes de ejecutar",
+  "contextoEjecucion": "GUC de aprobación exigida por el SQL, establecida en la misma conexión y retirada al finalizar",
+  "politicasOPrivilegiosNuevos": false,
+  "cuatroMigracionesOriginalesRepetidas": false
+}

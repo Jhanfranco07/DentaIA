@@ -1,0 +1,9 @@
+{
+  "fecha": "2026-11-04T01:21:23.165Z",
+  "archivosRevisados": 85,
+  "bundlesClienteRevisados": 36,
+  "secretosComparadosSinImprimir": 10,
+  "problemas": [],
+  "credencialesFueraDeGit": true,
+  "limitacion": "Comparación literal de secretos conocidos y patrones; requiere además revisión humana del diff."
+}

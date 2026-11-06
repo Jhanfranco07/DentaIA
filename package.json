@@ -7,14 +7,17 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "test:profesional": "node --experimental-strip-types --test src/features/profesional/historial-sintetico.test.mjs src/features/profesional/historial-autorizado.test.mjs src/features/profesional/resultados-educativos.test.mjs src/features/profesional/resultados-educativos-integracion.test.mjs src/features/profesional/api-clinica.test.mjs src/features/profesional/control-consultas-clinicas.test.mjs src/features/profesional/control-revalidacion-historial.test.mjs src/features/profesional/bff-integracion.test.mjs",
     "check:supabase": "node --env-file-if-exists=.env.local scripts/check-supabase.mjs",
     "setup:test-users": "node --env-file-if-exists=.env.local --env-file-if-exists=.env.admin.local scripts/create-test-users.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",
+    "maplibre-gl": "6.16.0",
     "next": "15.5.28",
     "react": "19.1.8",
-    "react-dom": "19.1.8"
+    "react-dom": "19.1.8",
+    "server-only": "0.0.1"
   },
   "devDependencies": {
     "@types/node": "22.18.11",

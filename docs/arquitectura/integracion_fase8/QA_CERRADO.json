@@ -1,0 +1,18 @@
+{
+  "fecha": "2026-11-03",
+  "remoto": false,
+  "clinicaHttpDesactivada": true,
+  "clinicaMvpDesactivada": true,
+  "jwtExpiry": 3600,
+  "basesAnteriores": [
+    {
+      "fase": 2,
+      "atenciones": 3
+    },
+    {
+      "fase": 3,
+      "atenciones": 3
+    }
+  ],
+  "sinUsuariosAjenos": true
+}

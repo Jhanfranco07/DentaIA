@@ -1,0 +1,16 @@
+sequenceDiagram
+  participant P as Paciente
+  participant S as Next.js propuesto
+  participant D as PostgreSQL
+  P->>S: Conceder atenciones seleccionadas con Idempotency-Key
+  S->>D: Identidad verificada y parámetros cerrados
+  D->>D: Derivar paciente, validar destinatario y mismo paciente de recursos
+  D->>D: Transacción: concesión, recursos y auditoría
+  D-->>S: Commit, misma clave y datos devuelve concesión previa
+  S-->>P: Estado actual, no reactivar concesión revocada
+  P->>S: Revocar concesión propia
+  S->>D: Bloquear mismo paciente y concesión en modo exclusivo
+  D->>D: Revocación irreversible y auditoría
+  D-->>P: Confirmar después del commit
+  Note over S,D: Lectores usan bloqueos compartidos compatibles con esta serialización
+  Note over P,D: Solicitudes y consentimiento fotográfico no otorgan este permiso

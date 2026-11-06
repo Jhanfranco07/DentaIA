@@ -1,0 +1,183 @@
+{
+  "fecha": "2026-11-04T21:43:36.814Z",
+  "entorno": "Next desarrollo local + Supabase Dental-IA real; únicamente cuentas sintéticas",
+  "pruebas": [
+    {
+      "nombre": "Login real paciente_a",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Login real paciente_b",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Login real odontologo_a",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Login real administrador_qa",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Perfil, solicitudes y consentimiento propios paciente_a",
+      "aprobada": true,
+      "http": [
+        200,
+        200,
+        200
+      ],
+      "perfiles": 1,
+      "solicitudes": 2,
+      "consentimientos": 0
+    },
+    {
+      "nombre": "BFF clínico propio paciente_a",
+      "aprobada": true,
+      "autorizaciones": 2,
+      "atenciones": 2,
+      "estados": [
+        "vigente",
+        "vigente"
+      ]
+    },
+    {
+      "nombre": "Perfil, solicitudes y consentimiento propios paciente_b",
+      "aprobada": true,
+      "http": [
+        200,
+        200,
+        200
+      ],
+      "perfiles": 1,
+      "solicitudes": 1,
+      "consentimientos": 0
+    },
+    {
+      "nombre": "BFF clínico propio paciente_b",
+      "aprobada": true,
+      "autorizaciones": 2,
+      "atenciones": 1,
+      "estados": [
+        "vencido",
+        "revocado"
+      ]
+    },
+    {
+      "nombre": "Paciente no accede al panel administrativo ni a su API de datos",
+      "aprobada": true,
+      "http": [
+        403,
+        403
+      ]
+    },
+    {
+      "nombre": "Paciente A no lee historial de B",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Superusuario AAL1 mantiene rechazo administrativo",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Superusuario AAL2 autorizado; lectura administrativa compartida sigue apagada",
+      "aprobada": true,
+      "http": [
+        200,
+        503
+      ]
+    },
+    {
+      "nombre": "Superusuario no hereda historial clínico",
+      "aprobada": true,
+      "http": 403
+    },
+    {
+      "nombre": "Profesional respeta concesiones vigentes, expiradas y revocadas",
+      "aprobada": true,
+      "http": [
+        200,
+        403
+      ],
+      "concesionA": "vigente",
+      "consultaBAutorizacionExpiradaODenegada": true
+    },
+    {
+      "nombre": "Ruta disponible /",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Ruta disponible /cuenta",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Ruta disponible /panel",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Ruta disponible /directorio",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Ruta disponible /solicitudes",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Ruta disponible /fotografias",
+      "aprobada": true,
+      "http": 200
+    },
+    {
+      "nombre": "Sin sesión el panel no muestra contenido personal",
+      "aprobada": false,
+      "error": "FUNCTIONAL_CHECK_FAILED"
+    },
+    {
+      "nombre": "Login desde la interfaz y perfil propio",
+      "aprobada": false,
+      "error": "FUNCTIONAL_CHECK_FAILED"
+    },
+    {
+      "nombre": "Panel integrado lee resumen, solicitudes, autorizaciones e historial",
+      "aprobada": false,
+      "error": "FUNCTIONAL_CHECK_FAILED"
+    },
+    {
+      "nombre": "Responsive 375, 1024 y 1280 sin desbordamiento de página",
+      "aprobada": true
+    },
+    {
+      "nombre": "Navegación móvil y teclado hacia cuenta",
+      "aprobada": false,
+      "error": "FUNCTIONAL_CHECK_FAILED"
+    },
+    {
+      "nombre": "Consentimientos y fotografías disponibles en su módulo; sin carga ni eliminación",
+      "aprobada": false,
+      "error": "CONSENT_MODULE_MISSING"
+    },
+    {
+      "nombre": "Paciente rechazado por la interfaz administrativa integrada",
+      "aprobada": true
+    },
+    {
+      "nombre": "Logout retira los datos del panel",
+      "aprobada": false,
+      "error": "FUNCTIONAL_CHECK_FAILED"
+    }
+  ],
+  "escriturasDeNegocio": false,
+  "servidorReutilizado": true,
+  "aprobadas": 22,
+  "fallidas": 6
+}

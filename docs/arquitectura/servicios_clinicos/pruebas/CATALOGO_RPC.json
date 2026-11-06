@@ -1,0 +1,572 @@
+{
+  "version": "17.11",
+  "funciones": [
+    {
+      "nspname": "clinical_service",
+      "proname": "audit_event",
+      "firma": "request_id uuid, actor_id uuid, patient_id uuid, context_id uuid, grant_id uuid, operation text, outcome text, reason text",
+      "prosecdef": false,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "dentaia_clinical_executor",
+      "proacl": [
+        "dentaia_clinical_executor=X/dentaia_clinical_executor"
+      ],
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "configuration",
+      "firma": "",
+      "prosecdef": false,
+      "provolatile": "s",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "postgres",
+      "proacl": [
+        "postgres=X/postgres",
+        "dentaia_clinical_executor=X/postgres"
+      ],
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "grant_access",
+      "firma": "p_id uuid, p_membership_id uuid, p_encounter_ids uuid[], p_expires_at timestamp with time zone, p_policy_version text, p_accepted boolean",
+      "prosecdef": true,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\"",
+        "lock_timeout=5s"
+      ],
+      "owner": "dentaia_clinical_executor",
+      "proacl": [
+        "dentaia_clinical_executor=X/dentaia_clinical_executor",
+        "authenticated=X/dentaia_clinical_executor"
+      ],
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "identity_context",
+      "firma": "other_user uuid",
+      "prosecdef": true,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "postgres",
+      "proacl": [
+        "postgres=X/postgres",
+        "dentaia_clinical_executor=X/postgres"
+      ],
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "lock_context",
+      "firma": "member_id uuid, expected_user uuid",
+      "prosecdef": false,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "dentaia_clinical_executor",
+      "proacl": [
+        "dentaia_clinical_executor=X/dentaia_clinical_executor"
+      ],
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "read_history",
+      "firma": "p_patient_id uuid, p_membership_id uuid, p_limit integer, p_before_at timestamp with time zone, p_before_id uuid",
+      "prosecdef": true,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\"",
+        "lock_timeout=5s"
+      ],
+      "owner": "dentaia_clinical_executor",
+      "proacl": [
+        "dentaia_clinical_executor=X/dentaia_clinical_executor",
+        "authenticated=X/dentaia_clinical_executor"
+      ],
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "reject_request",
+      "firma": "request_id uuid, actor_id uuid, context_id uuid, operation text, reason text, status integer",
+      "prosecdef": false,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "dentaia_clinical_executor",
+      "proacl": [
+        "dentaia_clinical_executor=X/dentaia_clinical_executor"
+      ],
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "revoke_access",
+      "firma": "p_id uuid",
+      "prosecdef": true,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\"",
+        "lock_timeout=5s"
+      ],
+      "owner": "dentaia_clinical_executor",
+      "proacl": [
+        "dentaia_clinical_executor=X/dentaia_clinical_executor",
+        "authenticated=X/dentaia_clinical_executor"
+      ],
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "session_current",
+      "firma": "identity jsonb",
+      "prosecdef": true,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "postgres",
+      "proacl": [
+        "postgres=X/postgres",
+        "dentaia_clinical_executor=X/postgres"
+      ],
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "valid_assignment",
+      "firma": "assignment jsonb",
+      "prosecdef": false,
+      "provolatile": "i",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "postgres",
+      "proacl": [
+        "postgres=X/postgres"
+      ],
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "clinical_service",
+      "proname": "verification_parent_lock",
+      "firma": "",
+      "prosecdef": false,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "postgres",
+      "proacl": [
+        "postgres=X/postgres",
+        "dentaia_clinical_executor=X/postgres"
+      ],
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "public",
+      "proname": "get_authorized_clinical_history",
+      "firma": "p_patient_id uuid, p_membership_id uuid, p_limit integer, p_before_at timestamp with time zone, p_before_id uuid",
+      "prosecdef": false,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "postgres",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "public",
+      "proname": "grant_clinical_access",
+      "firma": "p_id uuid, p_membership_id uuid, p_encounter_ids uuid[], p_expires_at timestamp with time zone, p_policy_version text, p_accepted boolean",
+      "prosecdef": false,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "postgres",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_execute": false
+    },
+    {
+      "nspname": "public",
+      "proname": "revoke_clinical_access",
+      "firma": "p_id uuid",
+      "prosecdef": false,
+      "provolatile": "v",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "owner": "postgres",
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_execute": false
+    }
+  ],
+  "rol_ejecutor": [
+    {
+      "rolname": "dentaia_clinical_executor",
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolcanlogin": false,
+      "rolinherit": false
+    }
+  ],
+  "politicas": [
+    {
+      "schemaname": "clinical",
+      "tablename": "clinic_memberships",
+      "policyname": "clinical_executor_lock",
+      "cmd": "UPDATE",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinic_memberships",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_audit",
+      "policyname": "clinical_executor_insert",
+      "cmd": "INSERT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": null,
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_grants",
+      "policyname": "clinical_executor_insert",
+      "cmd": "INSERT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": null,
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_grants",
+      "policyname": "clinical_executor_lock",
+      "cmd": "UPDATE",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_access_grants",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_documents",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_encounters",
+      "policyname": "clinical_executor_lock",
+      "cmd": "UPDATE",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_encounters",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_entries",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_grant_resources",
+      "policyname": "clinical_executor_insert",
+      "cmd": "INSERT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": null,
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinical_grant_resources",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinics",
+      "policyname": "clinical_executor_lock",
+      "cmd": "UPDATE",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "clinics",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "patient_records",
+      "policyname": "clinical_executor_lock",
+      "cmd": "UPDATE",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "patient_records",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_accounts",
+      "policyname": "clinical_executor_lock",
+      "cmd": "UPDATE",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_accounts",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "clinical",
+      "tablename": "professional_verifications",
+      "policyname": "clinical_executor_select",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "profiles",
+      "policyname": "clinical_executor_provenance",
+      "cmd": "SELECT",
+      "roles": [
+        "dentaia_clinical_executor"
+      ],
+      "qual": "true",
+      "with_check": null
+    }
+  ],
+  "tablas": [
+    {
+      "nspname": "clinical",
+      "relname": "clinic_memberships",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "clinical_access_audit",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "clinical_access_grants",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "clinical_documents",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "clinical_encounters",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "clinical_entries",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "clinical_grant_resources",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "clinics",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "patient_records",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "professional_accounts",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "clinical",
+      "relname": "professional_verifications",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "public",
+      "relname": "appointment_requests",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "public",
+      "relname": "dental_photos",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "public",
+      "relname": "dentists",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "public",
+      "relname": "patient_consents",
+      "relrowsecurity": true
+    },
+    {
+      "nspname": "public",
+      "relname": "profiles",
+      "relrowsecurity": true
+    }
+  ],
+  "columnas": 120,
+  "sin_IA": true,
+  "sin_admin_DI151": true
+}

@@ -1,0 +1,18 @@
+{
+  "rama": "integration/sprint5-demo",
+  "head": "67a85d3873c59234261883ef6f414525741c82a9",
+  "archivos_sha256": {
+    "src/components/Encabezado.tsx": "4ff1c5a66ee4604fdb3479168311c027a46187374e20090eddad3a3139ba610d",
+    "src/components/Pie.tsx": "2b1079d476ede7fa2b91bfe54d970bcbc8795511312b8c5197a9cd859cdc75f4",
+    "src/features/cuenta/Cuenta.tsx": "5d6e71b825d550100dd91846a7bcb21fe0830932e84a7c56fc19df45cb6c43c5",
+    "src/features/panel/PanelPaciente.tsx": "dd3b79f704491eab74234647012d308227e879c92b4a2b34738b309213a32a86",
+    "src/features/panel/ClinicaPanel.tsx": "be24f42fc8fdecee9791acf18319003131e290fc7373b2d8440853dad78c0bce",
+    "src/features/panel/clinica.ts": "d510ff11230afb7d8a63f14b7d808c1f18297f90f524bbc60eef9b3fcfd2be89",
+    "src/features/panel/clinica.test.mjs": "9442c60f01b5b0bb5a9b646ab5a2b227639d4ca44c2c07e5b25555014d71ee0c",
+    "package.json": "f5a33ad58fb512e026786cc8f0721d23d57b3c91131c01f71d85f6d04e60080f",
+    "package-lock.json": "b35fa1980142d5796c5d5fc3b1b217d5515b2c0872aa3f7cf04fe9547d101f01",
+    "scripts/qa-sprint5-browser.py": "1c01c8299711cf0e390fc7f92ca97bbbe02e1ca35334eacc8ea541bd48d1e865",
+    "scripts/qa-sprint5-integracion.mjs": "4f1d3d1f8ebd050ac13d9f9c47aa71d0fa8a066da4185a42aa764bb04da75696"
+  },
+  "nota": "Huella del ?rbol de aplicaci?n validado y arneses; no incluye secretos ni archivos .env."
+}

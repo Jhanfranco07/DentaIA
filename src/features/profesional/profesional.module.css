@@ -1,0 +1,609 @@
+.pagina {
+  color: var(--ink);
+}
+
+.encabezado {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.etiquetaSuperior,
+.etiquetaSeccion,
+.etiquetaResultado {
+  color: var(--teal-dark);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.etiquetaSuperior {
+  margin: 0 0 10px;
+}
+
+.encabezado h1 {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 4.3vw, 3rem);
+  letter-spacing: -0.035em;
+}
+
+.encabezado > p:last-child,
+.cabeceraSeccion > p:last-child,
+.tarjeta > p {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.avisoDemostracion {
+  margin-bottom: 24px;
+  padding: 18px 20px;
+  border: 1px solid #c7e5e5;
+  border-radius: 14px;
+  background: #e8f6f7;
+}
+
+.avisoDemostracion strong {
+  color: var(--teal-dark);
+}
+
+.avisoDemostracion p {
+  max-width: 80ch;
+  margin: 5px 0 0;
+  color: #24594d;
+  font-size: 14px;
+}
+
+.avisoClinico {
+  margin-bottom: 24px;
+  padding: 18px 20px;
+  border: 1px solid #c7e5e5;
+  border-radius: 14px;
+  background: #e8f6f7;
+}
+
+.avisoClinico strong {
+  color: var(--teal-dark);
+}
+
+.avisoClinico p {
+  max-width: 80ch;
+  margin: 5px 0 0;
+  color: #24594d;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.navegacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-bottom: 28px;
+}
+
+.navegacion a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  color: var(--teal-dark);
+  font-weight: 700;
+}
+
+.tarjeta {
+  margin-bottom: 24px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 12px 35px rgba(22, 61, 61, 0.06);
+}
+
+.cabeceraSeccion {
+  max-width: 780px;
+  margin-bottom: 24px;
+}
+
+.etiquetaSeccion {
+  margin: 0 0 8px;
+}
+
+.cabeceraSeccion h2,
+.tarjeta > h2 {
+  margin: 0 0 9px;
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  letter-spacing: -0.02em;
+}
+
+.tarjeta > p {
+  max-width: 720px;
+  margin: 0 0 12px;
+}
+
+.controles {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 20px;
+  border: 1px solid #d6e8e8;
+  border-radius: 14px;
+  background: #f8fbfb;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo label,
+.escenarios legend {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.campo select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #bdced1;
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.escenarios {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.escenarios p {
+  margin: 6px 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.opcionesEscenario {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.opcionEscenario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 7px 11px;
+  border: 1px solid #c8d9da;
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.opcionEscenario input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--teal);
+}
+
+.estadoCarga,
+.estadoVacio,
+.estadoDenegado,
+.estadoError {
+  padding: 18px;
+  border-radius: 12px;
+  line-height: 1.6;
+}
+
+.estadoCarga,
+.estadoVacio {
+  border: 1px solid #d8e6e5;
+  background: #f6faf9;
+  color: var(--muted);
+}
+
+.estadoDenegado {
+  border: 1px solid #e7d1a7;
+  background: #fff8e8;
+  color: #654c19;
+}
+
+.estadoError {
+  border: 1px solid #f0caca;
+  background: #fff4f4;
+  color: #8c2f2f;
+}
+
+.estadoDenegado p,
+.estadoError p {
+  margin: 5px 0 0;
+}
+
+.accionesEstado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.botonSecundario {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #8bb8b6;
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--teal-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.botonSecundario:hover:not(:disabled) {
+  border-color: var(--teal-dark);
+  background: #f0f8f7;
+}
+
+.botonSecundario:focus-visible,
+.campo select:focus-visible {
+  outline: 3px solid rgba(15, 133, 129, 0.35);
+  outline-offset: 2px;
+}
+
+.botonSecundario:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.resultadoHistorial {
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+
+.resultadoEducativo {
+  display: grid;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+
+.resultadoEducativo h3,
+.resultadoEducativo h4 {
+  margin: 0;
+}
+
+.resultadoEducativo h3 {
+  font-size: 20px;
+}
+
+.resultadoEducativo h4 {
+  margin-bottom: 9px;
+  font-size: 14px;
+}
+
+.listaEducativa {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.avisoEducativo {
+  margin: 0;
+  padding: 14px;
+  border: 1px solid #d6e8e8;
+  border-radius: 10px;
+  background: #f1f7f7;
+  color: #24594d;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.fuenteEducativa {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.fuenteEducativa dt {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.fuenteEducativa dd {
+  margin: 2px 0 0;
+}
+
+.resumenCaso {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+
+.etiquetaResultado {
+  margin: 0 0 5px;
+}
+
+.resumenCaso h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.resumenCaso dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 12px;
+  min-width: min(100%, 400px);
+  margin: 0;
+}
+
+.resumenCaso dt,
+.procedencia dt,
+.detalleClinico dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.resumenCaso dd,
+.procedencia dd,
+.detalleClinico dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.resumenCaso dd {
+  font-size: 13px;
+}
+
+.ayudaResultado {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.cronologia {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.itemCronologia {
+  position: relative;
+  padding-left: 22px;
+}
+
+.itemCronologia::before {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border: 3px solid #d5eeec;
+  border-radius: 50%;
+  background: var(--teal);
+  content: "";
+}
+
+.atencion {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fbfdfd;
+}
+
+.cabeceraAtencion {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.fechaAtencion {
+  margin: 0 0 4px;
+  color: var(--teal-dark);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.cabeceraAtencion h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.identificador {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #e8f6f7;
+  color: var(--teal-dark);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.procedencia,
+.detalleClinico {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+}
+
+.procedencia {
+  padding: 14px;
+  border-radius: 10px;
+  background: #f1f7f7;
+}
+
+.procedencia dd,
+.detalleClinico dd {
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.detalleAtencion {
+  margin-top: 17px;
+  border-top: 1px solid var(--line);
+  padding-top: 15px;
+}
+
+.detalleAtencion summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--teal-dark);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.detalleAtencion[open] summary {
+  margin-bottom: 16px;
+}
+
+.detalleClinico {
+  margin-bottom: 18px;
+}
+
+.detalleAtencion h4 {
+  margin: 0 0 10px;
+  font-size: 14px;
+}
+
+.listaExamenes {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.referenciaExamen {
+  display: grid;
+  gap: 3px;
+  padding: 13px;
+  border: 1px solid #dce8e8;
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.referenciaExamen strong {
+  color: var(--ink);
+}
+
+.examenNoDisponible {
+  color: #725723;
+  font-weight: 650;
+}
+
+.listaSolicitudes {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.solicitudProfesional {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px;
+  border: 1px solid #dce8e8;
+  border-radius: 11px;
+  background: #fbfdfd;
+}
+
+.solicitudProfesional div {
+  display: grid;
+  gap: 4px;
+}
+
+.solicitudProfesional strong {
+  color: var(--ink);
+}
+
+.solicitudProfesional span:not(.identificador),
+.mensajeSecundario {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.mensajeSecundario {
+  margin: 10px 0 0;
+}
+
+@media (max-width: 760px) {
+  .tarjeta {
+    padding: 22px 18px;
+  }
+
+  .controles,
+  .procedencia,
+  .detalleClinico {
+    grid-template-columns: 1fr;
+  }
+
+  .resumenCaso {
+    display: grid;
+  }
+
+  .resumenCaso dl {
+    grid-template-columns: 1fr;
+    min-width: 0;
+  }
+
+  .solicitudProfesional {
+    display: grid;
+  }
+}
+
+@media (max-width: 480px) {
+  .opcionesEscenario {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .opcionEscenario {
+    width: 100%;
+  }
+
+  .cabeceraAtencion {
+    display: block;
+  }
+
+  .identificador {
+    display: inline-flex;
+    margin-top: 10px;
+  }
+}
+
+.pagina{display:grid;gap:20px;max-width:1280px;margin:0 auto}.encabezado{position:relative;overflow:hidden;max-width:none;margin:0;padding:30px clamp(20px,4vw,36px);border:1px solid #17495b;border-radius:18px;background:radial-gradient(ellipse at 100% 0,#24687a 0,transparent 45%),linear-gradient(120deg,#123449,#17495a);color:#fff;box-shadow:0 15px 34px #16364a18}.etiquetaSuperior{color:#a8dcda}.encabezado h1{color:#fff;font-size:clamp(25px,3.5vw,35px);letter-spacing:-.045em}.encabezado>p:last-child{max-width:64ch;margin:0;color:#d0e1e8;font-size:13px;line-height:1.7}.avisoClinico{display:flex;align-items:flex-start;gap:12px;margin:0;padding:13px 16px;border:1px solid #cfe6e5;border-radius:12px;background:#f1f9f8}.iconoProteccion{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:10px;background:#dff1ef;color:var(--teal-dark)}.avisoClinico strong{color:#1d5660;font-size:12px}.avisoClinico p{margin:2px 0 0;color:#526b78;font-size:11px;line-height:1.55}.tarjeta{margin:0;padding:23px;border-radius:15px;box-shadow:0 8px 23px #153a4a09;scroll-margin-top:100px}.cabeceraSeccion{margin-bottom:18px}.cabeceraSeccion h2,.tarjeta>h2{font-size:19px;letter-spacing:-.035em}.cabeceraSeccion>p:last-child{margin:6px 0 0;font-size:12px;line-height:1.6}.controles{gap:16px;margin-bottom:18px;padding:15px;border-color:#e2ebef;border-radius:12px;background:#f8fafc}.campo label{font-size:11px}.campo select{border-color:#ccd9e0;border-radius:9px}.estadoCarga,.estadoVacio,.estadoDenegado,.estadoError{padding:13px 15px;border-radius:10px;font-size:12px}.estadoCarga,.estadoVacio{background:#f7fafb}.listaSolicitudes{gap:8px}.solicitudProfesional{padding:13px;border-radius:10px;background:#fafcfd}.identificador{border-radius:999px;background:#e5f4ee;color:#267252;letter-spacing:0;font-size:10px}.resultadoHistorial,.resultadoEducativo{padding-top:18px}.atencion{padding:16px;border-radius:12px;background:#fff}.procedencia{background:#f4f8fa}.referenciaExamen{background:#fafcfd}.botonSecundario{transition:background .15s,border-color .15s}.botonSecundario:hover:not(:disabled){border-color:#8bb8b6;background:#eef8f7}
+@media(max-width:760px){.pagina{gap:15px}.encabezado{padding:24px 19px;border-radius:15px}.tarjeta{padding:18px 15px}.cabeceraSeccion h2,.tarjeta>h2{font-size:17px}.controles{padding:12px}.estadoCarga,.estadoVacio,.estadoDenegado,.estadoError{padding:12px}}

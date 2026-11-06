@@ -1,0 +1,220 @@
+[
+  {
+    "inicio_utc": "2026-11-03T18:14:22.048070+00:00",
+    "migraciones": [
+      {
+        "archivo": "borradores_sql/01_clinical_identidad.sql",
+        "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/02_clinical_contenido.sql",
+        "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/03_clinical_permisos_auditoria.sql",
+        "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/04_clinical_integridad.sql",
+        "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/08_identidad_y_privilegios.sql",
+        "sha256": "b8540f79e89c398df68145c7d5772a2b24582d65d4e0a5c319b1259d9d4b5236",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/09_autorizaciones.sql",
+        "sha256": "e682c3b3f7382aec5aa8ad78f288f14095ece7ea3dd9d1e5f8f7875b38c5399f",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/10_historial_autorizado.sql",
+        "sha256": "a25dc18c571d9728ba67e5ec798b6e622e1542464743c51a828e4142ede0f33b",
+        "aprobada": true,
+        "error": null
+      }
+    ],
+    "aprobadas": 68,
+    "fallidas": 1,
+    "bloqueo": null,
+    "errores": [
+      {
+        "nombre": "Authenticated no adopta el rol ejecutor",
+        "aprobado": false,
+        "detalle": "",
+        "tipo": "ACL"
+      }
+    ]
+  },
+  {
+    "inicio_utc": "2026-11-03T18:16:21.547408+00:00",
+    "migraciones": [
+      {
+        "archivo": "borradores_sql/01_clinical_identidad.sql",
+        "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/02_clinical_contenido.sql",
+        "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/03_clinical_permisos_auditoria.sql",
+        "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/04_clinical_integridad.sql",
+        "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/08_identidad_y_privilegios.sql",
+        "sha256": "b8540f79e89c398df68145c7d5772a2b24582d65d4e0a5c319b1259d9d4b5236",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/09_autorizaciones.sql",
+        "sha256": "e682c3b3f7382aec5aa8ad78f288f14095ece7ea3dd9d1e5f8f7875b38c5399f",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/10_historial_autorizado.sql",
+        "sha256": "a25dc18c571d9728ba67e5ec798b6e622e1542464743c51a828e4142ede0f33b",
+        "aprobada": true,
+        "error": null
+      }
+    ],
+    "aprobadas": 69,
+    "fallidas": 0,
+    "bloqueo": null,
+    "errores": []
+  },
+  {
+    "inicio_utc": "2026-11-03T18:19:38.502781+00:00",
+    "migraciones": [
+      {
+        "archivo": "borradores_sql/01_clinical_identidad.sql",
+        "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/02_clinical_contenido.sql",
+        "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/03_clinical_permisos_auditoria.sql",
+        "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/04_clinical_integridad.sql",
+        "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/08_identidad_y_privilegios.sql",
+        "sha256": "1be7407a96f6e69019aee5562fe0d2847a7ee54ebf23847e86d105cd6c2d87ef",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/09_autorizaciones.sql",
+        "sha256": "28d6730ce747dcc9051d3e9b114978ec33e3de37b0716a74ef0f141dd4650cc1",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/10_historial_autorizado.sql",
+        "sha256": "a25dc18c571d9728ba67e5ec798b6e622e1542464743c51a828e4142ede0f33b",
+        "aprobada": true,
+        "error": null
+      }
+    ],
+    "aprobadas": 77,
+    "fallidas": 1,
+    "bloqueo": null,
+    "errores": [
+      {
+        "nombre": "Página con demasiados objetos no entrega un historial parcial silencioso",
+        "aprobado": false,
+        "detalle": "ERROR:  42501: permission denied for schema clinical\nLINE 2: ...replaces_id,ARRAY[id] AS path,false AS cycle FROM clinical.c...\n                                                             ^\nQUERY:  WITH RECURSIVE chain AS (\n   SELECT id,replaces_id,ARRAY[id] AS path,false AS cycle FROM clinical.clinical_entries WHERE id=NEW.id\n   UNION ALL\n   SELECT p.id,p.replaces_id,c.path||p.id,p.id=ANY(c.path)\n   FROM clinical.clinical_entries p JOIN chain c ON p.id=c.replaces_id WHERE NOT c.cycle\n ) SELECT coalesce(bool_or(cycle),false)          FROM chain\nCONTEXT:  PL/pgSQL function clinical.entry_cycles_check() line 4 at SQL statement\nLOCATION:  aclcheck_error, aclchk.c:2843",
+        "tipo": "SQL RPC"
+      }
+    ]
+  },
+  {
+    "inicio_utc": "2026-11-03T18:22:14.969348+00:00",
+    "migraciones": [
+      {
+        "archivo": "borradores_sql/01_clinical_identidad.sql",
+        "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/02_clinical_contenido.sql",
+        "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/03_clinical_permisos_auditoria.sql",
+        "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "borradores_sql/04_clinical_integridad.sql",
+        "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/08_identidad_y_privilegios.sql",
+        "sha256": "f7ccfa0e4f4a892d4cdcaac430926924143059c0ea370a56e64af62a82a65713",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/09_autorizaciones.sql",
+        "sha256": "28d6730ce747dcc9051d3e9b114978ec33e3de37b0716a74ef0f141dd4650cc1",
+        "aprobada": true,
+        "error": null
+      },
+      {
+        "archivo": "servicios_clinicos/sql/10_historial_autorizado.sql",
+        "sha256": "a25dc18c571d9728ba67e5ec798b6e622e1542464743c51a828e4142ede0f33b",
+        "aprobada": true,
+        "error": null
+      }
+    ],
+    "aprobadas": 78,
+    "fallidas": 0,
+    "bloqueo": null,
+    "errores": []
+  }
+]

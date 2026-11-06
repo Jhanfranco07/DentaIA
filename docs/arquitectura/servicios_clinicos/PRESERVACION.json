@@ -1,0 +1,12 @@
+{
+  "fuentes_previas": 103,
+  "documentos_actualizados_con_notas": [
+    "CONTRATOS_API.md",
+    "POLITICAS_POR_TABLA.md",
+    "PROTOCOLO_RPC_Y_CONCURRENCIA.md",
+    "README.md"
+  ],
+  "otros_archivos_previos_intactos": true,
+  "sql_ejecutado_coincide_hash": true,
+  "contratos_RPC_coinciden_catalogo": true
+}

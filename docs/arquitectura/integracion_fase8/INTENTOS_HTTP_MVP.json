@@ -1,0 +1,286 @@
+[
+  {
+    "alcance": "integral con MFA real",
+    "fecha": "2026-11-03",
+    "remoto": false,
+    "pruebas": [
+      {
+        "nombre": "Seis logins y JWT verificados por Auth local",
+        "aprobada": true,
+        "cuentas": 6,
+        "algoritmo": "ES256"
+      },
+      {
+        "nombre": "Perfil propio lectura y actualización persistente",
+        "aprobada": true,
+        "filas": 1
+      },
+      {
+        "nombre": "RLS profiles entre dos JWT: lectura y modificación ajenas bloqueadas",
+        "aprobada": true,
+        "filasLeidas": 0,
+        "filasModificadas": 0
+      },
+      {
+        "nombre": "Directorio ficticio y vínculo profesional explícito, sin otorgar roles",
+        "aprobada": true,
+        "registros": 2
+      },
+      {
+        "nombre": "Registro real de tres solicitudes académicas y persistencia",
+        "aprobada": true,
+        "registros": 3
+      },
+      {
+        "nombre": "RLS de solicitudes entre pacientes con dos JWT",
+        "aprobada": true,
+        "propias": 1,
+        "ajenas": 0
+      },
+      {
+        "nombre": "Cancelación propia y persistencia, sin nuevos estados",
+        "aprobada": true,
+        "estado": "cancelled"
+      },
+      {
+        "nombre": "Paciente ajeno no cancela solicitud de otra cuenta",
+        "aprobada": true,
+        "filas": 0
+      },
+      {
+        "nombre": "/api/clinical/patients/me patient1 HTTP 200",
+        "aprobada": true,
+        "http": 200
+      },
+      {
+        "nombre": "/api/clinical/patients/me dentist1 HTTP 403",
+        "aprobada": true,
+        "http": 403
+      },
+      {
+        "nombre": "/api/clinical/patients/me nonprofessional HTTP 403",
+        "aprobada": true,
+        "http": 403
+      },
+      {
+        "nombre": "/api/professional/me dentist1 HTTP 200",
+        "aprobada": true,
+        "http": 200
+      },
+      {
+        "nombre": "/api/professional/me patient1 HTTP 403",
+        "aprobada": true,
+        "http": 403
+      },
+      {
+        "nombre": "/api/professional/me superuser HTTP 403",
+        "aprobada": true,
+        "http": 403
+      },
+      {
+        "nombre": "Contextos profesionales vigentes y paginación keyset",
+        "aprobada": true,
+        "http": [
+          200,
+          200
+        ],
+        "paginas": 2
+      },
+      {
+        "nombre": "Profesional consulta solo solicitudes de su ficha vinculada",
+        "aprobada": true,
+        "http": 200,
+        "registros": 2
+      },
+      {
+        "nombre": "Filtro de solicitudes requested/cancelled",
+        "aprobada": true,
+        "http": [
+          200,
+          200
+        ]
+      },
+      {
+        "nombre": "Paginación de solicitudes sin duplicados",
+        "aprobada": true,
+        "http": [
+          200,
+          200
+        ]
+      },
+      {
+        "nombre": "Contexto ajeno no abre solicitudes profesionales",
+        "aprobada": true,
+        "http": 403
+      },
+      {
+        "nombre": "Paciente no consulta solicitudes profesionales",
+        "aprobada": true,
+        "http": 403
+      },
+      {
+        "nombre": "Estado inventado y actor en query rechazados",
+        "aprobada": true,
+        "http": [
+          400,
+          400
+        ]
+      },
+      {
+        "nombre": "Nueva concesión propia persistente",
+        "aprobada": true,
+        "http": 201
+      },
+      {
+        "nombre": "Lista de concesiones propias incluye alcance y estado",
+        "aprobada": true,
+        "http": 200
+      },
+      {
+        "nombre": "Concesión no aparece en lista del segundo paciente",
+        "aprobada": true,
+        "http": 200
+      },
+      {
+        "nombre": "Listado de pacientes contiene solo identidades autorizadas sin contenido clínico",
+        "aprobada": true,
+        "http": 200,
+        "pacientes": 1
+      },
+      {
+        "nombre": "Otro profesional no adopta clínica/permiso por UUID",
+        "aprobada": true,
+        "http": 403
+      },
+      {
+        "nombre": "Retirada de rol actual deniega pese a JWT vigente",
+        "aprobada": true,
+        "http": 403
+      },
+      {
+        "nombre": "Membresía suspendida deniega contexto y solicitudes",
+        "aprobada": true,
+        "http": 403
+      },
+      {
+        "nombre": "Nuevas consultas fallan cerradas si no se persiste auditoría",
+        "aprobada": true,
+        "http": 503
+      },
+      {
+        "nombre": "Concesión revocada deja de aparecer como acceso autorizado",
+        "aprobada": true,
+        "http": [
+          200,
+          200
+        ],
+        "pacientes": 0
+      },
+      {
+        "nombre": "Auditoría de nuevas lecturas permitidas y denegadas persistida",
+        "aprobada": true,
+        "eventosPermitidos": true,
+        "eventosDenegados": true
+      },
+      {
+        "nombre": "Consentimiento específico de almacenamiento y carga privada real",
+        "aprobada": true,
+        "storage": 200,
+        "metadatos": 201
+      },
+      {
+        "nombre": "Descarga propia y aislamiento Storage entre dos JWT",
+        "aprobada": true,
+        "propia": 200,
+        "ajena": 400,
+        "metadatosAjenos": 0
+      },
+      {
+        "nombre": "Algoritmo original no elimina foto ajena con segundo JWT",
+        "aprobada": true,
+        "resultado": "no_disponible",
+        "propiaConservada": true
+      },
+      {
+        "nombre": "Bucket sin exposición pública permanente",
+        "aprobada": true,
+        "http": 400
+      },
+      {
+        "nombre": "Consentimiento revocado bloquea nueva carga pero permite limpieza propia",
+        "aprobada": true,
+        "uploadRevocado": "denegado",
+        "limpieza": "persistida"
+      },
+      {
+        "nombre": "DI-150 rechaza superusuario AAL1 y sesión ausente",
+        "aprobada": true,
+        "http": [
+          403,
+          401
+        ]
+      },
+      {
+        "nombre": "Enrolamiento/desafío TOTP real y acceso DI-150 AAL2",
+        "aprobada": true,
+        "http": 200
+      },
+      {
+        "nombre": "Lecturas Auth Admin locales minimizadas: recuento sin PII",
+        "aprobada": true,
+        "usuarios": 6,
+        "metodo": "Auth Admin local, no endpoint DI151 de lectura HTTPS"
+      },
+      {
+        "nombre": "Escrituras administrativas Next permanecen apagadas",
+        "aprobada": true,
+        "http": 503
+      },
+      {
+        "nombre": "Cambio de rol canónico con sesión AAL2 real, aprobación y persistencia atómica",
+        "aprobada": true,
+        "rpcHttp": 200,
+        "estado": 200,
+        "auditorias": 1,
+        "idempotente": true
+      },
+      {
+        "nombre": "Protocolo rechaza autocambio, AAL1 y elevación profesional no aprobada",
+        "aprobada": true,
+        "estados": [
+          403,
+          403,
+          403
+        ]
+      },
+      {
+        "nombre": "Dos escrituras simultáneas: una aplica y otra obtiene conflicto de revisión",
+        "aprobada": true,
+        "estados": [
+          200,
+          409
+        ]
+      },
+      {
+        "nombre": "Fallo de auditoría administrativa revierte Auth y revisión",
+        "aprobada": true,
+        "rpc": "error esperado",
+        "persistencia": "sin cambio"
+      },
+      {
+        "nombre": "Pérdida de autorización administrativa deniega aun con AAL2 anterior",
+        "aprobada": true,
+        "http": 403,
+        "rpc": 403
+      }
+    ],
+    "bloqueos": [
+      "Adaptadores DI151 de lectura/escritura exigen HTTPS y permanecen sin alterar/desactivados. RPC administrativo y DI150 se prueban con Auth local real; no se afirma un flujo Next de escritura habilitado."
+    ],
+    "datos": "solo sintéticos locales",
+    "tokensGuardados": false,
+    "cuentas": 6,
+    "aprobadas": 45,
+    "fallidas": 0
+  }
+]

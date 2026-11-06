@@ -1,0 +1,137 @@
+erDiagram
+  public_profiles {
+    uuid id PK,FK
+  }
+  public_dentists {
+    uuid id PK
+  }
+  public_appointment_requests {
+    uuid id PK
+  }
+  public_patient_consents {
+    uuid id PK
+  }
+  public_dental_photos {
+    uuid id PK
+  }
+  dentaia_admin_revisiones_roles {
+    uuid usuario_id PK
+  }
+  dentaia_admin_aprobaciones_roles {
+    uuid id PK
+  }
+  dentaia_admin_auditoria_roles {
+    uuid actor_id PK
+    uuid solicitud_id PK
+  }
+  clinical_clinics {
+    uuid id PK
+  }
+  clinical_professional_accounts {
+    uuid id PK
+  }
+  clinical_professional_verifications {
+    uuid id PK
+  }
+  clinical_clinic_memberships {
+    uuid id PK
+  }
+  clinical_patient_records {
+    uuid id PK
+  }
+  clinical_clinical_encounters {
+    uuid id PK
+  }
+  clinical_clinical_entries {
+    uuid id PK
+  }
+  clinical_clinical_documents {
+    uuid id PK
+  }
+  clinical_clinical_access_grants {
+    uuid id PK
+  }
+  clinical_clinical_grant_resources {
+    uuid grant_id PK,FK
+    uuid encounter_id PK,FK
+  }
+  clinical_clinical_access_audit {
+    uuid id PK
+  }
+  ml_dataset_versions {
+    uuid id PK
+  }
+  ml_dataset_items {
+    uuid id PK
+  }
+  ml_model_versions {
+    uuid id PK
+  }
+  ml_analysis_authorizations {
+    uuid id PK
+  }
+  ml_analysis_jobs {
+    uuid id PK
+  }
+  ml_analysis_results {
+    uuid id PK
+  }
+  ml_educational_recommendations {
+    uuid id PK
+  }
+  ml_result_recommendations {
+    uuid result_id PK,FK
+    uuid recommendation_id PK,FK
+  }
+  ml_evaluation_runs {
+    uuid id PK
+  }
+  ml_evaluation_metrics {
+    uuid run_id PK,FK
+    text name PK
+    text label PK
+  }
+  auth_users {
+    uuid id PK
+  }
+  auth_users ||--o| public_profiles : "id"
+  auth_users ||--o{ public_appointment_requests : "user_id"
+  public_dentists ||--o{ public_appointment_requests : "dentist_id"
+  auth_users ||--o{ public_patient_consents : "user_id"
+  auth_users ||--o{ public_dental_photos : "user_id"
+  public_patient_consents ||--o{ public_dental_photos : "user_id,consent_id"
+  auth_users ||--o| clinical_professional_accounts : "user_id"
+  public_dentists o|--o| clinical_professional_accounts : "dentist_id"
+  clinical_professional_accounts ||--o{ clinical_professional_verifications : "professional_id"
+  auth_users ||--o{ clinical_professional_verifications : "reviewed_by"
+  clinical_clinics ||--o{ clinical_clinic_memberships : "clinic_id"
+  clinical_professional_accounts ||--o{ clinical_clinic_memberships : "professional_id"
+  auth_users ||--o| clinical_patient_records : "user_id"
+  clinical_patient_records ||--o{ clinical_clinical_encounters : "patient_id"
+  clinical_clinic_memberships ||--o{ clinical_clinical_encounters : "membership_id"
+  clinical_clinical_encounters o|--o| clinical_clinical_encounters : "replaces_id,patient_id,membership_id"
+  clinical_clinical_encounters ||--o{ clinical_clinical_entries : "encounter_id"
+  clinical_clinical_entries o|--o| clinical_clinical_entries : "replaces_id,encounter_id,kind"
+  clinical_clinical_encounters ||--o{ clinical_clinical_documents : "encounter_id"
+  clinical_patient_records ||--o{ clinical_clinical_access_grants : "patient_id"
+  clinical_clinic_memberships ||--o{ clinical_clinical_access_grants : "membership_id"
+  clinical_clinical_access_grants ||--o{ clinical_clinical_grant_resources : "grant_id"
+  clinical_clinical_encounters ||--o{ clinical_clinical_grant_resources : "encounter_id"
+  auth_users o|--o{ clinical_clinical_access_audit : "actor_user_id"
+  clinical_patient_records o|--o{ clinical_clinical_access_audit : "patient_id"
+  clinical_clinic_memberships o|--o{ clinical_clinical_access_audit : "membership_id"
+  clinical_clinical_access_grants o|--o{ clinical_clinical_access_audit : "grant_id"
+  ml_dataset_versions ||--o{ ml_dataset_items : "dataset_id"
+  ml_dataset_versions ||--o{ ml_model_versions : "dataset_id"
+  auth_users ||--o{ ml_analysis_authorizations : "owner_user_id"
+  public_dental_photos ||--o{ ml_analysis_authorizations : "photo_id,owner_user_id"
+  auth_users ||--o{ ml_analysis_jobs : "owner_user_id"
+  public_dental_photos ||--o{ ml_analysis_jobs : "photo_id"
+  ml_model_versions ||--o{ ml_analysis_jobs : "model_id"
+  ml_analysis_authorizations ||--o{ ml_analysis_jobs : "authorization_id,photo_id,owner_user_id"
+  ml_analysis_jobs ||--o| ml_analysis_results : "job_id"
+  ml_analysis_results ||--o{ ml_result_recommendations : "result_id"
+  ml_educational_recommendations ||--o{ ml_result_recommendations : "recommendation_id"
+  ml_model_versions ||--o{ ml_evaluation_runs : "model_id"
+  ml_dataset_versions ||--o{ ml_evaluation_runs : "dataset_id"
+  ml_evaluation_runs ||--o{ ml_evaluation_metrics : "run_id"

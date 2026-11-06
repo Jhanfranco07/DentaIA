@@ -1,0 +1,356 @@
+[
+  {
+    "nombre": "Paciente consulta su historial propio de dos clínicas",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),NULL),200,2);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Profesional autorizado consulta dos clínicas con una concesión",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),200,2);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Otro profesional solo consulta el recurso autorizado",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(3); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(33)),200,1);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Unión de concesiones incluye ambos recursos autorizados",
+    "sql": "INSERT INTO clinical.clinical_access_grants(id,patient_id,membership_id,purpose,policy_version,expires_at) VALUES(qa3.id(75),qa3.id(41),qa3.id(33),'academic_shared_history_qa','QA-NO-CLINICO-v1',now()+interval '1 hour'); INSERT INTO clinical.clinical_grant_resources VALUES(qa3.id(75),qa3.id(51));SET LOCAL ROLE authenticated; SELECT qa3.as_user(3); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(33)),200,2);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Paciente no consulta otro paciente",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(2); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),NULL),403);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Misma clínica sin concesión no concede acceso",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(5); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(35)),403);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Concesión vencida no concede acceso",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(3); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(42),qa3.id(33)),403);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Concesión revocada no concede acceso",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(42),qa3.id(34)),403);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Superusuario no obtiene acceso clínico por ser administrador",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(6); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),403);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Contexto de otro profesional no se puede declarar propio",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(33)),403);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Paciente inexistente e ID manipulado deniegan sin contenido",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(999),qa3.id(34)),403);",
+    "tipo": "RPC SQL conexión authenticator",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Profesional suspendido no accede",
+    "sql": "UPDATE clinical.professional_accounts SET status='suspended' WHERE id=qa3.id(24);SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Clínica inactiva no permite lectura",
+    "sql": "UPDATE clinical.clinics SET status='inactive' WHERE id=qa3.id(12);SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Membresía suspendida no permite lectura",
+    "sql": "UPDATE clinical.clinic_memberships SET status='suspended' WHERE id=qa3.id(34);SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Nueva verificación rechazada invalida la consulta",
+    "sql": "INSERT INTO clinical.professional_verifications(professional_id,reviewed_by,decision,reference,reason,reviewed_at) VALUES(qa3.id(24),qa3.id(6),'rejected','QA','QA',now()+interval '1 second');SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Rol Auth retirado se vuelve a verificar",
+    "sql": "UPDATE auth.users SET raw_app_meta_data=jsonb_set(raw_app_meta_data,'{dentaia,roles}','[\"paciente\"]') WHERE id=qa3.id(4);SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "user_metadata no eleva privilegios",
+    "sql": "UPDATE auth.users SET raw_user_meta_data='{\"dentaia\":{\"roles\":[\"odontologo\"]}}' WHERE id=qa3.id(2);SET LOCAL ROLE authenticated; SELECT qa3.as_user(2); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Cuenta suspendida en Auth no accede",
+    "sql": "UPDATE auth.users SET banned_until=now()+interval '1 day' WHERE id=qa3.id(4);SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),401);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Sesión borrada en Auth se rechaza",
+    "sql": "DELETE FROM auth.sessions WHERE id=qa3.id(1004);SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),401);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "JWT SQL expirado se rechaza",
+    "sql": "SELECT qa3.as_user(4,-1); SET LOCAL ROLE authenticated; SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),401);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Sin claims de sesión no se obtiene historial",
+    "sql": "SET LOCAL request.jwt.claim.sub=''; SET LOCAL request.jwt.claims='{}'; SET LOCAL ROLE authenticated; SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),401);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Identidad Auth inexistente se rechaza sin error de FK de auditoría",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(999); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),401);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Versión textual de roles no sustituye la versión numérica canónica",
+    "sql": "UPDATE auth.users SET raw_app_meta_data=jsonb_set(raw_app_meta_data,'{dentaia,version}','\"1\"') WHERE id=qa3.id(4);SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),401);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Roles duplicados se rechazan como asignación inválida",
+    "sql": "UPDATE auth.users SET raw_app_meta_data=jsonb_set(raw_app_meta_data,'{dentaia,roles}','[\"odontologo\",\"odontologo\"]') WHERE id=qa3.id(4);SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),401);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Roles desconocidos se rechazan como asignación inválida",
+    "sql": "UPDATE auth.users SET raw_app_meta_data=jsonb_set(raw_app_meta_data,'{dentaia,roles}','[\"odontologo\",\"root\"]') WHERE id=qa3.id(4);SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),401);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Paciente otorga concesión propia y persistencia interna",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),201);RESET ROLE; DO $$ BEGIN ASSERT EXISTS(SELECT 1 FROM clinical.clinical_access_grants WHERE id=qa3.id(79) AND patient_id=qa3.id(41)); ASSERT EXISTS(SELECT 1 FROM clinical.clinical_grant_resources WHERE grant_id=qa3.id(79) AND encounter_id=qa3.id(51)); END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Concesión no permite alcance de otro paciente",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(53)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Concesión requiere aceptación explícita",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',false),400);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Concesión requiere versión de política del operador",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','version-inventada',true),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Destinatario con asignación inválida no recibe concesión",
+    "sql": "UPDATE auth.users SET raw_app_meta_data=jsonb_set(raw_app_meta_data,'{dentaia,version}','\"1\"') WHERE id=qa3.id(5);SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Concesión no permite vencimiento pasado",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()-interval '1 hour','QA-NO-CLINICO-v1',true),400);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Concesión rechaza infinito",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],'infinity'::timestamptz,'QA-NO-CLINICO-v1',true),400);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Concesión no admite recursos duplicados",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51),qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),400);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Odontólogo sin rol paciente no otorga permisos por otra cuenta",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Consentimiento fotográfico no concede acceso clínico",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(3); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(42),qa3.id(33)),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Idempotencia conserva concesión y recursos",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),201);RESET ROLE;SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),200);RESET ROLE; DO $$ BEGIN ASSERT (SELECT count(*)=1 FROM clinical.clinical_access_grants WHERE id=qa3.id(79)); END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Clave idempotente con otro contenido se rechaza",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),201);RESET ROLE;SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(52)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),409);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Colisión de clave de otro propietario no revela su concesión",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(73),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),409);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Paciente revoca su propia concesión",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.revoke_clinical_access(qa3.id(71)),200);RESET ROLE; DO $$ BEGIN ASSERT (SELECT revoked_at IS NOT NULL FROM clinical.clinical_access_grants WHERE id=qa3.id(71)); END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Revocación ajena y desconocida se rechazan igual",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(2); SELECT qa3.expect(public.revoke_clinical_access(qa3.id(71)),403);RESET ROLE;SET LOCAL ROLE authenticated; SELECT qa3.as_user(2); SELECT qa3.expect(public.revoke_clinical_access(qa3.id(999)),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Reintento de revocación conserva el mismo instante",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); DO $$ DECLARE a jsonb;b jsonb; BEGIN a:=public.revoke_clinical_access(qa3.id(71)); b:=public.revoke_clinical_access(qa3.id(71)); ASSERT a->>'revokedAt'=b->>'revokedAt'; END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Revocación impide nuevas consultas",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.revoke_clinical_access(qa3.id(71)),200);RESET ROLE;SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),403);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Concesión repetida después de revocar no se reactiva",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),201);RESET ROLE;SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.revoke_clinical_access(qa3.id(79)),200);RESET ROLE;SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),200);RESET ROLE; DO $$ BEGIN ASSERT (SELECT revoked_at IS NOT NULL FROM clinical.clinical_access_grants WHERE id=qa3.id(79)); END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Paginación keyset no duplica ni omite la segunda atención",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); DO $$ DECLARE a jsonb;b jsonb; BEGIN a:=public.get_authorized_clinical_history(qa3.id(41),qa3.id(34),1); PERFORM qa3.expect(a,200,1); ASSERT a->'nextCursor' IS NOT NULL; b:=public.get_authorized_clinical_history(qa3.id(41),qa3.id(34),1,(a->'nextCursor'->>'beforeAt')::timestamptz,(a->'nextCursor'->>'beforeId')::uuid); PERFORM qa3.expect(b,200,1); ASSERT a->'entries'->0->>'encounterId'<>b->'entries'->0->>'encounterId'; END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Cursor manipulado no amplía el alcance",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(3); DO $$ DECLARE r jsonb; BEGIN r:=public.get_authorized_clinical_history(qa3.id(41),qa3.id(33),50,now()+interval '1 year',qa3.id(53)); PERFORM qa3.expect(r,200,1); ASSERT r->'entries'->0->>'encounterId'=qa3.id(52)::text; END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Límite de página inválido se rechaza",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34),0),400);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Página con demasiados objetos no entrega un historial parcial silencioso",
+    "sql": "INSERT INTO clinical.clinical_entries(encounter_id,kind,information_state) SELECT qa3.id(51),'diagnosis','not_recorded' FROM generate_series(1,101); SET CONSTRAINTS ALL IMMEDIATE;SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),503);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Campos desconocidos y exámenes ausentes no inventan datos",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); DO $$ DECLARE r jsonb; BEGIN r:=public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)); ASSERT r->'entries'->0->'diagnoses'->0->>'state'='unknown'; ASSERT r->'entries'->0->'diagnoses'->0->'value'='null'::jsonb; ASSERT r->'entries'->1->'exams'->0->>'availability'='unavailable'; ASSERT r->'entries'->0->'origin'->'professionalName'='null'::jsonb; END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "DTO no expone Auth, correos, secretos o rutas Storage",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); DO $$ DECLARE r jsonb; BEGIN r:=public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)); ASSERT r::text !~ '(encrypted_password|raw_app_meta_data|session_id|object_path|bucket_id|@|mfa_factors|signedUrl)'; END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Auditoría permitida registra concesiones efectivas",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),200);RESET ROLE; DO $$ BEGIN ASSERT EXISTS(SELECT 1 FROM clinical.clinical_access_audit WHERE actor_user_id=qa3.id(4) AND patient_id=qa3.id(41) AND membership_id=qa3.id(34) AND grant_id=qa3.id(71) AND outcome='allowed'); END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Auditoría denegada preserva contexto propio sin paciente ajeno",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(5); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(35)),403);RESET ROLE; DO $$ BEGIN ASSERT EXISTS(SELECT 1 FROM clinical.clinical_access_audit WHERE actor_user_id=qa3.id(5) AND membership_id=qa3.id(35) AND patient_id IS NULL AND grant_id IS NULL AND outcome='denied'); END $$;",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Anon no ejecuta RPC",
+    "sql": "SET LOCAL ROLE anon; SELECT public.get_authorized_clinical_history(NULL);",
+    "tipo": "ACL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Authenticated no consulta directamente tablas clínicas",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT * FROM clinical.clinical_encounters;",
+    "tipo": "ACL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Authenticated no edita auditoría",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); UPDATE clinical.clinical_access_audit SET outcome='allowed';",
+    "tipo": "ACL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Authenticated no fabrica auditoría",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); INSERT INTO clinical.clinical_access_audit(request_id,operation,outcome,reason_code) VALUES(gen_random_uuid(),'read_history','allowed','FORGED');",
+    "tipo": "ACL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Authenticated no adopta el rol ejecutor",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SET LOCAL ROLE dentaia_clinical_executor;",
+    "tipo": "ACL",
+    "sqlstate": "42501",
+    "db_user": "authenticator"
+  },
+  {
+    "nombre": "Authenticated no modifica roles Auth",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); UPDATE auth.users SET raw_app_meta_data='{}' WHERE id=qa3.id(4);",
+    "tipo": "ACL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Helpers privados y secretos quedan fuera de permisos cliente",
+    "sql": "DO $$ BEGIN ASSERT NOT has_function_privilege('authenticated','clinical_service.identity_context(uuid)','EXECUTE'); ASSERT NOT has_function_privilege('authenticated','clinical_service.configuration()','EXECUTE'); ASSERT NOT has_column_privilege('dentaia_clinical_executor','auth.users','encrypted_password','SELECT'); ASSERT NOT has_column_privilege('dentaia_clinical_executor','clinical.clinical_documents','object_path','SELECT'); ASSERT NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='dentaia_clinical_executor' AND (rolcanlogin OR rolbypassrls OR rolsuper)); ASSERT NOT has_table_privilege('dentaia_clinical_executor','public.appointment_requests','SELECT'); END $$;",
+    "tipo": "mínimo privilegio"
+  },
+  {
+    "nombre": "Wrappers públicos son INVOKER; servicio privado usa rol mínimo",
+    "sql": "DO $$ BEGIN ASSERT NOT(SELECT prosecdef FROM pg_proc WHERE oid='public.get_authorized_clinical_history(uuid,uuid,integer,timestamptz,uuid)'::regprocedure); ASSERT (SELECT proowner='dentaia_clinical_executor'::regrole AND prosecdef FROM pg_proc WHERE oid='clinical_service.read_history(uuid,uuid,integer,timestamptz,uuid)'::regprocedure); END $$;",
+    "tipo": "mínimo privilegio"
+  },
+  {
+    "nombre": "Configuración apagada impide lecturas",
+    "sql": "CREATE OR REPLACE FUNCTION clinical_service.configuration() RETURNS jsonb LANGUAGE sql STABLE SECURITY INVOKER SET search_path='' AS $c$ SELECT '{\"enabled\":false}'::jsonb; $c$;SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),503);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Un GUC del cliente no habilita el servicio apagado",
+    "sql": "CREATE OR REPLACE FUNCTION clinical_service.configuration() RETURNS jsonb LANGUAGE sql STABLE SECURITY INVOKER SET search_path='' AS $c$ SELECT '{\"enabled\":false}'::jsonb; $c$;SET LOCAL dentaia.clinical.enabled='true';SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT qa3.expect(public.get_authorized_clinical_history(qa3.id(41),qa3.id(34)),503);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Configuración apagada impide nuevas concesiones",
+    "sql": "CREATE OR REPLACE FUNCTION clinical_service.configuration() RETURNS jsonb LANGUAGE sql STABLE SECURITY INVOKER SET search_path='' AS $c$ SELECT '{\"enabled\":false}'::jsonb; $c$;SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true),503);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Apagar nuevas concesiones no impide revocar las propias",
+    "sql": "CREATE OR REPLACE FUNCTION clinical_service.configuration() RETURNS jsonb LANGUAGE sql STABLE SECURITY INVOKER SET search_path='' AS $c$ SELECT '{\"enabled\":false}'::jsonb; $c$;SET LOCAL ROLE authenticated; SELECT qa3.as_user(1); SELECT qa3.expect(public.revoke_clinical_access(qa3.id(71)),200);",
+    "tipo": "SQL RPC"
+  },
+  {
+    "nombre": "Cliente no ejecuta configuración reservada al operador",
+    "sql": "SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT clinical_service.configuration();",
+    "tipo": "ACL",
+    "sqlstate": "42501"
+  },
+  {
+    "nombre": "Fallo de auditoría impide respuesta clínica",
+    "sql": "CREATE FUNCTION pg_temp.fail_audit() RETURNS trigger LANGUAGE plpgsql AS $q$ BEGIN RAISE EXCEPTION 'QA_AUDIT_FAILURE'; END $q$; CREATE TRIGGER qa_fail BEFORE INSERT ON clinical.clinical_access_audit FOR EACH ROW EXECUTE FUNCTION pg_temp.fail_audit();SET LOCAL ROLE authenticated; SELECT qa3.as_user(4); SELECT public.get_authorized_clinical_history(qa3.id(41),qa3.id(34));",
+    "tipo": "auditoría",
+    "sqlstate": "P0001"
+  },
+  {
+    "nombre": "Fallo de auditoría revierte concesión",
+    "sql": "CREATE FUNCTION pg_temp.fail_audit() RETURNS trigger LANGUAGE plpgsql AS $q$ BEGIN RAISE EXCEPTION 'QA_AUDIT_FAILURE'; END $q$; CREATE TRIGGER qa_fail BEFORE INSERT ON clinical.clinical_access_audit FOR EACH ROW EXECUTE FUNCTION pg_temp.fail_audit();SELECT qa3.as_user(1); SET LOCAL ROLE authenticated; DO $$ BEGIN BEGIN PERFORM public.grant_clinical_access(qa3.id(79),qa3.id(35),ARRAY[qa3.id(51)],now()+interval '1 hour','QA-NO-CLINICO-v1',true); RAISE EXCEPTION 'MISSING_FAILURE'; EXCEPTION WHEN SQLSTATE 'P0001' THEN IF SQLERRM<>'CLINICAL_OPERATION_UNAVAILABLE' THEN RAISE; END IF; END; END $$; RESET ROLE; DO $$ BEGIN ASSERT NOT EXISTS(SELECT 1 FROM clinical.clinical_access_grants WHERE id=qa3.id(79)); END $$;",
+    "tipo": "auditoría"
+  },
+  {
+    "nombre": "Fallo de auditoría revierte revocación",
+    "sql": "CREATE FUNCTION pg_temp.fail_audit() RETURNS trigger LANGUAGE plpgsql AS $q$ BEGIN RAISE EXCEPTION 'QA_AUDIT_FAILURE'; END $q$; CREATE TRIGGER qa_fail BEFORE INSERT ON clinical.clinical_access_audit FOR EACH ROW EXECUTE FUNCTION pg_temp.fail_audit();SELECT qa3.as_user(1); SET LOCAL ROLE authenticated; DO $$ BEGIN BEGIN PERFORM public.revoke_clinical_access(qa3.id(71)); RAISE EXCEPTION 'MISSING_FAILURE'; EXCEPTION WHEN SQLSTATE 'P0001' THEN IF SQLERRM<>'CLINICAL_OPERATION_UNAVAILABLE' THEN RAISE; END IF; END; END $$; RESET ROLE; DO $$ BEGIN ASSERT (SELECT revoked_at IS NULL FROM clinical.clinical_access_grants WHERE id=qa3.id(71)); END $$;",
+    "tipo": "auditoría"
+  }
+]

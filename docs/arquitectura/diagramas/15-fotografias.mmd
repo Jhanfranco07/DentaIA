@@ -1,0 +1,14 @@
+flowchart TD
+  I["Imagen local"] --> V["Validación de formato, tamaño y decodificación"]
+  V --> CH{"Finalidad"}
+  CH -->|demo actual| DE["Caso reconocido y PDF educativo local"]
+  CH -->|almacenamiento actual| CO["Sesión y consentimiento académico vigente"]
+  CO --> ST["Bucket privado dental-photos"]
+  ST --> ME["Metadatos; compensación o reconciliación"]
+  ME --> EL["Borrado actual: Storage y después metadatos, reintentable"]
+  ME -. "futuro: autorización distinta y foto del propietario" .-> AU["analysis_authorizations"]
+  AU -.-> J["Job con modelo, idempotencia y lease"]
+  J -.-> Q{"Calidad y autorización siguen vigentes"}
+  Q -. "sí" .-> RE["Resultado orientativo y recomendaciones"]
+  Q -. "no" .-> NE["Cancelar o no evaluable; sin hallazgos inventados"]
+  EL -. "futuro: CASCADE de análisis personal" .-> LIM["No bloquear borrado actual; datasets separados"]

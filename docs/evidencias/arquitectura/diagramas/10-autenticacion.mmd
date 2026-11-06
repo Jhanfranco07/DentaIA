@@ -1,0 +1,16 @@
+sequenceDiagram
+  participant U as Usuario
+  participant N as Next.js
+  participant A as Supabase Auth
+  U->>A: Login existente
+  A-->>U: Sesión propia
+  U->>A: Challenge TOTP cuando corresponda
+  A-->>U: Token AAL2
+  U->>N: Solicitud con Bearer
+  N->>A: getUser y getClaims
+  A-->>N: Identidad, roles actuales y claims verificados
+  alt Superusuario vigente y AAL2
+    N-->>U: Respuesta autorizada mínima
+  else Sin permiso o sesión
+    N-->>U: 401 / 403; 503 si indisponible
+  end

@@ -1,0 +1,17 @@
+{
+  "fecha": "2026-11-04T22:11:57.733501+00:00",
+  "head": "67a85d3873c59234261883ef6f414525741c82a9",
+  "entorno": "Chromium real; Auth y HTTP interceptados; red externa bloqueada; sin Supabase remoto",
+  "pruebas": [
+    {
+      "nombre": "Cuenta → panel: resumen, solicitudes y clínica separados del reporte demo",
+      "aprobada": true
+    }
+  ],
+  "chromium": "155.0.8059.40",
+  "redExternaBloqueada": [],
+  "erroresJS": [],
+  "aprobadas": 1,
+  "fallidas": 0,
+  "repeticionFocalizada": true
+}

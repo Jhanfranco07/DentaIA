@@ -1,0 +1,46 @@
+{
+  "fecha": "2026-11-03",
+  "carpetaFueraRepositorio": true,
+  "archivos": [
+    {
+      "archivo": "postgresql-completo.dump.dpapi",
+      "sha256": "b63d3014bafd3de2bcbe02c171cd39bf5a4e2eaed825ae80f1f6fb5d623f504b",
+      "hashActualCoincide": true,
+      "descifradoDPAPIActualCorrecto": true
+    },
+    {
+      "archivo": "roles-auxiliares-sin-contrasenas.json.dpapi",
+      "sha256": "d734d575d633fb387bcc9463fe408761675e53c8e658446ea1f9e7f1d41db7c3",
+      "hashActualCoincide": true,
+      "descifradoDPAPIActualCorrecto": true
+    },
+    {
+      "archivo": "membresias-roles.json.dpapi",
+      "sha256": "0941cebea088a21626b895fe0672ad7c833de5cf38e08eaccf0c513b8e4525ee",
+      "hashActualCoincide": true,
+      "descifradoDPAPIActualCorrecto": true
+    },
+    {
+      "archivo": "globales-sin-contrasenas.sql.dpapi",
+      "sha256": "e8e24a729b6d23a951521ca995f8094f85108d6ec567c232ee4c08b6abd8566c",
+      "hashActualCoincide": true,
+      "descifradoDPAPIActualCorrecto": true
+    },
+    {
+      "archivo": "storage-binarios-y-mapa.json.dpapi",
+      "sha256": "9ed450a73e1286a1111428498f5d3f1b3e5a27ea75c5bfefc99a5deb7d6fba6a",
+      "hashActualCoincide": true,
+      "descifradoDPAPIActualCorrecto": true
+    }
+  ],
+  "acl": {
+    "soloUsuarioYSistema": true,
+    "herenciaDesactivada": true
+  },
+  "restauracionAisladaPrevia": true,
+  "tablasPreviamenteComparadas": 11,
+  "storageUploadRestoreProbado": false,
+  "recuperacionSinPerfilWindowsProbada": false,
+  "alcance": "Recuperacion local ensayada; no garantiza recuperacion ante perdida de este equipo/perfil. Conservar copia independiente cifrada y mecanismo de claves portable para ese escenario.",
+  "escriturasRemotas": 0
+}

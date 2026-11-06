@@ -1,0 +1,15 @@
+sequenceDiagram
+  participant U as Superusuario
+  participant N as Endpoint de roles
+  participant D as RPC propuesto en migración
+  U->>N: Cambio, revisión, aprobación y clave idempotente
+  N->>N: Guard AAL2, origen y JSON válidos
+  alt Escrituras deshabilitadas
+    N-->>U: 503 sin crear adaptador privilegiado
+  else Entorno aprobado y migración disponible
+    N->>D: Contexto verificado y solicitud exacta
+    D->>D: Bloqueos; revalidar actor, TOTP reciente y aprobación
+    D->>D: Cambio Auth, revisión, consumo y auditoría atómicos
+    D-->>N: Resultado o conflicto de versión
+    N-->>U: Confirmado; si incierto, reintentar misma clave
+  end

@@ -1,0 +1,44 @@
+   ▲ Next.js 15.5.28
+   - Local:        http://127.0.0.1:3140
+   - Network:      http://127.0.0.1:3140
+   - Environments: .env.development.local
+
+ ✓ Starting...
+ ✓ Ready in 1856ms
+ ○ Compiling /cuenta ...
+ ✓ Compiled /cuenta in 816ms (716 modules)
+ GET /cuenta 200 in 1219ms
+ ○ Compiling /panel ...
+ ✓ Compiled /panel in 910ms (752 modules)
+ GET /panel 200 in 1350ms
+ GET /cuenta 200 in 82ms
+ GET /panel 200 in 58ms
+ GET /cuenta 200 in 56ms
+ ○ Compiling / ...
+ ✓ Compiled / in 929ms (761 modules)
+ GET / 200 in 1381ms
+ ✓ Compiled /directorio in 336ms (774 modules)
+ GET /directorio 200 in 656ms
+ ○ Compiling /solicitudes ...
+ ✓ Compiled /solicitudes in 662ms (784 modules)
+ GET /solicitudes 200 in 965ms
+ ○ Compiling /fotografias ...
+ ✓ Compiled /fotografias in 722ms (798 modules)
+ GET /fotografias 200 in 1508ms
+ ○ Compiling /analisis/demo ...
+ ✓ Compiled /analisis/demo in 3.8s (821 modules)
+ GET /analisis/demo 200 in 4141ms
+ ○ Compiling /privacidad ...
+ ✓ Compiled /privacidad in 2.2s (816 modules)
+ GET /privacidad 200 in 2439ms
+ GET /fotografias 200 in 184ms
+ ○ Compiling /desarrollo/panel-admin ...
+ ✓ Compiled /desarrollo/panel-admin in 1132ms (867 modules)
+ GET /desarrollo/panel-admin 200 in 1624ms
+ GET /panel 200 in 295ms
+ GET /panel 200 in 168ms
+ GET /panel 200 in 150ms
+ GET /panel 200 in 146ms
+ GET /cuenta 200 in 158ms
+ GET /panel 200 in 146ms
+ GET /panel 200 in 162ms

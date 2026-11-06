@@ -1,0 +1,62 @@
+{
+  "fecha": "2026-11-03",
+  "base": "dentaia_arch_qa_fase5",
+  "remoto": false,
+  "migraciones": [
+    {
+      "archivo": "supabase/migrations/20261103012414_di151_roles_auditoria_atomica.sql",
+      "sha256": "4df24cc575b85f627e9b95a61a6bd451ec7fb355ff60f59ff07693f72ae4286f",
+      "aplicada": true
+    },
+    {
+      "archivo": "docs/arquitectura/borradores_sql/01_clinical_identidad.sql",
+      "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+      "aplicada": true
+    },
+    {
+      "archivo": "docs/arquitectura/borradores_sql/02_clinical_contenido.sql",
+      "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+      "aplicada": true
+    },
+    {
+      "archivo": "docs/arquitectura/borradores_sql/03_clinical_permisos_auditoria.sql",
+      "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+      "aplicada": true
+    },
+    {
+      "archivo": "docs/arquitectura/borradores_sql/04_clinical_integridad.sql",
+      "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+      "aplicada": true
+    },
+    {
+      "archivo": "docs/arquitectura/servicios_clinicos/sql/08_identidad_y_privilegios.sql",
+      "sha256": "f7ccfa0e4f4a892d4cdcaac430926924143059c0ea370a56e64af62a82a65713",
+      "aplicada": true
+    },
+    {
+      "archivo": "docs/arquitectura/servicios_clinicos/sql/09_autorizaciones.sql",
+      "sha256": "28d6730ce747dcc9051d3e9b114978ec33e3de37b0716a74ef0f141dd4650cc1",
+      "aplicada": true
+    },
+    {
+      "archivo": "docs/arquitectura/servicios_clinicos/sql/10_historial_autorizado.sql",
+      "sha256": "a25dc18c571d9728ba67e5ec798b6e622e1542464743c51a828e4142ede0f33b",
+      "aplicada": true
+    },
+    {
+      "archivo": "docs/arquitectura/backend_mvp/20261103195335_di36_servicios_comunes_mvp.sql",
+      "sha256": "feb7c8b3ca63ec552a1a5d6bfb21c939f21456b2981679dcee82b8ed27ce3f1d",
+      "aplicada": true
+    }
+  ],
+  "baseline": "Auth oficial schema-only y cinco tablas públicas vacías desde inventario, sin filas remotas",
+  "catalogo": {
+    "tablas": 19,
+    "columnas": 142,
+    "constraints": 118,
+    "indices": 54,
+    "tablasIA": 0,
+    "rls": true
+  },
+  "aprobado": true
+}

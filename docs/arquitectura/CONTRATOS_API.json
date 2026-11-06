@@ -1,0 +1,517 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/administracion/acceso",
+    "state": "codigo_en_rama",
+    "authorized": "Superusuario AAL2",
+    "request": "Bearer; sin cuerpo",
+    "response": "{autorizado:true}",
+    "errors": [
+      401,
+      403,
+      500,
+      503
+    ],
+    "tables": [],
+    "validation": "DI-150 getUser/getClaims; rol actual y factor verificado. No garantiza despliegue."
+  },
+  {
+    "method": "GET",
+    "path": "/api/administracion/usuarios",
+    "state": "sintetico_en_rama",
+    "authorized": "Superusuario AAL2",
+    "request": "q,rol,estado,pagina,tamano",
+    "response": "origen:sintetico,usuarios,total,pagina,paginas,tamano",
+    "errors": [
+      400,
+      401,
+      403,
+      500,
+      503
+    ],
+    "tables": [],
+    "validation": "Consulta cerrada y proveedor sintético; no es Auth Admin."
+  },
+  {
+    "method": "POST",
+    "path": "/api/administracion/roles/validar",
+    "state": "sintetico_en_rama",
+    "authorized": "Superusuario AAL2",
+    "request": "{operacion:validar_cambio_rol,usuarioId,rol}",
+    "response": "{modo:solo_validacion,aplicado:false,...}",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      413,
+      500,
+      503
+    ],
+    "tables": [],
+    "validation": "JSON <=2048 bytes; actor del servidor; nunca persiste."
+  },
+  {
+    "method": "GET",
+    "path": "/api/administracion/usuarios/reales",
+    "state": "real_condicionado_en_rama",
+    "authorized": "Superusuario AAL2 + opt-in servidor",
+    "request": "q<=80; rol/estado cerrados; pagina 1..1000; tamano 5/10/20",
+    "response": "origen:supabase,consistencia:lectura_no_transaccional,usuarios,total,pagina,paginas,tamano",
+    "errors": [
+      400,
+      401,
+      403,
+      500,
+      503
+    ],
+    "tables": [
+      "public.profiles"
+    ],
+    "validation": "Auth Admin + profiles; escaneo máximo 2000; sin datos clínicos, factores o emails en DTO."
+  },
+  {
+    "method": "GET",
+    "path": "/api/administracion/roles",
+    "state": "codigo_en_rama_requiere_migracion",
+    "authorized": "Superusuario AAL2 y TOTP reciente",
+    "request": "usuarioId UUID único",
+    "response": "codigo,resultado,revision,asignacion,solicitudId:null",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      409,
+      500,
+      503
+    ],
+    "tables": [
+      "dentaia_admin.revisiones_roles"
+    ],
+    "validation": "La función común SQL revalida sesión y AMR TOTP 5 minutos también en GET; depende de bandera/RPC."
+  },
+  {
+    "method": "POST",
+    "path": "/api/administracion/roles",
+    "state": "codigo_en_rama_requiere_migracion",
+    "authorized": "Superusuario AAL2, TOTP reciente y aprobación independiente",
+    "request": "{usuarioId,operacion,rol,revisionEsperada,asignacionEsperada,aprobacionId}; Idempotency-Key",
+    "response": "codigo,resultado,revision,asignacion,solicitudId",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      409,
+      413,
+      500,
+      503
+    ],
+    "tables": [
+      "dentaia_admin.revisiones_roles",
+      "dentaia_admin.aprobaciones_roles",
+      "dentaia_admin.auditoria_roles"
+    ],
+    "validation": "Origin igual; Sec-Fetch-Site same-origin si presente; JSON<=2048; MFA del objetivo al promover; sin cambios propios; último administrador; estado incierto se reconcilia sin clave nueva."
+  },
+  {
+    "method": "GET",
+    "path": "/api/desarrollo/validar-lectura-admin",
+    "state": "solo_desarrollo",
+    "authorized": "Guard real en cada caso",
+    "request": "Bearer propio, sin cuerpo",
+    "response": "recuentos,estados,coherencia sin filas privadas",
+    "errors": [
+      401,
+      403,
+      404,
+      500,
+      503
+    ],
+    "tables": [
+      "public.profiles"
+    ],
+    "validation": "404 fuera de development; no copia tokens ni simula AAL2."
+  },
+  {
+    "method": "GET",
+    "path": "/api/professional/me",
+    "state": "codigo_next_qa_local_con_rpc",
+    "authorized": "Identidad actual; paciente propietario o profesional verificado y contexto propio activo segun operacion",
+    "request": "Bearer; limit 1..50 (20 defecto), afterId UUID; membershipId obligatorio solo patients/requests; status requested/cancelled solo requests",
+    "response": "ok,apiVersion:clinical.workspace.v1,environment:qa_local,kind,data:{professionalId,dentistId,contexts:[{membershipId,clinicId,clinicName,validFrom,validUntil}]},nextAfterId,requestId",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "clinical.professional_accounts",
+      "clinical.clinic_memberships",
+      "clinical.professional_verifications"
+    ],
+    "validation": "get_clinical_workspace con JWT de usuario, auditoria obligatoria, sin datos de contacto ni privilegios por aparecer en dentists. Solo QA local y apagado en production."
+  },
+  {
+    "method": "GET",
+    "path": "/api/professional/patients",
+    "state": "codigo_next_qa_local_con_rpc",
+    "authorized": "Identidad actual; paciente propietario o profesional verificado y contexto propio activo segun operacion",
+    "request": "Bearer; limit 1..50 (20 defecto), afterId UUID; membershipId obligatorio solo patients/requests; status requested/cancelled solo requests",
+    "response": "ok,apiVersion:clinical.workspace.v1,environment:qa_local,kind,data:{membershipId,items:[{patientId}]},nextAfterId,requestId",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "clinical.clinical_access_grants",
+      "clinical.clinical_grant_resources",
+      "clinical.patient_records",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "get_clinical_workspace con JWT de usuario, auditoria obligatoria, sin datos de contacto ni privilegios por aparecer en dentists. Solo QA local y apagado en production."
+  },
+  {
+    "method": "GET",
+    "path": "/api/professional/requests",
+    "state": "codigo_next_qa_local_con_rpc",
+    "authorized": "Identidad actual; paciente propietario o profesional verificado y contexto propio activo segun operacion",
+    "request": "Bearer; limit 1..50 (20 defecto), afterId UUID; membershipId obligatorio solo patients/requests; status requested/cancelled solo requests",
+    "response": "ok,apiVersion:clinical.workspace.v1,environment:qa_local,kind,data:{professionalId,membershipId,items:[{id,status,createdAt,preferredDate,preferredTime,isDemo}]},nextAfterId,requestId",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "public.appointment_requests",
+      "clinical.professional_accounts",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "get_clinical_workspace con JWT de usuario, auditoria obligatoria, sin datos de contacto ni privilegios por aparecer en dentists. Solo QA local y apagado en production."
+  },
+  {
+    "method": "GET",
+    "path": "/api/clinical/patients/me",
+    "state": "codigo_next_qa_local_con_rpc",
+    "authorized": "Identidad actual; paciente propietario o profesional verificado y contexto propio activo segun operacion",
+    "request": "Bearer; sin IDs de identidad ni contexto; limit opcional validado, sin afterId",
+    "response": "ok,apiVersion:clinical.workspace.v1,environment:qa_local,kind,data:{patientId},nextAfterId:null,requestId",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "clinical.patient_records"
+    ],
+    "validation": "get_clinical_workspace con JWT de usuario, auditoria obligatoria, sin datos de contacto ni privilegios por aparecer en dentists. Solo QA local y apagado en production."
+  },
+  {
+    "method": "GET",
+    "path": "/api/clinical/patients/:patientId/history",
+    "state": "codigo_next_qa_local_con_rpc",
+    "authorized": "Propietario u odontólogo autorizado",
+    "request": "membershipId opcional para propio; limit 1..50; cursor v1 cifrado y firmado",
+    "response": "HTTP 200: {ok,apiVersion:clinical.v1,origen,environment,estado,caso,entries,nextCursor,requestId}",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "clinical.patient_records",
+      "clinical.clinic_memberships",
+      "clinical.clinical_access_grants",
+      "clinical.clinical_grant_resources",
+      "clinical.clinical_encounters",
+      "clinical.clinical_entries",
+      "clinical.clinical_documents",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "JWT SDK + getUser; concesión/rol/contexto frescos en RPC; DTO cerrado; cursor AES-256-GCM+HMAC, vinculado a actor/sesión/paciente/profesional/clínica/contexto/filtros; no-store. Sin descarga clínica."
+  },
+  {
+    "method": "GET",
+    "path": "/api/clinical/access-grants",
+    "state": "codigo_next_qa_local_con_rpc",
+    "authorized": "Identidad actual; paciente propietario o profesional verificado y contexto propio activo segun operacion",
+    "request": "Bearer; limit 1..50 (20 defecto), afterId UUID; membershipId obligatorio solo patients/requests; status requested/cancelled solo requests",
+    "response": "ok,apiVersion:clinical.workspace.v1,environment:qa_local,kind,data:{patientId,items:[{id,membershipId,estado,expiresAt,revokedAt,policyVersion,encounterIds}]},nextAfterId,requestId",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "clinical.clinical_access_grants",
+      "clinical.clinical_grant_resources"
+    ],
+    "validation": "get_clinical_workspace con JWT de usuario, auditoria obligatoria, sin datos de contacto ni privilegios por aparecer en dentists. Solo QA local y apagado en production."
+  },
+  {
+    "method": "POST",
+    "path": "/api/clinical/access-grants",
+    "state": "codigo_next_qa_local_con_rpc",
+    "authorized": "Paciente propietario",
+    "request": "{membershipId,encounterIds,expiresAt,policyVersion,accepted:true}; Idempotency-Key UUID; sin actor/patientId/purpose",
+    "response": "HTTP 201/200: {ok,id,estado,expiresAt,revokedAt,replayed,requestId}",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      409,
+      413,
+      415,
+      503
+    ],
+    "tables": [
+      "clinical.clinical_access_grants",
+      "clinical.clinical_grant_resources",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "JWT firmado verificado SDK + getUser fresco; RPC deriva paciente, política/finalidad y audita. Cuerpo cerrado <=8192 bytes; roles canónicos; Origin; no-store. Solo QA local; apagado en producción."
+  },
+  {
+    "method": "POST",
+    "path": "/api/clinical/access-grants/:id/revoke",
+    "state": "codigo_next_qa_local_con_rpc",
+    "authorized": "Paciente propietario",
+    "request": "{} JSON; id UUID de ruta; Bearer del propietario",
+    "response": "HTTP 200: {ok,id,revokedAt,requestId}",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      413,
+      415,
+      503
+    ],
+    "tables": [
+      "clinical.clinical_access_grants",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "JWT real; propiedad y revocación idempotente en RPC; sin actor del cuerpo; Origin; no-store; rollback si falla auditoría."
+  },
+  {
+    "method": "GET",
+    "path": "/api/clinical/documents/:id/content",
+    "state": "propuesto_no_implementado",
+    "authorized": "Propietario o permiso profesional por recurso",
+    "request": "membershipId; no bucket/path del cliente",
+    "response": "Stream privado, Content-Type permitido, Cache-Control no-store",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "clinical.clinical_documents",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "Auditar antes de stream; autorización por solicitud; controlar disponibilidad, contexto y límites de Storage. Bytes ya autorizados no se retiran por revocar."
+  },
+  {
+    "method": "POST",
+    "path": "/api/administracion/professionals/:id/verification",
+    "state": "propuesto_no_implementado",
+    "authorized": "Superusuario AAL2 con acción explícita de verificación",
+    "request": "{decision,reference,reason,expectedLatestReviewId}; Idempotency-Key",
+    "response": "{verificationId,decision,professionalStatus}",
+    "errors": [
+      400,
+      401,
+      403,
+      409,
+      503
+    ],
+    "tables": [
+      "clinical.professional_accounts",
+      "clinical.professional_verifications",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "Sin autoaprobación; reviewer del servidor; lock y comparación de última revisión. No concede Auth odontologo automáticamente; DI-151 requiere ampliación aprobada."
+  },
+  {
+    "method": "POST",
+    "path": "/api/administracion/clinics",
+    "state": "propuesto_no_implementado",
+    "authorized": "Operador de registro explícitamente autorizado, AAL2",
+    "request": "{name,location}; Idempotency-Key",
+    "response": "{id,status}",
+    "errors": [
+      400,
+      401,
+      403,
+      409,
+      503
+    ],
+    "tables": [
+      "clinical.clinics",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "Solo datos operativos de clínica. No acceso a pacientes o capacidad clínica implícita. Procedimiento de provisión pendiente."
+  },
+  {
+    "method": "POST",
+    "path": "/api/administracion/clinic-memberships",
+    "state": "propuesto_no_implementado",
+    "authorized": "Operador de membresías autorizado, AAL2",
+    "request": "{clinicId,professionalId,validFrom,validUntil}; Idempotency-Key",
+    "response": "{id,status,validFrom,validUntil}",
+    "errors": [
+      400,
+      401,
+      403,
+      409,
+      503
+    ],
+    "tables": [
+      "clinical.clinic_memberships",
+      "clinical.professional_accounts",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "Profesional verificado, fechas válidas, sin solapamiento. No autoasignación ni rebinding de una membresía existente."
+  },
+  {
+    "method": "POST",
+    "path": "/api/administracion/clinic-memberships/:id/suspend",
+    "state": "propuesto_no_implementado",
+    "authorized": "Operador de membresías autorizado, AAL2",
+    "request": "{expectedStatus}; Idempotency-Key",
+    "response": "{id,status:suspended}",
+    "errors": [
+      400,
+      401,
+      403,
+      409,
+      503
+    ],
+    "tables": [
+      "clinical.clinic_memberships",
+      "clinical.clinical_access_audit"
+    ],
+    "validation": "Transición y auditoría atómicas; nuevas consultas revalidan estado. No modifica clínica/profesional de origen."
+  },
+  {
+    "method": "POST",
+    "path": "/api/analysis/authorizations",
+    "state": "propuesto_no_implementado",
+    "authorized": "Propietario de foto",
+    "request": "{photoId,policyVersion,expiresAt,accepted:true}",
+    "response": "{id,purpose:exploratory_image_analysis,expiresAt}",
+    "errors": [
+      400,
+      401,
+      403,
+      422,
+      503
+    ],
+    "tables": [
+      "ml.analysis_authorizations",
+      "public.dental_photos"
+    ],
+    "validation": "Propiedad compuesta; política/texto configurados por equipo, no del cliente. No entrenamiento ni acceso clínico."
+  },
+  {
+    "method": "POST",
+    "path": "/api/analysis/authorizations/:id/revoke",
+    "state": "propuesto_no_implementado",
+    "authorized": "Propietario emisor",
+    "request": "{}",
+    "response": "{id,revokedAt}",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "ml.analysis_authorizations",
+      "ml.analysis_jobs"
+    ],
+    "validation": "Revocar y cancelar queued atómicamente; no entregar resultados nuevos tras revocar. No deshace cómputo ya realizado."
+  },
+  {
+    "method": "POST",
+    "path": "/api/analysis/jobs",
+    "state": "propuesto_no_implementado",
+    "authorized": "Propietario autorizado",
+    "request": "{photoId,modelId,authorizationId}; Idempotency-Key",
+    "response": "202 {id,status:queued,requestId}",
+    "errors": [
+      400,
+      401,
+      403,
+      409,
+      422,
+      503
+    ],
+    "tables": [
+      "ml.analysis_jobs",
+      "ml.analysis_authorizations",
+      "ml.model_versions"
+    ],
+    "validation": "Mismo triple foto/owner/autorización y modelo evaluado. Comparar payload de idempotencia, no resolverlo solo con UNIQUE."
+  },
+  {
+    "method": "GET",
+    "path": "/api/analysis/jobs/:id",
+    "state": "propuesto_no_implementado",
+    "authorized": "Propietario derivado",
+    "request": "UUID",
+    "response": "{id,status,resultId,errorCode,requestId}",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "ml.analysis_jobs"
+    ],
+    "validation": "Sin lease_id ni acceso al worker. No fallback de otro propietario."
+  },
+  {
+    "method": "GET",
+    "path": "/api/analysis/results/:id",
+    "state": "propuesto_no_implementado",
+    "authorized": "Propietario con autorización vigente",
+    "request": "UUID",
+    "response": "{id,modelVersion,qualityStatus,label,score,limitations,recommendations}",
+    "errors": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "tables": [
+      "ml.analysis_results",
+      "ml.result_recommendations",
+      "ml.educational_recommendations",
+      "ml.analysis_jobs"
+    ],
+    "validation": "No evaluable tiene clase/score NULL. No devolver artefactos ni diagnósticos clínicos; permisos profesionales futuros no se presuponen."
+  }
+]

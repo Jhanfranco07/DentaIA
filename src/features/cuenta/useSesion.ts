@@ -15,15 +15,17 @@ export function useSesion() {
 
   const verificar = useCallback(async () => {
     const version = ++peticion.current;
-    if (!activo.current) return;
+    if (!activo.current) return null;
     setCargando(true); setUsuario(null); setErrorSesion(""); idValidado.current = null;
     try {
       const { data, error } = await getSupabaseBrowserClient().auth.getUser();
-      if (!activo.current || version !== peticion.current) return;
+      if (!activo.current || version !== peticion.current) return null;
       if (error && error.name !== "AuthSessionMissingError") throw error;
       setUsuario(data.user); idValidado.current = data.user?.id ?? null;
+      return data.user;
     } catch (error) {
       if (activo.current && version === peticion.current) setErrorSesion(mensajeError(error));
+      return null;
     } finally { if (activo.current && version === peticion.current) setCargando(false); }
   }, []);
 
