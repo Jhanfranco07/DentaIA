@@ -103,11 +103,11 @@ export default function DirectorioLista() {
     return filtrados;
   }, [busqueda, carga, dentistas, distrito, especialidad, orden, radioKm, ubicacion]);
 
-  const ubicacionesVisibles = crearMarcadores(visibles);
-  const marcadoresDemo = carga.estado === "listo"
+  const ubicacionesVisibles = useMemo(() => crearMarcadores(visibles), [visibles]);
+  const marcadoresDemo = useMemo(() => carga.estado === "listo"
     ? carga.demos.map(crearMarcadorDemo).filter((marcador): marcador is MarcadorDemo => marcador !== null)
-    : [];
-  const ubicacionesMapa = [...ubicacionesVisibles, ...(mostrarDemo ? marcadoresDemo : [])];
+    : [], [carga]);
+  const ubicacionesMapa = useMemo(() => [...ubicacionesVisibles, ...(mostrarDemo ? marcadoresDemo : [])], [ubicacionesVisibles, marcadoresDemo, mostrarDemo]);
 
   async function usarUbicacion() {
     setErrorUbicacion("");
@@ -128,6 +128,11 @@ export default function DirectorioLista() {
   function limpiarFiltros() {
     setBusqueda(""); setDistrito(""); setEspecialidad(""); setRadioKm(""); setOrden("nombre");
     busquedaRef.current?.focus();
+  }
+
+  function mostrarEnMapa(id: string) {
+    setSeleccionado(id);
+    setVistaMovil("mapa");
   }
 
   return <section className={styles.pagina}>
@@ -172,7 +177,7 @@ export default function DirectorioLista() {
               const resumen = carga.resenas[d.id];
               const punto = ubicacionMasCercana(d.ubicaciones, ubicacion);
               const km = punto?.distancia ?? null;
-              return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`} onMouseEnter={() => setSeleccionado(d.id)} onFocus={() => setSeleccionado(d.id)}>
+              return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`}>
                 <div className={styles.avatar} style={{ background: d.avatar_color?.trim() || "#e3f6f0" }} aria-hidden="true">{inicialesDe(d.initials, d.name)}</div>
                 <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>Perfil de ejemplo · ficticio</span>}<h2>{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
                   <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.ubicacionesDisponibles ? "Ubicación no registrada" : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}<span>{formatearPrecio(d.consultation_price, d.currency)}</span></div>
@@ -180,7 +185,7 @@ export default function DirectorioLista() {
                     {resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : <>★ {resumen.promedio.toFixed(1)} · {resumen.total} {resumen.total === 1 ? "reseña" : "reseñas"}</>}
                     {!carga.resenasDisponibles && <span>Calificaciones no disponibles en este entorno</span>}
                   </p>
-                  <div className={styles.accionesTarjeta}><Link href={`/directorio/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil</Link><Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link></div>
+                  <div className={styles.accionesTarjeta}><Link href={`/directorio/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil</Link><Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link>{!d.is_demo && d.ubicaciones.some(p => Number.isFinite(p.latitude) && Number.isFinite(p.longitude)) && <button type="button" className={styles.verMapa} onClick={() => mostrarEnMapa(d.id)}>Ver en mapa</button>}</div>
                 </div>
               </li>;
             })}
@@ -188,7 +193,7 @@ export default function DirectorioLista() {
         </section>
         <section className={`${styles.mapaPanel} ${vistaMovil === "lista" ? styles.ocultarEnMovil : ""}`} aria-label="Mapa de consultorios">
           {conUbicacion.length === 0 && marcadoresDemo.length === 0 && <p className={styles.avisoMapa}>{carga.estado === "listo" && carga.ubicacionesDisponibles ? "No hay consultorios con ubicación registrada. El mapa no asigna puntos a perfiles sin coordenadas verificadas." : "El servicio de ubicaciones no está disponible en este entorno. El directorio por lista sigue disponible."}</p>}
-          <MapaDirectorio ubicaciones={ubicacionesMapa} ubicacion={ubicacion} alSeleccionar={setSeleccionado} />
+          <MapaDirectorio ubicaciones={ubicacionesMapa} ubicacion={ubicacion} seleccionado={seleccionado} visible={vistaMovil === "mapa"} alSeleccionar={setSeleccionado} />
         </section>
       </div>
     </>}
