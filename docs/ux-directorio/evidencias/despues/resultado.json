@@ -1,0 +1,73 @@
+{
+  "fixture": "datos sintéticos de QA; ningún servicio remoto",
+  "fase": "despues",
+  "anchos": [
+    {
+      "ancho": 320,
+      "desbordamiento": false
+    },
+    {
+      "ancho": 390,
+      "desbordamiento": false
+    },
+    {
+      "ancho": 768,
+      "desbordamiento": false
+    },
+    {
+      "ancho": 1024,
+      "desbordamiento": false
+    },
+    {
+      "ancho": 1440,
+      "desbordamiento": false
+    }
+  ],
+  "checks": [
+    {
+      "nombre": "Directorio sin desbordamiento a 320px",
+      "ok": true
+    },
+    {
+      "nombre": "Directorio sin desbordamiento a 390px",
+      "ok": true
+    },
+    {
+      "nombre": "Directorio sin desbordamiento a 768px",
+      "ok": true
+    },
+    {
+      "nombre": "Directorio sin desbordamiento a 1024px",
+      "ok": true
+    },
+    {
+      "nombre": "Directorio sin desbordamiento a 1440px",
+      "ok": true
+    },
+    {
+      "nombre": "Búsqueda por especialidad",
+      "ok": true
+    },
+    {
+      "nombre": "Filtro por distrito",
+      "ok": true
+    },
+    {
+      "nombre": "Marcadores, ficha y atribución",
+      "ok": true
+    },
+    {
+      "nombre": "Lista selecciona el marcador",
+      "ok": true
+    },
+    {
+      "nombre": "Estado sin datos",
+      "ok": true
+    },
+    {
+      "nombre": "Error recuperable",
+      "ok": true
+    }
+  ],
+  "errores_js": []
+}

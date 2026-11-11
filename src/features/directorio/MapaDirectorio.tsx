@@ -15,15 +15,19 @@ function obtenerTeselas() {
   return configurada?.startsWith("https://") ? configurada : "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 }
 
-export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }: {
+export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = "", visible = true, alSeleccionar }: {
   ubicaciones: MarcadorDirectorio[];
   ubicacion: PuntoGeografico | null;
+  seleccionado?: string;
+  visible?: boolean;
   alSeleccionar?: (id: string) => void;
 }) {
   const contenedor = useRef<HTMLDivElement>(null);
   const mapa = useRef<MapInstance | null>(null);
   const marcadores = useRef<Marker[]>([]);
+  const marcadoresPorDentista = useRef(new globalThis.Map<string, Marker>());
   const [listo, setListo] = useState(false);
+  const [errorTeselas, setErrorTeselas] = useState(false);
 
   useEffect(() => {
     if (!contenedor.current || mapa.current) return;
@@ -41,6 +45,8 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
     });
     instancia.addControl(new NavigationControl({ showCompass: false }), "top-right");
     instancia.once("load", () => setListo(true));
+    instancia.on("error", evento => { if (evento.error) setErrorTeselas(true); });
+    instancia.on("sourcedata", evento => { if (evento.sourceId === "openstreetmap" && evento.isSourceLoaded) setErrorTeselas(false); });
     mapa.current = instancia;
     return () => {
       marcadores.current.forEach(marcador => marcador.remove());
@@ -55,6 +61,7 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
     if (!listo || !mapa.current) return;
     marcadores.current.forEach(marcador => marcador.remove());
     marcadores.current = [];
+    marcadoresPorDentista.current.clear();
     const ubicacionesValidas = ubicaciones.filter((ubicacion): ubicacion is MarcadorConsultorio => ubicacion.tipo === "consultorio" && ubicacionConCoordenadasValidas(ubicacion));
     const demosValidas = ubicaciones.filter((ubicacion): ubicacion is MarcadorDemo => ubicacion.tipo === "demo" && Number.isFinite(ubicacion.latitude) && Number.isFinite(ubicacion.longitude)
       && ubicacion.latitude >= -90 && ubicacion.latitude <= 90 && ubicacion.longitude >= -180 && ubicacion.longitude <= 180);
@@ -79,6 +86,7 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
       const elemento = document.createElement("button");
       elemento.type = "button";
       elemento.className = styles.marcadorDentista;
+      elemento.dataset.dentistId = consultorio.dentist_id;
       elemento.setAttribute("aria-label", `Ver odontólogo ${consultorio.dentista.name || "sin nombre"}, ${consultorio.practice_name}`);
       elemento.addEventListener("click", () => alSeleccionar?.(consultorio.dentist_id));
       const marcador = new Marker({ element: elemento, anchor: "bottom" })
@@ -86,6 +94,7 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
         .setPopup(new Popup({ offset: 28 }).setDOMContent(popupRoot))
         .addTo(mapa.current);
       marcadores.current.push(marcador);
+      marcadoresPorDentista.current.set(consultorio.dentist_id, marcador);
     }
 
     for (const demo of demosValidas) {
@@ -134,8 +143,22 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, alSeleccionar }
     }
   }, [alSeleccionar, listo, ubicacion, ubicaciones]);
 
+  useEffect(() => {
+    if (!listo || !mapa.current) return;
+    if (visible) mapa.current.resize();
+    for (const [id, marcador] of marcadoresPorDentista.current) {
+      marcador.getElement().dataset.selected = String(id === seleccionado);
+    }
+    const marcador = marcadoresPorDentista.current.get(seleccionado);
+    if (marcador && visible) {
+      mapa.current.flyTo({ center: marcador.getLngLat(), zoom: 14, duration: 450 });
+      if (!marcador.getPopup()?.isOpen()) marcador.togglePopup();
+    }
+  }, [listo, seleccionado, visible, ubicaciones]);
+
   return <div className={styles.contenedorMapa}>
     <div ref={contenedor} className={styles.mapa} role="application" aria-label="Mapa interactivo de consultorios odontológicos" />
     {!listo && <span className={styles.cargando} role="status">Cargando mapa…</span>}
+    {errorTeselas && <div className={styles.errorTeselas} role="alert">No se pudieron cargar algunas teselas del mapa. Puedes consultar los perfiles en la lista.</div>}
   </div>;
 }

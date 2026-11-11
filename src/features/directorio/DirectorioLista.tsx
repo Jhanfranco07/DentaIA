@@ -130,6 +130,11 @@ export default function DirectorioLista() {
     busquedaRef.current?.focus();
   }
 
+  function mostrarEnMapa(id: string) {
+    setSeleccionado(id);
+    setVistaMovil("mapa");
+  }
+
   return <section className={styles.pagina}>
     <header className={styles.cabecera}>
       <span className={styles.etiqueta}>Directorio odontológico</span>
@@ -180,7 +185,7 @@ export default function DirectorioLista() {
                     {resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : <>★ {resumen.promedio.toFixed(1)} · {resumen.total} {resumen.total === 1 ? "reseña" : "reseñas"}</>}
                     {!carga.resenasDisponibles && <span>Calificaciones no disponibles en este entorno</span>}
                   </p>
-                  <div className={styles.accionesTarjeta}><Link href={`/directorio/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil</Link><Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link></div>
+                  <div className={styles.accionesTarjeta}><Link href={`/directorio/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil</Link><Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link>{!d.is_demo && d.ubicaciones.some(p => Number.isFinite(p.latitude) && Number.isFinite(p.longitude)) && <button type="button" className={styles.verMapa} onClick={() => mostrarEnMapa(d.id)}>Ver en mapa</button>}</div>
                 </div>
               </li>;
             })}
@@ -188,7 +193,7 @@ export default function DirectorioLista() {
         </section>
         <section className={`${styles.mapaPanel} ${vistaMovil === "lista" ? styles.ocultarEnMovil : ""}`} aria-label="Mapa de consultorios">
           {conUbicacion.length === 0 && marcadoresDemo.length === 0 && <p className={styles.avisoMapa}>{carga.estado === "listo" && carga.ubicacionesDisponibles ? "No hay consultorios con ubicación registrada. El mapa no asigna puntos a perfiles sin coordenadas verificadas." : "El servicio de ubicaciones no está disponible en este entorno. El directorio por lista sigue disponible."}</p>}
-          <MapaDirectorio ubicaciones={ubicacionesMapa} ubicacion={ubicacion} alSeleccionar={setSeleccionado} />
+          <MapaDirectorio ubicaciones={ubicacionesMapa} ubicacion={ubicacion} seleccionado={seleccionado} visible={vistaMovil === "mapa"} alSeleccionar={setSeleccionado} />
         </section>
       </div>
     </>}
