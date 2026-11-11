@@ -43,3 +43,38 @@ La prueba `catalogo-demo.test.mjs` verifica las 20 uniones, identificadores úni
 - Suite Node completa: 457 pruebas aprobadas, 0 fallidas. `npm audit --audit-level=high`: 0 vulnerabilidades.
 - Playwright con respuestas Supabase simuladas: lista de 20, filtros de distrito/especialidad/búsqueda, estado vacío, navegación Tab, marcador, ficha y ausencia de desbordamiento en 320, 390, 768, 1024 y 1440 px. Capturas en `evidencia/`. Esto valida la interfaz con fixtures, no una carga remota.
 - PostgreSQL 16 en un contenedor aislado `dentaia-demo-s6-pg`: migración existente aplicada; dos ejecuciones del seed devolvieron 20 filas y 20 slugs únicos. La limpieza eliminó las 20; el punto previo `clinica-demo-la-molina` permaneció (1 fila). Estado final del contenedor: 0 puntos del dataset nuevo. No se escribieron datos remotos.
+
+
+## Centros dentales con dirección pública: candidatos para reemplazar los puntos aproximados
+
+**Estado: investigación documental, NO cargados ni geocodificados.** Los perfiles de personas del catálogo siguen siendo completamente ficticios; no son empleados, integrantes ni profesionales asociados a las siguientes clínicas. La dirección de un centro real es una referencia geográfica independiente. Antes de publicar un punto como ubicación real, contrastar coordenadas con una fuente cartográfica actual, verificar que corresponda al local y conservar la atribución. No sustituir coordenadas de distrito por coordenadas supuestamente exactas.
+
+| N.º | Centro real (sede) | Dirección publicada | Fuente |
+| --- | --- | --- | --- |
+| 01 | Cerdent San Isidro | Calle Almirante Lord Cochrane 240, San Isidro | [Cerdent](https://cerdentperu.com/sedes/) |
+| 02 | Cerdent La Molina | Av. Javier Prado Este 6210, oficina 301, La Molina | [Cerdent](https://cerdentperu.com/sedes/) |
+| 03 | Cerdent Los Olivos | Av. Carlos Izaguirre 1122, Los Olivos | [Cerdent](https://cerdentperu.com/sedes/) |
+| 04 | Cerdent Jesús María | Av. Sánchez Carrión 615, Jesús María | [Cerdent](https://cerdentperu.com/sedes/) |
+| 05 | Cerdent Surco | Calle Los Antares 320, torre A, oficina 801, Santiago de Surco | [Cerdent](https://cerdentperu.com/sedes/) |
+| 06 | Cerdent San Borja | Av. San Borja Sur 781, San Borja | [Cerdent](https://cerdentperu.com/sedes/) |
+| 07 | Cerdent San Miguel | Av. Parque de las Leyendas 210, oficina 402A, San Miguel | [Cerdent](https://cerdentperu.com/sedes/) |
+| 08 | Cerdent Miraflores San Antonio | Av. Benavides 1555, oficina 303, Miraflores | [Cerdent](https://cerdentperu.com/sedes/) |
+| 09 | Cerdent Lince | Av. General César Canevaro 116, oficina 301, Lince | [Cerdent](https://cerdentperu.com/sedes/) |
+| 10 | Cerdent La Encalada | Jr. Paramonga 311, oficina 201, Santiago de Surco | [Cerdent](https://cerdentperu.com/sedes/) |
+| 11 | Resocentro Dental Miraflores | Av. Petit Thouars 4453, Miraflores | [Resocentro](https://www.resocentro.com/Paciente/Sedes) |
+| 12 | Resocentro San Isidro | Av. Javier Prado Este 499, San Isidro | [Resocentro](https://www.resocentro.com/Paciente/Sedes) |
+| 13 | Resocentro El Polo | Av. El Polo 434, Santiago de Surco | [Resocentro](https://www.resocentro.com/Paciente/Sedes) |
+| 14 | Romandent Miraflores | Av. Alfredo Benavides 2921, Miraflores | [Romandent](https://romandent.com.pe/sedes/) |
+| 15 | Romandent San Isidro | Av. Augusto Pérez Araníbar 1764, San Isidro | [Romandent](https://romandent.com.pe/sedes/) |
+| 16 | MUNIDENT Miraflores | Av. José Larco 742, oficina A, Miraflores | [MUNIDENT](https://munident.com/ubicacion) |
+| 17 | MUNIDENT Surco | Jr. Vulcano, Mz. A, lote 15, Urb. La Libertad, Santiago de Surco | [MUNIDENT](https://munident.com/ubicacion) |
+| 18 | Clínica Dental BOE | Av. Antonio José de Sucre 161, Pueblo Libre | Ficha pública del establecimiento |
+| 19 | Mundoral San Borja | Jr. Simoni 151, San Borja | Ficha pública del establecimiento |
+| 20 | Impacto Dental Jesús María | Jr. Huiracocha 1683, Jesús María | Ficha pública del establecimiento |
+
+### Decisión de seguridad y producto
+- **No asociar** nombres inventados de odontólogos a clínicas reales como si ejercieran allí: no se ha acreditado esa relación. Un perfil de simulación debe mantener un aviso inequívoco y no ofrecer reservas ni rutas a nombre del profesional ficticio.
+- Si se desea mostrar centros reales, modelarlos como establecimientos públicos independientes y mostrar sus fuentes; no trasladar esa información a `clinical.clinics` ni a `public.dentist_public_locations` sin verificación y autorización.
+- Mantener los veinte puntos sintéticos vigentes hasta completar verificaciones cartográficas y aprobar una migración de datos compatible con el esquema existente.
+- Los íconos de diente del PR sustituyen la palabra visible «DEMO» en los marcadores; **no suprimen el aviso de demostración de fichas y listados**.
+
