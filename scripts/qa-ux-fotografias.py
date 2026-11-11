@@ -12,6 +12,7 @@ p = argparse.ArgumentParser()
 p.add_argument("--fase", choices=("antes", "despues"), required=True)
 p.add_argument("--output", type=Path, required=True)
 p.add_argument("--browser", required=True)
+p.add_argument("--base", default="http://127.0.0.1:3180")
 args = p.parse_args()
 out = args.output / args.fase
 out.mkdir(parents=True, exist_ok=True)
@@ -94,17 +95,17 @@ with sync_playwright() as pw:
 
     for width in (320, 390, 768, 1024, 1440):
         page.set_viewport_size({"width": width, "height": 900})
-        page.goto("http://127.0.0.1:3180/fotografias")
+        page.goto(args.base + "/fotografias", wait_until="domcontentloaded")
         page.get_by_role("heading", name="Mis fotografías dentales").wait_for(timeout=30000)
         page.add_style_tag(content="nextjs-portal{display:none!important}")
-        page.screenshot(path=str(out / f"fotografias-{width}.png"), full_page=True)
+        page.screenshot(path=str(out / f"fotografias-{width}.png"))
         overflow = page.evaluate("document.documentElement.scrollWidth > innerWidth + 1")
         report["anchos"].append({"ancho": width, "desbordamiento": overflow})
         check(f"Sin desbordamiento a {width}px", lambda o=overflow: None if not o else (_ for _ in ()).throw(AssertionError("horizontal")))
 
     if args.fase == "despues":
         page.set_viewport_size({"width": 390, "height": 900})
-        page.goto("http://127.0.0.1:3180/fotografias")
+        page.goto(args.base + "/fotografias", wait_until="domcontentloaded")
         page.get_by_role("heading", name="Tu permiso para guardar imágenes").wait_for()
         check("Consentimiento no premarcado", lambda: (
             None if not page.get_by_role("checkbox").is_checked() and page.get_by_role("button", name="Dar consentimiento").is_disabled()
@@ -147,7 +148,7 @@ with sync_playwright() as pw:
             None if "delete" in flags["mutations"] else (_ for _ in ()).throw(AssertionError("sin borrado"))
         ))
         flags["fail"] = True
-        page.goto("http://127.0.0.1:3180/fotografias")
+        page.goto(args.base + "/fotografias", wait_until="domcontentloaded")
         check("Error de carga recuperable", lambda: (
             page.get_by_role("alert").wait_for(timeout=15000),
             page.get_by_role("button", name="Volver a cargar").wait_for()
@@ -175,3 +176,5 @@ with sync_playwright() as pw:
 
 (out / "resultado.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(json.dumps({"aprobadas": sum(c["aprobado"] for c in report["casos"]), "fallidas": sum(not c["aprobado"] for c in report["casos"])}))
+if any(not caso["aprobado"] for caso in report["casos"]) or report["errores_js"] or any(item["desbordamiento"] for item in report["anchos"]):
+    raise SystemExit(1)
