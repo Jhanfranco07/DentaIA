@@ -143,8 +143,8 @@ export default function DirectorioLista() {
     <header className={styles.cabecera}>
       <span className={styles.etiqueta}>Directorio odontológico</span>
       <h1>Encuentra orientación odontológica</h1>
-      <p>Busca por nombre, especialidad o distrito. Los puntos DEMO son coordenadas representativas para probar el mapa.</p>
-      <span className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}. Las coordenadas son representativas y no indican direcciones de atención.</span>
+      <p>Busca por nombre, especialidad o distrito. Los centros de referencia cuentan con direcciones y coordenadas publicadas. Los perfiles de odontólogos de ejemplo son ficticios.</p>
+      <span className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}. Las ubicaciones son referencias independientes, sin vinculación profesional ni citas mediante DentaIA.</span>
     </header>
 
     {carga.estado === "cargando" && <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i /><i /><i /></div></div>}
@@ -154,7 +154,7 @@ export default function DirectorioLista() {
       <div><h2>{carga.demos[0]?.name ?? "Clínica de demostración"}</h2>
         <strong>{carga.demos[0]?.public_label ?? "DEMO — Clínica ficticia, no ofrece atención real"}</strong>
         <p>{carga.demos[0] ? `${carga.demos[0].district}, ${carga.demos[0].city}, ${carga.demos[0].country}` : carga.demoDisponible ? "No hay ubicaciones DEMO publicadas." : "La ubicación DEMO no está disponible en este entorno."}</p>
-        {carga.demos[0] && <p>El punto del mapa es una coordenada representativa de demostración; no indica un consultorio ni una dirección real.</p>}
+        {carga.demos[0] && <p>Los puntos asociados a perfiles ficticios son referencias geográficas externas; no implican vinculación profesional.</p>}
       </div>
       {marcadoresDemo.length > 0 && <button type="button" aria-pressed={mostrarDemo} className={styles.botonDemo} onClick={() => setMostrarDemo(value => !value)}>{mostrarDemo ? "Ocultar en el mapa" : "Mostrar en el mapa"}</button>}
     </section>}
