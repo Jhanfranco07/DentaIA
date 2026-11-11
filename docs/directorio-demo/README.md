@@ -78,3 +78,35 @@ La prueba `catalogo-demo.test.mjs` verifica las 20 uniones, identificadores úni
 - Mantener los veinte puntos sintéticos vigentes hasta completar verificaciones cartográficas y aprobar una migración de datos compatible con el esquema existente.
 - Los íconos de diente del PR sustituyen la palabra visible «DEMO» en los marcadores; **no suprimen el aviso de demostración de fichas y listados**.
 
+
+
+## Dataset v2: veinte referencias geográficas documentadas
+
+La versión v2 conserva exactamente veinte personas ficticias y sus UUID/slugs; cambia las ubicaciones a centros dentales con dirección y coordenadas **registradas en fichas que citan RENIPRESS/MINSA**. La fuente consultada es un portal informativo independiente, no una validación oficial o presencial de apertura actual. No atribuir personal ficticio al establecimiento. Esta documentación no certifica capacidad de atención.
+
+| # | Centro de referencia | Dirección publicada | Distrito | Latitud | Longitud | Fuente |
+|---|---|---|---|---:|---:|---|
+| 01 | Cerdent San Borja | Av. San Borja Sur 781, piso 2 | San Borja | -12.100849 | -76.999601 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/consultorio-medico-cerdent-san-borja/) |
+| 02 | Cerdent Jesús María | Av. Faustino Sánchez Carrión 615, of. 303 | Jesús María | -12.089279 | -77.058167 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/consultorio-medico-cerdent-jesus-maria/) |
+| 03 | Cerdent La Molina | Av. Javier Prado Este 6210, of. 301 | La Molina | -12.070348 | -76.95249 | [Ficha](https://www.establecimientosdesalud.info/lima-este/centro-odontologico-cerdent-sac-la-molina/) |
+| 04 | Romandent Miraflores | Av. Alfredo Benavides 2921 | Miraflores | -12.128138 | -77.005019 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-romandent-eirl-miraflores/) |
+| 05 | Romandent San Isidro | Av. Augusto Pérez Araníbar 1764 | San Isidro | -12.106403 | -77.054749 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-romandent-san-isidro/) |
+| 06 | Romandent Surco | Jr. El Polo 348 | Santiago de Surco | -12.105931 | -76.973386 | [Ficha](https://www.establecimientosdesalud.info/lima-sur/centro-odontologico-romandent-santiago-de-surco/) |
+| 07 | Dental Científica (Universidad Científica del Sur) | Av. Paseo de la República 5514 | Miraflores | -12.119411 | -77.026132 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-de-la-universidad-cientifica-del-sur-dental-cientifica-miraflores/) |
+| 08 | Clínica Dental Smile Perfection | Calle Coronel Inclán 235, piso 3, of. 307 | Miraflores | -12.117637 | -77.031481 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/consultorio-medico-clinica-dental-smile-perfection-miraflores/) |
+| 09 | Centro Odontológico Universidad Wiener | Av. Arequipa 440-444 | Lima | -12.069504 | -77.037002 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-de-la-universidad-wiener-lima/) |
+| 10 | Vital Dent Integral | Av. Salaverry 1071, primer piso | Jesús María | -12.07 | -77.0453 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-integral-vital-dent-sac-jesus-maria/) |
+| 11 | Centro Odontológico Americano Primavera | Av. Primavera 643, interior 503 | San Borja | -12.110287 | -76.986509 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-americano-primavera-san-borja/) |
+| 12 | Dental Procare | Calle Alcanfores 142, interior 303 | Miraflores | -12.12096 | -77.027807 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-dental-procare-miraflores/) |
+| 13 | Bogdent | Jr. Subteniente Alejandro Tirado 318, int. 201 | Lima | -12.074412 | -77.034597 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-bogdent-lima/) |
+| 14 | Odontosalud Chorrillos | Av. El Sol 1242, La Campiña | Chorrillos | -12.177811 | -76.997082 | [Ficha](https://www.establecimientosdesalud.info/lima-sur/centro-odontologico-odontosalud-chorrillos/) |
+| 15 | Centro Odontológico Americano Los Olivos | Av. Carlos Alberto Izaguirre 1268 | Los Olivos | -11.995633 | -77.080356 | [Ficha](https://www.establecimientosdesalud.info/lima-norte/centro-odontologico-americano-los-olivos-los-olivos/) |
+| 16 | Multident Chorrillos | Av. Defensores del Morro 714, interiores 208-209 | Chorrillos | -12.17101 | -77.022508 | [Ficha](https://www.establecimientosdesalud.info/lima-sur/centro-odontologico-multident-chorrillos/) |
+| 17 | Centro Especializado en Odontoestomatología | Av. Simón Bolívar 165 | Pueblo Libre | -12.074555 | -77.054864 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-centro-especializado-en-odontoestomatologia-pueblo-libre/) |
+| 18 | Dental Max San Miguel | Calle Contisuyo 299, piso 2, int. 202 | San Miguel | -12.071798 | -77.098367 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-dental-max-san-miguel/) |
+| 19 | Centro Odontológico Americano El Campillo | Calle Ayarsa de Morales 237 | San Miguel | -12.079831 | -77.079575 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-americano-san-miguel-el-campillo-san-miguel/) |
+| 20 | Mueca Lince | Av. Julio César Tello 615 | Lince | -12.086597 | -77.039917 | [Ficha](https://www.establecimientosdesalud.info/lima-centro/centro-odontologico-mueca-lince/) |
+
+**La tabla existente obliga a conservar el literal histórico `public_label = 'DEMO — Clínica ficticia, no ofrece atención real'` por un CHECK.** Es un atributo técnico legado, no descripción fiel de la institución real de referencia. El frontend ya no lo expone en los marcadores. Para modelar formalmente centros reales separados de perfiles ficticios, se necesitaría una migración específica posteriormente, no parte de este cambio.
+
+**Publicación:** ejecutar el nuevo seed transaccional e idempotente SOLO tras revisar el diff, verificar los veinte puntos y autorizar la sustitución de los veinte slugs reservados en producción. El script actualizado de limpieza solo puede eliminar los veinte slugs y nombres aceptados. Mantener siempre sin cambios `clinica-demo-la-molina`.
