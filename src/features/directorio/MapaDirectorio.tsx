@@ -111,16 +111,27 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
       const nota = document.createElement("small");
       nota.textContent = "Coordenada representativa de demostración; no identifica un consultorio ni una dirección real.";
       popupRoot.append(nota);
+      if (demo.dentist_id) {
+        const enlace = document.createElement("a");
+        enlace.href = `/directorio/${encodeURIComponent(demo.dentist_id)}`;
+        enlace.textContent = "Ver perfil ficticio";
+        popupRoot.append(enlace);
+      }
       const elemento = document.createElement("button");
       elemento.type = "button";
       elemento.className = styles.marcadorDemo;
       elemento.textContent = "DEMO";
       elemento.setAttribute("aria-label", `${demo.public_label}, ${demo.district}`);
+      if (demo.dentist_id) {
+        elemento.dataset.dentistId = demo.dentist_id;
+        elemento.addEventListener("click", () => alSeleccionar?.(demo.dentist_id!));
+      }
       const marcador = new Marker({ element: elemento, anchor: "bottom" })
         .setLngLat([demo.longitude, demo.latitude])
         .setPopup(new Popup({ offset: 28 }).setDOMContent(popupRoot))
         .addTo(mapa.current);
       marcadores.current.push(marcador);
+      if (demo.dentist_id) marcadoresPorDentista.current.set(demo.dentist_id, marcador);
     }
 
     if (ubicacion) {

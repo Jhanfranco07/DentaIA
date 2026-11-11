@@ -10,5 +10,5 @@ export type MarcadorConsultorio = UbicacionPublica & { tipo: "consultorio"; dent
 export type DemoLocationPublica = Pick<Database["public"]["Tables"]["directory_demo_locations"]["Row"],
   "id" | "slug" | "name" | "district" | "city" | "country" | "latitude" | "longitude" | "is_demo" | "is_published" | "requests_enabled" | "public_label">;
 export type MarcadorDemo = Pick<DemoLocationPublica,
-  "id" | "slug" | "name" | "district" | "city" | "country" | "latitude" | "longitude" | "public_label"> & { tipo: "demo" };
+  "id" | "slug" | "name" | "district" | "city" | "country" | "latitude" | "longitude" | "public_label"> & { tipo: "demo"; dentist_id?: string };
 export type MarcadorDirectorio = MarcadorConsultorio | MarcadorDemo;

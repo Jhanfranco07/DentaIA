@@ -15,6 +15,7 @@ import type { ResenaPublica } from "./resenas";
 import { crearMarcadores, tieneUbicacionDentroDelRadio, ubicacionMasCercana } from "./ubicaciones";
 import { adjuntarUbicaciones, normalizarResenas } from "./compatibilidad-esquema";
 import { crearMarcadorDemo } from "./demo";
+import { AVISO_PERFILES_DEMO, CATALOGO_DEMO, unirCatalogoDemo } from "./catalogo-demo";
 
 const MapaDirectorio = dynamic(() => import("./MapaDirectorio"), {
   ssr: false,
@@ -61,7 +62,7 @@ export default function DirectorioLista() {
             .in("dentist_id", ids);
         }
         const ubicacionesResultado = adjuntarUbicaciones(baseDentistas, respuestaUbicaciones);
-        const dentistas = ubicacionesResultado.dentistas as DentistaDirectorio[];
+        const dentistasReales = ubicacionesResultado.dentistas as DentistaDirectorio[];
         let respuestaResenas: { data: ResenaPublica[] | null; error: unknown | null } = { data: [], error: null };
         if (ids.length) {
           respuestaResenas = await client.from("dentist_reviews").select("id,dentist_id,rating,comment,created_at").in("dentist_id", ids);
@@ -73,6 +74,7 @@ export default function DirectorioLista() {
           .eq("is_demo", true).eq("is_published", true).eq("requests_enabled", false);
         const demos = (respuestaDemo.data ?? []) as DemoLocationPublica[];
         if (cancelado) return;
+        const dentistas = [...dentistasReales.filter(d => !CATALOGO_DEMO.some(p => p.id === d.id)), ...unirCatalogoDemo(demos)];
         const sumarios = Object.fromEntries(dentistas.map(dentista => [dentista.id, resumirResenas(resenas.filter(r => r.dentist_id === dentista.id))]));
         setCarga({ estado: "listo", dentistas, demos, demoDisponible: !respuestaDemo.error, resenas: sumarios, resenasDisponibles: resenasResultado.disponibles, ubicacionesDisponibles: ubicacionesResultado.disponibles });
       } catch { if (!cancelado) setCarga({ estado: "error" }); }
@@ -106,7 +108,9 @@ export default function DirectorioLista() {
   const ubicacionesVisibles = useMemo(() => crearMarcadores(visibles), [visibles]);
   const marcadoresDemo = useMemo(() => carga.estado === "listo"
     ? carga.demos.map(crearMarcadorDemo).filter((marcador): marcador is MarcadorDemo => marcador !== null)
-    : [], [carga]);
+      .filter(marcador => !CATALOGO_DEMO.some(perfil => perfil.slug === marcador.slug) || visibles.some(d => d.slug === marcador.slug))
+      .map(marcador => ({ ...marcador, dentist_id: visibles.find(d => d.is_demo && d.slug === marcador.slug)?.id }))
+    : [], [carga, visibles]);
   const ubicacionesMapa = useMemo(() => [...ubicacionesVisibles, ...(mostrarDemo ? marcadoresDemo : [])], [ubicacionesVisibles, marcadoresDemo, mostrarDemo]);
 
   async function usarUbicacion() {
@@ -139,8 +143,8 @@ export default function DirectorioLista() {
     <header className={styles.cabecera}>
       <span className={styles.etiqueta}>Directorio odontológico</span>
       <h1>Encuentra orientación odontológica</h1>
-      <p>Busca por nombre, especialidad o distrito, o consulta la ubicación de profesionales que hayan registrado un consultorio.</p>
-      <span className={styles.avisoDemo}>Consulta el alcance de cada perfil. Los marcados como ficticios no ofrecen atención real y una solicitud no confirma una cita.</span>
+      <p>Busca por nombre, especialidad o distrito. Los puntos DEMO son coordenadas representativas para probar el mapa.</p>
+      <span className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}. Las coordenadas son representativas y no indican direcciones de atención.</span>
     </header>
 
     {carga.estado === "cargando" && <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i /><i /><i /></div></div>}
@@ -180,12 +184,12 @@ export default function DirectorioLista() {
               return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`}>
                 <div className={styles.avatar} style={{ background: d.avatar_color?.trim() || "#e3f6f0" }} aria-hidden="true">{inicialesDe(d.initials, d.name)}</div>
                 <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>Perfil de ejemplo · ficticio</span>}<h2>{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
-                  <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.ubicacionesDisponibles ? "Ubicación no registrada" : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}<span>{formatearPrecio(d.consultation_price, d.currency)}</span></div>
+                  <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.ubicacionesDisponibles ? "Ubicación no registrada" : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}{!d.is_demo && <span>{formatearPrecio(d.consultation_price, d.currency)}</span>}</div>
                   <p className={styles.rating} aria-label={resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : `${resumen.promedio.toFixed(1)} de cinco, ${resumen.total} reseñas`}>
                     {resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : <>★ {resumen.promedio.toFixed(1)} · {resumen.total} {resumen.total === 1 ? "reseña" : "reseñas"}</>}
                     {!carga.resenasDisponibles && <span>Calificaciones no disponibles en este entorno</span>}
                   </p>
-                  <div className={styles.accionesTarjeta}><Link href={`/directorio/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil</Link><Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link>{!d.is_demo && d.ubicaciones.some(p => Number.isFinite(p.latitude) && Number.isFinite(p.longitude)) && <button type="button" className={styles.verMapa} onClick={() => mostrarEnMapa(d.id)}>Ver en mapa</button>}</div>
+                  <div className={styles.accionesTarjeta}><Link href={`/directorio/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil</Link>{!d.is_demo && <Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link>}{d.ubicaciones.some(p => Number.isFinite(p.latitude) && Number.isFinite(p.longitude)) && <button type="button" className={styles.verMapa} onClick={() => mostrarEnMapa(d.id)}>Ver en mapa</button>}</div>
                 </div>
               </li>;
             })}
