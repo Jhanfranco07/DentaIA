@@ -31,4 +31,3 @@ Mantener una familia sans de alta legibilidad en los portales; evaluar una tipog
 ## Guardarraíles
 
 Foco visible, objetivos táctiles de al menos 44 px cuando proceda, contraste WCAG AA comprobado, orden de tabulación lógico, zoom 200 % sin pérdida de contenido y movimiento reducido. Usar `next/image` para activos adecuados y reservar dimensiones. Medir antes/después; esta propuesta no afirma cumplimiento WCAG ni resultados de rendimiento.
-
