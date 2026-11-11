@@ -1,4 +1,4 @@
-import Image from "next/image";
+import HeroCarousel from "@/components/HeroCarousel";
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
 import styles from "./home.module.css";
@@ -6,24 +6,27 @@ import styles from "./home.module.css";
 export default function Home() {
   return <>
     <section className={styles.hero} aria-labelledby="inicio-titulo">
+      <HeroCarousel />
+      <div className={styles.heroInner}>
       <div className={styles.heroCopy}>
-        <h1 id="inicio-titulo">Orientación y cuidado para tu salud bucal.</h1>
-        <p>DentaIA reúne tu espacio personal, un directorio odontológico y herramientas para preparar tu próxima consulta. Cada función respeta los permisos de tu cuenta y tu privacidad.</p>
-        <div className="actions"><Link href="/cuenta?modo=registro" className="action">Crear mi cuenta <Icono nombre="flecha" size={18} /></Link><Link href="/directorio" className="action action-secondary">Explorar odontólogos</Link></div>
+        <span className={`eyebrow ${styles.heroEyebrow}`}><span aria-hidden="true" /> CONOCE DENTAIA</span>
+        <h1 id="inicio-titulo">Una forma más simple de <span>cuidar tu sonrisa.</span></h1>
+        <p>DentaIA reúne tu espacio personal, un directorio odontológico y herramientas de atención con acceso protegido. Encuentra lo que necesitas, sin perder de vista tu privacidad.</p>
+        <div className="actions"><Link href="/cuenta?modo=registro" className="action">Comenzar ahora <Icono nombre="flecha" size={18} /></Link><Link href="/directorio" className="action action-secondary">Explorar odontólogos</Link></div>
         <Link className={styles.enlaceProfesional} href="/profesional">¿Eres odontólogo? Accede a tu espacio profesional <Icono nombre="flecha" size={16} /></Link>
+        <div className={styles.aviso}><span className={styles.check}><Icono nombre="check" size={20} /></span><div><strong>Tu bienestar es lo primero</strong><br />Sin diagnósticos automáticos. El análisis con IA está en desarrollo.</div></div>
       </div>
-      <figure className={styles.fotografia}>
-        <Image src="/hero/hero-1.jpg" alt="Una mujer sonríe en la recepción de un consultorio dental" width={1376} height={768} priority sizes="(max-width: 760px) 100vw, 50vw" />
-        <figcaption>Encuentra tu próximo paso para cuidar tu salud bucal.</figcaption>
-      </figure>
+      <Link href="/analisis" className={styles.heroTag}><span>Conoce DentaIA ahora</span><span>Prepara una fotografía, paso a paso <Icono nombre="flecha" size={16} /></span></Link>
+      </div>
+      <div className={styles.principios}><span><Icono nombre="destello" size={18} /> Información clara</span><span><Icono nombre="clinica" size={18} /> Encuentra profesionales</span><span><Icono nombre="escudo" size={18} /> Privacidad y control</span></div>
     </section>
 
     <section className={styles.seccion} id="funcionalidades" aria-labelledby="funciones-titulo">
-      <div className={styles.intro}><span className="eyebrow">UN ESPACIO PARA CADA NECESIDAD</span><h2 id="funciones-titulo">Menos búsquedas.<br />Más continuidad en tu cuidado.</h2><p>Desde preparar tu próxima consulta hasta revisar información autorizada: cada función tiene su lugar y cada cuenta, sus permisos.</p></div>
+      <div className={styles.intro}><span className="eyebrow">DESCUBRE DENTAIA</span><h2 id="funciones-titulo">Todo lo que necesitas, <span>más fácil.</span></h2><p>Desde preparar tu próxima consulta hasta revisar información autorizada: cada función tiene su lugar y cada cuenta, sus permisos.</p></div>
       <div className={styles.beneficios}>
-        <article><Icono nombre="persona" size={26} /><h3>Tu espacio personal</h3><p>Consulta tu perfil, organiza tus fotografías de prueba y revisa tus solicitudes desde el panel del paciente.</p><Link className="text-link" href="/panel">Ir a mi panel <span aria-hidden="true">→</span></Link></article>
-        <article><Icono nombre="diente" size={26} /><h3>Opciones de atención</h3><p>Busca por especialidad o distrito y consulta las ubicaciones publicadas. Los perfiles y establecimientos de ejemplo están identificados.</p><Link className="text-link" href="/directorio">Consultar el directorio <span aria-hidden="true">→</span></Link></article>
-        <article><Icono nombre="clinica" size={26} /><h3>Un entorno profesional</h3><p>Los odontólogos autorizados pueden consultar sus clínicas, solicitudes e historial según su membresía y los permisos vigentes.</p><Link className="text-link" href="/profesional">Acceder como profesional <span aria-hidden="true">→</span></Link></article>
+        <article><div className={styles.beneficioTop}><span className={styles.beneficioIcon}><Icono nombre="persona" size={26} /></span><span className={styles.numero}>01</span></div><h3>Tu espacio personal</h3><p>Consulta tu perfil, organiza tus fotografías de prueba y revisa tus solicitudes desde el panel del paciente.</p><Link className="text-link" href="/panel">Ir a mi panel <span aria-hidden="true">→</span></Link></article>
+        <article><div className={styles.beneficioTop}><span className={styles.beneficioIcon}><Icono nombre="diente" size={26} /></span><span className={styles.numero}>02</span></div><h3>Opciones de atención</h3><p>Busca por especialidad o distrito y consulta las ubicaciones publicadas. Los perfiles y establecimientos de ejemplo están identificados.</p><Link className="text-link" href="/directorio">Consultar el directorio <span aria-hidden="true">→</span></Link></article>
+        <article><div className={styles.beneficioTop}><span className={styles.beneficioIcon}><Icono nombre="clinica" size={26} /></span><span className={styles.numero}>03</span></div><h3>Un entorno profesional</h3><p>Los odontólogos autorizados pueden consultar sus clínicas, solicitudes e historial según su membresía y los permisos vigentes.</p><Link className="text-link" href="/profesional">Acceder como profesional <span aria-hidden="true">→</span></Link></article>
       </div>
     </section>
 

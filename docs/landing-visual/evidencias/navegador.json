@@ -1,0 +1,57 @@
+{
+  "contexto": "Build local de producción; Chromium real; sin Supabase remoto. No es medición de campo ni aceptación de producción.",
+  "pruebas": [
+    {
+      "nombre": "Responsive, fotografía, tarjeta y ausencia de desborde: 360px",
+      "aprobada": true
+    },
+    {
+      "nombre": "Responsive, fotografía, tarjeta y ausencia de desborde: 390px",
+      "aprobada": true
+    },
+    {
+      "nombre": "Responsive, fotografía, tarjeta y ausencia de desborde: 768px",
+      "aprobada": true
+    },
+    {
+      "nombre": "Responsive, fotografía, tarjeta y ausencia de desborde: 1366px",
+      "aprobada": true
+    },
+    {
+      "nombre": "Responsive, fotografía, tarjeta y ausencia de desborde: 1920px",
+      "aprobada": true
+    },
+    {
+      "nombre": "Menú móvil: ancla, cierre y teclado Escape",
+      "aprobada": true
+    },
+    {
+      "nombre": "CTA reales: registro, directorio y preparación protegida",
+      "aprobada": true
+    },
+    {
+      "nombre": "Teclado: salto al contenido y foco visible",
+      "aprobada": true
+    },
+    {
+      "nombre": "Movimiento reducido: imagen fija y sin precarga del resto",
+      "aprobada": true
+    },
+    {
+      "nombre": "Carrusel: carga progresiva, rotación, pausa, reanudación y cambio de preferencia",
+      "aprobada": true
+    },
+    {
+      "nombre": "Cinco fotografías: originales y optimizador del build",
+      "aprobada": true
+    },
+    {
+      "nombre": "Sin errores JavaScript o fallos de recursos Next en landing",
+      "aprobada": true
+    }
+  ],
+  "aprobadas": 12,
+  "fallidas": 0,
+  "erroresJS": [],
+  "recursosFallidos": []
+}
