@@ -1,0 +1,7 @@
+erDiagram
+  auth_users ||--o| public_profiles : id
+  auth_users ||--o{ public_appointment_requests : user_id
+  public_dentists ||--o{ public_appointment_requests : dentist_id
+  auth_users ||--o{ public_patient_consents : user_id
+  auth_users ||--o{ public_dental_photos : user_id
+  public_patient_consents ||--o{ public_dental_photos : "user_id y consent_id"

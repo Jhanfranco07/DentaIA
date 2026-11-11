@@ -1,0 +1,63 @@
+erDiagram
+  public_profiles {
+    uuid id PK,FK
+    text full_name
+    timestamptz created_at
+  }
+  public_dentists {
+    uuid id PK
+    text slug
+    text name
+    text specialty
+    text district
+    numeric consultation_price
+    text currency
+    text initials
+    text avatar_color
+    text description
+    boolean is_demo
+    boolean is_active
+    timestamptz created_at
+  }
+  public_appointment_requests {
+    uuid id PK
+    uuid user_id FK
+    uuid dentist_id FK
+    text contact_name
+    text contact_email
+    date preferred_date
+    time preferred_time
+    text message
+    text status
+    boolean is_demo
+    timestamptz created_at
+  }
+  public_patient_consents {
+    uuid id PK
+    uuid user_id FK
+    text policy_version
+    text consent_text
+    text purpose
+    timestamptz accepted_at
+    timestamptz revoked_at
+  }
+  public_dental_photos {
+    uuid id PK
+    uuid user_id FK
+    uuid consent_id FK
+    text bucket_id
+    text object_path
+    text original_filename
+    text mime_type
+    bigint size_bytes
+    timestamptz created_at
+  }
+  auth_users {
+    uuid id PK
+  }
+  auth_users ||--o| public_profiles : "id"
+  auth_users ||--o{ public_appointment_requests : "user_id"
+  public_dentists ||--o{ public_appointment_requests : "dentist_id"
+  auth_users ||--o{ public_patient_consents : "user_id"
+  auth_users ||--o{ public_dental_photos : "user_id"
+  public_patient_consents ||--o{ public_dental_photos : "user_id,consent_id"

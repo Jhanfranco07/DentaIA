@@ -1,0 +1,69 @@
+{
+  "baseURL": "http://localhost:3002",
+  "backend": "Simulado; ninguna escritura real",
+  "resultados": [
+    {
+      "nombre": "Páginas públicas y funciones privadas restringidas sin sesión",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Teclado: enlace de salto y foco de validación de cuenta",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Tres muestras: selección, resultados fijos, regiones y descarga de PDF",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Contenido reconocido con nombre cambiado; imagen desconocida con nombre de muestra rechazada",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Directorio: búsqueda, vacío, limpiar filtros devuelve foco, perfil y solicitud preseleccionada",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Error del perfil sin detalles internos y recuperación de lista vacía",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Cuenta: inicio de sesión y perfil con proveedor simulado",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Fotografías: consentimiento, carga, visualización, revocación y borrado seguro con proveedor simulado",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Recorrido: demostración → reporte → directorio → perfil → solicitud → historial → cancelación simulada",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Cierre de sesión oculta datos privados",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Adaptación real de navegador a escritorio, tablet y móvil; menú y teclado",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    },
+    {
+      "nombre": "Sin errores de ejecución de React ni del proveedor simulado",
+      "tipo": "navegador real con backend simulado",
+      "resultado": "APROBADA"
+    }
+  ],
+  "erroresPagina": [],
+  "total": 12,
+  "aprobadas": 12
+}

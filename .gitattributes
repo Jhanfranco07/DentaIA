@@ -1,0 +1,5 @@
+# Los hashes documentales corresponden a bytes originales, incluidos CRLF/LF.
+docs/arquitectura/** -text whitespace=cr-at-eol
+docs/evidencias/arquitectura/** -text whitespace=cr-at-eol
+# Transcripción histórica literal de Jira: sus espacios Markdown se preservan.
+docs/evidencias/arquitectura/REQUISITOS_JIRA.md whitespace=cr-at-eol,-blank-at-eol

@@ -156,6 +156,175 @@ export type Database = {
         }
         Relationships: []
       }
+      dentist_public_locations: {
+        Row: {
+          clinic_id: string
+          created_at: string
+          dentist_id: string
+          id: string
+          latitude: number
+          longitude: number
+          practice_address: string
+          practice_location: string
+          practice_name: string
+          publication_status: string
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+          verification_reference: string | null
+        }
+        Insert: {
+          clinic_id: string
+          created_at?: string
+          dentist_id: string
+          id?: string
+          latitude: number
+          longitude: number
+          practice_address: string
+          practice_location?: never
+          practice_name: string
+          publication_status?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          verification_reference?: string | null
+        }
+        Update: {
+          clinic_id?: string
+          created_at?: string
+          dentist_id?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          practice_address?: string
+          practice_location?: never
+          practice_name?: string
+          publication_status?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          verification_reference?: string | null
+        }
+        Relationships: [
+          { foreignKeyName: "dentist_public_locations_dentist_id_fkey"; columns: ["dentist_id"]; isOneToOne: false; referencedRelation: "dentists"; referencedColumns: ["id"] },
+        ]
+      }
+      directory_demo_locations: {
+        Row: {
+          city: string
+          country: string
+          created_at: string
+          district: string
+          id: string
+          is_demo: boolean
+          is_published: boolean
+          latitude: number
+          longitude: number
+          name: string
+          public_label: string
+          requests_enabled: boolean
+          slug: string
+        }
+        Insert: {
+          city: string
+          country: string
+          created_at?: string
+          district: string
+          id?: string
+          is_demo?: boolean
+          is_published?: boolean
+          latitude: number
+          longitude: number
+          name: string
+          public_label: string
+          requests_enabled?: boolean
+          slug: string
+        }
+        Update: {
+          city?: string
+          country?: string
+          created_at?: string
+          district?: string
+          id?: string
+          is_demo?: boolean
+          is_published?: boolean
+          latitude?: number
+          longitude?: number
+          name?: string
+          public_label?: string
+          requests_enabled?: boolean
+          slug?: string
+        }
+        Relationships: []
+      }
+      dentist_reviews: {
+        Row: {
+          appointment_request_id: string
+          author_user_id: string
+          comment: string
+          created_at: string
+          dentist_id: string
+          id: string
+          moderation_status: string
+          rating: number
+        }
+        Insert: {
+          appointment_request_id: string
+          author_user_id?: string
+          comment: string
+          created_at?: string
+          dentist_id: string
+          id?: string
+          moderation_status?: string
+          rating: number
+        }
+        Update: {
+          appointment_request_id?: string
+          author_user_id?: string
+          comment?: string
+          created_at?: string
+          dentist_id?: string
+          id?: string
+          moderation_status?: string
+          rating?: number
+        }
+        Relationships: [
+          { foreignKeyName: "dentist_reviews_dentist_id_fkey"; columns: ["dentist_id"]; isOneToOne: false; referencedRelation: "dentists"; referencedColumns: ["id"] },
+          { foreignKeyName: "dentist_reviews_appointment_request_id_fkey"; columns: ["appointment_request_id"]; isOneToOne: true; referencedRelation: "appointment_requests"; referencedColumns: ["id"] },
+        ]
+      }
+      dentist_review_reports: {
+        Row: {
+          category: string
+          created_at: string
+          details: string
+          id: string
+          moderation_status: string
+          reporter_user_id: string
+          review_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          details?: string
+          id?: string
+          moderation_status?: string
+          reporter_user_id?: string
+          review_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          details?: string
+          id?: string
+          moderation_status?: string
+          reporter_user_id?: string
+          review_id?: string
+        }
+        Relationships: [
+          { foreignKeyName: "dentist_review_reports_review_id_fkey"; columns: ["review_id"]; isOneToOne: false; referencedRelation: "dentist_reviews"; referencedColumns: ["id"] },
+        ]
+      }
       patient_consents: {
         Row: {
           accepted_at: string
@@ -209,7 +378,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      dentaia_manage_clinic_membership_v1: {
+        Args: { p_request_id: string | null; p_operation: string; p_professional_id: string | null; p_clinic_id: string | null; p_membership_id: string | null }
+        Returns: Json
+      }
+      dentaia_gestionar_ubicacion_v1: {
+        Args: {
+          p_solicitud: string
+          p_operacion: string
+          p_ubicacion_id: string | null
+          p_dentist_id: string | null
+          p_clinic_id: string | null
+          p_practice_name: string | null
+          p_practice_address: string | null
+          p_latitude: number | null
+          p_longitude: number | null
+          p_verification_reference: string | null
+        }
+        Returns: Json
+      }
+      dentaia_moderate_reviews_v1: {
+        Args: { p_request_id: string | null; p_operation: string; p_review_id: string | null; p_report_id: string | null; p_status: string | null }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

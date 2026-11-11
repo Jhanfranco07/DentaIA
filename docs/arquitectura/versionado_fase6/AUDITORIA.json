@@ -1,0 +1,1360 @@
+{
+  "rama": "docs/auditoria-arquitectura-integral",
+  "headInicial": "c992a14229d1bc838166dae200559b9aa7f7428c",
+  "mainObservado": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+  "nuevosIniciales": 223,
+  "sinModificadosSeguidosAlInicio": true,
+  "excluidos": [],
+  "archivos": [
+    {
+      "path": "docs/arquitectura/ARQUITECTURA_FISICA.md",
+      "grupo": "1",
+      "sha256Inicial": "519ffe15ac84fb2a24fb64714ee0fe1a06bc0b842862fa5ec5383673619f1fbd",
+      "sha256Actual": "519ffe15ac84fb2a24fb64714ee0fe1a06bc0b842862fa5ec5383673619f1fbd"
+    },
+    {
+      "path": "docs/arquitectura/ARQUITECTURA_GENERAL.md",
+      "grupo": "1",
+      "sha256Inicial": "adcf90d9b816d34060f5264aee2a03f9c6fef7312ab0e5c762d516aa8bbb7da1",
+      "sha256Actual": "adcf90d9b816d34060f5264aee2a03f9c6fef7312ab0e5c762d516aa8bbb7da1"
+    },
+    {
+      "path": "docs/arquitectura/ARQUITECTURA_LOGICA.md",
+      "grupo": "1",
+      "sha256Inicial": "521325d4cc8852d01b54674af1a1127181af0e0a3d663d78ed7419dd754722a0",
+      "sha256Actual": "521325d4cc8852d01b54674af1a1127181af0e0a3d663d78ed7419dd754722a0"
+    },
+    {
+      "path": "docs/arquitectura/AUDITORIA_INTEGRAL.md",
+      "grupo": "1",
+      "sha256Inicial": "ecd62f2ae25c2ebe81cbfed012a0145019dc25c12150922b910e4eb9615a9c0e",
+      "sha256Actual": "ecd62f2ae25c2ebe81cbfed012a0145019dc25c12150922b910e4eb9615a9c0e"
+    },
+    {
+      "path": "docs/arquitectura/BRECHAS_Y_PLAN_IMPLEMENTACION.md",
+      "grupo": "1",
+      "sha256Inicial": "4ab73cc900167e7d9beedc8af51d5f11d96a3c03ea5da8b12e228b7b33a41241",
+      "sha256Actual": "4ab73cc900167e7d9beedc8af51d5f11d96a3c03ea5da8b12e228b7b33a41241"
+    },
+    {
+      "path": "docs/arquitectura/CAMBIOS_MODELO.md",
+      "grupo": "1",
+      "sha256Inicial": "e610d54798f64d1f612cd270c215dc42d800c706ce8a16a9da2f6784c3a11a30",
+      "sha256Actual": "e610d54798f64d1f612cd270c215dc42d800c706ce8a16a9da2f6784c3a11a30"
+    },
+    {
+      "path": "docs/arquitectura/CATALOGO_COMPLEMENTARIO_VERIFICADO.json",
+      "grupo": "1",
+      "sha256Inicial": "b4cb8fe1dfe107ef7d49cf6dbd6b906a4317f4d98c360f503529e17644a5aa8a",
+      "sha256Actual": "b4cb8fe1dfe107ef7d49cf6dbd6b906a4317f4d98c360f503529e17644a5aa8a"
+    },
+    {
+      "path": "docs/arquitectura/CATALOGO_GESTIONADO.md",
+      "grupo": "1",
+      "sha256Inicial": "8b581090d1261af5227184fcd565f5da93b834d9caa6162592a42a29f8da83d6",
+      "sha256Actual": "8b581090d1261af5227184fcd565f5da93b834d9caa6162592a42a29f8da83d6"
+    },
+    {
+      "path": "docs/arquitectura/DECISIONES_ARQUITECTURA.md",
+      "grupo": "1",
+      "sha256Inicial": "acbeb2511f94477735760c0f123bfee578cb5512af901d484901b3d45d851248",
+      "sha256Actual": "acbeb2511f94477735760c0f123bfee578cb5512af901d484901b3d45d851248"
+    },
+    {
+      "path": "docs/arquitectura/DIAGRAMAS.md",
+      "grupo": "1",
+      "sha256Inicial": "75108b94d4841715d0a444f60db087607d065496f9cd3ba7630c28edc3f540dd",
+      "sha256Actual": "75108b94d4841715d0a444f60db087607d065496f9cd3ba7630c28edc3f540dd"
+    },
+    {
+      "path": "docs/arquitectura/DICCIONARIO_DATOS.md",
+      "grupo": "1",
+      "sha256Inicial": "6d7ce7c564cf7d838bd0ae93984e51a397b9d9f1fa6f37203644a13b20d24b1f",
+      "sha256Actual": "6d7ce7c564cf7d838bd0ae93984e51a397b9d9f1fa6f37203644a13b20d24b1f"
+    },
+    {
+      "path": "docs/arquitectura/FUENTES_VERIFICADAS.json",
+      "grupo": "1",
+      "sha256Inicial": "de199f860e1b0017bce2820a24a12b2ce57b0748c0ffa8ae17ea0fae36511966",
+      "sha256Actual": "de199f860e1b0017bce2820a24a12b2ce57b0748c0ffa8ae17ea0fae36511966"
+    },
+    {
+      "path": "docs/arquitectura/FUENTES_Y_EVIDENCIAS.md",
+      "grupo": "1",
+      "sha256Inicial": "80a287c30fb00f0db1efe2966a8c48fbb1d2aceb8a171550aff24e7f188283e4",
+      "sha256Actual": "80a287c30fb00f0db1efe2966a8c48fbb1d2aceb8a171550aff24e7f188283e4"
+    },
+    {
+      "path": "docs/arquitectura/HALLAZGOS.json",
+      "grupo": "1",
+      "sha256Inicial": "4da66dc576d81cc5163c4bd221d5a3cbd3aad7119893187ff5fdd3d8ab42f91b",
+      "sha256Actual": "4da66dc576d81cc5163c4bd221d5a3cbd3aad7119893187ff5fdd3d8ab42f91b"
+    },
+    {
+      "path": "docs/arquitectura/INVENTARIO_SUPABASE.json",
+      "grupo": "1",
+      "sha256Inicial": "c608df5a64e41d572acd8c5164eff5c5f4973f5ee4e87456dd17c0199a2a27f8",
+      "sha256Actual": "c608df5a64e41d572acd8c5164eff5c5f4973f5ee4e87456dd17c0199a2a27f8"
+    },
+    {
+      "path": "docs/arquitectura/INVENTARIO_SUPABASE_VERIFICADO.json",
+      "grupo": "1",
+      "sha256Inicial": "e81813b7c86bd52d842c9d61cc65e29b1777e804538e17e03fb1d5b0d4fec0f8",
+      "sha256Actual": "e81813b7c86bd52d842c9d61cc65e29b1777e804538e17e03fb1d5b0d4fec0f8"
+    },
+    {
+      "path": "docs/arquitectura/MATRIZ_AUDITORIA_TABLAS.md",
+      "grupo": "1",
+      "sha256Inicial": "fb9709840f4e671e1f3d45c6e6be7b4661568fad6c00d15f5387c3251a305a71",
+      "sha256Actual": "fb9709840f4e671e1f3d45c6e6be7b4661568fad6c00d15f5387c3251a305a71"
+    },
+    {
+      "path": "docs/arquitectura/MODELO_CONCEPTUAL.md",
+      "grupo": "1",
+      "sha256Inicial": "42b888627189a7ee8d35a8a03c36659de1ed325971b9bb3a963d5daf0cff328c",
+      "sha256Actual": "42b888627189a7ee8d35a8a03c36659de1ed325971b9bb3a963d5daf0cff328c"
+    },
+    {
+      "path": "docs/arquitectura/MODELO_DATOS.json",
+      "grupo": "1",
+      "sha256Inicial": "49c07025d34f722e279997d574823351e8fbaee6f51a99af65e74d67e3af0a49",
+      "sha256Actual": "49c07025d34f722e279997d574823351e8fbaee6f51a99af65e74d67e3af0a49"
+    },
+    {
+      "path": "docs/arquitectura/MODELO_FISICO.md",
+      "grupo": "1",
+      "sha256Inicial": "09840bdbc039006c83dfcf9a63cd3824dd1c79ccf9bd094ac467d61098e8b65b",
+      "sha256Actual": "09840bdbc039006c83dfcf9a63cd3824dd1c79ccf9bd094ac467d61098e8b65b"
+    },
+    {
+      "path": "docs/arquitectura/MODELO_LOGICO.md",
+      "grupo": "1",
+      "sha256Inicial": "8949c8966877ac7d1fa42f31fa85a420cc5bc85dca164667851b91b60ecd6a03",
+      "sha256Actual": "8949c8966877ac7d1fa42f31fa85a420cc5bc85dca164667851b91b60ecd6a03"
+    },
+    {
+      "path": "docs/arquitectura/POLITICAS_POR_TABLA.md",
+      "grupo": "1",
+      "sha256Inicial": "354459b335bc566f9f519895bb7312c1d6ed8a74de981c926de65bb42854230b",
+      "sha256Actual": "354459b335bc566f9f519895bb7312c1d6ed8a74de981c926de65bb42854230b"
+    },
+    {
+      "path": "docs/arquitectura/PROTOCOLO_RPC_Y_CONCURRENCIA.md",
+      "grupo": "1",
+      "sha256Inicial": "a3a33e7d8a6d4708258640ee52bf597c43eb607a7f0e95a82f7e6aec4b49b37d",
+      "sha256Actual": "a3a33e7d8a6d4708258640ee52bf597c43eb607a7f0e95a82f7e6aec4b49b37d"
+    },
+    {
+      "path": "docs/arquitectura/REQUISITOS_JIRA.md",
+      "grupo": "1",
+      "sha256Inicial": "2b4cd409c632ebdf7cba92cb89271a584d0e0e19274f24b352573519e9e55ef4",
+      "sha256Actual": "30a9b06bc631165fae2203f2d1240453265b8678219a6a8afe29a0878a3ea5e8"
+    },
+    {
+      "path": "docs/arquitectura/REQUISITOS_JIRA_VERIFICADOS.json",
+      "grupo": "1",
+      "sha256Inicial": "e8917eefa507b44eec4d8fe807a70f8f79ca57b9a683fdc70ff0e986b14417ec",
+      "sha256Actual": "e8917eefa507b44eec4d8fe807a70f8f79ca57b9a683fdc70ff0e986b14417ec"
+    },
+    {
+      "path": "docs/arquitectura/SEGURIDAD_Y_ROLES.md",
+      "grupo": "1",
+      "sha256Inicial": "3214bd4bcf88e218f09caa0e3969591286df2038f8000eb03443c2a784720ada",
+      "sha256Actual": "3214bd4bcf88e218f09caa0e3969591286df2038f8000eb03443c2a784720ada"
+    },
+    {
+      "path": "docs/arquitectura/borradores_sql/05_ia_investigacion.sql",
+      "grupo": "1",
+      "sha256Inicial": "045ac6a52109779a3d42dde5aa56d62a227531d77a16c5d726386ddcee382f0e",
+      "sha256Actual": "045ac6a52109779a3d42dde5aa56d62a227531d77a16c5d726386ddcee382f0e"
+    },
+    {
+      "path": "docs/arquitectura/borradores_sql/06_ia_analisis.sql",
+      "grupo": "1",
+      "sha256Inicial": "bfb2cd70a5e0631be3a084bf7b57ddce906afe466d65b72d53f49253a4569079",
+      "sha256Actual": "bfb2cd70a5e0631be3a084bf7b57ddce906afe466d65b72d53f49253a4569079"
+    },
+    {
+      "path": "docs/arquitectura/borradores_sql/07_ia_integridad.sql",
+      "grupo": "1",
+      "sha256Inicial": "3388f091564c14e2d515a9b8e91ebd83ac47cbfb2b2738283e7e842c05968aff",
+      "sha256Actual": "3388f091564c14e2d515a9b8e91ebd83ac47cbfb2b2738283e7e842c05968aff"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/01-logica.mmd",
+      "grupo": "1",
+      "sha256Inicial": "bc86ea73f4e4595512bb03d42f6eaa5830dd2b528dfa8ce2f47846eb4862440e",
+      "sha256Actual": "bc86ea73f4e4595512bb03d42f6eaa5830dd2b528dfa8ce2f47846eb4862440e"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/02-fisica.mmd",
+      "grupo": "1",
+      "sha256Inicial": "52425df091dfcdaaee8bf4cf5addf1706ce4e94bd5f26334d13b51883a566b59",
+      "sha256Actual": "52425df091dfcdaaee8bf4cf5addf1706ce4e94bd5f26334d13b51883a566b59"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/03-componentes.mmd",
+      "grupo": "1",
+      "sha256Inicial": "aed8ed5588272044f8811aeb286ff13aafe7f67fffd5c98e917f1cc73815f7cb",
+      "sha256Actual": "aed8ed5588272044f8811aeb286ff13aafe7f67fffd5c98e917f1cc73815f7cb"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/04-der-general.mmd",
+      "grupo": "1",
+      "sha256Inicial": "6016b3dc4c657da7a7c87bea8af7e8111c34f3fc0526f0685a7b2ac51560799c",
+      "sha256Actual": "6016b3dc4c657da7a7c87bea8af7e8111c34f3fc0526f0685a7b2ac51560799c"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/05-der-administracion.mmd",
+      "grupo": "1",
+      "sha256Inicial": "16c0e70d3f361cd00dbb117bd4e578976fb0c786fd217326d5af9d642059b8b2",
+      "sha256Actual": "16c0e70d3f361cd00dbb117bd4e578976fb0c786fd217326d5af9d642059b8b2"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/06-der-paciente.mmd",
+      "grupo": "1",
+      "sha256Inicial": "1c9833da03af47702ef62a628528d6d5fe402804c56870a02b42f38233181c68",
+      "sha256Actual": "1c9833da03af47702ef62a628528d6d5fe402804c56870a02b42f38233181c68"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/07-der-clinico.mmd",
+      "grupo": "1",
+      "sha256Inicial": "239ccf0421bdc69fe3e5eedc0d23de6918fd3f3ba2f3bde3dd22752aec63a5ba",
+      "sha256Actual": "239ccf0421bdc69fe3e5eedc0d23de6918fd3f3ba2f3bde3dd22752aec63a5ba"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/08-der-ia.mmd",
+      "grupo": "1",
+      "sha256Inicial": "7ab4a726532310ceeb9287b891205334df212427faa690cd7b0ed4f9e590fd0e",
+      "sha256Actual": "7ab4a726532310ceeb9287b891205334df212427faa690cd7b0ed4f9e590fd0e"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/09-casos-uso.mmd",
+      "grupo": "1",
+      "sha256Inicial": "cf766c679460759c86550c876c58a54c425d8cec7f1ab24d6abf87251d2c7839",
+      "sha256Actual": "cf766c679460759c86550c876c58a54c425d8cec7f1ab24d6abf87251d2c7839"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/10-autenticacion.mmd",
+      "grupo": "1",
+      "sha256Inicial": "f1b56062d76ce176e6595158a31e931966229a0dd22ece4a98bc021f19b5f318",
+      "sha256Actual": "f1b56062d76ce176e6595158a31e931966229a0dd22ece4a98bc021f19b5f318"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/11-solicitudes.mmd",
+      "grupo": "1",
+      "sha256Inicial": "6d0d85b0974a9818310b413d530496ca395d8f548790ca7a49703fe7058d2c53",
+      "sha256Actual": "6d0d85b0974a9818310b413d530496ca395d8f548790ca7a49703fe7058d2c53"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/12-historial.mmd",
+      "grupo": "1",
+      "sha256Inicial": "9c6b1ce85f0c6fe3d5ec1b6327d8f29699cd369e56dfef786b9802d4ee100908",
+      "sha256Actual": "9c6b1ce85f0c6fe3d5ec1b6327d8f29699cd369e56dfef786b9802d4ee100908"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/13-permisos.mmd",
+      "grupo": "1",
+      "sha256Inicial": "1d927acb4db7f35afff3c4ee6f43503df020eaf35b56f6904dd5950701b8b514",
+      "sha256Actual": "1d927acb4db7f35afff3c4ee6f43503df020eaf35b56f6904dd5950701b8b514"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/14-roles.mmd",
+      "grupo": "1",
+      "sha256Inicial": "5e49af036d130b72e87cdab378d42a3fc8db32e4a539b4c12c58532fa2cb4a69",
+      "sha256Actual": "5e49af036d130b72e87cdab378d42a3fc8db32e4a539b4c12c58532fa2cb4a69"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/15-fotografias.mmd",
+      "grupo": "1",
+      "sha256Inicial": "d1933f395861e0ad43ccb57dcbe4c260fbcb4d6d32b912fc28aa0f2a19e7e153",
+      "sha256Actual": "d1933f395861e0ad43ccb57dcbe4c260fbcb4d6d32b912fc28aa0f2a19e7e153"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/16-despliegue.mmd",
+      "grupo": "1",
+      "sha256Inicial": "361b1eadd6ab1af1e6252fd62f2731f3dab1ffeef6b1213c8d3f4aaf0140a7ce",
+      "sha256Actual": "361b1eadd6ab1af1e6252fd62f2731f3dab1ffeef6b1213c8d3f4aaf0140a7ce"
+    },
+    {
+      "path": "docs/arquitectura/diagramas/17-cicd.mmd",
+      "grupo": "1",
+      "sha256Inicial": "1aeb35a8c0aa410cd990e309ef43ca95946ed8abee503ff72ca593dcb0b3644d",
+      "sha256Actual": "1aeb35a8c0aa410cd990e309ef43ca95946ed8abee503ff72ca593dcb0b3644d"
+    },
+    {
+      "path": "docs/arquitectura/herramientas/README.md",
+      "grupo": "1",
+      "sha256Inicial": "6b3c3977e756c2b8b0a2b0ad83ab318cf9cd6f15a9f8823374cb08b9e01850de",
+      "sha256Actual": "6b3c3977e756c2b8b0a2b0ad83ab318cf9cd6f15a9f8823374cb08b9e01850de"
+    },
+    {
+      "path": "docs/arquitectura/herramientas/actualizar_documentos.py",
+      "grupo": "1",
+      "sha256Inicial": "c08a81ab36bade4eb8bc189e9026587d607ac1dfd04395422e5bfd69586b4729",
+      "sha256Actual": "c08a81ab36bade4eb8bc189e9026587d607ac1dfd04395422e5bfd69586b4729"
+    },
+    {
+      "path": "docs/arquitectura/herramientas/actualizar_manifest.py",
+      "grupo": "1",
+      "sha256Inicial": "224badb2f49df39bb1488eaf68bed2a3eeb473dbb2316d6f57df25ce1d026bd4",
+      "sha256Actual": "224badb2f49df39bb1488eaf68bed2a3eeb473dbb2316d6f57df25ce1d026bd4"
+    },
+    {
+      "path": "docs/arquitectura/herramientas/cerrar_documentos.py",
+      "grupo": "1",
+      "sha256Inicial": "01188a410ec8427a32b50271306edd0eeeb8fee9ac56b5f45d23f10f0455ab37",
+      "sha256Actual": "01188a410ec8427a32b50271306edd0eeeb8fee9ac56b5f45d23f10f0455ab37"
+    },
+    {
+      "path": "docs/arquitectura/herramientas/generar_modelo.py",
+      "grupo": "1",
+      "sha256Inicial": "e0efcfda987926455de1cffd31aa7276c3bb7c776cdc1d089e4bfab26dd68829",
+      "sha256Actual": "e0efcfda987926455de1cffd31aa7276c3bb7c776cdc1d089e4bfab26dd68829"
+    },
+    {
+      "path": "docs/arquitectura/herramientas/registrar_cierre.py",
+      "grupo": "1",
+      "sha256Inicial": "16c711e5397a894743aff58bdd187a70f5253dc35aad804729da954f26e904eb",
+      "sha256Actual": "16c711e5397a894743aff58bdd187a70f5253dc35aad804729da954f26e904eb"
+    },
+    {
+      "path": "docs/arquitectura/herramientas/revisar_contratos.py",
+      "grupo": "1",
+      "sha256Inicial": "8afdce5f90b7510ef1cb0290fafb779f27da28bc84ea831d584d8163ccf49919",
+      "sha256Actual": "8afdce5f90b7510ef1cb0290fafb779f27da28bc84ea831d584d8163ccf49919"
+    },
+    {
+      "path": "docs/arquitectura/herramientas/validar_arquitectura.py",
+      "grupo": "1",
+      "sha256Inicial": "2581a6263a0e398b9477f350687c089ab4c5cf84bb4a096a442b7cfa170b6fa1",
+      "sha256Actual": "2581a6263a0e398b9477f350687c089ab4c5cf84bb4a096a442b7cfa170b6fa1"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/01-logica.svg",
+      "grupo": "1",
+      "sha256Inicial": "9f786042070ce3b0033b8b8bec3f40f6c9d6dfb0b83dff9ac2a6dd3aaa77971b",
+      "sha256Actual": "9f786042070ce3b0033b8b8bec3f40f6c9d6dfb0b83dff9ac2a6dd3aaa77971b"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/02-fisica.svg",
+      "grupo": "1",
+      "sha256Inicial": "757128a24ad006aa573d0881ce4d98089a5a4bf06e2e890e17770e731fe02b00",
+      "sha256Actual": "757128a24ad006aa573d0881ce4d98089a5a4bf06e2e890e17770e731fe02b00"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/03-componentes.svg",
+      "grupo": "1",
+      "sha256Inicial": "595dbec1186524c54623c14c47ca8e54e8cd956113a197550e4672a6f4106f6a",
+      "sha256Actual": "595dbec1186524c54623c14c47ca8e54e8cd956113a197550e4672a6f4106f6a"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/04-der-general.svg",
+      "grupo": "1",
+      "sha256Inicial": "75fbbafa381b034347f83c71e6ea907ee139cb9416ea2f7872e3f07a221c2048",
+      "sha256Actual": "75fbbafa381b034347f83c71e6ea907ee139cb9416ea2f7872e3f07a221c2048"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/05-der-administracion.svg",
+      "grupo": "1",
+      "sha256Inicial": "69b7beeb8d3253c3735287ee2298904c2b2bad1b16b4e94f77d81c5bc199161d",
+      "sha256Actual": "69b7beeb8d3253c3735287ee2298904c2b2bad1b16b4e94f77d81c5bc199161d"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/06-der-paciente.svg",
+      "grupo": "1",
+      "sha256Inicial": "bd6efc9a73a2ea47c4bc252c13860e178993fa2e7032f08a9ab41685d929321d",
+      "sha256Actual": "bd6efc9a73a2ea47c4bc252c13860e178993fa2e7032f08a9ab41685d929321d"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/07-der-clinico.svg",
+      "grupo": "1",
+      "sha256Inicial": "cc44e56272372bd1ae4f248d23eb88d6b99d4363a7453d4b3094f56c40ed4577",
+      "sha256Actual": "cc44e56272372bd1ae4f248d23eb88d6b99d4363a7453d4b3094f56c40ed4577"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/08-der-ia.svg",
+      "grupo": "1",
+      "sha256Inicial": "7baa971f0c8cd692ff372eadfddd9b6330eed405ff7d128b9cb6a238464c6a9f",
+      "sha256Actual": "7baa971f0c8cd692ff372eadfddd9b6330eed405ff7d128b9cb6a238464c6a9f"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/09-casos-uso.svg",
+      "grupo": "1",
+      "sha256Inicial": "091c5d75820abfba0a414967bde35623b5e3b48cbfad90fa8021a8e80d34e53c",
+      "sha256Actual": "091c5d75820abfba0a414967bde35623b5e3b48cbfad90fa8021a8e80d34e53c"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/10-autenticacion.svg",
+      "grupo": "1",
+      "sha256Inicial": "77155f9346e21855596d0bc70e2ee6af8c4fe6a86f467399243a5a7d3a2269eb",
+      "sha256Actual": "77155f9346e21855596d0bc70e2ee6af8c4fe6a86f467399243a5a7d3a2269eb"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/11-solicitudes.svg",
+      "grupo": "1",
+      "sha256Inicial": "ebd74e21e7615a4a6658152ef3adffe7520d8aa426d523088eb88ddbd3f7c4fa",
+      "sha256Actual": "ebd74e21e7615a4a6658152ef3adffe7520d8aa426d523088eb88ddbd3f7c4fa"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/12-historial.svg",
+      "grupo": "1",
+      "sha256Inicial": "e14061264d60893dc18bf236ac3a60d8e9e2dcd6650a55abe57abf60a631e4ff",
+      "sha256Actual": "e14061264d60893dc18bf236ac3a60d8e9e2dcd6650a55abe57abf60a631e4ff"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/13-permisos.svg",
+      "grupo": "1",
+      "sha256Inicial": "5f21474651267a1b604b2db707b70c1172e1db1432223e12ac274ee2f781bec7",
+      "sha256Actual": "5f21474651267a1b604b2db707b70c1172e1db1432223e12ac274ee2f781bec7"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/14-roles.svg",
+      "grupo": "1",
+      "sha256Inicial": "049d995a83fbc5d08aa6f00b8ac8b234a151e3db90591ab38a1ff74e79ab8228",
+      "sha256Actual": "049d995a83fbc5d08aa6f00b8ac8b234a151e3db90591ab38a1ff74e79ab8228"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/15-fotografias.svg",
+      "grupo": "1",
+      "sha256Inicial": "18f31c8b5a23ba299841bd0cdc6c8559d9b1569b2023429c4d582cacbc0933c2",
+      "sha256Actual": "18f31c8b5a23ba299841bd0cdc6c8559d9b1569b2023429c4d582cacbc0933c2"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/16-despliegue.svg",
+      "grupo": "1",
+      "sha256Inicial": "94a8dd6fe0357d8d14f346b507e497a7ac422dfc38fab73b7bd455925a169dcd",
+      "sha256Actual": "94a8dd6fe0357d8d14f346b507e497a7ac422dfc38fab73b7bd455925a169dcd"
+    },
+    {
+      "path": "docs/arquitectura/renderizados/17-cicd.svg",
+      "grupo": "1",
+      "sha256Inicial": "b453327f8575652ec540b4baf3968ee4f1b0223866567e623b263d28d9fd50aa",
+      "sha256Actual": "b453327f8575652ec540b4baf3968ee4f1b0223866567e623b263d28d9fd50aa"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/ARQUITECTURA_FISICA.md",
+      "grupo": "1",
+      "sha256Inicial": "4543bf9d223f8d16e1e558c4532ab603c1e6d907d12d69b97854cbaff1d71633",
+      "sha256Actual": "4543bf9d223f8d16e1e558c4532ab603c1e6d907d12d69b97854cbaff1d71633"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/ARQUITECTURA_GENERAL.md",
+      "grupo": "1",
+      "sha256Inicial": "ae010d4468d8b330af623622bd6f23b1a84462b85a7fa5a17e26a25be5fea54f",
+      "sha256Actual": "ae010d4468d8b330af623622bd6f23b1a84462b85a7fa5a17e26a25be5fea54f"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/ARQUITECTURA_LOGICA.md",
+      "grupo": "1",
+      "sha256Inicial": "4f30336b39b91c9d4610f1e8ff18f96461e11794148071365056c9bdf984ade2",
+      "sha256Actual": "4f30336b39b91c9d4610f1e8ff18f96461e11794148071365056c9bdf984ade2"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/BRECHAS_Y_PLAN_IMPLEMENTACION.md",
+      "grupo": "1",
+      "sha256Inicial": "a26343c56650c85301b6f3ec9677dce56e93c5140794dc140684d16d41464810",
+      "sha256Actual": "a26343c56650c85301b6f3ec9677dce56e93c5140794dc140684d16d41464810"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/CATALOGO_GESTIONADO.md",
+      "grupo": "1",
+      "sha256Inicial": "8b581090d1261af5227184fcd565f5da93b834d9caa6162592a42a29f8da83d6",
+      "sha256Actual": "8b581090d1261af5227184fcd565f5da93b834d9caa6162592a42a29f8da83d6"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/CONTRATOS_API.md",
+      "grupo": "1",
+      "sha256Inicial": "4cc714c4dc4e6820f70c1412f037181196cf20a11138fc65d35949fbd56003fa",
+      "sha256Actual": "4cc714c4dc4e6820f70c1412f037181196cf20a11138fc65d35949fbd56003fa"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/DECISIONES_ARQUITECTURA.md",
+      "grupo": "1",
+      "sha256Inicial": "9b637107b5b27761a41692a66ad34aa2987c8ee830637923fbc4de9904b8249d",
+      "sha256Actual": "9b637107b5b27761a41692a66ad34aa2987c8ee830637923fbc4de9904b8249d"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/DIAGRAMAS.md",
+      "grupo": "1",
+      "sha256Inicial": "179a1829cd4e5526c01a2040ec95b5bea19f997ca0a39a8526292ce6cc7d1158",
+      "sha256Actual": "179a1829cd4e5526c01a2040ec95b5bea19f997ca0a39a8526292ce6cc7d1158"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/DICCIONARIO_DATOS.md",
+      "grupo": "1",
+      "sha256Inicial": "c83e75a28b84223475f5436fca766c9b22c9acfd004cbbcb3833991b0f4ef685",
+      "sha256Actual": "c83e75a28b84223475f5436fca766c9b22c9acfd004cbbcb3833991b0f4ef685"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/FUENTES_Y_EVIDENCIAS.md",
+      "grupo": "1",
+      "sha256Inicial": "cfe6a71ec0de6ca950a8fbdf29ac688679e981b849900fbaac55178d3ba4c550",
+      "sha256Actual": "cfe6a71ec0de6ca950a8fbdf29ac688679e981b849900fbaac55178d3ba4c550"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/INVENTARIO_SUPABASE.json",
+      "grupo": "1",
+      "sha256Inicial": "c608df5a64e41d572acd8c5164eff5c5f4973f5ee4e87456dd17c0199a2a27f8",
+      "sha256Actual": "c608df5a64e41d572acd8c5164eff5c5f4973f5ee4e87456dd17c0199a2a27f8"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/MANIFEST_SHA256.json",
+      "grupo": "1",
+      "sha256Inicial": "e7b7cf46ea06935f9c6358e4e0d40a3be5b60e577cc703c5491cb45abb6e8a52",
+      "sha256Actual": "e7b7cf46ea06935f9c6358e4e0d40a3be5b60e577cc703c5491cb45abb6e8a52"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/MODELO_CONCEPTUAL.md",
+      "grupo": "1",
+      "sha256Inicial": "013a0f103bd8dd3d4b1a472d377ca0f3564016e01e65fe56efe6c58679a57614",
+      "sha256Actual": "013a0f103bd8dd3d4b1a472d377ca0f3564016e01e65fe56efe6c58679a57614"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/MODELO_DATOS.json",
+      "grupo": "1",
+      "sha256Inicial": "ad1c79569aa732027e3d906a6a2818585acbe0ce3d8613ef07745ca3513c1114",
+      "sha256Actual": "ad1c79569aa732027e3d906a6a2818585acbe0ce3d8613ef07745ca3513c1114"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/MODELO_FISICO.md",
+      "grupo": "1",
+      "sha256Inicial": "77800a2e6796940a6701198f402bf48abdf2a6e8ba4924e0da76a82b88e62857",
+      "sha256Actual": "77800a2e6796940a6701198f402bf48abdf2a6e8ba4924e0da76a82b88e62857"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/MODELO_LOGICO.md",
+      "grupo": "1",
+      "sha256Inicial": "00bf0865614d1a95d4aea7c395ab7cbb1e34fc0d1c65bc6d64d39d59ad9aef77",
+      "sha256Actual": "00bf0865614d1a95d4aea7c395ab7cbb1e34fc0d1c65bc6d64d39d59ad9aef77"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/POLITICAS_POR_TABLA.md",
+      "grupo": "1",
+      "sha256Inicial": "3bf4380d9e0f132e7be363fe2a3d470ff0172af84ab5bd8c15074f2bfe3cd9b8",
+      "sha256Actual": "3bf4380d9e0f132e7be363fe2a3d470ff0172af84ab5bd8c15074f2bfe3cd9b8"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/README.md",
+      "grupo": "1",
+      "sha256Inicial": "8d65190b2d3483a58b5fdd6753be43e8065a434fc9614e964bd1ad35a9bf6f4d",
+      "sha256Actual": "8d65190b2d3483a58b5fdd6753be43e8065a434fc9614e964bd1ad35a9bf6f4d"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/REQUISITOS_JIRA.md",
+      "grupo": "1",
+      "sha256Inicial": "2b4cd409c632ebdf7cba92cb89271a584d0e0e19274f24b352573519e9e55ef4",
+      "sha256Actual": "2b4cd409c632ebdf7cba92cb89271a584d0e0e19274f24b352573519e9e55ef4"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/SEGURIDAD_Y_ROLES.md",
+      "grupo": "1",
+      "sha256Inicial": "0f99c1311c248186e83a979586e9db0bd5a6e5e8ab7d5eea2da12203bcc29cf1",
+      "sha256Actual": "0f99c1311c248186e83a979586e9db0bd5a6e5e8ab7d5eea2da12203bcc29cf1"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/VALIDACION_CONSISTENCIA.md",
+      "grupo": "1",
+      "sha256Inicial": "744e09b4a9c5b922d0ffc839d6ccd6e424d119a3ce5c34120b88aa3b84239548",
+      "sha256Actual": "744e09b4a9c5b922d0ffc839d6ccd6e424d119a3ce5c34120b88aa3b84239548"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/01-logica.mmd",
+      "grupo": "1",
+      "sha256Inicial": "869c867e5782f8e6cc55f811af41955600ddb43839582957b14971d8db07ae77",
+      "sha256Actual": "869c867e5782f8e6cc55f811af41955600ddb43839582957b14971d8db07ae77"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/02-fisica.mmd",
+      "grupo": "1",
+      "sha256Inicial": "52425df091dfcdaaee8bf4cf5addf1706ce4e94bd5f26334d13b51883a566b59",
+      "sha256Actual": "52425df091dfcdaaee8bf4cf5addf1706ce4e94bd5f26334d13b51883a566b59"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/03-componentes.mmd",
+      "grupo": "1",
+      "sha256Inicial": "aed8ed5588272044f8811aeb286ff13aafe7f67fffd5c98e917f1cc73815f7cb",
+      "sha256Actual": "aed8ed5588272044f8811aeb286ff13aafe7f67fffd5c98e917f1cc73815f7cb"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/04-der-general.mmd",
+      "grupo": "1",
+      "sha256Inicial": "4861044e87525c7e7d33f5e308acaa2ce786387ac02fe59c6e91950df1477e03",
+      "sha256Actual": "4861044e87525c7e7d33f5e308acaa2ce786387ac02fe59c6e91950df1477e03"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/05-der-administracion.mmd",
+      "grupo": "1",
+      "sha256Inicial": "68fa633524064ea525f57f0161694bc38e2eb2e3b29cb48f2a68eced4f249586",
+      "sha256Actual": "68fa633524064ea525f57f0161694bc38e2eb2e3b29cb48f2a68eced4f249586"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/06-der-paciente.mmd",
+      "grupo": "1",
+      "sha256Inicial": "45a00d96aa037d34e431387111edc9d04ec7c14f31e23c9193efe80ba9144b9c",
+      "sha256Actual": "45a00d96aa037d34e431387111edc9d04ec7c14f31e23c9193efe80ba9144b9c"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/07-der-clinico.mmd",
+      "grupo": "1",
+      "sha256Inicial": "df133813f9289e3fca9515f6fcc3af6e1ac1d2d541c7cf6005751efeefea2614",
+      "sha256Actual": "df133813f9289e3fca9515f6fcc3af6e1ac1d2d541c7cf6005751efeefea2614"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/08-der-ia.mmd",
+      "grupo": "1",
+      "sha256Inicial": "d5b62966ce805ee18f8215730db732b9b0e40030901dfc46507643827dbd3b3b",
+      "sha256Actual": "d5b62966ce805ee18f8215730db732b9b0e40030901dfc46507643827dbd3b3b"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/09-casos-uso.mmd",
+      "grupo": "1",
+      "sha256Inicial": "cf766c679460759c86550c876c58a54c425d8cec7f1ab24d6abf87251d2c7839",
+      "sha256Actual": "cf766c679460759c86550c876c58a54c425d8cec7f1ab24d6abf87251d2c7839"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/10-autenticacion.mmd",
+      "grupo": "1",
+      "sha256Inicial": "d50473e31c5ac44429e93751181703ad08acb5c09392e92fc8cabb7bcae32bf8",
+      "sha256Actual": "d50473e31c5ac44429e93751181703ad08acb5c09392e92fc8cabb7bcae32bf8"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/11-solicitudes.mmd",
+      "grupo": "1",
+      "sha256Inicial": "a40887e0660b9bb36543806ea89e0a453838488cf798650c19041921b2a62c00",
+      "sha256Actual": "a40887e0660b9bb36543806ea89e0a453838488cf798650c19041921b2a62c00"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/12-historial.mmd",
+      "grupo": "1",
+      "sha256Inicial": "05cc045f62b537d26f6bd18105c68e89ef3e33c962f7463207ccb921cdaee7b9",
+      "sha256Actual": "05cc045f62b537d26f6bd18105c68e89ef3e33c962f7463207ccb921cdaee7b9"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/13-permisos.mmd",
+      "grupo": "1",
+      "sha256Inicial": "864c4b5c94ccb844f8656f8d18e61b7e94f46aa2d47e59fa31e014e144845cca",
+      "sha256Actual": "864c4b5c94ccb844f8656f8d18e61b7e94f46aa2d47e59fa31e014e144845cca"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/14-roles.mmd",
+      "grupo": "1",
+      "sha256Inicial": "7214529d9e35bde1fdc512edb92d51e07a1a52c3c4339aaf245f4ddb9a0e4c2d",
+      "sha256Actual": "7214529d9e35bde1fdc512edb92d51e07a1a52c3c4339aaf245f4ddb9a0e4c2d"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/15-fotografias.mmd",
+      "grupo": "1",
+      "sha256Inicial": "833eb7386b4bc19e657a3f3157f6413b7042e635c33b977aa008c159233da62a",
+      "sha256Actual": "833eb7386b4bc19e657a3f3157f6413b7042e635c33b977aa008c159233da62a"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/16-despliegue.mmd",
+      "grupo": "1",
+      "sha256Inicial": "361b1eadd6ab1af1e6252fd62f2731f3dab1ffeef6b1213c8d3f4aaf0140a7ce",
+      "sha256Actual": "361b1eadd6ab1af1e6252fd62f2731f3dab1ffeef6b1213c8d3f4aaf0140a7ce"
+    },
+    {
+      "path": "docs/evidencias/arquitectura/diagramas/17-cicd.mmd",
+      "grupo": "1",
+      "sha256Inicial": "1aeb35a8c0aa410cd990e309ef43ca95946ed8abee503ff72ca593dcb0b3644d",
+      "sha256Actual": "1aeb35a8c0aa410cd990e309ef43ca95946ed8abee503ff72ca593dcb0b3644d"
+    },
+    {
+      "path": ".gitattributes",
+      "grupo": "1",
+      "sha256Inicial": null,
+      "sha256Actual": "68d26cbcb0567486bd4cfabeff279d3ddf37aa9ab96c94b61023e233d749b687"
+    },
+    {
+      "path": "docs/arquitectura/borradores_sql/01_clinical_identidad.sql",
+      "grupo": "2",
+      "sha256Inicial": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799",
+      "sha256Actual": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799"
+    },
+    {
+      "path": "docs/arquitectura/borradores_sql/02_clinical_contenido.sql",
+      "grupo": "2",
+      "sha256Inicial": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99",
+      "sha256Actual": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99"
+    },
+    {
+      "path": "docs/arquitectura/borradores_sql/03_clinical_permisos_auditoria.sql",
+      "grupo": "2",
+      "sha256Inicial": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e",
+      "sha256Actual": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e"
+    },
+    {
+      "path": "docs/arquitectura/borradores_sql/04_clinical_integridad.sql",
+      "grupo": "2",
+      "sha256Inicial": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb",
+      "sha256Actual": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb"
+    },
+    {
+      "path": "docs/arquitectura/borradores_sql/README.md",
+      "grupo": "2",
+      "sha256Inicial": "f81ded82f38638e42ae5314d22279dccebd29b3385112c8edba38cdce45ae716",
+      "sha256Actual": "f81ded82f38638e42ae5314d22279dccebd29b3385112c8edba38cdce45ae716"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/CATALOGO_VALIDADO.json",
+      "grupo": "2",
+      "sha256Inicial": "78880feba653da095c282ba4637869646afa2a7437e06e36875390548ac7fd1c",
+      "sha256Actual": "78880feba653da095c282ba4637869646afa2a7437e06e36875390548ac7fd1c"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/ENTORNO.json",
+      "grupo": "2",
+      "sha256Inicial": "1e90f17009ac29591b58a0094c0fa343a1169ab219908d0d51109394b9ec8da9",
+      "sha256Actual": "1e90f17009ac29591b58a0094c0fa343a1169ab219908d0d51109394b9ec8da9"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/FUENTES_INICIALES.json",
+      "grupo": "2",
+      "sha256Inicial": "bc8931956db23af6270128ac3e50d292c117e6cf93b549459eedd066298cd96d",
+      "sha256Actual": "bc8931956db23af6270128ac3e50d292c117e6cf93b549459eedd066298cd96d"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/INTENTOS.json",
+      "grupo": "2",
+      "sha256Inicial": "3396899f29a25fcb4a1e3161cbd81f860feb61ccf532afe9947712c30e6f25b3",
+      "sha256Actual": "3396899f29a25fcb4a1e3161cbd81f860feb61ccf532afe9947712c30e6f25b3"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/README.md",
+      "grupo": "2",
+      "sha256Inicial": "f5ee9be5ac17f64ee6457c29811c7ac7418e5652e8b66684581199f5187bc4a3",
+      "sha256Actual": "f5ee9be5ac17f64ee6457c29811c7ac7418e5652e8b66684581199f5187bc4a3"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/RESULTADOS.json",
+      "grupo": "2",
+      "sha256Inicial": "363f44ced0b566765514c3da156b6b552530e696edff04d7adf3bae6c85f23c8",
+      "sha256Actual": "363f44ced0b566765514c3da156b6b552530e696edff04d7adf3bae6c85f23c8"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/admin_adaptado_qa.sql",
+      "grupo": "2",
+      "sha256Inicial": "9ad3eb6554cd5846c238fa2f0f5b7144a7a6a6ccf23769ab893b2444708e1aaa",
+      "sha256Actual": "9ad3eb6554cd5846c238fa2f0f5b7144a7a6a6ccf23769ab893b2444708e1aaa"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/admin_ultimo_qa.sql",
+      "grupo": "2",
+      "sha256Inicial": "513dd8ef78732ff83de917f599a0638aaef5d8de6bc7da3472042ebab4467bfd",
+      "sha256Actual": "513dd8ef78732ff83de917f599a0638aaef5d8de6bc7da3472042ebab4467bfd"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/casos.json",
+      "grupo": "2",
+      "sha256Inicial": "497e9289bf2573b2a60eee5f3289d108d8bf2b0fc72b5ba6de83994c0cfe2d40",
+      "sha256Actual": "497e9289bf2573b2a60eee5f3289d108d8bf2b0fc72b5ba6de83994c0cfe2d40"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/casos_prototipo.json",
+      "grupo": "2",
+      "sha256Inicial": "a01597ab06233b49393b4d67552f0233a798c42b4c05cca92a8bbda929d8b652",
+      "sha256Actual": "a01597ab06233b49393b4d67552f0233a798c42b4c05cca92a8bbda929d8b652"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/concurrencia.py",
+      "grupo": "2",
+      "sha256Inicial": "200a7aa185b22a3e46ed989b1a596ac54b9af13d87bc463ba03ff3ca82ff4256",
+      "sha256Actual": "200a7aa185b22a3e46ed989b1a596ac54b9af13d87bc463ba03ff3ca82ff4256"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/ejecutar.py",
+      "grupo": "2",
+      "sha256Inicial": "8caf08bf0e2fee21e944c2cf8204fa915fb15b8b91d22a62e9b36dff24edb4d5",
+      "sha256Actual": "8caf08bf0e2fee21e944c2cf8204fa915fb15b8b91d22a62e9b36dff24edb4d5"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/fixtures.sql",
+      "grupo": "2",
+      "sha256Inicial": "282e4f99d8d5c845ff13989d9509596cba28980fef132e01ab84e59f1c80a553",
+      "sha256Actual": "282e4f99d8d5c845ff13989d9509596cba28980fef132e01ab84e59f1c80a553"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/generar_casos.py",
+      "grupo": "2",
+      "sha256Inicial": "89638245a2ce6845fb33c252fffacd531b259fb78ebb7ce74c95ebad184a058c",
+      "sha256Actual": "89638245a2ce6845fb33c252fffacd531b259fb78ebb7ce74c95ebad184a058c"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/generar_prototipo.py",
+      "grupo": "2",
+      "sha256Inicial": "532ba4aacee62fe629efbf2ed0b55a49e95364689f3f21537fcce2d662f59bc3",
+      "sha256Actual": "532ba4aacee62fe629efbf2ed0b55a49e95364689f3f21537fcce2d662f59bc3"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/prototipo_auditado_qa.sql",
+      "grupo": "2",
+      "sha256Inicial": "7867acfdc324ed36d9f7fb5d44250d5b4ebbda0b87c3ae4b66b2e3b97704c6f3",
+      "sha256Actual": "7867acfdc324ed36d9f7fb5d44250d5b4ebbda0b87c3ae4b66b2e3b97704c6f3"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/redactar_informe.py",
+      "grupo": "2",
+      "sha256Inicial": "162128812d41b83867c4160520d230e04eb6291d54309e491e28ef1c82f8feb7",
+      "sha256Actual": "162128812d41b83867c4160520d230e04eb6291d54309e491e28ef1c82f8feb7"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/registrar_entorno.py",
+      "grupo": "2",
+      "sha256Inicial": "3a0ae300bb769c8a16ac4c22930c93d3097dc0ac4160ffda9008c3ab4c30ad77",
+      "sha256Actual": "3a0ae300bb769c8a16ac4c22930c93d3097dc0ac4160ffda9008c3ab4c30ad77"
+    },
+    {
+      "path": "docs/arquitectura/pruebas_sql/validar_catalogo_completo.py",
+      "grupo": "2",
+      "sha256Inicial": "f326c1da5b9e18e28ed2bf2a98b375f243747237b1eee0216bf894e816375026",
+      "sha256Actual": "f326c1da5b9e18e28ed2bf2a98b375f243747237b1eee0216bf894e816375026"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/20261103195335_di36_servicios_comunes_mvp.sql",
+      "grupo": "3",
+      "sha256Inicial": "feb7c8b3ca63ec552a1a5d6bfb21c939f21456b2981679dcee82b8ed27ce3f1d",
+      "sha256Actual": "feb7c8b3ca63ec552a1a5d6bfb21c939f21456b2981679dcee82b8ed27ce3f1d"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/CONTRATOS_RPC.json",
+      "grupo": "3",
+      "sha256Inicial": "f31584a11cff7e950dd25a12b493d8c8271495a2b6f7f1f20785a77f495a1be4",
+      "sha256Actual": "f31584a11cff7e950dd25a12b493d8c8271495a2b6f7f1f20785a77f495a1be4"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/FUENTES_PREVIAS.json",
+      "grupo": "3",
+      "sha256Inicial": "22ff64a55183edbb8b412b308d03c05f2e7ad223b4e59df020363332aed7181f",
+      "sha256Actual": "22ff64a55183edbb8b412b308d03c05f2e7ad223b4e59df020363332aed7181f"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/PRESERVACION.json",
+      "grupo": "3",
+      "sha256Inicial": "2c1ee13069916fe9d825cf3ed5082538b25a59b88412423d469d4110afe92de4",
+      "sha256Actual": "2c1ee13069916fe9d825cf3ed5082538b25a59b88412423d469d4110afe92de4"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/README.md",
+      "grupo": "3",
+      "sha256Inicial": "c511f69159a2a3e0735f0d0ea5016effa00eba56f3e1954ec6c49ffc2ded0075",
+      "sha256Actual": "c511f69159a2a3e0735f0d0ea5016effa00eba56f3e1954ec6c49ffc2ded0075"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/pruebas/CATALOGO_RPC.json",
+      "grupo": "3",
+      "sha256Inicial": "ea3edb7d31a5af22b1ddbb3180fffa82a3d826145f65afddb9f21db5c92e184b",
+      "sha256Actual": "ea3edb7d31a5af22b1ddbb3180fffa82a3d826145f65afddb9f21db5c92e184b"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/pruebas/INTENTOS.json",
+      "grupo": "3",
+      "sha256Inicial": "a9b8220b0bf2e87ab65c033b11d5710e6ddadeaf3486446c4c7711b2a0bd7a07",
+      "sha256Actual": "a9b8220b0bf2e87ab65c033b11d5710e6ddadeaf3486446c4c7711b2a0bd7a07"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/pruebas/RESULTADOS.json",
+      "grupo": "3",
+      "sha256Inicial": "63d16a19e08205ee14df96e0c4e378f75d5017cbcf72886c1d3e94d8bf3c6c7b",
+      "sha256Actual": "63d16a19e08205ee14df96e0c4e378f75d5017cbcf72886c1d3e94d8bf3c6c7b"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/pruebas/casos.json",
+      "grupo": "3",
+      "sha256Inicial": "034a6060648ff481ce1c2e0e902256958d4b4e60557e4d47f4a41aa92b7b7f7e",
+      "sha256Actual": "034a6060648ff481ce1c2e0e902256958d4b4e60557e4d47f4a41aa92b7b7f7e"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/pruebas/catalogo.py",
+      "grupo": "3",
+      "sha256Inicial": "27affa1e70fb8b5e9f8261befb04bb66188a7a87f7588a8928a81cf6d2342b4e",
+      "sha256Actual": "27affa1e70fb8b5e9f8261befb04bb66188a7a87f7588a8928a81cf6d2342b4e"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/pruebas/concurrencia.py",
+      "grupo": "3",
+      "sha256Inicial": "47e353decd9b22fca3c797fba35348d41bf7ea420e45f70d5d28f462789c90fb",
+      "sha256Actual": "47e353decd9b22fca3c797fba35348d41bf7ea420e45f70d5d28f462789c90fb"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/pruebas/ejecutar.py",
+      "grupo": "3",
+      "sha256Inicial": "b1cc3533372e6a2c22c98562ff20e21cd577d9b316f5b3a973e281fb87dd0141",
+      "sha256Actual": "b1cc3533372e6a2c22c98562ff20e21cd577d9b316f5b3a973e281fb87dd0141"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/pruebas/fixtures.sql",
+      "grupo": "3",
+      "sha256Inicial": "62509d920271b0a1a22cf8eb0b2cd2b0ba9315836475a3ab35fda128b2e03a96",
+      "sha256Actual": "62509d920271b0a1a22cf8eb0b2cd2b0ba9315836475a3ab35fda128b2e03a96"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/pruebas/generar_casos.py",
+      "grupo": "3",
+      "sha256Inicial": "cb93302de855ba7548fb095ae6d86ca2d335e91e2b37b843e14ca16386f5fae2",
+      "sha256Actual": "cb93302de855ba7548fb095ae6d86ca2d335e91e2b37b843e14ca16386f5fae2"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/sql/08_identidad_y_privilegios.sql",
+      "grupo": "3",
+      "sha256Inicial": "f7ccfa0e4f4a892d4cdcaac430926924143059c0ea370a56e64af62a82a65713",
+      "sha256Actual": "f7ccfa0e4f4a892d4cdcaac430926924143059c0ea370a56e64af62a82a65713"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/sql/09_autorizaciones.sql",
+      "grupo": "3",
+      "sha256Inicial": "28d6730ce747dcc9051d3e9b114978ec33e3de37b0716a74ef0f141dd4650cc1",
+      "sha256Actual": "28d6730ce747dcc9051d3e9b114978ec33e3de37b0716a74ef0f141dd4650cc1"
+    },
+    {
+      "path": "docs/arquitectura/servicios_clinicos/sql/10_historial_autorizado.sql",
+      "grupo": "3",
+      "sha256Inicial": "a25dc18c571d9728ba67e5ec798b6e622e1542464743c51a828e4142ede0f33b",
+      "sha256Actual": "a25dc18c571d9728ba67e5ec798b6e622e1542464743c51a828e4142ede0f33b"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/ENTORNO_VALIDADO.json",
+      "grupo": "4",
+      "sha256Inicial": "5ba4d6f87961fc476e26b69d4339fb4a0a336c060b391a08ed3bf792474989bf",
+      "sha256Actual": "5ba4d6f87961fc476e26b69d4339fb4a0a336c060b391a08ed3bf792474989bf"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/FUENTES_PREVIAS.json",
+      "grupo": "4",
+      "sha256Inicial": "3b25b3952171e01a83cfd8e269a455c88b9a5544af38346b8c0df13a5ef0de95",
+      "sha256Actual": "3b25b3952171e01a83cfd8e269a455c88b9a5544af38346b8c0df13a5ef0de95"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/INTENTOS.json",
+      "grupo": "4",
+      "sha256Inicial": "9c5fc8e84d32f6b05a520977ef5e8a1dab83b094916ebda772868d4d5d3af262",
+      "sha256Actual": "9c5fc8e84d32f6b05a520977ef5e8a1dab83b094916ebda772868d4d5d3af262"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/PRESERVACION.json",
+      "grupo": "4",
+      "sha256Inicial": "7730a6d347bbeea3bf0d925a240dfc5e5dd7b748b0e4f2dd45eed5058b0490cc",
+      "sha256Actual": "7730a6d347bbeea3bf0d925a240dfc5e5dd7b748b0e4f2dd45eed5058b0490cc"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/PRODUCCION_CERRADA.json",
+      "grupo": "4",
+      "sha256Inicial": "14feb115b31154138151df757a5f20d6cd09cf9c31f9ac2536ea7773b8e57bcd",
+      "sha256Actual": "14feb115b31154138151df757a5f20d6cd09cf9c31f9ac2536ea7773b8e57bcd"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/README.md",
+      "grupo": "4",
+      "sha256Inicial": "b07c5318698a3f833eaa8b711d5e548128dc9a19f158f224e3f7445a3315851d",
+      "sha256Actual": "b07c5318698a3f833eaa8b711d5e548128dc9a19f158f224e3f7445a3315851d"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/RESULTADOS.json",
+      "grupo": "4",
+      "sha256Inicial": "40e3119cab1ec5f387cb53dda1c1737eaf9ac10fb9e6ee304f0055c39207040a",
+      "sha256Actual": "40e3119cab1ec5f387cb53dda1c1737eaf9ac10fb9e6ee304f0055c39207040a"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/actualizar_contratos.py",
+      "grupo": "4",
+      "sha256Inicial": "2064adcfca916e7cd846ce74cda7abf02f15ed4571d7c2dd6261e014151f848a",
+      "sha256Actual": "2064adcfca916e7cd846ce74cda7abf02f15ed4571d7c2dd6261e014151f848a"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/ejecutar.mjs",
+      "grupo": "4",
+      "sha256Inicial": "ceab69f28b9db8b56114b4ccf44cddcca34ff39fba1b1298d707340fa11f3af6",
+      "sha256Actual": "ceab69f28b9db8b56114b4ccf44cddcca34ff39fba1b1298d707340fa11f3af6"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/fixtures.sql",
+      "grupo": "4",
+      "sha256Inicial": "4f36f7be2f273f1cae69a12b98e2a5d0ffbada49753c48d1b4e834b97ba1857c",
+      "sha256Actual": "4f36f7be2f273f1cae69a12b98e2a5d0ffbada49753c48d1b4e834b97ba1857c"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/local.mjs",
+      "grupo": "4",
+      "sha256Inicial": "330113a9a69de5e01c859a1e776d41b23ba4898bef851bd94b5c0793d00b6759",
+      "sha256Actual": "330113a9a69de5e01c859a1e776d41b23ba4898bef851bd94b5c0793d00b6759"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/preparar_sql.py",
+      "grupo": "4",
+      "sha256Inicial": "6491c61643011d5483e8d094e390adfd6223e03a554252635873d542e0cb9a14",
+      "sha256Actual": "6491c61643011d5483e8d094e390adfd6223e03a554252635873d542e0cb9a14"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/produccion_cerrada.mjs",
+      "grupo": "4",
+      "sha256Inicial": "89fee60523cddbd4bf53539fd13b2f7a5f65338c88224914da58102b32aea833",
+      "sha256Actual": "89fee60523cddbd4bf53539fd13b2f7a5f65338c88224914da58102b32aea833"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/redactar_informe.py",
+      "grupo": "4",
+      "sha256Inicial": "4749a948149cd7037388ac8003cbd2171368105d7d667869cc4f9051fb805050",
+      "sha256Actual": "4749a948149cd7037388ac8003cbd2171368105d7d667869cc4f9051fb805050"
+    },
+    {
+      "path": "docs/arquitectura/http_jwt/registrar_entorno.mjs",
+      "grupo": "4",
+      "sha256Inicial": "497f55ad0d09a8c20488d18caed52a3fe787eb15944ab00fcdc5ae05c72773c4",
+      "sha256Actual": "497f55ad0d09a8c20488d18caed52a3fe787eb15944ab00fcdc5ae05c72773c4"
+    },
+    {
+      "path": "src/app/api/clinical/access-grants/[id]/revoke/route.ts",
+      "grupo": "4",
+      "sha256Inicial": "ae46b303685f91c0f08f47ff7b57debfe47eb644e9d08b7c147c98047d29c292",
+      "sha256Actual": "ae46b303685f91c0f08f47ff7b57debfe47eb644e9d08b7c147c98047d29c292"
+    },
+    {
+      "path": "src/app/api/clinical/access-grants/route.ts",
+      "grupo": "4",
+      "sha256Inicial": "2346f5ec061eb9bb82087b0469c4dc978a487301b7cebe1505eed9e964156776",
+      "sha256Actual": "2346f5ec061eb9bb82087b0469c4dc978a487301b7cebe1505eed9e964156776"
+    },
+    {
+      "path": "src/app/api/clinical/patients/[patientId]/history/route.ts",
+      "grupo": "4",
+      "sha256Inicial": "181a9ecbd7a4e69effb011c21f6b89edd8bd996476256f72d8dd7d92419c9874",
+      "sha256Actual": "181a9ecbd7a4e69effb011c21f6b89edd8bd996476256f72d8dd7d92419c9874"
+    },
+    {
+      "path": "src/app/api/clinical/patients/me/route.ts",
+      "grupo": "4",
+      "sha256Inicial": "92c3bdfd40172d98b1b5c4dcf50ccc4337a00f10b0dbf7f16c329ceb78c62b3c",
+      "sha256Actual": "92c3bdfd40172d98b1b5c4dcf50ccc4337a00f10b0dbf7f16c329ceb78c62b3c"
+    },
+    {
+      "path": "src/app/api/professional/me/route.ts",
+      "grupo": "4",
+      "sha256Inicial": "8ae4d98213ed1000b5ccbb32fee682b0e3bfcd6d974c9194cc4e621e83eb6a65",
+      "sha256Actual": "8ae4d98213ed1000b5ccbb32fee682b0e3bfcd6d974c9194cc4e621e83eb6a65"
+    },
+    {
+      "path": "src/app/api/professional/patients/route.ts",
+      "grupo": "4",
+      "sha256Inicial": "7f204bedd4d5eb3639fa22293038968010b11ebe495dd1ddd35b2850b51d1c7f",
+      "sha256Actual": "7f204bedd4d5eb3639fa22293038968010b11ebe495dd1ddd35b2850b51d1c7f"
+    },
+    {
+      "path": "src/app/api/professional/requests/route.ts",
+      "grupo": "4",
+      "sha256Inicial": "1338fa2ebc8c4ecb3715791e323759e7c154f977777309181bf0ee86a671bb46",
+      "sha256Actual": "1338fa2ebc8c4ecb3715791e323759e7c154f977777309181bf0ee86a671bb46"
+    },
+    {
+      "path": "src/features/clinica-http/cursor.test.mjs",
+      "grupo": "4",
+      "sha256Inicial": "74182704d556ac3af0ff84d8f8f580e8415dd0e1e8075e7ef544ffda36f8efd8",
+      "sha256Actual": "74182704d556ac3af0ff84d8f8f580e8415dd0e1e8075e7ef544ffda36f8efd8"
+    },
+    {
+      "path": "src/features/clinica-http/cursor.ts",
+      "grupo": "4",
+      "sha256Inicial": "0ff2de14c4b6771727a6bcec9c84a701d50428ddb0611a348430dc6078f2c220",
+      "sha256Actual": "0ff2de14c4b6771727a6bcec9c84a701d50428ddb0611a348430dc6078f2c220"
+    },
+    {
+      "path": "src/features/clinica-http/dto.ts",
+      "grupo": "4",
+      "sha256Inicial": "e70b4e5dec737f9d419daaee2b8d782f2e732e78432f39066d3199acff2c2a19",
+      "sha256Actual": "e70b4e5dec737f9d419daaee2b8d782f2e732e78432f39066d3199acff2c2a19"
+    },
+    {
+      "path": "src/features/clinica-http/http.test.mjs",
+      "grupo": "4",
+      "sha256Inicial": "95e533c12a342d9558b25f921954249d0112d847af5d76e07c4dcac3cbd77245",
+      "sha256Actual": "95e533c12a342d9558b25f921954249d0112d847af5d76e07c4dcac3cbd77245"
+    },
+    {
+      "path": "src/features/clinica-http/http.ts",
+      "grupo": "4",
+      "sha256Inicial": "0971c1e8fb58dd9a0e61c8121c71c9252f5ad277128b6a5b69c1a60ee6e3d36e",
+      "sha256Actual": "0971c1e8fb58dd9a0e61c8121c71c9252f5ad277128b6a5b69c1a60ee6e3d36e"
+    },
+    {
+      "path": "src/features/clinica-http/servidor.ts",
+      "grupo": "4",
+      "sha256Inicial": "1e12a3e1ab3da94880b72a8031d787e43d90ecb4909ee38af3ad40345a90253b",
+      "sha256Actual": "1e12a3e1ab3da94880b72a8031d787e43d90ecb4909ee38af3ad40345a90253b"
+    },
+    {
+      "path": "src/features/clinica-http/validaciones.ts",
+      "grupo": "4",
+      "sha256Inicial": "266311a0eade2868d92f2576f0153699900b04034269c1d122bae06c60e84f0b",
+      "sha256Actual": "266311a0eade2868d92f2576f0153699900b04034269c1d122bae06c60e84f0b"
+    },
+    {
+      "path": "src/features/clinica-http/workspace.test.mjs",
+      "grupo": "4",
+      "sha256Inicial": "522d42e443f40020272422e3eb4f60bbbaffcbb2840e1becb938541f330ecf36",
+      "sha256Actual": "522d42e443f40020272422e3eb4f60bbbaffcbb2840e1becb938541f330ecf36"
+    },
+    {
+      "path": "src/features/clinica-http/workspace.ts",
+      "grupo": "4",
+      "sha256Inicial": "f9eee6da0602af1ea34112c016a77485b5a9246308e0131d398c2f2668b2071f",
+      "sha256Actual": "f9eee6da0602af1ea34112c016a77485b5a9246308e0131d398c2f2668b2071f"
+    },
+    {
+      "path": "docs/arquitectura/CONSOLIDACION_BACKEND_MVP.md",
+      "grupo": "5",
+      "sha256Inicial": "2f1f3d21673415720b1c4247b16dfff3821016f619b4d951055fd5de575c7b52",
+      "sha256Actual": "2f1f3d21673415720b1c4247b16dfff3821016f619b4d951055fd5de575c7b52"
+    },
+    {
+      "path": "docs/arquitectura/CONTRATOS_API.json",
+      "grupo": "5",
+      "sha256Inicial": "8912b05fc4bf0b950125aa3c69abb4cd74818420eaaee2d47a1e4664449a4e4c",
+      "sha256Actual": "8912b05fc4bf0b950125aa3c69abb4cd74818420eaaee2d47a1e4664449a4e4c"
+    },
+    {
+      "path": "docs/arquitectura/CONTRATOS_API.md",
+      "grupo": "5",
+      "sha256Inicial": "4cef15b723828e3c61131edb323b6b3cfa0d2e2994b845c2a2ff6a6d31f91d23",
+      "sha256Actual": "4cef15b723828e3c61131edb323b6b3cfa0d2e2994b845c2a2ff6a6d31f91d23"
+    },
+    {
+      "path": "docs/arquitectura/IMPLEMENTACION_SERVICIOS_CLINICOS.md",
+      "grupo": "5",
+      "sha256Inicial": "e90d148db61348f8340f7dddf69265881aff7aa6accab3d412bdd68193f40240",
+      "sha256Actual": "e90d148db61348f8340f7dddf69265881aff7aa6accab3d412bdd68193f40240"
+    },
+    {
+      "path": "docs/arquitectura/MANIFEST_SHA256.json",
+      "grupo": "5",
+      "sha256Inicial": "537392c1060fe581ea38f165cfdbe659990c3516dc295178c9e7ea2c3234afad",
+      "sha256Actual": "537392c1060fe581ea38f165cfdbe659990c3516dc295178c9e7ea2c3234afad"
+    },
+    {
+      "path": "docs/arquitectura/PRUEBAS_Y_LIMITACIONES.md",
+      "grupo": "5",
+      "sha256Inicial": "3030bb5df59ab74ce949996cc0a17efd4916865a558afe4af4003deb208a5e51",
+      "sha256Actual": "3030bb5df59ab74ce949996cc0a17efd4916865a558afe4af4003deb208a5e51"
+    },
+    {
+      "path": "docs/arquitectura/README.md",
+      "grupo": "5",
+      "sha256Inicial": "a1bad0a483b1089a3d2337706fedb565555dfd9523cdb25e9340e4291215403d",
+      "sha256Actual": "a1bad0a483b1089a3d2337706fedb565555dfd9523cdb25e9340e4291215403d"
+    },
+    {
+      "path": "docs/arquitectura/VALIDACION_CONSISTENCIA.md",
+      "grupo": "5",
+      "sha256Inicial": "91c938d33484b7696ba3ccc079121c83fbc3031ea6c92a2d3351682c76aa8087",
+      "sha256Actual": "91c938d33484b7696ba3ccc079121c83fbc3031ea6c92a2d3351682c76aa8087"
+    },
+    {
+      "path": "docs/arquitectura/VALIDACION_HTTP_JWT.md",
+      "grupo": "5",
+      "sha256Inicial": "cd084803e97ddf894ac3e88600789132a47c7c9b7712f49a940f04a7642d7d43",
+      "sha256Actual": "cd084803e97ddf894ac3e88600789132a47c7c9b7712f49a940f04a7642d7d43"
+    },
+    {
+      "path": "docs/arquitectura/VALIDACION_SQL_RLS.md",
+      "grupo": "5",
+      "sha256Inicial": "c5c0c6d5f587b3572c723463ff9e9a170a69c1752dba04b76654c524cedc69a7",
+      "sha256Actual": "c5c0c6d5f587b3572c723463ff9e9a170a69c1752dba04b76654c524cedc69a7"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/BASELINE_ANTES_CONSOLIDACION.json",
+      "grupo": "5",
+      "sha256Inicial": "4453cb0a32d679d41a38d6c875fdf32a3b8536866e7821fd53a543ee015e8eef",
+      "sha256Actual": "4453cb0a32d679d41a38d6c875fdf32a3b8536866e7821fd53a543ee015e8eef"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/CATALOGO_MVP_VALIDADO.json",
+      "grupo": "5",
+      "sha256Inicial": "4c299edc5246101cd79a01dedcbc06576ac603838f7cb6389fb09552e7694a12",
+      "sha256Actual": "4c299edc5246101cd79a01dedcbc06576ac603838f7cb6389fb09552e7694a12"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/CIERRE_INTEGRACION.json",
+      "grupo": "5",
+      "sha256Inicial": "674acdaa8bc2d7d542a27acbf85593e2e7aa944b5c7a9eea787d31d0ca9688df",
+      "sha256Actual": "674acdaa8bc2d7d542a27acbf85593e2e7aa944b5c7a9eea787d31d0ca9688df"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/CONTRATOS_CLIENTE.ts",
+      "grupo": "5",
+      "sha256Inicial": "cc9a5bd50a479b3563e4b15ce299699d311b2c02d3bd6e2ca09e60bd7058d585",
+      "sha256Actual": "cc9a5bd50a479b3563e4b15ce299699d311b2c02d3bd6e2ca09e60bd7058d585"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/HTTP_MVP.json",
+      "grupo": "5",
+      "sha256Inicial": "7eb0f2347710ce1a34ee850da57c04fb2a57584fafd48d7d988ecef4e4c4f628",
+      "sha256Actual": "7eb0f2347710ce1a34ee850da57c04fb2a57584fafd48d7d988ecef4e4c4f628"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/INTENTOS_HTTP_MVP.json",
+      "grupo": "5",
+      "sha256Inicial": "f249c75ba66be1e168c82edd700e105c51a8a1e7207d7ac1bd51f488919dd92b",
+      "sha256Actual": "f249c75ba66be1e168c82edd700e105c51a8a1e7207d7ac1bd51f488919dd92b"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/INTENTOS_REGRESION_F4.json",
+      "grupo": "5",
+      "sha256Inicial": "f59d06191e8f36602cec670e7e9a72e61cd2b17a89e8e42d893d616e74f841e4",
+      "sha256Actual": "f59d06191e8f36602cec670e7e9a72e61cd2b17a89e8e42d893d616e74f841e4"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/INTENTOS_SQL.json",
+      "grupo": "5",
+      "sha256Inicial": "4f674017d79b6f81d3b14e887cde7387e515b23972c5acf6d2ae2fda9a955a78",
+      "sha256Actual": "4f674017d79b6f81d3b14e887cde7387e515b23972c5acf6d2ae2fda9a955a78"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/MIGRACIONES_DESDE_CERO.json",
+      "grupo": "5",
+      "sha256Inicial": "fe14d6bb3aa66938fabe148a7ccc33d82eb4098ee7da8d35f011773b5e19b057",
+      "sha256Actual": "fe14d6bb3aa66938fabe148a7ccc33d82eb4098ee7da8d35f011773b5e19b057"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/MODELO_MVP.json",
+      "grupo": "5",
+      "sha256Inicial": "65ec61418b09d1ee624e641b78930565fde112a80f7023ee210f9143a016f247",
+      "sha256Actual": "65ec61418b09d1ee624e641b78930565fde112a80f7023ee210f9143a016f247"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/PREPARACION_HTTP.json",
+      "grupo": "5",
+      "sha256Inicial": "96a4d86634b5c275d8480c3ca6730550e428f10ab5a3833829a393389e8b83b0",
+      "sha256Actual": "96a4d86634b5c275d8480c3ca6730550e428f10ab5a3833829a393389e8b83b0"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/PRODUCCION_CERRADA.json",
+      "grupo": "5",
+      "sha256Inicial": "d5a83b57834f57d847203443a2ee28a4f67423c0816311ad912e54bd5a1b72ee",
+      "sha256Actual": "d5a83b57834f57d847203443a2ee28a4f67423c0816311ad912e54bd5a1b72ee"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/REGRESION_HTTP_F4.json",
+      "grupo": "5",
+      "sha256Inicial": "319574b78dbf7f86416b3f63fe9938fb1bc6ead500d0685eb92263201fd985f4",
+      "sha256Actual": "319574b78dbf7f86416b3f63fe9938fb1bc6ead500d0685eb92263201fd985f4"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/REGRESION_SQL.json",
+      "grupo": "5",
+      "sha256Inicial": "33b8f313f3d46499c135d76281e6e39acc1be8a145c5f4e6e1b8db171c08c48e",
+      "sha256Actual": "33b8f313f3d46499c135d76281e6e39acc1be8a145c5f4e6e1b8db171c08c48e"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/STORAGE_LIMITES.json",
+      "grupo": "5",
+      "sha256Inicial": "d2b362ec0292daa214e7c8400e5456c2af0ff4ab5f0598810b17c18ecdd6f618",
+      "sha256Actual": "d2b362ec0292daa214e7c8400e5456c2af0ff4ab5f0598810b17c18ecdd6f618"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/VERIFICACIONES_FINALES.json",
+      "grupo": "5",
+      "sha256Inicial": "6dc3089736c7783cdf313e84c1ebaa2d0462ed7ee826f2ded3f97db6e87d6f5d",
+      "sha256Actual": "6dc3089736c7783cdf313e84c1ebaa2d0462ed7ee826f2ded3f97db6e87d6f5d"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/catalogar.py",
+      "grupo": "5",
+      "sha256Inicial": "541925738e8f6afc16af14e83238c5563c861185692946fc88b3b6b9a2e1bed6",
+      "sha256Actual": "541925738e8f6afc16af14e83238c5563c861185692946fc88b3b6b9a2e1bed6"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/cerrar_evidencias.mjs",
+      "grupo": "5",
+      "sha256Inicial": "61c823a9268149335a50d961d78cea7818c6e1aea91841f238694701d25d731f",
+      "sha256Actual": "61c823a9268149335a50d961d78cea7818c6e1aea91841f238694701d25d731f"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/mfa_local.mjs",
+      "grupo": "5",
+      "sha256Inicial": "41ba1a7b7a9a07a352e1b4a6d442219aa35f1eaadfea9ad046bd1a6a009f3412",
+      "sha256Actual": "41ba1a7b7a9a07a352e1b4a6d442219aa35f1eaadfea9ad046bd1a6a009f3412"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/preparar.py",
+      "grupo": "5",
+      "sha256Inicial": "2cb62386e45c075350d723c200c141313cd195b819518ed88a6504c61ae14a42",
+      "sha256Actual": "28935c09599712d54f26d76a4181fde3e602bde696984c4a724f8ccead2d2dfe"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/preparar_http.py",
+      "grupo": "5",
+      "sha256Inicial": "95856415ef4c8f8beb208099fae69aa94b9299c6570c75d09756c6cb558f62bb",
+      "sha256Actual": "95856415ef4c8f8beb208099fae69aa94b9299c6570c75d09756c6cb558f62bb"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/regresion_http_f4.mjs",
+      "grupo": "5",
+      "sha256Inicial": "93ad004078486fb2ea9b0436e5ce83d960933ac0567c2d7e2f400841ddd82abe",
+      "sha256Actual": "172c633d156b417a2d0cca75b07922e19f54d1b2c498da271b9ef9480f39be80"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/regresion_sql.py",
+      "grupo": "5",
+      "sha256Inicial": "b1800b556260123fd82115fc8a79732398d23d8a905331f1a09708605582d538",
+      "sha256Actual": "820e2a00403706014068f56b16a47b719596d99b8fe9507f75d130009968a86b"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/validar_http_mvp.mjs",
+      "grupo": "5",
+      "sha256Inicial": "41d4fd0dbc574e72a35c726d43f383f8d5194c88a59702d09fc42ecd3eb46deb",
+      "sha256Actual": "41d4fd0dbc574e72a35c726d43f383f8d5194c88a59702d09fc42ecd3eb46deb"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/validar_storage_limites.mjs",
+      "grupo": "5",
+      "sha256Inicial": "b6f5372254ce9c77824cdc844c0e243f3bb551090ebdb1a23ef00653f6e6e504",
+      "sha256Actual": "b6f5372254ce9c77824cdc844c0e243f3bb551090ebdb1a23ef00653f6e6e504"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/verificar_entregables.py",
+      "grupo": "5",
+      "sha256Inicial": "95f6ccbec2913f97b75fc1d79c532153a188eb5aba0c1c03fe1afeb93aaaea7b",
+      "sha256Actual": "95f6ccbec2913f97b75fc1d79c532153a188eb5aba0c1c03fe1afeb93aaaea7b"
+    },
+    {
+      "path": "docs/arquitectura/backend_mvp/verificar_produccion.mjs",
+      "grupo": "5",
+      "sha256Inicial": "99fe7364ffa6fc65ef50bee0982b31af714a5c5af9b4aecf4529ba03453e1ede",
+      "sha256Actual": "99fe7364ffa6fc65ef50bee0982b31af714a5c5af9b4aecf4529ba03453e1ede"
+    },
+    {
+      "path": "docs/arquitectura/integracion_fase5/AUDITORIA_GIT_INICIAL.json",
+      "grupo": "5",
+      "sha256Inicial": "ea826e5611039921290527c252f4c2f6209c6e7a8f962af06fdd7acea92dc7e4",
+      "sha256Actual": "ea826e5611039921290527c252f4c2f6209c6e7a8f962af06fdd7acea92dc7e4"
+    },
+    {
+      "path": "docs/arquitectura/integracion_fase5/CIERRE_SEGURIDAD.json",
+      "grupo": "5",
+      "sha256Inicial": "983b5a398260248df927e7d9bb4dc78600940a5a3f94abe3f7c1ff464c39cff2",
+      "sha256Actual": "983b5a398260248df927e7d9bb4dc78600940a5a3f94abe3f7c1ff464c39cff2"
+    },
+    {
+      "path": "docs/arquitectura/integracion_fase5/RESULTADOS_VERIFICACION.json",
+      "grupo": "5",
+      "sha256Inicial": "2e9f5a03271e7763cbcf7705c5e77fe9cbbc310ada64c7bc59a70600bd2e5ae3",
+      "sha256Actual": "2e9f5a03271e7763cbcf7705c5e77fe9cbbc310ada64c7bc59a70600bd2e5ae3"
+    },
+    {
+      "path": "docs/arquitectura/validacion/RESULTADOS.json",
+      "grupo": "5",
+      "sha256Inicial": "c7e23a8f64f8d549422bae7ed074343d2ee152352e2adcb6692ca35b2009d0db",
+      "sha256Actual": "c7e23a8f64f8d549422bae7ed074343d2ee152352e2adcb6692ca35b2009d0db"
+    },
+    {
+      "path": "docs/arquitectura/validacion/estructura.json",
+      "grupo": "5",
+      "sha256Inicial": "860f89c07a24f10baf18a954e48e1687e8aad7d7755d670ce40b8f3fe4e0da29",
+      "sha256Actual": "860f89c07a24f10baf18a954e48e1687e8aad7d7755d670ce40b8f3fe4e0da29"
+    }
+  ],
+  "secretosLiterales": 0,
+  "binarios": 0,
+  "datos": "catalogos tecnicos y fixtures sint?ticos; no filas de pacientes reales",
+  "politicaEOL": ".gitattributes preserva hashes; excepcion literal de espacios solo para transcripcion historica Jira",
+  "sinEliminarArchivos": true,
+  "cambiosPruebas": "--fase6 solo separa evidencias nuevas de informes anteriores"
+}

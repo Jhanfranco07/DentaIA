@@ -1,0 +1,120 @@
+{
+  "fecha": "2026-11-06T01:56:10.032104+00:00",
+  "entorno": "Build Next local en production; sin sesión ni conexión Supabase; flags apagados",
+  "pruebas": [
+    {
+      "ruta": "/api/administracion/acceso",
+      "metodo": "GET",
+      "esperado": 401,
+      "recibido": 401,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/usuarios/reales",
+      "metodo": "GET",
+      "esperado": 401,
+      "recibido": 401,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/roles",
+      "metodo": "GET",
+      "esperado": 401,
+      "recibido": 401,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/vinculaciones",
+      "metodo": "GET",
+      "esperado": 401,
+      "recibido": 401,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/resenas",
+      "metodo": "GET",
+      "esperado": 401,
+      "recibido": 401,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/ubicaciones",
+      "metodo": "POST",
+      "esperado": 401,
+      "recibido": 401,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/ubicaciones",
+      "metodo": "GET",
+      "esperado": 405,
+      "recibido": 405,
+      "cache_control": "",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/acceso?rol=superusuario",
+      "metodo": "GET",
+      "esperado": 401,
+      "recibido": 401,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/acceso",
+      "metodo": "GET",
+      "esperado": 401,
+      "recibido": 401,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/administracion/roles",
+      "metodo": "POST",
+      "esperado": 401,
+      "recibido": 401,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    },
+    {
+      "ruta": "/desarrollo/panel-admin",
+      "metodo": "GET",
+      "esperado": 404,
+      "recibido": 404,
+      "cache_control": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "aprobada": true
+    },
+    {
+      "ruta": "/desarrollo/mfa-admin",
+      "metodo": "GET",
+      "esperado": 404,
+      "recibido": 404,
+      "cache_control": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "aprobada": true
+    },
+    {
+      "ruta": "/desarrollo/roles-admin",
+      "metodo": "GET",
+      "esperado": 404,
+      "recibido": 404,
+      "cache_control": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "aprobada": true
+    },
+    {
+      "ruta": "/api/clinical/patients/me",
+      "metodo": "GET",
+      "esperado": 404,
+      "recibido": 404,
+      "cache_control": "private, no-store, max-age=0",
+      "aprobada": true
+    }
+  ],
+  "aprobadas": 14,
+  "fallidas": 0
+}

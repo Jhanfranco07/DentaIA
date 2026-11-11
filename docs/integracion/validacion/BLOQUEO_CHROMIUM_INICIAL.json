@@ -1,0 +1,8 @@
+{
+  "fecha": "2026-11-04",
+  "entorno": "Playwright Python, Chromium headless shell 1228, Next local 127.0.0.1:3140",
+  "error": "Page.goto: Timeout 15000ms exceeded; /panel, waiting until load",
+  "servidor": "GET /panel 200; compilación correcta en CHROMIUM_NEXT.log durante el intento",
+  "accion": "El arnés terminó y limpió sus procesos al encontrar un error de codificación charmap en stdout. El intento de detener PID 4952 no encontró un proceso activo. Se corrige stdout UTF-8 y se prepara segundo intento con Chrome instalado basado en Chromium, proxy desactivado y corte en el primer límite fallido.",
+  "resultado": "Bloqueo de navegación por investigar; no se considera éxito funcional ni fallo probado de la aplicación."
+}

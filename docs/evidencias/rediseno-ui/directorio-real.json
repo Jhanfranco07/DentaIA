@@ -1,0 +1,10 @@
+{
+  "proveedor": "Supabase real",
+  "operaciones": "Solo GET; escrituras bloqueadas en el navegador QA",
+  "perfiles": 4,
+  "estadosHTTP": [
+    200,
+    200
+  ],
+  "detalle": "APROBADO"
+}

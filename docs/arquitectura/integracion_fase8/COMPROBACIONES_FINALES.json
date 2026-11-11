@@ -1,0 +1,89 @@
+{
+  "fecha": "2026-11-03",
+  "rama": "docs/auditoria-arquitectura-integral",
+  "head": "49985c57e6869a968024256f92a3ac59e0b93ec2",
+  "main": "1bcb84956e755b4089494af43f983fd0d2e5bfad",
+  "suiteNode": {
+    "tests": 269,
+    "pass": 269,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "typecheck": {
+    "exitCode": 0,
+    "fuente": "salida real de npm run typecheck en esta fase"
+  },
+  "build": {
+    "exitCode": 0,
+    "sha256Log": "6bc211e3b6505e2e1ced0842aa901e1e0c9fe99d3d49e7f48ce6d64273457b94"
+  },
+  "audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "simulacion": {
+    "aprobada": true,
+    "checks": 12,
+    "catalogo": {
+      "rls": true,
+      "tablas": 19,
+      "indices": 54,
+      "columnas": 142,
+      "tablasIA": 0,
+      "restricciones": 118
+    }
+  },
+  "regresionPaqueteSQL": 78,
+  "httpJWTLocal": 59,
+  "mvpLocal": 45,
+  "storageLocal": 3,
+  "produccionCerrada": 8,
+  "sqlPglast": [
+    {
+      "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235358_di36_dentalia_01_administracion.sql",
+      "sha256": "8f5117d6040e6db4190e9e66cd2198bb26f62d6da96065521e51bc505a7c8181",
+      "sentencias": 26,
+      "dmlDirecto": false,
+      "alterTablasPublicas": false
+    },
+    {
+      "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235408_di36_dentalia_02_modelo_clinico.sql",
+      "sha256": "19c3253d3b4655e3a812a1740fb8757071dcdab7a2d6d7b812478ea3648cb6f1",
+      "sentencias": 88,
+      "dmlDirecto": false,
+      "alterTablasPublicas": false
+    },
+    {
+      "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235409_di36_dentalia_03_rpc_clinicos.sql",
+      "sha256": "c32fb15e0d7e774d322a1fcf019a5b35d1317ce8b9ba43895d028fe5f36f4eb9",
+      "sentencias": 52,
+      "dmlDirecto": false,
+      "alterTablasPublicas": false
+    },
+    {
+      "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235411_di36_dentalia_04_workspace.sql",
+      "sha256": "12cdef6a52dd03821a53aa295ead67b6cf39f7c97ad1f5ad0b6a0d6f176156ad",
+      "sentencias": 21,
+      "dmlDirecto": false,
+      "alterTablasPublicas": false
+    }
+  ],
+  "respaldoRemotoLecturaRestauradoLocalmente": true,
+  "escriturasRemotas": 0,
+  "nuevosEndpointsRemotosHabilitados": 0,
+  "autorizacionMigracionesPendiente": true,
+  "archivosRevisados": 47,
+  "secretosLiteralesDetectados": [],
+  "limiteEscaneo": "Patrones y comparación con valores privados configurados; no certificación universal",
+  "originalesCongeladosPreservados": 38,
+  "codigoFuncionalModificado": false,
+  "diffCheck": true,
+  "commitsCreadosEnFase8": 0,
+  "push": false,
+  "merge": false
+}

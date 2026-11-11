@@ -1,0 +1,55 @@
+{
+  "fecha": "2026-11-03",
+  "project": "Dental-IA",
+  "ref": "vwmdknzjyvmsdqpepykz",
+  "organizacion": "mrhdeaoscwglprdztrif",
+  "headInicial": "49985c57e6869a968024256f92a3ac59e0b93ec2",
+  "huellaPublica": "2aea91388f533f07548047d93acf2ebf",
+  "aprobacionEscriturasRemotas": true,
+  "respaldoCompletoVerificado": true,
+  "conexionPostgresBackupConfigurada": true,
+  "authSettings": {
+    "http": 200,
+    "disableSignup": false,
+    "mailerAutoconfirm": false,
+    "phoneAutoconfirm": false,
+    "emailProvider": true
+  },
+  "migracionesHistoricas": [
+    {
+      "version": "20261025150315",
+      "name": "dentaia_mvp_independent_modules"
+    },
+    {
+      "version": "20261025150507",
+      "name": "allow_photo_owner_cleanup_after_consent_revocation"
+    }
+  ],
+  "advisory": {
+    "name": "auth_leaked_password_protection",
+    "level": "WARN",
+    "estado": "preexistente_no_corregido",
+    "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+  },
+  "ddlRemotoEjecutado": 4,
+  "dmlRemotoEjecutado": 0,
+  "huellaPublicaTrasRPC": "1114dc34dc06e771d05fa4f507e7d6a5",
+  "ultimoControlRemoto": {
+    "soloLectura": true,
+    "tablasPublicas": 5,
+    "esquemasNuevos": 0,
+    "rls": true,
+    "usuarios": 5,
+    "perfiles": 2,
+    "dentistas": 4,
+    "solicitudes": 5,
+    "consentimientos": 5,
+    "fotografias": 1,
+    "objetosStorage": 1,
+    "secretosVault": 0
+  },
+  "alcanceAutorizacion": "Exclusivamente cuatro SQL con SHA aprobados; no cuentas, datos ni activacion",
+  "respaldoExterno": "Verificado segun confirmacion explicita del responsable; no auditado nuevamente por el agente",
+  "estadoMigraciones": "APLICADAS_Y_VALIDADAS",
+  "reporteVigente": "EJECUCION_MIGRACIONES_REMOTAS.json"
+}

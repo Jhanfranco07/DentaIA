@@ -1,0 +1,18 @@
+{
+  "chromium": "149.0.7827.55",
+  "entorno": "local sintético",
+  "aprobadas": [
+    "Portal profesional sin desbordamiento a 320 px",
+    "Portal profesional sin desbordamiento a 390 px",
+    "Portal profesional sin desbordamiento a 768 px",
+    "Portal profesional sin desbordamiento a 1024 px",
+    "Portal profesional sin desbordamiento a 1440 px",
+    "Perfil vinculado al directorio",
+    "Menú móvil operable por teclado y foco en destino",
+    "Acceso bloqueado sin lecturas clínicas: sin sesión",
+    "Acceso bloqueado sin lecturas clínicas: paciente",
+    "Error de solicitudes anunciado en su sección",
+    "Historial sintético: respuesta 200 tras seleccionar paciente",
+    "Historial sintético: respuesta 403 tras seleccionar paciente"
+  ]
+}

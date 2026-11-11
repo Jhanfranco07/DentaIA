@@ -1,0 +1,27 @@
+{
+  "base": "f2a7116f524ad1d4cc35a658c141a5b269294716",
+  "rama": "fix/admin-acceso-produccion",
+  "node": "22.23.4",
+  "resultados": {
+    "node_aprobadas": 454,
+    "node_fallidas": 0,
+    "node_omitidas": 0,
+    "navegador_fixtures_aprobadas": 8,
+    "navegador_fixtures_fallidas": 0,
+    "http_local_aprobadas": 7,
+    "http_local_fallidas": 0,
+    "build_exit": 0,
+    "typecheck_exit": 0
+  },
+  "supabase_remoto_ejecutado": false,
+  "configuracion_remota_modificada": false,
+  "produccion_desplegada_por_esta_entrega": false,
+  "sha256": {
+    "src/features/administracion/entorno-panel.ts": "77eb0609fe90d56154cc868da739ae5ae60de03a50d2bae53b17f816bcce5ac6",
+    "src/features/administracion/lecturas-supabase.ts": "5539f1f6ca18f447f7bd31d96bc8b993ce0952ec2a9f1592a3940f7a390f820c",
+    "src/features/administracion/entorno-panel.test.mjs": "ca749b9509548ae2c7cbba66bfc8d294a3838e530808cbb1e40ed0ac3bb1d53a",
+    "src/features/administracion/lecturas-supabase.test.mjs": "4b0b1c8b93f2d39241bf4149b67271d77ae41b29b905d9f81c20945b5a704050",
+    "scripts/qa-admin-produccion.py": "341a7cdc04a4f73c62a77995cfaa737f35053f178c7a3ef3c1cf5e9bfa265758"
+  },
+  "logs": "Se eliminan solo retornos de carro, espacios y líneas vacías finales para versionar las salidas."
+}

@@ -1,0 +1,20 @@
+{
+  "pdf": [
+    "cuidado-habitual",
+    "atencion-preventiva",
+    "cuidado-encias"
+  ],
+  "motores_renderizado": [
+    "Poppler",
+    "PyMuPDF"
+  ],
+  "revision": "Los tres revisados visualmente: A4, proporción conservada, texto dentro de página, sin superposiciones ni cortes; material fotográfico pendiente explícito.",
+  "capturas": 38,
+  "resoluciones": [
+    1440,
+    768,
+    390
+  ],
+  "revision_final": "Inicio, selección, resultado, reporte, preparación educativa, directorio y final omitir inspeccionados; correcciones de overflow, glifos y separación del mensaje móvil verificadas.",
+  "material": "Tarjetas editoriales, NO fotografías clínicas; no se aprueba ese criterio."
+}

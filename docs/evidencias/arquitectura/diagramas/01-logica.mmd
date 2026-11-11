@@ -1,0 +1,11 @@
+flowchart TD
+  U["Navegador: público, paciente y profesional"] --> P["Next.js: presentación y estado"]
+  P --> SDK["SDK cliente: flujos personales existentes"]
+  SDK --> R["Data API y Storage con RLS"]
+  P --> A["Route Handlers: administración en rama"]
+  A --> G["Guard: identidad, rol vigente y AAL2"]
+  G --> S["Servicios y adaptadores server-only"]
+  S --> DB["Supabase Auth y PostgreSQL"]
+  S -. "propuesto" .-> H["Servicio clínico: permisos y auditoría"]
+  H -.-> R
+  S -. "propuesto" .-> IA["Visión exploratoria aislada"]

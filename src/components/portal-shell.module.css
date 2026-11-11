@@ -1,0 +1,49 @@
+.shell{--portal-sidebar:260px;min-height:100vh;background:#f3f7fa;color:var(--ink)}
+.lateral{position:sticky;top:0;float:left;display:flex;flex-direction:column;width:var(--portal-sidebar);height:100vh;padding:25px 16px 18px;background:#fff;border-right:1px solid #e3ebf0;z-index:30}
+.cabeceraLateral{display:flex;align-items:center;justify-content:space-between;margin:0 7px 28px}.marca{display:inline-flex;align-items:center;text-decoration:none}.marca :global(.marca){font-size:23px}.marca :global(.marca-icono){width:39px;height:39px;border-radius:12px 12px 12px 4px}.cerrarMenu{display:none;place-items:center;width:38px;min-height:38px;border:1px solid #dde7ec;border-radius:9px;background:#fff;color:#4c6273}.cerrarMenu:hover{background:#eff7f7;color:var(--teal-dark)}
+.portalMarca{display:flex;align-items:center;gap:11px;padding:12px;margin-bottom:26px;background:linear-gradient(135deg,#eff9f8,#f4f8fc);border:1px solid #e3efef;border-radius:14px}.portalIcono{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:11px;background:#dff2f0;color:var(--teal-dark)}.portalMarca strong,.portalMarca span{display:block}.portalMarca strong{font-size:13px;line-height:1.4}.portalMarca div>span{margin-top:2px;color:var(--muted);font-size:11px}
+.tituloNavegacion,.grupo{display:block;margin:0 11px 10px;color:#8192a0;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.itemNavegacion{display:block}.itemNavegacion+.itemNavegacion{margin-top:3px}.grupo{margin-top:19px;margin-bottom:7px}.lateral nav{display:grid;align-content:start;gap:3px}.enlace{position:relative;display:flex;align-items:center;gap:12px;min-height:46px;padding:10px 12px;border:1px solid transparent;border-radius:11px;color:#5a6c7d;font-size:13px;font-weight:610;text-decoration:none;transition:background .16s ease,color .16s ease,border-color .16s ease}.enlace svg{flex:none;color:#8393a1}.enlace:hover{background:#f3f8f9;color:var(--teal-dark)}.enlace:hover svg{color:var(--teal)}.enlace[aria-current=page]{background:#e8f6f5;border-color:#d8eeec;color:#075f68;font-weight:750}.enlace[aria-current=page] svg{color:var(--teal-dark)}.marcaActiva{position:absolute;left:-1px;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--teal)}
+.pieLateral{display:grid;gap:14px;margin-top:auto;padding:16px 9px 0;border-top:1px solid #edf1f4}.estadoPrivado{display:flex;align-items:center;gap:8px;color:#667989;font-size:11px}.estadoPrivado>span{width:8px;height:8px;border-radius:50%;background:#2c9a80;box-shadow:0 0 0 3px #e4f5ef}.volver{display:flex;align-items:center;justify-content:space-between;min-height:40px;color:#526879;font-size:11px;font-weight:650;text-decoration:none}.volver:hover{color:var(--teal-dark)}
+.areaPrincipal{min-height:100vh;margin-left:var(--portal-sidebar);min-width:0}.encabezado{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:20px;min-height:84px;padding:12px clamp(22px,4vw,58px);background:#ffffffed;border-bottom:1px solid #e3ebf0;backdrop-filter:blur(16px)}.tituloPagina{display:grid;gap:3px;min-width:0}.tituloPagina>span{color:#80909e;font-size:10px;font-weight:750;letter-spacing:.08em;text-transform:uppercase}.tituloPagina>strong{overflow:hidden;color:#172f43;font-size:17px;font-weight:730;letter-spacing:-.02em;text-overflow:ellipsis;white-space:nowrap}.usuario{display:flex;align-items:center;gap:10px;margin-left:auto;padding-right:17px;border-right:1px solid #e1e8ec;min-width:0}.avatar{display:grid;place-items:center;width:38px;height:38px;flex:none;border:1px solid #cfe7e5;border-radius:50%;background:#e4f4f1;color:var(--teal-dark);font-size:14px;font-weight:800}.usuarioDatos{display:grid;gap:1px;min-width:0}.usuarioDatos strong{overflow:hidden;max-width:180px;color:#263c4e;font-size:12px;text-overflow:ellipsis;white-space:nowrap}.usuarioDatos>span{color:#778a98;font-size:10px}.cuenta,.salir,.botonMenu{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;border:1px solid #dce6eb;border-radius:10px;padding:9px 12px;background:#fff;color:#4a5f70;font:inherit;font-size:12px;font-weight:680;text-decoration:none;transition:background .16s ease,border-color .16s ease,color .16s ease}.cuenta:hover,.salir:hover,.botonMenu:hover{border-color:#b6d8d7;background:#f0f9f8;color:var(--teal-dark)}.salir:disabled{opacity:.6;cursor:wait}.botonMenu{display:none}.contenido{width:min(1480px,100%);min-width:0;margin:0 auto;padding:34px clamp(22px,4vw,58px) 70px;outline:none}.error{margin:12px 25px;padding:11px 15px;border:1px solid #edcbd0;border-radius:10px;background:#fff3f4;color:#8b2830;font-size:12px}.fondoMovil{display:none}
+@media(max-width:1050px){.shell{--portal-sidebar:230px}.lateral{padding-right:12px;padding-left:12px}.encabezado{gap:13px;padding-inline:22px}.contenido{padding-inline:24px}}
+@media(max-width:760px){.shell{--portal-sidebar:0px}.lateral{position:fixed;top:0;bottom:0;left:0;float:none;width:min(84vw,310px);height:100dvh;padding:21px 15px 17px;transform:translateX(-105%);transition:transform .22s ease;box-shadow:14px 0 38px #102a4318}.lateral[data-abierto=true]{transform:translateX(0)}.cabeceraLateral{margin-bottom:24px}.cerrarMenu{display:grid}.areaPrincipal{margin-left:0}.encabezado{min-height:74px;padding:10px 16px;gap:10px}.botonMenu{display:inline-flex;flex:none;width:42px;padding:0}.tituloPagina{flex:1}.tituloPagina>strong{font-size:15px}.usuario{gap:8px;margin-left:0;padding-right:10px}.avatar{width:34px;height:34px}.usuarioDatos strong{max-width:115px}.cuenta{width:42px;padding:0}.cuenta span{display:none}.salir{width:42px;padding:0}.salir span{display:none}.fondoMovil{position:fixed;inset:0;z-index:25;display:block;border:0;border-radius:0;background:#122c3b66;opacity:0;pointer-events:none;transition:opacity .2s}.lateral[data-abierto=true]~.fondoMovil{opacity:1;pointer-events:auto}.contenido{padding:26px 20px 48px}}
+@media(max-width:430px){.encabezado{gap:8px}.usuarioDatos{display:none}.usuario{padding-right:8px}.tituloPagina>span{font-size:9px}.tituloPagina>strong{max-width:140px}.contenido{padding:21px 14px 40px}.lateral{width:min(88vw,310px)}}
+@media(prefers-reduced-motion:reduce){.enlace,.cuenta,.salir,.botonMenu,.cerrarMenu,.lateral,.fondoMovil{transition:none}}
+/* Mantener navegación y acciones accesibles también en ventanas de poca altura. */
+.lateral{overflow-y:auto;overscroll-behavior:contain}.contenido{overflow-wrap:anywhere}.usuarioDatos strong{max-width:min(180px,18vw)}.cerrarMenu,.salir,.cuenta{min-height:44px;min-width:44px}.grupo,.tituloNavegacion{color:#526577}.tituloPagina>span{color:#526577}.usuarioDatos>span{color:#526577}
+@media(max-width:760px){.lateral{z-index:60}.fondoMovil{z-index:55}.encabezado{gap:8px}.tituloPagina>strong{max-width:none}.usuarioDatos strong{max-width:100px}.contenido{padding-bottom:40px}}
+@media(max-width:360px){.usuario{display:none}.contenido{padding-inline:12px}.tituloPagina>strong{max-width:150px}}
+
+/* Tipografía y navegación del portal paciente, sin alterar otros portales. */
+.shell[data-area="Paciente"] .portalMarca div>span,
+.shell[data-area="Paciente"] .tituloNavegacion,
+.shell[data-area="Paciente"] .grupo,
+.shell[data-area="Paciente"] .estadoPrivado,
+.shell[data-area="Paciente"] .volver,
+.shell[data-area="Paciente"] .tituloPagina>span,
+.shell[data-area="Paciente"] .usuarioDatos>span{font-size:12px;letter-spacing:0;text-transform:none}
+.shell[data-area="Paciente"] .enlace{font-size:14px}
+.shell[data-area="Paciente"] .portalMarca strong,
+.shell[data-area="Paciente"] .usuarioDatos strong{font-size:14px}
+.shell[data-area="Paciente"] .tituloPagina>strong{font-size:18px}
+.shell[data-area="Paciente"] .contenido{padding-top:28px}
+@media(max-width:760px){.shell[data-area="Paciente"] .contenido{padding-top:20px}}
+
+/* El portal profesional comparte la escala legible del menú del paciente. */
+.shell[data-area="Odontología"] .grupo,
+.shell[data-area="Odontología"] .tituloNavegacion,
+.shell[data-area="Odontología"] .estadoPrivado {
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.shell[data-area="Odontología"] .enlace {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+.shell[data-area="Odontología"] .botonMenu {
+  min-width: 44px;
+  min-height: 44px;
+}

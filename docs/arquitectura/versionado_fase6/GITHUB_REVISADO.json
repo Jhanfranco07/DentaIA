@@ -1,0 +1,49 @@
+{
+  "sha": "d0b442380096e4202f39e96e98683c03df175736",
+  "pr": 19,
+  "url": "https://github.com/Jhanfranco07/DentaIA/pull/19",
+  "draft": true,
+  "merged": false,
+  "mergeable": true,
+  "runs": [
+    {
+      "id": 41717376751,
+      "name": "Security",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Jhanfranco07/DentaIA/actions/runs/41717376751"
+    },
+    {
+      "id": 41717376969,
+      "name": "Tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Jhanfranco07/DentaIA/actions/runs/41717376969"
+    },
+    {
+      "id": 41717376910,
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Jhanfranco07/DentaIA/actions/runs/41717376910"
+    }
+  ],
+  "preview": [
+    {
+      "context": "Vercel",
+      "state": "success",
+      "target_url": "https://vercel.com/jhan-francos-projects/dent-ai/AQvci6s67VUVUNkG3czCPMrPFHQP"
+    }
+  ],
+  "testsLog": {
+    "jobId": 126200832895,
+    "summary": [
+      "# tests 269",
+      "# pass 269",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0"
+    ]
+  },
+  "nota": "Estado verificado del primer push. El commit posterior de cierre solo añade documentación/evidencias; el último estado se consulta en el PR, sin crear una cadena de commits para registrar su propio SHA."
+}

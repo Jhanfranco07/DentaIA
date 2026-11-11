@@ -1,0 +1,208 @@
+[
+  {
+    "fecha": "2026-11-03",
+    "entorno": "Docker local",
+    "base": "dentaia_arch_qa_fase8",
+    "datos": "exclusivamente ficticios; esquema remoto de lectura",
+    "escriturasRemotas": 0,
+    "checks": [
+      {
+        "nombre": "Copia representativa con 2 perfiles,4 dentistas,5 solicitudes,5 consentimientos,1 metadata foto",
+        "aprobada": true
+      },
+      {
+        "nombre": "Huella de esquema remoto reproducida antes de migrar",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235358_di36_dentalia_01_administracion.sql",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235408_di36_dentalia_02_modelo_clinico.sql",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235409_di36_dentalia_03_rpc_clinicos.sql",
+        "aprobada": true
+      }
+    ],
+    "migraciones": [
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235358_di36_dentalia_01_administracion.sql",
+        "sha256": "56ff53cea8fe693c4022ae029efde7d9c5d6935932a680b9895bd9f1dd6060db",
+        "aplicadaLocalmente": true
+      },
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235408_di36_dentalia_02_modelo_clinico.sql",
+        "sha256": "02bc139dbda7865fef7e549ce4c00bfb7ebd653daad1bd8ad93fa28e40433629",
+        "aplicadaLocalmente": true
+      },
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235409_di36_dentalia_03_rpc_clinicos.sql",
+        "sha256": "6b3dc8699ecf590d53f7770814a8b4017fb0dde87b53d19ec12d2b94021507c9",
+        "aplicadaLocalmente": true
+      }
+    ],
+    "aprobada": false,
+    "error": "LOCAL_SQL_FAILED: ERROR:  PUBLIC_SCHEMA_DRIFT_ABORT\nCONTEXT:  PL/pgSQL function inline_code_block line 18 at RAISE\n"
+  },
+  {
+    "fecha": "2026-11-03",
+    "entorno": "Docker local",
+    "base": "dentaia_arch_qa_fase8",
+    "datos": "exclusivamente ficticios; esquema remoto de lectura",
+    "escriturasRemotas": 0,
+    "checks": [
+      {
+        "nombre": "Copia representativa con 2 perfiles,4 dentistas,5 solicitudes,5 consentimientos,1 metadata foto",
+        "aprobada": true
+      },
+      {
+        "nombre": "Huella de esquema remoto reproducida antes de migrar",
+        "aprobada": false
+      }
+    ],
+    "migraciones": [],
+    "aprobada": false,
+    "error": "SIMULATION_CHECK_FAILED"
+  },
+  {
+    "fecha": "2026-11-03",
+    "entorno": "Docker local",
+    "base": "dentaia_arch_qa_fase8",
+    "datos": "exclusivamente ficticios; esquema remoto de lectura",
+    "escriturasRemotas": 0,
+    "checks": [
+      {
+        "nombre": "Copia representativa con 2 perfiles,4 dentistas,5 solicitudes,5 consentimientos,1 metadata foto",
+        "aprobada": true
+      },
+      {
+        "nombre": "Huella de esquema remoto reproducida antes de migrar",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235358_di36_dentalia_01_administracion.sql",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235408_di36_dentalia_02_modelo_clinico.sql",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235409_di36_dentalia_03_rpc_clinicos.sql",
+        "aprobada": true
+      }
+    ],
+    "migraciones": [
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235358_di36_dentalia_01_administracion.sql",
+        "sha256": "8f5117d6040e6db4190e9e66cd2198bb26f62d6da96065521e51bc505a7c8181",
+        "aplicadaLocalmente": true
+      },
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235408_di36_dentalia_02_modelo_clinico.sql",
+        "sha256": "19c3253d3b4655e3a812a1740fb8757071dcdab7a2d6d7b812478ea3648cb6f1",
+        "aplicadaLocalmente": true
+      },
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235409_di36_dentalia_03_rpc_clinicos.sql",
+        "sha256": "c32fb15e0d7e774d322a1fcf019a5b35d1317ce8b9ba43895d028fe5f36f4eb9",
+        "aplicadaLocalmente": true
+      }
+    ],
+    "huellaPublicaTrasRPC": "1114dc34dc06e771d05fa4f507e7d6a5",
+    "alcance": "PRELIMINAR: tres migraciones; no ensayo completo",
+    "aprobada": true
+  },
+  {
+    "fecha": "2026-11-03",
+    "entorno": "Docker local",
+    "base": "dentaia_arch_qa_fase8",
+    "datos": "exclusivamente ficticios; esquema remoto de lectura",
+    "escriturasRemotas": 0,
+    "checks": [
+      {
+        "nombre": "Copia representativa con 2 perfiles,4 dentistas,5 solicitudes,5 consentimientos,1 metadata foto",
+        "aprobada": true
+      },
+      {
+        "nombre": "Huella de esquema remoto reproducida antes de migrar",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235358_di36_dentalia_01_administracion.sql",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235408_di36_dentalia_02_modelo_clinico.sql",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235409_di36_dentalia_03_rpc_clinicos.sql",
+        "aprobada": true
+      },
+      {
+        "nombre": "Datos previos identicos tras 20261103235411_di36_dentalia_04_workspace.sql",
+        "aprobada": true
+      },
+      {
+        "nombre": "MVP 19 tablas,142 columnas,RLS activo,0 IA",
+        "aprobada": true
+      },
+      {
+        "nombre": "Servicios clinicos cerrados por defecto",
+        "aprobada": true
+      },
+      {
+        "nombre": "No concede RPC administrativo a anon/authenticated",
+        "aprobada": true
+      },
+      {
+        "nombre": "Ejecutor privado NOLOGIN/NOBYPASSRLS",
+        "aprobada": true
+      },
+      {
+        "nombre": "Anon no ejecuta RPC clinicos",
+        "aprobada": true
+      },
+      {
+        "nombre": "Dump local sintetico contiene formato custom valido",
+        "aprobada": true
+      }
+    ],
+    "migraciones": [
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235358_di36_dentalia_01_administracion.sql",
+        "sha256": "8f5117d6040e6db4190e9e66cd2198bb26f62d6da96065521e51bc505a7c8181",
+        "aplicadaLocalmente": true
+      },
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235408_di36_dentalia_02_modelo_clinico.sql",
+        "sha256": "19c3253d3b4655e3a812a1740fb8757071dcdab7a2d6d7b812478ea3648cb6f1",
+        "aplicadaLocalmente": true
+      },
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235409_di36_dentalia_03_rpc_clinicos.sql",
+        "sha256": "c32fb15e0d7e774d322a1fcf019a5b35d1317ce8b9ba43895d028fe5f36f4eb9",
+        "aplicadaLocalmente": true
+      },
+      {
+        "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235411_di36_dentalia_04_workspace.sql",
+        "sha256": "12cdef6a52dd03821a53aa295ead67b6cf39f7c97ad1f5ad0b6a0d6f176156ad",
+        "aplicadaLocalmente": true
+      }
+    ],
+    "catalogo": {
+      "rls": true,
+      "tablas": 19,
+      "indices": 54,
+      "columnas": 142,
+      "tablasIA": 0,
+      "restricciones": 118
+    },
+    "dumpLocalSha256": "e72b21b239c76f06b7546b114a2c276d4b9a50e9ead93150a158137502b7e291",
+    "aprobada": true
+  }
+]

@@ -1,0 +1,2071 @@
+{
+  "fecha": "2026-11-03",
+  "alcance": "validación estática y render local; sin SQL ejecutado ni JWT reales",
+  "checks": [
+    {
+      "nombre": "29 tablas y 219 columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clasificación 5 existentes/3 administrativas/11 clínicas/10 IA",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.profiles PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.profiles FK id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.dentists PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.appointment_requests PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.appointment_requests FK user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.appointment_requests FK dentist_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.patient_consents PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.patient_consents FK user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.dental_photos PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.dental_photos FK user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.dental_photos FK user_id,consent_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "dentaia_admin.revisiones_roles PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "dentaia_admin.aprobaciones_roles PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "dentaia_admin.auditoria_roles PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinics PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts FK user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts FK dentist_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications FK professional_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications FK reviewed_by",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships FK clinic_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships FK professional_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.patient_records PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.patient_records FK user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters FK patient_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters FK membership_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters FK replaces_id,patient_id,membership_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries FK encounter_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries FK replaces_id,encounter_id,kind",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents FK encounter_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants FK patient_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants FK membership_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_grant_resources PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_grant_resources FK grant_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_grant_resources FK encounter_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit FK actor_user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit FK patient_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit FK membership_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit FK grant_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items FK dataset_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions FK dataset_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations FK owner_user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations FK photo_id,owner_user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs FK owner_user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs FK photo_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs FK model_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs FK authorization_id,photo_id,owner_user_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results FK job_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.result_recommendations PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.result_recommendations FK result_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.result_recommendations FK recommendation_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs FK model_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs FK dataset_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics PK/columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics FK run_id",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.profiles diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.dentists diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.appointment_requests diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.patient_consents diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "public.dental_photos diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "dentaia_admin.revisiones_roles diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "dentaia_admin.aprobaciones_roles diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "dentaia_admin.auditoria_roles diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinics diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.patient_records diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_grant_resources diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.result_recommendations diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics diccionario",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "01_clinical_identidad.sql guardas/cierre",
+      "aprobado": true,
+      "detalle": {
+        "prohibido": [],
+        "grants": []
+      }
+    },
+    {
+      "nombre": "02_clinical_contenido.sql guardas/cierre",
+      "aprobado": true,
+      "detalle": {
+        "prohibido": [],
+        "grants": []
+      }
+    },
+    {
+      "nombre": "03_clinical_permisos_auditoria.sql guardas/cierre",
+      "aprobado": true,
+      "detalle": {
+        "prohibido": [],
+        "grants": []
+      }
+    },
+    {
+      "nombre": "04_clinical_integridad.sql guardas/cierre",
+      "aprobado": true,
+      "detalle": {
+        "prohibido": [],
+        "grants": []
+      }
+    },
+    {
+      "nombre": "05_ia_investigacion.sql guardas/cierre",
+      "aprobado": true,
+      "detalle": {
+        "prohibido": [],
+        "grants": []
+      }
+    },
+    {
+      "nombre": "06_ia_analisis.sql guardas/cierre",
+      "aprobado": true,
+      "detalle": {
+        "prohibido": [],
+        "grants": []
+      }
+    },
+    {
+      "nombre": "07_ia_integridad.sql guardas/cierre",
+      "aprobado": true,
+      "detalle": {
+        "prohibido": [],
+        "grants": []
+      }
+    },
+    {
+      "nombre": "21 CREATE TABLE y ningún reemplazo de tablas existentes",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinics DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinics.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinics.name tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinics.location tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinics.status tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinics.created_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinics DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts.user_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts.dentist_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts.status tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts.created_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_accounts DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications.professional_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications.reviewed_by tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications.decision tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications.reference tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications.reason tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications.reviewed_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.professional_verifications DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships.clinic_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships.professional_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships.status tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships.valid_from tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships.valid_until tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinic_memberships DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.patient_records DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.patient_records.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.patient_records.user_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.patient_records.status tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.patient_records.created_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.patient_records DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters.patient_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters.membership_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters.attended_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters.recorded_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters.status tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters.replaces_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters.correction_reason tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_encounters DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.encounter_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.kind tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.information_state tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.description tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.code_system tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.code tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.recorded_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.replaces_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries.correction_reason tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_entries DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.encounter_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.kind tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.title tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.exam_date tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.availability tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.bucket_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.object_path tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.mime_type tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.size_bytes tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents.created_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_documents DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants.patient_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants.membership_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants.purpose tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants.policy_version tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants.granted_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants.expires_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants.revoked_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants.scope_mode tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_grants DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_grant_resources DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_grant_resources.grant_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_grant_resources.encounter_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_grant_resources DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.request_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.actor_user_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.patient_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.membership_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.grant_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.operation tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.outcome tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.reason_code tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit.occurred_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "clinical.clinical_access_audit DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions.name tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions.version tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions.source_uri tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions.license tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions.permission_reference tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions.manifest_sha256 tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions.created_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_versions DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items.dataset_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items.subject_key tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items.object_reference tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items.image_sha256 tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items.label tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items.split tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.dataset_items DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.dataset_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.name tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.version tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.artifact_uri tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.artifact_sha256 tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.preprocessing_version tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.code_commit tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.status tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions.created_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.model_versions DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations.owner_user_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations.photo_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations.purpose tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations.policy_version tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations.consent_text tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations.granted_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations.expires_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations.revoked_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_authorizations DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.photo_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.model_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.owner_user_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.authorization_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.idempotency_key tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.status tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.error_code tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.created_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.finished_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.lease_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.lease_expires_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs.attempt_count tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_jobs DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results.job_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results.label tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results.score tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results.limitations tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results.disclaimer_version tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results.quality_status tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results.created_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.analysis_results DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations.code tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations.version tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations.text tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations.source_reference tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations.review_status tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.educational_recommendations DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.result_recommendations DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.result_recommendations.result_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.result_recommendations.recommendation_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.result_recommendations.reason tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.result_recommendations DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs.id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs.model_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs.dataset_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs.split tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs.sample_size tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs.config tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs.artifact_reference tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs.executed_at tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_runs DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics DDL columnas",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics.run_id tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics.name tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics.label tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics.value tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics.matrix tipo/NULL/default",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "ml.evaluation_metrics DDL PK/UNIQUE/CHECK/FK",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "01-logica.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "02-fisica.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "03-componentes.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "04-der-general.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "05-der-administracion.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "06-der-paciente.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "09-casos-uso.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "10-autenticacion.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "11-solicitudes.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "12-historial.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "13-permisos.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "14-roles.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "15-fotografias.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "16-despliegue.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "17-cicd.mmd SVG renderizado",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "17 diagramas renderizados",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "DER general cubre 29 tablas y solo Auth externa",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "05-der-administracion campos dentaia_admin.revisiones_roles",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "05-der-administracion campos dentaia_admin.aprobaciones_roles",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "05-der-administracion campos dentaia_admin.auditoria_roles",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "06-der-paciente campos public.profiles",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "06-der-paciente campos public.dentists",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "06-der-paciente campos public.appointment_requests",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "06-der-paciente campos public.patient_consents",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "06-der-paciente campos public.dental_photos",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.clinics",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.professional_accounts",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.professional_verifications",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.clinic_memberships",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.patient_records",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.clinical_encounters",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.clinical_entries",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.clinical_documents",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.clinical_access_grants",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.clinical_grant_resources",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "07-der-clinico campos clinical.clinical_access_audit",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.dataset_versions",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.dataset_items",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.model_versions",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.analysis_authorizations",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.analysis_jobs",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.analysis_results",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.educational_recommendations",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.result_recommendations",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.evaluation_runs",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "08-der-ia campos ml.evaluation_metrics",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "contratos únicos",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "API vincula tablas reales del modelo",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "15 contratos de rama y 10 propuestos",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "contratos implementados corresponden exactamente a Route Handlers",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "Jira 171 descripciones sin modificar",
+      "aprobado": true,
+      "detalle": null
+    },
+    {
+      "nombre": "enlaces locales Markdown",
+      "aprobado": true,
+      "detalle": []
+    },
+    {
+      "nombre": "38 originales preservados byte a byte",
+      "aprobado": true,
+      "detalle": []
+    },
+    {
+      "nombre": "cambios funcionales limitados a adaptadores HTTP aislados; DI-151 intacto",
+      "aprobado": true,
+      "detalle": []
+    }
+  ],
+  "sql": [
+    {
+      "archivo": "borradores_sql/01_clinical_identidad.sql",
+      "sentencias": 27,
+      "funciones_pl_normalizadas": 1,
+      "rls": [
+        "clinical.clinics",
+        "clinical.professional_accounts",
+        "clinical.professional_verifications",
+        "clinical.clinic_memberships",
+        "clinical.patient_records"
+      ],
+      "ejecutado": false
+    },
+    {
+      "archivo": "borradores_sql/02_clinical_contenido.sql",
+      "sentencias": 17,
+      "funciones_pl_normalizadas": 1,
+      "rls": [
+        "clinical.clinical_encounters",
+        "clinical.clinical_entries",
+        "clinical.clinical_documents"
+      ],
+      "ejecutado": false
+    },
+    {
+      "archivo": "borradores_sql/03_clinical_permisos_auditoria.sql",
+      "sentencias": 21,
+      "funciones_pl_normalizadas": 1,
+      "rls": [
+        "clinical.clinical_access_grants",
+        "clinical.clinical_grant_resources",
+        "clinical.clinical_access_audit"
+      ],
+      "ejecutado": false
+    },
+    {
+      "archivo": "borradores_sql/04_clinical_integridad.sql",
+      "sentencias": 29,
+      "funciones_pl_normalizadas": 10,
+      "rls": [],
+      "ejecutado": false
+    },
+    {
+      "archivo": "borradores_sql/05_ia_investigacion.sql",
+      "sentencias": 28,
+      "funciones_pl_normalizadas": 1,
+      "rls": [
+        "ml.dataset_versions",
+        "ml.dataset_items",
+        "ml.model_versions",
+        "ml.educational_recommendations",
+        "ml.evaluation_runs",
+        "ml.evaluation_metrics"
+      ],
+      "ejecutado": false
+    },
+    {
+      "archivo": "borradores_sql/06_ia_analisis.sql",
+      "sentencias": 25,
+      "funciones_pl_normalizadas": 1,
+      "rls": [
+        "ml.analysis_authorizations",
+        "ml.analysis_jobs",
+        "ml.analysis_results",
+        "ml.result_recommendations"
+      ],
+      "ejecutado": false
+    },
+    {
+      "archivo": "borradores_sql/07_ia_integridad.sql",
+      "sentencias": 21,
+      "funciones_pl_normalizadas": 8,
+      "rls": [],
+      "ejecutado": false
+    }
+  ],
+  "mermaid": [
+    {
+      "fuente": "diagramas/01-logica.mmd",
+      "sha256_fuente": "bc86ea73f4e4595512bb03d42f6eaa5830dd2b528dfa8ce2f47846eb4862440e",
+      "svg": "renderizados/01-logica.svg",
+      "sha256_svg": "9f786042070ce3b0033b8b8bec3f40f6c9d6dfb0b83dff9ac2a6dd3aaa77971b",
+      "renderizado": true,
+      "viewBox": "4 4 744 821",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/02-fisica.mmd",
+      "sha256_fuente": "52425df091dfcdaaee8bf4cf5addf1706ce4e94bd5f26334d13b51883a566b59",
+      "svg": "renderizados/02-fisica.svg",
+      "sha256_svg": "757128a24ad006aa573d0881ce4d98089a5a4bf06e2e890e17770e731fe02b00",
+      "renderizado": true,
+      "viewBox": "3.3125 4 615.6875 754",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/03-componentes.mmd",
+      "sha256_fuente": "aed8ed5588272044f8811aeb286ff13aafe7f67fffd5c98e917f1cc73815f7cb",
+      "svg": "renderizados/03-componentes.svg",
+      "sha256_svg": "595dbec1186524c54623c14c47ca8e54e8cd956113a197550e4672a6f4106f6a",
+      "renderizado": true,
+      "viewBox": "4 4 936 504",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/04-der-general.mmd",
+      "sha256_fuente": "6016b3dc4c657da7a7c87bea8af7e8111c34f3fc0526f0685a7b2ac51560799c",
+      "svg": "renderizados/04-der-general.svg",
+      "sha256_svg": "75fbbafa381b034347f83c71e6ea907ee139cb9416ea2f7872e3f07a221c2048",
+      "renderizado": true,
+      "viewBox": "4 4 3087.346923828125 1577.25",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/05-der-administracion.mmd",
+      "sha256_fuente": "16c0e70d3f361cd00dbb117bd4e578976fb0c786fd217326d5af9d642059b8b2",
+      "svg": "renderizados/05-der-administracion.svg",
+      "sha256_svg": "69b7beeb8d3253c3735287ee2298904c2b2bad1b16b4e94f77d81c5bc199161d",
+      "renderizado": true,
+      "viewBox": "4 4 981.09375 493",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/06-der-paciente.mmd",
+      "sha256_fuente": "1c9833da03af47702ef62a628528d6d5fe402804c56870a02b42f38233181c68",
+      "svg": "renderizados/06-der-paciente.svg",
+      "sha256_svg": "bd6efc9a73a2ea47c4bc252c13860e178993fa2e7032f08a9ab41685d929321d",
+      "renderizado": true,
+      "viewBox": "4 4 1112.227783203125 1669",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/07-der-clinico.mmd",
+      "sha256_fuente": "239ccf0421bdc69fe3e5eedc0d23de6918fd3f3ba2f3bde3dd22752aec63a5ba",
+      "svg": "renderizados/07-der-clinico.svg",
+      "sha256_svg": "cc44e56272372bd1ae4f248d23eb88d6b99d4363a7453d4b3094f56c40ed4577",
+      "renderizado": true,
+      "viewBox": "4 4 1930.0091552734375 2090.5",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/08-der-ia.mmd",
+      "sha256_fuente": "7ab4a726532310ceeb9287b891205334df212427faa690cd7b0ed4f9e590fd0e",
+      "svg": "renderizados/08-der-ia.svg",
+      "sha256_svg": "7baa971f0c8cd692ff372eadfddd9b6330eed405ff7d128b9cb6a238464c6a9f",
+      "renderizado": true,
+      "viewBox": "4 4 1418.301513671875 2308.25",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/09-casos-uso.mmd",
+      "sha256_fuente": "cf766c679460759c86550c876c58a54c425d8cec7f1ab24d6abf87251d2c7839",
+      "svg": "renderizados/09-casos-uso.svg",
+      "sha256_svg": "091c5d75820abfba0a414967bde35623b5e3b48cbfad90fa8021a8e80d34e53c",
+      "renderizado": true,
+      "viewBox": "4 4 1452.984375 378",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/10-autenticacion.mmd",
+      "sha256_fuente": "f1b56062d76ce176e6595158a31e931966229a0dd22ece4a98bc021f19b5f318",
+      "svg": "renderizados/10-autenticacion.svg",
+      "sha256_svg": "77155f9346e21855596d0bc70e2ee6af8c4fe6a86f467399243a5a7d3a2269eb",
+      "renderizado": true,
+      "viewBox": "-50 -10 868 713",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/11-solicitudes.mmd",
+      "sha256_fuente": "6d0d85b0974a9818310b413d530496ca395d8f548790ca7a49703fe7058d2c53",
+      "svg": "renderizados/11-solicitudes.svg",
+      "sha256_svg": "ebd74e21e7615a4a6658152ef3adffe7520d8aa426d523088eb88ddbd3f7c4fa",
+      "renderizado": true,
+      "viewBox": "-50 -10 1104 865",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/12-historial.mmd",
+      "sha256_fuente": "9c6b1ce85f0c6fe3d5ec1b6327d8f29699cd369e56dfef786b9802d4ee100908",
+      "svg": "renderizados/12-historial.svg",
+      "sha256_svg": "e14061264d60893dc18bf236ac3a60d8e9e2dcd6650a55abe57abf60a631e4ff",
+      "renderizado": true,
+      "viewBox": "-50 -10 1152 1049",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/13-permisos.mmd",
+      "sha256_fuente": "1d927acb4db7f35afff3c4ee6f43503df020eaf35b56f6904dd5950701b8b514",
+      "svg": "renderizados/13-permisos.svg",
+      "sha256_svg": "5f21474651267a1b604b2db707b70c1172e1db1432223e12ac274ee2f781bec7",
+      "renderizado": true,
+      "viewBox": "-50 -10 1273 845",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/14-roles.mmd",
+      "sha256_fuente": "5e49af036d130b72e87cdab378d42a3fc8db32e4a539b4c12c58532fa2cb4a69",
+      "svg": "renderizados/14-roles.svg",
+      "sha256_svg": "049d995a83fbc5d08aa6f00b8ac8b234a151e3db90591ab38a1ff74e79ab8228",
+      "renderizado": true,
+      "viewBox": "-50 -10 1067.5 759",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/15-fotografias.mmd",
+      "sha256_fuente": "d1933f395861e0ad43ccb57dcbe4c260fbcb4d6d32b912fc28aa0f2a19e7e153",
+      "svg": "renderizados/15-fotografias.svg",
+      "sha256_svg": "18f31c8b5a23ba299841bd0cdc6c8559d9b1569b2023429c4d582cacbc0933c2",
+      "renderizado": true,
+      "viewBox": "4 4 576.453125 1726",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/16-despliegue.mmd",
+      "sha256_fuente": "361b1eadd6ab1af1e6252fd62f2731f3dab1ffeef6b1213c8d3f4aaf0140a7ce",
+      "svg": "renderizados/16-despliegue.svg",
+      "sha256_svg": "94a8dd6fe0357d8d14f346b507e497a7ac422dfc38fab73b7bd455925a169dcd",
+      "renderizado": true,
+      "viewBox": "4 4 768 611",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    },
+    {
+      "fuente": "diagramas/17-cicd.mmd",
+      "sha256_fuente": "1aeb35a8c0aa410cd990e309ef43ca95946ed8abee503ff72ca593dcb0b3644d",
+      "svg": "renderizados/17-cicd.svg",
+      "sha256_svg": "b453327f8575652ec540b4baf3968ee4f1b0223866567e623b263d28d9fd50aa",
+      "renderizado": true,
+      "viewBox": "4 4 552 822",
+      "motor": "Mermaid CLI 12.2.0 / Chrome headless"
+    }
+  ],
+  "errores": [],
+  "sql_ejecutado": false,
+  "jwt_reales_probados": false,
+  "produccion_lista": false,
+  "total_comprobaciones": 361,
+  "aprobadas": 361,
+  "fallidas": 0
+}

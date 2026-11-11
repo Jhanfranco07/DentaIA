@@ -1,0 +1,69 @@
+{
+  "fecha": "2026-11-03",
+  "target": "vwmdknzjyvmsdqpepykz",
+  "estado": "PROPUESTO_NO_APLICADO",
+  "fuentesHistoricasSinModificar": true,
+  "autodespliegue": false,
+  "migraciones": [
+    {
+      "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235358_di36_dentalia_01_administracion.sql",
+      "sha256": "8f5117d6040e6db4190e9e66cd2198bb26f62d6da96065521e51bc505a7c8181",
+      "fuentes": [
+        {
+          "archivo": "supabase/migrations/20261103012414_di151_roles_auditoria_atomica.sql",
+          "sha256": "4df24cc575b85f627e9b95a61a6bd451ec7fb355ff60f59ff07693f72ae4286f"
+        }
+      ]
+    },
+    {
+      "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235408_di36_dentalia_02_modelo_clinico.sql",
+      "sha256": "19c3253d3b4655e3a812a1740fb8757071dcdab7a2d6d7b812478ea3648cb6f1",
+      "fuentes": [
+        {
+          "archivo": "docs/arquitectura/borradores_sql/01_clinical_identidad.sql",
+          "sha256": "d2bdc4af5f81aea452b3c1bbc0f33140b5cdb322d9db37e0358cbaf6f05c7799"
+        },
+        {
+          "archivo": "docs/arquitectura/borradores_sql/02_clinical_contenido.sql",
+          "sha256": "27ea4d14f37e6b50bca78076656e0deb7986f04ac2565373221f7da6a6ccca99"
+        },
+        {
+          "archivo": "docs/arquitectura/borradores_sql/03_clinical_permisos_auditoria.sql",
+          "sha256": "f3ad87c3287d2d31c86811b058ddad04beb63b2f0e82172e6ed70671fb2f1a6e"
+        },
+        {
+          "archivo": "docs/arquitectura/borradores_sql/04_clinical_integridad.sql",
+          "sha256": "6f21c82b4ccb2bff1b4eada84a0de4ad9a6aafefca200285e2a5320c5822f9fb"
+        }
+      ]
+    },
+    {
+      "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235409_di36_dentalia_03_rpc_clinicos.sql",
+      "sha256": "c32fb15e0d7e774d322a1fcf019a5b35d1317ce8b9ba43895d028fe5f36f4eb9",
+      "fuentes": [
+        {
+          "archivo": "docs/arquitectura/servicios_clinicos/sql/08_identidad_y_privilegios.sql",
+          "sha256": "f7ccfa0e4f4a892d4cdcaac430926924143059c0ea370a56e64af62a82a65713"
+        },
+        {
+          "archivo": "docs/arquitectura/servicios_clinicos/sql/09_autorizaciones.sql",
+          "sha256": "28d6730ce747dcc9051d3e9b114978ec33e3de37b0716a74ef0f141dd4650cc1"
+        },
+        {
+          "archivo": "docs/arquitectura/servicios_clinicos/sql/10_historial_autorizado.sql",
+          "sha256": "a25dc18c571d9728ba67e5ec798b6e622e1542464743c51a828e4142ede0f33b"
+        }
+      ]
+    },
+    {
+      "archivo": "docs/arquitectura/integracion_fase8/migraciones/20261103235411_di36_dentalia_04_workspace.sql",
+      "sha256": "12cdef6a52dd03821a53aa295ead67b6cf39f7c97ad1f5ad0b6a0d6f176156ad",
+      "fuentes": [
+        {
+          "archivo": "docs/arquitectura/backend_mvp/20261103195335_di36_servicios_comunes_mvp.sql",
+          "sha256": "feb7c8b3ca63ec552a1a5d6bfb21c939f21456b2981679dcee82b8ed27ce3f1d"
+        }
+      ]
+    }
+  ]
+}

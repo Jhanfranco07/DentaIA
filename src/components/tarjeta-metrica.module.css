@@ -1,0 +1,20 @@
+.tarjeta{
+  display:grid;
+  grid-template-columns:36px minmax(0,1fr);
+  grid-template-rows:auto auto auto;
+  align-content:center;
+  column-gap:12px;
+  min-width:0;
+  padding:4px 20px;
+}
+.tarjeta:first-child{padding-left:0}
+.tarjeta:last-child{padding-right:0}
+.icono{display:grid;grid-row:1/4;place-items:center;width:36px;height:36px;align-self:center;border-radius:10px;background:#e8f4f2;color:#06636e}
+.titulo{color:#435b6b;font-size:14px;font-weight:650;line-height:1.35}
+.valor{color:#143b4c;font-size:30px;line-height:1.15;letter-spacing:-.035em}
+.contexto{color:#526577;font-size:13px;line-height:1.4}
+@media(max-width:700px){
+  .tarjeta,.tarjeta:first-child,.tarjeta:last-child{padding:12px 0}
+  .tarjeta:first-child{padding-top:0}
+  .tarjeta:last-child{padding-bottom:0}
+}

@@ -1,0 +1,77 @@
+[
+  {
+    "nombre": "Páginas públicas: sin datos privados ni lenguaje interno; solicitud restringida sin sesión",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Teclado: enlace de salto, validación de cuenta y foco visible",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Tres referencias editoriales (fotografías clínicas pendientes), regiones del catálogo y descarga real de tres PDF",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Hash: muestra con nombre cambiado reconocida; otra imagen con nombre conocido rechazada",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Omitir es opcional: finalización, reporte retenido en sesión y otra demostración",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Búsqueda opcional: distrito, especialidad, perfil, solicitud y regreso al reporte",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Error del perfil sin detalles internos y estado vacío del directorio",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Cuenta: sesión, perfil y continuación anónima al odontólogo elegido con proveedor simulado",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Fotografías: consentimiento, carga, vista privada, revocación y recuperación de borrado parcial",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Recorrido con sesión: reporte → directorio → perfil → solicitud → historial → cancelación",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Cierre de sesión vuelve a proteger fotografías e historial",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "1440, 768 y 390 px: selección, revisión, resultado, reporte, finalización y menú sin desbordamiento",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Movimiento reducido: sin animaciones persistentes y recorrido completo utilizable",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Movimiento normal: preparación educativa visible, transición y zoom accesible",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  },
+  {
+    "nombre": "Sin errores de ejecución de React ni del proveedor simulado",
+    "tipo": "Navegador real; Supabase simulado sin escrituras remotas",
+    "resultado": "APROBADA"
+  }
+]

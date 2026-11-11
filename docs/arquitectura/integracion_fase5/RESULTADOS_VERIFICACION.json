@@ -1,0 +1,65 @@
+{
+  "fecha": "2026-11-03",
+  "fase": 5,
+  "checks": [
+    {
+      "comando": "node --experimental-strip-types --test --test-reporter=tap \"src/features/**/*.test.mjs\" \"docs/arquitectura/integracion_fase5/verificar-contratos.test.mjs\"",
+      "exitCode": 0,
+      "resultado": {
+        "tests": 261,
+        "pass": 261,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "detalle": "255 existentes + 6 de ejemplos documentales; no nuevos JWT HTTP",
+      "sha256Salida": "3de8fffc07110fbd565533a6513b8d37821f24a1bb8baed62f0e88b6a5b3107b"
+    },
+    {
+      "comando": "node node_modules/typescript/bin/tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --skipLibCheck docs/arquitectura/integracion_fase5/contratos.ts",
+      "exitCode": 0,
+      "resultado": "Compilación estricta aprobada, salida de herramienta observada"
+    },
+    {
+      "comando": "npm run typecheck",
+      "exitCode": 0,
+      "resultado": "Aprobado; salida de herramienta observada en F5"
+    },
+    {
+      "comando": "npm run build",
+      "exitCode": 0,
+      "resultado": "Build aprobado con tres rutas clínicas",
+      "sha256Salida": "179922a831b08b06dd90cba75eba7b744f1ca972515ec2ebef2b9ef55599c700"
+    },
+    {
+      "comando": "npm audit --audit-level=low --json",
+      "exitCode": 0,
+      "resultado": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    {
+      "comando": "node docs/arquitectura/integracion_fase5/verificar-cierre.mjs",
+      "exitCode": 0,
+      "resultado": "7 checks: 3 HTTP contra build local, 3 de fuente y 1 de catálogo ACL/RLS; sin escrituras SQL"
+    }
+  ],
+  "intentoPrevio": {
+    "tests": 256,
+    "pass_": 255,
+    "fail": 1,
+    "causa": "Importación del test documental con ../ adicional; corregido sin tocar src y repetida suite completa"
+  },
+  "recopilacion": "Primer intento de recopilación no pudo leer UTF-16 de PowerShell; corregido el lector. No es fallo de aplicación. El validador de enlaces se repitió tras generar este resultado.",
+  "httpJwtRealHistorico": "F4: 60 comprobaciones; no repetidas en F5",
+  "supabaseRemoto": "No consultado ni modificado",
+  "migracionesAplicadas": 0,
+  "nuevasPruebasVisuales": false,
+  "githubActionsVercelNuevos": "No ejecutados; sin push/PR/deploy",
+  "produccionLista": false
+}

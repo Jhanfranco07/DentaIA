@@ -1,0 +1,13 @@
+sequenceDiagram
+  participant P as Paciente
+  participant C as Cliente Next.js
+  participant D as Supabase Data API
+  P->>C: Solicitar atención académica
+  C->>D: INSERT con JWT, validación de formulario
+  D->>D: RLS propietario y profesional activo
+  D-->>C: requested o error
+  C-->>P: Estado sin prometer reserva
+  P->>C: Cancelar solicitud propia
+  C->>D: UPDATE requested a cancelled con filtros
+  D->>D: RLS y privilegios de columna
+  D-->>C: Fila afectada o rechazo

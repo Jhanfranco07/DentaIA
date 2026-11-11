@@ -1,0 +1,78 @@
+[
+  {
+    "id": "photo-intraoral-01",
+    "image": "data/images/intraoral_photo.jpg",
+    "modality": "clinical_photo",
+    "labeled": false,
+    "is_control": false,
+    "expected_severity": null,
+    "must_identify": [
+      "a clinical intraoral photograph (a real photo, not a diagram or x-ray)",
+      "teeth (molars / premolars visible on both sides)",
+      "the tongue",
+      "the palate (roof of the mouth) and/or uvula / soft palate / throat",
+      "gingiva (gums)"
+    ],
+    "must_avoid": [
+      "calling it a diagram/illustration or a radiograph"
+    ],
+    "reference_caption": "A clinical intraoral photograph of an open mouth showing teeth, tongue, palate, uvula and surrounding oral soft tissues.",
+    "source": {
+      "title": "File:Detailed view of the inside of the human mouth.jpg",
+      "url": "https://commons.wikimedia.org/wiki/File:Detailed_view_of_the_inside_of_the_human_mouth.jpg",
+      "license": "CC0"
+    }
+  },
+  {
+    "id": "dental_caries_cavity_2_cropped",
+    "image": "data/images/dental_caries_cavity_2_cropped.jpg",
+    "modality": "clinical_photo",
+    "labeled": false,
+    "is_control": false,
+    "expected_severity": "advanced",
+    "must_identify": [
+      "This is an intraoral clinical photograph of maxillary (upper) teeth and gingiva",
+      "One tooth shows extensive (advanced) dental caries with a large, dark/blackened cavitated lesion and gross breakdown of the crown",
+      "The carious cavity exposes deeper tooth structure (dentin/pulp chamber level destruction), not just superficial enamel",
+      "Adjacent teeth and the surrounding pink gingiva are comparatively intact/less affected"
+    ],
+    "must_avoid": [
+      "Calling the destroyed/carious tooth healthy or normal",
+      "Identifying the image as a radiograph/X-ray or an illustration/diagram instead of a clinical photo",
+      "Misreading the dark cavitation as merely surface staining, a filling, or a normal pit/fissure rather than a destructive carious lesion"
+    ],
+    "reference_caption": "Intraoral clinical photograph of the maxillary arch showing a single tooth with advanced dental caries, a large dark cavitated lesion and gross crown destruction, while the neighboring teeth and pink gingiva appear comparatively intact.",
+    "source": {
+      "title": "File:Dental Caries Cavity 2 (cropped).JPG",
+      "url": "https://commons.wikimedia.org/wiki/File%3ADental_Caries_Cavity_2_%28cropped%29.JPG",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Suyash.dwivedi"
+    }
+  },
+  {
+    "id": "mandibularanteriorcalculus",
+    "image": "data/images/mandibularanteriorcalculus.jpg",
+    "modality": "clinical_photo",
+    "labeled": false,
+    "is_control": false,
+    "expected_severity": null,
+    "must_identify": [
+      "This is an intraoral clinical photograph, not a diagram or radiograph",
+      "It shows the lingual surfaces of the lower (mandibular) anterior teeth, viewed from behind/below",
+      "There are heavy yellow-brown hard deposits of dental calculus (tartar) coating the lingual aspects of the teeth near the gumline",
+      "The deposits are consistent with supragingival (and likely subgingival) calculus accumulation in the lower anterior lingual region, a typical site near the salivary duct openings"
+    ],
+    "must_avoid": [
+      "Calling this a diagram, illustration, or X-ray/radiograph",
+      "Describing the teeth as clean/healthy or ignoring the calculus deposits",
+      "Mislabeling the calculus as caries, fillings, or fluorosis rather than tartar/calculus stain"
+    ],
+    "reference_caption": "Intraoral clinical photograph of the lingual surfaces of the mandibular anterior teeth showing heavy yellow-brown supragingival dental calculus (tartar) deposits along the gingival margins.",
+    "source": {
+      "title": "File:MandibularAnteriorCalculus.JPG",
+      "url": "https://commons.wikimedia.org/wiki/File%3AMandibularAnteriorCalculus.JPG",
+      "license": "Public domain",
+      "attribution": "DRosenbach at English Wikipedia"
+    }
+  }
+]

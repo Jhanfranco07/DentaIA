@@ -1,0 +1,2990 @@
+TAP version 13
+# (node:6191) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/ambiente-flujos.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: los flujos administrativos se habilitan en desarrollo local con opt-in
+ok 1 - los flujos administrativos se habilitan en desarrollo local con opt-in
+  ---
+  duration_ms: 0.60438
+  type: 'test'
+  ...
+# Subtest: el opt-in compartido se limita a Preview de develop
+ok 2 - el opt-in compartido se limita a Preview de develop
+  ---
+  duration_ms: 0.116724
+  type: 'test'
+  ...
+# (node:6198) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/api.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"MFA_AAL2_PENDIENTE"}
+# administrative_security {"status":403,"code":"MFA_AAL2_PENDIENTE"}
+# Subtest: consulta autorizada reutiliza el guard AAL2 y devuelve solo datos sintéticos privados
+ok 3 - consulta autorizada reutiliza el guard AAL2 y devuelve solo datos sintéticos privados
+  ---
+  duration_ms: 17.667363
+  type: 'test'
+  ...
+# Subtest: visitante, token inválido, paciente, odontólogo y AAL1 no llegan a consultar servicios
+ok 4 - visitante, token inválido, paciente, odontólogo y AAL1 no llegan a consultar servicios
+  ---
+  duration_ms: 4.132185
+  type: 'test'
+  ...
+# Subtest: consulta estricta: desconocidos, duplicados y formato de paginación se rechazan
+ok 5 - consulta estricta: desconocidos, duplicados y formato de paginación se rechazan
+  ---
+  duration_ms: 1.029273
+  type: 'test'
+  ...
+# Subtest: proyección de respuesta excluye campos privados adicionales de un proveedor
+ok 6 - proyección de respuesta excluye campos privados adicionales de un proveedor
+  ---
+  duration_ms: 2.336971
+  type: 'test'
+  ...
+# Subtest: propuesta autorizada es validación sin aplicar; la identidad procede del guard
+ok 7 - propuesta autorizada es validación sin aplicar; la identidad procede del guard
+  ---
+  duration_ms: 1.231955
+  type: 'test'
+  ...
+# Subtest: no se aceptan actor/autoridad del cliente, acciones de escritura ni promociones
+ok 8 - no se aceptan actor/autoridad del cliente, acciones de escritura ni promociones
+  ---
+  duration_ms: 1.489919
+  type: 'test'
+  ...
+# Subtest: JSON, tipo de contenido y tamaño de cuerpo se validan tras autorización
+ok 9 - JSON, tipo de contenido y tamaño de cuerpo se validan tras autorización
+  ---
+  duration_ms: 0.706032
+  type: 'test'
+  ...
+# administrative_security {"status":500,"code":"ERROR_INTERNO"}
+# Subtest: escenarios vacíos, errores de servicio y excepciones no filtran detalles
+ok 10 - escenarios vacíos, errores de servicio y excepciones no filtran detalles
+  ---
+  duration_ms: 4.361866
+  type: 'test'
+  ...
+# Subtest: provisión: preparar un resumen no escribe ni imprime datos personales/metadatos
+ok 11 - provisión: preparar un resumen no escribe ni imprime datos personales/metadatos
+  ---
+  duration_ms: 1.847742
+  type: 'test'
+  ...
+# Subtest: provisión: confirmación ausente, genérica o booleana no autoriza
+ok 12 - provisión: confirmación ausente, genérica o booleana no autoriza
+  ---
+  duration_ms: 0.454617
+  type: 'test'
+  ...
+# Subtest: provisión: objetivo privado ligado a la ejecución, sin UUID real embebido ni fallback CLI
+ok 13 - provisión: objetivo privado ligado a la ejecución, sin UUID real embebido ni fallback CLI
+  ---
+  duration_ms: 14.868554
+  type: 'test'
+  ...
+# Subtest: provisión: concesión confirmada preserva metadata anidada y exige nueva lectura
+ok 14 - provisión: concesión confirmada preserva metadata anidada y exige nueva lectura
+  ---
+  duration_ms: 0.42277
+  type: 'test'
+  ...
+# Subtest: provisión: otra identidad, proveedor inesperado, cuenta no confirmada o suspendida bloquean
+ok 15 - provisión: otra identidad, proveedor inesperado, cuenta no confirmada o suspendida bloquean
+  ---
+  duration_ms: 0.439064
+  type: 'test'
+  ...
+# Subtest: provisión: nunca sobrescribe roles o namespaces existentes distintos
+ok 16 - provisión: nunca sobrescribe roles o namespaces existentes distintos
+  ---
+  duration_ms: 0.445934
+  type: 'test'
+  ...
+# Subtest: provisión: estado ya asignado es idempotente sin PUT
+ok 17 - provisión: estado ya asignado es idempotente sin PUT
+  ---
+  duration_ms: 0.283211
+  type: 'test'
+  ...
+# Subtest: provisión: cambio durante confirmación cancela sin escribir
+ok 18 - provisión: cambio durante confirmación cancela sin escribir
+  ---
+  duration_ms: 0.298504
+  type: 'test'
+  ...
+# Subtest: provisión: un update aparentemente correcto no basta sin lectura posterior coincidente
+ok 19 - provisión: un update aparentemente correcto no basta sin lectura posterior coincidente
+  ---
+  duration_ms: 0.203613
+  type: 'test'
+  ...
+# Subtest: provisión: respuesta perdida se comprueba con GET, sin reintento ni rollback
+ok 20 - provisión: respuesta perdida se comprueba con GET, sin reintento ni rollback
+  ---
+  duration_ms: 0.408108
+  type: 'test'
+  ...
+# Subtest: provisión: fallo de lectura posterior produce estado incierto, sin filtrar errores
+ok 21 - provisión: fallo de lectura posterior produce estado incierto, sin filtrar errores
+  ---
+  duration_ms: 0.358313
+  type: 'test'
+  ...
+# Subtest: provisión: transporte SDK real restringe proyecto, UUID, payload y número de escrituras con fetch ficticio
+ok 22 - provisión: transporte SDK real restringe proyecto, UUID, payload y número de escrituras con fetch ficticio
+  ---
+  duration_ms: 1.413525
+  type: 'test'
+  ...
+# Subtest: DI-153 ensamblado real: origen ajeno se rechaza antes del cuerpo; origen correcto conserva bandera apagada
+ok 23 - DI-153 ensamblado real: origen ajeno se rechaza antes del cuerpo; origen correcto conserva bandera apagada
+  ---
+  duration_ms: 98.559677
+  type: 'test'
+  ...
+# Subtest: DI-153 ensamblado real: valores no exactos de la bandera jamás invocan el RPC aunque haya credencial sintética
+ok 24 - DI-153 ensamblado real: valores no exactos de la bandera jamás invocan el RPC aunque haya credencial sintética
+  ---
+  duration_ms: 96.588261
+  type: 'test'
+  ...
+# Subtest: DI-153 ensamblado real: Preview de Vercel bloquea escrituras aunque la bandera esté activada
+ok 25 - DI-153 ensamblado real: Preview de Vercel bloquea escrituras aunque la bandera esté activada
+  ---
+  duration_ms: 98.769049
+  type: 'test'
+  ...
+# Subtest: DI-153 consulta de revisión no elude el bloqueo del ensamblado de escritura ni expone contexto
+ok 26 - DI-153 consulta de revisión no elude el bloqueo del ensamblado de escritura ni expone contexto
+  ---
+  duration_ms: 89.366706
+  type: 'test'
+  ...
+# (node:6253) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/cambios-roles.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"MFA_AAL2_PENDIENTE"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# Subtest: contrato de cambio estricto: rechaza campos de autoridad, metadatos y revisiones inválidas
+ok 27 - contrato de cambio estricto: rechaza campos de autoridad, metadatos y revisiones inválidas
+  ---
+  duration_ms: 1.345304
+  type: 'test'
+  ...
+# Subtest: transiciones de paciente preservan roles independientes y revocar el último elimina la asignación
+ok 28 - transiciones de paciente preservan roles independientes y revocar el último elimina la asignación
+  ---
+  duration_ms: 0.182672
+  type: 'test'
+  ...
+# Subtest: cambios propios, superusuario objetivo y concesiones no aprobadas se deniegan
+ok 29 - cambios propios, superusuario objetivo y concesiones no aprobadas se deniegan
+  ---
+  duration_ms: 0.110415
+  type: 'test'
+  ...
+# Subtest: promoción administrativa requiere aprobación independiente y MFA del objetivo; protege último superusuario
+ok 30 - promoción administrativa requiere aprobación independiente y MFA del objetivo; protege último superusuario
+  ---
+  duration_ms: 0.881593
+  type: 'test'
+  ...
+# Subtest: aprobación administrativa no sustituye verificación profesional; sí permite revocar un rol existente
+ok 31 - aprobación administrativa no sustituye verificación profesional; sí permite revocar un rol existente
+  ---
+  duration_ms: 0.144946
+  type: 'test'
+  ...
+# Subtest: API reutiliza DI-150 y transmite únicamente contexto verificado, transición y clave
+ok 32 - API reutiliza DI-150 y transmite únicamente contexto verificado, transición y clave
+  ---
+  duration_ms: 14.963636
+  type: 'test'
+  ...
+# Subtest: sin sesión, paciente, odontólogo, AAL1 y fallo de Auth no acceden al proveedor
+ok 33 - sin sesión, paciente, odontólogo, AAL1 y fallo de Auth no acceden al proveedor
+  ---
+  duration_ms: 2.481916
+  type: 'test'
+  ...
+# Subtest: pérdida de autorización entre solicitudes se revalida y no reutiliza el permiso anterior
+ok 34 - pérdida de autorización entre solicitudes se revalida y no reutiliza el permiso anterior
+  ---
+  duration_ms: 0.515598
+  type: 'test'
+  ...
+# Subtest: protección de origen, tipo JSON, clave, longitud y entrada desconocida
+ok 35 - protección de origen, tipo JSON, clave, longitud y entrada desconocida
+  ---
+  duration_ms: 1.414797
+  type: 'test'
+  ...
+# Subtest: consulta de revisión es protegida y no admite campos adicionales o duplicados
+ok 36 - consulta de revisión es protegida y no admite campos adicionales o duplicados
+  ---
+  duration_ms: 0.580054
+  type: 'test'
+  ...
+# Subtest: respuestas perdidas y fallos de auditoría no se presentan como éxito ni rollback confirmado
+ok 37 - respuestas perdidas y fallos de auditoría no se presentan como éxito ni rollback confirmado
+  ---
+  duration_ms: 0.460466
+  type: 'test'
+  ...
+# Subtest: reintento conserva clave y contenido; transporte no decide por sí mismo si hubo commit
+ok 38 - reintento conserva clave y contenido; transporte no decide por sí mismo si hubo commit
+  ---
+  duration_ms: 0.554105
+  type: 'test'
+  ...
+# Subtest: solicitudes simultáneas llegan al puerto con su versión y claves distintas; no simula un lock PostgreSQL
+ok 39 - solicitudes simultáneas llegan al puerto con su versión y claves distintas; no simula un lock PostgreSQL
+  ---
+  duration_ms: 0.365765
+  type: 'test'
+  ...
+# Subtest: rechazos de la unidad transaccional se propagan sin afirmar aplicación
+ok 40 - rechazos de la unidad transaccional se propagan sin afirmar aplicación
+  ---
+  duration_ms: 0.804277
+  type: 'test'
+  ...
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"MFA_AAL2_PENDIENTE"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# (node:6261) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/cliente-panel-real.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: DI-152 cliente → endpoint real → guard → puerto simulado conserva filtros/paginación
+ok 41 - DI-152 cliente → endpoint real → guard → puerto simulado conserva filtros/paginación
+  ---
+  duration_ms: 23.163587
+  type: 'test'
+  ...
+# Subtest: DI-152 proveedor puede ajustar página fuera de rango sin fabricar resultados
+ok 42 - DI-152 proveedor puede ajustar página fuera de rango sin fabricar resultados
+  ---
+  duration_ms: 0.643579
+  type: 'test'
+  ...
+# Subtest: DI-152 búsqueda sin resultados mantiene página uno y vacío real del contrato
+ok 43 - DI-152 búsqueda sin resultados mantiene página uno y vacío real del contrato
+  ---
+  duration_ms: 0.502409
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"rol":"paciente"} antes del proveedor
+ok 44 - DI-152 rechazo {"rol":"paciente"} antes del proveedor
+  ---
+  duration_ms: 0.995263
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"rol":"odontologo"} antes del proveedor
+ok 45 - DI-152 rechazo {"rol":"odontologo"} antes del proveedor
+  ---
+  duration_ms: 0.420276
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"aal":"aal1"} antes del proveedor
+ok 46 - DI-152 rechazo {"aal":"aal1"} antes del proveedor
+  ---
+  duration_ms: 0.359576
+  type: 'test'
+  ...
+# Subtest: DI-152 rechazo {"invalid":true} antes del proveedor
+ok 47 - DI-152 rechazo {"invalid":true} antes del proveedor
+  ---
+  duration_ms: 0.30911
+  type: 'test'
+  ...
+# Subtest: DI-152 sesión ausente no llama al transporte y lectura apagada nunca se presenta exitosa
+ok 48 - DI-152 sesión ausente no llama al transporte y lectura apagada nunca se presenta exitosa
+  ---
+  duration_ms: 0.519163
+  type: 'test'
+  ...
+# Subtest: DI-152 validación de filtros/identidad impide peticiones manipuladas
+ok 49 - DI-152 validación de filtros/identidad impide peticiones manipuladas
+  ---
+  duration_ms: 0.162943
+  type: 'test'
+  ...
+# Subtest: DI-152 DTO conserva estados diferenciados y descarta datos extra
+ok 50 - DI-152 DTO conserva estados diferenciados y descarta datos extra
+  ---
+  duration_ms: 0.213378
+  type: 'test'
+  ...
+# Subtest: DI-152 no acepta una página de otra consulta ni resultados duplicados
+ok 51 - DI-152 no acepta una página de otra consulta ni resultados duplicados
+  ---
+  duration_ms: 0.30179
+  type: 'test'
+  ...
+# Subtest: DI-152 lectura posterior representa el nuevo estado después de respuesta confirmada
+ok 52 - DI-152 lectura posterior representa el nuevo estado después de respuesta confirmada
+  ---
+  duration_ms: 0.762285
+  type: 'test'
+  ...
+# Subtest: DI-152 resultado roles exige operación, código y clave correspondientes
+ok 53 - DI-152 resultado roles exige operación, código y clave correspondientes
+  ---
+  duration_ms: 0.135251
+  type: 'test'
+  ...
+# Subtest: DI-152 HTTP de error/HTML no expone cuerpos sensibles
+ok 54 - DI-152 HTTP de error/HTML no expone cuerpos sensibles
+  ---
+  duration_ms: 0.297293
+  type: 'test'
+  ...
+# (node:6269) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/api.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: transporte lee token renovado, usa rutas fijas y solo cookies same-origin sin caché
+ok 55 - transporte lee token renovado, usa rutas fijas y solo cookies same-origin sin caché
+  ---
+  duration_ms: 14.071487
+  type: 'test'
+  ...
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"MFA_AAL2_PENDIENTE"}
+# administrative_security {"status":403,"code":"MFA_AAL2_PENDIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":403,"code":"MFA_AAL2_PENDIENTE"}
+# Subtest: cliente → API → guard AAL2 → proveedor; lista y valida sin modificar roles
+ok 56 - cliente → API → guard AAL2 → proveedor; lista y valida sin modificar roles
+  ---
+  duration_ms: 7.792856
+  type: 'test'
+  ...
+# Subtest: identidad del operador solo procede del servidor y rechaza propuesta propia
+ok 57 - identidad del operador solo procede del servidor y rechaza propuesta propia
+  ---
+  duration_ms: 0.891488
+  type: 'test'
+  ...
+# Subtest: paciente, odontólogo, AAL1, suspensión y token inválido no alcanzan el servicio
+ok 58 - paciente, odontólogo, AAL1, suspensión y token inválido no alcanzan el servicio
+  ---
+  duration_ms: 3.904294
+  type: 'test'
+  ...
+# Subtest: AAL1 muestra el paso MFA requerido y el servidor mantiene la denegación
+ok 59 - AAL1 muestra el paso MFA requerido y el servidor mantiene la denegación
+  ---
+  duration_ms: 0.426485
+  type: 'test'
+  ...
+# Subtest: ausencia o fallo de sesión no envía una petición ni expone detalles
+ok 60 - ausencia o fallo de sesión no envía una petición ni expone detalles
+  ---
+  duration_ms: 0.188551
+  type: 'test'
+  ...
+# Subtest: estados HTTP y fallos de red producen errores seguros, sin fallback a fixtures
+ok 61 - estados HTTP y fallos de red producen errores seguros, sin fallback a fixtures
+  ---
+  duration_ms: 0.864387
+  type: 'test'
+  ...
+# Subtest: respuestas 200 malformadas, HTML, origen incoherente y paginación imposible se rechazan
+ok 62 - respuestas 200 malformadas, HTML, origen incoherente y paginación imposible se rechazan
+  ---
+  duration_ms: 1.669487
+  type: 'test'
+  ...
+# Subtest: proyección cliente excluye campos extra y conserva origen en listas vacías
+ok 63 - proyección cliente excluye campos extra y conserva origen en listas vacías
+  ---
+  duration_ms: 3.082561
+  type: 'test'
+  ...
+# Subtest: nunca da éxito a una escritura aplicada ni a respuestas de otro objetivo o rol
+ok 64 - nunca da éxito a una escritura aplicada ni a respuestas de otro objetivo o rol
+  ---
+  duration_ms: 0.630729
+  type: 'test'
+  ...
+# Subtest: filtros y JSON de propuesta se serializan sin autoridad aportada por el cliente
+ok 65 - filtros y JSON de propuesta se serializan sin autoridad aportada por el cliente
+  ---
+  duration_ms: 2.937055
+  type: 'test'
+  ...
+# Subtest: preflight sin red distingue preparación de verificación real y nunca serializa valores
+ok 66 - preflight sin red distingue preparación de verificación real y nunca serializa valores
+  ---
+  duration_ms: 0.731269
+  type: 'test'
+  ...
+# Subtest: preflight exige activación exacta, credencial dedicada, URL HTTPS y clave pública
+ok 67 - preflight exige activación exacta, credencial dedicada, URL HTTPS y clave pública
+  ---
+  duration_ms: 0.366525
+  type: 'test'
+  ...
+# Subtest: preflight detecta secretos modernos y service_role legacy bajo cualquier variable pública
+ok 68 - preflight detecta secretos modernos y service_role legacy bajo cualquier variable pública
+  ---
+  duration_ms: 0.437461
+  type: 'test'
+  ...
+# (node:6288) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/entorno-panel.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: panel admin permanece disponible en desarrollo local
+ok 69 - panel admin permanece disponible en desarrollo local
+  ---
+  duration_ms: 0.506995
+  type: 'test'
+  ...
+# Subtest: panel admin solo se habilita con opt-in en Preview de develop
+ok 70 - panel admin solo se habilita con opt-in en Preview de develop
+  ---
+  duration_ms: 0.132687
+  type: 'test'
+  ...
+# Subtest: lecturas administrativas privilegiadas requieren habilitación local o Preview autorizado
+ok 71 - lecturas administrativas privilegiadas requieren habilitación local o Preview autorizado
+  ---
+  duration_ms: 0.091947
+  type: 'test'
+  ...
+# Subtest: regresión: el enlace de cuenta resuelve el panel en Production de main
+ok 72 - regresión: el enlace de cuenta resuelve el panel en Production de main
+  ---
+  duration_ms: 3.262449
+  type: 'test'
+  ...
+# Subtest: Production no habilita otros despliegues ni sustituye el opt-in de lectura
+ok 73 - Production no habilita otros despliegues ni sustituye el opt-in de lectura
+  ---
+  duration_ms: 0.145186
+  type: 'test'
+  ...
+# Subtest: cliente de escritura server-only y apagado sin credencial dedicada; no toma la de lectura
+ok 74 - cliente de escritura server-only y apagado sin credencial dedicada; no toma la de lectura
+  ---
+  duration_ms: 114.30049
+  type: 'test'
+  ...
+# Subtest: SDK instalado: solo POST al RPC fijo, sin sesión de navegador, caché ni redirecciones
+ok 75 - SDK instalado: solo POST al RPC fijo, sin sesión de navegador, caché ni redirecciones
+  ---
+  duration_ms: 87.63692
+  type: 'test'
+  ...
+# Subtest: errores RPC y campos privados inesperados fallan sin reenviar detalle
+ok 76 - errores RPC y campos privados inesperados fallan sin reenviar detalle
+  ---
+  duration_ms: 87.425955
+  type: 'test'
+  ...
+# (node:6332) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/ambiente-flujos.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: el nuevo flujo no habilita escrituras sin opt-in Preview/local
+ok 77 - el nuevo flujo no habilita escrituras sin opt-in Preview/local
+  ---
+  duration_ms: 0.495789
+  type: 'test'
+  ...
+# Subtest: la nueva migración usa RPC autenticados, auditoría inmutable y bloquea membresías no verificadas
+ok 78 - la nueva migración usa RPC autenticados, auditoría inmutable y bloquea membresías no verificadas
+  ---
+  duration_ms: 0.765
+  type: 'test'
+  ...
+# Subtest: el historial local de migraciones usa la versión registrada remotamente
+ok 79 - el historial local de migraciones usa la versión registrada remotamente
+  ---
+  duration_ms: 0.212717
+  type: 'test'
+  ...
+# Subtest: los rollback están fuera del directorio que lee supabase db push y protegen su auditoría
+ok 80 - los rollback están fuera del directorio que lee supabase db push y protegen su auditoría
+  ---
+  duration_ms: 0.199057
+  type: 'test'
+  ...
+# Subtest: el adaptador privilegiado no se puede importar en contexto cliente
+ok 81 - el adaptador privilegiado no se puede importar en contexto cliente
+  ---
+  duration_ms: 53.504386
+  type: 'test'
+  ...
+# Subtest: sin opt-in o credencial dedicada falla sin red; no toma la clave del script de usuarios
+ok 82 - sin opt-in o credencial dedicada falla sin red; no toma la clave del script de usuarios
+  ---
+  duration_ms: 66.781569
+  type: 'test'
+  ...
+# Subtest: SDK real con fetch interceptado: GET Auth y profiles mínimo, sin caché, redirects ni métodos de escritura
+ok 83 - SDK real con fetch interceptado: GET Auth y profiles mínimo, sin caché, redirects ni métodos de escritura
+  ---
+  duration_ms: 89.825749
+  type: 'test'
+  ...
+# Subtest: SDK: errores de Auth/PostgreSQL y truncamiento no se convierten en lista vacía o perfiles ausentes
+ok 84 - SDK: errores de Auth/PostgreSQL y truncamiento no se convierten en lista vacía o perfiles ausentes
+  ---
+  duration_ms: 94.484868
+  type: 'test'
+  ...
+# Subtest: integración API → guard → proveedor → SDK Auth/profiles con transporte interceptado, sin servicio remoto
+ok 85 - integración API → guard → proveedor → SDK Auth/profiles con transporte interceptado, sin servicio remoto
+  ---
+  duration_ms: 104.318554
+  type: 'test'
+  ...
+# Subtest: Production main: opt-in y credencial dedicada habilitan solo el puerto GET; sin credencial no hay red
+ok 86 - Production main: opt-in y credencial dedicada habilitan solo el puerto GET; sin credencial no hay red
+  ---
+  duration_ms: 93.981929
+  type: 'test'
+  ...
+# (node:6392) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/mfa-desafio.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: el step-up verifica un factor TOTP existente y solo declara éxito después de AAL2
+ok 87 - el step-up verifica un factor TOTP existente y solo declara éxito después de AAL2
+  ---
+  duration_ms: 1.149392
+  type: 'test'
+  ...
+# Subtest: rechaza factores pendientes y códigos mal formados antes de llamar a Auth
+ok 88 - rechaza factores pendientes y códigos mal formados antes de llamar a Auth
+  ---
+  duration_ms: 0.429569
+  type: 'test'
+  ...
+# Subtest: distingue rechazo TOTP, sesión caducada, límite, red y fallo del servicio sin filtrar detalles
+ok 89 - distingue rechazo TOTP, sesión caducada, límite, red y fallo del servicio sin filtrar detalles
+  ---
+  duration_ms: 0.791459
+  type: 'test'
+  ...
+# Subtest: un desafío exitoso sin claim AAL2 sigue bloqueado
+ok 90 - un desafío exitoso sin claim AAL2 sigue bloqueado
+  ---
+  duration_ms: 0.910856
+  type: 'test'
+  ...
+# (node:6399) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/mfa-local.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MFA local: consulta no muta y AAL2 informativo no concede administración
+ok 91 - MFA local: consulta no muta y AAL2 informativo no concede administración
+  ---
+  duration_ms: 15.968312
+  type: 'test'
+  ...
+# Subtest: MFA local: bandera y consentimiento se requieren antes de cualquier mutación
+ok 92 - MFA local: bandera y consentimiento se requieren antes de cualquier mutación
+  ---
+  duration_ms: 0.59102
+  type: 'test'
+  ...
+# Subtest: MFA local: identidad ausente o no confirmada no enrola ni consulta el endpoint
+ok 93 - MFA local: identidad ausente o no confirmada no enrola ni consulta el endpoint
+  ---
+  duration_ms: 0.578551
+  type: 'test'
+  ...
+# Subtest: MFA local: enrolamiento explícito proyecta solo QR aislado y factor ID, sin secret/uri/sesión
+ok 94 - MFA local: enrolamiento explícito proyecta solo QR aislado y factor ID, sin secret/uri/sesión
+  ---
+  duration_ms: 1.613583
+  type: 'test'
+  ...
+# Subtest: MFA local: preferir challenge de factor verificado, no enrolar duplicados
+ok 95 - MFA local: preferir challenge de factor verificado, no enrolar duplicados
+  ---
+  duration_ms: 0.99368
+  type: 'test'
+  ...
+# Subtest: MFA local: factor pendiente creado aquí se verifica legítimamente sin cambiar roles
+ok 96 - MFA local: factor pendiente creado aquí se verifica legítimamente sin cambiar roles
+  ---
+  duration_ms: 0.48319
+  type: 'test'
+  ...
+# Subtest: MFA local: código inválido y factor ajeno se rechazan
+ok 97 - MFA local: código inválido y factor ajeno se rechazan
+  ---
+  duration_ms: 0.240879
+  type: 'test'
+  ...
+# Subtest: MFA local: retomar un pendiente propio ya escaneado tras recargar exige challenge real del SDK
+ok 98 - MFA local: retomar un pendiente propio ya escaneado tras recargar exige challenge real del SDK
+  ---
+  duration_ms: 0.455157
+  type: 'test'
+  ...
+# Subtest: MFA local: una identidad distinta no verifica el factor pendiente anterior
+ok 99 - MFA local: una identidad distinta no verifica el factor pendiente anterior
+  ---
+  duration_ms: 0.192487
+  type: 'test'
+  ...
+# Subtest: MFA local: errores SDK sensibles no se propagan y no hay reintento automático
+ok 100 - MFA local: errores SDK sensibles no se propagan y no hay reintento automático
+  ---
+  duration_ms: 0.262061
+  type: 'test'
+  ...
+# Subtest: MFA local: respuesta SDK de verify sin AAL2 posterior no produce éxito
+ok 101 - MFA local: respuesta SDK de verify sin AAL2 posterior no produce éxito
+  ---
+  duration_ms: 0.292095
+  type: 'test'
+  ...
+# Subtest: MFA local: impedir doble enrolamiento y descartar una operación al cambiar sesión
+ok 102 - MFA local: impedir doble enrolamiento y descartar una operación al cambiar sesión
+  ---
+  duration_ms: 4.070452
+  type: 'test'
+  ...
+# Subtest: MFA local: token de otra identidad no se transmite al servidor y respuestas inválidas no autorizan
+ok 103 - MFA local: token de otra identidad no se transmite al servidor y respuestas inválidas no autorizan
+  ---
+  duration_ms: 0.418894
+  type: 'test'
+  ...
+# Subtest: MFA local: temporización de caducidad conservadora sin modificar la sesión remota
+ok 104 - MFA local: temporización de caducidad conservadora sin modificar la sesión remota
+  ---
+  duration_ms: 0.062332
+  type: 'test'
+  ...
+# Subtest: MFA local: sesión caducada impide enrolar y verificar antes de cualquier mutación
+ok 105 - MFA local: sesión caducada impide enrolar y verificar antes de cualquier mutación
+  ---
+  duration_ms: 0.227308
+  type: 'test'
+  ...
+# Subtest: MFA local: código rechazado y desafío caducado permiten reintento manual sin nuevo enrolamiento
+ok 106 - MFA local: código rechazado y desafío caducado permiten reintento manual sin nuevo enrolamiento
+  ---
+  duration_ms: 0.549388
+  type: 'test'
+  ...
+# Subtest: MFA local: proyecto TOTP deshabilitado, rate limit y sesión rechazada usan errores seguros
+ok 107 - MFA local: proyecto TOTP deshabilitado, rate limit y sesión rechazada usan errores seguros
+  ---
+  duration_ms: 0.20813
+  type: 'test'
+  ...
+# Subtest: MFA local: fallo de red de getUser no se confunde con expiración ni permite una mutación
+ok 108 - MFA local: fallo de red de getUser no se confunde con expiración ni permite una mutación
+  ---
+  duration_ms: 0.103614
+  type: 'test'
+  ...
+# Subtest: MFA local: QR SVG oficial, codificado y base64 se muestran como imagen sin publicar secret ni uri
+ok 109 - MFA local: QR SVG oficial, codificado y base64 se muestran como imagen sin publicar secret ni uri
+  ---
+  duration_ms: 0.207469
+  type: 'test'
+  ...
+# Subtest: MFA local: SVG inválido o servidor 401 no producen éxito ni filtración
+ok 110 - MFA local: SVG inválido o servidor 401 no producen éxito ni filtración
+  ---
+  duration_ms: 0.334928
+  type: 'test'
+  ...
+# Subtest: MFA local: SVG de SVGo con declaración XML y comentario inicial es válido
+ok 111 - MFA local: SVG de SVGo con declaración XML y comentario inicial es válido
+  ---
+  duration_ms: 0.124586
+  type: 'test'
+  ...
+# (node:6407) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/servicios.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: listado paginado sintético, estable y sin información privada
+ok 112 - listado paginado sintético, estable y sin información privada
+  ---
+  duration_ms: 5.34478
+  type: 'test'
+  ...
+# Subtest: búsqueda por alias/UUID y filtros combinados no usan consultas SQL
+ok 113 - búsqueda por alias/UUID y filtros combinados no usan consultas SQL
+  ---
+  duration_ms: 6.332041
+  type: 'test'
+  ...
+# Subtest: consulta estricta rechaza tipos, roles, paginación y campos manipulables
+ok 114 - consulta estricta rechaza tipos, roles, paginación y campos manipulables
+  ---
+  duration_ms: 0.278876
+  type: 'test'
+  ...
+# Subtest: UUID inválido se rechaza; IDs sintéticos y UUID en mayúsculas se aceptan
+ok 115 - UUID inválido se rechaza; IDs sintéticos y UUID en mayúsculas se aceptan
+  ---
+  duration_ms: 0.257063
+  type: 'test'
+  ...
+# Subtest: roles permitidos se validan sin modificar el listado ni persistir cambios
+ok 116 - roles permitidos se validan sin modificar el listado ni persistir cambios
+  ---
+  duration_ms: 5.772998
+  type: 'test'
+  ...
+# Subtest: roles técnicos, visitante y payloads con campos de autoridad son rechazados
+ok 117 - roles técnicos, visitante y payloads con campos de autoridad son rechazados
+  ---
+  duration_ms: 0.266527
+  type: 'test'
+  ...
+# Subtest: autoasignación, promoción y cambios sobre superusuario requieren denegación
+ok 118 - autoasignación, promoción y cambios sobre superusuario requieren denegación
+  ---
+  duration_ms: 1.618871
+  type: 'test'
+  ...
+# Subtest: escenarios vacío/error son explícitos y la cuenta inexistente no se crea
+ok 119 - escenarios vacío/error son explícitos y la cuenta inexistente no se crea
+  ---
+  duration_ms: 5.011424
+  type: 'test'
+  ...
+# Subtest: los resultados son copias; un consumidor no altera el proveedor ni sus roles
+ok 120 - los resultados son copias; un consumidor no altera el proveedor ni sus roles
+  ---
+  duration_ms: 2.589807
+  type: 'test'
+  ...
+# (node:6414) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/ubicaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: valida y normaliza la entrada de guardar sin aceptar campos adicionales
+ok 121 - valida y normaliza la entrada de guardar sin aceptar campos adicionales
+  ---
+  duration_ms: 0.835815
+  type: 'test'
+  ...
+# Subtest: restringe publicar a referencia de verificación y operaciones de ocultar/retirar por ID
+ok 122 - restringe publicar a referencia de verificación y operaciones de ocultar/retirar por ID
+  ---
+  duration_ms: 0.145947
+  type: 'test'
+  ...
+# Subtest: acepta solo respuestas RPC acotadas sin filtrar campos inesperados
+ok 123 - acepta solo respuestas RPC acotadas sin filtrar campos inesperados
+  ---
+  duration_ms: 0.204505
+  type: 'test'
+  ...
+# Subtest: identifica errores de tabla no expuesta sin confundirlos con denegación o caída
+ok 124 - identifica errores de tabla no expuesta sin confundirlos con denegación o caída
+  ---
+  duration_ms: 0.075743
+  type: 'test'
+  ...
+# (node:6421) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/usuarios-reales.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: contrato real: perfiles propios del Auth ID, origen y proyección mínima
+ok 125 - contrato real: perfiles propios del Auth ID, origen y proyección mínima
+  ---
+  duration_ms: 2.550669
+  type: 'test'
+  ...
+# Subtest: perfil ausente no se crea ni se deduce desde user_metadata o correo
+ok 126 - perfil ausente no se crea ni se deduce desde user_metadata o correo
+  ---
+  duration_ms: 0.205846
+  type: 'test'
+  ...
+# Subtest: asignación ausente, inválida y suspendida son estados distintos; no asigna paciente por defecto
+ok 127 - asignación ausente, inválida y suspendida son estados distintos; no asigna paciente por defecto
+  ---
+  duration_ms: 5.335196
+  type: 'test'
+  ...
+# Subtest: estado de Auth es independiente de la asignación del negocio
+ok 128 - estado de Auth es independiente de la asignación del negocio
+  ---
+  duration_ms: 0.332815
+  type: 'test'
+  ...
+# Subtest: fechas falsy malformadas nunca se clasifican como cuenta habilitada
+ok 129 - fechas falsy malformadas nunca se clasifican como cuenta habilitada
+  ---
+  duration_ms: 0.341218
+  type: 'test'
+  ...
+# Subtest: búsqueda y filtros globales incluyen cuentas posteriores a la primera página de Auth
+ok 130 - búsqueda y filtros globales incluyen cuentas posteriores a la primera página de Auth
+  ---
+  duration_ms: 0.565582
+  type: 'test'
+  ...
+# Subtest: paginación ordenada por UUID, página fuera de rango y vacío
+ok 131 - paginación ordenada por UUID, página fuera de rango y vacío
+  ---
+  duration_ms: 0.304463
+  type: 'test'
+  ...
+# Subtest: consulta inválida no construye cliente privilegiado
+ok 132 - consulta inválida no construye cliente privilegiado
+  ---
+  duration_ms: 0.171335
+  type: 'test'
+  ...
+# Subtest: errores de Auth y PostgreSQL no devuelven datos parciales ni detalles privados
+ok 133 - errores de Auth y PostgreSQL no devuelven datos parciales ni detalles privados
+  ---
+  duration_ms: 0.454137
+  type: 'test'
+  ...
+# Subtest: cuentas repetidas durante un escaneo se rechazan como lectura inestable
+ok 134 - cuentas repetidas durante un escaneo se rechazan como lectura inestable
+  ---
+  duration_ms: 0.249512
+  type: 'test'
+  ...
+# Subtest: límite de 2000 cuentas falla sin truncar ni fingir un total completo
+ok 135 - límite de 2000 cuentas falla sin truncar ni fingir un total completo
+  ---
+  duration_ms: 2.045126
+  type: 'test'
+  ...
+# Subtest: se admite exactamente el límite únicamente después de comprobar el final de Auth
+ok 136 - se admite exactamente el límite únicamente después de comprobar el final de Auth
+  ---
+  duration_ms: 4.124352
+  type: 'test'
+  ...
+# Subtest: respuestas malformadas, perfiles ajenos y duplicados se rechazan
+ok 137 - respuestas malformadas, perfiles ajenos y duplicados se rechazan
+  ---
+  duration_ms: 0.270593
+  type: 'test'
+  ...
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"MFA_AAL2_PENDIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# Subtest: lecturas concurrentes no comparten snapshot, filtros, resultados ni instancia
+ok 138 - lecturas concurrentes no comparten snapshot, filtros, resultados ni instancia
+  ---
+  duration_ms: 5.527612
+  type: 'test'
+  ...
+# Subtest: API real de lectura exige guard AAL2 por petición y respuesta privada sin caché
+ok 139 - API real de lectura exige guard AAL2 por petición y respuesta privada sin caché
+  ---
+  duration_ms: 15.925288
+  type: 'test'
+  ...
+# Subtest: visitante, paciente, odontólogo, AAL1, suspendido y JWT inválido no crean proveedor real
+ok 140 - visitante, paciente, odontólogo, AAL1, suspendido y JWT inválido no crean proveedor real
+  ---
+  duration_ms: 1.609086
+  type: 'test'
+  ...
+# Subtest: API rechaza query duplicada, autoridad/proveedor del cliente y tipos inválidos
+ok 141 - API rechaza query duplicada, autoridad/proveedor del cliente y tipos inválidos
+  ---
+  duration_ms: 2.139456
+  type: 'test'
+  ...
+# Subtest: API proyecta también campos anidados y nunca expone objetos del proveedor
+ok 142 - API proyecta también campos anidados y nunca expone objetos del proveedor
+  ---
+  duration_ms: 0.429139
+  type: 'test'
+  ...
+# Subtest: no hay acción administrativa de escritura habilitada, aunque el actor tenga AAL2
+ok 143 - no hay acción administrativa de escritura habilitada, aunque el actor tenga AAL2
+  ---
+  duration_ms: 0.305795
+  type: 'test'
+  ...
+# Subtest: snippet verifica las cuatro respuestas con fixtures sin reportar datos personales o tokens
+ok 144 - snippet verifica las cuatro respuestas con fixtures sin reportar datos personales o tokens
+  ---
+  duration_ms: 18.409918
+  type: 'test'
+  ...
+# Subtest: snippet requiere rechazo del guard y del endpoint en escenarios negativos, con fixtures
+ok 145 - snippet requiere rechazo del guard y del endpoint en escenarios negativos, con fixtures
+  ---
+  duration_ms: 1.671059
+  type: 'test'
+  ...
+# Subtest: snippet no acepta campos extra, estado inesperado ni datos de otra identidad
+ok 146 - snippet no acepta campos extra, estado inesperado ni datos de otra identidad
+  ---
+  duration_ms: 2.86647
+  type: 'test'
+  ...
+# Subtest: snippet no se ejecuta en producción ni confunde ausencia de sesión con aceptación positiva
+ok 147 - snippet no se ejecuta en producción ni confunde ausencia de sesión con aceptación positiva
+  ---
+  duration_ms: 1.148591
+  type: 'test'
+  ...
+# (node:6441) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/administracion/validacion-lectura.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: matriz QA con fixtures: filtros, búsqueda, paginación y reporte sin filas personales
+ok 148 - matriz QA con fixtures: filtros, búsqueda, paginación y reporte sin filas personales
+  ---
+  duration_ms: 26.211682
+  type: 'test'
+  ...
+# Subtest: matriz QA limita el volumen y no presenta una muestra incompleta como validada
+ok 149 - matriz QA limita el volumen y no presenta una muestra incompleta como validada
+  ---
+  duration_ms: 1.166459
+  type: 'test'
+  ...
+# Subtest: matriz QA identifica rechazos 401 y 403 antes de consultar filas
+ok 150 - matriz QA identifica rechazos 401 y 403 antes de consultar filas
+  ---
+  duration_ms: 0.318786
+  type: 'test'
+  ...
+# Subtest: matriz QA rechaza campos adicionales sensibles y errores sin revelar contenido
+ok 151 - matriz QA rechaza campos adicionales sensibles y errores sin revelar contenido
+  ---
+  duration_ms: 0.164204
+  type: 'test'
+  ...
+# (node:6449) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/analisis/casos.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: muestra cuidado-habitual: imagen original válida, hash y resultado fijo
+ok 152 - muestra cuidado-habitual: imagen original válida, hash y resultado fijo
+  ---
+  duration_ms: 5.970552
+  type: 'test'
+  ...
+# Subtest: reporte cuidado-habitual: PDF descargable, advertencia, imagen y xref coherentes
+ok 153 - reporte cuidado-habitual: PDF descargable, advertencia, imagen y xref coherentes
+  ---
+  duration_ms: 11.776167
+  type: 'test'
+  ...
+# Subtest: muestra atencion-preventiva: imagen original válida, hash y resultado fijo
+ok 154 - muestra atencion-preventiva: imagen original válida, hash y resultado fijo
+  ---
+  duration_ms: 1.570521
+  type: 'test'
+  ...
+# Subtest: reporte atencion-preventiva: PDF descargable, advertencia, imagen y xref coherentes
+ok 155 - reporte atencion-preventiva: PDF descargable, advertencia, imagen y xref coherentes
+  ---
+  duration_ms: 1.66977
+  type: 'test'
+  ...
+# Subtest: muestra cuidado-encias: imagen original válida, hash y resultado fijo
+ok 156 - muestra cuidado-encias: imagen original válida, hash y resultado fijo
+  ---
+  duration_ms: 0.759692
+  type: 'test'
+  ...
+# Subtest: reporte cuidado-encias: PDF descargable, advertencia, imagen y xref coherentes
+ok 157 - reporte cuidado-encias: PDF descargable, advertencia, imagen y xref coherentes
+  ---
+  duration_ms: 1.605153
+  type: 'test'
+  ...
+# Subtest: la asociación depende de bytes y nunca del nombre de archivo
+ok 158 - la asociación depende de bytes y nunca del nombre de archivo
+  ---
+  duration_ms: 1.68375
+  type: 'test'
+  ...
+# Subtest: rechaza imágenes desconocidas, vacías o demasiado grandes sin asignar resultados
+ok 159 - rechaza imágenes desconocidas, vacías o demasiado grandes sin asignar resultados
+  ---
+  duration_ms: 3.637623
+  type: 'test'
+  ...
+# Subtest: identificadores estables y regiones acotadas al ejemplo
+ok 160 - identificadores estables y regiones acotadas al ejemplo
+  ---
+  duration_ms: 0.791029
+  type: 'test'
+  ...
+# Subtest: el reporte rechaza imagen inválida, dimensiones imposibles y fecha inválida
+ok 161 - el reporte rechaza imagen inválida, dimensiones imposibles y fecha inválida
+  ---
+  duration_ms: 0.501457
+  type: 'test'
+  ...
+# Subtest: el enlace de solicitud acepta solo IDs internos válidos
+ok 162 - el enlace de solicitud acepta solo IDs internos válidos
+  ---
+  duration_ms: 0.258345
+  type: 'test'
+  ...
+# Subtest: las ilustraciones antiguas no se presentan como fotografías ni conservan resultados
+ok 163 - las ilustraciones antiguas no se presentan como fotografías ni conservan resultados
+  ---
+  duration_ms: 0.634807
+  type: 'test'
+  ...
+# Subtest: procedencia por archivo y licencias coinciden con el catálogo clínico
+ok 164 - procedencia por archivo y licencias coinciden con el catálogo clínico
+  ---
+  duration_ms: 0.640656
+  type: 'test'
+  ...
+# (node:6460) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/analisis/flujo.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: la vuelta del directorio conserva únicamente una referencia pública al reporte
+ok 165 - la vuelta del directorio conserva únicamente una referencia pública al reporte
+  ---
+  duration_ms: 0.927753
+  type: 'test'
+  ...
+# Subtest: una sesión manipulada, desconocida o inválida nunca restaura resultados
+ok 166 - una sesión manipulada, desconocida o inválida nunca restaura resultados
+  ---
+  duration_ms: 0.137115
+  type: 'test'
+  ...
+# Subtest: una preparación interrumpida vuelve a revisión y omitir mantiene el último paso
+ok 167 - una preparación interrumpida vuelve a revisión y omitir mantiene el último paso
+  ---
+  duration_ms: 0.118326
+  type: 'test'
+  ...
+# (node:6467) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/analisis/fotografia.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: acepta JPG, PNG y WebP de hasta ocho megabytes
+ok 168 - acepta JPG, PNG y WebP de hasta ocho megabytes
+  ---
+  duration_ms: 0.867013
+  type: 'test'
+  ...
+# Subtest: rechaza archivos ausentes, vacíos, sobredimensionados y tipos no permitidos
+ok 169 - rechaza archivos ausentes, vacíos, sobredimensionados y tipos no permitidos
+  ---
+  duration_ms: 0.203253
+  type: 'test'
+  ...
+# Subtest: solicita la cámara posterior como preferencia y no activa permisos por sí misma
+ok 170 - solicita la cámara posterior como preferencia y no activa permisos por sí misma
+  ---
+  duration_ms: 0.081872
+  type: 'test'
+  ...
+# Subtest: explica errores comunes de cámara sin ocultar alternativas
+ok 171 - explica errores comunes de cámara sin ocultar alternativas
+  ---
+  duration_ms: 0.148912
+  type: 'test'
+  ...
+# (node:6474) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/analisis/casos.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: PDF premium cuidado-habitual: A4, contenido, una imagen y enlace accesible
+ok 172 - PDF premium cuidado-habitual: A4, contenido, una imagen y enlace accesible
+  ---
+  duration_ms: 13.909618
+  type: 'test'
+  ...
+# Subtest: PDF premium atencion-preventiva: A4, contenido, una imagen y enlace accesible
+ok 173 - PDF premium atencion-preventiva: A4, contenido, una imagen y enlace accesible
+  ---
+  duration_ms: 1.937759
+  type: 'test'
+  ...
+# Subtest: PDF premium cuidado-encias: A4, contenido, una imagen y enlace accesible
+ok 174 - PDF premium cuidado-encias: A4, contenido, una imagen y enlace accesible
+  ---
+  duration_ms: 1.899192
+  type: 'test'
+  ...
+# Subtest: PDF conserva la proporción de fotografías horizontales y verticales
+ok 175 - PDF conserva la proporción de fotografías horizontales y verticales
+  ---
+  duration_ms: 3.431256
+  type: 'test'
+  ...
+# Subtest: PDF rechaza fechas, dimensiones y regiones no válidas sin producir documentos incompletos
+ok 176 - PDF rechaza fechas, dimensiones y regiones no válidas sin producir documentos incompletos
+  ---
+  duration_ms: 1.008533
+  type: 'test'
+  ...
+# Subtest: PDF solo marca regiones definidas para la referencia y etiqueta el material pendiente con transparencia
+ok 177 - PDF solo marca regiones definidas para la referencia y etiqueta el material pendiente con transparencia
+  ---
+  duration_ms: 1.874164
+  type: 'test'
+  ...
+# Subtest: PDF mantiene autor, licencia y cambios de una fotografía reutilizada con enlaces verificables
+ok 178 - PDF mantiene autor, licencia y cambios de una fotografía reutilizada con enlaces verificables
+  ---
+  duration_ms: 1.900123
+  type: 'test'
+  ...
+# (node:6485) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/autorizacion/autorizacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":503,"code":"IDENTIDAD_NO_DISPONIBLE"}
+# administrative_security {"status":503,"code":"IDENTIDAD_NO_DISPONIBLE"}
+# administrative_security {"status":503,"code":"IDENTIDAD_NO_DISPONIBLE"}
+# administrative_security {"status":503,"code":"IDENTIDAD_NO_DISPONIBLE"}
+# administrative_security {"status":503,"code":"IDENTIDAD_NO_DISPONIBLE"}
+# administrative_security {"status":503,"code":"IDENTIDAD_NO_DISPONIBLE"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# Subtest: sin sesión, esquema incorrecto o bearer ambiguo: 401 y no consulta Auth
+ok 179 - sin sesión, esquema incorrecto o bearer ambiguo: 401 y no consulta Auth
+  ---
+  duration_ms: 15.531776
+  type: 'test'
+  ...
+# Subtest: Auth recibe el token exacto; no se decodifica como prueba de identidad
+ok 180 - Auth recibe el token exacto; no se decodifica como prueba de identidad
+  ---
+  duration_ms: 0.517421
+  type: 'test'
+  ...
+# Subtest: sesión inválida, expirada o usuario inexistente: 401 aunque vengan metadatos
+ok 181 - sesión inválida, expirada o usuario inexistente: 401 aunque vengan metadatos
+  ---
+  duration_ms: 0.24759
+  type: 'test'
+  ...
+# Subtest: paciente o profesional autenticado carece de autorización administrativa
+ok 182 - paciente o profesional autenticado carece de autorización administrativa
+  ---
+  duration_ms: 0.25453
+  type: 'test'
+  ...
+# Subtest: autoasignación en user_metadata no concede acceso, ni con namespace idéntico
+ok 183 - autoasignación en user_metadata no concede acceso, ni con namespace idéntico
+  ---
+  duration_ms: 0.176092
+  type: 'test'
+  ...
+# Subtest: rol recibido en query, cookies, encabezados o cuerpo no es autoridad
+ok 184 - rol recibido en query, cookies, encabezados o cuerpo no es autoridad
+  ---
+  duration_ms: 3.205489
+  type: 'test'
+  ...
+# Subtest: formatos desconocidos, roles inesperados y asignación inactiva se deniegan
+ok 185 - formatos desconocidos, roles inesperados y asignación inactiva se deniegan
+  ---
+  duration_ms: 0.147701
+  type: 'test'
+  ...
+# Subtest: superusuario válido procede únicamente de app_metadata obtenido del proveedor
+ok 186 - superusuario válido procede únicamente de app_metadata obtenido del proveedor
+  ---
+  duration_ms: 0.718351
+  type: 'test'
+  ...
+# Subtest: identidad anónima, sin confirmar, eliminada o suspendida se deniega
+ok 187 - identidad anónima, sin confirmar, eliminada o suspendida se deniega
+  ---
+  duration_ms: 0.357242
+  type: 'test'
+  ...
+# Subtest: revocación de rol se consulta en la siguiente petición, aun con el mismo token
+ok 188 - revocación de rol se consulta en la siguiente petición, aun con el mismo token
+  ---
+  duration_ms: 0.349231
+  type: 'test'
+  ...
+# Subtest: red, configuración, límite de peticiones o caída de Auth: 503 y ninguna concesión
+ok 189 - red, configuración, límite de peticiones o caída de Auth: 503 y ninguna concesión
+  ---
+  duration_ms: 1.906403
+  type: 'test'
+  ...
+# Subtest: todas las respuestas son privadas y mínimas; desafío Bearer solo para 401
+ok 190 - todas las respuestas son privadas y mínimas; desafío Bearer solo para 401
+  ---
+  duration_ms: 0.991949
+  type: 'test'
+  ...
+# Subtest: peticiones concurrentes no comparten identidad ni autorización
+ok 191 - peticiones concurrentes no comparten identidad ni autorización
+  ---
+  duration_ms: 0.156213
+  type: 'test'
+  ...
+# (node:6493) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/autorizacion/autorizacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":401,"code":"SESION_INVALIDA"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"MFA_AAL2_PENDIENTE"}
+# administrative_security {"status":503,"code":"IDENTIDAD_NO_DISPONIBLE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":403,"code":"ROL_INSUFICIENTE"}
+# administrative_security {"status":500,"code":"ERROR_INTERNO"}
+# Subtest: MFA: aal1, ausencia o valor manipulado se deniegan aunque el rol sea válido
+ok 192 - MFA: aal1, ausencia o valor manipulado se deniegan aunque el rol sea válido
+  ---
+  duration_ms: 14.992482
+  type: 'test'
+  ...
+# Subtest: MFA: un factor enrolado no equivale a una sesión aal2
+ok 193 - MFA: un factor enrolado no equivale a una sesión aal2
+  ---
+  duration_ms: 0.209973
+  type: 'test'
+  ...
+# Subtest: MFA: se requiere un factor verificado actual; retirarlo invalida el acceso
+ok 194 - MFA: se requiere un factor verificado actual; retirarlo invalida el acceso
+  ---
+  duration_ms: 0.324093
+  type: 'test'
+  ...
+# Subtest: MFA: identidad y claims verificados deben corresponder al mismo usuario y token
+ok 195 - MFA: identidad y claims verificados deben corresponder al mismo usuario y token
+  ---
+  duration_ms: 1.208772
+  type: 'test'
+  ...
+# Subtest: MFA: cabeceras y metadatos editables no sustituyen la prueba firmada
+ok 196 - MFA: cabeceras y metadatos editables no sustituyen la prueba firmada
+  ---
+  duration_ms: 0.260018
+  type: 'test'
+  ...
+# Subtest: MFA: fallo de firma/caducidad devuelve 401; error de proveedor devuelve 503
+ok 197 - MFA: fallo de firma/caducidad devuelve 401; error de proveedor devuelve 503
+  ---
+  duration_ms: 0.352726
+  type: 'test'
+  ...
+# Subtest: un rol revocado prevalece sobre claims firmados antiguos y evita incluso consultar MFA
+ok 198 - un rol revocado prevalece sobre claims firmados antiguos y evita incluso consultar MFA
+  ---
+  duration_ms: 0.138908
+  type: 'test'
+  ...
+# Subtest: un servicio privado nunca se invoca para visitantes, pacientes, odontólogos o sesiones rechazadas
+ok 199 - un servicio privado nunca se invoca para visitantes, pacientes, odontólogos o sesiones rechazadas
+  ---
+  duration_ms: 3.237687
+  type: 'test'
+  ...
+# Subtest: el contrato ejecuta una vez tras validar rol y MFA; impone no-store a la respuesta del servicio
+ok 200 - el contrato ejecuta una vez tras validar rol y MFA; impone no-store a la respuesta del servicio
+  ---
+  duration_ms: 0.334248
+  type: 'test'
+  ...
+# Subtest: operaciones desconocidas, gestión de cuentas y acciones clínicas permanecen denegadas
+ok 201 - operaciones desconocidas, gestión de cuentas y acciones clínicas permanecen denegadas
+  ---
+  duration_ms: 0.588517
+  type: 'test'
+  ...
+# Subtest: revocación o suspensión entre solicitudes impide volver a ejecutar el servicio
+ok 202 - revocación o suspensión entre solicitudes impide volver a ejecutar el servicio
+  ---
+  duration_ms: 0.755306
+  type: 'test'
+  ...
+# Subtest: revocar el rol y rechazar una sesión son fallos distintos
+ok 203 - revocar el rol y rechazar una sesión son fallos distintos
+  ---
+  duration_ms: 0.130986
+  type: 'test'
+  ...
+# Subtest: errores del servicio se convierten en respuesta mínima privada
+ok 204 - errores del servicio se convierten en respuesta mínima privada
+  ---
+  duration_ms: 0.302371
+  type: 'test'
+  ...
+# Subtest: no se prepara una respuesta privada mientras la identidad siga pendiente de verificación
+ok 205 - no se prepara una respuesta privada mientras la identidad siga pendiente de verificación
+  ---
+  duration_ms: 0.237754
+  type: 'test'
+  ...
+# (node:6501) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/autorizacion/roles.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: roles de módulo: acepta solo la asignación activa de app_metadata
+ok 206 - roles de módulo: acepta solo la asignación activa de app_metadata
+  ---
+  duration_ms: 0.833072
+  type: 'test'
+  ...
+# Subtest: roles de módulo: asignación ausente, inválida, duplicada o suspendida deniega
+ok 207 - roles de módulo: asignación ausente, inválida, duplicada o suspendida deniega
+  ---
+  duration_ms: 0.172057
+  type: 'test'
+  ...
+# Subtest: destino por defecto para roles múltiples: superusuario, odontólogo, paciente
+ok 208 - destino por defecto para roles múltiples: superusuario, odontólogo, paciente
+  ---
+  duration_ms: 0.146399
+  type: 'test'
+  ...
+# Subtest: la asignación de URL no concede módulo: rutas paciente, profesional y administración se separan
+ok 209 - la asignación de URL no concede módulo: rutas paciente, profesional y administración se separan
+  ---
+  duration_ms: 0.086859
+  type: 'test'
+  ...
+# Subtest: adaptador real: getUser llama Auth con bearer, sin caché ni cliente privilegiado
+ok 210 - adaptador real: getUser llama Auth con bearer, sin caché ni cliente privilegiado
+  ---
+  duration_ms: 78.1793
+  type: 'test'
+  ...
+# Subtest: server-only impide importar el adaptador en un contexto ordinario
+ok 211 - server-only impide importar el adaptador en un contexto ordinario
+  ---
+  duration_ms: 48.197779
+  type: 'test'
+  ...
+# Subtest: SDK real: firma criptográfica, caducidad y aal2 sin claves persistidas ni Auth remoto
+ok 212 - SDK real: firma criptográfica, caducidad y aal2 sin claves persistidas ni Auth remoto
+  ---
+  duration_ms: 103.515144
+  type: 'test'
+  ...
+# (node:6542) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/clinica-http/ambiente.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Remoto solo con todos los flags, origen y allowlist exactos
+ok 213 - Remoto solo con todos los flags, origen y allowlist exactos
+  ---
+  duration_ms: 0.954693
+  type: 'test'
+  ...
+# Subtest: Falta DENTAIA_CLINICAL_ACADEMIC_ENABLED falla cerrado
+ok 214 - Falta DENTAIA_CLINICAL_ACADEMIC_ENABLED falla cerrado
+  ---
+  duration_ms: 0.131657
+  type: 'test'
+  ...
+# Subtest: Falta DENTAIA_CLINICAL_PROJECT_REF falla cerrado
+ok 215 - Falta DENTAIA_CLINICAL_PROJECT_REF falla cerrado
+  ---
+  duration_ms: 0.062173
+  type: 'test'
+  ...
+# Subtest: Falta DENTAIA_CLINICAL_DEMO_USER_IDS falla cerrado
+ok 216 - Falta DENTAIA_CLINICAL_DEMO_USER_IDS falla cerrado
+  ---
+  duration_ms: 0.056594
+  type: 'test'
+  ...
+# Subtest: Rechaza destino https://otro.supabase.co
+ok 217 - Rechaza destino https://otro.supabase.co
+  ---
+  duration_ms: 0.168021
+  type: 'test'
+  ...
+# Subtest: Rechaza destino http://vwmdknzjyvmsdqpepykz.supabase.co
+ok 218 - Rechaza destino http://vwmdknzjyvmsdqpepykz.supabase.co
+  ---
+  duration_ms: 0.639223
+  type: 'test'
+  ...
+# Subtest: Rechaza destino https://vwmdknzjyvmsdqpepykz.supabase.co/path
+ok 219 - Rechaza destino https://vwmdknzjyvmsdqpepykz.supabase.co/path
+  ---
+  duration_ms: 0.114271
+  type: 'test'
+  ...
+# Subtest: Rechaza destino https://vwmdknzjyvmsdqpepykz.supabase.co?x=1
+ok 220 - Rechaza destino https://vwmdknzjyvmsdqpepykz.supabase.co?x=1
+  ---
+  duration_ms: 0.066119
+  type: 'test'
+  ...
+# Subtest: Bloqueo de despliegue {"NODE_ENV":"production"}
+ok 221 - Bloqueo de despliegue {"NODE_ENV":"production"}
+  ---
+  duration_ms: 0.11394
+  type: 'test'
+  ...
+# Subtest: Bloqueo de despliegue {"VERCEL":"1"}
+ok 222 - Bloqueo de despliegue {"VERCEL":"1"}
+  ---
+  duration_ms: 3.465447
+  type: 'test'
+  ...
+# Subtest: Bloqueo de despliegue {"VERCEL_ENV":"preview"}
+ok 223 - Bloqueo de despliegue {"VERCEL_ENV":"preview"}
+  ---
+  duration_ms: 0.116764
+  type: 'test'
+  ...
+# Subtest: Preview académico habilitado solo con runtime, rama y flags exactos
+ok 224 - Preview académico habilitado solo con runtime, rama y flags exactos
+  ---
+  duration_ms: 0.073049
+  type: 'test'
+  ...
+# Subtest: Preview denegado con condición ausente o distinta {"DENTAIA_CLINICAL_PREVIEW_ENABLED":""}
+ok 225 - Preview denegado con condición ausente o distinta {"DENTAIA_CLINICAL_PREVIEW_ENABLED":""}
+  ---
+  duration_ms: 0.075222
+  type: 'test'
+  ...
+# Subtest: Preview denegado con condición ausente o distinta {"VERCEL_ENV":"production"}
+ok 226 - Preview denegado con condición ausente o distinta {"VERCEL_ENV":"production"}
+  ---
+  duration_ms: 0.056424
+  type: 'test'
+  ...
+# Subtest: Preview denegado con condición ausente o distinta {"VERCEL_GIT_COMMIT_REF":"integration/sprint5-demo"}
+ok 227 - Preview denegado con condición ausente o distinta {"VERCEL_GIT_COMMIT_REF":"integration/sprint5-demo"}
+  ---
+  duration_ms: 0.084987
+  type: 'test'
+  ...
+# Subtest: Preview denegado con condición ausente o distinta {}
+ok 228 - Preview denegado con condición ausente o distinta {}
+  ---
+  duration_ms: 0.055012
+  type: 'test'
+  ...
+# Subtest: Preview no acepta configuración académica ajena al proyecto
+ok 229 - Preview no acepta configuración académica ajena al proyecto
+  ---
+  duration_ms: 0.114841
+  type: 'test'
+  ...
+# Subtest: Preview clínico acepta solo develop y rechaza la rama experimental y cualquier otra rama
+ok 230 - Preview clínico acepta solo develop y rechaza la rama experimental y cualquier otra rama
+  ---
+  duration_ms: 0.173038
+  type: 'test'
+  ...
+# Subtest: Clave privilegiada no aceptada
+ok 231 - Clave privilegiada no aceptada
+  ---
+  duration_ms: 0.198105
+  type: 'test'
+  ...
+# Subtest: Allowlist con duplicados no aceptada
+ok 232 - Allowlist con duplicados no aceptada
+  ---
+  duration_ms: 0.131566
+  type: 'test'
+  ...
+# Subtest: Solo cuenta en allowlist y marcador app_metadata
+ok 233 - Solo cuenta en allowlist y marcador app_metadata
+  ---
+  duration_ms: 0.076644
+  type: 'test'
+  ...
+# Subtest: Host/origin local y sin cross-site
+ok 234 - Host/origin local y sin cross-site
+  ---
+  duration_ms: 13.851151
+  type: 'test'
+  ...
+# Subtest: Host/origin Preview se limita al URL único de Vercel
+ok 235 - Host/origin Preview se limita al URL único de Vercel
+  ---
+  duration_ms: 0.505724
+  type: 'test'
+  ...
+# Subtest: Preview rechaza URL de sistema malformada
+ok 236 - Preview rechaza URL de sistema malformada
+  ---
+  duration_ms: 0.262081
+  type: 'test'
+  ...
+# (node:6550) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/clinica-http/cursor.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cursor conserva precisión PostgreSQL y contexto sin normalizar fechas
+ok 237 - cursor conserva precisión PostgreSQL y contexto sin normalizar fechas
+  ---
+  duration_ms: 2.18634
+  type: 'test'
+  ...
+# Subtest: cursor usa cifrado opaco y nonce diferente en cada emisión
+ok 238 - cursor usa cifrado opaco y nonce diferente en cada emisión
+  ---
+  duration_ms: 0.320638
+  type: 'test'
+  ...
+# Subtest: alterar IV, ciphertext, tag o firma rechaza cursor
+ok 239 - alterar IV, ciphertext, tag o firma rechaza cursor
+  ---
+  duration_ms: 0.653955
+  type: 'test'
+  ...
+# Subtest: cursor se vincula a identidad, sesión, paciente, contexto y filtros
+ok 240 - cursor se vincula a identidad, sesión, paciente, contexto y filtros
+  ---
+  duration_ms: 0.696849
+  type: 'test'
+  ...
+# Subtest: cursor vencido o emitido en el futuro se rechaza
+ok 241 - cursor vencido o emitido en el futuro se rechaza
+  ---
+  duration_ms: 0.336793
+  type: 'test'
+  ...
+# Subtest: cursor no supera expiración del JWT y rotar clave invalida anteriores
+ok 242 - cursor no supera expiración del JWT y rotar clave invalida anteriores
+  ---
+  duration_ms: 0.250764
+  type: 'test'
+  ...
+# Subtest: formato o tamaño de cursor inválido se rechazan sin excepciones públicas
+ok 243 - formato o tamaño de cursor inválido se rechazan sin excepciones públicas
+  ---
+  duration_ms: 0.09364
+  type: 'test'
+  ...
+# Subtest: firma no acepta secreto débil ni vigencia fuera de límites
+ok 244 - firma no acepta secreto débil ni vigencia fuera de límites
+  ---
+  duration_ms: 0.154209
+  type: 'test'
+  ...
+# Subtest: representaciones base64url no canónicas también se rechazan
+ok 245 - representaciones base64url no canónicas también se rechazan
+  ---
+  duration_ms: 3.461801
+  type: 'test'
+  ...
+# (node:6557) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/clinica-http/http.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: API desactivada falla cerrada sin llamar Auth ni RPC
+ok 246 - API desactivada falla cerrada sin llamar Auth ni RPC
+  ---
+  duration_ms: 13.340389
+  type: 'test'
+  ...
+# Subtest: diagnóstico de configuración queda solo en el registro controlado, sin exponer valores
+ok 247 - diagnóstico de configuración queda solo en el registro controlado, sin exponer valores
+  ---
+  duration_ms: 1.073902
+  type: 'test'
+  ...
+# Subtest: sin JWT devuelve 401 y log no incluye token ni datos
+ok 248 - sin JWT devuelve 401 y log no incluye token ni datos
+  ---
+  duration_ms: 0.442349
+  type: 'test'
+  ...
+# Subtest: error de autenticación se conserva y no ejecuta RPC
+ok 249 - error de autenticación se conserva y no ejecuta RPC
+  ---
+  duration_ms: 0.491152
+  type: 'test'
+  ...
+# Subtest: concesión convierte envelope 201 a HTTP 201 y proyecta DTO
+ok 250 - concesión convierte envelope 201 a HTTP 201 y proyecta DTO
+  ---
+  duration_ms: 2.113721
+  type: 'test'
+  ...
+# Subtest: actor y rol no pueden declararse en cuerpo
+ok 251 - actor y rol no pueden declararse en cuerpo
+  ---
+  duration_ms: 1.108953
+  type: 'test'
+  ...
+# Subtest: origen de escritura cruzado se rechaza
+ok 252 - origen de escritura cruzado se rechaza
+  ---
+  duration_ms: 0.334559
+  type: 'test'
+  ...
+# Subtest: clave de idempotencia es obligatoria y UUID
+ok 253 - clave de idempotencia es obligatoria y UUID
+  ---
+  duration_ms: 0.298415
+  type: 'test'
+  ...
+# Subtest: error PostgREST se normaliza sin filtrar detalle
+ok 254 - error PostgREST se normaliza sin filtrar detalle
+  ---
+  duration_ms: 0.439926
+  type: 'test'
+  ...
+# Subtest: denegación SQL HTTP 200 se convierte a HTTP 403
+ok 255 - denegación SQL HTTP 200 se convierte a HTTP 403
+  ---
+  duration_ms: 0.49679
+  type: 'test'
+  ...
+# Subtest: payload de otro paciente no sale del adaptador
+ok 256 - payload de otro paciente no sale del adaptador
+  ---
+  duration_ms: 0.574677
+  type: 'test'
+  ...
+# Subtest: consulta duplicada se rechaza antes de RPC
+ok 257 - consulta duplicada se rechaza antes de RPC
+  ---
+  duration_ms: 0.253138
+  type: 'test'
+  ...
+# Subtest: fechas inválidas no pasan y precisión de seis decimales se conserva
+ok 258 - fechas inválidas no pasan y precisión de seis decimales se conserva
+  ---
+  duration_ms: 0.077926
+  type: 'test'
+  ...
+# Subtest: recursos vacíos, duplicados y aceptación falsa se rechazan
+ok 259 - recursos vacíos, duplicados y aceptación falsa se rechazan
+  ---
+  duration_ms: 0.24787
+  type: 'test'
+  ...
+# Subtest: cuerpo por streaming también respeta límite de bytes
+ok 260 - cuerpo por streaming también respeta límite de bytes
+  ---
+  duration_ms: 0.587446
+  type: 'test'
+  ...
+# Subtest: JSON inválido o tipo MIME incorrecto se distinguen
+ok 261 - JSON inválido o tipo MIME incorrecto se distinguen
+  ---
+  duration_ms: 0.339636
+  type: 'test'
+  ...
+# (node:6565) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/clinica-http/workspace.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: paciente propio no acepta ID/rol/escenario arbitrarios
+ok 262 - paciente propio no acepta ID/rol/escenario arbitrarios
+  ---
+  duration_ms: 12.007843
+  type: 'test'
+  ...
+# Subtest: contexto requerido para pacientes y solicitudes profesionales
+ok 263 - contexto requerido para pacientes y solicitudes profesionales
+  ---
+  duration_ms: 0.303182
+  type: 'test'
+  ...
+# Subtest: query profesional valida UUID, estados originales y keyset
+ok 264 - query profesional valida UUID, estados originales y keyset
+  ---
+  duration_ms: 0.54969
+  type: 'test'
+  ...
+# Subtest: estado de solicitudes no se admite en otros recursos
+ok 265 - estado de solicitudes no se admite en otros recursos
+  ---
+  duration_ms: 0.1338
+  type: 'test'
+  ...
+# Subtest: DTO identidad solo proyecta ID propio
+ok 266 - DTO identidad solo proyecta ID propio
+  ---
+  duration_ms: 0.569279
+  type: 'test'
+  ...
+# Subtest: DTO rechaza origen/kind/version inconsistentes
+ok 267 - DTO rechaza origen/kind/version inconsistentes
+  ---
+  duration_ms: 0.118957
+  type: 'test'
+  ...
+# Subtest: DTO solicitudes no contiene datos de contacto ni ID Auth del paciente
+ok 268 - DTO solicitudes no contiene datos de contacto ni ID Auth del paciente
+  ---
+  duration_ms: 0.262422
+  type: 'test'
+  ...
+# Subtest: DTO rechaza objetos/filas sin contrato y páginas excesivas
+ok 269 - DTO rechaza objetos/filas sin contrato y páginas excesivas
+  ---
+  duration_ms: 0.149373
+  type: 'test'
+  ...
+# Subtest: lista clínica vacía mantiene contexto y pagina nula
+ok 270 - lista clínica vacía mantiene contexto y pagina nula
+  ---
+  duration_ms: 0.155041
+  type: 'test'
+  ...
+# Subtest: endpoint desactivado no consulta Auth/RPC
+ok 271 - endpoint desactivado no consulta Auth/RPC
+  ---
+  duration_ms: 1.484023
+  type: 'test'
+  ...
+# Subtest: endpoint sin JWT y sin autorización no invoca RPC
+ok 272 - endpoint sin JWT y sin autorización no invoca RPC
+  ---
+  duration_ms: 0.46979
+  type: 'test'
+  ...
+# Subtest: RPC denegado transforma envelope en HTTP 403 sin datos
+ok 273 - RPC denegado transforma envelope en HTTP 403 sin datos
+  ---
+  duration_ms: 0.839011
+  type: 'test'
+  ...
+# Subtest: endpoint proyecta datos y marca no-store
+ok 274 - endpoint proyecta datos y marca no-store
+  ---
+  duration_ms: 0.354709
+  type: 'test'
+  ...
+# Subtest: respuesta RPC con contexto distinto falla cerrada
+ok 275 - respuesta RPC con contexto distinto falla cerrada
+  ---
+  duration_ms: 0.237063
+  type: 'test'
+  ...
+# (node:6573) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/cuenta/validaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: login vacío dirige la corrección al correo; después a la contraseña
+ok 276 - login vacío dirige la corrección al correo; después a la contraseña
+  ---
+  duration_ms: 0.833262
+  type: 'test'
+  ...
+# Subtest: correo mal formado identifica email, sin marcar el nombre oculto del login
+ok 277 - correo mal formado identifica email, sin marcar el nombre oculto del login
+  ---
+  duration_ms: 0.174891
+  type: 'test'
+  ...
+# Subtest: registro identifica el primer campo incorrecto en orden de lectura
+ok 278 - registro identifica el primer campo incorrecto en orden de lectura
+  ---
+  duration_ms: 0.096824
+  type: 'test'
+  ...
+# Subtest: cada error incluye un mensaje y no expone el valor de contraseña
+ok 279 - cada error incluye un mensaje y no expone el valor de contraseña
+  ---
+  duration_ms: 0.192407
+  type: 'test'
+  ...
+# Subtest: campos válidos y contraseña existente corta no reciben estado de error
+ok 280 - campos válidos y contraseña existente corta no reciben estado de error
+  ---
+  duration_ms: 0.387728
+  type: 'test'
+  ...
+# (node:6580) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/cuenta/perfiles.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sin sesión o con otro usuario no consulta ni modifica perfiles
+ok 281 - sin sesión o con otro usuario no consulta ni modifica perfiles
+  ---
+  duration_ms: 1.010968
+  type: 'test'
+  ...
+# Subtest: lectura filtra por el usuario validado; ausencia de perfil se conserva
+ok 282 - lectura filtra por el usuario validado; ausencia de perfil se conserva
+  ---
+  duration_ms: 0.231324
+  type: 'test'
+  ...
+# Subtest: edición envía solo full_name; creación usa el ID verificado
+ok 283 - edición envía solo full_name; creación usa el ID verificado
+  ---
+  duration_ms: 0.209703
+  type: 'test'
+  ...
+# Subtest: propaga errores de RLS o red y rechaza nombres inválidos
+ok 284 - propaga errores de RLS o red y rechaza nombres inválidos
+  ---
+  duration_ms: 0.183414
+  type: 'test'
+  ...
+# Subtest: una creación simultánea recupera el perfil existente sin sobrescribirlo
+ok 285 - una creación simultánea recupera el perfil existente sin sobrescribirlo
+  ---
+  duration_ms: 0.247439
+  type: 'test'
+  ...
+# Subtest: no informa éxito si una actualización no devuelve ninguna fila
+ok 286 - no informa éxito si una actualización no devuelve ninguna fila
+  ---
+  duration_ms: 0.151456
+  type: 'test'
+  ...
+# (node:6587) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/cuenta/validaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: rechaza campos vacíos y correo inválido; permite contraseñas existentes cortas al ingresar
+ok 287 - rechaza campos vacíos y correo inválido; permite contraseñas existentes cortas al ingresar
+  ---
+  duration_ms: 0.575579
+  type: 'test'
+  ...
+# Subtest: registro valida nombre, longitud y confirmación
+ok 288 - registro valida nombre, longitud y confirmación
+  ---
+  duration_ms: 0.123534
+  type: 'test'
+  ...
+# Subtest: traduce errores sin exponer el mensaje del proveedor
+ok 289 - traduce errores sin exponer el mensaje del proveedor
+  ---
+  duration_ms: 0.209893
+  type: 'test'
+  ...
+# (node:6594) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/directorio/compatibilidad-esquema.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: el directorio conserva odontólogos cuando aún no existe la tabla pública de ubicaciones
+ok 290 - el directorio conserva odontólogos cuando aún no existe la tabla pública de ubicaciones
+  ---
+  duration_ms: 0.963426
+  type: 'test'
+  ...
+# Subtest: el directorio también soporta tablas habilitadas sin filas publicadas
+ok 291 - el directorio también soporta tablas habilitadas sin filas publicadas
+  ---
+  duration_ms: 0.098387
+  type: 'test'
+  ...
+# Subtest: las reseñas ausentes se presentan vacías y no bloquean los perfiles
+ok 292 - las reseñas ausentes se presentan vacías y no bloquean los perfiles
+  ---
+  duration_ms: 0.123864
+  type: 'test'
+  ...
+# Subtest: la DEMO tiene tabla separada, marca inmutable, coordenadas acotadas y ninguna FK clínica
+ok 293 - la DEMO tiene tabla separada, marca inmutable, coordenadas acotadas y ninguna FK clínica
+  ---
+  duration_ms: 0.623239
+  type: 'test'
+  ...
+# Subtest: RLS permite solo lectura de filas demo publicadas y niega toda escritura cliente
+ok 294 - RLS permite solo lectura de filas demo publicadas y niega toda escritura cliente
+  ---
+  duration_ms: 0.907233
+  type: 'test'
+  ...
+# Subtest: seed es repetible y acotado al slug DEMO; limpieza no elimina otros registros
+ok 295 - seed es repetible y acotado al slug DEMO; limpieza no elimina otros registros
+  ---
+  duration_ms: 0.331635
+  type: 'test'
+  ...
+# Subtest: el marcador DEMO es distinguible y carece de enlace a perfil o solicitud real
+ok 296 - el marcador DEMO es distinguible y carece de enlace a perfil o solicitud real
+  ---
+  duration_ms: 0.088922
+  type: 'test'
+  ...
+# (node:6608) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/directorio/demo.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: crea un marcador DEMO claramente rotulado, geográficamente válido y sin relación clínica
+ok 297 - crea un marcador DEMO claramente rotulado, geográficamente válido y sin relación clínica
+  ---
+  duration_ms: 0.467727
+  type: 'test'
+  ...
+# Subtest: rechaza marcadores DEMO ocultos, con texto cambiado, coordenadas inválidas o solicitudes activadas
+ok 298 - rechaza marcadores DEMO ocultos, con texto cambiado, coordenadas inválidas o solicitudes activadas
+  ---
+  duration_ms: 0.087901
+  type: 'test'
+  ...
+# Subtest: los marcadores de consultorios verificados siguen saliendo solo de ubicaciones dentales publicadas
+ok 299 - los marcadores de consultorios verificados siguen saliendo solo de ubicaciones dentales publicadas
+  ---
+  duration_ms: 0.406416
+  type: 'test'
+  ...
+# (node:6615) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/directorio/formato.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: formatearPrecio: muestra un precio válido en soles
+ok 300 - formatearPrecio: muestra un precio válido en soles
+  ---
+  duration_ms: 0.821945
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: sin moneda usa soles
+ok 301 - formatearPrecio: sin moneda usa soles
+  ---
+  duration_ms: 0.215982
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: acepta otra moneda válida
+ok 302 - formatearPrecio: acepta otra moneda válida
+  ---
+  duration_ms: 0.169213
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: una moneda inválida cae a soles
+ok 303 - formatearPrecio: una moneda inválida cae a soles
+  ---
+  duration_ms: 0.123004
+  type: 'test'
+  ...
+# Subtest: formatearPrecio: no inventa un precio si el dato no es válido
+ok 304 - formatearPrecio: no inventa un precio si el dato no es válido
+  ---
+  duration_ms: 0.090986
+  type: 'test'
+  ...
+# Subtest: normalizar: quita tildes y pasa a minúsculas
+ok 305 - normalizar: quita tildes y pasa a minúsculas
+  ---
+  duration_ms: 0.141231
+  type: 'test'
+  ...
+# Subtest: normalizar: recorta espacios y maneja texto vacío
+ok 306 - normalizar: recorta espacios y maneja texto vacío
+  ---
+  duration_ms: 0.061952
+  type: 'test'
+  ...
+# Subtest: textoOpcional: devuelve el texto recortado si existe
+ok 307 - textoOpcional: devuelve el texto recortado si existe
+  ---
+  duration_ms: 0.088552
+  type: 'test'
+  ...
+# Subtest: textoOpcional: usa la alternativa si falta o está vacío
+ok 308 - textoOpcional: usa la alternativa si falta o está vacío
+  ---
+  duration_ms: 0.110034
+  type: 'test'
+  ...
+# Subtest: inicialesDe: usa las iniciales guardadas si existen
+ok 309 - inicialesDe: usa las iniciales guardadas si existen
+  ---
+  duration_ms: 0.231195
+  type: 'test'
+  ...
+# Subtest: inicialesDe: las deriva del nombre si vienen vacías
+ok 310 - inicialesDe: las deriva del nombre si vienen vacías
+  ---
+  duration_ms: 0.178205
+  type: 'test'
+  ...
+# Subtest: inicialesDe: devuelve ? si no hay datos
+ok 311 - inicialesDe: devuelve ? si no hay datos
+  ---
+  duration_ms: 0.056514
+  type: 'test'
+  ...
+# (node:6622) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/directorio/geolocalizacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: valida coordenadas sin aceptar NaN ni límites fuera de rango
+ok 312 - valida coordenadas sin aceptar NaN ni límites fuera de rango
+  ---
+  duration_ms: 0.738391
+  type: 'test'
+  ...
+# Subtest: calcula distancia esférica aproximada, no tiempo ni ruta vial
+ok 313 - calcula distancia esférica aproximada, no tiempo ni ruta vial
+  ---
+  duration_ms: 8.155549
+  type: 'test'
+  ...
+# Subtest: filtra dentro del radio y ordena ubicaciones válidas antes de las ausentes
+ok 314 - filtra dentro del radio y ordena ubicaciones válidas antes de las ausentes
+  ---
+  duration_ms: 0.50354
+  type: 'test'
+  ...
+# Subtest: ubica solo a petición del llamador y rechaza precisión superior a un kilómetro
+ok 315 - ubica solo a petición del llamador y rechaza precisión superior a un kilómetro
+  ---
+  duration_ms: 0.386686
+  type: 'test'
+  ...
+# Subtest: traduce denegación, indisponibilidad, timeout e incompatibilidad
+ok 316 - traduce denegación, indisponibilidad, timeout e incompatibilidad
+  ---
+  duration_ms: 0.129473
+  type: 'test'
+  ...
+# Subtest: la migración solo crea tablas nuevas y no altera el esquema clínico existente
+ok 317 - la migración solo crea tablas nuevas y no altera el esquema clínico existente
+  ---
+  duration_ms: 0.742657
+  type: 'test'
+  ...
+# Subtest: solo concede lectura pública mínima de sedes y prohíbe insertar o actualizar coordenadas
+ok 318 - solo concede lectura pública mínima de sedes y prohíbe insertar o actualizar coordenadas
+  ---
+  duration_ms: 1.064256
+  type: 'test'
+  ...
+# Subtest: la reseña exige identidad propia, rol paciente activo, una atención real completada y moderación
+ok 319 - la reseña exige identidad propia, rol paciente activo, una atención real completada y moderación
+  ---
+  duration_ms: 0.710079
+  type: 'test'
+  ...
+# Subtest: autor solo puede leer campos públicos publicados; reportes quedan privados
+ok 320 - autor solo puede leer campos públicos publicados; reportes quedan privados
+  ---
+  duration_ms: 0.349832
+  type: 'test'
+  ...
+# Subtest: el rollback verifica propiedad y se niega a borrar información
+ok 321 - el rollback verifica propiedad y se niega a borrar información
+  ---
+  duration_ms: 0.160609
+  type: 'test'
+  ...
+# (node:6636) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/lib/navegacion.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: el contexto conserva solo el caso conocido y descarta parámetros arbitrarios
+ok 322 - el contexto conserva solo el caso conocido y descarta parámetros arbitrarios
+  ---
+  duration_ms: 0.606985
+  type: 'test'
+  ...
+# Subtest: la solicitud conserva el profesional validado y el regreso al reporte
+ok 323 - la solicitud conserva el profesional validado y el regreso al reporte
+  ---
+  duration_ms: 0.288109
+  type: 'test'
+  ...
+# Subtest: continuar tras autenticación nunca acepta redirecciones externas ni otras rutas
+ok 324 - continuar tras autenticación nunca acepta redirecciones externas ni otras rutas
+  ---
+  duration_ms: 0.18131
+  type: 'test'
+  ...
+# (node:6643) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/next.config.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: la política permite cámara y geolocalización al origen y mantiene bloqueado el micrófono
+ok 325 - la política permite cámara y geolocalización al origen y mantiene bloqueado el micrófono
+  ---
+  duration_ms: 0.506335
+  type: 'test'
+  ...
+# (node:6650) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/directorio/resenas.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: no asigna calificación por defecto cuando no hay reseñas publicadas
+ok 326 - no asigna calificación por defecto cuando no hay reseñas publicadas
+  ---
+  duration_ms: 0.806633
+  type: 'test'
+  ...
+# Subtest: promedia solo calificaciones enteras entre uno y cinco
+ok 327 - promedia solo calificaciones enteras entre uno y cinco
+  ---
+  duration_ms: 0.155392
+  type: 'test'
+  ...
+# Subtest: ordena por fecha o por calificación y conserva orden estable secundario
+ok 328 - ordena por fecha o por calificación y conserva orden estable secundario
+  ---
+  duration_ms: 0.163965
+  type: 'test'
+  ...
+# Subtest: solo una interacción real completada es elegible, nunca una solicitud demo
+ok 329 - solo una interacción real completada es elegible, nunca una solicitud demo
+  ---
+  duration_ms: 0.081141
+  type: 'test'
+  ...
+# (node:6657) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/directorio/ubicaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: elige el consultorio más cercano entre varias sedes sin convertirlo en distancia vial
+ok 330 - elige el consultorio más cercano entre varias sedes sin convertirlo en distancia vial
+  ---
+  duration_ms: 0.705872
+  type: 'test'
+  ...
+# Subtest: el radio incluye al odontólogo si alguna sede publicada cae dentro
+ok 331 - el radio incluye al odontólogo si alguna sede publicada cae dentro
+  ---
+  duration_ms: 0.146188
+  type: 'test'
+  ...
+# Subtest: crea un marcador por ubicación y mantiene vínculo al perfil, sin incluir datos de clínica internos
+ok 332 - crea un marcador por ubicación y mantiene vínculo al perfil, sin incluir datos de clínica internos
+  ---
+  duration_ms: 0.111245
+  type: 'test'
+  ...
+# Subtest: no promueve perfiles académicos ficticios a marcadores de consultorio aunque traigan ubicaciones
+ok 333 - no promueve perfiles académicos ficticios a marcadores de consultorio aunque traigan ubicaciones
+  ---
+  duration_ms: 0.456561
+  type: 'test'
+  ...
+# Subtest: descarta ubicaciones con coordenadas ausentes, no finitas o fuera de rango
+ok 334 - descarta ubicaciones con coordenadas ausentes, no finitas o fuera de rango
+  ---
+  duration_ms: 0.178076
+  type: 'test'
+  ...
+# (node:6664) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/fotografias/eliminar.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: elimina el archivo y luego los metadatos filtrando propietario, ID y ruta
+ok 335 - elimina el archivo y luego los metadatos filtrando propietario, ID y ruta
+  ---
+  duration_ms: 1.389762
+  type: 'test'
+  ...
+# Subtest: archivo inexistente: remove devuelve [] y completa la limpieza de metadatos
+ok 336 - archivo inexistente: remove devuelve [] y completa la limpieza de metadatos
+  ---
+  duration_ms: 0.196833
+  type: 'test'
+  ...
+# Subtest: fallo de Storage conserva ambos recursos y no intenta DELETE de PostgreSQL
+ok 337 - fallo de Storage conserva ambos recursos y no intenta DELETE de PostgreSQL
+  ---
+  duration_ms: 0.473456
+  type: 'test'
+  ...
+# Subtest: excepción de red se traduce sin presentar éxito ni borrar metadatos
+ok 338 - excepción de red se traduce sin presentar éxito ni borrar metadatos
+  ---
+  duration_ms: 0.859661
+  type: 'test'
+  ...
+# Subtest: fallo de PostgreSQL tras borrar archivo conserva el registro y explica el reintento
+ok 339 - fallo de PostgreSQL tras borrar archivo conserva el registro y explica el reintento
+  ---
+  duration_ms: 0.240188
+  type: 'test'
+  ...
+# Subtest: reintento después de fallo parcial completa la limpieza sin re-subir; repetir es inocuo
+ok 340 - reintento después de fallo parcial completa la limpieza sin re-subir; repetir es inocuo
+  ---
+  duration_ms: 0.37569
+  type: 'test'
+  ...
+# Subtest: consentimiento revocado: la eliminación y recuperación no requieren consultarlo ni upload
+ok 341 - consentimiento revocado: la eliminación y recuperación no requieren consultarlo ni upload
+  ---
+  duration_ms: 0.302591
+  type: 'test'
+  ...
+# Subtest: foto de otro propietario es invisible y no se toca Storage ni se informa borrado
+ok 342 - foto de otro propietario es invisible y no se toca Storage ni se informa borrado
+  ---
+  duration_ms: 0.175081
+  type: 'test'
+  ...
+# Subtest: rechaza rutas ajenas, bucket distinto y rutas manipuladas aunque haya metadatos propios
+ok 343 - rechaza rutas ajenas, bucket distinto y rutas manipuladas aunque haya metadatos propios
+  ---
+  duration_ms: 0.263132
+  type: 'test'
+  ...
+# Subtest: sin sesión, JWT inválido o cambio de usuario no se consulta ni modifica ningún recurso
+ok 344 - sin sesión, JWT inválido o cambio de usuario no se consulta ni modifica ningún recurso
+  ---
+  duration_ms: 0.302671
+  type: 'test'
+  ...
+# Subtest: sesión expirada entre servicios conserva los metadatos y permite reintentar al autenticarse
+ok 345 - sesión expirada entre servicios conserva los metadatos y permite reintentar al autenticarse
+  ---
+  duration_ms: 0.183603
+  type: 'test'
+  ...
+# Subtest: Storage 200 sin filas afectadas no es éxito si el objeto sigue listado
+ok 346 - Storage 200 sin filas afectadas no es éxito si el objeto sigue listado
+  ---
+  duration_ms: 0.113499
+  type: 'test'
+  ...
+# Subtest: fallo al comprobar Storage impide borrar el registro
+ok 347 - fallo al comprobar Storage impide borrar el registro
+  ---
+  duration_ms: 0.09386
+  type: 'test'
+  ...
+# Subtest: DELETE de PostgreSQL sin filas y con registro aún presente no informa éxito
+ok 348 - DELETE de PostgreSQL sin filas y con registro aún presente no informa éxito
+  ---
+  duration_ms: 0.079378
+  type: 'test'
+  ...
+# Subtest: borrado concurrente de metadatos se comprueba antes de confirmar finalización
+ok 349 - borrado concurrente de metadatos se comprueba antes de confirmar finalización
+  ---
+  duration_ms: 0.074301
+  type: 'test'
+  ...
+# Subtest: distingue errores de permisos y base de datos sin filtrar mensajes del proveedor
+ok 350 - distingue errores de permisos y base de datos sin filtrar mensajes del proveedor
+  ---
+  duration_ms: 0.220929
+  type: 'test'
+  ...
+# (node:6671) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/fotografias/mensajes.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: los errores del proveedor nunca se muestran crudos al paciente
+ok 351 - los errores del proveedor nunca se muestran crudos al paciente
+  ---
+  duration_ms: 0.530231
+  type: 'test'
+  ...
+# Subtest: la eliminación parcial conserva una instrucción comprensible de reintento
+ok 352 - la eliminación parcial conserva una instrucción comprensible de reintento
+  ---
+  duration_ms: 0.246467
+  type: 'test'
+  ...
+# Subtest: sesión y permisos se diferencian de errores de archivo
+ok 353 - sesión y permisos se diferencian de errores de archivo
+  ---
+  duration_ms: 0.097025
+  type: 'test'
+  ...
+# (node:6678) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/panel/clinica.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Integración: identidad propia del BFF, lecturas sin mutaciones y proyección mínima
+ok 354 - Integración: identidad propia del BFF, lecturas sin mutaciones y proyección mínima
+  ---
+  duration_ms: 15.538376
+  type: 'test'
+  ...
+# Subtest: Integración: no hay petición clínica sin sesión
+ok 355 - Integración: no hay petición clínica sin sesión
+  ---
+  duration_ms: 0.350673
+  type: 'test'
+  ...
+# Subtest: Integración: rechazo 401 no se sustituye por mocks
+ok 356 - Integración: rechazo 401 no se sustituye por mocks
+  ---
+  duration_ms: 0.235541
+  type: 'test'
+  ...
+# Subtest: Integración: rechazo 403 no se sustituye por mocks
+ok 357 - Integración: rechazo 403 no se sustituye por mocks
+  ---
+  duration_ms: 0.199227
+  type: 'test'
+  ...
+# Subtest: Integración: rechazo 404 no se sustituye por mocks
+ok 358 - Integración: rechazo 404 no se sustituye por mocks
+  ---
+  duration_ms: 0.191826
+  type: 'test'
+  ...
+# Subtest: Integración: rechazo 503 no se sustituye por mocks
+ok 359 - Integración: rechazo 503 no se sustituye por mocks
+  ---
+  duration_ms: 0.144135
+  type: 'test'
+  ...
+# Subtest: Integración: respuesta de otro paciente falla cerrada
+ok 360 - Integración: respuesta de otro paciente falla cerrada
+  ---
+  duration_ms: 1.731111
+  type: 'test'
+  ...
+# Subtest: Integración: vacío y límite de página se representan sin inventar totales
+ok 361 - Integración: vacío y límite de página se representan sin inventar totales
+  ---
+  duration_ms: 0.38254
+  type: 'test'
+  ...
+# Subtest: Integración: contenido inválido o desbordado no produce éxito
+ok 362 - Integración: contenido inválido o desbordado no produce éxito
+  ---
+  duration_ms: 0.900883
+  type: 'test'
+  ...
+# (node:6686) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/panel/logica.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: contarSolicitudes: sin solicitudes devuelve ceros
+ok 363 - contarSolicitudes: sin solicitudes devuelve ceros
+  ---
+  duration_ms: 0.859792
+  type: 'test'
+  ...
+# Subtest: contarSolicitudes: solo las solicitadas cuentan como pendientes
+ok 364 - contarSolicitudes: solo las solicitadas cuentan como pendientes
+  ---
+  duration_ms: 0.095772
+  type: 'test'
+  ...
+# Subtest: contarSolicitudes: un estado desconocido no cuenta como pendiente
+ok 365 - contarSolicitudes: un estado desconocido no cuenta como pendiente
+  ---
+  duration_ms: 0.061321
+  type: 'test'
+  ...
+# Subtest: resolverReporte: sin sesión de demostración no hay reporte
+ok 366 - resolverReporte: sin sesión de demostración no hay reporte
+  ---
+  duration_ms: 0.101932
+  type: 'test'
+  ...
+# Subtest: resolverReporte: un caso desconocido no genera reporte
+ok 367 - resolverReporte: un caso desconocido no genera reporte
+  ---
+  duration_ms: 0.069624
+  type: 'test'
+  ...
+# Subtest: resolverReporte: antes de llegar a las recomendaciones no hay reporte
+ok 368 - resolverReporte: antes de llegar a las recomendaciones no hay reporte
+  ---
+  duration_ms: 0.074591
+  type: 'test'
+  ...
+# Subtest: resolverReporte: una etapa desconocida no genera reporte
+ok 369 - resolverReporte: una etapa desconocida no genera reporte
+  ---
+  duration_ms: 0.052028
+  type: 'test'
+  ...
+# Subtest: resolverReporte: desde las recomendaciones devuelve las del caso, sin alterarlas
+ok 370 - resolverReporte: desde las recomendaciones devuelve las del caso, sin alterarlas
+  ---
+  duration_ms: 0.089734
+  type: 'test'
+  ...
+# Subtest: resolverReporte: el reporte no incluye datos de cuenta
+ok 371 - resolverReporte: el reporte no incluye datos de cuenta
+  ---
+  duration_ms: 0.193489
+  type: 'test'
+  ...
+# (node:6693) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/profesional/api-clinica.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: consulta el perfil profesional con Bearer, same-origin y sin persistir token
+ok 372 - consulta el perfil profesional con Bearer, same-origin y sin persistir token
+  ---
+  duration_ms: 15.308008
+  type: 'test'
+  ...
+# Subtest: proyecta solicitudes profesionales sin filtrar PII inesperada
+ok 373 - proyecta solicitudes profesionales sin filtrar PII inesperada
+  ---
+  duration_ms: 1.04721
+  type: 'test'
+  ...
+# Subtest: sin sesión no se emite ninguna solicitud HTTP
+ok 374 - sin sesión no se emite ninguna solicitud HTTP
+  ---
+  duration_ms: 0.414197
+  type: 'test'
+  ...
+# Subtest: un fallo transitorio de Supabase no se presenta como sesión ausente
+ok 375 - un fallo transitorio de Supabase no se presenta como sesión ausente
+  ---
+  duration_ms: 0.220809
+  type: 'test'
+  ...
+# Subtest: una denegación del servidor no transporta cuerpo clínico
+ok 376 - una denegación del servidor no transporta cuerpo clínico
+  ---
+  duration_ms: 0.447336
+  type: 'test'
+  ...
+# Subtest: preserva una indisponibilidad HTTP sin interpretar su cuerpo como datos
+ok 377 - preserva una indisponibilidad HTTP sin interpretar su cuerpo como datos
+  ---
+  duration_ms: 0.398514
+  type: 'test'
+  ...
+# Subtest: rechaza un error clínico cuyo requestId no cumple el contrato
+ok 378 - rechaza un error clínico cuyo requestId no cumple el contrato
+  ---
+  duration_ms: 0.434067
+  type: 'test'
+  ...
+# Subtest: una ruta clínica ausente se traduce a un estado seguro aunque no devuelva JSON
+ok 379 - una ruta clínica ausente se traduce a un estado seguro aunque no devuelva JSON
+  ---
+  duration_ms: 0.309802
+  type: 'test'
+  ...
+# Subtest: rechaza respuestas exitosas con un contrato inesperado
+ok 380 - rechaza respuestas exitosas con un contrato inesperado
+  ---
+  duration_ms: 0.461958
+  type: 'test'
+  ...
+# Subtest: rechaza fechas ISO calendáricamente imposibles
+ok 381 - rechaza fechas ISO calendáricamente imposibles
+  ---
+  duration_ms: 0.629047
+  type: 'test'
+  ...
+# Subtest: construye rutas de pacientes e historial con los parámetros oficiales
+ok 382 - construye rutas de pacientes e historial con los parámetros oficiales
+  ---
+  duration_ms: 0.682667
+  type: 'test'
+  ...
+# Subtest: una página de solicitudes debe coincidir con membresía y profesional actuales
+ok 383 - una página de solicitudes debe coincidir con membresía y profesional actuales
+  ---
+  duration_ms: 0.11417
+  type: 'test'
+  ...
+# Subtest: conserva el cursor opaco de historial y proyecta solo el DTO permitido
+ok 384 - conserva el cursor opaco de historial y proyecta solo el DTO permitido
+  ---
+  duration_ms: 0.227709
+  type: 'test'
+  ...
+# Subtest: acepta el background no vacio emitido por el DTO real del BFF
+ok 385 - acepta el background no vacio emitido por el DTO real del BFF
+  ---
+  duration_ms: 0.098957
+  type: 'test'
+  ...
+# Subtest: rechaza backgrounds que no cumplen el contrato real del BFF
+ok 386 - rechaza backgrounds que no cumplen el contrato real del BFF
+  ---
+  duration_ms: 0.239136
+  type: 'test'
+  ...
+# Subtest: clasifica un 403 de paginacion de contextos para limpiar el contexto
+ok 387 - clasifica un 403 de paginacion de contextos para limpiar el contexto
+  ---
+  duration_ms: 0.09428
+  type: 'test'
+  ...
+# (node:6701) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/clinica-http/http.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: DI-159 cliente → BFF: perfil, solicitudes asignadas y pacientes autorizados compatibles
+ok 388 - DI-159 cliente → BFF: perfil, solicitudes asignadas y pacientes autorizados compatibles
+  ---
+  duration_ms: 16.264705
+  type: 'test'
+  ...
+# Subtest: DI-159 cliente → BFF: historial autorizado y nueva lectura denegada tras cambio de permiso RPC
+ok 389 - DI-159 cliente → BFF: historial autorizado y nueva lectura denegada tras cambio de permiso RPC
+  ---
+  duration_ms: 2.020439
+  type: 'test'
+  ...
+# Subtest: DI-159 cliente → BFF: Auth 401 impide consultar RPC
+ok 390 - DI-159 cliente → BFF: Auth 401 impide consultar RPC
+  ---
+  duration_ms: 0.466004
+  type: 'test'
+  ...
+# Subtest: DI-159 cliente → BFF: Auth 403 impide consultar RPC
+ok 391 - DI-159 cliente → BFF: Auth 403 impide consultar RPC
+  ---
+  duration_ms: 0.269341
+  type: 'test'
+  ...
+# Subtest: DI-159 sin token después de logout no consulta BFF/RPC
+ok 392 - DI-159 sin token después de logout no consulta BFF/RPC
+  ---
+  duration_ms: 0.171706
+  type: 'test'
+  ...
+# (node:6709) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/profesional/control-consultas-clinicas.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: restringir el contexto finaliza una paginación sin borrar su perfil
+ok 393 - restringir el contexto finaliza una paginación sin borrar su perfil
+  ---
+  duration_ms: 0.813422
+  type: 'test'
+  ...
+# Subtest: una restricción no recrea un estado de paginación ya finalizado
+ok 394 - una restricción no recrea un estado de paginación ya finalizado
+  ---
+  duration_ms: 0.081101
+  type: 'test'
+  ...
+# Subtest: cambiar contexto aborta toda consulta pendiente y descarta sus resultados
+ok 395 - cambiar contexto aborta toda consulta pendiente y descarta sus resultados
+  ---
+  duration_ms: 0.165437
+  type: 'test'
+  ...
+# Subtest: una nueva consulta del mismo recurso cancela la anterior
+ok 396 - una nueva consulta del mismo recurso cancela la anterior
+  ---
+  duration_ms: 0.111586
+  type: 'test'
+  ...
+# Subtest: una respuesta atrasada no puede restaurar datos tras cambiar de contexto
+ok 397 - una respuesta atrasada no puede restaurar datos tras cambiar de contexto
+  ---
+  duration_ms: 0.10761
+  type: 'test'
+  ...
+# Subtest: cambiar de paciente cancela solo el historial en curso
+ok 398 - cambiar de paciente cancela solo el historial en curso
+  ---
+  duration_ms: 0.123765
+  type: 'test'
+  ...
+# (node:6716) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/profesional/control-revalidacion-historial.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: coalesce foco y visibilidad cercanos sin omitir una revalidación posterior
+ok 399 - coalesce foco y visibilidad cercanos sin omitir una revalidación posterior
+  ---
+  duration_ms: 0.505693
+  type: 'test'
+  ...
+# Subtest: invalidar una revalidación cancelada descarta la petición pendiente
+ok 400 - invalidar una revalidación cancelada descarta la petición pendiente
+  ---
+  duration_ms: 0.089083
+  type: 'test'
+  ...
+# Subtest: reiniciar la cronología elimina páginas y cursor antes de releer el historial
+ok 401 - reiniciar la cronología elimina páginas y cursor antes de releer el historial
+  ---
+  duration_ms: 0.412304
+  type: 'test'
+  ...
+# (node:6723) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/profesional/historial-autorizado.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: el permiso simulado concedido conserva la procedencia de dos clínicas
+ok 402 - el permiso simulado concedido conserva la procedencia de dos clínicas
+  ---
+  duration_ms: 5.886998
+  type: 'test'
+  ...
+# Subtest: el permiso simulado concede únicamente los registros incluidos en su alcance
+ok 403 - el permiso simulado concede únicamente los registros incluidos en su alcance
+  ---
+  duration_ms: 0.127019
+  type: 'test'
+  ...
+# Subtest: la misma consulta con clínica de contexto distinta no entrega datos
+ok 404 - la misma consulta con clínica de contexto distinta no entrega datos
+  ---
+  duration_ms: 0.090224
+  type: 'test'
+  ...
+# Subtest: los permisos denegado, expirado y revocado no revelan datos clínicos
+ok 405 - los permisos denegado, expirado y revocado no revelan datos clínicos
+  ---
+  duration_ms: 0.11398
+  type: 'test'
+  ...
+# Subtest: un paciente inexistente, el vacío y el error no conservan datos de otra consulta
+ok 406 - un paciente inexistente, el vacío y el error no conservan datos de otra consulta
+  ---
+  duration_ms: 0.245465
+  type: 'test'
+  ...
+# Subtest: DI-159: identificadores desconocidos o contextos ajenos fallan cerrados
+ok 407 - DI-159: identificadores desconocidos o contextos ajenos fallan cerrados
+  ---
+  duration_ms: 0.156192
+  type: 'test'
+  ...
+# Subtest: DI-159: el alcance repetido no duplica atenciones ni altera la cronología
+ok 408 - DI-159: el alcance repetido no duplica atenciones ni altera la cronología
+  ---
+  duration_ms: 0.413747
+  type: 'test'
+  ...
+# Subtest: DI-159: una revocación sintética se reevalúa y elimina el historial de una nueva lectura
+ok 409 - DI-159: una revocación sintética se reevalúa y elimina el historial de una nueva lectura
+  ---
+  duration_ms: 0.141891
+  type: 'test'
+  ...
+# Subtest: DI-159: la auditoría sintética registra resultado sin transportar entradas
+ok 410 - DI-159: la auditoría sintética registra resultado sin transportar entradas
+  ---
+  duration_ms: 0.331574
+  type: 'test'
+  ...
+# Subtest: DI-159: una política requerida sin auditor falla cerrada
+ok 411 - DI-159: una política requerida sin auditor falla cerrada
+  ---
+  duration_ms: 0.222592
+  type: 'test'
+  ...
+# Subtest: DI-159: el proveedor de demostración aplica su política requerida
+ok 412 - DI-159: el proveedor de demostración aplica su política requerida
+  ---
+  duration_ms: 0.270183
+  type: 'test'
+  ...
+# Subtest: DI-159: el proveedor de demostración exige y espera su auditor
+ok 413 - DI-159: el proveedor de demostración exige y espera su auditor
+  ---
+  duration_ms: 0.369149
+  type: 'test'
+  ...
+# Subtest: DI-159: un fallo de auditoría sintética impide entregar el historial
+ok 414 - DI-159: un fallo de auditoría sintética impide entregar el historial
+  ---
+  duration_ms: 0.166588
+  type: 'test'
+  ...
+# Subtest: DI-159: un rechazo asíncrono de auditoría impide entregar el historial
+ok 415 - DI-159: un rechazo asíncrono de auditoría impide entregar el historial
+  ---
+  duration_ms: 0.123134
+  type: 'test'
+  ...
+# Subtest: DI-159: excepciones de fuente devuelven error sin contenido
+ok 416 - DI-159: excepciones de fuente devuelven error sin contenido
+  ---
+  duration_ms: 0.30229
+  type: 'test'
+  ...
+# (node:6730) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/profesional/historial-sintetico.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ordena las atenciones por fecha de atención sin mutar la fixture
+ok 417 - ordena las atenciones por fecha de atención sin mutar la fixture
+  ---
+  duration_ms: 5.562524
+  type: 'test'
+  ...
+# Subtest: distingue dato no registrado, desconocido y registrado
+ok 418 - distingue dato no registrado, desconocido y registrado
+  ---
+  duration_ms: 0.118947
+  type: 'test'
+  ...
+# Subtest: formatea fechas ISO válidas y protege frente a fechas inválidas
+ok 419 - formatea fechas ISO válidas y protege frente a fechas inválidas
+  ---
+  duration_ms: 4.854941
+  type: 'test'
+  ...
+# Subtest: la transición de carga limpia cualquier dato anterior
+ok 420 - la transición de carga limpia cualquier dato anterior
+  ---
+  duration_ms: 0.117646
+  type: 'test'
+  ...
+# Subtest: el escenario con contenido devuelve solo el caso seleccionado
+ok 421 - el escenario con contenido devuelve solo el caso seleccionado
+  ---
+  duration_ms: 0.151635
+  type: 'test'
+  ...
+# Subtest: los escenarios vacío, denegado y error no conservan entradas clínicas
+ok 422 - los escenarios vacío, denegado y error no conservan entradas clínicas
+  ---
+  duration_ms: 0.090825
+  type: 'test'
+  ...
+# Subtest: un caso desconocido falla sin revelar información
+ok 423 - un caso desconocido falla sin revelar información
+  ---
+  duration_ms: 0.051447
+  type: 'test'
+  ...
+# (node:6737) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/profesional/resultados-educativos-interfaz.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: la interfaz educativa inicia sin contenido anterior
+ok 424 - la interfaz educativa inicia sin contenido anterior
+  ---
+  duration_ms: 0.855594
+  type: 'test'
+  ...
+# Subtest: la interfaz consume el proveedor sintético mediante el contrato validado
+ok 425 - la interfaz consume el proveedor sintético mediante el contrato validado
+  ---
+  duration_ms: 0.307739
+  type: 'test'
+  ...
+# Subtest: la interfaz muestra vacío sin transportar contenido
+ok 426 - la interfaz muestra vacío sin transportar contenido
+  ---
+  duration_ms: 0.097775
+  type: 'test'
+  ...
+# Subtest: cambiar de contenido a acceso denegado limpia el resultado educativo
+ok 427 - cambiar de contenido a acceso denegado limpia el resultado educativo
+  ---
+  duration_ms: 0.115983
+  type: 'test'
+  ...
+# Subtest: DI-159: los estados educativos sin autorización no conservan contenido
+ok 428 - DI-159: los estados educativos sin autorización no conservan contenido
+  ---
+  duration_ms: 0.087981
+  type: 'test'
+  ...
+# Subtest: una fuente educativa no disponible se presenta como error seguro
+ok 429 - una fuente educativa no disponible se presenta como error seguro
+  ---
+  duration_ms: 0.090735
+  type: 'test'
+  ...
+# (node:6744) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/profesional/resultados-educativos.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: inicia en carga simulada y sin contenido educativo
+ok 430 - inicia en carga simulada y sin contenido educativo
+  ---
+  duration_ms: 0.950035
+  type: 'test'
+  ...
+# Subtest: devuelve solo contenido educativo validado cuando el proveedor lo permite
+ok 431 - devuelve solo contenido educativo validado cuando el proveedor lo permite
+  ---
+  duration_ms: 0.352074
+  type: 'test'
+  ...
+# Subtest: preserva cada estado no permitido sin contenido
+ok 432 - preserva cada estado no permitido sin contenido
+  ---
+  duration_ms: 0.196563
+  type: 'test'
+  ...
+# Subtest: rechaza solicitudes malformadas sin consultar el proveedor
+ok 433 - rechaza solicitudes malformadas sin consultar el proveedor
+  ---
+  duration_ms: 0.172907
+  type: 'test'
+  ...
+# Subtest: convierte respuestas malformadas del proveedor en errores seguros
+ok 434 - convierte respuestas malformadas del proveedor en errores seguros
+  ---
+  duration_ms: 0.863165
+  type: 'test'
+  ...
+# Subtest: fuente no disponible no requiere ni transporta contenido educativo
+ok 435 - fuente no disponible no requiere ni transporta contenido educativo
+  ---
+  duration_ms: 0.111647
+  type: 'test'
+  ...
+# Subtest: oculta excepciones del proveedor como errores seguros
+ok 436 - oculta excepciones del proveedor como errores seguros
+  ---
+  duration_ms: 0.152487
+  type: 'test'
+  ...
+# (node:6751) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/solicitudes/solicitudes.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sin sesión no permite consultar solicitudes
+ok 437 - sin sesión no permite consultar solicitudes
+  ---
+  duration_ms: 0.990024
+  type: 'test'
+  ...
+# Subtest: no permite consultar solicitudes de otro usuario
+ok 438 - no permite consultar solicitudes de otro usuario
+  ---
+  duration_ms: 0.121882
+  type: 'test'
+  ...
+# Subtest: la consulta filtra por usuario y solicitudes demo
+ok 439 - la consulta filtra por usuario y solicitudes demo
+  ---
+  duration_ms: 0.164074
+  type: 'test'
+  ...
+# Subtest: sin solicitudes devuelve una lista vacía
+ok 440 - sin solicitudes devuelve una lista vacía
+  ---
+  duration_ms: 0.079268
+  type: 'test'
+  ...
+# Subtest: la cancelación exige una sesión válida
+ok 441 - la cancelación exige una sesión válida
+  ---
+  duration_ms: 0.18804
+  type: 'test'
+  ...
+# Subtest: solo cancela solicitudes propias, demo y solicitadas
+ok 442 - solo cancela solicitudes propias, demo y solicitadas
+  ---
+  duration_ms: 0.309632
+  type: 'test'
+  ...
+# Subtest: no informa éxito cuando ninguna fila fue cancelada
+ok 443 - no informa éxito cuando ninguna fila fue cancelada
+  ---
+  duration_ms: 0.189893
+  type: 'test'
+  ...
+# Subtest: propaga los errores de consulta y cancelación
+ok 444 - propaga los errores de consulta y cancelación
+  ---
+  duration_ms: 0.198565
+  type: 'test'
+  ...
+# (node:6758) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/work/integration/src/features/solicitudes/validaciones.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/work/integration/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: acepta una solicitud válida
+ok 445 - acepta una solicitud válida
+  ---
+  duration_ms: 0.795595
+  type: 'test'
+  ...
+# Subtest: rechaza campos obligatorios vacíos
+ok 446 - rechaza campos obligatorios vacíos
+  ---
+  duration_ms: 0.110865
+  type: 'test'
+  ...
+# Subtest: rechaza correos inválidos
+ok 447 - rechaza correos inválidos
+  ---
+  duration_ms: 0.12111
+  type: 'test'
+  ...
+# Subtest: rechaza fechas anteriores a hoy
+ok 448 - rechaza fechas anteriores a hoy
+  ---
+  duration_ms: 0.097525
+  type: 'test'
+  ...
+# Subtest: acepta la fecha actual
+ok 449 - acepta la fecha actual
+  ---
+  duration_ms: 0.067541
+  type: 'test'
+  ...
+# Subtest: rechaza mensajes mayores a 1000 caracteres
+ok 450 - rechaza mensajes mayores a 1000 caracteres
+  ---
+  duration_ms: 0.06743
+  type: 'test'
+  ...
+# Subtest: acepta mensajes de 1000 caracteres
+ok 451 - acepta mensajes de 1000 caracteres
+  ---
+  duration_ms: 0.05343
+  type: 'test'
+  ...
+# Subtest: solo permite cancelar solicitudes solicitadas
+ok 452 - solo permite cancelar solicitudes solicitadas
+  ---
+  duration_ms: 0.051276
+  type: 'test'
+  ...
+# Subtest: rechaza fechas inexistentes
+ok 453 - rechaza fechas inexistentes
+  ---
+  duration_ms: 0.243773
+  type: 'test'
+  ...
+# Subtest: acepta el 29 de febrero de un año bisiesto
+ok 454 - acepta el 29 de febrero de un año bisiesto
+  ---
+  duration_ms: 0.190393
+  type: 'test'
+  ...
+1..454
+# tests 454
+# suites 0
+# pass 454
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5517.784773

@@ -1,0 +1,103 @@
+{
+  "acl": [
+    {
+      "acl": [
+        "postgres=arwdDxtm/postgres",
+        "service_role=arwdDxtm/postgres",
+        "authenticated=ar/postgres"
+      ],
+      "table": "appointment_requests",
+      "schema": "public"
+    },
+    {
+      "acl": [
+        "postgres=arwdDxtm/postgres",
+        "service_role=arwdDxtm/postgres",
+        "authenticated=ard/postgres"
+      ],
+      "table": "dental_photos",
+      "schema": "public"
+    },
+    {
+      "acl": [
+        "postgres=arwdDxtm/postgres",
+        "service_role=arwdDxtm/postgres",
+        "anon=r/postgres",
+        "authenticated=r/postgres"
+      ],
+      "table": "dentists",
+      "schema": "public"
+    },
+    {
+      "acl": [
+        "postgres=arwdDxtm/postgres",
+        "service_role=arwdDxtm/postgres",
+        "authenticated=ar/postgres"
+      ],
+      "table": "patient_consents",
+      "schema": "public"
+    },
+    {
+      "acl": [
+        "postgres=arwdDxtm/postgres",
+        "service_role=arwdDxtm/postgres",
+        "authenticated=ar/postgres"
+      ],
+      "table": "profiles",
+      "schema": "public"
+    }
+  ],
+  "columnAcl": [
+    {
+      "acl": [
+        "authenticated=w/postgres"
+      ],
+      "table": "appointment_requests",
+      "column": "status"
+    },
+    {
+      "acl": [
+        "authenticated=w/postgres"
+      ],
+      "table": "patient_consents",
+      "column": "revoked_at"
+    },
+    {
+      "acl": [
+        "authenticated=w/postgres"
+      ],
+      "table": "profiles",
+      "column": "full_name"
+    }
+  ],
+  "extensions": [
+    {
+      "name": "pg_stat_statements",
+      "schema": "extensions",
+      "version": "1.11"
+    },
+    {
+      "name": "pgcrypto",
+      "schema": "extensions",
+      "version": "1.3"
+    },
+    {
+      "name": "plpgsql",
+      "schema": "pg_catalog",
+      "version": "1.0"
+    },
+    {
+      "name": "supabase_vault",
+      "schema": "vault",
+      "version": "0.3.1"
+    },
+    {
+      "name": "uuid-ossp",
+      "schema": "extensions",
+      "version": "1.1"
+    }
+  ],
+  "publicSchemaOwner": "pg_database_owner",
+  "postgresCreateOnAuth": false,
+  "postgresHasLockPermission": true
+}

@@ -1,0 +1,86 @@
+{
+  "mirror_repository": "https://github.com/Tuminha/dental-vision-benchmark",
+  "mirror_commit": "19a7a39df441275f216435dda04ef87a5ef34bb8",
+  "upstream_readme_license_statement": "Images are openly licensed (Wikimedia Commons / CC0); per-image attribution is in CREDITS.md. The benchmark code is MIT; the images keep their own licenses.",
+  "source_record_file": "https://github.com/Tuminha/dental-vision-benchmark/blob/19a7a39df441275f216435dda04ef87a5ef34bb8/data/items.json",
+  "credits_file": "https://github.com/Tuminha/dental-vision-benchmark/blob/19a7a39df441275f216435dda04ef87a5ef34bb8/CREDITS.md",
+  "photos": [
+    {
+      "caso": "cuidado-habitual",
+      "upstream_item_id": "photo-intraoral-01",
+      "upstream_commit": "19a7a39df441275f216435dda04ef87a5ef34bb8",
+      "mirror_file": "https://github.com/Tuminha/dental-vision-benchmark/blob/19a7a39df441275f216435dda04ef87a5ef34bb8/data/images/intraoral_photo.jpg",
+      "mirror_raw": "https://raw.githubusercontent.com/Tuminha/dental-vision-benchmark/19a7a39df441275f216435dda04ef87a5ef34bb8/data/images/intraoral_photo.jpg",
+      "original_source": {
+        "title": "File:Detailed view of the inside of the human mouth.jpg",
+        "url": "https://commons.wikimedia.org/wiki/File:Detailed_view_of_the_inside_of_the_human_mouth.jpg",
+        "license": "CC0"
+      },
+      "original_sha256": "cc987fe6a887574b573b1225e6043779400320b275fae99a5a35645cbc23a846",
+      "optimized_file": "public/demo/cuidado-habitual.jpg",
+      "optimized_sha256": "73f8781d80ee70ac9ad5bb35d60121a09b8650ac6d22165a0b7ae2a846428884",
+      "width": 1280,
+      "height": 1707,
+      "original_size_bytes": 291596,
+      "optimized_size_bytes": 289553,
+      "transformations": [
+        "Recompressed to JPEG quality 88 with progressive encoding",
+        "Removed EXIF and other identifying metadata",
+        "No cropping, stretching, retouching, or clinical annotations baked into image"
+      ],
+      "license_verification": "Per-image explicit redistribution/attribution records in mirror CREDITS.md and data/items.json; original Commons pages not directly retrievable under current network policy."
+    },
+    {
+      "caso": "atencion-preventiva",
+      "upstream_item_id": "dental_caries_cavity_2_cropped",
+      "upstream_commit": "19a7a39df441275f216435dda04ef87a5ef34bb8",
+      "mirror_file": "https://github.com/Tuminha/dental-vision-benchmark/blob/19a7a39df441275f216435dda04ef87a5ef34bb8/data/images/dental_caries_cavity_2_cropped.jpg",
+      "mirror_raw": "https://raw.githubusercontent.com/Tuminha/dental-vision-benchmark/19a7a39df441275f216435dda04ef87a5ef34bb8/data/images/dental_caries_cavity_2_cropped.jpg",
+      "original_source": {
+        "title": "File:Dental Caries Cavity 2 (cropped).JPG",
+        "url": "https://commons.wikimedia.org/wiki/File%3ADental_Caries_Cavity_2_%28cropped%29.JPG",
+        "license": "CC BY-SA 4.0",
+        "attribution": "Suyash.dwivedi"
+      },
+      "original_sha256": "21fd5dcdd578a37e51496349a08ca6d05d5de70cc679dfac3bd91f4181f4e313",
+      "optimized_file": "public/demo/atencion-preventiva.jpg",
+      "optimized_sha256": "9df2f498893f87a57427cd73cd7b5cb291e7e3807bb64884b7f41b8b3648decf",
+      "width": 1280,
+      "height": 960,
+      "original_size_bytes": 156361,
+      "optimized_size_bytes": 154291,
+      "transformations": [
+        "Recompressed to JPEG quality 88 with progressive encoding",
+        "Removed EXIF and other identifying metadata",
+        "No cropping, stretching, retouching, or clinical annotations baked into image"
+      ],
+      "license_verification": "Per-image explicit redistribution/attribution records in mirror CREDITS.md and data/items.json; original Commons pages not directly retrievable under current network policy."
+    },
+    {
+      "caso": "cuidado-encias",
+      "upstream_item_id": "mandibularanteriorcalculus",
+      "upstream_commit": "19a7a39df441275f216435dda04ef87a5ef34bb8",
+      "mirror_file": "https://github.com/Tuminha/dental-vision-benchmark/blob/19a7a39df441275f216435dda04ef87a5ef34bb8/data/images/mandibularanteriorcalculus.jpg",
+      "mirror_raw": "https://raw.githubusercontent.com/Tuminha/dental-vision-benchmark/19a7a39df441275f216435dda04ef87a5ef34bb8/data/images/mandibularanteriorcalculus.jpg",
+      "original_source": {
+        "title": "File:MandibularAnteriorCalculus.JPG",
+        "url": "https://commons.wikimedia.org/wiki/File%3AMandibularAnteriorCalculus.JPG",
+        "license": "Public domain",
+        "attribution": "DRosenbach at English Wikipedia"
+      },
+      "original_sha256": "5ad979161a5b4f87f3e924f2aeb968ea3f4b837f433c3eedea0939726093f379",
+      "optimized_file": "public/demo/cuidado-encias.jpg",
+      "optimized_sha256": "97376310eb73f2eeacb691559d2ce6dc184aeb4caf66299f588c3d36a19b0628",
+      "width": 1280,
+      "height": 636,
+      "original_size_bytes": 167800,
+      "optimized_size_bytes": 163371,
+      "transformations": [
+        "Recompressed to JPEG quality 88 with progressive encoding",
+        "Removed EXIF and other identifying metadata",
+        "No cropping, stretching, retouching, or clinical annotations baked into image"
+      ],
+      "license_verification": "Per-image explicit redistribution/attribution records in mirror CREDITS.md and data/items.json; original Commons pages not directly retrievable under current network policy."
+    }
+  ]
+}

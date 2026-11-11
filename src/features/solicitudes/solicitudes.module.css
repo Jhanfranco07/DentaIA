@@ -13,7 +13,7 @@
 }
 
 .etiquetaSuperior {
-  color: #087d73;
+  color: var(--teal-dark);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.2px;
@@ -22,22 +22,22 @@
 }
 
 .titulo {
-  font-family: "Manrope", sans-serif;
+  font-family: inherit;
   font-size: clamp(28px, 4vw, 40px);
   font-weight: 800;
-  color: #172937;
+  color: var(--ink);
   margin: 0 0 12px;
 }
 
 .descripcion {
-  color: #667784;
+  color: var(--muted);
   font-size: 15px;
   line-height: 1.7;
 }
 
 .tarjeta {
   background: #ffffff;
-  border: 1px solid #e6ebe8;
+  border: 1px solid var(--line);
   border-radius: 18px;
   padding: 32px;
   margin-bottom: 28px;
@@ -45,15 +45,15 @@
 }
 
 .tituloSeccion {
-  font-family: "Manrope", sans-serif;
+  font-family: inherit;
   font-size: 22px;
   font-weight: 800;
-  color: #172937;
+  color: var(--ink);
   margin: 0 0 12px;
 }
 
 .subtitulo {
-  color: #667784;
+  color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 26px;
@@ -85,7 +85,7 @@
 .etiqueta {
   font-size: 13px;
   font-weight: 700;
-  color: #254239;
+  color: var(--ink);
 }
 
 .input,
@@ -97,7 +97,7 @@
   border: 1px solid #dce6e0;
   border-radius: 10px;
   background: #ffffff;
-  color: #172937;
+  color: var(--ink);
   font: inherit;
   font-size: 14px;
   outline: none;
@@ -107,7 +107,7 @@
 .input:focus,
 .select:focus,
 .textarea:focus {
-  border-color: #159e90;
+  border-color: var(--teal);
   box-shadow: 0 0 0 3px rgba(21, 158, 144, 0.12);
 }
 
@@ -118,12 +118,12 @@
 
 .contador {
   font-size: 12px;
-  color: #667784;
+  color: var(--muted);
   text-align: right;
 }
 
 .aviso {
-  background: #eaf7f1;
+  background: var(--soft);
   border: 1px solid #d6eade;
   border-radius: 10px;
   padding: 15px;
@@ -137,7 +137,7 @@
   align-items: center;
   justify-content: center;
   padding: 14px 24px;
-  background: #13998a;
+  background: var(--teal);
   border: 1px solid transparent;
   border-radius: 10px;
   color: #ffffff;
@@ -148,7 +148,7 @@
 }
 
 .boton:hover:not(:disabled) {
-  background: #087d73;
+  background: var(--teal-dark);
 }
 
 .boton:disabled {
@@ -202,7 +202,7 @@
 
 .solicitud {
   padding: 22px;
-  border: 1px solid #e6ebe8;
+  border: 1px solid var(--line);
   border-radius: 14px;
   background: #fbfdfc;
 }
@@ -217,7 +217,7 @@
 }
 
 .solicitudTitulo {
-  font-family: "Manrope", sans-serif;
+  font-family: inherit;
   font-size: 16px;
   font-weight: 800;
   margin: 0;
@@ -238,7 +238,7 @@
 
 .detalle strong {
   display: block;
-  color: #667784;
+  color: var(--muted);
   font-size: 12px;
   margin-bottom: 3px;
 }
@@ -249,20 +249,20 @@
   border-radius: 30px;
   padding: 7px 12px;
   background: #e5f5ed;
-  color: #087d73;
+  color: var(--teal-dark);
   font-size: 12px;
   font-weight: 700;
 }
 
 .estadoCancelado {
   background: #f1f2f3;
-  color: #667784;
+  color: var(--muted);
 }
 
 .vacio {
   text-align: center;
   padding: 36px 20px;
-  color: #667784;
+  color: var(--muted);
   background: #f7faf8;
   border-radius: 12px;
 }
@@ -299,3 +299,24 @@
     margin-bottom: 22px;
   }
 }
+.contenedor{width:100%;max-width:none;padding:0;margin:0}.encabezado{max-width:740px;text-align:left;margin:0 0 30px}.titulo{font-size:clamp(2rem,4.3vw,3rem);margin:12px 0 16px;font-family:inherit;letter-spacing:-.035em}.etiquetaSuperior{font-size:11px;letter-spacing:.13em;color:var(--teal)}.descripcion{color:var(--muted);line-height:1.75}.tarjeta{border-color:var(--line);border-radius:20px;box-shadow:var(--shadow)}.solicitud{background:#f6f9fc}.boton{min-height:48px}.tituloSeccion{font-family:inherit;font-size:22px}.formulario{gap:22px}.estado{border-radius:6px}.exito{border-radius:12px}.vacio a{color:var(--teal-dark);font-weight:700}
+.encabezadoSolicitudes{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.tituloSeccion{margin-bottom:5px}.subtitulo{margin:0 0 18px;font-size:12px;line-height:1.55}.verTodas{display:inline-flex;align-items:center;gap:7px;min-height:38px;flex:none;color:#086c75;font-size:11px;font-weight:750;text-decoration:none}.verTodas:hover{text-decoration:underline}.lista{gap:10px}.solicitud{padding:15px 16px;border-color:#e2eaf0;border-radius:13px;background:#fff;box-shadow:0 4px 12px #102a4305}.solicitudCabecera{align-items:center;margin-bottom:10px}.solicitudResumen{display:flex;align-items:center;gap:10px;min-width:0}.iconoSolicitud{display:grid;place-items:center;width:35px;height:35px;flex:none;border-radius:11px;background:#eaf2ff;color:#315e99;font-size:19px;font-weight:700}.solicitudTitulo{color:#193a4e;font-size:13px}.solicitudResumen p{margin:3px 0 0;color:#647a89;font-size:11px}.estado{padding:5px 9px;border-radius:999px;font-size:10px;font-weight:750}.estadoSolicitada{background:#e5f4ee;color:#247a59}.estadoCancelado{background:#edf1f4;color:#657784}.detallesExpandibles{border-top:1px solid #edf1f3}.detallesExpandibles summary{display:inline-flex;align-items:center;min-height:36px;cursor:pointer;color:#086c75;font-size:11px;font-weight:700}.detalles{gap:9px 18px;margin:0 0 12px}.detalle{font-size:11px}.detalle dt{color:#6e8190;font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}.detalle dd{margin:2px 0 0;color:#2b4558;overflow-wrap:anywhere}.detalleCompleto{grid-column:1/-1}.botonCancelar,.botonNeutral{min-height:36px;padding:7px 11px;border-radius:8px;font-size:10px;font-weight:750}.botonNeutral{border:1px solid #ccd9e1;background:#fff;color:#365064;cursor:pointer}.confirmacion{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px;padding:9px 11px;border:1px solid #ead6ad;border-radius:10px;background:#fff9ed;color:#75591f;font-size:11px}.mensajeCompacto{margin:12px 0 0;color:#637887;font-size:11px}.mensajeCompacto a{color:#086c75;font-weight:700}.tarjeta.compacto{margin:0;padding:19px;border-radius:16px}.tarjeta.compacto .tituloSeccion{font-size:17px}.tarjeta.compacto .subtitulo{max-width:60ch;margin-bottom:12px}.tarjeta.compacto .solicitud{padding:12px}.tarjeta.compacto .detalles{grid-template-columns:repeat(2,minmax(0,1fr))}
+.esqueletoSolicitudes{display:grid;gap:8px}.esqueletoSolicitudes i{height:67px;border:1px solid #e3ebf0;border-radius:11px;background:linear-gradient(100deg,#eff4f7 18%,#fff 42%,#eff4f7 66%);background-size:220% 100%;animation:solicitudCargando 1.4s ease-in-out infinite}.esqueletoSolicitudes i:nth-child(2){opacity:.75}.esqueletoSolicitudes i:nth-child(3){opacity:.5}@keyframes solicitudCargando{to{background-position:-170% 0}}
+.filtroSolicitudes{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 14px}.filtroSolicitudes label{color:#576f7e;font-size:10px;font-weight:750}.filtroSolicitudes select{min-height:38px;padding:7px 11px;border:1px solid #d0dfe5;border-radius:9px;background:#fff;color:#2b4658;font:inherit;font-size:11px}.filtroSolicitudes>span{color:#70828f;font-size:10px}
+.estadoSolicitada{background:#fff6e4;color:#785a16}.iconoSolicitud svg{color:currentColor}
+@media(max-width:560px){.encabezadoSolicitudes{display:grid}.verTodas{justify-self:start}.solicitudCabecera{align-items:flex-start}.detalles{grid-template-columns:1fr}.detalleCompleto{grid-column:auto}.confirmacion{align-items:stretch}.confirmacion>*{flex:1}.tarjeta.compacto{padding:15px}}
+@media(prefers-reduced-motion:reduce){.esqueletoSolicitudes i{animation:none}}
+
+/* Lectura de solicitudes en el panel y en su página completa. */
+.subtitulo,.solicitudResumen p,.mensajeCompacto{font-size:14px}
+.verTodas,.detallesExpandibles summary,.detalle,.filtroSolicitudes label,.filtroSolicitudes select,.filtroSolicitudes>span{font-size:14px}
+.solicitudTitulo{font-size:16px}
+.detalle dt,.estado{font-size:12px}
+.botonCancelar,.botonNeutral{min-height:44px;font-size:14px}
+.filtroSolicitudes select{min-height:44px}
+.tarjeta.compacto{padding:24px;border:1px solid #d9e5eb;box-shadow:none}
+.tarjeta.compacto .tituloSeccion{font-size:22px}
+.tarjeta.compacto .subtitulo{font-size:14px}
+.tarjeta.compacto .solicitud{padding:16px}
+.tarjeta.compacto .verTodas{min-height:44px}
+@media(max-width:560px){.tarjeta.compacto{padding:20px}.tarjeta.compacto .detalles{grid-template-columns:1fr}}

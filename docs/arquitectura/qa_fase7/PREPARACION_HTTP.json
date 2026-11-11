@@ -1,0 +1,10 @@
+{
+  "fecha": "2026-11-03",
+  "base": "postgres exclusivamente stack Docker QA marcado",
+  "remoto": false,
+  "migracionIncremental": "20261103195335_di36_servicios_comunes_mvp.sql",
+  "sha256": "feb7c8b3ca63ec552a1a5d6bfb21c939f21456b2981679dcee82b8ed27ce3f1d",
+  "bucketPrivado": true,
+  "politicasStorage": 3,
+  "noSeRelajoRLS": true
+}

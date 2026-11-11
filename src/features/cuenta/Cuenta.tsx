@@ -6,12 +6,25 @@ import { mensajeError, validarFormularioCuenta, type CampoCuenta } from "./valid
 import styles from "./cuenta.module.css";
 import PerfilPaciente from "./PerfilPaciente";
 import { useSesion } from "./useSesion";
+import Link from "next/link";
+import Encabezado from "@/components/Encabezado";
+import Pie from "@/components/Pie";
+import PortalShell from "@/components/PortalShell";
+import { NAVEGACION_PACIENTE, NAVEGACION_ODONTOLOGO, NAVEGACION_ADMIN } from "@/components/navegacion-portal";
+import { Icono } from "@/components/Identidad";
+import { retornoSolicitud } from "@/lib/navegacion";
+import { rolesDelUsuario, rutaPrincipalPorRoles } from "@/features/autorizacion/roles";
+import { useRouter } from "next/navigation";
 
-export default function Cuenta() {
+export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean }) {
   const { usuario, cargando, errorSesion, verificar } = useSesion();
+  const router = useRouter();
+  const roles = rolesDelUsuario(usuario);
   const operacion = useRef(false);
   const activo = useRef(true);
-  const [registro, setRegistro] = useState(false);
+  const [registro, setRegistro] = useState(modoInicial);
+  const [continuar, setContinuar] = useState<string | null>(null);
+  useEffect(() => { setContinuar(retornoSolicitud(new URLSearchParams(window.location.search).get("continuar"))); }, []);
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -61,7 +74,21 @@ export default function Cuenta() {
       if (error) throw error;
       if (!activo.current) return;
       if (data.session) {
-        await verificar();
+        const verificado = await verificar();
+        if (!activo.current) return;
+        if (!verificado) {
+          setError("No pudimos volver a confirmar tu sesión. Comprueba la conexión y vuelve a iniciar sesión.");
+          return;
+        }
+        const rolesVerificados = rolesDelUsuario(verificado);
+        const destino = rutaPrincipalPorRoles(rolesVerificados);
+        if (!destino) {
+          setError("La cuenta inició sesión, pero no tiene un rol DentaIA activo. Contacta con la administración.");
+          return;
+        }
+        // El retorno de una solicitud solo aplica al paciente sin otros roles.
+        const soloPaciente = rolesVerificados.length === 1 && rolesVerificados[0] === "paciente";
+        router.replace(soloPaciente ? continuar ?? destino : destino);
       } else {
         setAviso("Si el registro puede completarse, recibirás un correo de confirmación. Revisa tu bandeja de entrada y spam, confirma el correo y vuelve para iniciar sesión.");
         setRegistro(false);
@@ -86,23 +113,37 @@ export default function Cuenta() {
     finally { operacion.current = false; if (activo.current) setOcupado(false); }
   }
 
-  return <section className={styles.pagina} aria-labelledby="cuenta-titulo">
-    <header className={styles.cabecera}><span className={styles.etiqueta}>TU ESPACIO EN DENTAIA</span><h1 id="cuenta-titulo">Tu cuenta, cerca de ti.</h1><p>Accede a tu espacio personal para continuar tu recorrido de orientación bucal.</p></header>
-    <div className={styles.panel}>
-      <aside className={styles.presentacion}><span className={styles.simbolo} aria-hidden="true">✦</span><h2>Una sonrisa más informada empieza contigo.</h2><p>Tu cuenta te acompaña en cada visita. Mantén tus datos a mano y vuelve cuando lo necesites.</p><span className={styles.nota}>Prototipo académico · Usa datos de demostración.</span></aside>
+  const nombreUsuario = usuario?.user_metadata?.full_name;
+  const etiquetaUsuario = typeof nombreUsuario === "string" && nombreUsuario.trim() ? nombreUsuario.trim() : usuario?.email?.split("@")[0] ?? "Tu perfil";
+  const otrosEspacios = [
+    ...(roles.includes("superusuario") && roles.includes("odontologo") ? [{ href: "/profesional", titulo: "Espacio profesional" }] : []),
+    ...(roles.includes("paciente") && (roles.includes("odontologo") || roles.includes("superusuario")) ? [{ href: "/panel", titulo: "Espacio del paciente" }] : []),
+  ];
+  const contenido = <section className={`${styles.pagina} ${usuario ? styles.paginaAutenticada : ""}`} aria-labelledby="cuenta-titulo">
+    {usuario ? <header className={styles.cabeceraPerfil}>
+      <span className={styles.avatarCuenta} aria-hidden="true">{etiquetaUsuario.slice(0, 1).toLocaleUpperCase("es")}</span>
+      <div><span className={styles.etiqueta}>PERFIL DE CUENTA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>{etiquetaUsuario}<span aria-hidden="true"> · </span>{usuario.email ?? "Correo no disponible"}</p></div>
+      <span className={styles.rolCuenta}>{roles.includes("superusuario") ? "Superadministrador" : roles.includes("odontologo") ? "Odontólogo" : roles.includes("paciente") ? "Paciente" : "Sin rol activo"}</span>
+    </header> : <header className={styles.cabecera}><h1 id="cuenta-titulo">Accede a DentaIA</h1><p>Inicia sesión o crea tu cuenta para continuar.</p></header>}
+    <div className={`${styles.panel} ${usuario ? styles.panelAutenticado : styles.panelPublico}`}>
+      {!usuario && <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32} /></span><h2>Tu cuidado bucal, en un solo lugar.</h2><p>Consulta tu perfil y las herramientas disponibles para tu cuenta.</p><span className={styles.nota}>El análisis automático está pendiente y no sustituye una evaluación odontológica.</span></aside>}
       <div className={styles.contenido}>
         {cargando ? <p role="status">Comprobando tu sesión…</p> : <>
           {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}
           {aviso && <p className={styles.aviso} role="status">{aviso}</p>}
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
-            <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />
-            <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>
+            {continuar && roles.includes("paciente") && !roles.includes("odontologo") && !roles.includes("superusuario") && <div className="notice"><strong>Tu profesional sigue seleccionado.</strong><p>Ya puedes continuar con tu solicitud de demostración.</p><Link href={continuar} className="action">Continuar mi solicitud</Link></div>}
+            {roles.includes("paciente") && <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />}
+            {roles.length === 0 && <p role="alert" className={styles.error}>Esta cuenta no tiene un rol DentaIA activo.</p>}
+            {otrosEspacios.length > 0 && <section className={styles.otrosEspacios} aria-label="Otros espacios de tu cuenta"><h2>Otros espacios autorizados</h2><p>Tu cuenta tiene más de un rol. Puedes cambiar de espacio sin cerrar sesión.</p>{otrosEspacios.map(({href,titulo}) => <Link key={href} href={href} className="text-link">{titulo} →</Link>)}</section>}
+            {roles.length > 0 ? <p className={styles.nota}>Para cambiar de sección o cerrar sesión, utiliza la navegación de tu espacio. Los permisos de la cuenta se verifican en el servidor.</p>
+              : <button className={styles.secundario} type="button" disabled={ocupado} onClick={() => { void cerrarSesion(); }}>{ocupado ? "Cerrando sesión…" : "Cerrar sesión"}</button>}
           </> : <>
             <div className={styles.opciones} aria-label="Opciones de acceso">
               <button type="button" aria-pressed={!registro} disabled={ocupado} onClick={() => cambiarModo(false)}>Iniciar sesión</button>
               <button type="button" aria-pressed={registro} disabled={ocupado} onClick={() => cambiarModo(true)}>Crear cuenta</button>
             </div>
-            <h2>{registro ? "Crea tu cuenta" : "Qué bueno verte de nuevo"}</h2>
+            <h2>{registro ? "Crea tu cuenta" : "Inicia sesión"}</h2>
             <form className={styles.formulario} onSubmit={enviar} noValidate aria-busy={ocupado}>
               <fieldset disabled={ocupado}>
                 {registro && <label>Nombre completo<input name="nombre" autoComplete="name" required minLength={2} maxLength={120} value={nombre} aria-invalid={campoInvalido === "nombre" || undefined} aria-describedby={campoInvalido === "nombre" ? "cuenta-error" : undefined} onChange={e => { setNombre(e.target.value); limpiarValidacion("nombre"); }} /></label>}
@@ -117,4 +158,10 @@ export default function Cuenta() {
       </div>
     </div>
   </section>;
+  if (usuario && roles.length > 0) {
+    const superusuario = roles.includes("superusuario");
+    const odontologo = !superusuario && roles.includes("odontologo");
+    return <PortalShell area={superusuario ? "Administración" : odontologo ? "Odontología" : "Paciente"} descripcion="Perfil y preferencias" enlaces={superusuario ? NAVEGACION_ADMIN : odontologo ? NAVEGACION_ODONTOLOGO : NAVEGACION_PACIENTE}>{contenido}</PortalShell>;
+  }
+  return <><Encabezado /><main id="contenido" tabIndex={-1}>{contenido}</main><Pie /></>;
 }
