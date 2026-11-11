@@ -103,11 +103,11 @@ export default function DirectorioLista() {
     return filtrados;
   }, [busqueda, carga, dentistas, distrito, especialidad, orden, radioKm, ubicacion]);
 
-  const ubicacionesVisibles = crearMarcadores(visibles);
-  const marcadoresDemo = carga.estado === "listo"
+  const ubicacionesVisibles = useMemo(() => crearMarcadores(visibles), [visibles]);
+  const marcadoresDemo = useMemo(() => carga.estado === "listo"
     ? carga.demos.map(crearMarcadorDemo).filter((marcador): marcador is MarcadorDemo => marcador !== null)
-    : [];
-  const ubicacionesMapa = [...ubicacionesVisibles, ...(mostrarDemo ? marcadoresDemo : [])];
+    : [], [carga]);
+  const ubicacionesMapa = useMemo(() => [...ubicacionesVisibles, ...(mostrarDemo ? marcadoresDemo : [])], [ubicacionesVisibles, marcadoresDemo, mostrarDemo]);
 
   async function usarUbicacion() {
     setErrorUbicacion("");
@@ -177,7 +177,7 @@ export default function DirectorioLista() {
               const resumen = carga.resenas[d.id];
               const punto = ubicacionMasCercana(d.ubicaciones, ubicacion);
               const km = punto?.distancia ?? null;
-              return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`} onMouseEnter={() => setSeleccionado(d.id)} onFocus={() => setSeleccionado(d.id)}>
+              return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`}>
                 <div className={styles.avatar} style={{ background: d.avatar_color?.trim() || "#e3f6f0" }} aria-hidden="true">{inicialesDe(d.initials, d.name)}</div>
                 <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>Perfil de ejemplo · ficticio</span>}<h2>{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
                   <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.ubicacionesDisponibles ? "Ubicación no registrada" : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}<span>{formatearPrecio(d.consultation_price, d.currency)}</span></div>
