@@ -23,4 +23,3 @@ Base: `main` en `244643b4a6f2feb35674119e81e32a4a4bb84c70`. Next.js 15 App Route
 ## Límites funcionales
 
 El mapa ya existe: la propuesta de Sprint 6 debe mejorar su uso con lista equivalente y datos verificados, no crear otro mapa. Los 20 perfiles odontológicos son una iniciativa futura; requieren fuente, consentimiento de publicación y rotulado demo antes de cargar registros. Ninguna vista de IA debe presentar contenido educativo o sintético como diagnóstico real.
-
