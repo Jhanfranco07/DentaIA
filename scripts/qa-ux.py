@@ -96,7 +96,7 @@ with sync_playwright() as p:
             if path=='/cuenta':expect(page.get_by_role('heading',name='Mi cuenta',exact=True)).to_be_visible()
             if path=='/panel':expect(page.get_by_role('heading',name='Hola, Cuenta')).to_be_visible()
             if path=='/profesional':
-                check('Profesional: membresía sintética compatible y selector de clínica disponible',lambda: expect(page.get_by_label('Clínica de contexto',exact=True)).to_be_visible())
+                check('Profesional: membresía sintética compatible y selector de clínica disponible',lambda: expect(page.get_by_label('Clínica activa',exact=True)).to_be_visible())
             if path=='/administracion':expect(page.get_by_role('navigation',name='Secciones del panel administrativo')).to_be_visible()
             for width in [320,390,768,1024,1440]:
                 def responsive(w=width):
