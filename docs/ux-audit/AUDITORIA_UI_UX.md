@@ -38,4 +38,3 @@ Base: merge `244643b`. Método: inspección de rutas, componentes, estilos y la 
 ## Criterios de la próxima validación
 
 Usar fixtures inequívocamente sintéticos, sin datos clínicos ni cuentas productivas. Probar 320, 390, 768, 1024 y 1440 px; teclado, zoom, foco, lector de pantalla y reducción de movimiento. Registrar evidencia y fallos por ruta. La revisión previa de `docs/ux` reporta pruebas de navegador con fixtures, pero sus resultados no sustituyen una nueva línea base tras futuras modificaciones.
-
