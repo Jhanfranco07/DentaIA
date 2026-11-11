@@ -15,7 +15,9 @@ test("20 perfiles únicos enlazados con 20 puntos demo, sin cuentas profesionale
   assert.equal(new Set(perfiles.map(p => p.id)).size, 20);
   assert.equal(new Set(perfiles.flatMap(p => p.ubicaciones.map(u => u.id))).size, 20);
   assert.ok(perfiles.every(p => p.is_demo && p.ubicaciones[0].dentist_id === p.id));
-  assert.ok(perfiles.every(p => !p.ubicaciones[0].practice_address.includes("Calle")));
+  assert.ok(perfiles.every(p => p.ubicaciones[0].practice_address.includes(", Lima, Perú")));
+  assert.ok(CATALOGO_DEMO.every(p => p.source_url.startsWith("https://")));
+  assert.ok(perfiles.every(p => p.description.includes("no existe vinculación laboral")));
   assert.match(AVISO_PERFILES_DEMO, /No representan profesionales verificados/);
 });
 

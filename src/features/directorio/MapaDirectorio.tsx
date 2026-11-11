@@ -7,6 +7,7 @@ import type { MarcadorConsultorio, MarcadorDemo, MarcadorDirectorio } from "./ti
 import type { PuntoGeografico } from "./geolocalizacion";
 import { ubicacionConCoordenadasValidas } from "./ubicaciones";
 import styles from "./mapa-directorio.module.css";
+import { perfilDemo } from "./catalogo-demo";
 
 const LIMA = { longitude: -77.0428, latitude: -12.0464 };
 
@@ -100,28 +101,38 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
     for (const demo of demosValidas) {
       const popupRoot = document.createElement("div");
       const nombre = document.createElement("strong");
-      nombre.textContent = demo.name;
+      const perfil = demo.dentist_id ? perfilDemo(demo.dentist_id) : undefined;
+      nombre.textContent = perfil?.name ?? demo.name;
+      if (perfil) {
+        const especialidad = document.createElement("p");
+        especialidad.textContent = perfil.specialty + " · Profesional ficticio";
+        popupRoot.append(especialidad);
+      }
       popupRoot.append(nombre);
       const etiqueta = document.createElement("p");
-      etiqueta.textContent = demo.public_label;
+      etiqueta.textContent = `Referencia geográfica: ${demo.name}`;
       popupRoot.append(etiqueta);
       const distrito = document.createElement("p");
       distrito.textContent = `${demo.district}, ${demo.city}, ${demo.country}`;
       popupRoot.append(distrito);
       const nota = document.createElement("small");
-      nota.textContent = "Coordenada representativa de demostración; no identifica un consultorio ni una dirección real.";
+      nota.textContent = perfil ? `Dirección publicada: ${perfil.practice_address}. Este profesional ficticio no trabaja necesariamente en este centro; no hay reservas por DentaIA.` : "Punto académico no vinculado a profesionales.";
       popupRoot.append(nota);
       if (demo.dentist_id) {
         const enlace = document.createElement("a");
         enlace.href = `/directorio/${encodeURIComponent(demo.dentist_id)}`;
-        enlace.textContent = "Ver perfil ficticio";
+        enlace.textContent = "Ver ficha de ejemplo";
         popupRoot.append(enlace);
       }
       const elemento = document.createElement("button");
       elemento.type = "button";
       elemento.className = styles.marcadorDemo;
-      elemento.textContent = "DEMO";
-      elemento.setAttribute("aria-label", `${demo.public_label}, ${demo.district}`);
+      const icono = document.createElement("span");
+      icono.className = styles.iconoDiente;
+      icono.textContent = "🦷";
+      icono.setAttribute("aria-hidden", "true");
+      elemento.append(icono);
+      elemento.setAttribute("aria-label", `Ver referencia geográfica de ${demo.name} en ${demo.district}`);
       if (demo.dentist_id) {
         elemento.dataset.dentistId = demo.dentist_id;
         elemento.addEventListener("click", () => alSeleccionar?.(demo.dentist_id!));
