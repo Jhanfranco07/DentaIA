@@ -127,7 +127,7 @@ export default function DentistaDetalle({ id }: { id: string }) {
                 <dd>{formatearPrecio(carga.dentista.consultation_price, carga.dentista.currency)}</dd>
               </div>}
               <div>
-                <dt>Consultorio</dt>
+                <dt>{carga.dentista.is_demo ? "Centro geográfico de referencia" : "Consultorio"}</dt>
                 <dd>{carga.ubicaciones.length ? carga.ubicaciones.map(u => u.practice_name).join(", ") : carga.ubicacionesDisponibles ? "No registrado" : "No disponible en este entorno"}</dd>
               </div>
               <div>
