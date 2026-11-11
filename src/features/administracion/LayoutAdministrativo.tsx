@@ -75,15 +75,11 @@ export default function LayoutAdministrativo({ children, seccion, onSeleccionar 
         <span className={styles.simbolo}><Icono nombre="escudo" size={25} /></span>
         <div><strong>DentaIA</strong><span>Administración</span></div>
       </div>
-      <p className={styles.etiquetaMenu}>ESPACIO DE TRABAJO</p>
+      <p className={styles.etiquetaMenu}>Secciones</p>
       <NavegacionAdministrativa seccion={seccion} onSeleccionar={destino => {
         setMenuAbierto(false);
         onSeleccionar(destino);
       }} />
-      <div className={styles.notaLateral}>
-        <strong>Acceso administrativo protegido</strong>
-        <p>Las lecturas dependen de habilitación del entorno. Los cambios de roles permanecen desactivados en Vercel.</p>
-      </div>
       <Link href="/cuenta" className={styles.volver}>Mi cuenta</Link>
       <button type="button" className={styles.volver} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>
         {saliendo ? "Cerrando sesión…" : "Cerrar sesión"}

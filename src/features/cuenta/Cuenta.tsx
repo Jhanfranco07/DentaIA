@@ -124,9 +124,9 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
       <span className={styles.avatarCuenta} aria-hidden="true">{etiquetaUsuario.slice(0, 1).toLocaleUpperCase("es")}</span>
       <div><span className={styles.etiqueta}>PERFIL DE CUENTA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>{etiquetaUsuario}<span aria-hidden="true"> · </span>{usuario.email ?? "Correo no disponible"}</p></div>
       <span className={styles.rolCuenta}>{roles.includes("superusuario") ? "Superadministrador" : roles.includes("odontologo") ? "Odontólogo" : roles.includes("paciente") ? "Paciente" : "Sin rol activo"}</span>
-    </header> : <header className={styles.cabecera}><span className={styles.etiqueta}>TU ESPACIO EN DENTAIA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>Accede a tu perfil y continúa tu recorrido en DentaIA.</p></header>}
+    </header> : <header className={styles.cabecera}><h1 id="cuenta-titulo">Accede a DentaIA</h1><p>Inicia sesión o crea tu cuenta para continuar.</p></header>}
     <div className={`${styles.panel} ${usuario ? styles.panelAutenticado : styles.panelPublico}`}>
-      {!usuario && <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32} /></span><h2>Un espacio claro para tu cuidado dental.</h2><p>Inicia sesión para consultar tu cuenta o crea un perfil para comenzar.</p><span className={styles.nota}>El análisis automático está pendiente y no sustituye una evaluación odontológica.</span></aside>}
+      {!usuario && <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32} /></span><h2>Tu cuidado bucal, en un solo lugar.</h2><p>Consulta tu perfil y las herramientas disponibles para tu cuenta.</p><span className={styles.nota}>El análisis automático está pendiente y no sustituye una evaluación odontológica.</span></aside>}
       <div className={styles.contenido}>
         {cargando ? <p role="status">Comprobando tu sesión…</p> : <>
           {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}
@@ -143,7 +143,7 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
               <button type="button" aria-pressed={!registro} disabled={ocupado} onClick={() => cambiarModo(false)}>Iniciar sesión</button>
               <button type="button" aria-pressed={registro} disabled={ocupado} onClick={() => cambiarModo(true)}>Crear cuenta</button>
             </div>
-            <h2>{registro ? "Crea tu cuenta" : "Qué bueno verte de nuevo"}</h2>
+            <h2>{registro ? "Crea tu cuenta" : "Inicia sesión"}</h2>
             <form className={styles.formulario} onSubmit={enviar} noValidate aria-busy={ocupado}>
               <fieldset disabled={ocupado}>
                 {registro && <label>Nombre completo<input name="nombre" autoComplete="name" required minLength={2} maxLength={120} value={nombre} aria-invalid={campoInvalido === "nombre" || undefined} aria-describedby={campoInvalido === "nombre" ? "cuenta-error" : undefined} onChange={e => { setNombre(e.target.value); limpiarValidacion("nombre"); }} /></label>}

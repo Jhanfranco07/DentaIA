@@ -39,11 +39,12 @@ test("seed es repetible y acotado al slug DEMO; limpieza no elimina otros regist
   assert.doesNotMatch(limpieza, /delete from\s+(public\.)?dentists|delete from\s+clinical\./i);
 });
 
-test("el marcador DEMO es distinguible y carece de enlace a perfil o solicitud real", () => {
-  assert.match(mapa, /elemento\.textContent = "DEMO"/);
-  assert.match(mapa, /demo\.public_label/);
-  assert.match(mapa, /no identifica un consultorio ni una dirección real/);
+test("el marcador odontológico usa un diente y no enlaza profesionales ficticios a atención real", () => {
+  assert.match(mapa, /icono\.textContent = "🦷"/);
+  assert.match(mapa, /perfilDemo/);
+  assert.match(mapa, /no trabaja necesariamente en este centro/);
+  assert.doesNotMatch(mapa, /elemento\.textContent = "DEMO"/);
   assert.match(directorio, /crearMarcadorDemo/);
   assert.match(directorio, /marcadoresDemo/);
-  assert.match(directorio, /Clínica ficticia, no ofrece atención real/);
+  assert.match(directorio, /AVISO_PERFILES_DEMO/);
 });

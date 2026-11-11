@@ -34,6 +34,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const [error, setError] = useState("");
   const boton = useRef<HTMLButtonElement>(null);
   const lateral = useRef<HTMLElement>(null);
+  const seccionPendiente = useRef<string | null>(null);
   const [fragmento, setFragmento] = useState("");
   const hrefActual = enlaces.find(e => e.href === ruta + fragmento)?.href;
   const pagina = enlaces.find(e => e.href === hrefActual) ?? enlaces.find(({ href, exacto }) => exacto ? ruta === href : ruta === href || ruta.startsWith(`${href}/`));
@@ -72,6 +73,13 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
     return () => { document.body.style.overflow = overflow; document.removeEventListener("keydown", teclado); boton.current?.focus(); };
   }, [abierto, movil]);
 
+  useEffect(() => {
+    if (abierto || !seccionPendiente.current) return;
+    const destino = document.getElementById(seccionPendiente.current);
+    seccionPendiente.current = null;
+    destino?.focus({ preventScroll: true });
+  }, [abierto]);
+
   async function cerrarSesion() {
     if (saliendo) return;
     setSaliendo(true); setError("");
@@ -87,7 +95,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   }
 
   let grupoAnterior = "";
-  return <div className={styles.shell}>
+  return <div className={styles.shell} data-area={area}>
     <aside ref={lateral} id="navegacion-portal" className={styles.lateral} data-abierto={abierto} aria-hidden={movil && !abierto} inert={movil && !abierto ? true : undefined} aria-label={`Navegación del portal ${area}`}>
       <div className={styles.cabeceraLateral}><Link href="/" className={styles.marca} aria-label="DentaIA, página de inicio"><Marca /></Link><button type="button" className={styles.cerrarMenu} aria-label="Cerrar navegación" onClick={() => { setAbierto(false); boton.current?.focus(); }}><Icono nombre="cerrar" size={18} /></button></div>
       <div className={styles.portalMarca}><span className={styles.portalIcono}><Icono nombre={area === "Odontología" ? "diente" : area === "Administración" ? "escudo" : "persona"} size={19} /></span><div><strong>{area}</strong><span>Espacio de trabajo</span></div></div>
@@ -99,7 +107,17 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
           if (grupo) grupoAnterior = grupo;
           return <span className={styles.itemNavegacion} key={href}>
             {encabezadoGrupo && <span className={styles.grupo}>{grupo}</span>}
-            <Link href={href} onClick={() => { setAbierto(false); if (href.includes("#")) setFragmento(href.slice(href.indexOf("#"))); }} aria-current={activo ? "page" : undefined} className={styles.enlace}>
+            <Link href={href} onClick={(event) => {
+              if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+              const [paginaDestino, ancla] = href.split("#");
+              if (paginaDestino === ruta) {
+                setFragmento(ancla ? `#${ancla}` : "");
+                if (area === "Odontología" && abierto) {
+                  seccionPendiente.current = ancla || "contenido";
+                }
+              }
+              setAbierto(false);
+            }} aria-current={activo ? "page" : undefined} className={styles.enlace}>
               <Icono nombre={icono ?? "flecha"} size={18} /><span>{etiqueta}</span>{activo && <span className={styles.marcaActiva} aria-hidden="true" />}
             </Link>
           </span>;

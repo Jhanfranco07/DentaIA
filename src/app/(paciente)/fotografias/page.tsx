@@ -46,6 +46,9 @@ type Preview = {
   url: string;
 };
 
+type Paso = 1 | 2 | 3 | 4 | 5;
+const PASOS = ["Consentimiento", "Preparación", "Elegir imagen", "Revisión", "Confirmación"] as const;
+
 function formatBytes(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
 }
@@ -109,10 +112,14 @@ function PhotosPageContent() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [errorCarga, setErrorCarga] = useState(false);
   const [message, setMessage] = useState("");
+  const [paso, setPaso] = useState<Paso>(1);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
+  const localPreviewRef = useRef<string | null>(null);
+  const previewUrlsRef = useRef(new Set<string>());
 
   const clearMessages = () => {
     setError("");
@@ -122,6 +129,7 @@ function PhotosPageContent() {
   async function loadData() {
     setLoading(true);
     clearMessages();
+    setErrorCarga(false);
 
     try {
       const client = getSupabaseBrowserClient();
@@ -162,6 +170,13 @@ function PhotosPageContent() {
 
       setConsentId(consent?.id ?? null);
       setAccepted(Boolean(consent));
+      if (!consent) {
+        if (localPreviewRef.current) URL.revokeObjectURL(localPreviewRef.current);
+        localPreviewRef.current = null;
+        setSelectedFile(null);
+        setLocalPreview(null);
+      }
+      setPaso((actual) => !consent ? 1 : actual === 1 ? 2 : actual);
 
       const { data: photoData, error: photosError } = await client
         .from("dental_photos")
@@ -178,6 +193,7 @@ function PhotosPageContent() {
       setPhotos(photoData ?? []);
     } catch (err) {
       setError(mensajeFotografia(err, "No se pudo cargar la información."));
+      setErrorCarga(true);
     } finally {
       setLoading(false);
     }
@@ -200,6 +216,11 @@ function PhotosPageContent() {
           current.forEach((preview) => URL.revokeObjectURL(preview.url));
           return [];
         });
+        previewUrlsRef.current.clear();
+        if (localPreviewRef.current) URL.revokeObjectURL(localPreviewRef.current);
+        localPreviewRef.current = null;
+        setSelectedFile(null);
+        setLocalPreview(null);
         setMessage("");
         setError("Tu sesión se cerró. Inicia sesión de nuevo en Mi cuenta para continuar.");
         return;
@@ -214,10 +235,10 @@ function PhotosPageContent() {
 
     return () => {
       subscription.unsubscribe();
-      previews.forEach((preview) => URL.revokeObjectURL(preview.url));
-      if (localPreview) {
-        URL.revokeObjectURL(localPreview);
-      }
+      previewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+      previewUrlsRef.current.clear();
+      if (localPreviewRef.current) URL.revokeObjectURL(localPreviewRef.current);
+      localPreviewRef.current = null;
     };
     // La suscripción controla cambios de sesión; la carga inicial se ejecuta una sola vez.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -234,6 +255,7 @@ function PhotosPageContent() {
 
     if (localPreview) {
       URL.revokeObjectURL(localPreview);
+      localPreviewRef.current = null;
     }
 
     setSelectedFile(null);
@@ -242,7 +264,10 @@ function PhotosPageContent() {
     void validateImage(file)
       .then(() => {
         setSelectedFile(file);
-        setLocalPreview(URL.createObjectURL(file));
+        const url = URL.createObjectURL(file);
+        localPreviewRef.current = url;
+        setLocalPreview(url);
+        setPaso(4);
       })
       .catch((err) => {
         setError(mensajeFotografia(err, "No se pudo validar la imagen."));
@@ -302,6 +327,7 @@ function PhotosPageContent() {
 
       setConsentId(data.id);
       setMessage("Consentimiento registrado correctamente.");
+      setPaso(2);
     } catch (err) {
       setError(mensajeFotografia(err, "No se pudo registrar el consentimiento."));
     } finally {
@@ -419,6 +445,7 @@ function PhotosPageContent() {
 
       if (localPreview) {
         URL.revokeObjectURL(localPreview);
+        localPreviewRef.current = null;
       }
 
       setLocalPreview(null);
@@ -428,6 +455,7 @@ function PhotosPageContent() {
       }
 
       setMessage("Fotografía almacenada correctamente.");
+      setPaso(5);
     } catch (err) {
       setError(mensajeFotografia(err, "No se pudo subir la fotografía."));
     } finally {
@@ -450,12 +478,14 @@ function PhotosPageContent() {
       }
 
       const url = URL.createObjectURL(data);
+      previewUrlsRef.current.add(url);
 
       setPreviews((current) => {
         const previous = current.find((item) => item.photoId === photo.id);
 
         if (previous) {
           URL.revokeObjectURL(previous.url);
+          previewUrlsRef.current.delete(previous.url);
         }
 
         return [
@@ -503,6 +533,7 @@ function PhotosPageContent() {
 
       if (preview) {
         URL.revokeObjectURL(preview.url);
+        previewUrlsRef.current.delete(preview.url);
       }
 
       return current.filter((item) => item.photoId !== photoId);
@@ -576,6 +607,8 @@ function PhotosPageContent() {
 
       setConsentId(null);
       setAccepted(false);
+      descartarSeleccion();
+      setPaso(1);
       setMessage(
         "Consentimiento revocado. Ya no puedes realizar nuevas cargas con este consentimiento."
       );
@@ -586,11 +619,22 @@ function PhotosPageContent() {
     }
   }
 
+  function descartarSeleccion() {
+    if (localPreview) URL.revokeObjectURL(localPreview);
+    localPreviewRef.current = null;
+    setSelectedFile(null);
+    setLocalPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    if (cameraInputRef.current) cameraInputRef.current.value = "";
+    clearMessages();
+    setPaso(3);
+  }
+
   if (loading) {
     return (
       <section className={styles.page}>
         <section className={styles.card}>
-          <p>Preparando tus fotografías…</p>
+          <p role="status">Preparando tus fotografías…</p>
         </section>
       </section>
     );
@@ -627,6 +671,7 @@ function PhotosPageContent() {
       {error && (
         <div className={styles.error} role="alert">
           {error}
+          {errorCarga && <button type="button" className={styles.textButton} onClick={() => void loadData()}>Volver a cargar</button>}
         </div>
       )}
 
@@ -636,7 +681,14 @@ function PhotosPageContent() {
         </div>
       )}
 
-      <section className={styles.card}>
+      <nav className={styles.progress} aria-label="Progreso para guardar una fotografía">
+        <ol>{PASOS.map((nombre, indice) => <li key={nombre} aria-current={paso === indice + 1 ? "step" : undefined} className={paso > indice + 1 ? styles.completed : undefined}><span>{indice + 1}</span>{nombre}</li>)}</ol>
+        <p className={styles.progressCurrent}>Paso {paso} de 5 · {PASOS[paso - 1]}</p>
+      </nav>
+
+      {consentId && paso !== 1 && <div className={styles.consentSummary} role="status"><strong>Permiso activo para guardar imágenes</strong><button type="button" className={styles.textButton} onClick={() => setPaso(1)}>Administrar permiso</button></div>}
+
+      {paso === 1 && <section className={styles.card}>
         <h2>Tu permiso para guardar imágenes</h2>
 
         <p>
@@ -701,12 +753,26 @@ function PhotosPageContent() {
             Permiso de almacenamiento activo
           </p>
         )}
-      </section>
+        {consentId && <button type="button" className={styles.button} onClick={() => setPaso(2)}>Continuar a preparación</button>}
+      </section>}
 
-      <section className={styles.card}>
-        <h2>Guardar una fotografía</h2>
+      {paso === 2 && <section className={styles.card}>
+        <p className={styles.stepLabel}>Paso 2 de 5</p>
+        <h2>Prepara una imagen clara</h2>
+        <p>Usa únicamente una imagen de prueba. Busca luz uniforme, mantén el dispositivo estable y revisa que la zona de interés quede enfocada.</p>
+        <div className={styles.guidance}>
+          <div><h3>Sonrisa frontal</h3><p>Coloca la cámara frente al rostro y muestra la sonrisa completa. Esta vista sirve para preparar la imagen; no permite diagnosticar caries.</p></div>
+          <div><h3>Imagen intraoral</h3><p>Acerca la cámara a la zona que deseas mostrar sin perder nitidez. Evita reflejos fuertes y vuelve a tomarla si sale borrosa.</p></div>
+        </div>
+        <p className={styles.privacyNote}>La imagen permanece en tu dispositivo hasta que la revises y pulses «Subir fotografía». Aquí no se realiza análisis automatizado.</p>
+        <button type="button" className={styles.button} onClick={() => setPaso(3)}>Continuar a elegir imagen</button>
+      </section>}
 
-        <p>
+      {(paso === 3 || paso === 4) && <section className={styles.card}>
+        <p className={styles.stepLabel}>Paso {paso} de 5</p>
+        <h2>{paso === 3 ? "Elige una fotografía" : "Revisa antes de guardar"}</h2>
+
+        {paso === 3 && <><p>
           Elige una imagen de prueba en formato JPG, PNG o WebP de hasta 8 MB. No subas fotografías de pacientes reales en esta demostración.
         </p>
 
@@ -725,9 +791,10 @@ function PhotosPageContent() {
           </button>
           <input ref={cameraInputRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" aria-label="Tomar fotografía con la cámara trasera" onChange={handleFileChange} disabled={!consentId || busy} style={{ display: "none" }} />
         </div>
-        <p>En celulares compatibles se abrirá la cámara trasera. En otros dispositivos podrás seleccionar una imagen.</p>
+        <p>En celulares compatibles se abrirá la cámara trasera. Si está denegada o no disponible, selecciona una imagen guardada en el dispositivo.</p>
+        <button type="button" className={styles.textButton} onClick={() => setPaso(2)}>Volver a preparación</button></>}
 
-        {localPreview && selectedFile && (
+        {paso === 4 && localPreview && selectedFile && (
           <div className={styles.previewBox}>
             <img
               src={localPreview}
@@ -746,15 +813,22 @@ function PhotosPageContent() {
           </div>
         )}
 
-        <button
+        {paso === 4 && <div className={styles.actions}><button type="button" className={styles.secondaryButton} onClick={descartarSeleccion} disabled={busy}>Descartar o reemplazar</button><button
           type="button"
           className={styles.button}
           disabled={!consentId || !selectedFile || busy}
           onClick={uploadPhoto}
         >
           {busy ? "Subiendo..." : "Subir fotografía"}
-        </button>
-      </section>
+        </button></div>}
+      </section>}
+
+      {paso === 5 && <section className={styles.card}>
+        <p className={styles.stepLabel}>Paso 5 de 5</p>
+        <h2>Fotografía guardada</h2>
+        <p>La imagen se almacenó en tu galería privada. Puedes verla o eliminarla desde «Mis fotografías». No se ha realizado análisis ni diagnóstico.</p>
+        <button type="button" className={styles.button} onClick={() => setPaso(2)}>Guardar otra fotografía</button>
+      </section>}
 
       <section className={styles.card}>
         <div className={styles.sectionHeader}>
@@ -769,7 +843,7 @@ function PhotosPageContent() {
         </div>
 
         {photos.length === 0 ? (
-          <p>Tu galería está vacía. Descarga una muestra de la demostración y vuelve aquí para probar el guardado.</p>
+          <p>Aún no hay fotografías guardadas. Cuando subas una imagen de prueba con tu permiso, aparecerá aquí.</p>
         ) : (
           <div className={styles.photoGrid}>
             {photos.map((photo) => {

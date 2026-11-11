@@ -767,20 +767,11 @@ export default function ProfesionalClinico() {
   return (
     <section className={styles.pagina} aria-labelledby="titulo-profesional">
       <header className={styles.encabezado}>
-        <p className={styles.etiquetaSuperior}>DENTAIA / PORTAL PROFESIONAL</p>
         <h1 id="titulo-profesional">Panel del odontólogo</h1>
         <p>
-          Consulta solicitudes, pacientes autorizados e historial clínico mediante
-          servicios protegidos del entorno clínico.
+          Elige tu clínica de trabajo para revisar las solicitudes asignadas y consultar el historial compartido por tus pacientes.
         </p>
       </header>
-
-      <aside className={styles.avisoClinico} aria-label="Protección de datos clínicos">
-        <span className={styles.iconoProteccion}><Icono nombre="escudo" size={19} /></span>
-        <div><strong>Consulta clínica protegida</strong>
-          <p>El servidor valida sesión, rol, membresía y consentimiento vigente antes de entregar historial.</p>
-        </div>
-      </aside>
 
       {cargandoSesion && (
         <div className={styles.estadoCarga} role="status" aria-live="polite">
@@ -812,16 +803,11 @@ export default function ProfesionalClinico() {
 
       {!cargandoSesion && usuario && !sesionRemotaExpirada && (
         <>
-          <section id="contexto-clinico" className={styles.tarjeta} aria-labelledby="titulo-contexto">
+          <section id="contexto-clinico" className={styles.tarjeta} tabIndex={-1} aria-labelledby="titulo-contexto">
             <header className={styles.cabeceraSeccion}>
-              <p className={styles.etiquetaSeccion}>CONTEXTO VERIFICADO</p>
               <h2 id="titulo-contexto">Clínica de trabajo</h2>
-              <p>Selecciona una membresía activa devuelta por el servidor.</p>
+              <p>La clínica seleccionada determina qué solicitudes y pacientes puedes consultar.</p>
             </header>
-
-            {perfil.perfil?.dentistId
-              ? <p className={styles.ayudaResultado}>Vista pública del perfil: <Link href={`/directorio/${encodeURIComponent(perfil.perfil.dentistId)}`}>ver cómo aparece en el directorio</Link>. Los datos solo se pueden modificar mediante el flujo autorizado del profesional.</p>
-              : perfil.estado === "listo" && <p className={styles.estadoVacio}>Esta cuenta todavía no tiene un perfil público de odontólogo vinculado.</p>}
 
             {perfil.estado === "cargando" && <div className={styles.estadoCarga} role="status">Cargando membresías clínicas…</div>}
             {perfil.estado === "denegado" && <div className={styles.estadoDenegado} role="alert">{perfil.mensaje}</div>}
@@ -831,9 +817,10 @@ export default function ProfesionalClinico() {
             {perfil.estado === "listo" && (
               <div className={styles.controles}>
                 <div className={styles.campo}>
-                  <label htmlFor="clinica-contexto-real">Clínica de contexto</label>
+                  <label htmlFor="clinica-contexto-real">Clínica activa</label>
                   <select
                     id="clinica-contexto-real"
+                    aria-describedby="ayuda-clinica"
                     value={contextoId}
                     onChange={(event) => cambiarContexto(event.target.value)}
                   >
@@ -844,9 +831,8 @@ export default function ProfesionalClinico() {
                     ))}
                   </select>
                 </div>
-                <p className={styles.ayudaResultado}>
-                  El cambio de clínica cancela consultas en curso y elimina los
-                  datos clínicos mostrados anteriormente.
+                <p id="ayuda-clinica" className={styles.ayudaResultado}>
+                  Al cambiar de clínica, se limpia la selección del paciente y su historial.
                 </p>
               </div>
             )}
@@ -866,20 +852,24 @@ export default function ProfesionalClinico() {
             )}
           </section>
 
+          <nav aria-label="Accesos del panel" className={styles.accesos}>
+            <a href="#solicitudes-profesionales"><Icono nombre="calendario" size={20} /> Ver solicitudes</a>
+            <a href="#historial-clinico"><Icono nombre="usuarios" size={20} /> Consultar historial</a>
+            <a href="#perfil-profesional"><Icono nombre="persona" size={20} /> Ver perfil</a>
+          </nav>
+
           {mensajeContexto && <div className={styles.estadoDenegado} role="alert">{mensajeContexto}</div>}
 
-          <section id="solicitudes-profesionales" className={styles.tarjeta} aria-labelledby="titulo-solicitudes-profesionales">
+          <section id="solicitudes-profesionales" className={styles.tarjeta} tabIndex={-1} aria-labelledby="titulo-solicitudes-profesionales">
             <header className={styles.cabeceraSeccion}>
-              <p className={styles.etiquetaSeccion}>SOLICITUDES ASIGNADAS</p>
               <h2 id="titulo-solicitudes-profesionales">Solicitudes de demostración</h2>
-              <p>La respuesta profesional no incluye datos de contacto ni mensajes del paciente.</p>
+              <p>Consulta la fecha preferida y el estado de cada solicitud asignada. Esta vista es de solo lectura.</p>
             </header>
             <ListaSolicitudes estado={solicitudes} onMore={() => void cargarMasSolicitudes()} />
           </section>
 
-          <section id="historial-clinico" className={styles.tarjeta} aria-labelledby="titulo-historial-real">
+          <section id="historial-clinico" className={styles.tarjeta} tabIndex={-1} aria-labelledby="titulo-historial-real">
             <header className={styles.cabeceraSeccion}>
-              <p className={styles.etiquetaSeccion}>HISTORIAL COMPARTIDO</p>
               <h2 id="titulo-historial-real">Pacientes autorizados</h2>
               <p>Solo aparecen pacientes con autorización vigente para la clínica seleccionada.</p>
             </header>
@@ -889,6 +879,7 @@ export default function ProfesionalClinico() {
                 <label htmlFor="paciente-autorizado">Paciente autorizado</label>
                 <select
                   id="paciente-autorizado"
+                  aria-describedby="ayuda-paciente"
                   value={pacienteId}
                   disabled={pacientes.estado !== "listo"}
                   onChange={(event) => cambiarPaciente(event.target.value)}
@@ -903,8 +894,8 @@ export default function ProfesionalClinico() {
                   ))}
                 </select>
               </div>
-              <p className={styles.ayudaResultado}>
-                Cambiar de paciente elimina inmediatamente el historial anterior.
+              <p id="ayuda-paciente" className={styles.ayudaResultado}>
+                El historial se actualiza al seleccionar otro paciente.
               </p>
             </div>
 
@@ -925,7 +916,9 @@ export default function ProfesionalClinico() {
               />
             )}
 
-            <EstadoHistorialClinico vista={historial.vista} />
+            {(pacientes.estado === "listo" || historial.vista.estado !== "inactivo") && (
+              <EstadoHistorialClinico vista={historial.vista} />
+            )}
             {avisoHistorial && (
               <div className={styles.estadoVacio} role="status" aria-live="polite">
                 {avisoHistorial}
@@ -945,10 +938,42 @@ export default function ProfesionalClinico() {
               />
             )}
           </section>
+          <section id="perfil-profesional" className={styles.tarjeta} tabIndex={-1} aria-labelledby="titulo-perfil-profesional">
+            <header className={styles.cabeceraSeccion}>
+              <h2 id="titulo-perfil-profesional">Perfil profesional</h2>
+              <p>Consulta tu ficha pública y accede a las opciones disponibles de tu cuenta.</p>
+            </header>
+            {perfil.perfil?.dentistId && (
+              <Link href={`/directorio/${encodeURIComponent(perfil.perfil.dentistId)}`} className="text-link">
+                Ver perfil en el directorio
+              </Link>
+            )}
+            {perfil.perfil && !perfil.perfil.dentistId && (
+              <p className={styles.estadoVacio}>Tu cuenta aún no tiene un perfil público vinculado.</p>
+            )}
+            <div><Link href="/cuenta" className="text-link">Ir a Mi cuenta</Link></div>
+          </section>
+
+          <aside className={styles.avisoClinico} aria-label="Protección de datos clínicos">
+            <span className={styles.iconoProteccion}><Icono nombre="escudo" size={19} /></span>
+            <div><strong>Consulta clínica protegida</strong>
+              <p>El historial solo está disponible con una membresía activa y el consentimiento vigente del paciente.</p>
+            </div>
+          </aside>
         </>
       )}
     </section>
   );
+}
+
+const formatoFechaSolicitud = new Intl.DateTimeFormat("es-PE", {
+  dateStyle: "long",
+  timeZone: "UTC",
+});
+
+function fechaSolicitud(fecha: string) {
+  const valor = new Date(`${fecha}T12:00:00Z`);
+  return Number.isNaN(valor.getTime()) ? fecha : formatoFechaSolicitud.format(valor);
 }
 
 function ListaSolicitudes({
@@ -991,10 +1016,14 @@ function ListaSolicitudes({
         {estado.items.map((solicitud) => (
           <li key={solicitud.id} className={styles.solicitudProfesional}>
             <div>
-              <strong>Solicitud de demostración</strong>
-              <span>Fecha preferida: {solicitud.preferredDate}{solicitud.preferredTime ? ` · ${solicitud.preferredTime}` : ""}</span>
+              <strong>
+                <time dateTime={solicitud.preferredDate}>
+                  {fechaSolicitud(solicitud.preferredDate)}
+                </time>
+              </strong>
+              <span>{solicitud.preferredTime ? `Hora preferida: ${solicitud.preferredTime.slice(0, 5)}` : "Sin hora preferida"}</span>
             </div>
-            <span className={styles.identificador}>
+            <span className={styles.estadoSolicitud} data-estado={solicitud.status}>
               {solicitud.status === "requested" ? "Solicitada" : "Cancelada"}
             </span>
           </li>

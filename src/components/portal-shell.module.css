@@ -13,3 +13,37 @@
 .lateral{overflow-y:auto;overscroll-behavior:contain}.contenido{overflow-wrap:anywhere}.usuarioDatos strong{max-width:min(180px,18vw)}.cerrarMenu,.salir,.cuenta{min-height:44px;min-width:44px}.grupo,.tituloNavegacion{color:#526577}.tituloPagina>span{color:#526577}.usuarioDatos>span{color:#526577}
 @media(max-width:760px){.lateral{z-index:60}.fondoMovil{z-index:55}.encabezado{gap:8px}.tituloPagina>strong{max-width:none}.usuarioDatos strong{max-width:100px}.contenido{padding-bottom:40px}}
 @media(max-width:360px){.usuario{display:none}.contenido{padding-inline:12px}.tituloPagina>strong{max-width:150px}}
+
+/* Tipografía y navegación del portal paciente, sin alterar otros portales. */
+.shell[data-area="Paciente"] .portalMarca div>span,
+.shell[data-area="Paciente"] .tituloNavegacion,
+.shell[data-area="Paciente"] .grupo,
+.shell[data-area="Paciente"] .estadoPrivado,
+.shell[data-area="Paciente"] .volver,
+.shell[data-area="Paciente"] .tituloPagina>span,
+.shell[data-area="Paciente"] .usuarioDatos>span{font-size:12px;letter-spacing:0;text-transform:none}
+.shell[data-area="Paciente"] .enlace{font-size:14px}
+.shell[data-area="Paciente"] .portalMarca strong,
+.shell[data-area="Paciente"] .usuarioDatos strong{font-size:14px}
+.shell[data-area="Paciente"] .tituloPagina>strong{font-size:18px}
+.shell[data-area="Paciente"] .contenido{padding-top:28px}
+@media(max-width:760px){.shell[data-area="Paciente"] .contenido{padding-top:20px}}
+
+/* El portal profesional comparte la escala legible del menú del paciente. */
+.shell[data-area="Odontología"] .grupo,
+.shell[data-area="Odontología"] .tituloNavegacion,
+.shell[data-area="Odontología"] .estadoPrivado {
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.shell[data-area="Odontología"] .enlace {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+.shell[data-area="Odontología"] .botonMenu {
+  min-width: 44px;
+  min-height: 44px;
+}

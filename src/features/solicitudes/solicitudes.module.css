@@ -306,3 +306,17 @@
 .estadoSolicitada{background:#fff6e4;color:#785a16}.iconoSolicitud svg{color:currentColor}
 @media(max-width:560px){.encabezadoSolicitudes{display:grid}.verTodas{justify-self:start}.solicitudCabecera{align-items:flex-start}.detalles{grid-template-columns:1fr}.detalleCompleto{grid-column:auto}.confirmacion{align-items:stretch}.confirmacion>*{flex:1}.tarjeta.compacto{padding:15px}}
 @media(prefers-reduced-motion:reduce){.esqueletoSolicitudes i{animation:none}}
+
+/* Lectura de solicitudes en el panel y en su página completa. */
+.subtitulo,.solicitudResumen p,.mensajeCompacto{font-size:14px}
+.verTodas,.detallesExpandibles summary,.detalle,.filtroSolicitudes label,.filtroSolicitudes select,.filtroSolicitudes>span{font-size:14px}
+.solicitudTitulo{font-size:16px}
+.detalle dt,.estado{font-size:12px}
+.botonCancelar,.botonNeutral{min-height:44px;font-size:14px}
+.filtroSolicitudes select{min-height:44px}
+.tarjeta.compacto{padding:24px;border:1px solid #d9e5eb;box-shadow:none}
+.tarjeta.compacto .tituloSeccion{font-size:22px}
+.tarjeta.compacto .subtitulo{font-size:14px}
+.tarjeta.compacto .solicitud{padding:16px}
+.tarjeta.compacto .verTodas{min-height:44px}
+@media(max-width:560px){.tarjeta.compacto{padding:20px}.tarjeta.compacto .detalles{grid-template-columns:1fr}}

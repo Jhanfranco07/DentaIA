@@ -63,7 +63,7 @@ with sync_playwright() as p:
     page.goto(BASE)
     def landing():
         expect(page.get_by_role('heading',level=1)).to_have_count(1)
-        expect(page.get_by_role('link',name='Comenzar ahora')).to_have_attribute('href','/cuenta?modo=registro')
+        expect(page.get_by_role('link',name='Crear mi cuenta')).to_have_attribute('href','/cuenta?modo=registro')
         assert page.locator('a[href="#"]').count()==0
         assert 'Prototipo académico' not in page.locator('body').inner_text()
         expect(page.get_by_role('heading',name='Hoy puedes preparar una fotografía.')).to_be_visible()
@@ -96,7 +96,7 @@ with sync_playwright() as p:
             if path=='/cuenta':expect(page.get_by_role('heading',name='Mi cuenta',exact=True)).to_be_visible()
             if path=='/panel':expect(page.get_by_role('heading',name='Hola, Cuenta')).to_be_visible()
             if path=='/profesional':
-                check('Profesional: membresía sintética compatible y selector de clínica disponible',lambda: expect(page.get_by_label('Clínica de contexto',exact=True)).to_be_visible())
+                check('Profesional: membresía sintética compatible y selector de clínica disponible',lambda: expect(page.get_by_label('Clínica activa',exact=True)).to_be_visible())
             if path=='/administracion':expect(page.get_by_role('navigation',name='Secciones del panel administrativo')).to_be_visible()
             for width in [320,390,768,1024,1440]:
                 def responsive(w=width):

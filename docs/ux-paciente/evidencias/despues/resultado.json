@@ -1,0 +1,61 @@
+{
+  "fixture": "sintético; tráfico externo bloqueado",
+  "resultados": [
+    {
+      "width": 320,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 2,
+        "/cuenta": 2
+      },
+      "small_text": []
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 2,
+        "/cuenta": 2
+      },
+      "small_text": []
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 2,
+        "/cuenta": 2
+      },
+      "small_text": []
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 2,
+        "/cuenta": 2
+      },
+      "small_text": []
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 2,
+        "/cuenta": 2
+      },
+      "small_text": []
+    }
+  ],
+  "errores_js": []
+}
