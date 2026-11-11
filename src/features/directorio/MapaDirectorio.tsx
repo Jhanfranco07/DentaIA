@@ -103,25 +103,29 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
       nombre.textContent = demo.name;
       popupRoot.append(nombre);
       const etiqueta = document.createElement("p");
-      etiqueta.textContent = demo.public_label;
+      etiqueta.textContent = "Ubicación de referencia para una ficha académica.";
       popupRoot.append(etiqueta);
       const distrito = document.createElement("p");
       distrito.textContent = `${demo.district}, ${demo.city}, ${demo.country}`;
       popupRoot.append(distrito);
       const nota = document.createElement("small");
-      nota.textContent = "Coordenada representativa de demostración; no identifica un consultorio ni una dirección real.";
+      nota.textContent = "Perfil ficticio. Este punto es aproximado y no representa una clínica verificada ni ofrece atención.";
       popupRoot.append(nota);
       if (demo.dentist_id) {
         const enlace = document.createElement("a");
         enlace.href = `/directorio/${encodeURIComponent(demo.dentist_id)}`;
-        enlace.textContent = "Ver perfil ficticio";
+        enlace.textContent = "Ver ficha de ejemplo";
         popupRoot.append(enlace);
       }
       const elemento = document.createElement("button");
       elemento.type = "button";
       elemento.className = styles.marcadorDemo;
-      elemento.textContent = "DEMO";
-      elemento.setAttribute("aria-label", `${demo.public_label}, ${demo.district}`);
+      const icono = document.createElement("span");
+      icono.className = styles.iconoDiente;
+      icono.textContent = "🦷";
+      icono.setAttribute("aria-hidden", "true");
+      elemento.append(icono);
+      elemento.setAttribute("aria-label", `Ver ubicación de ejemplo en ${demo.district}`);
       if (demo.dentist_id) {
         elemento.dataset.dentistId = demo.dentist_id;
         elemento.addEventListener("click", () => alSeleccionar?.(demo.dentist_id!));
