@@ -8,9 +8,9 @@ La jerarquía visual amplía texto, controles y estados de foco del directorio y
 
 ## Evidencia y límites
 
-`evidencias/antes` y `evidencias/despues` contienen capturas a 320, 390, 768, 1024 y 1440 px, generadas con `scripts/qa-directorio-mapa.py` y datos sintéticos interceptados en Playwright. No representan la base real. La ejecución de después pasó 11/11 casos: cinco anchuras sin desbordamiento, búsqueda, distrito, marcadores/ficha/atribución, lista→mapa, vacío y error de carga. No se usaron credenciales de producción ni se insertaron datos.
+`evidencias/antes` y `evidencias/despues` contienen capturas a 320, 390, 768, 1024 y 1440 px, generadas con `scripts/qa-directorio-mapa.py` y datos sintéticos interceptados en Playwright. No representan la base real. La ejecución de después pasó 13/13 casos: cinco anchuras sin desbordamiento, búsqueda, distrito, marcadores/ficha/atribución, lista→mapa, teclado móvil, error de teselas, vacío y error de carga. No se usaron credenciales de producción ni se insertaron datos.
 
-Los servicios externos y la geolocalización real requieren una validación adicional en un entorno conectado. El mapa usa teselas OSM y conserva la atribución visible. Una falla de teselas se informa sin ocultar los resultados en lista. La prueba automática de desconexión total del proveedor de teselas queda pendiente; la prueba de error de directorio sí está cubierta.
+Los servicios externos y la geolocalización real requieren una validación adicional en un entorno conectado. El mapa usa teselas OSM y conserva la atribución visible. Una falla de teselas se informa sin ocultar los resultados en lista. La falla del proveedor de teselas se simuló mediante bloqueo de red; la geolocalización real sigue pendiente.
 
 ## Carga futura de 20 perfiles ficticios
 
@@ -20,7 +20,8 @@ El modelo `dentists` ya contiene `name`, `slug`, `specialty`, `district`, `descr
 
 - `npm run typecheck`: pasó.
 - `node --experimental-strip-types --test --test-reporter=tap 'src/features/**/*.test.mjs'`: 454/454.
-- `python scripts/qa-directorio-mapa.py --fase despues --output docs/ux-directorio/evidencias --browser <Chrome>`: 11/11.
+- `python scripts/qa-directorio-mapa.py --fase despues --output docs/ux-directorio/evidencias --browser <Chrome>`: 13/13.
 - `npm run build`: ver resultado en el PR.
 
 Los jobs DevSecOps de GitHub Actions son la verificación final de integración del PR.
+

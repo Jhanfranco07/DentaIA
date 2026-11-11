@@ -61,6 +61,14 @@
       "ok": true
     },
     {
+      "nombre": "Teclado y selección móvil",
+      "ok": true
+    },
+    {
+      "nombre": "Error de teselas con lista disponible",
+      "ok": true
+    },
+    {
       "nombre": "Estado sin datos",
       "ok": true
     },

@@ -130,6 +130,24 @@ with sync_playwright() as pw:
             page.get_by_role("button", name="Ver en mapa", exact=True).first.click(),
             page.locator('[data-dentist-id="' + uid(1) + '"][data-selected="true"]').wait_for(timeout=10000)
         ))
+        def teclado_y_movil():
+            page.set_viewport_size({"width": 390, "height": 900})
+            page.get_by_role("tab", name="Lista").click()
+            page.get_by_role("button", name="Ver en mapa", exact=True).first.focus()
+            assert page.get_by_role("button", name="Ver en mapa", exact=True).first.evaluate("el => el === document.activeElement")
+            page.keyboard.press("Enter")
+            assert page.get_by_role("tab", name="Mapa").get_attribute("aria-selected") == "true"
+            page.locator('[data-dentist-id="' + uid(1) + '"][data-selected="true"]').wait_for(timeout=10000)
+            assert page.get_by_role("button", name="Ver odontólogo Profesional sintético de QA A, Consultorio sintético A").is_visible()
+        check("Teclado y selección móvil", teclado_y_movil)
+        flags["tiles_offline"] = True
+        page.set_viewport_size({"width": 1440, "height": 900})
+        page.goto("http://127.0.0.1:3180/directorio")
+        check("Error de teselas con lista disponible", lambda: (
+            page.get_by_text("No se pudieron cargar algunas teselas del mapa.", exact=False).wait_for(timeout=20000),
+            page.get_by_text("Profesional sintético de QA A").first.wait_for()
+        ))
+        flags["tiles_offline"] = False
     flags["empty"] = True
     page.goto("http://127.0.0.1:3180/directorio")
     check("Estado sin datos", lambda: page.get_by_text(
