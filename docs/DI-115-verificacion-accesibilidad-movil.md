@@ -4,7 +4,7 @@
 **Responsable de la actividad:** Angie Jara  
 **Base comprobada:** `2c9c51f3a8b9d24ae543f6e5716f1cd131fa2784`  
 **Fecha de ejecución técnica:** 11 de noviembre de 2026  
-**Estado:** En curso. Verificación técnica parcial.
+**Estado:** En curso. Verificación técnica y manual parcial.
 
 ## Resultados ejecutados sobre la base integrada
 
@@ -47,16 +47,31 @@ Estas mediciones cubren combinaciones seleccionadas. Quedan pendientes el estilo
 - [Directorio y mapa](ux-directorio/README.md). El equipo registró 13 casos aprobados con Playwright y datos interceptados. Incluye cinco anchos, teclado móvil, filtros, ausencia de datos y fallos de teselas.
 - [DI-165](DI-165-pruebas-funcionales-vista-paciente.md). Pruebas históricas de la vista paciente, con el entorno y límites descritos en ese documento.
 
-Los registros anteriores pertenecen a sus ejecuciones originales. Las comprobaciones de esta entrega emplearon una compilación local y no consultaron Supabase de producción ni usaron datos clínicos.
+Los registros anteriores pertenecen a sus ejecuciones originales. Las comprobaciones automatizadas de esta entrega usaron una compilación local con configuración sintética. Los resultados manuales que siguen corresponden a la revisión local de Angie en Windows.
+
+## Verificación manual del 11 de noviembre de 2026
+
+**Entorno de escritorio:** Windows, servidor local de desarrollo en `localhost:3000` y modo Responsive de DevTools a 390 × 618 px emulados. Se probó la rama `feature/angie-di115-accesibilidad` después del commit documental `b4d40de`, sobre la base de aplicación `2c9c51f`.
+
+| Caso | Recorrido | Resultado observado | Evidencia |
+| --- | --- | --- | --- |
+| M1a | `/panel` sin sesión. Revisar aviso y activar «Ir a Mi cuenta» con Tab y Enter. | El título, el aviso y el enlace se ven completos. Enter abre `/cuenta`. | Captura del modo Responsive y confirmación manual de Angie. |
+| M1b | `/panel` con sesión. Llegar al menú con Tab, abrirlo con Enter y cerrarlo con Escape. | El menú abre y, al cerrarlo, el foco vuelve al botón. | Confirmación manual de Angie. |
+| M1c | Desde `/panel`, llegar al enlace al directorio con Tab y pulsar Enter. | El foco es visible y el enlace abre `/directorio`. | Confirmación manual de Angie. |
+| M1d | En `/directorio`, buscar `zzzz`, llegar a «Limpiar filtros» con Tab y pulsar Enter. | Se borra la búsqueda y el foco vuelve al buscador. | Confirmación manual de Angie. |
+| M1e | En `/directorio`, llegar a «Ver perfil» con Tab y pulsar Enter. Revisar la ficha y activar «Volver al directorio». | «Ver perfil» muestra foco visible y abre la ficha correspondiente. La ficha se ve completa y el enlace de retorno abre el listado. | Confirmación manual de Angie. |
+| M4 | Safari en iPhone físico, conectado al mismo Wi-Fi que el PC. Intento de abrir `/directorio` mediante la dirección de red del servidor local. | **Bloqueado por conexión.** La página no cargó. Quedaron sin verificar el listado, el mapa y la ficha en iOS. | Reporte de Angie. Sin diagnóstico de la causa de conexión. |
+
+La emulación a 390 px se ejecutó en un navegador de escritorio. La captura y las confirmaciones documentan los pasos indicados. El desbordamiento horizontal no se midió por separado.
 
 ## Verificación manual pendiente
 
 | ID | Entorno | Recorrido | Evidencia por registrar |
 | --- | --- | --- | --- |
-| M1 | PC, Chromium o Chrome a 390 px | `/panel` con cuenta de prueba. Tab al menú, Enter, Escape y Tab al enlace de directorio. Revisar foco visible, cortes y desplazamiento lateral. | Orden de foco, destino al cerrar y captura sin datos personales. |
+| M1 restante | PC a 390 px emulados | Medir desbordamiento horizontal y revisar cortes en el panel con sesión. | Ancho, estado de sesión y resultado. |
 | M2 | PC, 1440 px y zoom 200 % | Panel → directorio → ficha → privacidad. Revisar Tab/Shift+Tab, nombres accesibles y lectura a zoom. | Ruta, navegador, controles afectados y captura cuando aplique. |
 | M3 | Android con Chrome | Abrir directorio y ficha. Usar búsqueda, distrito, Lista/Mapa y volver a Lista. Denegar geolocalización si se solicita. | Modelo, SO, navegador, ancho y resultado. |
-| M4 | iOS con Safari | Repetir M3 y abrir el panel con cuenta de prueba si el entorno dispone de acceso académico. | Modelo, SO, navegador y resultado. Registrar emulación por separado. |
+| M4 | iOS con Safari | Pendiente de acceso al entorno académico desde el iPhone. Tras resolver el bloqueo, revisar listado, mapa, ficha y, si hay sesión de prueba, panel. | Modelo, SO, navegador y resultado. |
 | M5 | PC con herramientas de red | Probar carga, vacío y error recuperable de directorio y ficha. Usar fixtures o una cuenta académica autorizada según el caso. Revisar mensajes, estado del foco y navegación. | Qué respuesta se simuló, texto mostrado y elemento activo tras recuperar. |
 | M6 | PC con herramienta de accesibilidad | Inspeccionar dos tarjetas y comprobar contraste de texto y foco en panel, listado y ficha. | Nombre computado de cada enlace, colores y relación observada. |
 
