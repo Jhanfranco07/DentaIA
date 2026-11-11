@@ -108,7 +108,7 @@ export default function DirectorioLista() {
   const ubicacionesVisibles = useMemo(() => crearMarcadores(visibles), [visibles]);
   const marcadoresDemo = useMemo(() => carga.estado === "listo"
     ? carga.demos.map(crearMarcadorDemo).filter((marcador): marcador is MarcadorDemo => marcador !== null)
-      .filter(marcador => !CATALOGO_DEMO.some(perfil => perfil.slug === marcador.slug) || visibles.some(d => d.slug === marcador.slug))
+      .filter(marcador => CATALOGO_DEMO.some(perfil => perfil.slug === marcador.slug && visibles.some(d => d.slug === marcador.slug)))
       .map(marcador => ({ ...marcador, dentist_id: visibles.find(d => d.is_demo && d.slug === marcador.slug)?.id }))
     : [], [carga, visibles]);
   const ubicacionesMapa = useMemo(() => [...ubicacionesVisibles, ...(mostrarDemo ? marcadoresDemo : [])], [ubicacionesVisibles, marcadoresDemo, mostrarDemo]);
@@ -149,14 +149,11 @@ export default function DirectorioLista() {
 
     {carga.estado === "cargando" && <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i /><i /><i /></div></div>}
     {carga.estado === "error" && <div className={`${styles.aviso} ${styles.avisoError}`} role="alert"><strong>No pudimos cargar el directorio.</strong><p>Comprueba la conexión y vuelve a intentarlo.</p><button type="button" className={styles.boton} onClick={() => { setCarga({ estado: "cargando" }); setIntento(n => n + 1); }}>Reintentar</button></div>}
-    {carga.estado === "listo" && carga.demos.length > 0 && <section className={styles.tarjetaDemo} aria-label="Establecimiento de demostración">
-      <span className={styles.etiquetaDemo}>DEMO</span>
-      <div><h2>{carga.demos[0]?.name ?? "Clínica de demostración"}</h2>
-        <strong>{carga.demos[0]?.public_label ?? "DEMO — Clínica ficticia, no ofrece atención real"}</strong>
-        <p>{carga.demos[0] ? `${carga.demos[0].district}, ${carga.demos[0].city}, ${carga.demos[0].country}` : carga.demoDisponible ? "No hay ubicaciones DEMO publicadas." : "La ubicación DEMO no está disponible en este entorno."}</p>
-        {carga.demos[0] && <p>Los puntos asociados a perfiles ficticios son referencias geográficas externas; no implican vinculación profesional.</p>}
+    {carga.estado === "listo" && marcadoresDemo.length > 0 && <section className={styles.tarjetaDemo} aria-label="Información sobre las ubicaciones de referencia">
+      <div><h2>Ubicaciones geográficas de referencia</h2>
+        <p>Los centros y direcciones se basan en registros públicos. Los nombres de profesionales de ejemplo son ficticios y no están vinculados con esos centros.</p>
       </div>
-      {marcadoresDemo.length > 0 && <button type="button" aria-pressed={mostrarDemo} className={styles.botonDemo} onClick={() => setMostrarDemo(value => !value)}>{mostrarDemo ? "Ocultar en el mapa" : "Mostrar en el mapa"}</button>}
+      <button type="button" aria-pressed={mostrarDemo} className={styles.botonDemo} onClick={() => setMostrarDemo(value => !value)}>{mostrarDemo ? "Ocultar referencias" : "Mostrar referencias"}</button>
     </section>}
     {carga.estado === "listo" && dentistas.length === 0 && marcadoresDemo.length === 0 && <div className={styles.aviso} role="status">Por ahora no hay odontólogos activos ni ubicaciones publicadas en el directorio.</div>}
 
