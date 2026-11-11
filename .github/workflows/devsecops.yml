@@ -1,55 +1,122 @@
 name: DevSecOps
-
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, 'feature/**']
   pull_request:
     branches: [main, develop]
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
-  ci:
-    name: CI
-    uses: ./.github/workflows/ci.yml
-
-  tests:
-    name: Tests
-    uses: ./.github/workflows/tests.yml
-
-  security:
-    name: Security
-    uses: ./.github/workflows/security.yml
-
+  dependencias:
+    name: Lockfile y dependencias
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+  typescript:
+    name: TypeScript
+    needs: dependencias
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+  unitarias:
+    name: Pruebas aisladas
+    needs: dependencias
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Ejecutar pruebas aisladas existentes
+        shell: bash
+        run: |
+          mapfile -d '' tests < <(find src/features -name '*.test.mjs' ! -name '*integracion.test.mjs' -print0)
+          test "${#tests[@]}" -gt 0
+          node --experimental-strip-types --test --test-reporter=tap "${tests[@]}"
+  integracion:
+    name: Integración local simulada
+    needs: dependencias
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Ejecutar pruebas de integración con dobles locales
+        shell: bash
+        run: |
+          mapfile -d '' tests < <(find src/features -name '*integracion.test.mjs' -print0)
+          test "${#tests[@]}" -gt 0
+          node --experimental-strip-types --test --test-reporter=tap "${tests[@]}"
+  auditoria:
+    name: Auditoría de dependencias
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm audit
+  build:
+    name: Build Next.js
+    if: ${{ github.event_name != 'push' || !startsWith(github.ref, 'refs/heads/feature/') }}
+    needs: [typescript, unitarias, integracion]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
   validacion-final:
     name: Validación final
-    needs: [ci, tests, security]
-    # Evaluar también fallos, cancelaciones y jobs omitidos; no dar verde por omisión.
     if: ${{ always() }}
+    needs: [dependencias, typescript, unitarias, integracion, auditoria, build]
     runs-on: ubuntu-latest
     permissions: {}
     steps:
-      - name: Comprobar todas las verificaciones obligatorias
+      - name: Comprobar verificaciones obligatorias
         env:
-          CI_RESULT: ${{ needs.ci.result }}
-          TESTS_RESULT: ${{ needs.tests.result }}
-          SECURITY_RESULT: ${{ needs.security.result }}
+          NEEDS_JSON: ${{ toJSON(needs) }}
+          IS_FEATURE_PUSH: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}
         shell: bash
         run: |
-          {
-            echo '## Validación DevSecOps'
-            echo '| Verificación | Resultado |'
-            echo '| --- | --- |'
-            printf '| CI | %s |\n' "$CI_RESULT"
-            printf '| Tests | %s |\n' "$TESTS_RESULT"
-            printf '| Security | %s |\n' "$SECURITY_RESULT"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          if [[ "$CI_RESULT" != 'success' || "$TESTS_RESULT" != 'success' || "$SECURITY_RESULT" != 'success' ]]; then
-            echo '::error::Todas las verificaciones obligatorias deben terminar en success.'
-            exit 1
-          fi
-
-          echo 'Todas las verificaciones obligatorias aprobaron.'
+          echo '## Validación DevSecOps' >> "$GITHUB_STEP_SUMMARY"
+          echo '| Job | Resultado |' >> "$GITHUB_STEP_SUMMARY"
+          echo '| --- | --- |' >> "$GITHUB_STEP_SUMMARY"
+          printf '%s' "$NEEDS_JSON" | jq -r 'to_entries[] | "| \(.key) | \(.value.result) |"' >> "$GITHUB_STEP_SUMMARY"
+          printf '%s' "$NEEDS_JSON" | jq -e --arg feature "$IS_FEATURE_PUSH" '
+            all(to_entries[]; .value.result == "success" or
+              ($feature == "true" and .key == "build" and .value.result == "skipped"))
+          ' >/dev/null || { echo '::error::Una verificación obligatoria falló, se canceló o se omitió.'; exit 1; }
