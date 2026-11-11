@@ -36,8 +36,8 @@ export default function UsuariosAdministrativos({ onSeleccionar, revision }: { o
   useEffect(() => { if (!cargando && resultado && enfocar.current) { resumen.current?.focus(); enfocar.current = false; } }, [cargando, resultado]);
   function filtrar(cambio: () => void) { cambio(); setPagina(1); enfocar.current = false; }
   return <section className={styles.bloque} aria-labelledby="admin-usuarios">
-    <div className={styles.tituloBloque}><h2 id="admin-usuarios">Usuarios y perfiles</h2><span className={styles.indicador}>Fuente: Supabase</span></div>
-    <p>Consulta Auth y profiles por la API protegida. No muestra correos, credenciales ni información clínica. No se sustituyen errores por fixtures.</p>
+    <div className={styles.tituloBloque}><h2 id="admin-usuarios">Usuarios y perfiles</h2></div>
+    <p>Busca cuentas por nombre o UUID y revisa su estado y asignaciones cuando la lectura está disponible.</p>
     <div className={styles.filtrosAdmin}>
       <label>Búsqueda por nombre o UUID<input type="search" value={q} maxLength={80} onChange={e => filtrar(() => setQ(e.target.value))} /></label>
       <label>Filtrar por rol<select value={rol} onChange={e => filtrar(() => setRol(e.target.value))}>

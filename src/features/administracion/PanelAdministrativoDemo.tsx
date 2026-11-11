@@ -36,36 +36,23 @@ export default function PanelAdministrativoDemo() {
   }
 
   return <section className={styles.pagina} aria-label="Panel administrativo protegido">
-    <div className={styles.avisoDemo}>
-      <strong>Administración con permisos verificados</strong>
-      <p>Las operaciones disponibles dependen de la configuración del entorno y de tus permisos. Los cambios de roles permanecen desactivados en el despliegue actual.</p>
-    </div>
     <LayoutAdministrativo seccion={seccion} onSeleccionar={seleccionar}>
       <div className={styles.introduccion}>
-        <span className="eyebrow">PANEL ADMINISTRATIVO · ACCESO VERIFICADO POR EL SERVIDOR</span>
-        <h1 id="admin-titulo" ref={titulo} tabIndex={-1}>{seccion === "inicio" ? "Un espacio para organizar DentaIA." : actual.titulo}</h1>
+        <h1 id="admin-titulo" ref={titulo} tabIndex={-1}>{seccion === "inicio" ? "Panel administrativo" : actual.titulo}</h1>
         <p>{seccion === "inicio"
-          ? "Consulta perfiles y gestiona únicamente operaciones autorizadas, con responsabilidades claras y acceso mínimo."
+          ? "Consulta usuarios y accede a las tareas administrativas disponibles para tu cuenta."
           : actual.descripcion + ". Cada solicitud vuelve a comprobar la autorización del servidor."}</p>
       </div>
 
       {seccion === "inicio" && <>
-        <div className={styles.tarjetas}>
+        <div className={styles.tarjetas} aria-label="Tareas principales">
           <TarjetaAdministrativa titulo="Usuarios" icono="persona"
-            descripcion="Consulta la identidad y el estado de las cuentas. Sin acceso a fotografías ni historiales."
+            descripcion="Busca cuentas y revisa su perfil, estado y asignaciones cuando la lectura está habilitada."
             accion="Consultar usuarios" onAbrir={() => seleccionar("usuarios")} />
           <TarjetaAdministrativa titulo="Consultorios" icono="clinica"
-            descripcion="Registra y publica sedes verificadas. La publicación exige identidad profesional, membresía vigente y autorización AAL2 en el servidor."
+            descripcion="Consulta las sedes y utiliza las operaciones disponibles según tus permisos."
             accion="Gestionar consultorios" onAbrir={() => seleccionar("ubicaciones")} />
         </div>
-        <section className={styles.bloque} aria-labelledby="admin-alcance">
-          <h2 id="admin-alcance">Antes de realizar una operación</h2>
-          <ul className={styles.pasos}>
-            <li><span>01</span><div><strong>Usuarios reales</strong><p>Auth y profiles mediante la API protegida. Requiere habilitación de lectura del operador; sin credenciales privadas en React.</p></div></li>
-            <li><span>02</span><div><strong>Cambios controlados</strong><p>Reutilizan revisión, aprobación independiente e idempotencia de DI-151. No se activa la escritura desde esta pantalla.</p></div></li>
-            <li><span>03</span><div><strong>Autorización por operación</strong><p>Superusuario activo y MFA/AAL2. Cambiar una sección o un UUID no concede permisos.</p></div></li>
-          </ul>
-        </section>
       </>}
 
       {seccion === "usuarios" && <UsuariosAdministrativos revision={revision} onSeleccionar={id => { setObjetivo(id); seleccionar("roles"); }} />}
