@@ -15,4 +15,3 @@ No inicia implementación. Cada entrega debe preservar contratos, roles, MFA/AAL
 **Después, con decisión de producto y datos:** evaluar 20 perfiles odontológicos de demostración con fuente autorizada, rotulado inequívoco y criterios de publicación. El mapa interactivo ya existe; no cargar datos ni cambiar base de datos en esta fase.
 
 Dependencias: confirmar destino de PR #32 y demás ramas que tocan landing; definir alcance visual con producto; acordar datos de prueba y validadores de accesibilidad. Ninguna etapa presupone un servicio clínico real o una inferencia de IA disponible.
-
