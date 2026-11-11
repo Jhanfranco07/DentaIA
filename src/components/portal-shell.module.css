@@ -28,3 +28,22 @@
 .shell[data-area="Paciente"] .tituloPagina>strong{font-size:18px}
 .shell[data-area="Paciente"] .contenido{padding-top:28px}
 @media(max-width:760px){.shell[data-area="Paciente"] .contenido{padding-top:20px}}
+
+/* El portal profesional comparte la escala legible del menú del paciente. */
+.shell[data-area="Odontología"] .grupo,
+.shell[data-area="Odontología"] .tituloNavegacion,
+.shell[data-area="Odontología"] .estadoPrivado {
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.shell[data-area="Odontología"] .enlace {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+.shell[data-area="Odontología"] .botonMenu {
+  min-width: 44px;
+  min-height: 44px;
+}
