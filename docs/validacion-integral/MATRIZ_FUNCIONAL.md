@@ -1,0 +1,26 @@
+# Matriz funcional inicial · 11/11/2026
+
+**Alcance de evidencia.** `U` = pruebas Node aisladas; `I` = integración local/sintética; `B` = Playwright con respuestas simuladas; `P` = PostgreSQL local; `R` = servicio remoto real. Un resultado `B` no acredita `R`. El detalle de ejecuciones está en [RESULTADOS_PRUEBAS.md](RESULTADOS_PRUEBAS.md). Las rutas protegidas requieren sesión y permisos verificados por el servidor y/o RLS; un fixture no sustituye esa verificación.
+
+| Rol / función | Ruta y componente principal | Esperado y estado de implementación | Dependencia backend / Supabase | Prueba y resultado | Límite / severidad |
+|---|---|---|---|---|---|
+| Público: portada | `/`, `src/app/(public)/page.tsx` | Entrada y navegación pública implementadas | Ninguna para contenido estático | Build correcto | Revisión de contenido remoto pendiente · baja |
+| Paciente: registro/login | `/cuenta`, `src/features/cuenta/*` | Formularios, validación y sesión con Supabase Auth implementados | Auth y correo de confirmación | U pasa; R pendiente | No se crearon cuentas remotas · alta para aceptación |
+| Paciente: control de rol | `AccesoRol`, `useSesion` | Sin sesión o rol paciente, bloquear rutas privadas | Auth `getUser`, metadatos de rol verificados | U pasa; B paciente sintético pasa | R pendiente · alta |
+| Paciente: panel | `/panel`, `PanelPaciente` | Resumen privado y estados de servicio | API clínica `/api/clinical/patients/me`, Supabase | U pasa; B cinco anchos sin desborde | HTTP clínico real no habilitado en ensayo · alta |
+| Paciente: directorio | `/directorio`, `DirectorioLista` | Listado, búsqueda, filtros, vacío/error | Lectura de `dentists`, `directory_demo_locations`, reseñas y ubicaciones | U pasa; B de PR #40: 20 perfiles, filtros y vacío; P: 20 puntos | R pendiente; seed remoto no ejecutado · media |
+| Paciente: ficha | `/directorio/[id]`, `DentistaDetalle` | Ficha por UUID, aviso DEMO | Lectura Supabase; ficha demo requiere punto publicado | U/B de PR #40 pasan | R pendiente · media |
+| Paciente: mapa | `MapaDirectorio`, en directorio/ficha | Marcador vinculado, coordenada demo explícita, sin rutas a local ficticio | MapLibre y teselas OSM; puntos Supabase | U/B de PR #40 pasan en cinco anchos | Red de teselas y datos remotos no validados · media |
+| Paciente: solicitudes | `/solicitudes`, `FormularioSolicitud`, `MisSolicitudes` | Solicitudes existentes y estados, sin cita clínica real | `appointment_requests`, Auth y RLS | U pasa; B rol sintético/denegación pendientes | Crear solicitud remota no autorizado · alta |
+| Paciente: perfil | `/cuenta`, componentes de cuenta | Consultar/editar perfil propio según RLS | Auth y tablas de perfiles | U pasa | Escritura real pendiente · media |
+| Paciente: fotografías/consentimiento | `/fotografias`, `PhotosPageContent` | Consentimiento expreso antes de Storage privado; revocación y borrado | Auth, `patient_consents`, `dental_photos`, Storage/RLS | U pasa; B completo inconcluso por timeout/captura | No usar fotos reales; R pendiente · alta |
+| Paciente: análisis educativo | `/analisis`, `AnalisisDental` | Flujo educativo sin diagnóstico automático habilitado | Casos sintéticos y contexto local | U pasa | No se valida visión artificial · media |
+| Odontólogo: login/rol | `/cuenta`, `/profesional`, `AccesoRol` | Solo rol odontólogo; sesión expirada y error visible | Auth/rol | U pasa; B 12 comprobaciones sintéticas | R con cuenta verificada pendiente · alta |
+| Odontólogo: panel/perfil | `/profesional`, `ProfesionalClinico` | Contextos de membresía y estado restringido | `/api/professional/me`, BFF clínico, Supabase | U pasa; B sintético pasa | Backend remoto deshabilitado en ensayo · alta |
+| Odontólogo: solicitudes | `/profesional`, `ProfesionalClinico` | Lista por contexto autorizado y paginación | `/api/professional/requests`, rol/membresía | U integración local pasa; B sintético pasa | R pendiente · alta |
+| Odontólogo: pacientes/historial | `/profesional`, `ProfesionalClinico` | Solo paciente autorizado; revocación y revalidación | `/api/professional/patients`, `/api/clinical/patients/[patientId]/history`, grants | U integración local pasa; B sintético pasa | R pendiente; no leer historia real · crítica si falla en QA |
+| Superusuario: acceso/MFA | `/administracion`, `UsuariosAdministrativosConectados`, `DesafioMfaAdministrativo` | Rol activo, factor verificado y AAL2; 404/403 según entorno | Auth JWT, MFA, API administrativa | U pasa; B/R no comprobados aquí | Requiere cuenta autorizada y entorno QA · alta |
+| Superusuario: panel/listados | `/administracion`, `PanelAdministrativoDemo`, `UsuariosAdministrativos` | Navegación, filtros y lectura solo con opt-in | `DENTAIA_ADMIN_READS_ENABLED`, secreto servidor, API | U pasa; B/R pendientes | Opt-in desactivado en ensayo; no habilitarlo para simular · alta |
+| Superusuario: roles/sedes/reseñas | `/administracion`, gestores administrativos | Denegar escritura sin rol/AAL2 y controles del servidor | APIs, RPC y RLS | U de permisos, bloqueos y servicios pasa | R pendiente; no se hicieron cambios remotos · crítica si falla en QA |
+
+**Lectura:** “implementado” identifica código y contratos presentes, no operación productiva comprobada. Los hallazgos priorizados están en [HALLAZGOS.md](HALLAZGOS.md).
