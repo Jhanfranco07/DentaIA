@@ -1,0 +1,48 @@
+{
+  "entorno": "Chromium local; sesión, API e imágenes sintéticas",
+  "anchos": [
+    {
+      "ancho": 320,
+      "desbordamiento": false
+    },
+    {
+      "ancho": 390,
+      "desbordamiento": false
+    },
+    {
+      "ancho": 768,
+      "desbordamiento": false
+    },
+    {
+      "ancho": 1024,
+      "desbordamiento": false
+    },
+    {
+      "ancho": 1440,
+      "desbordamiento": false
+    }
+  ],
+  "casos": [
+    {
+      "nombre": "Sin desbordamiento a 320px",
+      "aprobado": true
+    },
+    {
+      "nombre": "Sin desbordamiento a 390px",
+      "aprobado": true
+    },
+    {
+      "nombre": "Sin desbordamiento a 768px",
+      "aprobado": true
+    },
+    {
+      "nombre": "Sin desbordamiento a 1024px",
+      "aprobado": true
+    },
+    {
+      "nombre": "Sin desbordamiento a 1440px",
+      "aprobado": true
+    }
+  ],
+  "errores_js": []
+}
