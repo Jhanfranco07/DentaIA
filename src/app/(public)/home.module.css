@@ -4,3 +4,10 @@
 @media(max-width:1000px){.hero{gap:28px}.hero h1{font-size:clamp(2.25rem,4.5vw,3.3rem)}.fotografia{min-height:380px}.heroCopy>p{font-size:16px}}
 @media(max-width:760px){.hero,.seccion,.cierre{width:calc(100% - 32px)}.hero{grid-template-columns:1fr;padding-block:32px;gap:26px}.hero h1{font-size:clamp(2.1rem,7.5vw,3.25rem);max-width:19ch}.heroCopy>p{font-size:16px}.hero :global(.actions){gap:10px}.hero :global(.action){padding-inline:16px}.fotografia{min-height:220px;aspect-ratio:4/3;max-height:420px;border-radius:20px 20px 20px 6px}.fotografia img{object-position:68% center}.seccion{padding-block:34px}.beneficios,.pasos{grid-template-columns:1fr;gap:24px}.beneficios article{padding-bottom:20px;border-bottom:1px solid var(--line)}.beneficios article:last-child{border:0;padding-bottom:0}.confianza{grid-template-columns:1fr;gap:22px}.ia{padding:22px}.cierre{align-items:flex-start;flex-direction:column;margin-bottom:32px;padding:24px}.cierre h2{font-size:25px}}
 @media(max-width:360px){.hero :global(.actions)>a{width:100%}.hero h1{font-size:2.1rem}.enlaceProfesional{font-size:13px}}
+/* Portada y acceso comparten una escala clara con los portales. */
+.hero h1 { max-width: 13ch; color: var(--ink); }
+.heroCopy > p { max-width: 58ch; line-height: 1.6; }
+.fotografia figcaption { font-size: 16px; line-height: 1.45; }
+.enlaceProfesional { min-height: 44px; }
+.hero a:focus-visible, .seccion a:focus-visible, .cierre a:focus-visible { outline: 3px solid var(--teal-dark); outline-offset: 3px; }
+@media (max-width: 760px) { .hero h1 { max-width: 20ch; } }

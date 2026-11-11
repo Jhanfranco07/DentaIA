@@ -5,3 +5,10 @@
 @media(max-width:700px){.pagina{gap:18px}.panelPublico{grid-template-columns:1fr}.presentacion{padding:22px;border-right:0;border-bottom:1px solid #e0e8ed}.presentacion h2{margin-top:14px;font-size:20px}.nota{padding-top:15px}.panelAutenticado{max-width:none}.cabeceraPerfil{align-items:flex-start;flex-wrap:wrap;gap:11px}.cabeceraPerfil>div{flex-basis:calc(100% - 72px)}.rolCuenta{margin-left:69px}.contenido{padding:20px}.boton{width:100%}.datos{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.formulario input,.boton,.enlaceAcceso{transition:none}}
 .otrosEspacios{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}.otrosEspacios h2{font-size:20px}.otrosEspacios p{color:var(--muted);font-size:14px}.otrosEspacios>a{display:flex}.cabeceraPerfil>div{min-width:0}.cabeceraPerfil p,.datos dd{overflow-wrap:anywhere}.formulario input{font-size:16px}.contenido .nota{font-size:13px;line-height:1.6}
+.cabecera p, .presentacion p { font-size: 16px; line-height: 1.6; }
+.presentacion .nota { font-size: 13px; line-height: 1.55; }
+.opciones button { min-height: 44px; font-size: 14px; }
+.formulario label { font-size: 14px; }
+.formulario small { font-size: 13px; }
+.boton { font-size: 14px; }
+.error, .aviso { font-size: 14px; }

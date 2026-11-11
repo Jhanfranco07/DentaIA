@@ -63,7 +63,7 @@ with sync_playwright() as p:
     page.goto(BASE)
     def landing():
         expect(page.get_by_role('heading',level=1)).to_have_count(1)
-        expect(page.get_by_role('link',name='Comenzar ahora')).to_have_attribute('href','/cuenta?modo=registro')
+        expect(page.get_by_role('link',name='Crear mi cuenta')).to_have_attribute('href','/cuenta?modo=registro')
         assert page.locator('a[href="#"]').count()==0
         assert 'Prototipo académico' not in page.locator('body').inner_text()
         expect(page.get_by_role('heading',name='Hoy puedes preparar una fotografía.')).to_be_visible()
