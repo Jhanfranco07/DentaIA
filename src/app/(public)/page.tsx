@@ -7,15 +7,14 @@ export default function Home() {
   return <>
     <section className={styles.hero} aria-labelledby="inicio-titulo">
       <div className={styles.heroCopy}>
-        <span className="eyebrow">TU CUIDADO DENTAL, MEJOR ORGANIZADO</span>
-        <h1 id="inicio-titulo">Tu próximo paso hacia una <span>sonrisa cuidada.</span></h1>
-        <p>DentaIA reúne tu espacio personal, un directorio odontológico y herramientas de atención con acceso protegido. Encuentra lo que necesitas, sin perder de vista tu privacidad.</p>
-        <div className="actions"><Link href="/cuenta?modo=registro" className="action">Comenzar ahora <Icono nombre="flecha" size={18} /></Link><Link href="/directorio" className="action action-secondary">Explorar odontólogos</Link></div>
+        <h1 id="inicio-titulo">Orientación y cuidado para tu salud bucal.</h1>
+        <p>DentaIA reúne tu espacio personal, un directorio odontológico y herramientas para preparar tu próxima consulta. Cada función respeta los permisos de tu cuenta y tu privacidad.</p>
+        <div className="actions"><Link href="/cuenta?modo=registro" className="action">Crear mi cuenta <Icono nombre="flecha" size={18} /></Link><Link href="/directorio" className="action action-secondary">Explorar odontólogos</Link></div>
         <Link className={styles.enlaceProfesional} href="/profesional">¿Eres odontólogo? Accede a tu espacio profesional <Icono nombre="flecha" size={16} /></Link>
       </div>
       <figure className={styles.fotografia}>
         <Image src="/hero/hero-1.jpg" alt="Una mujer sonríe en la recepción de un consultorio dental" width={1376} height={768} priority sizes="(max-width: 760px) 100vw, 50vw" />
-        <figcaption>Más claridad para cuidar de ti.</figcaption>
+        <figcaption>Encuentra tu próximo paso para cuidar tu salud bucal.</figcaption>
       </figure>
     </section>
 
