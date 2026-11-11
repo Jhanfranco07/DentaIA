@@ -19,8 +19,11 @@ def preprocess(image):
     canvas = np.full((640, 640, 3), 114, dtype=np.uint8)
     canvas[top:top + resized[1], left:left + resized[0]] = cv2.resize(
         np.asarray(image), resized, interpolation=cv2.INTER_LINEAR)
-    tensor = canvas.astype(np.float32).transpose(2, 0, 1)[None] / 255.0
-    return np.ascontiguousarray(tensor), ratio, left, top
+    tensor = np.empty((1, 3, 640, 640), dtype=np.float32)
+    for channel in range(3):
+        np.divide(canvas[:, :, channel], np.float32(255.0),
+                  out=tensor[0, channel], casting="unsafe")
+    return tensor, ratio, left, top
 
 
 def postprocess(output, width, height, ratio, left, top):

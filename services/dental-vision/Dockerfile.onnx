@@ -44,5 +44,5 @@ COPY LICENSE_REVIEW.md ./
 COPY third_party ./third_party
 RUN useradd --create-home vision && chown -R vision:vision /service
 USER vision
-EXPOSE 10000
-CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000} --workers 1 --limit-concurrency 4 --timeout-keep-alive 5 --no-access-log"]
+EXPOSE 7860
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860} --workers 1 --limit-concurrency 4 --timeout-keep-alive 5 --no-access-log"]

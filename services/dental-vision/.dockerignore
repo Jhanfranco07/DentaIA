@@ -1,4 +1,6 @@
 .venv
+.git
+.vscode
 .env*
 __pycache__
 .pytest_cache
@@ -7,3 +9,7 @@ evidence/private
 evidence/linux
 Ultralytics
 **/__pycache__
+*.jpg
+*.jpeg
+*.png
+*.webp
