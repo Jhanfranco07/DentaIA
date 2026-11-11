@@ -1,0 +1,8 @@
+Fecha: 2026-11-11
+Base: 2c9c51f3a8b9d24ae543f6e5716f1cd131fa2784
+Entorno: Linux, Chromium 156.0.8078.79, Playwright
+Intentos: recorrido de panel y recorrido de directorio, con fixtures.
+Resultado: ambos intentos se detuvieron al iniciar Chromium.
+Mensaje observado: BrowserType.launch: Target page, context or browser has been closed
+Causa observada en Chromium: process_singleton_posix.cc:297, socket() failed: Operation not permitted (1)
+Las páginas no llegaron a abrirse y no se generaron mediciones visuales ni resultados de axe.

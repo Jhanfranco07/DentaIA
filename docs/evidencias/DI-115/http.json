@@ -1,0 +1,22 @@
+[
+  {
+    "ruta": "/panel",
+    "http": 200,
+    "privacidad_en_html": false
+  },
+  {
+    "ruta": "/directorio",
+    "http": 200,
+    "privacidad_en_html": true
+  },
+  {
+    "ruta": "/directorio/00000000-0000-4000-8000-000000000001",
+    "http": 200,
+    "privacidad_en_html": true
+  },
+  {
+    "ruta": "/privacidad",
+    "http": 200,
+    "privacidad_en_html": true
+  }
+]
