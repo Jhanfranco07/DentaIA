@@ -1,0 +1,266 @@
+{
+  "fixture": "sintético; tráfico externo bloqueado",
+  "resultados": [
+    {
+      "width": 320,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 1,
+        "/cuenta": 1
+      },
+      "small_text": [
+        {
+          "text": "Tu espacio de cuidado",
+          "px": 10
+        },
+        {
+          "text": "Motor de IA pendiente · sin diagnósticos automatiz",
+          "px": 10
+        },
+        {
+          "text": "Fotografías guardadas",
+          "px": 10
+        },
+        {
+          "text": "En tu espacio personal",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes registradas",
+          "px": 10
+        },
+        {
+          "text": "Historial de solicitudes",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes pendientes",
+          "px": 10
+        },
+        {
+          "text": "Por atender",
+          "px": 10
+        },
+        {
+          "text": "Ver todas →",
+          "px": 11
+        },
+        {
+          "text": "→",
+          "px": 11
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 1,
+        "/cuenta": 1
+      },
+      "small_text": [
+        {
+          "text": "Tu espacio de cuidado",
+          "px": 10
+        },
+        {
+          "text": "Motor de IA pendiente · sin diagnósticos automatiz",
+          "px": 10
+        },
+        {
+          "text": "Fotografías guardadas",
+          "px": 10
+        },
+        {
+          "text": "En tu espacio personal",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes registradas",
+          "px": 10
+        },
+        {
+          "text": "Historial de solicitudes",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes pendientes",
+          "px": 10
+        },
+        {
+          "text": "Por atender",
+          "px": 10
+        },
+        {
+          "text": "Ver todas →",
+          "px": 11
+        },
+        {
+          "text": "→",
+          "px": 11
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 1,
+        "/cuenta": 1
+      },
+      "small_text": [
+        {
+          "text": "Tu espacio de cuidado",
+          "px": 10
+        },
+        {
+          "text": "Motor de IA pendiente · sin diagnósticos automatiz",
+          "px": 10
+        },
+        {
+          "text": "Fotografías guardadas",
+          "px": 11
+        },
+        {
+          "text": "En tu espacio personal",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes registradas",
+          "px": 11
+        },
+        {
+          "text": "Historial de solicitudes",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes pendientes",
+          "px": 11
+        },
+        {
+          "text": "Por atender",
+          "px": 10
+        },
+        {
+          "text": "Ver todas →",
+          "px": 11
+        },
+        {
+          "text": "→",
+          "px": 11
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 1,
+        "/cuenta": 1
+      },
+      "small_text": [
+        {
+          "text": "Tu espacio de cuidado",
+          "px": 10
+        },
+        {
+          "text": "Motor de IA pendiente · sin diagnósticos automatiz",
+          "px": 10
+        },
+        {
+          "text": "Fotografías guardadas",
+          "px": 11
+        },
+        {
+          "text": "En tu espacio personal",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes registradas",
+          "px": 11
+        },
+        {
+          "text": "Historial de solicitudes",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes pendientes",
+          "px": 11
+        },
+        {
+          "text": "Por atender",
+          "px": 10
+        },
+        {
+          "text": "Ver todas →",
+          "px": 11
+        },
+        {
+          "text": "→",
+          "px": 11
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "links": {
+        "/directorio": 3,
+        "/solicitudes": 2,
+        "/fotografias": 1,
+        "/cuenta": 1
+      },
+      "small_text": [
+        {
+          "text": "Tu espacio de cuidado",
+          "px": 10
+        },
+        {
+          "text": "Motor de IA pendiente · sin diagnósticos automatiz",
+          "px": 10
+        },
+        {
+          "text": "Fotografías guardadas",
+          "px": 11
+        },
+        {
+          "text": "En tu espacio personal",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes registradas",
+          "px": 11
+        },
+        {
+          "text": "Historial de solicitudes",
+          "px": 10
+        },
+        {
+          "text": "Solicitudes pendientes",
+          "px": 11
+        },
+        {
+          "text": "Por atender",
+          "px": 10
+        },
+        {
+          "text": "Ver todas →",
+          "px": 11
+        },
+        {
+          "text": "→",
+          "px": 11
+        }
+      ]
+    }
+  ],
+  "errores_js": []
+}

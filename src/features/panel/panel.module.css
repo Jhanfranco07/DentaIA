@@ -10,3 +10,39 @@
 @media(max-width:560px){.metricas{grid-template-columns:1fr}.detalleClinico{padding:9px 12px}}
 .metricas{grid-template-columns:repeat(3,minmax(0,1fr))}.cabecera p,.resumen>p,.detalleClinico>summary{font-size:14px}.accionPrincipal,.accionSecundaria,.boton{min-height:44px;font-size:13px}
 @media(max-width:1000px){.metricas{grid-template-columns:1fr}.accionesCabecera{gap:10px}}
+
+/* Sprint 6: tareas y actividad del paciente. */
+.pagina{gap:20px;max-width:1180px}
+.cabecera{display:grid;align-content:center;min-height:250px;padding:clamp(25px,4vw,44px);border:0;border-radius:18px;background:#143b4c;box-shadow:none}
+.cabecera::after{display:none}
+.etiqueta{color:#bce7e2;font-size:13px;font-weight:650;letter-spacing:0;text-transform:none}
+.etiqueta::before{width:8px;height:8px;background:#75c9bd}
+.cabecera h1{margin:7px 0 9px;font-size:clamp(30px,3.6vw,44px)}
+.cabecera p{max-width:56ch;color:#e2eef1;font-size:16px;line-height:1.55}
+.accionesCabecera{margin-top:21px}
+.accionPrincipal{min-height:48px;padding:11px 17px;border-radius:10px;font-size:15px}
+.accionPrincipal:hover{transform:none}
+.resumen{padding:22px 26px;border:1px solid #d9e5eb;border-radius:16px;box-shadow:none}
+.metricas{grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.metricas>*+*{border-left:1px solid #dce6ec}
+.contenidoPanel{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr);gap:20px;align-items:start}
+.actividad{min-width:0}
+.proximosPasos{display:grid;gap:0;padding:25px;border:1px solid #d9e5eb;border-radius:16px;background:#fff}
+.proximosEncabezado{margin-bottom:12px}
+.proximosEncabezado h2{margin:0;color:#183b4d;font-size:22px}
+.proximosEncabezado p{margin:4px 0 0;color:#526577;font-size:14px}
+.paso{display:grid;grid-template-columns:42px minmax(0,1fr) 18px;align-items:center;gap:13px;min-height:82px;padding:14px 0;border-top:1px solid #e3ebef;color:#173b4d;text-decoration:none}
+.paso:hover{color:var(--teal-dark)}
+.paso>span:nth-child(2){display:grid;gap:2px}
+.paso strong{font-size:15px;line-height:1.35}
+.paso small{color:#526577;font-size:13px;line-height:1.4}
+.pasoIcono{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;background:#e8f4f2;color:#06636e}
+.avisoMotor{display:block;margin:15px 0 0;padding:13px 14px;border:1px solid #d9e7e9;border-radius:10px;background:#f5faf9;color:#315c63;font-size:13px;line-height:1.5;font-weight:550}
+.detalleClinico{padding:12px 20px;border-radius:12px;box-shadow:none}
+.detalleClinico>summary{min-height:44px;font-size:14px}
+.aviso{padding:20px;font-size:14px}
+.aviso strong{font-size:16px}
+.boton{min-height:44px;font-size:14px}
+@media(max-width:1050px){.contenidoPanel{grid-template-columns:1fr}.proximosPasos{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:12px}.proximosEncabezado,.avisoMotor{grid-column:1/-1}.paso{grid-template-columns:36px minmax(0,1fr);align-content:start}.paso>svg{display:none}.pasoIcono{width:36px;height:36px}}
+@media(max-width:700px){.cabecera{min-height:0;padding:25px 22px}.cabecera p{font-size:15px}.resumen{padding:18px}.metricas{grid-template-columns:1fr}.metricas>*+*{border-left:0;border-top:1px solid #dce6ec}.proximosPasos{grid-template-columns:1fr;padding:20px}.proximosEncabezado,.avisoMotor{grid-column:auto}.paso{grid-template-columns:42px minmax(0,1fr) 18px;min-height:76px}.paso>svg{display:block}.pasoIcono{width:42px;height:42px}}
+@media(max-width:420px){.accionPrincipal{width:100%;font-size:14px}.cabecera h1{font-size:32px}}
