@@ -1,7 +1,7 @@
 import type { Dentista, DemoLocationPublica, DentistaDirectorio, UbicacionPublica } from "./tipos";
 
 export const VERSION_CATALOGO_DEMO = "directorio-demo-2026-11-v2";
-export const AVISO_PERFILES_DEMO = "Los odontólogos de ejemplo son ficticios. Los centros que figuran como referencia geográfica son independientes: no se afirma que esos profesionales trabajen allí ni que acepten solicitudes desde DentaIA.";
+export const AVISO_PERFILES_DEMO = "Perfiles de demostración. No representan profesionales verificados. Los centros son referencias geográficas independientes: no existe vinculación laboral ni atención gestionada por DentaIA.";
 
 // Direcciones y coordenadas publicadas en fichas que citan el registro RENIPRESS/MINSA.
 // Son referencias documentales, NO verificación presencial ni confirmación de atención actual.
