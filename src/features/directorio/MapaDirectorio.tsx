@@ -16,17 +16,22 @@ function obtenerTeselas() {
   return configurada?.startsWith("https://") ? configurada : "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 }
 
-export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = "", visible = true, alSeleccionar }: {
+export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = "", visible = true, alSeleccionar, modoPaciente = false, radarActivo = false, idsCercanos = [], basePerfil = "/directorio" }: {
   ubicaciones: MarcadorDirectorio[];
   ubicacion: PuntoGeografico | null;
   seleccionado?: string;
   visible?: boolean;
   alSeleccionar?: (id: string) => void;
+  modoPaciente?: boolean;
+  radarActivo?: boolean;
+  idsCercanos?: readonly string[];
+  basePerfil?: string;
 }) {
   const contenedor = useRef<HTMLDivElement>(null);
   const mapa = useRef<MapInstance | null>(null);
   const marcadores = useRef<Marker[]>([]);
   const marcadoresPorDentista = useRef(new globalThis.Map<string, Marker>());
+  const marcadorUsuario = useRef<HTMLElement | null>(null);
   const [listo, setListo] = useState(false);
   const [errorTeselas, setErrorTeselas] = useState(false);
 
@@ -63,6 +68,7 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
     marcadores.current.forEach(marcador => marcador.remove());
     marcadores.current = [];
     marcadoresPorDentista.current.clear();
+    marcadorUsuario.current = null;
     const ubicacionesValidas = ubicaciones.filter((ubicacion): ubicacion is MarcadorConsultorio => ubicacion.tipo === "consultorio" && ubicacionConCoordenadasValidas(ubicacion));
     const demosValidas = ubicaciones.filter((ubicacion): ubicacion is MarcadorDemo => ubicacion.tipo === "demo" && Number.isFinite(ubicacion.latitude) && Number.isFinite(ubicacion.longitude)
       && ubicacion.latitude >= -90 && ubicacion.latitude <= 90 && ubicacion.longitude >= -180 && ubicacion.longitude <= 180);
@@ -81,7 +87,7 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
         popupRoot.append(direccion);
       }
       const enlace = document.createElement("a");
-      enlace.href = `/directorio/${encodeURIComponent(consultorio.dentist_id)}`;
+      enlace.href = `${basePerfil}/${encodeURIComponent(consultorio.dentist_id)}`;
       enlace.textContent = "Ver perfil";
       popupRoot.append(enlace);
       const elemento = document.createElement("button");
@@ -120,7 +126,7 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
       popupRoot.append(nota);
       if (demo.dentist_id) {
         const enlace = document.createElement("a");
-        enlace.href = `/directorio/${encodeURIComponent(demo.dentist_id)}`;
+        enlace.href = `${basePerfil}/${encodeURIComponent(demo.dentist_id)}`;
         enlace.textContent = "Ver ficha de ejemplo";
         popupRoot.append(enlace);
       }
@@ -147,8 +153,17 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
 
     if (ubicacion) {
       const persona = document.createElement("span");
-      persona.className = styles.marcadorUbicacion;
+      persona.className = styles.radarAncla;
       persona.setAttribute("aria-label", "Ubicación aproximada de este dispositivo");
+      persona.dataset.radar = String(modoPaciente && radarActivo);
+      const anillos = document.createElement("span");
+      anillos.className = styles.radarAnillos;
+      anillos.setAttribute("aria-hidden", "true");
+      const centro = document.createElement("span");
+      centro.className = styles.marcadorUbicacion;
+      centro.setAttribute("aria-hidden", "true");
+      persona.append(anillos, centro);
+      marcadorUsuario.current = persona;
       marcadores.current.push(new Marker({ element: persona, anchor: "center" })
         .setLngLat([ubicacion.longitude, ubicacion.latitude])
         .setPopup(new Popup({ offset: 15 }).setText("Ubicación aproximada de este dispositivo; no se guarda."))
@@ -163,7 +178,14 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
         mapa.current.fitBounds([[Math.min(...longitudes), Math.min(...latitudes)], [Math.max(...longitudes), Math.max(...latitudes)]], { padding: 52, maxZoom: 14, duration: 500 });
       }
     }
-  }, [alSeleccionar, listo, ubicacion, ubicaciones]);
+  }, [alSeleccionar, listo, ubicacion, ubicaciones, modoPaciente, basePerfil]);
+
+  useEffect(() => {
+    if (marcadorUsuario.current) marcadorUsuario.current.dataset.radar = String(modoPaciente && radarActivo);
+    for (const [id, marker] of marcadoresPorDentista.current) {
+      marker.getElement().dataset.cercano = String(modoPaciente && !!ubicacion && idsCercanos.includes(id));
+    }
+  }, [idsCercanos, listo, modoPaciente, radarActivo, ubicacion]);
 
   useEffect(() => {
     if (!listo || !mapa.current) return;
@@ -178,7 +200,7 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
     }
   }, [listo, seleccionado, visible, ubicaciones]);
 
-  return <div className={styles.contenedorMapa}>
+  return <div className={styles.contenedorMapa} data-vista={modoPaciente ? "paciente" : "publica"}>
     <div ref={contenedor} className={styles.mapa} role="application" aria-label="Mapa interactivo de consultorios odontológicos" />
     {!listo && <span className={styles.cargando} role="status">Cargando mapa…</span>}
     {errorTeselas && <div className={styles.errorTeselas} role="alert">No se pudieron cargar algunas teselas del mapa. Puedes consultar los perfiles en la lista.</div>}
