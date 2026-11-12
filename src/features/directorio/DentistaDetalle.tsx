@@ -134,6 +134,13 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio" }: 
             <h2>{carga.dentista.is_demo ? "Acerca del perfil ficticio" : "Acerca del profesional"}</h2>
             <p>{textoOpcional(carga.dentista.description, "Este profesional aún no ha publicado una descripción.")}</p>
 
+            <section aria-labelledby="titulo-servicios-perfil">
+              <h2 id="titulo-servicios-perfil">Servicios</h2>
+              <p>{carga.dentista.is_demo
+                ? "Este perfil ficticio no ofrece servicios ni atención real."
+                : "Este profesional aún no tiene servicios publicados en DentaIA."}</p>
+            </section>
+
             {carga.dentista.is_demo && <p className={styles.nota}>
               {carga.ubicaciones.length
                 ? "El profesional es ficticio. El establecimiento indicado es una referencia independiente; no se afirma una relación laboral ni se ofrecen citas desde DentaIA."
