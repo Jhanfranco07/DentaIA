@@ -24,8 +24,15 @@ Ejecutar en PowerShell: winget install Stripe.StripeCLI
 
 RLS activo: cada usuario solo lee sus pagos. Solo el servidor escribe.
 
-
 ## Endpoint `POST /api/stripe/checkout`
 - Requiere el encabezado `Authorization: Bearer <access_token de Supabase>`.
 - 401 si no hay sesión válida. 502 si Stripe falla.
 - Respuesta correcta: `{ "url": "https://checkout.stripe.com/..." }`.
+
+## Webhook `POST /api/stripe/webhook`
+Verifica la firma con `STRIPE_WEBHOOK_SECRET` y es idempotente (`stripe_event_id` único).
+| Evento | Acción |
+|---|---|
+| checkout.session.completed | Guarda el pago (`paid` o `unpaid`) |
+| checkout.session.expired | Guarda el pago como `expired` |
+| Otros | Se ignoran (200) |
