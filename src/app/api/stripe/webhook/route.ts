@@ -38,6 +38,23 @@ export async function POST(req: Request) {
       if (error) throw error;
       break;
     }
+
+        case "checkout.session.expired": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      if (!session.client_reference_id) break;
+
+      const { error } = await getSupabaseAdmin().from("payments").upsert({
+        user_id: session.client_reference_id,
+        stripe_session_id: session.id,
+        stripe_event_id: event.id,
+        plan: session.metadata?.plan ?? "premium-demo",
+        amount_total: session.amount_total ?? 0,
+        currency: session.currency ?? "usd",
+        status: "expired",
+      }, { onConflict: "stripe_event_id", ignoreDuplicates: true });
+      if (error) throw error;
+      break;
+    }
   }
 
   return NextResponse.json({ received: true });
