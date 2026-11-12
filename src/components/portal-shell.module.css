@@ -47,3 +47,23 @@
   min-width: 44px;
   min-height: 44px;
 }
+
+/* Identidad visual de la experiencia educativa: aislada de los demás módulos. */
+.shell[data-educacion="true"]{background:#f4f4ff}
+.shell[data-educacion="true"] .lateral{background:linear-gradient(180deg,#151b3e,#171b43 72%,#251b55);border-color:#34345e;color:#f6f5ff}
+.shell[data-educacion="true"] .marca :global(.marca){color:#fff}
+.shell[data-educacion="true"] .portalMarca{background:#ffffff15;border:1px solid #ffffff17}
+.shell[data-educacion="true"] .portalMarca strong{color:white}
+.shell[data-educacion="true"] .portalMarca div>span,.shell[data-educacion="true"] .tituloNavegacion,.shell[data-educacion="true"] .grupo,.shell[data-educacion="true"] .estadoPrivado,.shell[data-educacion="true"] .volver{color:#c4c4eb}
+.shell[data-educacion="true"] .portalIcono{background:#6a51d4;color:white}
+.shell[data-educacion="true"] .enlace{color:#e3e3f6}
+.shell[data-educacion="true"] .enlace svg{color:#dddaf5}
+.shell[data-educacion="true"] .enlace:hover{color:white;background:#ffffff17}
+.shell[data-educacion="true"] .enlace[aria-current=page]{color:white;border:1px solid #9779ff;background:linear-gradient(110deg,#6247e0,#7959e5);box-shadow:0 8px 17px #00000026}
+.shell[data-educacion="true"] .enlace[aria-current=page] svg{color:white}
+.shell[data-educacion="true"] .marcaActiva{display:none}
+.shell[data-educacion="true"] .pieLateral{border-top-color:#ffffff24}
+.shell[data-educacion="true"] .encabezado{background:#f8f7ffed;border-bottom-color:#e4e1fa}
+.shell[data-educacion="true"] .contenido{width:100%;max-width:1800px;padding:20px clamp(17px,2vw,32px) 55px}
+.shell[data-educacion="true"] .tituloPagina>strong{color:#202453}
+@media(max-width:760px){.shell[data-educacion="true"] .contenido{padding:15px 13px 44px}.shell[data-educacion="true"] .cerrarMenu{background:#ffffff1b;border-color:#ffffff38;color:white}}
