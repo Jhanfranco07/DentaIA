@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe/server";
 import type Stripe from "stripe";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 
@@ -21,9 +22,22 @@ export async function POST(req: Request) {
   }
 
     switch (event.type) {
-    case "checkout.session.completed":
-      console.log("Checkout completado:", event.id);
+        case "checkout.session.completed": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      if (!session.client_reference_id) break;
+
+      const { error } = await getSupabaseAdmin().from("payments").upsert({
+        user_id: session.client_reference_id,
+        stripe_session_id: session.id,
+        stripe_event_id: event.id,
+        plan: session.metadata?.plan ?? "premium-demo",
+        amount_total: session.amount_total ?? 0,
+        currency: session.currency ?? "usd",
+        status: "paid",
+      });
+      if (error) throw error;
       break;
+    }
   }
 
   return NextResponse.json({ received: true });
