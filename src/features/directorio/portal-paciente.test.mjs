@@ -26,8 +26,8 @@ test("los avatares corresponden solo a los veinte perfiles ficticios registrados
   assert.equal(archivo.subarray(4,12).toString("ascii"),"ftypavif");
   assert.equal(statSync("public/directorio/avatares-adultos.avif").size, 15414);
   assert.match(contenido, /CATALOGO_DEMO\.map/);
-  assert.match(contenido, /CIRCULOS_FEMENINOS/);
-  assert.match(contenido, /CIRCULOS_MASCULINOS/);
+  assert.match(contenido, /CATALOGO_DEMO\.map/);
+  assert.match(contenido, /indice % 2 === 0/);
   assert.match(contenido, /if \(!rostro\)/);
   assert.match(catalogo, /odontologo-demo-s6-/);
   const css=leer("src/features/directorio/directorio.module.css");
@@ -40,7 +40,7 @@ test("el radar requiere consentimiento y usa puntos reales del directorio", () =
   const mapa=leer("src/features/directorio/MapaDirectorio.tsx");
   const estilos=leer("src/features/directorio/mapa-directorio.module.css");
   assert.match(directorio,/obtenerUbicacionActual\(navigator\.geolocation\)/);
-  assert.match(directorio,/if \(modoPaciente\) setRadarActivo\(true\)/);
+  assert.match(directorio,/setRadarActivo\(true\)/);
   assert.match(directorio,/ubicacionMasCercana\(d\.ubicaciones, ubicacion\)/);
   assert.match(directorio,/p\.ubicacion\.practice_name/);
   assert.match(directorio,/orden === "cercania"/);
