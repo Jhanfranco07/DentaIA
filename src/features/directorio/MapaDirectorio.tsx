@@ -200,7 +200,7 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
     }
   }, [listo, seleccionado, visible, ubicaciones]);
 
-  return <div className={styles.contenedorMapa} data-vista={modoPaciente ? "paciente" : "publica"}>
+  return <div className={styles.contenedorMapa} data-vista={modoPaciente ? "paciente" : "publica"} data-radar={String(modoPaciente && radarActivo)}>
     <div ref={contenedor} className={styles.mapa} role="application" aria-label="Mapa interactivo de consultorios odontológicos" />
     {!listo && <span className={styles.cargando} role="status">Cargando mapa…</span>}
     {errorTeselas && <div className={styles.errorTeselas} role="alert">No se pudieron cargar algunas teselas del mapa. Puedes consultar los perfiles en la lista.</div>}
