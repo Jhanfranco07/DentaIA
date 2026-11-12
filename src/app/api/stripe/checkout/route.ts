@@ -20,6 +20,9 @@ export async function POST(req: Request) {
         },
       },
     ],
+
+    client_reference_id: user.id,
+    customer_email: user.email ?? undefined,
     mode: "payment",
   });
 
