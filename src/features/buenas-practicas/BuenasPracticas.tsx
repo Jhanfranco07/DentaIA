@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
 import { GUIAS_BUCALES, type GuiaBucal } from "./contenido";
-import { MascotaDiente, MiniIlustracion } from "./Ilustraciones";
+import Ilustracion3D from "./Ilustracion3D";
 import styles from "./buenas-practicas.module.css";
 
 type Tema = "Todos" | "Hábitos" | "Prevención" | "Alimentación" | "Cuidados";
@@ -14,6 +14,8 @@ const TEMAS: readonly { titulo: Tema; emoji: string }[] = [
   { titulo: "Alimentación", emoji: "🍏" },
   { titulo: "Cuidados", emoji: "💜" },
 ];
+const TITULOS: Record<string, string> = { cepillado: "Cepillado correcto", hilo: "Uso del hilo dental", alimentacion: "Alimentación saludable", fluor: "Prevención de caries", encias: "Cuidado de encías", controles: "Controles odontológicos" };
+const ORDEN: Record<string, number> = { cepillado: 0, hilo: 1, alimentacion: 2, fluor: 3, encias: 4, controles: 5 };
 const TIPS = [
   { titulo: "Dos minutos que cuentan", cuerpo: "Cepilla tus dientes durante dos minutos, dos veces al día, utilizando pasta dental fluorada.", fuente: "American Dental Association", url: "https://www.mouthhealthy.org/all-topics-a-z/brushing-your-teeth/" },
   { titulo: "Cuida cada espacio", cuerpo: "Limpia entre los dientes todos los días con hilo dental u otro limpiador interdental adecuado.", fuente: "American Dental Association", url: "https://www.mouthhealthy.org/all-topics-a-z/flossing/" },
@@ -29,6 +31,7 @@ function coincideConTema(guia: GuiaBucal, tema: Tema) {
 }
 
 export default function BuenasPracticas() {
+  const pistaRef = useRef<HTMLDivElement>(null);
   const [tema, setTema] = useState<Tema>("Todos");
   const [busqueda, setBusqueda] = useState("");
   const [seleccion, setSeleccion] = useState("cepillado");
@@ -49,10 +52,17 @@ export default function BuenasPracticas() {
   const visibles = useMemo(() => GUIAS_BUCALES.filter((g) =>
     coincideConTema(g, tema) &&
     (g.titulo + " " + g.descripcion + " " + g.pasos.join(" ")).toLocaleLowerCase("es").includes(busqueda.trim().toLocaleLowerCase("es"))
-  ), [tema, busqueda]);
+  ).sort((a,b)=>(ORDEN[a.id]??99)-(ORDEN[b.id]??99)), [tema, busqueda]);
   const actual = visibles.find((g) => g.id === seleccion) ?? visibles[0];
   const porcentaje = Math.round(100 * revisadas.length / GUIAS_BUCALES.length);
   const tiempo = String(Math.floor(segundos / 60)).padStart(2, "0") + ":" + String(segundos % 60).padStart(2, "0");
+
+  function moverTarjetas(direccion: -1 | 1) {
+    const pista = pistaRef.current;
+    if (!pista) return;
+    const comportamiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth";
+    pista.scrollBy({ left: direccion * Math.max(220, pista.clientWidth / 3), behavior: comportamiento });
+  }
 
   function abrirGuia(id: string) {
     setSeleccion(id);
@@ -64,7 +74,7 @@ export default function BuenasPracticas() {
     <section className={styles.hero} aria-labelledby="educacion-titulo">
       <div className={styles.heroBrillo} aria-hidden="true" />
       <div className={styles.heroCopy}>
-        <span className={styles.heroEtiqueta}><Icono nombre="reporte" size={19} /> BUENAS PRÁCTICAS</span>
+        <span className={styles.heroEtiqueta}><Icono nombre="diente" size={19} /> BUENAS PRÁCTICAS</span>
         <h1 id="educacion-titulo">Aprende a cuidar <span>tu salud bucal</span></h1>
         <p>Conoce hábitos y consejos para mantener una sonrisa saludable. Aprende a tu ritmo, paso a paso.</p>
         <div className={styles.heroAcciones}>
@@ -73,8 +83,7 @@ export default function BuenasPracticas() {
         </div>
       </div>
       <div className={styles.heroMascota}>
-        <div className={styles.orbita} aria-hidden="true" />
-        <MascotaDiente />
+        <Ilustracion3D tipo="heroe" />
         <span className={styles.destelloUno} aria-hidden="true">✦</span>
         <span className={styles.destelloDos} aria-hidden="true">✧</span>
       </div>
@@ -94,21 +103,21 @@ export default function BuenasPracticas() {
         </button>
       )}</div></div>
       <label className={styles.busqueda}><Icono nombre="buscar" size={18}/><span className={styles.srOnly}>Buscar guía educativa</span><input type="search" placeholder="Buscar un tema o consejo" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value);setMostrarDetalle(false);}}/></label>
-      {visibles.length ? <div className={styles.tarjetas}>{visibles.map((g, indice) => <button type="button" key={g.id} className={styles.tarjeta} style={{animationDelay: `${indice * 60}ms`}} onClick={()=>abrirGuia(g.id)} aria-label={`Abrir guía de ${g.titulo}`}>
+      {visibles.length ? <><div className={styles.controlCarrusel}><span>Explora nuestras seis guías de cuidado bucal</span><div><button type="button" aria-label="Mostrar guías anteriores" onClick={()=>moverTarjetas(-1)}>‹</button><button type="button" aria-label="Mostrar más guías" onClick={()=>moverTarjetas(1)}>›</button></div></div><div ref={pistaRef} className={styles.tarjetas} aria-label="Carrusel de guías educativas">{visibles.map((g, indice) => <button type="button" key={g.id} className={styles.tarjeta} style={{animationDelay: `${indice * 60}ms`}} onClick={()=>abrirGuia(g.id)} aria-label={`Abrir guía de ${g.titulo}`}>
         <span className={styles.dibujo} data-tema={g.id}>
           <span className={styles.circuloFondo} aria-hidden="true" />
-          <MiniIlustracion id={g.id} />
+          <Ilustracion3D tipo={g.id} />
           <span className={styles.insigniaAccion} aria-hidden="true">{revisadas.includes(g.id) ? "✓" : "▶"}</span>
         </span>
         <span className={styles.tarjetaInfo}>
-          <strong>{g.titulo}</strong>
+          <strong>{TITULOS[g.id] ?? g.titulo}</strong>
           <span className={styles.tarjetaDescripcion}>{g.descripcion}</span>
           <span className={styles.progresoBarra}><span style={{width: revisadas.includes(g.id) ? "100%" : "0%"}} /></span>
           <span className={styles.tarjetaPie}><span>{revisadas.includes(g.id) ? "100% · Revisado" : "0% · Por explorar"}</span><span>{revisadas.includes(g.id) ? "✓" : "→"}</span></span>
         </span>
-      </button>)}</div> : <div className={styles.sinResultados}><strong>No encontramos ese tema</strong><p>Prueba otra búsqueda o vuelve a mostrar todas las guías.</p><button type="button" onClick={()=>{setTema("Todos");setBusqueda("");}}>Ver todos</button></div>}
+      </button>)}</div></> : <div className={styles.sinResultados}><strong>No encontramos ese tema</strong><p>Prueba otra búsqueda o vuelve a mostrar todas las guías.</p><button type="button" onClick={()=>{setTema("Todos");setBusqueda("");}}>Ver todos</button></div>}
       {mostrarDetalle && actual && <article id="guia-detalle" className={styles.detalle} aria-label={`Guía de ${actual.titulo}`}>
-        <div className={styles.detalleDibujo}><MiniIlustracion id={actual.id}/></div>
+        <div className={styles.detalleDibujo}><Ilustracion3D tipo={actual.id}/></div>
         <div className={styles.detalleContenido}>
           <div className={styles.detalleCabecera}><span className={styles.seccionEtiqueta}>GUÍA INTERACTIVA · {actual.categoria.toUpperCase()}</span><button type="button" className={styles.cerrarDetalle} onClick={()=>setMostrarDetalle(false)} aria-label="Cerrar guía">✕</button></div>
           <h3>{actual.titulo}</h3><p>{actual.descripcion}</p><span className={styles.duracion}><Icono nombre="reloj" size={16}/>{actual.duracion}</span>
@@ -122,19 +131,19 @@ export default function BuenasPracticas() {
     <section className={styles.extras} aria-label="Herramientas de aprendizaje">
       <article className={styles.reto}>
         <div className={styles.extraTitulo}><span aria-hidden="true">🏆</span><div><h2>Reto de la semana</h2><p>Practica un hábito saludable durante siete días.</p></div></div>
-        <div className={styles.retoInterior}><span className={styles.retoIcono} aria-hidden="true">🪥</span><div><strong>Cepíllate 2 veces al día durante 7 días</strong><div className={styles.miniBarra}><span style={{width: `${dias.length / 7 * 100}%`}} /></div><span className={styles.retoCantidad}>{dias.length}/7 días · Registro de esta sesión</span></div><span className={styles.medalla} aria-hidden="true">✦</span></div>
+        <div className={styles.retoInterior}><span className={styles.retoIcono} aria-hidden="true">🪥</span><div><strong>Cepíllate 2 veces al día durante 7 días</strong><div className={styles.miniBarra}><span style={{width: `${dias.length / 7 * 100}%`}} /></div><span className={styles.retoCantidad}>{dias.length}/7 días · Registro de esta sesión</span></div><span className={styles.medalla} aria-hidden="true"><Ilustracion3D tipo="heroe" /></span></div>
         <div className={styles.dias} aria-label="Marcar días del reto">{Array.from({length:7},(_,i)=><button type="button" key={i} aria-label={`Día ${i+1}`} aria-pressed={dias.includes(i+1)} onClick={()=>setDias((d)=>d.includes(i+1)?d.filter((n)=>n!==i+1):[...d,i+1])}>{dias.includes(i+1)?"✓":i+1}</button>)}</div>
       </article>
       <article className={styles.tarjetaTiempo} id="temporizador">
         <div className={styles.extraTitulo}><span aria-hidden="true">⏱️</span><div><h2>Temporizador de cepillado</h2><p>Dos minutos para acompañar tu rutina.</p></div></div>
-        <div className={styles.tiempoContenido}><div className={styles.cuentaAtras} role="timer" aria-label={`Tiempo restante ${tiempo}`}>{tiempo}</div><button type="button" className={styles.play} onClick={()=>{if(segundos===0)setSegundos(120);setReproduciendo(v=>!v);}} aria-label={reproduciendo?"Pausar temporizador":"Iniciar temporizador"}>{reproduciendo?"Ⅱ":"▶"}</button><button className={styles.reset} type="button" onClick={()=>{setReproduciendo(false);setSegundos(120);}}>Reiniciar</button><div className={styles.miniDiente}><MascotaDiente /></div></div>
+        <div className={styles.tiempoContenido}><div className={styles.cuentaAtras} role="timer" aria-label={`Tiempo restante ${tiempo}`}>{tiempo}</div><button type="button" className={styles.play} onClick={()=>{if(segundos===0)setSegundos(120);setReproduciendo(v=>!v);}} aria-label={reproduciendo?"Pausar temporizador":"Iniciar temporizador"}>{reproduciendo?"Ⅱ":"▶"}</button><button className={styles.reset} type="button" onClick={()=>{setReproduciendo(false);setSegundos(120);}}>Reiniciar</button><div className={styles.miniDiente}><Ilustracion3D tipo="cepillado" /></div></div>
         {segundos===0 && <p className={styles.finalizado} role="status">¡Dos minutos completados!</p>}
       </article>
       <article className={styles.sabias}>
         <div className={styles.extraTitulo}><span aria-hidden="true">💡</span><div><h2>¿Sabías que...?</h2></div></div>
         <p><strong>{TIPS[tip].titulo}.</strong> {TIPS[tip].cuerpo}</p>
         <div className={styles.tipPie}><a href={TIPS[tip].url} target="_blank" rel="noopener noreferrer">Fuente: {TIPS[tip].fuente}</a><button type="button" onClick={()=>setTip(t=>(t+1)%TIPS.length)} aria-label="Ver otro consejo">Otro consejo →</button></div>
-        <span className={styles.decoracionTip} aria-hidden="true">✦</span>
+        <span className={styles.decoracionTip} aria-hidden="true"><Ilustracion3D tipo="fluor" /></span>
       </article>
     </section>
     <footer className={styles.notaFinal}><span aria-hidden="true">✚</span><p>Contenido educativo general; no sustituye una evaluación odontológica. Ante dolor, sangrado persistente u otros síntomas, acude a un profesional.</p><Link href="/directorio">Explorar directorio <Icono nombre="flecha" size={16}/></Link></footer>

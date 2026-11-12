@@ -10,3 +10,48 @@
 @media(max-width:560px){.hero{grid-template-columns:1fr;gap:0;border-radius:23px}.heroMascota{max-width:175px;justify-self:center}.hero h1{font-size:36px}.heroEtiqueta{font-size:12px}.tarjetaProgreso{max-width:none}.tarjetas{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.tarjetaInfo{padding:11px 9px}.tarjetaInfo strong{font-size:13px}.tarjetaDescripcion{font-size:10px}.dibujo svg{width:125px}.tarjeta{grid-template-rows:120px 1fr}.dibujo{min-height:118px}.tituloFila h2{font-size:25px}.filtro,.filtroActivo{padding:8px 10px;font-size:11px!important}.notaFinal a{white-space:normal}}
 @media(max-width:375px){.tarjetas{grid-template-columns:1fr}.tarjeta{grid-template-rows:145px auto}.dibujo svg{width:175px}.hero h1{font-size:31px}.heroAcciones{align-items:stretch}.heroAcciones>*{flex:1}}
 @media(prefers-reduced-motion:reduce){.heroMascota,.miniDiente,.destelloUno,.destelloDos,.tarjeta{animation:none!important}.tarjeta,.dibujo svg{transition:none!important}.tarjeta:hover{transform:none}.tarjeta:hover svg{transform:none}}
+
+/* v3: ilustraciones originales 3D optimizadas en un solo recurso AVIF de 16 KiB. */
+.imagen3d{display:block;width:160px;aspect-ratio:8/7;flex:none;background-image:url("/educacion/ilustraciones-premium.avif");background-size:400% 200%;background-repeat:no-repeat;background-position:0 0;filter:drop-shadow(0 7px 7px #3245a832);pointer-events:none}
+.imagen3d[data-tipo="cepillado"]{background-position:0% 0%}
+.imagen3d[data-tipo="hilo"]{background-position:33.333% 0%}
+.imagen3d[data-tipo="alimentacion"]{background-position:66.667% 0%}
+.imagen3d[data-tipo="fluor"]{background-position:100% 0%}
+.imagen3d[data-tipo="encias"]{background-position:0% 100%}
+.imagen3d[data-tipo="controles"]{background-position:33.333% 100%}
+.imagen3d[data-tipo="heroe"]{background-position:66.667% 100%}
+.hero{grid-template-columns:minmax(290px,1.22fr) minmax(230px,1fr) minmax(185px,.8fr);min-height:320px}
+.heroMascota{max-width:355px;filter:none}
+.heroMascota .imagen3d{width:100%;max-width:355px;filter:drop-shadow(0 15px 16px #3e78ba45);transform-origin:center}
+.orbita{display:none}
+.dibujo .imagen3d{position:relative;z-index:1;width:150px;max-width:100%;height:auto;filter:drop-shadow(0 9px 7px #425d9d2c);transition:transform .28s ease}
+.tarjeta:hover .imagen3d{transform:scale(1.08) rotate(-2deg)}
+.detalleDibujo .imagen3d{width:min(215px,100%);filter:drop-shadow(0 10px 11px #476cb12e);animation:flotar 5s ease-in-out infinite}
+.miniDiente .imagen3d{width:100%;filter:drop-shadow(0 6px 8px #668fdc44)}
+.medalla{width:58px;height:55px;flex:none;filter:none}
+.medalla .imagen3d{width:64px;filter:drop-shadow(0 4px 7px #7e60ca62)}
+.decoracionTip{right:-10px;bottom:-15px}
+.decoracionTip .imagen3d{width:112px;opacity:.72;filter:drop-shadow(0 5px 8px #477fcb33)}
+.sabias>p,.tipPie{max-width:calc(100% - 64px)}
+.tarjetas{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:3px;padding:4px 3px 16px;scrollbar-width:thin;scrollbar-color:#b9b4e9 transparent}
+.tarjeta{flex:0 0 calc((100% - 48px)/5);min-width:185px;min-height:253px;grid-template-rows:134px 1fr;scroll-snap-align:start}
+.tarjetaInfo{padding:13px 12px 14px;gap:7px}
+.tarjetaInfo strong{font-size:15px}
+.tarjetaDescripcion{min-height:42px}
+.tarjetaPie{margin-top:auto}
+.controlCarrusel{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:-9px;margin-bottom:-10px;color:#6d76a1;font-size:11px}
+.controlCarrusel>div{display:flex;gap:6px}
+.controlCarrusel button{display:grid;place-items:center;width:31px;height:31px;border:1px solid #c9c8ee;border-radius:50%;background:#fff;color:#6250d1;font-size:21px;cursor:pointer;box-shadow:0 3px 8px #6274ad18}
+.controlCarrusel button:hover{background:#eeeaff}
+.reto{background:linear-gradient(115deg,#e9e1ff,#f9e2f7)}
+.tarjetaTiempo{background:linear-gradient(115deg,#dbe9ff,#cbf1ff)}
+.sabias{background:linear-gradient(115deg,#e5f5ff,#c6e7ff)}
+.extras{gap:15px}
+@media(max-width:1450px){.tarjeta{flex-basis:calc((100% - 24px)/3)}.hero{grid-template-columns:minmax(245px,1.18fr) minmax(190px,.86fr) minmax(185px,.74fr)}}
+@media(max-width:1100px){.hero{grid-template-columns:minmax(0,1fr) 200px}.heroMascota{width:200px}.tarjeta{flex-basis:calc((100% - 24px)/3)}}
+@media(max-width:770px){.hero{grid-template-columns:1fr 175px}.heroMascota{width:175px}.tarjeta{flex-basis:calc((100% - 12px)/2)}.tarjetaInfo strong{font-size:14px}.imagen3d{max-width:100%}}
+@media(max-width:560px){.hero{grid-template-columns:1fr}.heroMascota{width:215px}.tarjeta{flex-basis:min(76%,265px)}.dibujo .imagen3d{width:157px}.sabias>p,.tipPie{max-width:none}.decoracionTip{opacity:.23}}
+@media(prefers-reduced-motion:reduce){.detalleDibujo .imagen3d,.heroMascota{animation:none!important}.tarjeta:hover .imagen3d{transform:none!important}.imagen3d{transition:none!important}}
+
+/* Mascota con resolución superior (420×417) para mantener nitidez en el hero. */
+.imagen3d[data-tipo="heroe"]{background-image:url("/educacion/mascota-premium.avif");background-size:contain;background-position:center}
