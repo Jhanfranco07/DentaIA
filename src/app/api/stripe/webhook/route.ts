@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         plan: session.metadata?.plan ?? "premium-demo",
         amount_total: session.amount_total ?? 0,
         currency: session.currency ?? "usd",
-        status: "paid",
+        status: session.payment_status === "paid" ? "paid" : "unpaid",
         }, { onConflict: "stripe_event_id", ignoreDuplicates: true });
       if (error) throw error;
       break;
