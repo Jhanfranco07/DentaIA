@@ -48,6 +48,11 @@ export default function PanelPaciente() {
                 <span><strong>Preparar una fotografía</strong><small>Revísala localmente antes de continuar.</small></span>
                 <Icono nombre="flecha" size={17} />
               </Link>
+              <Link href="/buenas-practicas" className={styles.paso}>
+                <span className={styles.pasoIcono}><Icono nombre="escudo" size={20} /></span>
+                <span><strong>Buenas prácticas</strong><small>Descubre guías y ejercicios interactivos para tu salud bucal.</small></span>
+                <Icono nombre="flecha" size={17} />
+              </Link>
               <Link href="/cuenta" className={styles.paso}>
                 <span className={styles.pasoIcono}><Icono nombre="persona" size={20} /></span>
                 <span><strong>Mi perfil</strong><small>Revisa los datos de tu cuenta.</small></span>
