@@ -194,30 +194,52 @@
 .sinUbicacionPerfil a{color:#6042d0;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:620px){.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande{width:140px;flex-basis:140px}.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande .avatar{width:140px;height:150px}}
 
-/* Portada editorial con fotografía real y fuente acreditada, separada de perfiles ficticios. */
-.heroPremiumFotografiaMarco{position:relative;display:block;margin:0;min-height:260px;align-self:stretch;overflow:hidden;border-radius:24px;background:#d9e6f9 url("/hero/hero-1.jpg") center/cover no-repeat;box-shadow:0 12px 28px #36286b25}
-.heroPremiumFotografiaMarco .heroPremiumFotografia{display:block;width:100%;height:100%;min-height:260px;max-height:330px;object-fit:cover;object-position:center 30%;border-radius:24px;filter:none;-webkit-mask-image:none;mask-image:none}
-.heroPremiumFotoFuente{position:absolute;bottom:10px;left:10px;right:10px;z-index:3;width:max-content;max-width:calc(100% - 20px);padding:4px 9px;border-radius:7px;background:#15132abf;color:white;font-size:10px;line-height:1.5}
-.heroPremiumFotoFuente a{color:white;text-decoration:underline;text-underline-offset:2px}
-:global([data-portal-tema="dark"]) .heroPremium{background:linear-gradient(125deg,#302454,#4d2e7b 70%,#6b3c9a);border-color:#7357aa;color:#f3ebff}
-:global([data-portal-tema="dark"]) .heroPremiumCopy h1{color:#fff}
-:global([data-portal-tema="dark"]) .heroPremiumCopy>p,
-:global([data-portal-tema="dark"]) .heroPremiumNota{color:#ddd1f3}
-:global([data-portal-tema="dark"]) .heroPremiumDatos{background:#292041dc;border-color:#65518e;color:#f4eeff}
-:global([data-portal-tema="dark"]) .heroPremiumDatos strong{color:#fff}
-:global([data-portal-tema="dark"]) .heroPremiumDatos small{color:#c9bcdf}
-@media(max-width:1310px){.heroPremiumFotografiaMarco .heroPremiumFotografia{max-height:290px}}
-@media(max-width:760px){.heroPremiumFotografiaMarco{min-height:190px}.heroPremiumFotografiaMarco .heroPremiumFotografia{min-height:190px;max-height:240px}}
-@media(max-width:490px){.heroPremiumFotografiaMarco{display:block;margin-top:8px;min-height:170px}.heroPremiumFotografiaMarco .heroPremiumFotografia{min-height:170px;max-height:210px}}
+/* Aplicación del tema del paciente a superficies existentes. */
+
+/* Conservamos la portada premium con contraste en ambos modos. */
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina{color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .filtros,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta,:global([data-area="Paciente"][data-tema="oscuro"]) .detalle,:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPanel,:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera{background:#2d254a;border-color:#625180;color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .campo input,:global([data-area="Paciente"][data-tema="oscuro"]) .campo select{background:#231b3e;border-color:#6b568f;color:#f6efff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .cuerpo h1,:global([data-area="Paciente"][data-tema="oscuro"]) .cuerpo h2,:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumEncabezado strong,:global([data-area="Paciente"][data-tema="oscuro"]) .encabezadoResultados h2{color:#f6eeff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .meta,:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumEncabezado small{color:#cec5e6}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremium{border-color:#8d6fbf;box-shadow:0 15px 33px #10072570}
+:global([data-area="Paciente"][data-tema="oscuro"]) .accesosEspecialidades button{background:#362a54;border-color:#6d548d;color:#e8ddff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .accesosEspecialidades .accesoActivo{background:#734cdd;color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumIndicador{background:#3d305f;color:#d9c5ff;border-color:#7863a0}
+
+/* Imagen fotográfica editorial del hero: sin alterar fichas ficticias. */
+.heroPremiumArte{position:relative;overflow:hidden;border-radius:22px;isolation:isolate}
+.heroPremiumImagen{width:100%;height:260px;max-height:260px;object-fit:cover;object-position:center 25%;border-radius:22px;filter:none;mask-image:none;-webkit-mask-image:none;box-shadow:0 9px 24px #29205120}
+.creditoFotografia{position:absolute;right:12px;bottom:8px;z-index:3;max-width:calc(100% - 24px);padding:4px 7px;border-radius:6px;background:#151b3ec9;color:#fff;font-size:9px;line-height:1.3}
+@media(max-width:1310px){.heroPremiumImagen{width:100%;max-height:240px;height:240px}}
+@media(max-width:760px){.heroPremiumImagen{width:100%;max-height:185px;height:185px}}
+@media(max-width:490px){.heroPremiumArte{display:none}}
 
 
-/* Directorio, filtros y fichas del paciente; mapa geográfico intacto. */
-:global([data-portal-tema="dark"]) .pagina[data-vista="paciente"] :is(.filtros,.tarjeta,.mapaPanel,.proximidadPremium,.localizadorPremium,.aviso,.detalle,.nota,.sinUbicacionPerfil){background:var(--patient-surface);border-color:var(--patient-line);color:var(--ink);box-shadow:var(--patient-shadow)}
-:global([data-portal-tema="dark"]) .pagina[data-vista="paciente-perfil"] :is(.detalle,.aviso,.nota,.sinUbicacionPerfil){background:var(--patient-surface);border-color:var(--patient-line);color:var(--ink)}
-:global([data-portal-tema="dark"]) .pagina :is(.cuerpo h1,.cuerpo h2,.mapaPremiumEncabezado strong,.encabezadoResultados h2,.sinUbicacionPerfil strong){color:var(--ink)}
-:global([data-portal-tema="dark"]) .pagina :is(.meta,.tarjeta .meta span,.mapaPremiumEncabezado small,.nota,.mapaPremiumLeyenda,.sinUbicacionPerfil p){color:var(--muted)}
-:global([data-portal-tema="dark"]) .pagina :is(.campo input,.campo select,.localizadorBoton,.proximidadOpcion,.mapaPremiumIndicador,.filtros){background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
-:global([data-portal-tema="dark"]) .pagina :is(.ficticio,.etiquetaDemo,.mapaPremiumIcono){background:#45376c;color:#e6d6ff}
-:global([data-portal-tema="dark"]) .pagina :is(.heroPremiumCTA,.solicitar,.enlace){color:#e0d0ff}
-:global([data-portal-tema="dark"]) .pagina .heroPremiumCTA{background:var(--patient-action);color:#fff}
-:global([data-portal-tema="light"]) .pagina[data-vista="paciente"] :is(.filtros,.tarjeta,.mapaPanel){border-color:var(--patient-line)}
+/* Ajustes de coherencia con modo morado, respetando el mapa interactivo. */
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremium{
+  background:linear-gradient(125deg,#302453,#55337c 68%,#6a3b9a);
+  border-color:#8162bb;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumCopy h1{color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumCopy h1 span{color:#ddc8ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.heroPremiumCopy>p,.heroPremiumNota){color:#e2d7f5}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumDatos{
+  background:#2b2247e8;border-color:#67538d;color:#f5eeff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumDatos strong{color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumDatos small{color:#d2c6e9}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.localizadorPremium,.proximidadPremium,.sinUbicacionPerfil){
+  background:#2e264b;border-color:#665387;color:#f3edff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.localizadorTexto,.proximidadTexto,.sinUbicacionPerfil p){color:#d5cbea}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.proximidadOpcion,.mapaPremiumIndicador){
+  background:#3c315a;border-color:#765f9d;color:#eadfff;
+}
+/* La foto real también debe estar presente en móvil, no solo en escritorio. */
+.heroPremiumArte{background:#dce9f3 url("/hero/hero-1.jpg") center/cover no-repeat}
+@media(max-width:490px){
+  .heroPremiumArte{display:block;min-height:175px;margin-top:9px}
+  .heroPremiumImagen{display:block;width:100%;height:175px;max-height:175px;object-fit:cover;object-position:center 23%}
+  .creditoFotografia{right:8px;bottom:7px;font-size:9px}
+}

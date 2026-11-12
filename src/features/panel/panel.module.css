@@ -47,15 +47,13 @@
 @media(max-width:700px){.cabecera{min-height:0;padding:25px 22px}.cabecera p{font-size:15px}.resumen{padding:18px}.metricas{grid-template-columns:1fr}.metricas>*+*{border-left:0;border-top:1px solid #dce6ec}.proximosPasos{grid-template-columns:1fr;padding:20px}.proximosEncabezado,.avisoMotor{grid-column:auto}.paso{grid-template-columns:42px minmax(0,1fr) 18px;min-height:76px}.paso>svg{display:block}.pasoIcono{width:42px;height:42px}}
 @media(max-width:420px){.accionPrincipal{width:100%;font-size:14px}.cabecera h1{font-size:32px}}
 
-
-/* Temas del portal paciente: estados y tarjetas comparten los mismos tokens. */
-:global([data-portal-tema]) .cabecera{background:var(--patient-hero);border-color:var(--patient-line);box-shadow:var(--patient-shadow)}
-:global([data-portal-tema]) .accionPrincipal{background:var(--patient-surface);color:var(--patient-ink)}
-:global([data-portal-tema]) .accionPrincipal:hover{background:var(--patient-panel)}
-:global([data-portal-tema="dark"]) :is(.resumen,.estadoResumen,.tarjeta,.proximosPasos,.actividad,.paso,.detalleClinico){background:var(--patient-surface);border-color:var(--patient-line);box-shadow:var(--patient-shadow);color:var(--ink)}
-:global([data-portal-tema="dark"]) :is(.saludo h2,.tarjeta strong,.aviso strong,.proximosEncabezado h2,.paso strong,.detalleClinico summary){color:var(--ink)}
-:global([data-portal-tema="dark"]) :is(.saludo p,.paso small,.proximosEncabezado p,.aviso p,.recomendaciones){color:var(--muted)}
-:global([data-portal-tema="dark"]) :is(.aviso,.avisoMotor){background:var(--patient-panel);border-color:var(--patient-line);color:var(--muted)}
-:global([data-portal-tema="dark"]) .pasoIcono{background:#423371;color:#ded0ff}
-:global([data-portal-tema="dark"]) .etiquetaResumen{color:#cbb6ff}
-:global([data-portal-tema="light"]) :is(.resumen,.tarjeta,.proximosPasos){border-color:var(--patient-line);box-shadow:var(--patient-shadow)}
+/* Portal paciente: tema visual sin cambiar interacciones. */
+:global([data-area="Paciente"][data-tema="claro"]) .cabecera{background:radial-gradient(circle at 90% 0,#82d7f3,transparent 44%),linear-gradient(125deg,#134a7d,#137ca8);border:1px solid #56bad5}
+:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera{background:radial-gradient(circle at 90% 0,#7854b6,transparent 44%),linear-gradient(125deg,#241742,#4b2c89);border:1px solid #7554b9;box-shadow:0 15px 32px #100b2355}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina{color:#efeaff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen,:global([data-area="Paciente"][data-tema="oscuro"]) .proximosPasos,:global([data-area="Paciente"][data-tema="oscuro"]) .detalleClinico,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta{background:#2b2344;border-color:#594b79;color:#f1edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen h2,:global([data-area="Paciente"][data-tema="oscuro"]) .resumen h3,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta h2,:global([data-area="Paciente"][data-tema="oscuro"]) .proximosEncabezado h2,:global([data-area="Paciente"][data-tema="oscuro"]) .detalleClinico>summary,:global([data-area="Paciente"][data-tema="oscuro"]) .paso{color:#f5efff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen p,:global([data-area="Paciente"][data-tema="oscuro"]) .proximosEncabezado p,:global([data-area="Paciente"][data-tema="oscuro"]) .paso small,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta p{color:#c8c0de}
+:global([data-area="Paciente"][data-tema="oscuro"]) .paso{border-color:#594b79}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pasoIcono{background:#49346f;color:#d6c4ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .avisoMotor{background:#3d325a;color:#ebdeff;border-color:#6e5b93}

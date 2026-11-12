@@ -13,15 +13,14 @@
 .boton { font-size: 14px; }
 .error, .aviso { font-size: 14px; }
 
+/* Aplicación del tema del paciente a superficies existentes. */
 
-/* Perfil del paciente: formularios y tarjetas sincronizados con el tema elegido. */
-:global([data-portal-tema]) .boton{background:var(--patient-action);border-color:var(--patient-action);color:#fff}
-:global([data-portal-tema]) .boton:hover{background:var(--patient-action-hover)}
-:global([data-portal-tema="dark"]) :is(.panel,.presentacion,.contenido,.datos>div,.enlaceAcceso,.opciones,.secundario){background:var(--patient-surface);border-color:var(--patient-line);color:var(--ink)}
-:global([data-portal-tema="dark"]) :is(.cabeceraPerfil,.accesos){border-color:var(--patient-line)}
-:global([data-portal-tema="dark"]) :is(.contenido h2,.cabeceraPerfil h1,.datos dd,.formulario label,.enlaceAcceso strong){color:var(--ink)}
-:global([data-portal-tema="dark"]) :is(.presentacion p,.cabeceraPerfil p,.datos dt,.nota,.enlaceAcceso small,.formulario small){color:var(--muted)}
-:global([data-portal-tema="dark"]) :is(.formulario input,.opciones button){background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
-:global([data-portal-tema="dark"]) .opciones button[aria-pressed="true"]{background:#50387c;color:#fff;border-color:#8666c8}
-:global([data-portal-tema="dark"]) :is(.avatarCuenta,.rolCuenta,.simbolo,.iconoAcceso){background:#493b70;color:#edddff;border-color:var(--patient-line)}
-:global([data-portal-tema="light"]) :is(.panel,.datos>div,.enlaceAcceso){border-color:var(--patient-line)}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina{color:#f4edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .panel,:global([data-area="Paciente"][data-tema="oscuro"]) .presentacion,:global([data-area="Paciente"][data-tema="oscuro"]) .opciones{background:#2e254a;border-color:#5e4c80;color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .presentacion h2,:global([data-area="Paciente"][data-tema="oscuro"]) .contenido h2,:global([data-area="Paciente"][data-tema="oscuro"]) .formulario label{color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .formulario input{background:#221b3b;border-color:#655386;color:#f6efff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .opciones button{color:#e7dbff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .opciones button[aria-pressed="true"]{background:#554078;border-color:#876ca9;color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .avatarCuenta,:global([data-area="Paciente"][data-tema="oscuro"]) .simbolo{background:#42346a;border-color:#6b5598;color:#d4c1ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .boton{background:#714bd9;border-color:#714bd9}
+:global([data-area="Paciente"][data-tema="oscuro"]) .enlaceAcceso{background:#3a2e57;border-color:#6a558c;color:#f4e8ff}

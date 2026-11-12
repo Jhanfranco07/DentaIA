@@ -14,16 +14,12 @@ export default function HeroDirectorioPaciente() {
       </div>
       <small className={styles.heroPremiumNota}>Los perfiles ilustrados son ficticios y no están vinculados laboralmente a los centros geográficos mostrados. No se gestionan citas con ellos.</small>
     </div>
-    <figure className={`${styles.heroPremiumArte} ${styles.heroPremiumFotografiaMarco}`}>
-      <Image
-        src="https://images.pexels.com/photos/37458083/pexels-photo-37458083/free-photo-of-dental-professionals-posing-in-modern-clinic.jpeg?auto=compress&dpr=1&h=750&w=1260"
-        alt="Fotografía ilustrativa de dos profesionales odontológicos en una clínica"
-        width={1000} height={860} unoptimized priority
-        sizes="(max-width: 760px) 300px, (max-width: 1310px) 400px, 530px"
-        className={`${styles.heroPremiumImagen} ${styles.heroPremiumFotografia}`}
-      />
-      <figcaption className={styles.heroPremiumFotoFuente}>Imagen ilustrativa · <a href="https://www.pexels.com/photo/dental-professionals-posing-in-modern-clinic-37458083/" target="_blank" rel="noopener noreferrer">Emily Gaibor / Pexels</a></figcaption>
-    </figure>
+    <div className={styles.heroPremiumArte} aria-hidden="true">
+      <Image src="https://images.pexels.com/photos/37458083/pexels-photo-37458083/free-photo-of-dental-professionals-posing-in-modern-clinic.jpeg?auto=compress&dpr=1&h=750&w=1260" alt="Dos profesionales odontológicos posan en una clínica moderna; imagen ilustrativa" width={740} height={690} unoptimized priority
+        sizes="(max-width: 760px) 180px, (max-width: 1310px) 235px, 350px"
+        className={styles.heroPremiumImagen}/>
+      <small className={styles.creditoFotografia}>Fotografía ilustrativa: Emily Gaibor / Pexels</small>
+    </div>
     <aside className={styles.heroPremiumDatos} aria-label="Explora el directorio">
       <span className={styles.heroPremiumDatosTitulo}>Descubre tu próximo paso</span>
       <div><span className={styles.heroPremiumMiniIcono}><Icono nombre="usuarios" size={18}/></span><span><strong>Perfiles odontológicos</strong><small>Nombres y especialidades para explorar</small></span></div>

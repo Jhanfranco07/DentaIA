@@ -321,17 +321,13 @@
 .tarjeta.compacto .verTodas{min-height:44px}
 @media(max-width:560px){.tarjeta.compacto{padding:20px}.tarjeta.compacto .detalles{grid-template-columns:1fr}}
 
+/* Aplicación del tema del paciente a superficies existentes. */
 
-/* Solicitudes: misma lectura y contraste en formularios, listados y estados. */
-:global([data-portal-tema]) .boton{background:var(--patient-action);color:var(--patient-on-action)}
-:global([data-portal-tema]) .boton:hover:not(:disabled){background:var(--patient-action-hover)}
-:global([data-portal-tema="dark"]) :is(.tarjeta,.solicitud,.lista,.vacio,.filtroSolicitudes){background:var(--patient-surface);border-color:var(--patient-line);box-shadow:var(--patient-shadow);color:var(--ink)}
-:global([data-portal-tema="dark"]) :is(.solicitudTitulo,.tituloSeccion,.etiqueta,.solicitudTitulo,.titulo){color:var(--ink)}
-:global([data-portal-tema="dark"]) :is(.descripcion,.subtitulo,.detalle,.detalles,.contador,.solicitudResumen p,.solicitudCabecera p){color:var(--muted)}
-:global([data-portal-tema="dark"]) :is(.input,.select,.textarea){background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
-:global([data-portal-tema="dark"]) :is(.aviso,.mensajeCompacto,.confirmacion){background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
-:global([data-portal-tema="dark"]) .estadoSolicitada{background:#29493f;color:#b6ffdd}
-:global([data-portal-tema="dark"]) .estadoCancelado{background:#3a3455;color:#dad3ed}
-:global([data-portal-tema="dark"]) .iconoSolicitud{background:#48346d;color:#e1d2ff}
-:global([data-portal-tema="dark"]) :is(.detallesExpandibles,.detalleCompleto){border-color:var(--patient-line)}
-:global([data-portal-tema="light"]) :is(.tarjeta,.solicitud){border-color:var(--patient-line);box-shadow:var(--patient-shadow)}
+:global([data-area="Paciente"][data-tema="oscuro"]) .contenedor{color:#f4edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta,:global([data-area="Paciente"][data-tema="oscuro"]) .solicitud,:global([data-area="Paciente"][data-tema="oscuro"]) .solicitudResumen,:global([data-area="Paciente"][data-tema="oscuro"]) .vacio{background:#2b2446;border-color:#5f4c7d;color:#f2ebff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .input,:global([data-area="Paciente"][data-tema="oscuro"]) .select,:global([data-area="Paciente"][data-tema="oscuro"]) .textarea{background:#211b38;border-color:#665488;color:#f6eeff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .etiqueta,:global([data-area="Paciente"][data-tema="oscuro"]) .tituloSeccion,:global([data-area="Paciente"][data-tema="oscuro"]) .titulo{color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .aviso{background:#3d325a;border-color:#655581;color:#e6d9ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .boton{background:#714bd9}
+:global([data-area="Paciente"][data-tema="oscuro"]) .botonNeutral{background:#3f325d;border-color:#705d91;color:#efe5ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .estado{background:#3d305f;color:#e0d0ff}

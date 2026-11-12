@@ -10,14 +10,13 @@
 .progressCurrent{display:none;margin:12px 0 0;text-align:center;color:#075b68;font-size:14px;font-weight:800}@media(max-width:760px){.progress li{font-size:0}.progressCurrent{display:block}}
 @media(max-width:760px){.progress li span{font-size:13px}}
 
+/* Aplicación del tema del paciente a superficies existentes. */
 
-/* Colección privada de fotografías: colores del portal sin modificar el almacenamiento. */
-:global([data-portal-tema]) .button{background:var(--patient-action);color:var(--patient-on-action)}
-:global([data-portal-tema]) .button:hover{background:var(--patient-action-hover)}
-:global([data-portal-tema="dark"]) :is(.card,.photoCard,.previewBox,.consentSummary,.guidance,.privacyNote){background:var(--patient-surface);border-color:var(--patient-line);box-shadow:var(--patient-shadow);color:var(--ink)}
-:global([data-portal-tema="dark"]) :is(.card p,.card li,.photoInfo span,.header p,.previewBox p){color:var(--muted)}
-:global([data-portal-tema="dark"]) :is(.photo,.placeholder){background:var(--patient-panel);color:var(--muted)}
-:global([data-portal-tema="dark"]) :is(.secondaryButton,.textButton){background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
-:global([data-portal-tema="dark"]) .page input[type=file]{background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
-:global([data-portal-tema="dark"]) :is(.counter,.stepLabel){background:var(--patient-panel);color:#d6c3ff}
-:global([data-portal-tema="light"]) :is(.card,.photoCard,.previewBox){border-color:var(--patient-line)}
+:global([data-area="Paciente"][data-tema="oscuro"]) .page{color:#f4edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .header,:global([data-area="Paciente"][data-tema="oscuro"]) .card,:global([data-area="Paciente"][data-tema="oscuro"]) .photoCard,:global([data-area="Paciente"][data-tema="oscuro"]) .previewBox,:global([data-area="Paciente"][data-tema="oscuro"]) .guidance{background:#2d2548;border-color:#5b4d7b;color:#f4edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .header h1,:global([data-area="Paciente"][data-tema="oscuro"]) .card h2{color:#f7efff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .card p,:global([data-area="Paciente"][data-tema="oscuro"]) .card li,:global([data-area="Paciente"][data-tema="oscuro"]) .header p,:global([data-area="Paciente"][data-tema="oscuro"]) .photoInfo span{color:#cfc5e3}
+:global([data-area="Paciente"][data-tema="oscuro"]) .secondaryButton{background:#44365f;border-color:#79638d;color:#f7edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .button{background:#7049d9}
+:global([data-area="Paciente"][data-tema="oscuro"]) .page input[type=file]{background:#31274d;border-color:#7b63a3;color:#f0e6ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .page input::file-selector-button{background:#453461;border-color:#806b9e;color:#f5edff}

@@ -29,6 +29,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const router = useRouter();
   const { usuario } = useSesion();
   const [abierto, setAbierto] = useState(false);
+  const [tema, setTema] = useState<"claro" | "oscuro">("claro");
   const [movil, setMovil] = useState(false);
   const [saliendo, setSaliendo] = useState(false);
   const [error, setError] = useState("");
@@ -36,31 +37,27 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const lateral = useRef<HTMLElement>(null);
   const seccionPendiente = useRef<string | null>(null);
   const [fragmento, setFragmento] = useState("");
-  // Preferencia visual exclusiva del portal paciente; no altera roles ni navegación.
-  const [temaPaciente, setTemaPaciente] = useState<"light" | "dark">("light");
-  useEffect(() => {
-    if (area !== "Paciente") return;
-    try {
-      const preferencia = window.localStorage.getItem("dentaia:tema-paciente");
-      if (preferencia === "light" || preferencia === "dark") setTemaPaciente(preferencia);
-    } catch {
-      // El portal sigue funcionando si el navegador bloquea almacenamiento local.
-    }
-  }, [area]);
-
-  function alternarTemaPaciente() {
-    const siguiente = temaPaciente === "light" ? "dark" : "light";
-    setTemaPaciente(siguiente);
-    try { window.localStorage.setItem("dentaia:tema-paciente", siguiente); } catch {
-      // La selección permanece activa en esta sesión aunque no se pueda guardar.
-    }
-  }
   const hrefActual = enlaces.find(e => e.href === ruta + fragmento)?.href;
   const pagina = enlaces.find(e => e.href === hrefActual) ?? enlaces.find(({ href, exacto }) => exacto ? ruta === href : ruta === href || ruta.startsWith(`${href}/`));
   const nombre = usuario?.user_metadata?.full_name;
   const nombreUsuario = typeof nombre === "string" && nombre.trim() ? nombre.trim() : usuario?.email?.split("@")[0] ?? "Cuenta";
   const roles = rolesDelUsuario(usuario);
 
+  useEffect(() => {
+    if (area !== "Paciente") return;
+    try {
+      const guardado = window.localStorage.getItem("dentaia-tema-paciente");
+      if (guardado === "claro" || guardado === "oscuro") setTema(guardado);
+      else if (window.matchMedia("(prefers-color-scheme: dark)").matches) setTema("oscuro");
+    } catch { /* Preferencia opcional. */ }
+  }, [area]);
+  function alternarTema() {
+    setTema(actual => {
+      const siguiente = actual === "claro" ? "oscuro" : "claro";
+      try { window.localStorage.setItem("dentaia-tema-paciente", siguiente); } catch { /* Opcional. */ }
+      return siguiente;
+    });
+  }
   useEffect(() => {
     const actualizar = () => { setFragmento(window.location.hash); setAbierto(false); };
     actualizar(); window.addEventListener("hashchange", actualizar);
@@ -114,7 +111,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   }
 
   let grupoAnterior = "";
-  return <div className={styles.shell} data-area={area} data-portal-tema={area === "Paciente" ? temaPaciente : undefined} data-educacion={ruta === "/buenas-practicas" || ruta.startsWith("/panel/odontologos") ? "true" : undefined}>
+  return <div className={styles.shell} data-area={area} data-tema={area === "Paciente" ? tema : undefined}>
     <aside ref={lateral} id="navegacion-portal" className={styles.lateral} data-abierto={abierto} aria-hidden={movil && !abierto} inert={movil && !abierto ? true : undefined} aria-label={`Navegación del portal ${area}`}>
       <div className={styles.cabeceraLateral}><Link href="/" className={styles.marca} aria-label="DentaIA, página de inicio"><Marca /></Link><button type="button" className={styles.cerrarMenu} aria-label="Cerrar navegación" onClick={() => { setAbierto(false); boton.current?.focus(); }}><Icono nombre="cerrar" size={18} /></button></div>
       <div className={styles.portalMarca}><span className={styles.portalIcono}><Icono nombre={area === "Odontología" ? "diente" : area === "Administración" ? "escudo" : "persona"} size={19} /></span><div><strong>{area}</strong><span>Espacio de trabajo</span></div></div>
@@ -151,18 +148,8 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
           <Icono nombre={abierto ? "cerrar" : "menu"} size={20} />
         </button>
         <div className={styles.tituloPagina}><span>{descripcion}</span><strong>{pagina?.etiqueta ?? area}</strong></div>
-        {area === "Paciente" && <button
-          type="button"
-          className={styles.selectorTema}
-          onClick={alternarTemaPaciente}
-          aria-label={temaPaciente === "light" ? "Activar modo oscuro morado" : "Activar modo claro celeste"}
-          aria-pressed={temaPaciente === "dark"}
-          title={temaPaciente === "light" ? "Modo oscuro morado" : "Modo claro celeste"}
-        >
-          <span aria-hidden="true" className={styles.temaSimbolo}>{temaPaciente === "light" ? "☾" : "☀"}</span>
-          <span>{temaPaciente === "light" ? "Modo oscuro" : "Modo claro"}</span>
-        </button>}
         <div className={styles.usuario}><span className={styles.avatar} aria-hidden="true">{nombreUsuario.slice(0, 1).toLocaleUpperCase("es")}</span><span className={styles.usuarioDatos}><strong>{nombreUsuario}</strong><span>{etiquetaRol(roles)}</span></span></div>
+        {area === "Paciente" && <button type="button" className={styles.temaBoton} onClick={alternarTema} aria-pressed={tema === "oscuro"} aria-label={tema === "oscuro" ? "Activar modo claro celeste" : "Activar modo oscuro morado"} title={tema === "oscuro" ? "Modo claro" : "Modo oscuro"}><span aria-hidden="true">{tema === "oscuro" ? "☀" : "☾"}</span><span>{tema === "oscuro" ? "Claro" : "Oscuro"}</span></button>}
         {mostrarCuentaHeader && !enlaces.some(e => e.href === "/cuenta") && <Link href="/cuenta" className={styles.cuenta}><Icono nombre="persona" size={17} /><span>Mi cuenta</span></Link>}
         <button type="button" className={styles.salir} aria-label={saliendo ? "Cerrando sesión" : "Cerrar sesión"} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>
           <Icono nombre="salir" size={17} /><span>{saliendo ? "Cerrando…" : "Salir"}</span>
