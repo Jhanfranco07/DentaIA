@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Icono } from "@/components/Identidad";
 import MisSolicitudes from "@/features/solicitudes/MisSolicitudes";
 import { useSesion } from "@/features/cuenta/useSesion";
+import { useNombrePerfil } from "@/features/cuenta/useNombrePerfil";
 import EstadoPanel from "./EstadoPanel";
 import ClinicaPanel from "./ClinicaPanel";
 import ResumenPanel from "./ResumenPanel";
@@ -12,8 +13,8 @@ import styles from "./panel.module.css";
 
 export default function PanelPaciente() {
   const { usuario, cargando, errorSesion, verificar } = useSesion();
-  const nombre = usuario?.user_metadata?.full_name;
-  const primerNombre = typeof nombre === "string" && nombre.trim() ? nombre.trim().split(/\s+/)[0] : "";
+  const nombre = useNombrePerfil(usuario);
+  const primerNombre = usuario ? nombre.trim().split(/\s+/)[0] : "";
 
   return <section className={styles.pagina}>
     <header className={styles.cabecera}>
