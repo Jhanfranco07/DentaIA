@@ -20,6 +20,7 @@ const filas = [
   {
     "name": "Bruno Lévano",
     "specialty": "Ortodoncia",
+    "serviciosIlustrativos": ["Evaluación de alineación dental", "Control de ortodoncia"],
     "district": "Jesús María",
     "latitude": -12.089279,
     "longitude": -77.058167,
@@ -215,6 +216,7 @@ export const CATALOGO_DEMO = filas.map((fila, index) => {
     id: `d36a2026-0000-4000-8000-0000000000${numero}`,
     slug: `odontologo-demo-s6-${numero}`,
     ...fila,
+    serviciosIlustrativos: "serviciosIlustrativos" in fila ? fila.serviciosIlustrativos : [],
     description: `Perfil ficticio de ${fila.specialty.toLowerCase()}, creado para una demostración académica. ${fila.practice_name} es únicamente una referencia geográfica basada en una ficha pública; no existe vinculación laboral ni atención disponible mediante este perfil.`,
     source: VERSION_CATALOGO_DEMO,
   };

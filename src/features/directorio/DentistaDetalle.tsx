@@ -24,6 +24,9 @@ type Carga =
 export default function DentistaDetalle({ id, baseDirectorio = "/directorio" }: { id: string; baseDirectorio?: string }) {
   const [carga, setCarga] = useState<Carga>({ estado: "cargando" });
   const [intento, setIntento] = useState(0);
+  const serviciosIlustrativos = carga.estado === "listo" && carga.dentista.is_demo
+    ? perfilDemo(carga.dentista.id)?.serviciosIlustrativos
+    : undefined;
 
   useEffect(() => {
     let cancelado = false;
@@ -136,9 +139,18 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio" }: 
 
             <section aria-labelledby="titulo-servicios-perfil">
               <h2 id="titulo-servicios-perfil">Servicios</h2>
-              <p>{carga.dentista.is_demo
-                ? "Este perfil ficticio no ofrece servicios ni atención real."
-                : "Este profesional aún no tiene servicios publicados en DentaIA."}</p>
+              {serviciosIlustrativos?.length ? (
+                <>
+                  <p>Ejemplos ilustrativos para la demostración. Este perfil ficticio no ofrece atención real. Los ejemplos no corresponden al centro geográfico de referencia.</p>
+                  <ul>
+                    {serviciosIlustrativos.map(servicio => <li key={servicio}>{servicio}</li>)}
+                  </ul>
+                </>
+              ) : (
+                <p>{carga.dentista.is_demo
+                  ? "Este perfil ficticio no ofrece servicios ni atención real."
+                  : "Este profesional aún no tiene servicios publicados en DentaIA."}</p>
+              )}
             </section>
 
             {carga.dentista.is_demo && <p className={styles.nota}>
