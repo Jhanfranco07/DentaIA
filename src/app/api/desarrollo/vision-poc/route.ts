@@ -2,6 +2,7 @@ import "server-only";
 
 import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { authorizeVisionDemoRequest } from "@/features/autorizacion/vision-demo-server";
 
 const MAX_BYTES = 8 * 1024 * 1024;
 const LOCAL_VISION_URL = "http://127.0.0.1:10000/predict";
@@ -55,6 +56,17 @@ function configuredVisionUrl(): URL | null {
 }
 
 export async function POST(request: NextRequest) {
+  const access = await authorizeVisionDemoRequest(request.headers);
+  if (!access.allowed) {
+    return error(access.status, access.code === "AUTH_REQUIRED"
+      ? "Inicia sesión para usar esta demostración."
+      : access.code === "ALLOWLIST_UNCONFIGURED"
+        ? "El acceso a la demostración no está configurado."
+        : access.code === "AUTH_UNAVAILABLE"
+          ? "No se pudo verificar la sesión. Inténtalo más tarde."
+          : "Tu cuenta no está autorizada para esta demostración.");
+  }
+
   const contentType = request.headers.get("content-type")?.split(";", 1)[0].toLowerCase();
   if (!contentType || !ACCEPTED_TYPES.has(contentType)) {
     return error(415, "Envía una imagen JPEG, PNG o WebP.");

@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 import styles from "./vision-poc.module.css";
 
@@ -37,6 +38,15 @@ const CLASS_DISPLAY = {
 
 const CLIENT_DEFAULT_EXPLANATION =
   "En este modelo, «d» indica una posible caries en un diente temporal y «D» en un diente permanente. La confianza no indica gravedad ni certeza diagnóstica, y no es una probabilidad clínica validada.";
+
+async function authenticatedHeaders(headers: HeadersInit = {}): Promise<Headers> {
+  const { data, error } = await getSupabaseBrowserClient().auth.getSession();
+  const token = data.session?.access_token;
+  if (error || !token) throw new Error("Inicia sesión con una cuenta autorizada para usar esta demostración.");
+  const result = new Headers(headers);
+  result.set("Authorization", `Bearer ${token}`);
+  return result;
+}
 
 function isPrediction(value: unknown): value is Prediction {
   if (!value || typeof value !== "object") return false;
@@ -106,7 +116,7 @@ export default function VisionPocPage() {
     try {
       const response = await fetch("/api/desarrollo/vision-poc", {
         method: "POST",
-        headers: { "Content-Type": file.type || "application/octet-stream" },
+        headers: await authenticatedHeaders({ "Content-Type": file.type || "application/octet-stream" }),
         body: file,
         cache: "no-store",
       });
@@ -128,6 +138,7 @@ export default function VisionPocPage() {
 
   async function explainResult() {
     if (!prediction || explaining) return;
+    setError(null);
     const payload = {
       detections: prediction.detections.map(({ class_name, confidence }) => ({ class_name, confidence })),
     };
@@ -144,11 +155,17 @@ export default function VisionPocPage() {
     try {
       const response = await fetch("/api/desarrollo/vision-poc/explain", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: await authenticatedHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify(payload),
         cache: "no-store",
       });
       const body: unknown = await response.json().catch(() => null);
+      if (!response.ok && (response.status === 401 || response.status === 403 || response.status === 503)) {
+        const detail = body && typeof body === "object" && "detail" in body
+          ? String(body.detail) : "No se pudo verificar el acceso a la demostración.";
+        setError(detail);
+        return;
+      }
       if (!response.ok || !isExplanation(body)) {
         throw new Error("No se pudo obtener la explicación.");
       }

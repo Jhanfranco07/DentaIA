@@ -1,5 +1,13 @@
 # Continuar desde otra computadora
 
+## Actualización PR #51 — 12 de noviembre de 2026
+
+Esta rama incorpora preparación técnica local (sin commit, push, ni despliegue) para proteger la demo mediante sesiones Supabase verificadas y una allowlist de UUIDs configurada en servidor, exigir un limitador compartido Upstash antes de llamar a OpenAI, ejecutar pruebas FastAPI aisladas en DevSecOps y construir el runtime Railway desde el checkpoint fijado en una etapa Linux separada. `.env.example` solo documenta nombres de configuración y no contiene valores para la allowlist o Upstash. Para habilitarlo después de revisión: configurar `DENTAL_VISION_ALLOWED_USER_IDS` con UUIDs autorizados; configurar Upstash REST y OpenAI como secretos del entorno; no usar esto como permiso para exposición pública sin resolver AGPL.
+
+Desde `services/dental-vision`, probar la receta con `docker build --file Dockerfile.railway --tag dentaia-vision:railway .`. El build descarga y verifica `best.pt` solo durante construcción, exporta/valida ONNX y deja únicamente ONNX + manifiesto en el runtime. Para validar localmente, instalar dependencias de prueba en un entorno aislado y ejecutar `python -m pytest -m 'not real' -q`; CI hace esto automáticamente sin `RUN_REAL_INFERENCE`, sin fotos de prueba y sin descarga de modelos. En la máquina revisada no hay Docker ni Python, así que ni build ni pytest se han ejecutado localmente. Ver la limitación de reproducibilidad por imagen base/dependencias del sistema y las obligaciones pendientes en `README.md` y `LICENSE_REVIEW.md`.
+
+El endpoint de visión y el de explicación requieren usuario allowlisted. La interfaz obtiene la sesión Supabase y envía su access token únicamente al Route Handler de mismo origen para que el servidor lo verifique; no envía el secreto FastAPI ni claves de proveedor. El limitador de explicaciones es atómico por usuario, 5 solicitudes por 10 minutos; si Upstash no está configurado o no responde, se sirve texto predeterminado y no se consulta OpenAI. Estos cambios aún deben pasar CI y revisión de Jhan antes de incorporarse al PR #51.
+
 Se detuvieron las construcciones y validaciones largas por petición del usuario. No se desplegó en Render ni Vercel, no se hicieron merges y no se modificaron Supabase, Jira ni otras ramas. La rama contiene únicamente el microservicio y documentación de evaluación.
 
 ## Estado guardado

@@ -6,6 +6,14 @@ Servicio independiente de Next.js y Supabase. Usa exclusivamente el detector YOL
 
 Consultar [evaluación técnica](TECHNICAL_REVIEW.md) y los JSON de `evidence/` para resultados medidos y bloqueos. Un smoke test con dos fotografías no valida precisión, seguridad clínica ni generalización. La API conserva `d` y `D` como identificadores originales y agrega una descripción orientativa por clase; una descripción de posible caries no es un diagnóstico.
 
+## Preparación del contenedor Railway (no desplegado)
+
+Desde `services/dental-vision`, el comando local de construcción es `docker build --file Dockerfile.railway --tag dentaia-vision:railway .`. La etapa `exporter` descarga `best.pt` desde el commit inmutable indicado por `scripts/download_model.py`, verifica SHA-256 y tamaño, exporta ONNX, agrega procedencia/licencia y comprueba el grafo y las versiones. La etapa final contiene FastAPI, ONNX Runtime, `best.onnx`, su manifiesto y avisos; no copia el checkpoint ni PyTorch. No se requieren pesos locales ni se suben a Git. La primera construcción necesita acceso de red al repositorio de pesos y a los índices de paquetes.
+
+El comando no se ha ejecutado en esta computadora: no están disponibles Docker ni Python. Las versiones fijadas PyTorch 2.11.0 / torchvision 0.26.0 corresponden a la matriz oficial y tienen ruedas CPU Linux para CPython 3.11; la construcción debe terminar la importación y exportación como verificación efectiva. [Matriz de compatibilidad](https://github.com/pytorch/vision) · [ruedas CPU](https://download.pytorch.org/whl/cpu/torchvision/).
+
+La receta fija el commit, los hashes y las versiones directas, pero no es una reproducción bit a bit: la etiqueta base Debian/imagen Python y las dependencias transitivas/paquetes del sistema no están fijados por digest y hash. Sigue pendiente una SBOM y auditoría de avisos para la imagen resuelta. Leer [LICENSE_REVIEW.md](LICENSE_REVIEW.md): la publicación pública permanece bloqueada mientras se resuelve AGPL, los derechos de pesos/datos y una oferta accesible de la fuente correspondiente. La URL de fuente debe apuntar a la versión realmente publicada; no se debe inventar ni configurar antes de revisar el alcance.
+
 La API ONNX de menor memoria midió **329 MiB de pico aproximado y 2.01 s de mediana caliente en Windows**. En la continuación se construyó la imagen Linux, se validó la exportación ONNX y pasaron las 21 pruebas Linux. **La validación Linux integral por HTTP con 512 MiB/0.1 CPU y sus mediciones siguen pendientes**: se detuvo el flujo por petición del usuario. No está confirmado el funcionamiento en Render Free. Ver [traspaso a otra computadora](HANDOFF.md).
 
 ## Instalación local

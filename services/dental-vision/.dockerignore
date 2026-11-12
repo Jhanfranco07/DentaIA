@@ -5,8 +5,6 @@
 __pycache__
 .pytest_cache
 models/*
-!models/best.onnx
-!models/best.onnx.json
 evidence/private
 evidence/linux
 Ultralytics

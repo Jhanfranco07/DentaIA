@@ -1,18 +1,14 @@
 import "server-only";
 
-import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { authorizeVisionDemoRequest } from "@/features/autorizacion/vision-demo-server";
+import { consumeVisionExplanationLimit } from "@/features/autorizacion/vision-demo";
 
 const MAX_REQUEST_BYTES = 16 * 1024;
 const MAX_DETECTIONS = 100;
 const MAX_OUTPUT_CHARS = 350;
 const MAX_PROVIDER_RESPONSE_BYTES = 32 * 1024;
 const PROVIDER_TIMEOUT_MS = 12_000;
-const RATE_WINDOW_MS = 10 * 60 * 1_000;
-const RATE_LIMIT = 5;
-
-// Best-effort process-local limit: 5 calls per address per 10 minutes. It resets on restart,
-// can differ across server instances, and depends on trusted proxy headers; not public API protection.
 const DEFAULT_EXPLANATION =
   "El modelo usa «d» para señalar una posible caries en diente temporal y «D» en diente permanente. La confianza no indica gravedad ni certeza diagnóstica, y no es una probabilidad clínica validada.";
 
@@ -27,8 +23,6 @@ const INSTRUCTIONS = [
   "La página ya muestra una advertencia educativa permanente sobre el alcance de la herramienta; no la repitas.",
   "No diagnostiques ni recomiendes tratamientos. Devuelve solo texto claro, sin jerga, explicaciones largas ni repeticiones.",
 ].join(" ");
-
-const attemptsByAddress = new Map<string, number[]>();
 
 type DetectionInput = { class_name: "d" | "D"; confidence: number };
 
@@ -66,34 +60,6 @@ function validateDetections(value: unknown): DetectionInput[] | null {
     detections.push({ class_name: detection.class_name, confidence: detection.confidence });
   }
   return detections;
-}
-
-function consumeRateLimit(request: NextRequest): { allowed: boolean; retryAfter: number } {
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",", 1)[0]?.trim();
-  const address = (forwarded || request.headers.get("x-real-ip") || "unknown").slice(0, 128);
-  const key = createHash("sha256").update(address).digest("hex");
-  const now = Date.now();
-  const active = (attemptsByAddress.get(key) ?? []).filter((time) => now - time < RATE_WINDOW_MS);
-
-  if (active.length >= RATE_LIMIT) {
-    attemptsByAddress.set(key, active);
-    return {
-      allowed: false,
-      retryAfter: Math.max(1, Math.ceil((RATE_WINDOW_MS - (now - active[0])) / 1_000)),
-    };
-  }
-
-  if (attemptsByAddress.size >= 4_096 && !attemptsByAddress.has(key)) {
-    for (const [candidate, times] of attemptsByAddress) {
-      if (!times.some((time) => now - time < RATE_WINDOW_MS)) attemptsByAddress.delete(candidate);
-    }
-    if (attemptsByAddress.size >= 4_096) {
-      return { allowed: false, retryAfter: Math.ceil(RATE_WINDOW_MS / 1_000) };
-    }
-  }
-
-  attemptsByAddress.set(key, [...active, now]);
-  return { allowed: true, retryAfter: 0 };
 }
 
 async function readJsonLimited(response: Response): Promise<unknown> {
@@ -149,6 +115,19 @@ function extractOutputText(value: unknown): string | null {
 }
 
 export async function POST(request: NextRequest) {
+  const access = await authorizeVisionDemoRequest(request.headers);
+  if (!access.allowed) {
+    return json(access.status, {
+      detail: access.code === "AUTH_REQUIRED"
+        ? "Inicia sesión para usar esta demostración."
+        : access.code === "ALLOWLIST_UNCONFIGURED"
+          ? "El acceso a la demostración no está configurado."
+          : access.code === "AUTH_UNAVAILABLE"
+            ? "No se pudo verificar la sesión. Inténtalo más tarde."
+            : "Tu cuenta no está autorizada para esta demostración.",
+    });
+  }
+
   const contentType = request.headers.get("content-type")?.split(";", 1)[0].trim().toLowerCase();
   if (contentType !== "application/json") {
     return json(415, { detail: "La solicitud debe usar application/json." });
@@ -180,9 +159,11 @@ export async function POST(request: NextRequest) {
     return json(400, { detail: "Envía como máximo 100 detecciones con etiqueta d/D y confidence entre 0 y 1." });
   }
 
-  const rate = consumeRateLimit(request);
+  const rate = await consumeVisionExplanationLimit(access.userId,
+    process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN);
   if (!rate.allowed) {
-    return json(200, { source: "default", explanation: DEFAULT_EXPLANATION }, rate.retryAfter);
+    if (rate.status === 429) return json(429, { detail: "Alcanzaste el límite de explicaciones. Inténtalo más tarde." }, rate.retryAfter);
+    return defaultResult();
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
