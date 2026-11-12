@@ -80,7 +80,7 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio" }: 
   }
 
   return (
-    <section className={styles.pagina}>
+    <section className={styles.pagina} data-vista={baseDirectorio === "/panel/odontologos" ? "paciente-perfil" : "publico-perfil"}>
       <nav aria-label="Navegación de perfil" className={styles.retorno}><Link href={baseDirectorio} className={styles.volver}>← Volver al directorio</Link></nav>
 
       {carga.estado === "cargando" && (
@@ -135,11 +135,19 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio" }: 
             <p>{textoOpcional(carga.dentista.description, "Este profesional aún no ha publicado una descripción.")}</p>
 
             {carga.dentista.is_demo && <p className={styles.nota}>
-              El profesional es ficticio. La dirección corresponde a una referencia geográfica publicada de un establecimiento independiente; no afirmamos que este profesional trabaje allí ni ofrecemos citas desde DentaIA.
+              {carga.ubicaciones.length
+                ? "El profesional es ficticio. El establecimiento indicado es una referencia independiente; no se afirma una relación laboral ni se ofrecen citas desde DentaIA."
+                : "Este perfil es ficticio y no tiene una dirección de consultorio publicada. El distrito declarado no equivale a una ubicación exacta ni implica disponibilidad de atención."}
             </p>}
             {carga.dentista.is_demo && !perfilDemo(carga.dentista.id) && <Link className={styles.solicitar} href={enlaceSolicitud(carga.dentista.id)}>Solicitud de demostración</Link>}
             {!carga.dentista.is_demo && <p className={styles.nota}>Este perfil no tiene activo un flujo de solicitudes desde DentaIA.</p>}
-            {carga.ubicaciones.length ? <section className={styles.ubicacionPerfil} aria-labelledby="titulo-ubicacion-perfil"><div><h2 id="titulo-ubicacion-perfil">{carga.dentista.is_demo ? "Ubicación geográfica de referencia" : "Consultorios publicados"}</h2><p>{carga.dentista.is_demo ? "Dirección y coordenadas procedentes de una ficha pública; no confirman disponibilidad actual ni vinculación con el profesional ficticio." : "La distancia desde tu dispositivo solo se calcula si tú das permiso en el directorio."}</p><ul>{carga.ubicaciones.map(ubicacion => <li key={ubicacion.id}><strong>{ubicacion.practice_name}</strong><p>{ubicacion.practice_address}</p>{!carga.dentista.is_demo && <a href={`https://www.openstreetmap.org/directions?to=${ubicacion.latitude}%2C${ubicacion.longitude}`} target="_blank" rel="noopener noreferrer">Cómo llegar en OpenStreetMap ↗</a>}</li>)}</ul></div><MapaDirectorio ubicaciones={carga.dentista.is_demo ? carga.ubicaciones.map(ubicacion => ({ id: ubicacion.id, slug: carga.dentista.slug, name: ubicacion.practice_name, district: carga.dentista.district, city: "Lima", country: "Perú", latitude: ubicacion.latitude, longitude: ubicacion.longitude, public_label: "DEMO — Clínica ficticia, no ofrece atención real", tipo: "demo" as const, dentist_id: carga.dentista.id })) : carga.ubicaciones.map(ubicacion => ({ ...ubicacion, tipo: "consultorio" as const, dentista: { id: carga.dentista.id, name: carga.dentista.name, is_demo: carga.dentista.is_demo } })) satisfies MarcadorConsultorio[]} ubicacion={null} basePerfil={baseDirectorio} modoPaciente={baseDirectorio === "/panel/odontologos"} /></section> : <p className={styles.nota}>{carga.ubicacionesDisponibles ? "Ubicación no registrada. Este perfil no se coloca en el mapa." : "El servicio de ubicaciones aún no está disponible en este entorno."}</p>}
+            {carga.ubicaciones.length ? <section className={styles.ubicacionPerfil} aria-labelledby="titulo-ubicacion-perfil"><div><h2 id="titulo-ubicacion-perfil">{carga.dentista.is_demo ? "Ubicación geográfica de referencia" : "Consultorios publicados"}</h2><p>{carga.dentista.is_demo ? "Dirección y coordenadas procedentes de una ficha pública; no confirman disponibilidad actual ni vinculación con el profesional ficticio." : "La distancia desde tu dispositivo solo se calcula si tú das permiso en el directorio."}</p><ul>{carga.ubicaciones.map(ubicacion => <li key={ubicacion.id}><strong>{ubicacion.practice_name}</strong><p>{ubicacion.practice_address}</p>{!carga.dentista.is_demo && <a href={`https://www.openstreetmap.org/directions?to=${ubicacion.latitude}%2C${ubicacion.longitude}`} target="_blank" rel="noopener noreferrer">Cómo llegar en OpenStreetMap ↗</a>}</li>)}</ul></div><MapaDirectorio ubicaciones={carga.dentista.is_demo ? carga.ubicaciones.map(ubicacion => ({ id: ubicacion.id, slug: carga.dentista.slug, name: ubicacion.practice_name, district: carga.dentista.district, city: "Lima", country: "Perú", latitude: ubicacion.latitude, longitude: ubicacion.longitude, public_label: "DEMO — Clínica ficticia, no ofrece atención real", tipo: "demo" as const, dentist_id: carga.dentista.id })) : carga.ubicaciones.map(ubicacion => ({ ...ubicacion, tipo: "consultorio" as const, dentista: { id: carga.dentista.id, name: carga.dentista.name, is_demo: carga.dentista.is_demo } })) satisfies MarcadorConsultorio[]} ubicacion={null} basePerfil={baseDirectorio} modoPaciente={baseDirectorio === "/panel/odontologos"} /></section> : carga.dentista.is_demo && carga.ubicacionesDisponibles
+              ? <section className={styles.sinUbicacionPerfil} aria-label="Situación de la ubicación">
+                  <strong>Sin consultorio publicado en {textoOpcional(carga.dentista.district, "el distrito indicado")}</strong>
+                  <p>El distrito es informativo. No hay dirección ni coordenadas asociadas a este perfil ficticio, por lo que no se inventa un marcador exacto en el mapa.</p>
+                  <Link href={baseDirectorio}>Explorar otras ubicaciones de referencia</Link>
+                </section>
+              : <p className={styles.nota}>{carga.ubicacionesDisponibles ? "Ubicación no registrada. Este perfil no se coloca en el mapa." : "El servicio de ubicaciones aún no está disponible en este entorno."}</p>}
             <ResenasOdontologo dentistId={carga.dentista.id} />
           </div>
         </article>
