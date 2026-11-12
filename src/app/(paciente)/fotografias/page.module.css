@@ -9,3 +9,15 @@
 @media(max-width:380px){.progress li{font-size:10px}.progress li span{width:26px;height:26px}.card{padding:19px}.actions>*{width:100%;flex-basis:100%}}
 .progressCurrent{display:none;margin:12px 0 0;text-align:center;color:#075b68;font-size:14px;font-weight:800}@media(max-width:760px){.progress li{font-size:0}.progressCurrent{display:block}}
 @media(max-width:760px){.progress li span{font-size:13px}}
+
+
+/* Colección privada de fotografías: colores del portal sin modificar el almacenamiento. */
+:global([data-portal-tema]) .button{background:var(--patient-action);color:var(--patient-on-action)}
+:global([data-portal-tema]) .button:hover{background:var(--patient-action-hover)}
+:global([data-portal-tema="dark"]) :is(.card,.photoCard,.previewBox,.consentSummary,.guidance,.privacyNote){background:var(--patient-surface);border-color:var(--patient-line);box-shadow:var(--patient-shadow);color:var(--ink)}
+:global([data-portal-tema="dark"]) :is(.card p,.card li,.photoInfo span,.header p,.previewBox p){color:var(--muted)}
+:global([data-portal-tema="dark"]) :is(.photo,.placeholder){background:var(--patient-panel);color:var(--muted)}
+:global([data-portal-tema="dark"]) :is(.secondaryButton,.textButton){background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
+:global([data-portal-tema="dark"]) .page input[type=file]{background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
+:global([data-portal-tema="dark"]) :is(.counter,.stepLabel){background:var(--patient-panel);color:#d6c3ff}
+:global([data-portal-tema="light"]) :is(.card,.photoCard,.previewBox){border-color:var(--patient-line)}

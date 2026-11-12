@@ -55,3 +55,19 @@
 
 /* Mascota con resolución superior (420×417) para mantener nitidez en el hero. */
 .imagen3d[data-tipo="heroe"]{background-image:url("/educacion/mascota-premium.avif");background-size:contain;background-position:center}
+
+
+/* Las guías educativas adoptan ambos temas sin alterar pasos ni interacciones. */
+:global([data-portal-tema="light"]) .hero{background:linear-gradient(125deg,#0d5379,#1d94ba);border-color:#65c9e2}
+:global([data-portal-tema="light"]) .hero h1,
+:global([data-portal-tema="light"]) .hero h1 span{color:#fff}
+:global([data-portal-tema="light"]) .heroCopy p{color:#e5faff}
+:global([data-portal-tema="dark"]) .hero{background:linear-gradient(128deg,#2b1e50,#543298 76%,#6637a4);border-color:#7258a8}
+:global([data-portal-tema="dark"]) :is(.tarjeta,.tarjetaProgreso,.detalle,.reto,.extraTitulo,.tarjetaTiempo,.sabias,.notaFinal,.busqueda){background:var(--patient-surface);border-color:var(--patient-line);color:var(--ink);box-shadow:var(--patient-shadow)}
+:global([data-portal-tema="dark"]) :is(.tituloFila h2,.tarjetaInfo strong,.detalleContenido h3,.detalleContenido h4,.extraTitulo strong,.retoInterior strong,.tiempoContenido strong){color:var(--ink)}
+:global([data-portal-tema="dark"]) :is(.tarjetaDescripcion,.detalleContenido>p,.detalleContenido p,.retoInterior p,.sabias p,.notaFinal p){color:var(--muted)}
+:global([data-portal-tema="dark"]) :is(.filtro,.filtros,.busqueda input,.cerrarDetalle,.botonDuracion,.controlCarrusel){background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
+:global([data-portal-tema="dark"]) :is(.pasos li,.consejo,.tipPie){background:var(--patient-panel);border-color:var(--patient-line);color:var(--muted)}
+:global([data-portal-tema="dark"]) :is(.botonPrincipal,.botonFinal,.filtroActivo){background:var(--patient-action);color:#fff;border-color:var(--patient-action)}
+:global([data-portal-tema="dark"]) .tarjetaPie{border-color:var(--patient-line)}
+:global([data-portal-tema="light"]) :is(.tarjeta,.detalle,.reto){border-color:var(--patient-line)}

@@ -209,3 +209,15 @@
 @media(max-width:1310px){.heroPremiumFotografiaMarco .heroPremiumFotografia{max-height:290px}}
 @media(max-width:760px){.heroPremiumFotografiaMarco{min-height:190px}.heroPremiumFotografiaMarco .heroPremiumFotografia{min-height:190px;max-height:240px}}
 @media(max-width:490px){.heroPremiumFotografiaMarco{display:block;margin-top:8px;min-height:170px}.heroPremiumFotografiaMarco .heroPremiumFotografia{min-height:170px;max-height:210px}}
+
+
+/* Directorio, filtros y fichas del paciente; mapa geográfico intacto. */
+:global([data-portal-tema="dark"]) .pagina[data-vista="paciente"] :is(.filtros,.tarjeta,.mapaPanel,.proximidadPremium,.localizadorPremium,.aviso,.detalle,.nota,.sinUbicacionPerfil){background:var(--patient-surface);border-color:var(--patient-line);color:var(--ink);box-shadow:var(--patient-shadow)}
+:global([data-portal-tema="dark"]) .pagina[data-vista="paciente-perfil"] :is(.detalle,.aviso,.nota,.sinUbicacionPerfil){background:var(--patient-surface);border-color:var(--patient-line);color:var(--ink)}
+:global([data-portal-tema="dark"]) .pagina :is(.cuerpo h1,.cuerpo h2,.mapaPremiumEncabezado strong,.encabezadoResultados h2,.sinUbicacionPerfil strong){color:var(--ink)}
+:global([data-portal-tema="dark"]) .pagina :is(.meta,.tarjeta .meta span,.mapaPremiumEncabezado small,.nota,.mapaPremiumLeyenda,.sinUbicacionPerfil p){color:var(--muted)}
+:global([data-portal-tema="dark"]) .pagina :is(.campo input,.campo select,.localizadorBoton,.proximidadOpcion,.mapaPremiumIndicador,.filtros){background:var(--patient-panel);border-color:var(--patient-line);color:var(--ink)}
+:global([data-portal-tema="dark"]) .pagina :is(.ficticio,.etiquetaDemo,.mapaPremiumIcono){background:#45376c;color:#e6d6ff}
+:global([data-portal-tema="dark"]) .pagina :is(.heroPremiumCTA,.solicitar,.enlace){color:#e0d0ff}
+:global([data-portal-tema="dark"]) .pagina .heroPremiumCTA{background:var(--patient-action);color:#fff}
+:global([data-portal-tema="light"]) .pagina[data-vista="paciente"] :is(.filtros,.tarjeta,.mapaPanel){border-color:var(--patient-line)}

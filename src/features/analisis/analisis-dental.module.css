@@ -9,3 +9,20 @@
 @media(max-width:760px){.hero{min-height:0;padding:25px 21px;border-radius:17px}.heroDibujo{width:100px;height:100px;border-radius:28px}.heroDibujo>svg{width:58px;height:58px}.hero p{font-size:13px}.contenido{padding:20px 16px}.revision,.preparacion{grid-template-columns:1fr}.vistaImagen img{max-height:420px}}
 @media(max-width:560px){.pagina{gap:14px}.hero{padding:22px 18px}.heroDibujo{display:none}.hero h1{font-size:30px}.hero p{font-size:12px}.pasos{gap:6px}.pasos li{justify-content:center;gap:6px;min-height:48px;padding:7px 5px;font-size:10px}.pasos li>span{width:24px;height:24px}.opciones{grid-template-columns:1fr}.opcion{min-height:0;padding:17px}.camara{padding:14px}.marcoCamara{aspect-ratio:3/4}.acciones,.accionesFinales{display:grid;grid-template-columns:1fr}.acciones>* ,.accionesFinales>*{width:100%}.detalleImagen dl{grid-template-columns:1fr 1fr}.enlacesSecundarios{display:grid;gap:2px}}
 @media(prefers-reduced-motion:reduce){.botonPrimario,.botonSecundario{transition:none}}
+
+
+/* Preparación de imágenes: coherencia visual sin activar el motor de IA. */
+:global([data-portal-tema]) .hero{background:var(--patient-hero);border-color:var(--patient-line);box-shadow:var(--patient-shadow)}
+:global([data-portal-tema]) .botonPrimario{background:var(--patient-action);color:var(--patient-on-action)}
+:global([data-portal-tema]) .botonPrimario:hover:not(:disabled){background:var(--patient-action-hover)}
+:global([data-portal-tema]) .numeroPaso{color:var(--teal-dark)}
+:global([data-portal-tema="dark"]) :is(.contenido,.opcion,.camara,.pasos li,.vistaImagen,.vistaPreparacion){background:var(--patient-surface);border-color:var(--patient-line);color:var(--ink);box-shadow:var(--patient-shadow)}
+:global([data-portal-tema="dark"]) :is(.seccionIntro h2,.opcion h3,.camaraTitulo h2,.detalleImagen h4,.detalleImagen h3,.privacidad strong){color:var(--ink)}
+:global([data-portal-tema="dark"]) :is(.seccionIntro p,.opcion p,.ayudaCamara,.vistaImagen figcaption,.vistaPreparacion figcaption,.detalleImagen,.enlacesSecundarios a){color:var(--muted)}
+:global([data-portal-tema="dark"]) :is(.privacidad,.detalleImagen,.pasosFuturos){background:var(--patient-panel);border-color:var(--patient-line);color:var(--muted)}
+:global([data-portal-tema="dark"]) .pasos li[data-activo="true"]{background:#42366e;border-color:#775fb1;color:#f3edff}
+:global([data-portal-tema="dark"]) .pasos li>span{background:#443964;color:#f6f0ff}
+:global([data-portal-tema="dark"]) .botonSecundario{background:var(--patient-panel);color:var(--ink);border-color:var(--patient-line)}
+:global([data-portal-tema="dark"]) .botonSecundario:hover:not(:disabled){background:#3f346c;border-color:#8b70c6;color:#fff}
+:global([data-portal-tema="dark"]) :is(.tagImagen,.iconoOpcion,.iconoOpcion.azul){background:#473c78;color:#e2d5ff}
+:global([data-portal-tema="light"]) :is(.contenido,.opcion,.pasos li){border-color:var(--patient-line)}
