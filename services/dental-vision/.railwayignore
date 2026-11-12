@@ -1,7 +1,10 @@
 **
 !Dockerfile.railway
+!Dockerfile.evaluation
 !.dockerignore
 !requirements-onnx.txt
+!requirements-export.txt
+!requirements-evaluation.txt
 !LICENSE_REVIEW.md
 !app/
 app/**
@@ -9,6 +12,12 @@ app/**
 !app/main.py
 !app/model.py
 !app/onnx_model.py
+!app/evaluation.py
+!scripts/
+scripts/**
+!scripts/download_model.py
+!scripts/export_onnx.py
+!scripts/validate_artifacts.py
 !models/
 models/**
 !models/best.onnx
