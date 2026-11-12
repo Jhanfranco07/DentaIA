@@ -193,3 +193,16 @@
 .sinUbicacionPerfil p{margin:0;color:#63698d;font-size:12px;line-height:1.6}
 .sinUbicacionPerfil a{color:#6042d0;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:620px){.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande{width:140px;flex-basis:140px}.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande .avatar{width:140px;height:150px}}
+
+/* Aplicación del tema del paciente a superficies existentes. */
+
+/* Conservamos la portada premium con contraste en ambos modos. */
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina{color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .filtros,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta,:global([data-area="Paciente"][data-tema="oscuro"]) .detalle,:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPanel,:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera{background:#2d254a;border-color:#625180;color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .campo input,:global([data-area="Paciente"][data-tema="oscuro"]) .campo select{background:#231b3e;border-color:#6b568f;color:#f6efff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .cuerpo h1,:global([data-area="Paciente"][data-tema="oscuro"]) .cuerpo h2,:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumEncabezado strong,:global([data-area="Paciente"][data-tema="oscuro"]) .encabezadoResultados h2{color:#f6eeff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .meta,:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumEncabezado small{color:#cec5e6}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremium{border-color:#8d6fbf;box-shadow:0 15px 33px #10072570}
+:global([data-area="Paciente"][data-tema="oscuro"]) .accesosEspecialidades button{background:#362a54;border-color:#6d548d;color:#e8ddff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .accesosEspecialidades .accesoActivo{background:#734cdd;color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumIndicador{background:#3d305f;color:#d9c5ff;border-color:#7863a0}
