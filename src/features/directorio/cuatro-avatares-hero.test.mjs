@@ -2,15 +2,18 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 const read = (p) => readFileSync(p,"utf8");
-test("portada premium original: recurso AVIF local y no retratos del catálogo",()=>{
- const data=readFileSync("public/directorio/hero-odontologos-premium.avif");
- assert.equal(data.subarray(4,12).toString("ascii"),"ftypavif");
- assert.ok(data.length>=12000);
+test("portada premium fotográfica: dos odontólogos reales y crédito visible",()=>{
+ const respaldo=readFileSync("public/hero/hero-1.jpg");
+ assert.equal(respaldo.subarray(0,3).toString("hex"),"ffd8ff");
  const hero=read("src/features/directorio/HeroDirectorioPaciente.tsx");
- assert.match(hero,/hero-odontologos-premium\.avif/);
+ assert.match(hero,/pexels\.com\/photos\/37458083/);
+ assert.match(hero,/Emily Gaibor \/ Pexels/);
+ assert.match(hero,/Fotografía ilustrativa de dos profesionales odontológicos/);
  assert.doesNotMatch(hero,/AvatarOdontologo/);
- assert.match(hero,/width=\{740\}/);
- assert.match(read("src/features/directorio/directorio.module.css"),/\.heroPremiumImagen/);
+ assert.match(hero,/unoptimized priority/);
+ const css=read("src/features/directorio/directorio.module.css");
+ assert.match(css,/\.heroPremiumFotografia/);
+ assert.match(css,/hero-1\.jpg/);
 });
 test("los cuatro perfiles demo legacy tienen retrato original en lista y detalle",()=>{
  const data=readFileSync("public/directorio/cuatro-avatares-demo.avif");

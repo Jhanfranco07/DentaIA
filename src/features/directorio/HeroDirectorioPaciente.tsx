@@ -16,13 +16,13 @@ export default function HeroDirectorioPaciente() {
     </div>
     <figure className={`${styles.heroPremiumArte} ${styles.heroPremiumFotografiaMarco}`}>
       <Image
-        src="https://images.unsplash.com/photo-1659989693409-5adc97274bed?auto=format&fit=crop&w=1000&q=82"
-        alt="Fotografía ilustrativa de un profesional odontológico con bata blanca"
+        src="https://images.pexels.com/photos/37458083/pexels-photo-37458083/free-photo-of-dental-professionals-posing-in-modern-clinic.jpeg?auto=compress&dpr=1&h=750&w=1260"
+        alt="Fotografía ilustrativa de dos profesionales odontológicos en una clínica"
         width={1000} height={860} unoptimized priority
         sizes="(max-width: 760px) 300px, (max-width: 1310px) 400px, 530px"
         className={`${styles.heroPremiumImagen} ${styles.heroPremiumFotografia}`}
       />
-      <figcaption className={styles.heroPremiumFotoFuente}>Imagen ilustrativa · <a href="https://unsplash.com/photos/fNSPSQAH1mQ" target="_blank" rel="noopener noreferrer">Nate Johnston / Unsplash</a></figcaption>
+      <figcaption className={styles.heroPremiumFotoFuente}>Imagen ilustrativa · <a href="https://www.pexels.com/photo/dental-professionals-posing-in-modern-clinic-37458083/" target="_blank" rel="noopener noreferrer">Emily Gaibor / Pexels</a></figcaption>
     </figure>
     <aside className={styles.heroPremiumDatos} aria-label="Explora el directorio">
       <span className={styles.heroPremiumDatosTitulo}>Descubre tu próximo paso</span>
