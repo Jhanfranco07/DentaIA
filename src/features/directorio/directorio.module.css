@@ -168,3 +168,7 @@
 .pagina[data-vista="paciente"] .accesosEspecialidades{margin-block:-2px}
 .pagina[data-vista="paciente"] .avatarIlustrado{background-repeat:no-repeat}
 @media(max-width:760px){.pagina[data-vista="paciente"] .localizadorPremium{margin-top:0;margin-inline:0}}
+
+/* Nueva colección editorial 3D: 20 retratos adultos originales 4×5, orden de catálogo. */
+.avatarIlustrado{background-image:url("/directorio/avatares-ilustrados-premium.avif")!important;background-color:#e9e6fa!important;background-repeat:no-repeat}
+.heroPremiumRetratoPrimario .avatarHero,.heroPremiumRetratoSecundario .avatarHero{image-rendering:auto}
