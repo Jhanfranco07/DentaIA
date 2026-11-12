@@ -1,0 +1,12 @@
+{
+  "status": "blocked_or_failed",
+  "base_commit": "363d5e6",
+  "requests": [],
+  "method": "Linux Docker, real localhost HTTP, one worker; /proc/1 VmHWM kernel high-water RSS; cgroup memory.peak includes file cache and stdlib probes",
+  "limits": {
+    "memory_bytes": 536870912,
+    "swap_bytes": 0,
+    "cpus": 0.1
+  },
+  "blocker": "TimeoutExpired: Command '['docker', 'info', '--format', '{{json .}}']' timed out after 30 seconds"
+}

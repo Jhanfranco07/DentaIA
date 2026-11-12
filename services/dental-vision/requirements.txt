@@ -1,0 +1,11 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.11.0+cpu
+torchvision==0.26.0+cpu
+ultralytics==8.4.104
+fastapi==0.135.2
+starlette==1.10.0
+pydantic==2.14.2
+uvicorn==0.42.0
+Pillow==12.1.1
+numpy==2.4.6
+opencv-python==5.0.0.93

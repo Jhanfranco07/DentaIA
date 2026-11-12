@@ -1,0 +1,15 @@
+.venv
+.git
+.vscode
+.env*
+__pycache__
+.pytest_cache
+models/*
+evidence/private
+evidence/linux
+Ultralytics
+**/__pycache__
+*.jpg
+*.jpeg
+*.png
+*.webp
