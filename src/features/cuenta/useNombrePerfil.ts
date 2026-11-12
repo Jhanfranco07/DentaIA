@@ -25,19 +25,21 @@ export function useNombrePerfil(usuario: User | null) {
 
   useEffect(() => {
     let vigente = true;
+    let version = 0;
     if (!id) return;
     async function cargar() {
       try {
         const actual = await leerPerfil(getSupabaseBrowserClient(), id!);
-        if (vigente) setPerfil({ id: id!, nombre: actual?.full_name ?? null });
+        if (vigente && version === 0) setPerfil({ id: id!, nombre: actual?.full_name ?? null });
       } catch {
         // No bloquear el panel por un error de lectura: mostrar fallback Auth.
-        if (vigente) setPerfil({ id: id!, nombre: null });
+        if (vigente && version === 0) setPerfil({ id: id!, nombre: null });
       }
     }
     const actualizar = (evento: Event) => {
       const detalle = (evento as CustomEvent<{ usuarioId: string; nombre: string }>).detail;
       if (detalle?.usuarioId !== id || typeof detalle.nombre !== "string") return;
+      version += 1;
       setPerfil({ id: id!, nombre: detalle.nombre });
     };
     void cargar();
