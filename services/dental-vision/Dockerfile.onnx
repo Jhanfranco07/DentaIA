@@ -1,14 +1,14 @@
-FROM python:3.11.9-slim AS base
+FROM python:3.11.18-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
     OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 WORKDIR /service
-RUN apt-get update && apt-get install -y --no-install-recommends libstdc++6 \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
 FROM base AS runtime-deps
 ENV MODEL_BACKEND=onnx MODEL_PATH=models/best.onnx MODEL_MANIFEST_PATH=models/best.onnx.json
 COPY requirements-onnx.txt ./
-RUN pip install --no-cache-dir -r requirements-onnx.txt
+RUN pip install --no-cache-dir -r requirements-onnx.txt && pip install --no-cache-dir --upgrade setuptools wheel==0.46.2 jaraco-context==6.1.0
 
 FROM runtime-deps AS exporter
 ENV YOLO_AUTOINSTALL=false YOLO_CONFIG_DIR=/tmp/dentaia-yolo
