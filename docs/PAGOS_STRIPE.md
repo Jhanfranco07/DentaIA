@@ -9,3 +9,6 @@ Todas las transacciones se ejecutan estrictamente en modo prueba (Test Mode). No
 ## 3. Creación del Sandbox y Claves
 1. Crear cuenta en Stripe y activar el modo Test Mode en el dashboard.
 2. Ir a Developers > API keys y copiar la clave publicable (pk_test_...) y la clave secreta (sk_test_...).
+
+## 4. Instalación de Stripe CLI en Windows
+Ejecutar en PowerShell: winget install Stripe.StripeCLI
