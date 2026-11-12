@@ -21,5 +21,13 @@ export default function AvatarOdontologo({ id, name, initials, avatarColor, hero
   if (!rostro) return <span aria-hidden="true" className={`${styles.avatar} ${hero ? styles.avatarHero : ""}`} style={{ backgroundColor: avatarColor?.trim() || "#e3f6f0" }}>{inicialesDe(initials ?? "",name)}</span>;
   const col = rostro.indice % 4;
   const fila = Math.floor(rostro.indice / 4);
-  return <span aria-hidden="true" className={clase} style={{ backgroundPosition: `${col * 100 / 3}% ${fila * 25}%` }} />;
+  // Recorte centrado de cada retrato dentro de la hoja: la imagen original tiene márgenes
+  // transparentes amplios, por eso los rostros se veían demasiado pequeños.
+  const escala = hero ? 1.72 : 1.34;
+  const posX = ((col * escala + (escala - 1) / 2) / (4 * escala - 1)) * 100;
+  const posY = ((fila * escala + (escala - 1) / 2) / (5 * escala - 1)) * 100;
+  return <span aria-hidden="true" className={clase} style={{
+    backgroundSize: `${4 * escala * 100}% ${5 * escala * 100}%`,
+    backgroundPosition: `${posX}% ${posY}%`,
+  }} />;
 }
