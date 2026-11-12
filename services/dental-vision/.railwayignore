@@ -25,3 +25,9 @@ models/**
 !third_party/
 third_party/**
 !third_party/AGPL-3.0.txt
+
+!requirements-linux-tests.txt
+!pytest.ini
+!tests/
+!tests/**
+!scripts/download_samples.py

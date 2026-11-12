@@ -1,25 +1,40 @@
-FROM python:3.11.9-slim AS base
+FROM python:3.11.18-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
     OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 WORKDIR /service
-RUN apt-get update && apt-get install -y --no-install-recommends libstdc++6 \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
 FROM base AS runtime-deps
 ENV MODEL_BACKEND=onnx MODEL_PATH=models/best.onnx MODEL_MANIFEST_PATH=models/best.onnx.json
 COPY requirements-onnx.txt ./
-RUN pip install --no-cache-dir -r requirements-onnx.txt
+RUN pip install --no-cache-dir -r requirements-onnx.txt && pip install --no-cache-dir --upgrade setuptools wheel==0.46.2 jaraco-context==6.1.0
 
 FROM runtime-deps AS exporter
 ENV YOLO_AUTOINSTALL=false YOLO_CONFIG_DIR=/tmp/dentaia-yolo
 COPY requirements-export.txt ./
-RUN pip install --no-cache-dir -r requirements-export.txt \
-    && python -c "import torch, torchvision, ultralytics, onnx; print('torch', torch.__version__, 'torchvision', torchvision.__version__, 'ultralytics', ultralytics.__version__, 'onnx', onnx.__version__)"
+RUN pip install --no-cache-dir -r requirements-export.txt
 COPY app ./app
 COPY scripts/download_model.py scripts/export_onnx.py scripts/validate_artifacts.py ./scripts/
-RUN python scripts/download_model.py \
-    && python scripts/export_onnx.py \
+RUN mkdir -p evidence && python scripts/download_model.py && python scripts/export_onnx.py \
     && python scripts/validate_artifacts.py
+
+# Evaluation image only: contains Torch to execute the existing 21-test suite.
+FROM exporter AS tests
+COPY requirements-linux-tests.txt ./
+RUN pip install --no-cache-dir -r requirements-linux-tests.txt
+COPY tests ./tests
+COPY pytest.ini ./
+COPY scripts/download_samples.py ./scripts/
+RUN python scripts/download_samples.py
+ENV RUN_REAL_INFERENCE=1
+CMD ["python", "-m", "pytest", "-q", "--junitxml=evidence/tests-linux.xml"]
+
+FROM tests AS test-execution
+RUN --network=none python -m pytest -q --junitxml=evidence/tests-linux.xml
+
+FROM scratch AS test-receipt
+COPY --from=test-execution /service/evidence/tests-linux.xml /tests-linux.xml
 
 FROM runtime-deps AS runtime
 COPY app ./app
@@ -29,5 +44,5 @@ COPY LICENSE_REVIEW.md ./
 COPY third_party ./third_party
 RUN useradd --create-home vision && chown -R vision:vision /service
 USER vision
-EXPOSE 8080
-CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1 --limit-concurrency 4 --timeout-keep-alive 5 --no-access-log"]
+EXPOSE 7860
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860} --workers 1 --limit-concurrency 4 --timeout-keep-alive 5 --no-access-log"]
