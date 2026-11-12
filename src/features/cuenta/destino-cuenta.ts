@@ -1,4 +1,4 @@
-import { rutaPrincipalPorRoles, type RolModulo } from "../autorizacion/roles";
+import { rutaPrincipalPorRoles, type RolModulo } from "../autorizacion/roles.ts";
 
 /**
  * Al abrir la página de acceso con una sesión de paciente ya activa,
