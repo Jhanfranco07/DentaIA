@@ -9,3 +9,14 @@
 @media(max-width:760px){.hero{min-height:0;padding:25px 21px;border-radius:17px}.heroDibujo{width:100px;height:100px;border-radius:28px}.heroDibujo>svg{width:58px;height:58px}.hero p{font-size:13px}.contenido{padding:20px 16px}.revision,.preparacion{grid-template-columns:1fr}.vistaImagen img{max-height:420px}}
 @media(max-width:560px){.pagina{gap:14px}.hero{padding:22px 18px}.heroDibujo{display:none}.hero h1{font-size:30px}.hero p{font-size:12px}.pasos{gap:6px}.pasos li{justify-content:center;gap:6px;min-height:48px;padding:7px 5px;font-size:10px}.pasos li>span{width:24px;height:24px}.opciones{grid-template-columns:1fr}.opcion{min-height:0;padding:17px}.camara{padding:14px}.marcoCamara{aspect-ratio:3/4}.acciones,.accionesFinales{display:grid;grid-template-columns:1fr}.acciones>* ,.accionesFinales>*{width:100%}.detalleImagen dl{grid-template-columns:1fr 1fr}.enlacesSecundarios{display:grid;gap:2px}}
 @media(prefers-reduced-motion:reduce){.botonPrimario,.botonSecundario{transition:none}}
+
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina{color:#f2edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .contenido,:global([data-area="Paciente"][data-tema="oscuro"]) .opcion,:global([data-area="Paciente"][data-tema="oscuro"]) .camara,:global([data-area="Paciente"][data-tema="oscuro"]) .pasosFuturos,:global([data-area="Paciente"][data-tema="oscuro"]) .vistaImagen,:global([data-area="Paciente"][data-tema="oscuro"]) .vistaPreparacion{background:#2a2245;border-color:#5a4a7c;color:#f4edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .seccionIntro h2,:global([data-area="Paciente"][data-tema="oscuro"]) .opcion h3,:global([data-area="Paciente"][data-tema="oscuro"]) .pasosFuturos h3{color:#f5f0ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .seccionIntro p,:global([data-area="Paciente"][data-tema="oscuro"]) .opcion p,:global([data-area="Paciente"][data-tema="oscuro"]) .vistaPreparacion figcaption{color:#c8bfdf}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pasosFuturos li,:global([data-area="Paciente"][data-tema="oscuro"]) .detalleImagen dl{background:#372c53;color:#eee6ff;border-color:#665386}
+:global([data-area="Paciente"][data-tema="oscuro"]) .privacidad{background:#362c56;border-color:#6b5992;color:#eee5ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .privacidad strong,:global([data-area="Paciente"][data-tema="oscuro"]) .privacidad p{color:#e2dafa}
+:global([data-area="Paciente"][data-tema="oscuro"]) .botonSecundario{background:#3c315d;border-color:#735f97;color:#f7efff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .botonPrimario{background:#7049d7}
+:global([data-area="Paciente"][data-tema="claro"]) .botonPrimario{background:#147cb0}

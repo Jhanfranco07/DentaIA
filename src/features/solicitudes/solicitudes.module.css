@@ -320,3 +320,14 @@
 .tarjeta.compacto .solicitud{padding:16px}
 .tarjeta.compacto .verTodas{min-height:44px}
 @media(max-width:560px){.tarjeta.compacto{padding:20px}.tarjeta.compacto .detalles{grid-template-columns:1fr}}
+
+/* Aplicación del tema del paciente a superficies existentes. */
+
+:global([data-area="Paciente"][data-tema="oscuro"]) .contenedor{color:#f4edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta,:global([data-area="Paciente"][data-tema="oscuro"]) .solicitud,:global([data-area="Paciente"][data-tema="oscuro"]) .solicitudResumen,:global([data-area="Paciente"][data-tema="oscuro"]) .vacio{background:#2b2446;border-color:#5f4c7d;color:#f2ebff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .input,:global([data-area="Paciente"][data-tema="oscuro"]) .select,:global([data-area="Paciente"][data-tema="oscuro"]) .textarea{background:#211b38;border-color:#665488;color:#f6eeff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .etiqueta,:global([data-area="Paciente"][data-tema="oscuro"]) .tituloSeccion,:global([data-area="Paciente"][data-tema="oscuro"]) .titulo{color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .aviso{background:#3d325a;border-color:#655581;color:#e6d9ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .boton{background:#714bd9}
+:global([data-area="Paciente"][data-tema="oscuro"]) .botonNeutral{background:#3f325d;border-color:#705d91;color:#efe5ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .estado{background:#3d305f;color:#e0d0ff}
