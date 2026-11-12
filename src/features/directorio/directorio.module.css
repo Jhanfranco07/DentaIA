@@ -30,8 +30,8 @@
 .heroProfesionales{position:relative;height:210px;min-width:0;display:flex;justify-content:center;align-items:end;isolation:isolate}
 .heroAura{position:absolute;inset:25% 1% 2%;border-radius:50%;background:#56b8f584;filter:blur(23px);z-index:-1}
 .heroProfesionales .avatarHero{width:166px;height:166px;max-width:54%;flex:0 0 166px;border:0;border-radius:18px;background-color:transparent!important;filter:drop-shadow(0 12px 12px #4f6caf45);box-shadow:none}
-.heroProfesionales .avatarHero:nth-of-type(2){transform:translate(22px,-17px) rotate(-3deg);z-index:2}
-.heroProfesionales .avatarHero:nth-of-type(3){transform:translate(-18px,14px) rotate(3deg)}
+.heroProfesionales .avatarHero:nth-of-type(1){transform:translate(22px,-17px) rotate(-3deg);z-index:2}
+.heroProfesionales .avatarHero:nth-of-type(2){transform:translate(-18px,14px) rotate(3deg)}
 .heroBrillo{position:absolute;top:20%;right:2%;color:#fff;font-size:37px;text-shadow:0 0 13px #fff;animation:avatarBrillo 2.7s ease-in-out infinite}
 .heroResumen{position:relative;z-index:2;display:grid;gap:12px;padding:17px;border:1px solid #ffffffbe;border-radius:21px;background:#ffffff81;backdrop-filter:blur(11px);box-shadow:0 12px 26px #514e9a24}
 .heroResumen>div{display:flex;align-items:center;gap:12px}.heroResumen svg{color:#694bdb;flex:0 0 auto}.heroResumen span{display:grid;gap:3px}.heroResumen strong{font-size:12px;color:#25275d}.heroResumen small{font-size:10px;color:#545d91;line-height:1.32}
