@@ -8,7 +8,7 @@ export const NAVEGACION_PACIENTE: readonly EnlacePortal[] = [
   { href: "/resultados", etiqueta: "Mis resultados", icono: "reporte", grupo: "Mi espacio" },
   { href: "/solicitudes", etiqueta: "Mis solicitudes", icono: "calendario", grupo: "Mi espacio" },
   { href: "/buenas-practicas", etiqueta: "Buenas prácticas", icono: "escudo", grupo: "Mi espacio" },
-  { href: "/directorio", etiqueta: "Odontólogos", icono: "diente", grupo: "Explorar" },
+  { href: "/panel/odontologos", etiqueta: "Odontólogos", icono: "diente", grupo: "Explorar" },
   { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Cuenta" },
 ];
 export const NAVEGACION_ODONTOLOGO: readonly EnlacePortal[] = [

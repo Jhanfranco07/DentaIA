@@ -16,3 +16,28 @@
 @media(prefers-reduced-motion:reduce){.marcadorDemo{transition:none}}
 
 .marcadorDentista{width:30px;height:30px;min-height:30px;cursor:pointer}.marcadorDentista[data-selected="true"]{background:#124e60;box-shadow:0 0 0 6px #f3c95e,0 3px 12px #102a4350;z-index:2}.contenedorMapa :global(.maplibregl-popup-content a){min-height:44px}.errorTeselas{position:absolute;z-index:3;left:12px;right:12px;bottom:40px;padding:12px;border:1px solid #b45555;border-radius:10px;background:#fff9f6;color:#713b31;font-size:13px;line-height:1.45}
+
+/* Marcadores premium del portal paciente y radar anclado a coordenadas reales. */
+.contenedorMapa[data-vista="paciente"]{height:min(72vh,650px);min-height:540px;border:0;border-radius:22px}
+.contenedorMapa[data-vista="paciente"] .marcadorDemo{background:linear-gradient(145deg,#8b62fc,#5c37d2);border-color:#fff;box-shadow:0 4px 16px #6247dd60;width:42px;height:42px}
+.contenedorMapa[data-vista="paciente"] .marcadorDemo:hover{background:#5734b9}
+.contenedorMapa[data-vista="paciente"] .marcadorDemo[data-cercano="true"]{box-shadow:0 0 0 5px #906ff55d,0 5px 17px #6b4de05c}
+.contenedorMapa[data-vista="paciente"] .marcadorDemo[data-selected="true"]{background:#4c22bd;box-shadow:0 0 0 6px #b79aff,0 4px 19px #6b4de060}
+.contenedorMapa[data-vista="paciente"] .marcadorDentista{background:#6f4adf}
+.radarAncla{position:relative;display:grid;place-items:center;width:24px;height:24px;pointer-events:none}
+.radarAncla .marcadorUbicacion{position:relative;z-index:2;width:20px;height:20px;border:4px solid white;border-radius:50%;background:#267eef;box-shadow:0 0 0 6px #2785f042,0 0 17px #1878ed7a}
+.radarAnillos{position:absolute;inset:0;display:block;opacity:0;pointer-events:none}
+.radarAncla[data-radar="true"] .radarAnillos{opacity:1}
+.radarAnillos:before,.radarAnillos:after{content:"";position:absolute;top:50%;left:50%;width:38px;height:38px;border:3px solid #7547ea;border-radius:50%;background:#895df02e;transform:translate(-50%,-50%) scale(.1)}
+.radarAncla[data-radar="true"] .radarAnillos:before{animation:radarExpandir 2.1s ease-out infinite}
+.radarAncla[data-radar="true"] .radarAnillos:after{animation:radarExpandir 2.1s ease-out 1.05s infinite}
+.contenedorMapa[data-vista="paciente"][data-radar="true"] .marcadorDemo[data-cercano="true"]{animation:pinCercano .95s ease-in-out infinite alternate}
+@keyframes radarExpandir{from{opacity:.9;transform:translate(-50%,-50%) scale(.1)}to{opacity:0;transform:translate(-50%,-50%) scale(5)}}
+@keyframes pinCercano{to{filter:brightness(1.19);box-shadow:0 0 0 9px #ab8cff57,0 3px 18px #6a42d5}}
+@media(max-width:760px){.contenedorMapa[data-vista="paciente"]{min-height:420px;height:62vh}}
+@media(prefers-reduced-motion:reduce){.radarAncla[data-radar="true"] .radarAnillos:before,.radarAncla[data-radar="true"] .radarAnillos:after,.contenedorMapa[data-vista="paciente"][data-radar="true"] .marcadorDemo[data-cercano="true"]{animation:none}.radarAnillos{display:none}}
+
+/* Barrido circular decorativo del radar, exclusivamente tras geolocalización consentida. */
+.radarAncla[data-radar="true"]:before{content:"";position:absolute;left:50%;top:50%;width:154px;height:154px;transform:translate(-50%,-50%);border-radius:50%;background:conic-gradient(from 0deg,transparent 0 230deg,#7657eb15 260deg,#7657eb67 355deg,transparent 360deg);border:1px solid #7357e92a;animation:radarBarridoDent 2.7s linear infinite;pointer-events:none}
+@keyframes radarBarridoDent{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.radarAncla[data-radar="true"]:before{animation:none;display:none}}
