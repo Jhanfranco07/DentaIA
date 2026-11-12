@@ -23,6 +23,7 @@ export async function POST(req: Request) {
 
     client_reference_id: user.id,
     customer_email: user.email ?? undefined,
+    metadata: { plan: PLAN_PREMIUM.id },
     mode: "payment",
   });
 
