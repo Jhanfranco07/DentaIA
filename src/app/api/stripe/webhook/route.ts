@@ -55,6 +55,8 @@ export async function POST(req: Request) {
       if (error) throw error;
       break;
     }
+    default:
+    break;
   }
 
   return NextResponse.json({ received: true });
