@@ -145,7 +145,8 @@
 .pagina[data-vista="paciente"] .tarjeta .accionesTarjeta{margin-top:3px}
 .pagina[data-vista="paciente"] .tarjeta .enlace,.pagina[data-vista="paciente"] .tarjeta .verMapa{min-height:36px;font-size:11px}
 .pagina[data-vista="paciente"] .mapaPanel{top:105px;border:1px solid #e2dbff;border-radius:23px;overflow:hidden;background:#fff;box-shadow:0 7px 19px #6455a31b;padding:10px}
-.pagina[data-vista="paciente"] .mapaPanel>div:has(.mapa){border:0;border-radius:15px;box-shadow:none}
+.pagina[data-vista="paciente"] .mapaPanel>div{border:0;border-radius:0;box-shadow:none;overflow:visible}
+.pagina[data-vista="paciente"] .mapaPanel>div:nth-last-child(2){border-radius:15px;overflow:hidden}
 .mapaPremiumEncabezado{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 7px 13px}
 .mapaPremiumEncabezado>div{display:flex;gap:11px;align-items:center}
 .mapaPremiumIcono{display:grid;place-items:center;width:41px;height:41px;background:linear-gradient(140deg,#eae0ff,#e2eeff);color:#6544d7;border-radius:13px}
@@ -160,3 +161,10 @@
 @media(max-width:760px){.heroPremium{grid-template-columns:1fr 155px;padding:21px 18px;min-height:252px;gap:7px}.heroPremiumCopy h1{font-size:29px}.heroPremiumCopy>p{font-size:12px}.heroPremiumArte{min-height:180px}.heroPremiumRetratoPrimario{left:0;top:7%;width:127px;height:172px}.heroPremiumRetratoSecundario{width:95px;height:119px;right:0}.heroPremiumAcciones>span{display:none}.heroPremiumCTA{min-height:39px}.localizadorPremium{flex-wrap:wrap}.localizadorTexto{min-width:170px}.localizadorPrivacidad{margin-left:auto}.proximidadPremium{flex-wrap:wrap}.proximidadOpciones{flex-basis:100%}.encabezadoResultados h2{font-size:19px}.pagina[data-vista="paciente"] .explorador{display:block}.pagina[data-vista="paciente"] .grilla{max-height:none;overflow:visible}.pagina[data-vista="paciente"] .mapaPanel{position:relative;top:auto}.pagina[data-vista="paciente"] .tarjetaAvatarMarco{flex-basis:103px;width:103px;height:112px}.pagina[data-vista="paciente"] .tarjeta .meta span:nth-child(2){display:inline-flex}}
 @media(max-width:490px){.heroPremium{grid-template-columns:1fr;padding:20px 18px}.heroPremiumArte{display:none}.heroPremiumCopy h1{font-size:32px}.heroPremiumNota{font-size:9px}.localizadorPremium{padding:13px}.localizadorBoton{width:100%}.localizadorPrivacidad{margin-left:auto}.proximidadPremium{padding:10px}.proximidadOpcion{flex:1 0 185px}.encabezadoResultados{align-items:start}.leyendaResultado{display:none}.pagina[data-vista="paciente"] .tarjetaAvatarMarco{flex-basis:76px;width:76px;height:96px}.pagina[data-vista="paciente"] .tarjeta{padding:12px;gap:10px}.pagina[data-vista="paciente"] .tarjeta h2{font-size:15px}.pagina[data-vista="paciente"] .tarjeta .meta span:nth-child(2){display:none}.pagina[data-vista="paciente"] .tarjeta .accionesTarjeta{flex-wrap:wrap}.pagina[data-vista="paciente"] .tarjeta .accionesTarjeta>*{flex:auto}.mapaPremiumIndicador{display:none}}
 @media(prefers-reduced-motion:reduce){.heroPremiumCTA,.heroPremiumDestelloUno,.heroPremiumDestelloDos,.heroPremiumRetratoPrimario,.heroPremiumRetratoSecundario,.localizadorBoton,.proximidadPulso{animation:none!important;transition:none!important}.heroPremiumCTA:hover,.localizadorBoton:hover{transform:none!important}}
+
+/* Acortar el recorrido hasta los resultados sin ocultar el aviso de privacidad. */
+.pagina[data-vista="paciente"] .localizadorPremium{margin-top:-24px;margin-inline:13px;z-index:5;box-shadow:0 9px 20px #5553a32b}
+.pagina[data-vista="paciente"] .proximidadPremium{padding-block:8px}
+.pagina[data-vista="paciente"] .accesosEspecialidades{margin-block:-2px}
+.pagina[data-vista="paciente"] .avatarIlustrado{background-repeat:no-repeat}
+@media(max-width:760px){.pagina[data-vista="paciente"] .localizadorPremium{margin-top:0;margin-inline:0}}
