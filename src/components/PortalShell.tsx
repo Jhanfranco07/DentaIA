@@ -123,7 +123,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
           if (grupo) grupoAnterior = grupo;
           return <span className={styles.itemNavegacion} key={href}>
             {encabezadoGrupo && <span className={styles.grupo}>{grupo}</span>}
-            <Link href={href} onClick={(event) => {
+            <Link href={area === "Paciente" && href === "/cuenta" ? "/cuenta?perfil=1" : href} onClick={(event) => {
               if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
               const [paginaDestino, ancla] = href.split("#");
               if (paginaDestino === ruta) {

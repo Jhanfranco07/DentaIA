@@ -13,10 +13,11 @@ import PortalShell from "@/components/PortalShell";
 import { NAVEGACION_PACIENTE, NAVEGACION_ODONTOLOGO, NAVEGACION_ADMIN } from "@/components/navegacion-portal";
 import { Icono } from "@/components/Identidad";
 import { retornoSolicitud } from "@/lib/navegacion";
+import { destinoEntradaPaciente } from "./destino-cuenta";
 import { rolesDelUsuario, rutaPrincipalPorRoles } from "@/features/autorizacion/roles";
 import { useRouter } from "next/navigation";
 
-export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean }) {
+export default function Cuenta({ modoInicial = false, perfilSolicitado = false }: { modoInicial?: boolean; perfilSolicitado?: boolean }) {
   const { usuario, cargando, errorSesion, verificar } = useSesion();
   const router = useRouter();
   const roles = rolesDelUsuario(usuario);
@@ -24,7 +25,19 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
   const activo = useRef(true);
   const [registro, setRegistro] = useState(modoInicial);
   const [continuar, setContinuar] = useState<string | null>(null);
-  useEffect(() => { setContinuar(retornoSolicitud(new URLSearchParams(window.location.search).get("continuar"))); }, []);
+  const [continuarListo, setContinuarListo] = useState(false);
+  useEffect(() => {
+    setContinuar(retornoSolicitud(new URLSearchParams(window.location.search).get("continuar")));
+    setContinuarListo(true);
+  }, []);
+
+  // El acceso público con una sesión de paciente ya activa abre el panel;
+  // el perfil solicitado desde el menú sigue siendo editable.
+  const destinoEntrada = continuarListo && !cargando && !errorSesion && usuario
+    ? destinoEntradaPaciente(roles, perfilSolicitado, continuar) : null;
+  useEffect(() => {
+    if (destinoEntrada) router.replace(destinoEntrada);
+  }, [destinoEntrada, router]);
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -158,6 +171,7 @@ export default function Cuenta({ modoInicial = false }: { modoInicial?: boolean 
       </div>
     </div>
   </section>;
+  if (destinoEntrada) return <main id="contenido" tabIndex={-1} className={styles.pagina}><p role="status">Abriendo tu panel…</p></main>;
   if (usuario && roles.length > 0) {
     const superusuario = roles.includes("superusuario");
     const odontologo = !superusuario && roles.includes("odontologo");
