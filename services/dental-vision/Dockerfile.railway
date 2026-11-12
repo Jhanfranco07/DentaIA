@@ -1,0 +1,25 @@
+﻿FROM python:3.11.9-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+ENV OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+ENV MODEL_BACKEND=onnx MODEL_PATH=models/best.onnx MODEL_MANIFEST_PATH=models/best.onnx.json
+
+WORKDIR /service
+
+RUN apt-get update && apt-get install -y --no-install-recommends libstdc++6 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements-onnx.txt ./
+RUN pip install --no-cache-dir -r requirements-onnx.txt
+
+COPY app ./app
+COPY models/best.onnx models/best.onnx
+COPY models/best.onnx.json models/best.onnx.json
+COPY LICENSE_REVIEW.md ./
+COPY third_party ./third_party
+
+RUN useradd --create-home vision && chown -R vision:vision /service
+USER vision
+EXPOSE 8080
+
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1 --limit-concurrency 4 --timeout-keep-alive 5 --no-access-log"]

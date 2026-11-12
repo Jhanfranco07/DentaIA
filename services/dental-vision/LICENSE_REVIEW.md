@@ -26,3 +26,28 @@ No se ha aprobado ni aplicado una relicencia de la aplicación principal. No se 
 El flujo local Docker publica el puerto solo en `127.0.0.1`, exige un secreto efímero y usa únicamente muestras públicas. No publica imágenes Docker en registries. Esto limita la exposición técnica y no se presenta como una exención general de AGPL.
 
 La plantilla Render queda inactiva como `.example`. Render Free ofrece un Web Service accesible por Internet y no un servicio privado de red; la API key protege `/predict`, pero no convierte la infraestructura en privada. No aplicar la plantilla hasta resolver licencias y Linux. Si se exige aislamiento de red privado sin servicios pagos, mantener la evaluación local en Docker/loopback; no elegir automáticamente un plan Render de pago.
+
+## Revision de cumplimiento para Railway (2026-11-11)
+
+### Hechos comprobados en este checkout
+
+- `Dockerfile.railway` copia `models/best.onnx`, su manifiesto, `LICENSE_REVIEW.md` y `third_party/AGPL-3.0.txt` dentro de la imagen. Esto conserva avisos, pero no incorpora una oferta accesible de codigo fuente correspondiente ni el inventario completo de avisos de dependencias.
+- El ONNX actual deriva del checkpoint `Eeman1113/dental_study` en el commit indicado arriba: el descargador fija esa URL/commit y `models/best.onnx.json` contiene hashes, tamano, parametros de exportacion y clases. **El manifiesto actualmente presente no contiene `repository`, commit ni `license`**; `scripts/export_onnx.py` agrega esos campos al regenerarlo y `scripts/validate_artifacts.py` los exige. No se debe tratar el manifiesto actual por si solo como evidencia de licencia/procedencia.
+- El README del repositorio original atribuye AGPL-3.0 a los pesos YOLO11 y MIT a su codigo, pero el checkout auditado no incluye una licencia del autor que confirme permisos especificos de redistribucion. La licencia del checkpoint y el alcance de la licencia sobre el ONNX siguen siendo asuntos pendientes.
+- `requirements-onnx.txt` fija versiones de FastAPI, Starlette, Pydantic, Uvicorn, Pillow, NumPy, OpenCV headless y ONNX Runtime. Es solo una lista directa: no fija el arbol transitivo ni identifica todas las bibliotecas nativas incluidas por las ruedas, la imagen base de Python o Debian. No hay SBOM ni paquete de avisos completo en el servicio.
+
+### Obligaciones y alcance: confirmado frente a pendiente
+
+- **Texto de licencia:** `third_party/AGPL-3.0.txt` contiene el texto AGPL-3.0. Si se transmite una copia del contenedor/objeto binario a un destinatario, AGPL §§4-6 requieren conservar avisos y licencia y cumplir las condiciones de entrega de la fuente correspondiente aplicables a esa forma de distribucion. El contenedor incorpora el ONNX; no se ha verificado que la plataforma reciba una copia en el sentido juridico pertinente ni quien seria el destinatario.
+- **Servicio accesible por red:** AGPL §13 exige ofrecer a todos los usuarios que interactuan remotamente con una version modificada la oportunidad de obtener, sin cargo, la fuente correspondiente de esa version. El propio texto confirma esta obligacion para una obra cubierta modificada. Aplicar exactamente esa obligacion al servicio DentaIA, al ONNX derivado y a una aplicacion mayor requiere determinar primero el alcance de cobertura; Ultralytics sostiene que los modelos entrenados y los proyectos derivados quedan cubiertos, pero esa posicion del licenciante no resuelve por si sola el analisis juridico.
+- **Contenido de la fuente:** la fuente correspondiente puede incluir las fuentes preferidas para modificar la obra, scripts de build/instalacion y configuraciones necesarias. Que incluya el checkpoint original, datos de entrenamiento, otras partes del repositorio DentaIA o codigo de terceros depende del alcance y de las definiciones de la licencia; no se debe publicar material sin verificar los derechos. Un archivo de licencia o una atribucion aislada no reemplazan la fuente correspondiente.
+- La separacion del frontend por HTTP y la ausencia de PyTorch/Ultralytics en la imagen de runtime no prueban que el backend o el sistema mayor queden fuera de AGPL. Esa calificacion, y si se requiere ofrecer un codigo fuente mas amplio, quedan pendientes de asesoria juridica/licenciante.
+
+### Bloqueos antes de exponer el servicio publicamente
+
+1. Obtener una determinacion documentada del alcance AGPL para pesos, ONNX, microservicio y sistema que lo consume, incluyendo una respuesta del titular o asesoria juridica. Confirmar tambien permisos sobre el checkpoint y los datos de entrenamiento; la atribucion CC BY del dataset por si sola no acredita consentimiento ni todos los derechos necesarios.
+2. Preparar y publicar una copia revisada de la fuente correspondiente y una oferta visible/estable accesible desde el servicio para cada usuario remoto, o una alternativa de licencia/autorizacion que cubra el uso previsto. Aun no hay URL de fuente publica verificada; no agregar un enlace ficticio ni publicar el repositorio privado automaticamente.
+3. Antes de entregar la imagen a terceros, generar un SBOM de la imagen final, revisar licencias y avisos de dependencias transitivas, ruedas binarias, bibliotecas nativas, Python, Debian e imagen base, y distribuir los avisos exigidos por cada licencia.
+4. Corregir o regenerar el manifiesto del ONNX desde un proceso confiable y verificar que el archivo resultante registra origen, commit y licencia; hacerlo no cambia ni resuelve los derechos sobre el modelo.
+
+**Estado: bloqueado para un Railway publico.** Esta revision identifica obligaciones probables y pendientes, no es una conclusion juridica ni una certificacion de cumplimiento. No se desplego ni se modifico la configuracion remota.
