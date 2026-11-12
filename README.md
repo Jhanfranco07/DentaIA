@@ -62,3 +62,4 @@ En español: `feat: desarrollar navegación del paciente`; `fix: corregir valida
 
 ## Dependencias de Pagos
 - stripe: SDK oficial para comunicación con la API de Stripe desde el servidor.
+- server-only: Paquete de protección para garantizar que las claves y lógica de Stripe se ejecuten únicamente en el servidor.
