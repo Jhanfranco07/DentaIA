@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ id: session.id });
   } catch (error) {
-    console.error("Error de Stripe:", error);
+        console.error("Error de Stripe:", error instanceof Error ? error.message : "desconocido");
     return NextResponse.json({ error: "No se pudo iniciar el pago de prueba." }, { status: 502 });
   }
 }
