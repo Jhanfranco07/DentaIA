@@ -20,5 +20,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Firma inválida." }, { status: 400 });
   }
 
-  return NextResponse.json({ received: true, type: event.type });
+    switch (event.type) {
+    case "checkout.session.completed":
+      console.log("Checkout completado:", event.id);
+      break;
+  }
+
+  return NextResponse.json({ received: true });
 }
