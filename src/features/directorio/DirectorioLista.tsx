@@ -17,6 +17,7 @@ import { adjuntarUbicaciones, normalizarResenas } from "./compatibilidad-esquema
 import { crearMarcadorDemo } from "./demo";
 import { AVISO_PERFILES_DEMO, CATALOGO_DEMO, unirCatalogoDemo } from "./catalogo-demo";
 import AvatarOdontologo, { tratamientoDemo } from "./AvatarOdontologo";
+import HeroDirectorioPaciente from "./HeroDirectorioPaciente";
 
 const MapaDirectorio = dynamic(() => import("./MapaDirectorio"), {
   ssr: false,
@@ -133,7 +134,7 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
     try {
       const resultado = await obtenerUbicacionActual(navigator.geolocation);
       setUbicacion(resultado);
-      if (modoPaciente) setRadarActivo(true);
+      if (modoPaciente) { setRadarActivo(true); setVistaMovil("mapa"); }
       setRadioKm("");
       if (orden === "nombre") setOrden("cercania");
     } catch (error) {
@@ -155,25 +156,7 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
   }
 
   return <section className={styles.pagina} data-vista={modoPaciente ? "paciente" : "publica"}>
-    {modoPaciente ? <header className={styles.heroPaciente}>
-      <div className={styles.heroTexto}>
-        <span className={styles.heroEtiqueta}><Icono nombre="diente" size={20}/> ODONTÓLOGOS</span>
-        <h1>Encuentra orientación odontológica <em>cerca de ti</em></h1>
-        <p>Explora perfiles y centros de referencia en Lima. Busca por especialidad, distrito o ubicación y consulta su ficha.</p>
-        <span className={styles.heroNota}>Los 20 perfiles ilustrados son ficticios. Los centros geográficos son referencias independientes, sin relación laboral ni reservas desde DentaIA.</span>
-      </div>
-      <div className={styles.heroProfesionales} aria-hidden="true">
-        <div className={styles.heroAura}/>
-        <AvatarOdontologo id={CATALOGO_DEMO[0].id} name={CATALOGO_DEMO[0].name} hero />
-        <AvatarOdontologo id={CATALOGO_DEMO[1].id} name={CATALOGO_DEMO[1].name} hero />
-        <span className={styles.heroBrillo}>✦</span>
-      </div>
-      <div className={styles.heroResumen}>
-        <div><Icono nombre="usuarios" size={19}/><span><strong>Directorio informativo</strong><small>Perfiles y especialidades publicados</small></span></div>
-        <div><Icono nombre="ubicacion" size={19}/><span><strong>Centros de referencia</strong><small>Explora las ubicaciones en el mapa</small></span></div>
-        <div><Icono nombre="escudo" size={19}/><span><strong>Información responsable</strong><small>Distancias calculadas con tu permiso</small></span></div>
-      </div>
-    </header> : <header className={styles.cabecera}>
+    {modoPaciente ? <HeroDirectorioPaciente /> : <header className={styles.cabecera}>
       <span className={styles.etiqueta}>Directorio odontológico</span>
       <h1>Encuentra orientación odontológica</h1>
       <p>Busca por nombre, especialidad o distrito. Los centros de referencia cuentan con direcciones y coordenadas publicadas. Los perfiles de odontólogos de ejemplo son ficticios.</p>
@@ -191,11 +174,25 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
     {carga.estado === "listo" && dentistas.length === 0 && marcadoresDemo.length === 0 && <div className={styles.aviso} role="status">Por ahora no hay odontólogos activos ni ubicaciones publicadas en el directorio.</div>}
 
     {carga.estado === "listo" && (dentistas.length > 0 || marcadoresDemo.length > 0) && <>
-      <div className={styles.accionesMapa}><button type="button" onClick={() => void usarUbicacion()} disabled={cargandoUbicacion} className={styles.botonUbicacion}><Icono nombre="buscar" size={16} />{cargandoUbicacion ? "Buscando ubicación…" : ubicacion ? "Actualizar mi ubicación" : "Usar mi ubicación"}</button><span>El permiso solo se solicita al pulsar el botón. El punto se mantiene en esta sesión y no se guarda; el proveedor de mapas recibe solicitudes normales de teselas para el área visible.</span></div>
+      {modoPaciente ? <div className={styles.localizadorPremium}>
+        <span className={styles.localizadorEmblema} aria-hidden="true"><Icono nombre="ubicacion" size={24}/></span>
+        <div className={styles.localizadorTexto}>
+          <strong>Descubre qué referencias están cerca de ti</strong>
+          <span>Compara ubicaciones y ordénalas por distancia real en línea recta.</span>
+        </div>
+        <button type="button" onClick={() => void usarUbicacion()} disabled={cargandoUbicacion} className={styles.localizadorBoton}><Icono nombre="ubicacion" size={17}/>{cargandoUbicacion ? "Localizando…" : ubicacion ? "Actualizar ubicación" : "Activar radar de cercanía"}</button>
+        <details className={styles.localizadorPrivacidad}><summary><Icono nombre="privacidad" size={15}/> Privacidad</summary><p>Solo solicitamos permiso al pulsar el botón. Tu posición permanece temporalmente en esta sesión y no se guarda en DentaIA. El mapa solicita las teselas necesarias al proveedor. Las distancias son aproximadas y en línea recta.</p></details>
+      </div> : <div className={styles.accionesMapa}><button type="button" onClick={() => void usarUbicacion()} disabled={cargandoUbicacion} className={styles.botonUbicacion}><Icono nombre="buscar" size={16} />{cargandoUbicacion ? "Buscando ubicación…" : ubicacion ? "Actualizar mi ubicación" : "Usar mi ubicación"}</button><span>El permiso solo se solicita al pulsar el botón. El punto se mantiene en esta sesión y no se guarda; el proveedor de mapas recibe solicitudes normales de teselas para el área visible.</span></div>}
       {errorUbicacion && <p className={styles.errorUbicacion} role="alert">{errorUbicacion}</p>}
-      {ubicacion && <p className={styles.privacidadUbicacion} role="status">Ubicación temporal recibida (precisión aproximada de {Math.round(ubicacion.accuracy ?? 0)} m). Se usa para ordenar y calcular distancias en línea recta.</p>}
-      {modoPaciente && radarActivo && <div className={styles.radarEstado} role="status" aria-live="polite"><span className={styles.radarPunto} aria-hidden="true"/> Explorando las referencias cercanas desde tu ubicación…</div>}
-      {modoPaciente && ubicacion && !radarActivo && cercanos.length > 0 && <div className={styles.cercanos} role="status"><Icono nombre="ubicacion" size={16}/><span>Referencias más cercanas: <strong>{cercanos.map(c => c.name).join(" · ")}</strong>. Distancia en línea recta, no recorrido vial.</span></div>}
+      {ubicacion && !modoPaciente && <p className={styles.privacidadUbicacion} role="status">Ubicación temporal recibida (precisión aproximada de {Math.round(ubicacion.accuracy ?? 0)} m). Se usa para ordenar y calcular distancias en línea recta.</p>}
+      {modoPaciente && ubicacion && <div className={styles.proximidadPremium} role="status" aria-live="polite">
+        <div className={styles.proximidadIcono} aria-hidden="true"><Icono nombre="ubicacion" size={20}/><span className={radarActivo ? styles.proximidadPulso : ""}/></div>
+        <div className={styles.proximidadTexto}><strong>{radarActivo ? "Radar activo: localizando referencias…" : "Estas son las referencias más próximas"}</strong><small>Precisión del dispositivo: aprox. {Math.round(ubicacion.accuracy ?? 0)} m. Distancias en línea recta, no rutas.</small></div>
+        <div className={styles.proximidadOpciones}>
+          {cercanos.map((c,i) => <button key={c.id} type="button" onClick={() => mostrarEnMapa(c.id)} className={styles.proximidadOpcion} title={`Ver ${c.name} en el mapa`}><span>{i+1}</span><strong>{c.name}</strong><small>{formatearDistancia(c.km)}</small></button>)}
+          {cercanos.length === 0 && <span>Sin ubicaciones cercanas disponibles</span>}
+        </div>
+      </div>}
       <div className={styles.filtros}>
         <div className={styles.campo}><label htmlFor="dir-busqueda">Buscar por nombre o especialidad</label><input id="dir-busqueda" ref={busquedaRef} type="search" placeholder="Ej.: ortodoncia, Dra. …" value={busqueda} onChange={e => setBusqueda(e.target.value)} /></div>
         <div className={styles.campo}><label htmlFor="dir-distrito">Distrito</label><select id="dir-distrito" value={distrito} onChange={e => setDistrito(e.target.value)}><option value="">Todos los distritos</option>{distritos.map(d => <option key={d} value={d}>{d}</option>)}</select></div>
@@ -204,7 +201,11 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
         <div className={styles.campo}><label htmlFor="dir-orden">Ordenar por</label><select id="dir-orden" value={orden} onChange={e => setOrden(e.target.value as Orden)}><option value="nombre">Nombre</option><option value="cercania" disabled={!ubicacion || conUbicacion.length === 0}>Cercanía</option><option value="calificacion" disabled={!carga.resenasDisponibles || !dentistas.some(d => (carga.resenas[d.id]?.total ?? 0) > 0)}>Calificación publicada</option></select></div>
       </div>
       {ubicacion && conUbicacion.length === 0 && <p className={styles.privacidadUbicacion}>Aún no hay consultorios con coordenadas registradas. Puedes seguir buscando por nombre, especialidad o distrito.</p>}
-      <p className={styles.conteo} aria-live="polite">{modoPaciente ? <>Profesionales y centros <span>({visibles.length} resultados de {dentistas.length})</span></> : <>Mostrando {visibles.length} de {dentistas.length} profesionales</>}</p>
+      {modoPaciente && <nav className={styles.accesosEspecialidades} aria-label="Filtrar por especialidad">
+        <span>Explorar:</span>{["Odontología general","Ortodoncia","Endodoncia","Odontopediatría"].filter(opcion=>especialidades.includes(opcion)).map(opcion=><button key={opcion} type="button" className={especialidad===opcion ? styles.accesoActivo : ""} aria-pressed={especialidad===opcion} onClick={()=>setEspecialidad(actual=>actual===opcion?"":opcion)}>{opcion}</button>)}
+        {(busqueda || distrito || especialidad || radioKm) && <button type="button" className={styles.limpiarPremium} onClick={limpiarFiltros}>Limpiar filtros</button>}
+      </nav>}
+      {modoPaciente ? <div className={styles.encabezadoResultados} id="resultados-directorio"><div><span className={styles.seccionEyebrow}>TU EXPLORACIÓN</span><h2>Conoce los perfiles del directorio <span>{visibles.length} de {dentistas.length}</span></h2></div><span className={styles.leyendaResultado}><Icono nombre="diente" size={16}/> Revisa su ficha y ubicación</span></div> : <p className={styles.conteo} aria-live="polite">Mostrando {visibles.length} de {dentistas.length} profesionales</p>}
       <div className={styles.alternarVista} role="tablist" aria-label="Vista del directorio"><button type="button" role="tab" aria-selected={vistaMovil === "lista"} onClick={() => setVistaMovil("lista")}>Lista</button><button type="button" role="tab" aria-selected={vistaMovil === "mapa"} onClick={() => setVistaMovil("mapa")}>Mapa</button></div>
       <div className={styles.explorador}>
         <section className={`${styles.resultados} ${vistaMovil === "mapa" ? styles.ocultarEnMovil : ""}`} aria-label="Resultados del directorio">
@@ -214,13 +215,13 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
               const punto = ubicacionMasCercana(d.ubicaciones, ubicacion);
               const km = punto?.distancia ?? null;
               return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`}>
-                <AvatarOdontologo id={d.id} name={d.name} initials={d.initials} avatarColor={d.avatar_color} />
-                <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>Perfil de ejemplo · ficticio</span>}<h2>{modoPaciente ? tratamientoDemo(d.id) : ""}{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
+                <div className={styles.tarjetaAvatarMarco}><AvatarOdontologo id={d.id} name={d.name} initials={d.initials} avatarColor={d.avatar_color} /></div>
+                <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>{modoPaciente ? "Perfil ilustrado · Ficticio" : "Perfil de ejemplo · ficticio"}</span>}<h2>{modoPaciente ? tratamientoDemo(d.id) : ""}{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
                   <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.ubicacionesDisponibles ? "Ubicación no registrada" : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}{!d.is_demo && <span>{formatearPrecio(d.consultation_price, d.currency)}</span>}</div>
-                  <p className={styles.rating} aria-label={resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : `${resumen.promedio.toFixed(1)} de cinco, ${resumen.total} reseñas`}>
+                  {(!modoPaciente || (resumen?.total ?? 0)>0) && <p className={styles.rating} aria-label={resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : `${resumen.promedio.toFixed(1)} de cinco, ${resumen.total} reseñas`}>
                     {resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : <>★ {resumen.promedio.toFixed(1)} · {resumen.total} {resumen.total === 1 ? "reseña" : "reseñas"}</>}
                     {!carga.resenasDisponibles && <span>Calificaciones no disponibles en este entorno</span>}
-                  </p>
+                  </p>}
                   <div className={styles.accionesTarjeta}><Link href={`${modoPaciente ? "/panel/odontologos" : "/directorio"}/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil <span aria-hidden="true">→</span></Link>{!d.is_demo && <Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link>}{d.ubicaciones.some(p => Number.isFinite(p.latitude) && Number.isFinite(p.longitude)) && <button type="button" className={styles.verMapa} onClick={() => mostrarEnMapa(d.id)}>Ver en mapa</button>}</div>
                 </div>
               </li>;
@@ -228,8 +229,10 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
           </ul>}
         </section>
         <section className={`${styles.mapaPanel} ${vistaMovil === "lista" ? styles.ocultarEnMovil : ""}`} aria-label="Mapa de consultorios">
+          {modoPaciente && <div className={styles.mapaPremiumEncabezado}><div><span className={styles.mapaPremiumIcono}><Icono nombre="ubicacion" size={20}/></span><span><strong>Explora el mapa</strong><small>{ubicacion ? "Puntos ordenados por cercanía" : "Encuentra centros por distrito y especialidad"}</small></span></div><span className={styles.mapaPremiumIndicador}><i aria-hidden="true"/> Mapa interactivo</span></div>}
           {conUbicacion.length === 0 && marcadoresDemo.length === 0 && <p className={styles.avisoMapa}>{carga.estado === "listo" && carga.ubicacionesDisponibles ? "No hay consultorios con ubicación registrada. El mapa no asigna puntos a perfiles sin coordenadas verificadas." : "El servicio de ubicaciones no está disponible en este entorno. El directorio por lista sigue disponible."}</p>}
           <MapaDirectorio ubicaciones={ubicacionesMapa} ubicacion={ubicacion} seleccionado={seleccionado} visible={vistaMovil === "mapa"} alSeleccionar={setSeleccionado} modoPaciente={modoPaciente} radarActivo={radarActivo} idsCercanos={idsCercanos} basePerfil={modoPaciente ? "/panel/odontologos" : "/directorio"} />
+          {modoPaciente && <div className={styles.mapaPremiumLeyenda}><span><b className={styles.mapaPinDiente}>🦷</b> Centros de referencia</span>{ubicacion && <span><b className={styles.mapaPinUsuario}/> Tu ubicación temporal</span>}<small>Ubicaciones orientativas · no indican vinculación laboral</small></div>}
         </section>
       </div>
     </>}

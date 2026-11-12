@@ -36,3 +36,8 @@
 @keyframes pinCercano{to{filter:brightness(1.19);box-shadow:0 0 0 9px #ab8cff57,0 3px 18px #6a42d5}}
 @media(max-width:760px){.contenedorMapa[data-vista="paciente"]{min-height:420px;height:62vh}}
 @media(prefers-reduced-motion:reduce){.radarAncla[data-radar="true"] .radarAnillos:before,.radarAncla[data-radar="true"] .radarAnillos:after,.contenedorMapa[data-vista="paciente"][data-radar="true"] .marcadorDemo[data-cercano="true"]{animation:none}.radarAnillos{display:none}}
+
+/* Barrido circular decorativo del radar, exclusivamente tras geolocalización consentida. */
+.radarAncla[data-radar="true"]:before{content:"";position:absolute;left:50%;top:50%;width:154px;height:154px;transform:translate(-50%,-50%);border-radius:50%;background:conic-gradient(from 0deg,transparent 0 230deg,#7657eb15 260deg,#7657eb67 355deg,transparent 360deg);border:1px solid #7357e92a;animation:radarBarridoDent 2.7s linear infinite;pointer-events:none}
+@keyframes radarBarridoDent{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.radarAncla[data-radar="true"]:before{animation:none;display:none}}
