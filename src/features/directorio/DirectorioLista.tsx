@@ -92,7 +92,7 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
   const cercanos = useMemo(() => ubicacion ? dentistas.flatMap(d => {
     const p = ubicacionMasCercana(d.ubicaciones, ubicacion);
     return p ? [{ id: d.id, km: p.distancia, name: p.ubicacion.practice_name }] : [];
-  }).sort((a,b) => a.km - b.km).slice(0, 3) : [], [dentistas,ubicacion]);
+  }).sort((a,b) => (a.km ?? Number.POSITIVE_INFINITY) - (b.km ?? Number.POSITIVE_INFINITY)).slice(0, 3) : [], [dentistas,ubicacion]);
   useEffect(() => {
     if (!radarActivo) return;
     const timeout = window.setTimeout(() => setRadarActivo(false), 3300);
