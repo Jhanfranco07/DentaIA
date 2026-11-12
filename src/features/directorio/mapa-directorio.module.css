@@ -127,7 +127,7 @@
 
 /* MapLibre traslada el botón raíz. Giramos SOLO la silueta, no el diente SVG. */
 .contenedorMapa .marcadorDemo,.contenedorMapa .marcadorDentista{
-  position:relative;display:grid;place-items:center;
+  position:absolute;display:grid;place-items:center;
   width:46px;height:50px;min-width:46px;min-height:50px;
   padding:0;
   border:0!important;border-radius:0;
