@@ -36,6 +36,25 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const lateral = useRef<HTMLElement>(null);
   const seccionPendiente = useRef<string | null>(null);
   const [fragmento, setFragmento] = useState("");
+  // Preferencia visual exclusiva del portal paciente; no altera roles ni navegación.
+  const [temaPaciente, setTemaPaciente] = useState<"light" | "dark">("light");
+  useEffect(() => {
+    if (area !== "Paciente") return;
+    try {
+      const preferencia = window.localStorage.getItem("dentaia:tema-paciente");
+      if (preferencia === "light" || preferencia === "dark") setTemaPaciente(preferencia);
+    } catch {
+      // El portal sigue funcionando si el navegador bloquea almacenamiento local.
+    }
+  }, [area]);
+
+  function alternarTemaPaciente() {
+    const siguiente = temaPaciente === "light" ? "dark" : "light";
+    setTemaPaciente(siguiente);
+    try { window.localStorage.setItem("dentaia:tema-paciente", siguiente); } catch {
+      // La selección permanece activa en esta sesión aunque no se pueda guardar.
+    }
+  }
   const hrefActual = enlaces.find(e => e.href === ruta + fragmento)?.href;
   const pagina = enlaces.find(e => e.href === hrefActual) ?? enlaces.find(({ href, exacto }) => exacto ? ruta === href : ruta === href || ruta.startsWith(`${href}/`));
   const nombre = usuario?.user_metadata?.full_name;
@@ -95,7 +114,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   }
 
   let grupoAnterior = "";
-  return <div className={styles.shell} data-area={area} data-educacion={ruta === "/buenas-practicas" || ruta.startsWith("/panel/odontologos") ? "true" : undefined}>
+  return <div className={styles.shell} data-area={area} data-portal-tema={area === "Paciente" ? temaPaciente : undefined} data-educacion={ruta === "/buenas-practicas" || ruta.startsWith("/panel/odontologos") ? "true" : undefined}>
     <aside ref={lateral} id="navegacion-portal" className={styles.lateral} data-abierto={abierto} aria-hidden={movil && !abierto} inert={movil && !abierto ? true : undefined} aria-label={`Navegación del portal ${area}`}>
       <div className={styles.cabeceraLateral}><Link href="/" className={styles.marca} aria-label="DentaIA, página de inicio"><Marca /></Link><button type="button" className={styles.cerrarMenu} aria-label="Cerrar navegación" onClick={() => { setAbierto(false); boton.current?.focus(); }}><Icono nombre="cerrar" size={18} /></button></div>
       <div className={styles.portalMarca}><span className={styles.portalIcono}><Icono nombre={area === "Odontología" ? "diente" : area === "Administración" ? "escudo" : "persona"} size={19} /></span><div><strong>{area}</strong><span>Espacio de trabajo</span></div></div>
@@ -132,6 +151,17 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
           <Icono nombre={abierto ? "cerrar" : "menu"} size={20} />
         </button>
         <div className={styles.tituloPagina}><span>{descripcion}</span><strong>{pagina?.etiqueta ?? area}</strong></div>
+        {area === "Paciente" && <button
+          type="button"
+          className={styles.selectorTema}
+          onClick={alternarTemaPaciente}
+          aria-label={temaPaciente === "light" ? "Activar modo oscuro morado" : "Activar modo claro celeste"}
+          aria-pressed={temaPaciente === "dark"}
+          title={temaPaciente === "light" ? "Modo oscuro morado" : "Modo claro celeste"}
+        >
+          <span aria-hidden="true" className={styles.temaSimbolo}>{temaPaciente === "light" ? "☾" : "☀"}</span>
+          <span>{temaPaciente === "light" ? "Modo oscuro" : "Modo claro"}</span>
+        </button>}
         <div className={styles.usuario}><span className={styles.avatar} aria-hidden="true">{nombreUsuario.slice(0, 1).toLocaleUpperCase("es")}</span><span className={styles.usuarioDatos}><strong>{nombreUsuario}</strong><span>{etiquetaRol(roles)}</span></span></div>
         {mostrarCuentaHeader && !enlaces.some(e => e.href === "/cuenta") && <Link href="/cuenta" className={styles.cuenta}><Icono nombre="persona" size={17} /><span>Mi cuenta</span></Link>}
         <button type="button" className={styles.salir} aria-label={saliendo ? "Cerrando sesión" : "Cerrar sesión"} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>

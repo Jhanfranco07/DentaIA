@@ -193,3 +193,19 @@
 .sinUbicacionPerfil p{margin:0;color:#63698d;font-size:12px;line-height:1.6}
 .sinUbicacionPerfil a{color:#6042d0;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:620px){.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande{width:140px;flex-basis:140px}.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande .avatar{width:140px;height:150px}}
+
+/* Portada editorial con fotografía real y fuente acreditada, separada de perfiles ficticios. */
+.heroPremiumFotografiaMarco{position:relative;display:block;margin:0;min-height:260px;align-self:stretch;overflow:hidden;border-radius:24px;background:#d9e6f9 url("/hero/hero-1.jpg") center/cover no-repeat;box-shadow:0 12px 28px #36286b25}
+.heroPremiumFotografiaMarco .heroPremiumFotografia{display:block;width:100%;height:100%;min-height:260px;max-height:330px;object-fit:cover;object-position:center 30%;border-radius:24px;filter:none;-webkit-mask-image:none;mask-image:none}
+.heroPremiumFotoFuente{position:absolute;bottom:10px;left:10px;right:10px;z-index:3;width:max-content;max-width:calc(100% - 20px);padding:4px 9px;border-radius:7px;background:#15132abf;color:white;font-size:10px;line-height:1.5}
+.heroPremiumFotoFuente a{color:white;text-decoration:underline;text-underline-offset:2px}
+:global([data-portal-tema="dark"]) .heroPremium{background:linear-gradient(125deg,#302454,#4d2e7b 70%,#6b3c9a);border-color:#7357aa;color:#f3ebff}
+:global([data-portal-tema="dark"]) .heroPremiumCopy h1{color:#fff}
+:global([data-portal-tema="dark"]) .heroPremiumCopy>p,
+:global([data-portal-tema="dark"]) .heroPremiumNota{color:#ddd1f3}
+:global([data-portal-tema="dark"]) .heroPremiumDatos{background:#292041dc;border-color:#65518e;color:#f4eeff}
+:global([data-portal-tema="dark"]) .heroPremiumDatos strong{color:#fff}
+:global([data-portal-tema="dark"]) .heroPremiumDatos small{color:#c9bcdf}
+@media(max-width:1310px){.heroPremiumFotografiaMarco .heroPremiumFotografia{max-height:290px}}
+@media(max-width:760px){.heroPremiumFotografiaMarco{min-height:190px}.heroPremiumFotografiaMarco .heroPremiumFotografia{min-height:190px;max-height:240px}}
+@media(max-width:490px){.heroPremiumFotografiaMarco{display:block;margin-top:8px;min-height:170px}.heroPremiumFotografiaMarco .heroPremiumFotografia{min-height:170px;max-height:210px}}

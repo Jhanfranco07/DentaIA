@@ -14,11 +14,16 @@ export default function HeroDirectorioPaciente() {
       </div>
       <small className={styles.heroPremiumNota}>Los perfiles ilustrados son ficticios y no están vinculados laboralmente a los centros geográficos mostrados. No se gestionan citas con ellos.</small>
     </div>
-    <div className={styles.heroPremiumArte} aria-hidden="true">
-      <Image src="/directorio/hero-odontologos-premium.avif" alt="" width={740} height={690} priority
-        sizes="(max-width: 760px) 180px, (max-width: 1310px) 235px, 350px"
-        className={styles.heroPremiumImagen}/>
-    </div>
+    <figure className={`${styles.heroPremiumArte} ${styles.heroPremiumFotografiaMarco}`}>
+      <Image
+        src="https://images.unsplash.com/photo-1659989693409-5adc97274bed?auto=format&fit=crop&w=1000&q=82"
+        alt="Fotografía ilustrativa de un profesional odontológico con bata blanca"
+        width={1000} height={860} unoptimized priority
+        sizes="(max-width: 760px) 300px, (max-width: 1310px) 400px, 530px"
+        className={`${styles.heroPremiumImagen} ${styles.heroPremiumFotografia}`}
+      />
+      <figcaption className={styles.heroPremiumFotoFuente}>Imagen ilustrativa · <a href="https://unsplash.com/photos/fNSPSQAH1mQ" target="_blank" rel="noopener noreferrer">Nate Johnston / Unsplash</a></figcaption>
+    </figure>
     <aside className={styles.heroPremiumDatos} aria-label="Explora el directorio">
       <span className={styles.heroPremiumDatosTitulo}>Descubre tu próximo paso</span>
       <div><span className={styles.heroPremiumMiniIcono}><Icono nombre="usuarios" size={18}/></span><span><strong>Perfiles odontológicos</strong><small>Nombres y especialidades para explorar</small></span></div>

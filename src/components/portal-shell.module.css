@@ -70,3 +70,107 @@
 
 /* Mantener el mismo tema oscuro premium en Buenas prácticas y Odontólogos del paciente. */
 .shell[data-educacion="true"] .contenido{max-width:none}
+
+/* Identidad coherente del portal paciente. Las otras áreas conservan su diseño. */
+.shell[data-area="Paciente"] {
+  --patient-surface: #ffffff;
+  --patient-panel: #ecf9ff;
+  --patient-ink: #15344e;
+  --patient-muted: #4d6678;
+  --patient-line: #cbe7f2;
+  --patient-action: #087f9b;
+  --patient-action-hover: #056781;
+  --patient-on-action: #ffffff;
+  --patient-hero: linear-gradient(117deg,#114e71 4%,#188cb2 100%);
+  --patient-shadow: 0 13px 32px #17577715;
+  --ink: var(--patient-ink);
+  --muted: var(--patient-muted);
+  --teal: var(--patient-action);
+  --teal-dark: var(--patient-action-hover);
+  --line: var(--patient-line);
+  --soft: #dff5ff;
+  --soft-blue: #e0f3ff;
+  --shadow: var(--patient-shadow);
+  --shadow-card: 0 7px 20px #17577710;
+  background: radial-gradient(circle at 95% 7%, #d4f5ff 0, transparent 35%), #eef9fe;
+  color: var(--ink);
+}
+.shell[data-area="Paciente"][data-portal-tema="dark"] {
+  color-scheme: dark;
+  --patient-surface: #24213f;
+  --patient-panel: #302a52;
+  --patient-ink: #f1eeff;
+  --patient-muted: #c9c4e6;
+  --patient-line: #49436e;
+  --patient-action: #7650d4;
+  --patient-action-hover: #6340bf;
+  --patient-on-action: #ffffff;
+  --patient-hero: linear-gradient(125deg,#302052 4%,#5d32a7 65%,#7742b5);
+  --patient-shadow: 0 13px 35px #09051642;
+  --soft: #373057;
+  --soft-blue: #302f59;
+  background: radial-gradient(ellipse at 70% 0,#3e326d77,transparent 45%),#181529;
+}
+.shell[data-area="Paciente"][data-portal-tema="light"] .lateral {
+  background: linear-gradient(165deg,#ffffff,#ebfaff 75%,#dff4ff);
+  border-color:#cde7f3;color:#193c56;
+}
+.shell[data-area="Paciente"][data-portal-tema="dark"] .lateral {
+  background: radial-gradient(ellipse at -15% 5%,#54308e 0,transparent 37%),linear-gradient(172deg,#18132f,#20183e 70%,#301858);
+  border-color:#48346f;color:#f7f2ff;
+}
+.shell[data-area="Paciente"][data-portal-tema="dark"] .marca :global(.marca){color:#fff}
+.shell[data-area="Paciente"][data-portal-tema="dark"] .marca :global(.marca-acento){color:#9de8f4}
+.shell[data-area="Paciente"] .portalMarca{border-color:var(--patient-line);background:var(--patient-panel)}
+.shell[data-area="Paciente"] .portalIcono{background:var(--soft);color:var(--teal)}
+.shell[data-area="Paciente"] .enlace{color:var(--patient-muted)}
+.shell[data-area="Paciente"] .enlace svg{color:currentColor}
+.shell[data-area="Paciente"] .enlace:hover{color:var(--ink);background:var(--soft)}
+.shell[data-area="Paciente"] .enlace[aria-current=page]{
+  background:var(--patient-action);border-color:transparent;color:#fff;
+  box-shadow:0 7px 18px #155d8840;
+}
+.shell[data-area="Paciente"] .enlace[aria-current=page] svg{color:#fff}
+.shell[data-area="Paciente"] .marcaActiva{background:#ffffff95}
+.shell[data-area="Paciente"] .pieLateral{border-color:var(--patient-line)}
+.shell[data-area="Paciente"] .tituloNavegacion,
+.shell[data-area="Paciente"] .grupo,
+.shell[data-area="Paciente"] .estadoPrivado,
+.shell[data-area="Paciente"] .volver,
+.shell[data-area="Paciente"] .portalMarca div>span{color:var(--patient-muted)}
+.shell[data-area="Paciente"] .encabezado{background:var(--patient-surface);border-bottom-color:var(--patient-line)}
+.shell[data-area="Paciente"] .tituloPagina>span,
+.shell[data-area="Paciente"] .usuarioDatos>span{color:var(--patient-muted)}
+.shell[data-area="Paciente"] .tituloPagina>strong,
+.shell[data-area="Paciente"] .usuarioDatos strong{color:var(--ink)}
+.shell[data-area="Paciente"] .avatar{background:var(--soft);border-color:var(--patient-line);color:var(--ink)}
+.shell[data-area="Paciente"] .usuario{border-color:var(--patient-line)}
+.shell[data-area="Paciente"] .cuenta,
+.shell[data-area="Paciente"] .salir,
+.shell[data-area="Paciente"] .botonMenu,
+.shell[data-area="Paciente"] .selectorTema{
+  color:var(--ink);background:var(--patient-panel);border-color:var(--patient-line);
+}
+.shell[data-area="Paciente"] .selectorTema{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;border:1px solid var(--patient-line);border-radius:12px;
+  padding:8px 12px;white-space:nowrap;font-size:12px;font-weight:750;
+  transition:background .2s,border-color .2s;
+}
+.shell[data-area="Paciente"] .selectorTema:hover,
+.shell[data-area="Paciente"] .cuenta:hover,
+.shell[data-area="Paciente"] .salir:hover,
+.shell[data-area="Paciente"] .botonMenu:hover{background:var(--soft);border-color:var(--patient-action)}
+.shell[data-area="Paciente"] .temaSimbolo{font-size:19px;line-height:1}
+.shell[data-area="Paciente"] .contenido{width:100%;max-width:1800px;padding:24px clamp(17px,2vw,32px) 55px}
+.shell[data-area="Paciente"][data-portal-tema="dark"] .contenido :is(input,select,textarea){
+  background:var(--patient-panel);color:var(--ink);border-color:var(--patient-line);
+}
+.shell[data-area="Paciente"][data-portal-tema="dark"] .contenido :is(input,textarea)::placeholder{color:#c0b8db}
+.shell[data-area="Paciente"] :is(a,button,input,select,textarea):focus-visible{outline:3px solid var(--teal)!important;outline-offset:3px}
+@media(max-width:1100px){.shell[data-area="Paciente"] .selectorTema>span:last-child{display:none}.shell[data-area="Paciente"] .selectorTema{width:44px;padding:0}}
+@media(max-width:760px){
+  .shell[data-area="Paciente"] .contenido{padding:17px 13px 44px}
+  .shell[data-area="Paciente"][data-portal-tema="dark"] .cerrarMenu{background:#ffffff18;border-color:#a693c9;color:#fff}
+}
+@media(prefers-reduced-motion:reduce){.shell[data-area="Paciente"] .selectorTema{transition:none}}
