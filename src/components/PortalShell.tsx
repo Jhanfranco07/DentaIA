@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { rolesDelUsuario } from "@/features/autorizacion/roles";
 import { useSesion } from "@/features/cuenta/useSesion";
+import { useNombrePerfil } from "@/features/cuenta/useNombrePerfil";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { Icono, Marca, type NombreIcono } from "./Identidad";
 import styles from "./portal-shell.module.css";
@@ -39,8 +40,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const [fragmento, setFragmento] = useState("");
   const hrefActual = enlaces.find(e => e.href === ruta + fragmento)?.href;
   const pagina = enlaces.find(e => e.href === hrefActual) ?? enlaces.find(({ href, exacto }) => exacto ? ruta === href : ruta === href || ruta.startsWith(`${href}/`));
-  const nombre = usuario?.user_metadata?.full_name;
-  const nombreUsuario = typeof nombre === "string" && nombre.trim() ? nombre.trim() : usuario?.email?.split("@")[0] ?? "Cuenta";
+  const nombreUsuario = useNombrePerfil(usuario);
   const roles = rolesDelUsuario(usuario);
 
   useEffect(() => {
@@ -114,7 +114,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   return <div className={styles.shell} data-area={area} data-tema={area === "Paciente" ? tema : undefined}>
     <aside ref={lateral} id="navegacion-portal" className={styles.lateral} data-abierto={abierto} aria-hidden={movil && !abierto} inert={movil && !abierto ? true : undefined} aria-label={`Navegación del portal ${area}`}>
       <div className={styles.cabeceraLateral}><Link href="/" className={styles.marca} aria-label="DentaIA, página de inicio"><Marca /></Link><button type="button" className={styles.cerrarMenu} aria-label="Cerrar navegación" onClick={() => { setAbierto(false); boton.current?.focus(); }}><Icono nombre="cerrar" size={18} /></button></div>
-      <div className={styles.portalMarca}><span className={styles.portalIcono}><Icono nombre={area === "Odontología" ? "diente" : area === "Administración" ? "escudo" : "persona"} size={19} /></span><div><strong>{area}</strong><span>Espacio de trabajo</span></div></div>
+      <div className={styles.portalMarca}><span className={styles.portalIcono}><Icono nombre={area === "Odontología" ? "diente" : area === "Administración" ? "escudo" : "persona"} size={19} /></span><div><strong>{area}</strong><span>{area === "Paciente" ? "Mi espacio personal" : "Espacio de trabajo"}</span></div></div>
       <p className={styles.tituloNavegacion}>Menú principal</p>
       <nav aria-label={`Secciones de ${area}`}>
         {enlaces.map(({ href, etiqueta, exacto, icono, grupo }) => {

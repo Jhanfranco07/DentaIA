@@ -6,6 +6,7 @@ import { mensajeError, validarFormularioCuenta, type CampoCuenta } from "./valid
 import styles from "./cuenta.module.css";
 import PerfilPaciente from "./PerfilPaciente";
 import { useSesion } from "./useSesion";
+import { useNombrePerfil } from "./useNombrePerfil";
 import Link from "next/link";
 import Encabezado from "@/components/Encabezado";
 import Pie from "@/components/Pie";
@@ -126,8 +127,7 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
     finally { operacion.current = false; if (activo.current) setOcupado(false); }
   }
 
-  const nombreUsuario = usuario?.user_metadata?.full_name;
-  const etiquetaUsuario = typeof nombreUsuario === "string" && nombreUsuario.trim() ? nombreUsuario.trim() : usuario?.email?.split("@")[0] ?? "Tu perfil";
+  const etiquetaUsuario = useNombrePerfil(usuario);
   const otrosEspacios = [
     ...(roles.includes("superusuario") && roles.includes("odontologo") ? [{ href: "/profesional", titulo: "Espacio profesional" }] : []),
     ...(roles.includes("paciente") && (roles.includes("odontologo") || roles.includes("superusuario")) ? [{ href: "/panel", titulo: "Espacio del paciente" }] : []),
