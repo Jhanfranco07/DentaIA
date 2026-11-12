@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         amount_total: session.amount_total ?? 0,
         currency: session.currency ?? "usd",
         status: "paid",
-      });
+        }, { onConflict: "stripe_event_id", ignoreDuplicates: true });
       if (error) throw error;
       break;
     }
