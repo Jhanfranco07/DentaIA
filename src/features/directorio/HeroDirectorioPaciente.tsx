@@ -15,9 +15,10 @@ export default function HeroDirectorioPaciente() {
       <small className={styles.heroPremiumNota}>Los perfiles ilustrados son ficticios y no están vinculados laboralmente a los centros geográficos mostrados. No se gestionan citas con ellos.</small>
     </div>
     <div className={styles.heroPremiumArte} aria-hidden="true">
-      <Image src="/directorio/hero-odontologos-premium.avif" alt="" width={740} height={690} priority
+      <Image src="https://images.pexels.com/photos/37458083/pexels-photo-37458083/free-photo-of-dental-professionals-posing-in-modern-clinic.jpeg?auto=compress&dpr=1&h=750&w=1260" alt="Dos profesionales odontológicos posan en una clínica moderna; imagen ilustrativa" width={740} height={690} unoptimized priority
         sizes="(max-width: 760px) 180px, (max-width: 1310px) 235px, 350px"
         className={styles.heroPremiumImagen}/>
+      <small className={styles.creditoFotografia}>Fotografía ilustrativa: Emily Gaibor / Pexels</small>
     </div>
     <aside className={styles.heroPremiumDatos} aria-label="Explora el directorio">
       <span className={styles.heroPremiumDatosTitulo}>Descubre tu próximo paso</span>

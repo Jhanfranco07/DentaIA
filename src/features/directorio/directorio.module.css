@@ -206,3 +206,11 @@
 :global([data-area="Paciente"][data-tema="oscuro"]) .accesosEspecialidades button{background:#362a54;border-color:#6d548d;color:#e8ddff}
 :global([data-area="Paciente"][data-tema="oscuro"]) .accesosEspecialidades .accesoActivo{background:#734cdd;color:#fff}
 :global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumIndicador{background:#3d305f;color:#d9c5ff;border-color:#7863a0}
+
+/* Imagen fotográfica editorial del hero: sin alterar fichas ficticias. */
+.heroPremiumArte{position:relative;overflow:hidden;border-radius:22px;isolation:isolate}
+.heroPremiumImagen{width:100%;height:260px;max-height:260px;object-fit:cover;object-position:center 25%;border-radius:22px;filter:none;mask-image:none;-webkit-mask-image:none;box-shadow:0 9px 24px #29205120}
+.creditoFotografia{position:absolute;right:12px;bottom:8px;z-index:3;max-width:calc(100% - 24px);padding:4px 7px;border-radius:6px;background:#151b3ec9;color:#fff;font-size:9px;line-height:1.3}
+@media(max-width:1310px){.heroPremiumImagen{width:100%;max-height:240px;height:240px}}
+@media(max-width:760px){.heroPremiumImagen{width:100%;max-height:185px;height:185px}}
+@media(max-width:490px){.heroPremiumArte{display:none}}
