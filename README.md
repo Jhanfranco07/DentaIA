@@ -59,3 +59,6 @@ Preparar esta base no publica ni despliega una nueva versión.
 
 ## Convención de commits
 En español: `feat: desarrollar navegación del paciente`; `fix: corregir validación de imágenes`; `docs: explicar alcance académico`.
+
+## Dependencias de Pagos
+- stripe: SDK oficial para comunicación con la API de Stripe desde el servidor.
