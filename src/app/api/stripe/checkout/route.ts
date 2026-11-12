@@ -26,6 +26,7 @@ export async function POST(req: Request) {
     customer_email: user.email ?? undefined,
     metadata: { plan: PLAN_PREMIUM.id },
     success_url: `${siteUrl()}/premium/exito?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${siteUrl()}/premium/cancelado`,
     mode: "payment",
   });
 
