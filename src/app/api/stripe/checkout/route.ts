@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getUserFromRequest } from "@/lib/supabase/server-auth";
 import { getStripe } from "@/lib/stripe/server"
 import { PLAN_PREMIUM } from "@/lib/stripe/plan"
+import { siteUrl } from "@/lib/stripe/urls"
 
 export async function POST(req: Request) {
   const user = await getUserFromRequest(req);
@@ -24,6 +25,7 @@ export async function POST(req: Request) {
     client_reference_id: user.id,
     customer_email: user.email ?? undefined,
     metadata: { plan: PLAN_PREMIUM.id },
+    success_url: `${siteUrl()}/premium/exito?session_id={CHECKOUT_SESSION_ID}`,
     mode: "payment",
   });
 
