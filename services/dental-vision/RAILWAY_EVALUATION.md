@@ -1,14 +1,33 @@
 # Evaluación simulada en Railway
 
-Esta variante sirve para comprobar el contenedor, el health check y el contrato HTTP **sin descargar ni cargar pesos**. `/predict` valida la imagen y responde `status: simulation`, `simulated: true`, `model: null` y `predictions: []`. No ejecuta ONNX ni devuelve predicciones o diagnósticos. No acepta fotos de pacientes en esta evaluación.
+Esta variante comprueba el contenedor y el contrato HTTP **sin descargar ni cargar pesos**. `/predict` valida la imagen y responde `status: simulation`, `simulated: true`, `model: null` y `predictions: []`. No ejecuta ONNX ni devuelve predicciones o diagnósticos. **No uses fotografías reales de pacientes** en esta evaluación.
 
-El `railway.json` del servicio apunta ahora a `Dockerfile.evaluation`. Configurar Root Directory `/services/dental-vision` y `DENTAL_VISION_SERVICE_SECRET` con un valor ASCII aleatorio de al menos 32 bytes. No hace falta configurar `MODEL_BACKEND`: esta aplicación no carga modelos. Railway inyecta `PORT`; el contenedor escucha en `0.0.0.0`. Health check: `/health`.
+## Despliegue y verificaciones reportados
 
-Para conexión futura desde Next.js, mantener las llamadas en el Route Handler del servidor, usar HTTPS y el mismo secreto del lado servidor; nunca usar `NEXT_PUBLIC_`. La ruta Next actual conserva su autenticación y su allowlist de dos imágenes demo.
+El siguiente estado procede del contexto proporcionado por el equipo; no fue consultado ni comprobado independientemente en Railway durante esta revisión:
 
-## Comandos
+- Proyecto: `overflowing-surprise`.
+- Servicio: `luminous-communication`.
+- Entorno: `production`.
+- Root Directory: `/`.
+- Dockerfile: `Dockerfile.evaluation`.
+- Health check: `/health`.
+- Comando reportado como ejecutado:
 
-Desde `services/dental-vision`:
+  ```text
+  railway up ./services/dental-vision --path-as-root --service luminous-communication --environment production
+  ```
+
+- `GET /health` respondió HTTP 200 con `mode: simulation` y `model_loaded: false`.
+- `/predict` sin secreto respondió HTTP 401.
+
+No se ha comprobado `/predict` con imagen y secreto válidos, ni la validación de formatos, límites y respuesta simulada en el servicio remoto. Tampoco se verificó si GitHub Auto Deploy está desactivado. Mantener Auto Deploy **desactivado hasta contar con autorización** y configurar el servicio desde **Railway → Service Settings**; el repositorio ya no depende de `railway.json`. El estado reportado no autoriza un despliegue nuevo ni una publicación pública.
+
+## Configuración local de la variante
+
+En Service Settings, los valores reportados para la simulación son Root Directory `/` y `Dockerfile.evaluation`, junto con health check `/health`. El endpoint requiere `DENTAL_VISION_SERVICE_SECRET` ASCII de al menos 32 bytes para `/predict`. No hace falta `MODEL_BACKEND`: la aplicación no carga modelos. Railway proporciona `PORT` y el contenedor escucha en `0.0.0.0`.
+
+El Dockerfile de evaluación instala FastAPI, Starlette, Pydantic, Uvicorn y Pillow. No copia pesos, fotos ni módulos de inferencia. Para probar localmente desde `services/dental-vision`:
 
 ```powershell
 docker build -f Dockerfile.evaluation -t dentaia-vision:evaluation .
@@ -16,10 +35,17 @@ python -m pip install -r requirements-evaluation-test.txt
 python -m pytest -q tests/test_evaluation.py
 ```
 
-Para desplegar más adelante, tras resolver las restricciones de licencia y autorizar el despliegue, Railway debe usar Root Directory `/services/dental-vision` y `Dockerfile.evaluation`. El comando de CLI sería `railway up`; **no se ejecutó**. No desplegar públicamente ni cambiar a `Dockerfile.railway` hasta resolver `LICENSE_REVIEW.md`.
+Estos comandos son instrucciones, no resultados de esta revisión. No se construyó la imagen aquí.
 
-## Límites
+## Uso futuro del backend ONNX
 
-- Esta es una simulación de transporte/validación de imágenes; no evalúa modelo, precisión, rendimiento de ONNX ni utilidad clínica.
-- El Dockerfile instala solo FastAPI, Starlette, Pydantic, Uvicorn y Pillow; no contiene Torch, Ultralytics, ONNX Runtime, pesos ni fotos.
-- La publicación pública sigue bloqueada por la revisión de derechos de pesos/datos, obligaciones AGPL, fuente correspondiente y avisos. El uso académico no crea una exención automática.
+La simulación y el servicio ONNX son configuraciones distintas. Una evaluación ONNX futura requiere autorización, revisión de licencias y una configuración manual separada en Service Settings: Root Directory `/services/dental-vision`, builder Dockerfile, Dockerfile path `Dockerfile.railway`, health check `/health`, y variables `MODEL_BACKEND=onnx`, `MODEL_PATH=models/best.onnx`, `MODEL_MANIFEST_PATH=models/best.onnx.json` y `DENTAL_VISION_SERVICE_SECRET`. No ejecutar el build ONNX sin autorización: descarga pesos y dependencias.
+
+La conexión futura desde Next.js debe usar HTTPS y mantener el secreto exclusivamente en el servidor. La ruta de Next conserva su allowlist de dos imágenes demo; esta evaluación no habilita imágenes arbitrarias. No enviar fotografías reales de pacientes.
+
+## Pendientes y restricciones
+
+- Probar `/predict` remoto con imagen sintética válida y secreto, y comprobar errores/formato/límites; no usar fotos de pacientes.
+- Confirmar en Service Settings el Root Directory, Dockerfile, health check y estado de GitHub Auto Deploy antes de cualquier nueva acción autorizada.
+- No se probó Railway desde esta revisión ni se consultó su configuración actual.
+- La publicación pública del backend real sigue bloqueada por derechos de pesos/datos, obligaciones AGPL, fuente correspondiente y avisos/SBOM. El uso académico no es una exención automática.

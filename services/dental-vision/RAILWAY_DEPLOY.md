@@ -1,47 +1,50 @@
-# Preparación de Railway para DentaIA Vision
+# Railway: estado de evaluación y configuración futura
 
-Esta guía prepara una evaluación académica local o privada. **No autoriza la publicación pública**: consulta [LICENSE_REVIEW.md](LICENSE_REVIEW.md) antes de exponer o distribuir el servicio.
+Esta guía separa la simulación desplegada de una posible evaluación ONNX futura. La revisión no consultó Railway ni aplicó cambios remotos. Los datos de despliegue de la sección siguiente son los antecedentes proporcionados por el equipo, no verificaciones independientes realizadas aquí.
 
-La documentación oficial de Railway mantiene `railway.json` como archivo de configuración admitido. Railway marca Config as Code como deprecado y dice que los archivos existentes seguirán funcionando para servicios heredados hasta el 1 de diciembre de 2026. Esa fecha se refiere a esos servicios; no la presento como un retiro universal de toda configuración. Railway recomienda Infrastructure as Code; revisa su documentación vigente antes de migrar.
+## Simulación reportada como desplegada
 
-## Servicio
+Según el contexto proporcionado, el servicio `luminous-communication`, en el proyecto `overflowing-surprise` y entorno `production`, tiene Root Directory `/`, usa `Dockerfile.evaluation` y health check `/health`. El despliegue se habría ejecutado con:
 
-- Root Directory: `/services/dental-vision` en la configuración del servicio.
-- Builder: Dockerfile; archivo `Dockerfile.railway` (también declarado en `railway.json`).
-- Ruta del archivo de configuración: `/services/dental-vision/railway.json`. Railway documenta que el archivo de configuración no sigue automáticamente el Root Directory.
-- Health check: `/health`, timeout 300 segundos. El endpoint responde `200` cuando ONNX está cargado y `503` cuando no está disponible.
-- Reinicio: `ON_FAILURE`, máximo 3 reintentos.
-- Puerto: Railway provee `PORT`; el contenedor escucha en `0.0.0.0` y usa `8080` solo como valor local predeterminado.
+```text
+railway up ./services/dental-vision --path-as-root --service luminous-communication --environment production
+```
 
-## Variables del servicio
+También se reportó `GET /health` con HTTP 200, `mode: simulation` y `model_loaded: false`, y `/predict` sin secreto con HTTP 401. No está comprobado por esta revisión: que `/predict` funcione con una imagen y secreto válidos, que GitHub Auto Deploy esté desactivado, ni la configuración actual de Service Settings. La simulación no ejecuta ONNX ni descarga pesos.
 
-Configurar como variables del servicio, sin incluir secretos en Git:
+Para conservar este modo de evaluación, configura el servicio desde **Railway → Service Settings**. No dependas de `railway.json`: ese archivo se retiró del repositorio. Mantén GitHub Auto Deploy **desactivado hasta contar con autorización explícita**. No uses fotografías reales de pacientes en la evaluación.
+
+## Configuración futura de ONNX — no aplicada
+
+Esta configuración describe una posible evaluación posterior; no corresponde al servicio de simulación reportado como desplegado y no ha sido aplicada ni validada en Railway. Solo considerarla cuando exista autorización y se resuelvan los bloqueos de `LICENSE_REVIEW.md`.
+
+En **Service Settings**, la configuración prevista sería:
+
+- Root Directory: `/services/dental-vision`.
+- Builder: Dockerfile.
+- Dockerfile path: `Dockerfile.railway`.
+- Health check path: `/health`.
+- GitHub Auto Deploy: desactivado hasta autorización explícita.
+
+Variables previstas para ese servicio futuro:
 
 ```text
 MODEL_BACKEND=onnx
 MODEL_PATH=models/best.onnx
 MODEL_MANIFEST_PATH=models/best.onnx.json
-DENTAL_VISION_SERVICE_SECRET=<secreto aleatorio ASCII de al menos 32 bytes>
+DENTAL_VISION_SERVICE_SECRET=<secreto ASCII aleatorio de al menos 32 bytes>
 ```
 
-La descarga de pesos y la exportación ocurren durante el build. Ese proceso requiere acceso a los índices de paquetes y al artefacto fijado en `scripts/download_model.py`; el servicio no descarga pesos al arrancar. El build completo, el consumo de memoria y la latencia en Railway todavía requieren validación.
+El Dockerfile ONNX descarga pesos durante el build y los exporta. No ejecutes ese build sin autorización específica para descargar artefactos y dependencias. El uso académico no constituye una exención automática de licencia.
 
-## Conexión desde Next.js
+## Conexión futura desde Next.js
 
-En el servidor Next.js, configura `DENTAL_VISION_API_URL` con la URL HTTPS del servicio terminada exactamente en `/predict`. Configura allí el mismo `DENTAL_VISION_SERVICE_SECRET`; no uses el prefijo `NEXT_PUBLIC_` ni envíes el secreto al navegador.
+Solo tras autorizar y aprobar la integración, configura `DENTAL_VISION_API_URL` en el entorno servidor de Next.js con una URL HTTPS que termine en `/predict`, junto con el mismo `DENTAL_VISION_SERVICE_SECRET`. No uses `NEXT_PUBLIC_` ni envíes el secreto al navegador. La ruta actual de Next.js conserva una allowlist de dos imágenes demo; esta guía no habilita fotografías arbitrarias ni fotos reales de pacientes.
 
-La ruta existente `/api/desarrollo/vision-poc` conserva la autenticación y la allowlist actual de dos imágenes públicas verificadas. Esta configuración no habilita imágenes arbitrarias.
+## Verificación y rollback previstos
 
-## Verificación y rollback
+Antes de cualquier uso futuro del servicio ONNX, valida el contexto Docker, el build Linux, `/health`, autenticación, errores de `/predict`, memoria y latencia. La imagen completa y la inferencia ONNX en Railway aún no están comprobadas por esta revisión. Si una futura evaluación autorizada falla, usa el procedimiento aprobado del proyecto para volver a la versión revisada; no se realizaron acciones de rollback.
 
-1. Antes de cualquier despliegue, revisa el contexto filtrado y confirma que incluye `requirements-export.txt` y los tres scripts de `scripts/` que requiere el Dockerfile.
-2. Valida localmente la imagen, el arranque, `/health`, el secreto y `/predict` con pruebas que no usen pesos reales. Registra memoria y latencia. El build requiere descargar dependencias y pesos; no lo ejecutes sin autorización.
-3. En una futura evaluación autorizada, confirma en los logs que el build termina y que `/health` responde `200` con `backend: onnx`. Después verifica el flujo de Next.js con las dos muestras demo y sus respuestas de error. Esto no valida el uso clínico.
-4. Ante un fallo, detén el uso de la versión candidata y vuelve a la imagen o al commit revisado mediante el procedimiento de rollback aprobado por el proyecto. Esta guía no indica borrar despliegues ni artefactos.
+## Bloqueo de publicación
 
-## Límites conocidos
-
-- Esta configuración no se ha aplicado ni probado en Railway; no demuestra que el servicio funcione allí.
-- El build descarga pesos y requiere red. El contenedor de runtime incluye el modelo ONNX derivado.
-- Se fijan dependencias directas, pero no todo el árbol transitivo ni el digest de la imagen. Faltan la SBOM y la revisión completa de avisos.
-- La publicación pública sigue bloqueada por la revisión AGPL, los derechos de pesos y datos, la fuente correspondiente y los avisos. El uso académico no es una exención automática.
+La publicación pública y la distribución del servicio/modelo continúan bloqueadas hasta aclarar los derechos de pesos y datos, las obligaciones AGPL, la fuente correspondiente y los avisos/SBOM. No se debe exponer públicamente el servicio ONNX antes de resolver esos puntos.

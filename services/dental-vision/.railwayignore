@@ -1,7 +1,6 @@
 **
 !Dockerfile.railway
 !Dockerfile.evaluation
-!railway.json
 !.dockerignore
 !requirements-onnx.txt
 !requirements-export.txt
