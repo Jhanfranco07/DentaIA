@@ -5,3 +5,7 @@ Este documento detalla la configuración y arquitectura del flujo de pagos en en
 
 ## 2. Simulación de Pagos
 Todas las transacciones se ejecutan estrictamente en modo prueba (Test Mode). No se procesan cargos reales ni se utiliza dinero real.
+
+## 3. Creación del Sandbox y Claves
+1. Crear cuenta en Stripe y activar el modo Test Mode en el dashboard.
+2. Ir a Developers > API keys y copiar la clave publicable (pk_test_...) y la clave secreta (sk_test_...).
