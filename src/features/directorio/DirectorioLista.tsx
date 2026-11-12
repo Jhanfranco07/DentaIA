@@ -116,6 +116,7 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
     return filtrados;
   }, [busqueda, carga, dentistas, distrito, especialidad, orden, radioKm, ubicacion]);
 
+  const idsCercanos = useMemo(() => cercanos.map(c => c.id), [cercanos]);
   const ubicacionesVisibles = useMemo(() => crearMarcadores(visibles), [visibles]);
   const marcadoresDemo = useMemo(() => carga.estado === "listo"
     ? carga.demos.map(crearMarcadorDemo).filter((marcador): marcador is MarcadorDemo => marcador !== null)
@@ -228,7 +229,7 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
         </section>
         <section className={`${styles.mapaPanel} ${vistaMovil === "lista" ? styles.ocultarEnMovil : ""}`} aria-label="Mapa de consultorios">
           {conUbicacion.length === 0 && marcadoresDemo.length === 0 && <p className={styles.avisoMapa}>{carga.estado === "listo" && carga.ubicacionesDisponibles ? "No hay consultorios con ubicación registrada. El mapa no asigna puntos a perfiles sin coordenadas verificadas." : "El servicio de ubicaciones no está disponible en este entorno. El directorio por lista sigue disponible."}</p>}
-          <MapaDirectorio ubicaciones={ubicacionesMapa} ubicacion={ubicacion} seleccionado={seleccionado} visible={vistaMovil === "mapa"} alSeleccionar={setSeleccionado} modoPaciente={modoPaciente} radarActivo={radarActivo} idsCercanos={cercanos.map(c => c.id)} basePerfil={modoPaciente ? "/panel/odontologos" : "/directorio"} />
+          <MapaDirectorio ubicaciones={ubicacionesMapa} ubicacion={ubicacion} seleccionado={seleccionado} visible={vistaMovil === "mapa"} alSeleccionar={setSeleccionado} modoPaciente={modoPaciente} radarActivo={radarActivo} idsCercanos={idsCercanos} basePerfil={modoPaciente ? "/panel/odontologos" : "/directorio"} />
         </section>
       </div>
     </>}
