@@ -214,3 +214,32 @@
 @media(max-width:1310px){.heroPremiumImagen{width:100%;max-height:240px;height:240px}}
 @media(max-width:760px){.heroPremiumImagen{width:100%;max-height:185px;height:185px}}
 @media(max-width:490px){.heroPremiumArte{display:none}}
+
+
+/* Ajustes de coherencia con modo morado, respetando el mapa interactivo. */
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremium{
+  background:linear-gradient(125deg,#302453,#55337c 68%,#6a3b9a);
+  border-color:#8162bb;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumCopy h1{color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumCopy h1 span{color:#ddc8ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.heroPremiumCopy>p,.heroPremiumNota){color:#e2d7f5}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumDatos{
+  background:#2b2247e8;border-color:#67538d;color:#f5eeff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumDatos strong{color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumDatos small{color:#d2c6e9}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.localizadorPremium,.proximidadPremium,.sinUbicacionPerfil){
+  background:#2e264b;border-color:#665387;color:#f3edff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.localizadorTexto,.proximidadTexto,.sinUbicacionPerfil p){color:#d5cbea}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.proximidadOpcion,.mapaPremiumIndicador){
+  background:#3c315a;border-color:#765f9d;color:#eadfff;
+}
+/* La foto real también debe estar presente en móvil, no solo en escritorio. */
+.heroPremiumArte{background:#dce9f3 url("/hero/hero-1.jpg") center/cover no-repeat}
+@media(max-width:490px){
+  .heroPremiumArte{display:block;min-height:175px;margin-top:9px}
+  .heroPremiumImagen{display:block;width:100%;height:175px;max-height:175px;object-fit:cover;object-position:center 23%}
+  .creditoFotografia{right:8px;bottom:7px;font-size:9px}
+}
