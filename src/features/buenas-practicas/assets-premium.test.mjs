@@ -8,6 +8,9 @@ test("hoja local de ilustraciones AVIF con siete personajes", () => {
   const asset = readFileSync(join(base,"public/educacion/ilustraciones-premium.avif"));
   assert.ok(asset.length > 10000 && asset.length < 35000);
   assert.equal(asset.subarray(4,12).toString("ascii"),"ftypavif");
+  const hero = readFileSync(join(base,"public/educacion/mascota-premium.avif"));
+  assert.ok(hero.length > 9000 && hero.length < 20000);
+  assert.equal(hero.subarray(4,12).toString("ascii"),"ftypavif");
   const css = readFileSync(join(base,"src/features/buenas-practicas/buenas-practicas.module.css"),"utf8");
   const component = readFileSync(join(base,"src/features/buenas-practicas/BuenasPracticas.tsx"),"utf8");
   const sprite = readFileSync(join(base,"src/features/buenas-practicas/Ilustracion3D.tsx"),"utf8");

@@ -52,3 +52,6 @@
 @media(max-width:770px){.hero{grid-template-columns:1fr 175px}.heroMascota{width:175px}.tarjeta{flex-basis:calc((100% - 12px)/2)}.tarjetaInfo strong{font-size:14px}.imagen3d{max-width:100%}}
 @media(max-width:560px){.hero{grid-template-columns:1fr}.heroMascota{width:215px}.tarjeta{flex-basis:min(76%,265px)}.dibujo .imagen3d{width:157px}.sabias>p,.tipPie{max-width:none}.decoracionTip{opacity:.23}}
 @media(prefers-reduced-motion:reduce){.detalleDibujo .imagen3d,.heroMascota{animation:none!important}.tarjeta:hover .imagen3d{transform:none!important}.imagen3d{transition:none!important}}
+
+/* Mascota con resolución superior (420×417) para mantener nitidez en el hero. */
+.imagen3d[data-tipo="heroe"]{background-image:url("/educacion/mascota-premium.avif");background-size:contain;background-position:center}

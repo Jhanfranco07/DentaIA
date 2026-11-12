@@ -7,3 +7,5 @@ Las celdas son de 160 × 140 px, organizadas en 4 columnas × 2 filas. Orden: ce
 `Ilustracion3D.tsx` selecciona cada celda y `buenas-practicas.module.css` la muestra con `background-size:400% 200%`. Se conservan los dibujos SVG anteriores en el repositorio como referencia y posible recurso de contingencia.
 
 Las ilustraciones son decorativas y no implican resultados clínicos, certificación ni diagnósticos. La información de las guías y las fuentes educativas permanece independiente de los dibujos. Progreso y retos son locales a la sesión.
+
+La mascota principal también tiene una versión AVIF independiente de 420 × 417 px (`public/educacion/mascota-premium.avif`, 10 151 bytes) para conservar nitidez en la cabecera y el reto semanal.
