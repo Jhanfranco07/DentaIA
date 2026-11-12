@@ -1,4 +1,4 @@
-export type NombreIcono = "diente" | "flecha" | "escudo" | "reporte" | "persona" | "casa" | "camara" | "calendario" | "clinica" | "usuarios" | "salir" | "buscar" | "llave" | "reloj" | "menu" | "cerrar" | "enlace" | "subir" | "destello" | "imagen" | "check" | "alerta" | "privacidad" | "reloj-lista" | "actualizar";
+export type NombreIcono = "diente" | "flecha" | "escudo" | "reporte" | "persona" | "casa" | "camara" | "calendario" | "clinica" | "usuarios" | "salir" | "buscar" | "llave" | "reloj" | "menu" | "cerrar" | "enlace" | "subir" | "destello" | "imagen" | "check" | "alerta" | "privacidad" | "reloj-lista" | "actualizar" | "ubicacion";
 
 export function Icono({ nombre = "diente", size = 24 }: { nombre?: NombreIcono; size?: number }) {
   const trazos = {
@@ -9,6 +9,7 @@ export function Icono({ nombre = "diente", size = 24 }: { nombre?: NombreIcono; 
     camara: "M4 7h3l2-3h6l2 3h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Zm8 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z",
     calendario: "M5 4v3m14-3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13H4V6a1 1 0 0 1 1-1Zm3 8h2m3 0h2m-7 4h2m3 0h2",
     clinica: "M12 3v18M3 12h18M5 5h14v14H5zM9 8v2m6-2v2m-6 6v2m6-2v2",
+    ubicacion: "M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0ZM12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
     usuarios: "M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2m6-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6-3a4 4 0 0 1 0 8m2 2h4v-2a4 4 0 0 0-3-3.87",
     salir: "M10 17l5-5-5-5m5 5H3m9-9h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7",
     buscar: "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm6-2 4 4",

@@ -21,7 +21,7 @@ export default function PanelPaciente() {
       <h1>{primerNombre ? `Hola, ${primerNombre}` : "Bienvenido a DentaIA"}</h1>
       <p>Revisa tus solicitudes y organiza los próximos pasos de tu cuidado dental.</p>
       <div className={styles.accionesCabecera}>
-        <Link href="/directorio" className={styles.accionPrincipal}>Explorar odontólogos <Icono nombre="flecha" size={18} /></Link>
+        <Link href="/panel/odontologos" className={styles.accionPrincipal}>Explorar odontólogos <Icono nombre="flecha" size={18} /></Link>
       </div>
     </header>
 
