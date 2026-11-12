@@ -30,12 +30,6 @@ RUN python scripts/download_samples.py
 ENV RUN_REAL_INFERENCE=1
 CMD ["python", "-m", "pytest", "-q", "--junitxml=evidence/tests-linux.xml"]
 
-FROM tests AS test-execution
-RUN --network=none python -m pytest -q --junitxml=evidence/tests-linux.xml
-
-FROM scratch AS test-receipt
-COPY --from=test-execution /service/evidence/tests-linux.xml /tests-linux.xml
-
 FROM runtime-deps AS runtime
 COPY app ./app
 COPY --from=exporter /service/models/best.onnx /service/models/best.onnx
