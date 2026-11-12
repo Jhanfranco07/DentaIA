@@ -8,6 +8,7 @@ export function MascotaDiente({ pequeno = false }: { pequeno?: boolean }) {
     <ellipse cx="122" cy="142" rx="7" ry="10" fill="#263864"/><path d="M181 140 q10 -10 20 0" stroke="#263864" strokeWidth="6" fill="none" strokeLinecap="round"/>
     <ellipse cx="106" cy="162" rx="14" ry="7" fill="#f7abc2" opacity=".8"/><ellipse cx="217" cy="161" rx="14" ry="7" fill="#f7abc2" opacity=".8"/>
     <path d="M141 163 Q161 190 184 163Z" fill="#253b6a"/><path d="M150 174 Q163 166 176 176" stroke="#ff9cb9" strokeWidth="7" strokeLinecap="round" fill="none"/>
+    <path d="M222 146 l38 12 v34 c0 23-15 43-38 53-25-10-38-30-38-53v-34Z" fill="#64d6fc" stroke="#fff" strokeWidth="5" opacity=".97"/><path d="M222 154l28 10v27c0 17-11 33-28 41-18-8-28-24-28-41v-27Z" fill="#257ec4"/><path d="M208 186l10 10 18-22" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/>
     <g className="dentaEstrella"><path d="M53 104 l6 -16 6 16 16 6 -16 6 -6 16 -6 -16 -16 -6Z" fill="#ffca65"/><path d="M258 94 l4 -12 4 12 12 4 -12 4 -4 12 -4 -12 -12 -4Z" fill="#fff"/></g>
   </svg>;
 }
