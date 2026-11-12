@@ -7,10 +7,11 @@ import time
 import warnings
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Request
 from PIL import Image, ImageOps, UnidentifiedImageError
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field, model_validator
 from starlette.concurrency import run_in_threadpool
 
 from app.model import TorchDetector
@@ -19,6 +20,10 @@ MAX_BYTES = 8 * 1024 * 1024
 MAX_PIXELS = 12_000_000
 FORMATS = {"image/jpeg": "JPEG", "image/png": "PNG", "image/webp": "WEBP"}
 logger = logging.getLogger("dental_vision")
+CLASS_DESCRIPTIONS = {
+    "d": "Posible caries en diente temporal",
+    "D": "Posible caries en diente permanente",
+}
 
 
 class Box(BaseModel):
@@ -30,9 +35,21 @@ class Box(BaseModel):
 
 class Detection(BaseModel):
     class_id: int
-    class_name: str
+    class_name: Literal["d", "D"]
     confidence: float = Field(ge=0, le=1)
     box: Box
+
+    @model_validator(mode="after")
+    def class_id_matches_name(self):
+        expected = {0: "d", 1: "D"}
+        if expected.get(self.class_id) != self.class_name:
+            raise ValueError("Detection class id and name do not match")
+        return self
+
+    @computed_field
+    @property
+    def class_description(self) -> str:
+        return CLASS_DESCRIPTIONS[self.class_name]
 
 
 class Prediction(BaseModel):

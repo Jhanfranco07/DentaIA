@@ -12,6 +12,7 @@ const PUBLIC_SAMPLE_NAMES = new Set([
 type Detection = {
   class_id: number;
   class_name: "d" | "D";
+  class_description: string;
   confidence: number;
   box: { x_min: number; y_min: number; x_max: number; y_max: number };
 };
@@ -29,8 +30,13 @@ type Explanation = {
   explanation: string;
 };
 
+const CLASS_DISPLAY = {
+  d: { class_id: 0, description: "Posible caries en diente temporal" },
+  D: { class_id: 1, description: "Posible caries en diente permanente" },
+} as const;
+
 const CLIENT_DEFAULT_EXPLANATION =
-  "El detector marca regiones que superan su umbral y asigna a cada salida una etiqueta técnica y un score entre 0 y 1. Las etiquetas d y D son identificadores técnicos cuyo significado no está confirmado. El score describe la confianza interna del modelo para esa detección; no es una probabilidad clínica ni confirma o descarta una enfermedad. Una lista vacía solo indica que ninguna salida superó el umbral configurado.";
+  "En este modelo, «d» indica una posible caries en un diente temporal y «D» en un diente permanente. La confianza no indica gravedad ni certeza diagnóstica, y no es una probabilidad clínica validada.";
 
 function isPrediction(value: unknown): value is Prediction {
   if (!value || typeof value !== "object") return false;
@@ -38,7 +44,16 @@ function isPrediction(value: unknown): value is Prediction {
   return Array.isArray(candidate.detections)
     && typeof candidate.width === "number"
     && typeof candidate.height === "number"
-    && typeof candidate.inference_ms === "number";
+    && typeof candidate.inference_ms === "number"
+    && candidate.detections.every((detection) => {
+      if (!detection || typeof detection !== "object") return false;
+      const item = detection as Detection;
+      if (item.class_name !== "d" && item.class_name !== "D") return false;
+      const display = CLASS_DISPLAY[item.class_name];
+      return item.class_id === display.class_id
+        && item.class_description === display.description
+        && typeof item.confidence === "number";
+    });
 }
 
 function isExplanation(value: unknown): value is Explanation {
@@ -47,7 +62,7 @@ function isExplanation(value: unknown): value is Explanation {
   return (candidate.source === "ai" || candidate.source === "default")
     && typeof candidate.explanation === "string"
     && candidate.explanation.length > 0
-    && candidate.explanation.length <= 1_200;
+    && candidate.explanation.length <= 350;
 }
 
 export default function VisionPocPage() {
@@ -155,8 +170,11 @@ export default function VisionPocPage() {
         <p className={styles.eyebrow}>PRUEBA LOCAL · SOLO MUESTRAS PÚBLICAS</p>
         <h1>Visualizador ONNX de DentaIA</h1>
         <p className={styles.intro}>
-          Esta página envía únicamente las dos fotografías públicas verificadas al proxy local. Las etiquetas <code>d</code> y <code>D</code> son salidas literales del modelo; no son diagnósticos ni recomendaciones clínicas.
+          Esta página analiza únicamente las dos fotografías públicas autorizadas.
         </p>
+        <aside className={styles.educationalNotice} aria-label="Alcance educativo">
+          Las marcas señalan una posible caries, pero no confirman un diagnóstico. La confianza del modelo no indica gravedad ni certeza diagnóstica, y no es una probabilidad clínica validada. Que no haya marcas no garantiza que no existan problemas; esta herramienta educativa no sustituye la evaluación de un odontólogo.
+        </aside>
 
         <section className={styles.controls} aria-label="Controles de análisis">
           <label className={styles.fileLabel}>
@@ -191,7 +209,7 @@ export default function VisionPocPage() {
                       <g key={`${detection.class_name}-${index}`}>
                         <rect className={styles.box} x={x} y={y} width={width} height={height} />
                         <text className={styles.boxLabel} x={x + 4} y={Math.max(16, y - 5)}>
-                          {detection.class_name} {detection.confidence.toFixed(3)}
+                          {detection.class_description}
                         </text>
                       </g>
                     );
@@ -205,12 +223,12 @@ export default function VisionPocPage() {
                 <h2>Resultado técnico</h2>
                 <p>Modelo: {prediction.model} · inferencia: {prediction.inference_ms.toFixed(3)} ms</p>
                 {prediction.detections.length === 0 ? (
-                  <p className={styles.empty}>No hubo salidas sobre el umbral del modelo. Esto no indica ausencia de enfermedad.</p>
+                  <p className={styles.empty}>El modelo no señaló zonas en esta imagen.</p>
                 ) : (
                   <ul>
                     {prediction.detections.map((detection, index) => (
                       <li key={`${detection.class_name}-${index}`}>
-                        <code>{detection.class_name}</code> · confianza {detection.confidence.toFixed(6)} · caja normalizada ({detection.box.x_min.toFixed(3)}, {detection.box.y_min.toFixed(3)})–({detection.box.x_max.toFixed(3)}, {detection.box.y_max.toFixed(3)})
+                        <strong>{detection.class_description}</strong> · Confianza del modelo: {Math.round(detection.confidence * 100)}% · caja normalizada ({detection.box.x_min.toFixed(3)}, {detection.box.y_min.toFixed(3)})–({detection.box.x_max.toFixed(3)}, {detection.box.y_max.toFixed(3)})
                       </li>
                     ))}
                   </ul>
@@ -218,14 +236,18 @@ export default function VisionPocPage() {
                 <button className={styles.analyze} type="button" disabled={explaining || explanation !== null} onClick={explainResult}>
                   {explaining ? "Preparando explicación…" : explanation ? "Explicación disponible" : "Explicar resultado"}
                 </button>
-                {explanation && (
-                  <section aria-live="polite">
-                    <h3>{explanation.source === "ai" ? "Explicación educativa generada por IA" : "Texto predeterminado, sin respuesta de IA"}</h3>
-                    <p>{explanation.explanation}</p>
-                    <p>Las etiquetas son identificadores técnicos sin significado clínico confirmado. Esta explicación no es un diagnóstico ni una recomendación clínica.</p>
-                  </section>
-                )}
               </div>
+            )}
+            {explanation && (
+              <section className={styles.explanation} aria-live="polite" aria-labelledby="explanation-heading">
+                <div className={styles.explanationHeader}>
+                  <h2 id="explanation-heading">Explicación sencilla</h2>
+                  <span className={styles.explanationSource}>
+                    {explanation.source === "ai" ? "Generada por IA" : "Texto predeterminado · no generado por IA"}
+                  </span>
+                </div>
+                <p>{explanation.explanation}</p>
+              </section>
             )}
           </section>
         )}

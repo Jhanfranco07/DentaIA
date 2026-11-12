@@ -4,10 +4,11 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 
 import pytest
+from pydantic import ValidationError
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from app.main import MAX_BYTES, create_app, decode_image
+from app.main import MAX_BYTES, Detection, create_app, decode_image
 from app.model import verify_weights
 
 SECRET = "test-only-secret-" * 3
@@ -46,8 +47,41 @@ def test_formats_and_normalized_contract_with_mock(client, fmt, mime):
     result = response.json()
     assert (result["width"], result["height"]) == (64, 32)
     assert result["detections"][0]["class_name"] == "d"
+    assert result["detections"][0]["class_description"] == "Posible caries en diente temporal"
     assert all(0 <= v <= 1 for v in result["detections"][0]["box"].values())
     assert response.headers["cache-control"] == "no-store"
+
+
+@pytest.mark.parametrize(("class_id", "class_name", "description"), [
+    (0, "d", "Posible caries en diente temporal"),
+    (1, "D", "Posible caries en diente permanente"),
+])
+def test_prediction_preserves_exact_class_and_description(monkeypatch, class_id, class_name, description):
+    monkeypatch.setenv("DENTAL_VISION_SERVICE_SECRET", SECRET)
+
+    class ClassDetector:
+        def __init__(self, path):
+            pass
+
+        def predict(self, image):
+            return [{"class_id": class_id, "class_name": class_name, "confidence": 0.8,
+                     "box": {"x_min": 0.1, "y_min": 0.2, "x_max": 0.3, "y_max": 0.4}}]
+
+    with TestClient(create_app(ClassDetector)) as test_client:
+        response = test_client.post("/predict", content=image_bytes(), headers=HEADERS)
+
+    assert response.status_code == 200
+    detection = response.json()["detections"][0]
+    assert detection["class_id"] == class_id
+    assert detection["class_name"] == class_name
+    assert detection["class_description"] == description
+
+
+@pytest.mark.parametrize(("class_id", "class_name"), [(0, "D"), (1, "d")])
+def test_class_id_and_name_cannot_be_interchanged(class_id, class_name):
+    with pytest.raises(ValidationError):
+        Detection(class_id=class_id, class_name=class_name, confidence=0.8,
+                  box={"x_min": 0.1, "y_min": 0.2, "x_max": 0.3, "y_max": 0.4})
 
 
 def test_load_once_and_health_with_mock(client):

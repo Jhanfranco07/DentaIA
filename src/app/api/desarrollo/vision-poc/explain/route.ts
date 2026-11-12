@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const MAX_REQUEST_BYTES = 16 * 1024;
 const MAX_DETECTIONS = 100;
-const MAX_OUTPUT_CHARS = 1_200;
+const MAX_OUTPUT_CHARS = 350;
 const MAX_PROVIDER_RESPONSE_BYTES = 32 * 1024;
 const PROVIDER_TIMEOUT_MS = 12_000;
 const RATE_WINDOW_MS = 10 * 60 * 1_000;
@@ -14,16 +14,18 @@ const RATE_LIMIT = 5;
 // Best-effort process-local limit: 5 calls per address per 10 minutes. It resets on restart,
 // can differ across server instances, and depends on trusted proxy headers; not public API protection.
 const DEFAULT_EXPLANATION =
-  "El detector marca regiones que superan su umbral y asigna a cada salida una etiqueta técnica y un score entre 0 y 1. Las etiquetas d y D son identificadores técnicos cuyo significado no está confirmado. El score describe la confianza interna del modelo para esa detección; no es una probabilidad clínica ni confirma o descarta una enfermedad. Una lista vacía solo indica que ninguna salida superó el umbral configurado.";
+  "El modelo usa «d» para señalar una posible caries en diente temporal y «D» en diente permanente. La confianza no indica gravedad ni certeza diagnóstica, y no es una probabilidad clínica validada.";
 
 const INSTRUCTIONS = [
-  "Escribe en español una explicación educativa muy breve de las salidas técnicas de un detector visual.",
-  "Las etiquetas d y D son identificadores opacos; no les atribuyas enfermedades ni condiciones.",
-  "Un confidence entre 0 y 1 es un score del modelo, no una probabilidad clínica ni una medida calibrada de salud.",
-  "No diagnostiques, no recomiendes tratamientos ni des recomendaciones clínicas individualizadas.",
-  "Si no hay detecciones, explica solo que ninguna salida superó el umbral; no infieras ausencia de enfermedad.",
-  "No inventes hechos. Limítate a explicar qué son etiquetas, detecciones y scores en términos técnicos.",
-  "Devuelve solo texto plano, máximo 3 frases y 600 caracteres.",
+  "Responde en español sencillo, profesional, cercano y sin alarmismo, para una persona sin conocimientos odontológicos.",
+  "Explica el resultado en 2 o 3 frases y menos de 350 caracteres, con palabras comunes y sin repeticiones.",
+  "Interpreta las clases exactamente así: d minúscula = posible caries en diente temporal (de leche); D mayúscula = posible caries en diente permanente. No intercambies las letras.",
+  "Habla de una posible caries, nunca de una caries confirmada ni de un diagnóstico.",
+  "Usa solo las etiquetas y valores recibidos. No describas la imagen ni inventes características, hallazgos o cantidades.",
+  "Nunca interpretes el porcentaje de confianza como gravedad, certeza diagnóstica o probabilidad de enfermedad.",
+  "Si la lista está vacía, di únicamente que no hay detecciones en esta imagen; no digas que los dientes están sanos.",
+  "La página ya muestra una advertencia educativa permanente sobre el alcance de la herramienta; no la repitas.",
+  "No diagnostiques ni recomiendes tratamientos. Devuelve solo texto claro, sin jerga, explicaciones largas ni repeticiones.",
 ].join(" ");
 
 const attemptsByAddress = new Map<string, number[]>();

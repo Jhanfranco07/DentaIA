@@ -4,7 +4,7 @@ Servicio independiente de Next.js y Supabase. Usa exclusivamente el detector YOL
 
 ## Estado y alcance
 
-Consultar [evaluación técnica](TECHNICAL_REVIEW.md) y los JSON de `evidence/` para resultados medidos y bloqueos. Un smoke test con dos fotografías no valida precisión, seguridad clínica ni generalización. Las clases se devuelven literalmente como `d` y `D`: no se convierten en diagnósticos, gravedad ni recomendaciones.
+Consultar [evaluación técnica](TECHNICAL_REVIEW.md) y los JSON de `evidence/` para resultados medidos y bloqueos. Un smoke test con dos fotografías no valida precisión, seguridad clínica ni generalización. La API conserva `d` y `D` como identificadores originales y agrega una descripción orientativa por clase; una descripción de posible caries no es un diagnóstico.
 
 La API ONNX de menor memoria midió **329 MiB de pico aproximado y 2.01 s de mediana caliente en Windows**. En la continuación se construyó la imagen Linux, se validó la exportación ONNX y pasaron las 21 pruebas Linux. **La validación Linux integral por HTTP con 512 MiB/0.1 CPU y sus mediciones siguen pendientes**: se detuvo el flujo por petición del usuario. No está confirmado el funcionamiento en Render Free. Ver [traspaso a otra computadora](HANDOFF.md).
 
@@ -30,7 +30,9 @@ En Windows usar una ruta corta para el entorno: ONNX incluye rutas internas larg
 
 - `GET /health`: `200` con `status: "ok"`, `model_available: true`, `device: "cpu"` y `backend: "torch"` o `"onnx"`; `503` si el modelo no está disponible. Sin autenticación para el health check de Render.
 - `POST /predict`: cuerpo **binario** de la imagen, `Content-Type: image/jpeg`, `image/png` o `image/webp`; cabecera `X-Service-Secret`. No usa multipart ni base64.
-- Respuesta: `model`, dimensiones tras corregir orientación EXIF, `inference_ms`, `detections[]` con `class_id`, `class_name`, `confidence` y `box: {x_min,y_min,x_max,y_max}`. Coordenadas entre 0 y 1 relativas a la imagen orientada, origen superior izquierdo; no son coordenadas de la imagen reducida a 640.
+- Respuesta: `model`, dimensiones tras corregir orientación EXIF, `inference_ms`, `detections[]` con `class_id`, `class_name`, `class_description`, `confidence` y `box: {x_min,y_min,x_max,y_max}`. Coordenadas entre 0 y 1 relativas a la imagen orientada, origen superior izquierdo; no son coordenadas de la imagen reducida a 640.
+- Mapeo original del conjunto de datos: `class_id: 0`, `class_name: "d"` → “Posible caries en diente temporal”; `class_id: 1`, `class_name: "D"` → “Posible caries en diente permanente”. Se distingue la minúscula de la mayúscula. La fuente define `d` como caries en diente primario y `D` como caries en diente permanente: Ahmed et al. (2025), *Annotated intraoral image dataset for dental caries detection*, Scientific Data 12, 1297, [doi:10.1038/s41597-025-05647-9](https://www.nature.com/articles/s41597-025-05647-9).
+- La confianza es una puntuación interna del modelo; no representa gravedad, certeza diagnóstica ni una probabilidad clínica validada. Las descripciones indican una posible caries y no confirman enfermedad. Una lista vacía tampoco garantiza ausencia de problemas dentales; se requiere evaluación odontológica.
 - Una lista vacía significa que no se superó el umbral; no certifica una boca sana. No se fabrican resultados cuando falla el modelo.
 - Errores: `401` credenciales, `400` longitud inválida, `413` más de 8 MiB o 12 millones de píxeles, `415` formato o MIME incongruente, `422` imagen inválida/truncada/animada, `429` inferencia ocupada, `503` modelo/inferencia no disponible.
 
