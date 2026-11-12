@@ -1,0 +1,15 @@
+FROM python:3.11.9-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+WORKDIR /service
+
+COPY requirements-evaluation.txt ./
+RUN pip install --no-cache-dir -r requirements-evaluation.txt \
+    && useradd --create-home vision
+
+COPY app/__init__.py ./app/__init__.py
+COPY app/evaluation.py ./app/evaluation.py
+
+USER vision
+EXPOSE 8080
+CMD ["sh", "-c", "exec uvicorn app.evaluation:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1 --limit-concurrency 4 --timeout-keep-alive 5 --no-access-log"]
