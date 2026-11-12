@@ -67,3 +67,6 @@
 .shell[data-educacion="true"] .contenido{width:100%;max-width:1800px;padding:20px clamp(17px,2vw,32px) 55px}
 .shell[data-educacion="true"] .tituloPagina>strong{color:#202453}
 @media(max-width:760px){.shell[data-educacion="true"] .contenido{padding:15px 13px 44px}.shell[data-educacion="true"] .cerrarMenu{background:#ffffff1b;border-color:#ffffff38;color:white}}
+
+/* Mantener el mismo tema oscuro premium en Buenas prácticas y Odontólogos del paciente. */
+.shell[data-educacion="true"] .contenido{max-width:none}
