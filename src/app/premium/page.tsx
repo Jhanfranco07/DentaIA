@@ -23,10 +23,10 @@ export default function PremiumPage() {
         headers: { Authorization: `Bearer ${data.session?.access_token}` },
       });
       const json = await res.json();
-      console.log(json);
+      if (!res.ok) throw new Error(json.error ?? "No se pudo iniciar el pago.");
+      window.location.href = json.url;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error inesperado.");
-    } finally {
       setCargando(false);
     }
   }
