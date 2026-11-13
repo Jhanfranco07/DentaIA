@@ -1,5 +1,6 @@
 "use client";
 import { PLAN_PREMIUM } from "@/lib/stripe/plan";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 const precio = new Intl.NumberFormat("es-PE", {
   style: "currency",
@@ -7,7 +8,16 @@ const precio = new Intl.NumberFormat("es-PE", {
 }).format(PLAN_PREMIUM.amount / 100);
 
 export default function PremiumPage() {
-  return (
+    async function pagar() {
+    const client = getSupabaseBrowserClient();
+    const { data } = await client.auth.getSession();
+    const res = await fetch("/api/stripe/checkout", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${data.session?.access_token}` },
+    });
+    console.log(await res.json());
+  }
+    return (
     <main className="module-shell">
       <div className="page-intro">
         <p>
