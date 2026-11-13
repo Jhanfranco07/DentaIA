@@ -1,28 +1,99 @@
+# Action SHAs: checkout v6, setup-node v6, setup-python v6.1.0; artifacts v4.
 name: CI
-
-on:
-  workflow_call:
-
+'on':
+  push:
+    branches:
+    - main
+    - develop
+  pull_request:
+    branches:
+    - main
+    - develop
+  workflow_dispatch: {}
+  workflow_call: {}
 permissions:
   contents: read
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
 jobs:
-  ci:
-    name: TypeScript y build
+  preparacion:
+    name: Checkout · instalación y lockfile
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Obtener código
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          persist-credentials: false
-      - name: Preparar Node.js 22
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
-        with:
-          node-version: '22'
-          cache: npm
-      - name: Instalar dependencias
-        run: npm ci
-      - name: Verificar tipos de TypeScript
-        run: npm run typecheck
-      - name: Compilar aplicación
-        run: npm run build
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: git diff --exit-code -- package.json package-lock.json
+  typescript:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: npm run typecheck
+  lint:
+    name: Análisis estático configurado
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/lint.mjs
+  build:
+    name: Build Next.js
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - typescript
+    - lint
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: npm run build
+  validacion-final:
+    name: CI · Validación final
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - preparacion
+    - typescript
+    - lint
+    - build
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}

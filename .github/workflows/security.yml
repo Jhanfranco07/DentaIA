@@ -1,25 +1,132 @@
+# Action SHAs: checkout v6, setup-node v6, setup-python v6.1.0; artifacts v4.
 name: Security
-
-on:
-  workflow_call:
-  workflow_dispatch:
-
+'on':
+  push:
+    branches:
+    - main
+    - develop
+  pull_request:
+    branches:
+    - main
+    - develop
+  workflow_dispatch: {}
+  workflow_call: {}
 permissions:
   contents: read
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
 jobs:
-  audit:
-    name: Auditoría de dependencias
+  dependencias:
+    name: Dependencias JavaScript · npm audit
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Obtener código
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          persist-credentials: false
-      - name: Preparar Node.js 22
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
-        with:
-          node-version: '22'
-          cache: npm
-      - name: Revisar vulnerabilidades de todas las dependencias
-        run: npm audit
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: npm audit
+  sast:
+    name: SAST · Semgrep local
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements-*.txt
+    - run: |-
+        python -m pip install semgrep==1.185.0
+        mkdir -p reports
+        semgrep scan --config .github/security/semgrep.yml --error --strict --metrics off --disable-version-check --json --output reports/semgrep.json src services/dental-vision/app
+        python scripts/ci/security-summary.py reports/semgrep.json
+  secretos:
+    name: Secretos · Gitleaks OSS
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: bash scripts/ci/gitleaks.sh
+  configuracion:
+    name: Configuración · YAML, permisos y actionlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements-*.txt
+    - run: |-
+        python -m pip install PyYAML==6.0.3
+        python scripts/ci/validate-workflows.py
+        bash scripts/ci/actionlint.sh
+  python:
+    name: Dependencias Python · pip-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements-*.txt
+    - run: |-
+        python -m pip install pip-audit==2.10.1
+        pip-audit --progress-spinner off -r services/dental-vision/requirements-onnx.txt -r services/dental-vision/requirements-linux-tests.txt
+  hallazgos:
+    name: Consolidación de hallazgos
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - dependencias
+    - sast
+    - secretos
+    - configuracion
+    - python
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+  quality-gate:
+    name: Security · Quality Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - dependencias
+    - sast
+    - secretos
+    - configuracion
+    - python
+    - hallazgos
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
