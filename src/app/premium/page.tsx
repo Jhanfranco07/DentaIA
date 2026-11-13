@@ -1,5 +1,10 @@
 import { PLAN_PREMIUM } from "@/lib/stripe/plan";
 
+const precio = new Intl.NumberFormat("es-PE", {
+  style: "currency",
+  currency: PLAN_PREMIUM.currency.toUpperCase(),
+}).format(PLAN_PREMIUM.amount / 100);
+
 export default function PremiumPage() {
   return (
     <main className="module-shell">
@@ -11,6 +16,11 @@ export default function PremiumPage() {
         <span className="pill">PLAN PREMIUM</span>
         <h1>DentAI Premium</h1>
       </div>
+
+        <section className="surface panel">
+        <h2>{PLAN_PREMIUM.name}</h2>
+        <p className="precio">{precio}</p>
+      </section>
     </main>
   );
 }
