@@ -7,6 +7,9 @@ create table public.payments (
   stripe_session_id text not null,
   stripe_event_id text not null,
   plan text not null,
+  amount_total integer not null,
+  currency text not null,
+  status text not null check (status in ('paid', 'unpaid', 'expired')),
   created_at timestamptz not null default now()
 );
 
