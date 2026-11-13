@@ -114,7 +114,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   return <div className={styles.shell} data-area={area} data-tema={area === "Paciente" ? tema : undefined}>
     <aside ref={lateral} id="navegacion-portal" className={styles.lateral} data-abierto={abierto} aria-hidden={movil && !abierto} inert={movil && !abierto ? true : undefined} aria-label={`Navegación del portal ${area}`}>
       <div className={styles.cabeceraLateral}><Link href="/" className={styles.marca} aria-label="DentaIA, página de inicio"><Marca /></Link><button type="button" className={styles.cerrarMenu} aria-label="Cerrar navegación" onClick={() => { setAbierto(false); boton.current?.focus(); }}><Icono nombre="cerrar" size={18} /></button></div>
-      <div className={styles.portalMarca}><span className={styles.portalIcono}><Icono nombre={area === "Odontología" ? "diente" : area === "Administración" ? "escudo" : "persona"} size={19} /></span><div><strong>{area}</strong><span>{area === "Paciente" ? "Mi espacio personal" : "Espacio de trabajo"}</span></div></div>
+      <div className={styles.portalMarca}><span className={styles.portalIcono}>{area === "Paciente" ? nombreUsuario.slice(0, 1).toLocaleUpperCase("es") : <Icono nombre={area === "Odontología" ? "diente" : "escudo"} size={19} />}</span><div><strong>{area === "Paciente" ? nombreUsuario : area}</strong><span>{area === "Paciente" ? "Paciente" : "Espacio de trabajo"}</span></div></div>
       <p className={styles.tituloNavegacion}>Menú principal</p>
       <nav aria-label={`Secciones de ${area}`}>
         {enlaces.map(({ href, etiqueta, exacto, icono, grupo }) => {

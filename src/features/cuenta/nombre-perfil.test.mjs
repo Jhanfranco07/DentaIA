@@ -19,7 +19,9 @@ test("cabecera, saludo y cuenta utilizan la misma fuente de nombre", () => {
     assert.match(archivo(ruta), /useNombrePerfil\(usuario\)/, ruta);
   }
   const shell = archivo("src/components/PortalShell.tsx");
-  assert.match(shell, /area === "Paciente" \? "Mi espacio personal" : "Espacio de trabajo"/);
+  assert.match(shell, /area === "Paciente" \? nombreUsuario : area/);
+  assert.match(shell, /area === "Paciente" \? "Paciente" : "Espacio de trabajo"/);
+  assert.match(shell, /useNombrePerfil\(usuario\)/);
 });
 
 test("guardar el perfil actualiza el nombre visible sin refrescar ni modificar Auth", () => {
