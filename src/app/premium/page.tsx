@@ -1,6 +1,7 @@
 "use client";
 import { PLAN_PREMIUM } from "@/lib/stripe/plan";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { useState } from "react";
 
 const precio = new Intl.NumberFormat("es-PE", {
   style: "currency",
@@ -8,16 +9,24 @@ const precio = new Intl.NumberFormat("es-PE", {
 }).format(PLAN_PREMIUM.amount / 100);
 
 export default function PremiumPage() {
-    async function pagar() {
-    const client = getSupabaseBrowserClient();
-    const { data } = await client.auth.getSession();
-    const res = await fetch("/api/stripe/checkout", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${data.session?.access_token}` },
-    });
-    console.log(await res.json());
+  const [cargando, setCargando] = useState(false);
+
+  async function pagar() {
+    setCargando(true);
+    try {
+      const client = getSupabaseBrowserClient();
+      const { data } = await client.auth.getSession();
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${data.session?.access_token}` },
+      });
+      console.log(await res.json());
+    } finally {
+      setCargando(false);
+    }
   }
-    return (
+
+  return (
     <main className="module-shell">
       <div className="page-intro">
         <p>
@@ -28,13 +37,15 @@ export default function PremiumPage() {
         <h1>DentAI Premium</h1>
       </div>
 
-        <section className="surface panel">
+      <section className="surface panel">
         <h2>{PLAN_PREMIUM.name}</h2>
         <p className="precio">{precio}</p>
-        <button className="action">Pagar con Stripe (modo prueba)</button>
+        <button className="action" onClick={pagar} disabled={cargando}>
+          {cargando ? "Redirigiendo…" : "Pagar con Stripe (modo prueba)"}
+        </button>
       </section>
 
-        <p className="notice">
+      <p className="notice">
         <strong>Modo prueba</strong>
         No se cobra dinero real. Usa la tarjeta 4242 4242 4242 4242, cualquier
         fecha futura y cualquier CVC.
