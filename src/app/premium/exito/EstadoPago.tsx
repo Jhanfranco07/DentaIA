@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import type { Payment } from "@/types/payments";
+import type { ReactNode } from "react";
 
 export default function EstadoPago({ sessionId }: { sessionId?: string }) {
   const [pago, setPago] = useState<Payment | null>(null);
@@ -25,19 +26,25 @@ export default function EstadoPago({ sessionId }: { sessionId?: string }) {
     return () => clearTimeout(timer);
   }, [sessionId, pago, intentos]);
 
+  let mensaje: ReactNode;
   if (!sessionId) {
-    return <p className="notice notice-error">Falta el identificador de la sesión.</p>;
-  }
-  if (pago) {
-    return (
+    mensaje = <p className="notice notice-error">Falta el identificador de la sesión.</p>;
+  } else if (pago) {
+    mensaje = (
       <p className="notice">
         <strong>Pago registrado</strong>
         Estado: {pago.status}
       </p>
     );
+  } else if (intentos >= 6) {
+    mensaje = <p className="notice">Todavía no recibimos la confirmación. Revisa «Mis pagos» en unos minutos.</p>;
+  } else {
+    mensaje = <p className="notice">Confirmando tu pago de prueba…</p>;
   }
-  if (intentos >= 6) {
-    return <p className="notice">Todavía no recibimos la confirmación. Revisa «Mis pagos» en unos minutos.</p>;
-  }
-  return <p className="notice">Confirmando tu pago de prueba…</p>;
+
+  return (
+    <div role="status" aria-live="polite">
+      {mensaje}
+    </div>
+  );
 }

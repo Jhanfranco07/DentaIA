@@ -18,9 +18,12 @@ export default function PremiumPage() {
     try {
       const client = getSupabaseBrowserClient();
       const { data } = await client.auth.getSession();
+      
+      if (!data.session) throw new Error("Inicia sesión para continuar.");
+
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
-        headers: { Authorization: `Bearer ${data.session?.access_token}` },
+        headers: { Authorization: `Bearer ${data.session.access_token}` },
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "No se pudo iniciar el pago.");
@@ -45,7 +48,12 @@ export default function PremiumPage() {
       <section className="surface panel">
         <h2>{PLAN_PREMIUM.name}</h2>
         <p className="precio">{precio}</p>
-        <button className="action" onClick={pagar} disabled={cargando}>
+        <button 
+          className="action" 
+          onClick={pagar} 
+          disabled={cargando}
+          aria-busy={cargando}
+        >
           {cargando ? "Redirigiendo…" : "Pagar con Stripe (modo prueba)"}
         </button>
         {error && (
