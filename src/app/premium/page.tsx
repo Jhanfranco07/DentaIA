@@ -21,6 +21,12 @@ export default function PremiumPage() {
         <h2>{PLAN_PREMIUM.name}</h2>
         <p className="precio">{precio}</p>
       </section>
+
+        <p className="notice">
+        <strong>Modo prueba</strong>
+        No se cobra dinero real. Usa la tarjeta 4242 4242 4242 4242, cualquier
+        fecha futura y cualquier CVC.
+      </p>
     </main>
   );
 }
