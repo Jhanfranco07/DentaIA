@@ -19,4 +19,6 @@ grant select, insert, update, delete on table public.payments to service_role;
 
 create index payments_user_id_idx on public.payments (user_id);
 
+alter table public.payments enable row level security;
+
 commit;
