@@ -1,0 +1,14 @@
+{
+  "base": "d345faa130198ce6580c94ba351a28415f863f36",
+  "pdf_sha256": "d3143eba87fa00513fbcb863f615a34df860ae839d28e534cc5a1ab8c18dce36",
+  "node": "v24.19.0",
+  "schema_existing_preserved": true,
+  "payment_matches_pr48_bytes": true,
+  "migration_sha256": "159360c09b2c074cf7568819a8f3e79acf94a0c73bb8551bd4f12f62a21721f7",
+  "sql_pass": 39,
+  "node_tests_pass": 493,
+  "node_tests_fail": 0,
+  "supabase_remote_applied": false,
+  "production_failure_test": false,
+  "isolated_transaction_rollback_test": true
+}

@@ -1,0 +1,11 @@
+f5770e09755406f23051cc95691267a7e45e677c
+.env.example
+docs/PAGOS_STRIPE.md
+src/app/cuenta/page.tsx
+
+Auto-merging .env.example
+CONFLICT (content): Merge conflict in .env.example
+Auto-merging docs/PAGOS_STRIPE.md
+CONFLICT (add/add): Merge conflict in docs/PAGOS_STRIPE.md
+Auto-merging src/app/cuenta/page.tsx
+CONFLICT (content): Merge conflict in src/app/cuenta/page.tsx
