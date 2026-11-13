@@ -1,0 +1,73 @@
+> dentaia@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.28
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 5.1s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/24) ...
+   Generating static pages (6/24)
+   Generating static pages (12/24)
+   Generating static pages (18/24)
+ ✓ Generating static pages (24/24)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                        Size  First Load JS
+┌ ○ /                                           1.51 kB         114 kB
+├ ○ /_not-found                                    1 kB         105 kB
+├ ƒ /administracion                               141 B         194 kB
+├ ○ /analisis                                   10.3 kB         182 kB
+├ ○ /analisis/demo                                194 B         104 kB
+├ ƒ /api/administracion/acceso                    194 B         104 kB
+├ ƒ /api/administracion/resenas                   194 B         104 kB
+├ ƒ /api/administracion/roles                     194 B         104 kB
+├ ƒ /api/administracion/roles/validar             194 B         104 kB
+├ ƒ /api/administracion/ubicaciones               194 B         104 kB
+├ ƒ /api/administracion/usuarios                  194 B         104 kB
+├ ƒ /api/administracion/usuarios/reales           194 B         104 kB
+├ ƒ /api/administracion/vinculaciones             194 B         104 kB
+├ ƒ /api/clinical/access-grants                   194 B         104 kB
+├ ƒ /api/clinical/access-grants/[id]/revoke       194 B         104 kB
+├ ƒ /api/clinical/patients/[patientId]/history    194 B         104 kB
+├ ƒ /api/clinical/patients/me                     194 B         104 kB
+├ ƒ /api/desarrollo/validar-lectura-admin         194 B         104 kB
+├ ƒ /api/desarrollo/vision-poc                    194 B         104 kB
+├ ƒ /api/desarrollo/vision-poc/explain            194 B         104 kB
+├ ƒ /api/professional/me                          194 B         104 kB
+├ ƒ /api/professional/patients                    194 B         104 kB
+├ ƒ /api/professional/requests                    194 B         104 kB
+├ ƒ /api/stripe/checkout                          194 B         104 kB
+├ ƒ /api/stripe/webhook                           194 B         104 kB
+├ ○ /buenas-practicas                           9.86 kB         181 kB
+├ ƒ /cuenta                                     6.68 kB         185 kB
+├ ƒ /desarrollo/acceso                           1.8 kB         173 kB
+├ ƒ /desarrollo/lectura-admin                   2.25 kB         174 kB
+├ ƒ /desarrollo/mfa-admin                       5.62 kB         177 kB
+├ ƒ /desarrollo/panel-admin                       142 B         194 kB
+├ ƒ /desarrollo/roles-admin                       176 B         178 kB
+├ ○ /desarrollo/vision-poc                      3.51 kB         172 kB
+├ ○ /directorio                                   183 B         193 kB
+├ ƒ /directorio/[id]                              178 B         186 kB
+├ ○ /fotografias                                9.76 kB         181 kB
+├ ○ /panel                                      5.37 kB         184 kB
+├ ○ /panel/odontologos                          2.35 kB         195 kB
+├ ƒ /panel/odontologos/[id]                       987 B         186 kB
+├ ○ /premium                                    1.24 kB         169 kB
+├ ○ /premium/cancelado                            169 B         107 kB
+├ ƒ /premium/exito                                865 B         169 kB
+├ ○ /privacidad                                   169 B         107 kB
+├ ○ /profesional                                12.8 kB         184 kB
+├ ○ /resultados                                 2.68 kB         174 kB
+└ ƒ /solicitudes                                2.57 kB         181 kB
++ First Load JS shared by all                    104 kB
+  ├ chunks/1255-dc3ddf72a1dc71a7.js             46.6 kB
+  ├ chunks/4bd1b696-f785427dddbba9fb.js         54.2 kB
+  └ other shared chunks (total)                  2.7 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

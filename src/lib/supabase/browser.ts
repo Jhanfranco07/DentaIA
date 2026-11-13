@@ -17,3 +17,17 @@ export function getSupabaseBrowserClient(): SupabaseClient<Database> {
   client = createClient<Database>(url, key);
   return client;
 }
+
+export async function getUserFromRequest(req: Request) {
+  const token = req.headers.get("authorization")?.replace("Bearer ", "");
+  if (!token) return null;
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY as string,
+    { auth: { persistSession: false } }
+  );
+
+  const { data, error } = await supabase.auth.getUser(token);
+  return error ? null : data.user;
+}

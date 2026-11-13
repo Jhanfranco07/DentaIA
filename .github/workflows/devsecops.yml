@@ -53,6 +53,8 @@ jobs:
           mapfile -d '' tests < <(find src/features src/app -name '*.test.mjs' ! -name '*integracion.test.mjs' -print0)
           test "${#tests[@]}" -gt 0
           node --experimental-strip-types --test --test-reporter=tap "${tests[@]}"
+      - name: Ejecutar pruebas Stripe Sandbox (Vitest)
+        run: npm test
   integracion:
     name: Integración local simulada
     needs: dependencias

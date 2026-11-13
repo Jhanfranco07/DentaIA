@@ -1,3 +1,52 @@
+# Integración de Pagos con Stripe (Sandbox)
+
+## Estado de la revisión del PR #48
+
+La tabla `payments` ya fue aplicada y verificada en la fase de base de datos autorizada, con versión `20261113011041` y nombre `payments`. Esta revisión de código no aplica SQL ni modifica su esquema, RLS o historial remoto.
+
+La persistencia actual respeta ambos UNIQUE: inserta primero y, ante `23505`, verifica sesión, propietario y datos económicos. Conserva el primer `stripe_event_id`; una sesión `unpaid` puede avanzar a `paid` o `expired` mediante UPDATE condicionado a `status = unpaid`. Los estados terminales no retroceden. Se soporta también `checkout.session.async_payment_succeeded`. Colisiones de eventos pertenecientes a otra sesión y errores de almacenamiento se propagan como error para conservar el reintento del webhook.
+
+No es un ledger de todos los eventos Stripe: los eventos posteriores no reemplazan el identificador inicial. No se agregaron tablas ni RPC. Los escenarios se prueban con fixtures; no se presenta esta validación como un cobro real o una prueba end-to-end de Stripe.
+
+Checkout conserva `id` y devuelve además la URL consumida por la interfaz. Las claves continúan exclusivamente en la configuración existente, sin cambios de secretos. Las pruebas Vitest se ejecutan junto a las pruebas Node en el job de pruebas de DevSecOps.
+
+
+## 1. Objetivo y Alcance
+Este documento detalla la configuración y arquitectura del flujo de pagos en entorno de pruebas para la plataforma.
+
+## 2. Simulación de Pagos
+Todas las transacciones se ejecutan estrictamente en modo prueba (Test Mode). No se procesan cargos reales ni se utiliza dinero real.
+
+## 3. Creación del Sandbox y Claves
+1. Crear cuenta en Stripe y activar el modo Test Mode en el dashboard.
+2. Ir a Developers > API keys y copiar la clave publicable (pk_test_...) y la clave secreta (sk_test_...).
+
+## 4. Instalación de Stripe CLI en Windows
+Ejecutar en PowerShell: winget install Stripe.StripeCLI
+
+## Tabla `payments`
+| Columna | Descripción |
+|---|---|
+| user_id | Usuario de Supabase que pagó |
+| stripe_session_id | Sesión de Checkout (única) |
+| stripe_event_id | Evento del webhook (único, evita duplicados) |
+| plan, amount_total, currency | Plan y monto en centavos |
+| status | paid, unpaid o expired |
+
+RLS activo: cada usuario solo lee sus pagos. Solo el servidor escribe.
+
+## Endpoint `POST /api/stripe/checkout`
+- Requiere el encabezado `Authorization: Bearer <access_token de Supabase>`.
+- 401 si no hay sesión válida. 502 si Stripe falla.
+- Respuesta correcta: `{ "url": "https://checkout.stripe.com/..." }`.
+
+## Webhook `POST /api/stripe/webhook`
+Verifica la firma con `STRIPE_WEBHOOK_SECRET` y es idempotente (`stripe_event_id` único).
+| Evento | Acción |
+|---|---|
+| checkout.session.completed | Guarda el pago (`paid` o `unpaid`) |
+| checkout.session.expired | Guarda el pago como `expired` |
+| Otros | Se ignoran (200) |
 # Stripe Sandbox — Fase 3: base de datos
 
 ## Alcance y fuente
