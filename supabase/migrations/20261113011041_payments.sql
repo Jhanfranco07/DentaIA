@@ -17,4 +17,6 @@ create table public.payments (
 revoke all on table public.payments from public, anon, authenticated, service_role;
 grant select, insert, update, delete on table public.payments to service_role;
 
+create index payments_user_id_idx on public.payments (user_id);
+
 commit;
