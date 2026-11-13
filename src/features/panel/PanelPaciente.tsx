@@ -21,7 +21,7 @@ export default function PanelPaciente() {
       <span className={styles.etiqueta}>Tu espacio personal</span>
       <h1>{primerNombre ? `Hola, ${primerNombre}` : "Bienvenido a DentaIA"}</h1>
       <p>Revisa tus solicitudes y organiza los próximos pasos de tu cuidado dental.</p>
-      <div className={styles.ilustracionHero} aria-hidden="true"><Icono nombre="diente" size={92} /><span className={styles.brilloHero}><Icono nombre="destello" size={24} /></span></div>
+      <div className={styles.ilustracionHero} aria-hidden="true"><span className={styles.orbitaHero} /><Icono nombre="diente" size={112} /><span className={styles.brilloHero}><Icono nombre="destello" size={24} /></span></div>
       <div className={styles.accionesCabecera}>
         <Link href="/panel/odontologos" className={styles.accionPrincipal}>Explorar odontólogos <Icono nombre="flecha" size={18} /></Link>
       </div>
@@ -31,14 +31,18 @@ export default function PanelPaciente() {
       <EstadoPanel tipo="error" titulo="No pudimos comprobar tu sesión." accion={<button type="button" className={styles.boton} onClick={() => void verificar()}>Reintentar sesión</button>} /> : !usuario ?
         <EstadoPanel tipo="vacio" titulo="Inicia sesión para acceder a tu panel." accion={<Link href="/cuenta" className={styles.enlace}>Ir a mi perfil</Link>}>No se muestran datos personales sin sesión.</EstadoPanel> : <Fragment key={usuario.id}>
           <ResumenPanel />
-          <div className={styles.encabezadoActividad}><div><span className={styles.etiquetaActividad}>TU ESPACIO DE TRABAJO</span><h2>Accesos y actividad reciente</h2><p>Encuentra tus herramientas y consulta el estado de tus solicitudes.</p></div><Link href="/solicitudes" className={styles.enlaceActividad}>Ver todas las solicitudes <Icono nombre="flecha" size={17} /></Link></div>
           <div className={styles.contenidoPanel}>
-            <div className={styles.actividad}>
-              <MisSolicitudes compacto />
+            <div className={styles.columnaPrincipal}>
+              <div className={styles.actividad}><MisSolicitudes compacto /></div>
+              <Link href="/analisis" className={styles.siguientePaso}>
+                <span className={styles.iconoSiguiente} aria-hidden="true"><Icono nombre="reporte" size={38} /></span>
+                <span className={styles.textoSiguiente}><small>Siguiente paso</small><strong>Prepara una fotografía de tu boca</strong><span>Sigue las recomendaciones para obtener una imagen clara y útil.</span></span>
+                <span className={styles.botonSiguiente}>Preparar fotografía <Icono nombre="flecha" size={17} /></span>
+              </Link>
             </div>
             <aside className={styles.proximosPasos} aria-labelledby="proximos-pasos-titulo">
               <div className={styles.proximosEncabezado}>
-                <h2 id="proximos-pasos-titulo">Continúa desde aquí</h2>
+                <h2 id="proximos-pasos-titulo"><span className={styles.iconoAcciones} aria-hidden="true"><Icono nombre="destello" size={23} /></span> Acciones rápidas</h2>
                 <p>Accesos a tus herramientas personales.</p>
               </div>
               <Link href="/fotografias" className={styles.paso}>
