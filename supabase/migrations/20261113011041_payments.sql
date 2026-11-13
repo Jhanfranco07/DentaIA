@@ -5,7 +5,7 @@ create table public.payments (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
   stripe_session_id text not null unique,
-  stripe_event_id text not null,
+  stripe_event_id text not null unique,
   plan text not null,
   amount_total integer not null,
   currency text not null,
