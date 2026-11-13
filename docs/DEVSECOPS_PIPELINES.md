@@ -117,7 +117,7 @@ No hay ESLint configurado en `main`: el job lo declara explícitamente; si apare
 - `npm audit` completo, sin umbral reducido ni exclusión de devDependencies; `pip-audit 2.10.1` resuelve también dependencias transitivas de runtime ONNX y pruebas Linux, sin ignorar advisories.
 - Semgrep OSS **1.185.0**, cinco reglas locales versionadas: ejecución dinámica JS/Python, TLS desactivado Python/Node y shell Python. `--error --strict`, sin reglas remotas cambiantes ni licencia. Alcance limitado, no equivale a SAST exhaustivo.
 - Gitleaks OSS **8.30.1**, snapshot completo de archivos versionados, resultados 100% redactados, sin subir informes con secretos. No revisa todo el historial previo. Excepciones revisadas de `generic-api-key`: SHA-256 de seis archivos de evidencia, clave explícitamente pública `sb_publishable_` de `.env.example` y una constante sintética exacta en `test_evaluation.py`. Condición AND de archivo y valor; no se excluyen carpetas completas ni credenciales privadas.
-- Bandit **1.9.4** bloquea severidad media/alta del código `services/dental-vision/app`. El análisis inicial informa una observación baja de binding de red del contenedor (B104); no es una auditoría libre de observaciones.
+- Bandit **1.9.4** bloquea severidad media/alta del código `services/dental-vision/app`. El análisis inicial informa una observación baja de uso de `assert` al validar la forma de salida ONNX (B101); no es una auditoría libre de observaciones.
 - actionlint **1.7.12** y PyYAML **6.0.3**, más validación de DAG, permisos, SHA, persistencia de credenciales, eventos y ausencia de comandos de publicación.
 - Checkout v6, setup-node v6, setup-python v6.1.0 y upload-artifact v4 fijados a SHA completos. Binarios Gitleaks/actionlint fijados a versión y SHA-256 verificado contra los checksums oficiales. No se utiliza un tag flotante `latest`.
 
@@ -163,7 +163,18 @@ Abrir [GitHub Actions](https://github.com/Jhanfranco07/DentaIA/actions), elegir 
 
 Presentar CI para explicar la bifurcación TypeScript/lint y convergencia al build; Automated Testing para mostrar las cuatro categorías y sus cifras; Security para explicar scanners independientes y bloqueo ante hallazgos; Backend IA para separar contrato/autenticación de inferencia real; DevSecOps para integrar gates sin repetir trabajo; CD para distinguir observar una publicación de autorizar Production.
 
-Ejecuciones previas reales, **no evidencia de los YAML nuevos**: [PR #48 DevSecOps, ocho jobs aprobados](https://github.com/Jhanfranco07/DentaIA/actions/runs/43353189536). Las ejecuciones de esta arquitectura se registrarán tras verificar los seis workflows del PR.
+Ejecuciones previas reales, **no evidencia de los YAML nuevos**: [PR #48 DevSecOps, ocho jobs aprobados](https://github.com/Jhanfranco07/DentaIA/actions/runs/43353189536). Las seis ejecuciones iniciales de esta arquitectura aprobaron para el commit `17af104` del [PR #67](https://github.com/Jhanfranco07/DentaIA/pull/67):
+
+| Workflow | Jobs aprobados | Ejecución real |
+| --- | ---: | --- |
+| CI | 5/5 | [43357425834](https://github.com/Jhanfranco07/DentaIA/actions/runs/43357425834) |
+| Automated Testing | 6/6 | [43357425821](https://github.com/Jhanfranco07/DentaIA/actions/runs/43357425821) |
+| Security | 7/7 | [43357425777](https://github.com/Jhanfranco07/DentaIA/actions/runs/43357425777) |
+| Backend IA | 6/6 | [43357426060](https://github.com/Jhanfranco07/DentaIA/actions/runs/43357426060) |
+| DevSecOps | 5/5 | [43357425884](https://github.com/Jhanfranco07/DentaIA/actions/runs/43357425884) |
+| Continuous Delivery | 7/7 | [43357425914](https://github.com/Jhanfranco07/DentaIA/actions/runs/43357425914) |
+
+Los logs de Actions confirman 463 casos unitarios, 11 de integración, 16 de contratos y 3 de regresión; backend confirma 6 + 8 + 15 casos. Vercel confirmó publicación del SHA exacto: [Preview del proveedor](https://vercel.com/jhan-francos-projects/dent-ai/8FWSKgTVXWLa53YTMGqDnDnD2P4w). Estos resultados corresponden a esa revisión, no se atribuyen automáticamente a commits posteriores. El commit que incorpora esta evidencia vuelve a ejecutar los seis workflows; consultar sus resultados más recientes en el PR antes de fusionar.
 
 ## Costos, configuración manual y recuperación
 

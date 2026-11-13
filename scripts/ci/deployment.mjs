@@ -39,3 +39,4 @@ if(process.argv.includes('--smoke')){
 }
 text+='\nProduction: no se ejecuta promoción ni despliegue desde este workflow. Revisión y autorización externas necesarias.\n';
 appendFileSync(process.env.GITHUB_STEP_SUMMARY,text);
+console.log(text);
