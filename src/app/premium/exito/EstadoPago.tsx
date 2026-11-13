@@ -6,27 +6,38 @@ import type { Payment } from "@/types/payments";
 
 export default function EstadoPago({ sessionId }: { sessionId?: string }) {
   const [pago, setPago] = useState<Payment | null>(null);
+  const [intentos, setIntentos] = useState(0);
 
   useEffect(() => {
-    if (!sessionId) return;
-    getSupabaseBrowserClient()
-      .from("payments")
-      .select("*")
-      .eq("stripe_session_id", sessionId)
-      .maybeSingle()
-      .then(({ data }) => setPago(data as Payment | null));
-  }, [sessionId]);
+    if (!sessionId || pago || intentos >= 6) return;
+
+    const timer = setTimeout(async () => {
+      const { data } = await getSupabaseBrowserClient()
+        .from("payments")
+        .select("*")
+        .eq("stripe_session_id", sessionId)
+        .maybeSingle();
+
+      if (data) setPago(data as Payment);
+      setIntentos((n) => n + 1);
+    }, intentos === 0 ? 0 : 2000);
+
+    return () => clearTimeout(timer);
+  }, [sessionId, pago, intentos]);
 
   if (!sessionId) {
     return <p className="notice notice-error">Falta el identificador de la sesión.</p>;
   }
-  if (!pago) {
-    return <p className="notice">Aún no vemos tu pago registrado.</p>;
+  if (pago) {
+    return (
+      <p className="notice">
+        <strong>Pago registrado</strong>
+        Estado: {pago.status}
+      </p>
+    );
   }
-  return (
-    <p className="notice">
-      <strong>Pago registrado</strong>
-      Estado: {pago.status}
-    </p>
-  );
+  if (intentos >= 6) {
+    return <p className="notice">Todavía no recibimos la confirmación. Revisa «Mis pagos» en unos minutos.</p>;
+  }
+  return <p className="notice">Confirmando tu pago de prueba…</p>;
 }
