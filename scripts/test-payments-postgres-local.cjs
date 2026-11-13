@@ -85,7 +85,7 @@ async function asRole(role, user, fn) {
     assert(/^begin;/i.test(migration.trim()) && /commit;$/i.test(migration.trim()));
     await db.query(migration);
   });
-  await test('Diez columnas, tipos, NOT NULL y solo dos DEFAULT', async () => {
+  await test('Nueve columnas, tipos, NOT NULL y solo dos DEFAULT', async () => {
     const cols = (await db.query("select column_name,data_type,is_nullable,column_default from information_schema.columns where table_schema='public' and table_name='payments' order by ordinal_position")).rows;
     assert.deepEqual(cols.map(x=>x.column_name),['id','user_id','stripe_session_id','stripe_event_id','plan','amount_total','currency','status','created_at']);
     assert.deepEqual(cols.map(x=>x.data_type),['uuid','uuid','text','text','text','integer','text','text','timestamp with time zone']);
