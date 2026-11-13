@@ -1,0 +1,121 @@
+# Action SHAs: checkout v6, setup-node v6, setup-python v6.1.0; artifacts v4.
+name: Continuous Delivery
+'on':
+  push:
+    branches:
+    - main
+    - develop
+  pull_request:
+    branches:
+    - main
+    - develop
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  actions: read
+  deployments: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+jobs:
+  commit:
+    name: Confirmar commit y rama
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: |-
+        git rev-parse HEAD
+        git diff --exit-code
+  quality-gate:
+    name: Quality Gate de integración
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: commit
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: node scripts/ci/observe.mjs devsecops.yml
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        TARGET_EVENT: ${{ github.event_name }}
+        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
+  build-verificado:
+    name: Confirmar build del pipeline CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: quality-gate
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: node scripts/ci/observe.mjs ci.yml
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        TARGET_EVENT: ${{ github.event_name }}
+        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
+  preview:
+    name: Publicación existente · Vercel y Railway
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: build-verificado
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: node scripts/ci/deployment.mjs
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        TARGET_EVENT: ${{ github.event_name }}
+        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
+  disponibilidad:
+    name: Comprobación pública de Preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preview
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: node scripts/ci/deployment.mjs --smoke
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        TARGET_EVENT: ${{ github.event_name }}
+        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
+  promocion-manual:
+    name: Production · autorización externa
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: disponibilidad
+    permissions: {}
+    steps:
+    - run: echo "Production no se publica desde Actions. Promoción fuera de este workflow, después de revisión y autorización."
+        >> "$GITHUB_STEP_SUMMARY"
+  resultado:
+    name: CD · Resultado de observación
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - commit
+    - quality-gate
+    - build-verificado
+    - preview
+    - disponibilidad
+    - promocion-manual
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
