@@ -10,8 +10,10 @@ const precio = new Intl.NumberFormat("es-PE", {
 
 export default function PremiumPage() {
   const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState("");
 
   async function pagar() {
+    setError("");
     setCargando(true);
     try {
       const client = getSupabaseBrowserClient();
@@ -20,7 +22,10 @@ export default function PremiumPage() {
         method: "POST",
         headers: { Authorization: `Bearer ${data.session?.access_token}` },
       });
-      console.log(await res.json());
+      const json = await res.json();
+      console.log(json);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error inesperado.");
     } finally {
       setCargando(false);
     }
@@ -43,6 +48,11 @@ export default function PremiumPage() {
         <button className="action" onClick={pagar} disabled={cargando}>
           {cargando ? "Redirigiendo…" : "Pagar con Stripe (modo prueba)"}
         </button>
+        {error && (
+          <p className="notice notice-error" role="alert">
+            {error}
+          </p>
+        )}
       </section>
 
       <p className="notice">
