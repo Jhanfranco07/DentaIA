@@ -45,9 +45,9 @@ function crearAdminFalso() {
         return { error: null };
       },
       select: () => ({
-        eq: (_columna: string, valor: string) => ({
+        eq: (columna: string, valor: string) => ({
           maybeSingle: async () => ({
-            data: filas.find((f) => f.stripe_session_id === valor) ?? null,
+            data: filas.find((f) => (columna === "stripe_event_id" ? f.stripe_event_id : f.stripe_session_id) === valor) ?? null,
             error: null,
           }),
         }),
@@ -154,4 +154,45 @@ describe("idempotencia del webhook con restricciones UNIQUE", () => {
 
     expect(admin.filas[0].status).toBe("expired");
   });
+
+  it("entregas concurrentes del mismo evento dejan una sola fila", async () => {
+    const e = evento("evt_1", "cs_1", "paid");
+    await Promise.all([handleCheckoutCompleted(e), handleCheckoutCompleted(e)]);
+    expect(admin.filas).toHaveLength(1);
+  });
+
+  it("un evento de expiración no retrocede un pago paid", async () => {
+    await handleCheckoutCompleted(evento("evt_1", "cs_1", "paid"));
+    await handleCheckoutExpired(evento("evt_2", "cs_1", "unpaid", EXPIRADO));
+    expect(admin.filas[0].status).toBe("paid");
+  });
+
+  it("una sesión unpaid puede expirar sin crear otra fila", async () => {
+    await handleCheckoutCompleted(evento("evt_1", "cs_1", "unpaid"));
+    await handleCheckoutExpired(evento("evt_2", "cs_1", "unpaid", EXPIRADO));
+    expect(admin.filas).toHaveLength(1);
+    expect(admin.filas[0]).toMatchObject({ status: "expired", stripe_event_id: "evt_1" });
+  });
+
+  it("no ignora un event_id que colisiona con otra sesión", async () => {
+    await handleCheckoutCompleted(evento("evt_1", "cs_1", "paid"));
+    await expect(handleCheckoutCompleted(evento("evt_1", "cs_2", "paid"))).rejects.toMatchObject({ code: "23505" });
+    expect(admin.filas).toHaveLength(1);
+  });
+
+  it("no ignora una colisión de sesión con otro propietario", async () => {
+    await handleCheckoutCompleted(evento("evt_1", "cs_1", "unpaid"));
+    const otro = evento("evt_2", "cs_1", "paid", ASYNC_OK);
+    (otro.data.object as Stripe.Checkout.Session).client_reference_id = "user-2";
+    await expect(handleAsyncPaymentSucceeded(otro)).rejects.toMatchObject({ code: "23505" });
+    expect(admin.filas[0].status).toBe("unpaid");
+  });
+
+  it("no aplica un evento de otra sesión aunque ambas sesiones ya existan", async () => {
+    await handleCheckoutCompleted(evento("evt_1", "cs_1", "paid"));
+    await handleCheckoutCompleted(evento("evt_2", "cs_2", "unpaid"));
+    await expect(handleAsyncPaymentSucceeded(evento("evt_1", "cs_2", "paid", ASYNC_OK))).rejects.toMatchObject({ code: "23505" });
+    expect(admin.filas.find(f => f.stripe_session_id === "cs_2")?.status).toBe("unpaid");
+  });
+
 });

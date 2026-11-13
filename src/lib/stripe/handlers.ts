@@ -21,10 +21,40 @@ async function savePayment(event: Stripe.Event, status: PaymentStatus) {
   const row = buildPaymentRow(event, status);
   if (!row) return;
 
-  const { error } = await getSupabaseAdmin()
+  const admin = getSupabaseAdmin();
+  const { error } = await admin.from("payments").insert(row);
+  if (!error) return;
+  if (error.code !== "23505") throw error;
+
+  // Un conflicto de evento o sesión solo es una reentrega válida si corresponde
+  // a la misma sesión, propietario y datos económicos inmutables.
+  const { data: existing, error: readError } = await admin
     .from("payments")
-    .upsert(row, { onConflict: "stripe_event_id", ignoreDuplicates: true });
-  if (error) throw error;
+    .select("user_id,stripe_session_id,stripe_event_id,plan,amount_total,currency,status")
+    .eq("stripe_session_id", row.stripe_session_id)
+    .maybeSingle();
+  if (readError) throw readError;
+  if (!existing || existing.user_id !== row.user_id || existing.plan !== row.plan ||
+      existing.amount_total !== row.amount_total || existing.currency !== row.currency) {
+    throw error;
+  }
+  if (existing.stripe_event_id === row.stripe_event_id) return;
+
+  const { data: eventOwner, error: eventReadError } = await admin.from("payments")
+    .select("stripe_session_id")
+    .eq("stripe_event_id", row.stripe_event_id)
+    .maybeSingle();
+  if (eventReadError) throw eventReadError;
+  if (eventOwner && eventOwner.stripe_session_id !== row.stripe_session_id) throw error;
+
+  // Conservar el primer evento UNIQUE; solo salir de unpaid. El filtro SQL
+  // hace que dos entregas concurrentes no sobrescriban un estado terminal.
+  if (existing.status !== "unpaid" || row.status === "unpaid") return;
+  const { error: updateError } = await admin.from("payments")
+    .update({ status: row.status })
+    .eq("stripe_session_id", row.stripe_session_id)
+    .eq("status", "unpaid");
+  if (updateError) throw updateError;
 }
 
 export function handleCheckoutCompleted(event: Stripe.Event) {
@@ -34,4 +64,8 @@ export function handleCheckoutCompleted(event: Stripe.Event) {
 
 export function handleCheckoutExpired(event: Stripe.Event) {
   return savePayment(event, "expired");
+}
+
+export function handleAsyncPaymentSucceeded(event: Stripe.Event) {
+  return savePayment(event, "paid");
 }

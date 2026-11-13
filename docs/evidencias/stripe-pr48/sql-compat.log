@@ -1,0 +1,40 @@
+PASS Fallo tras CREATE TABLE revierte toda la migración y conserva la tabla centinela local
+PASS Migración final completa: parseo y aplicación transaccional en PostgreSQL real
+PASS Nueve columnas, tipos, NOT NULL y solo dos DEFAULT
+PASS PK, FK con CASCADE, dos UNIQUE y CHECK válidos
+PASS Índice B-tree válido en user_id
+PASS RLS habilitado; única política SELECT para authenticated y auth.uid()
+PASS Grants mínimos neutralizan privilegios heredados de PUBLIC y roles cliente
+PASS service_role escribe sin identidad de usuario y DEFAULT genera UUID/fecha
+PASS RLS usuario 1: solo su fila, incluso filtrando por otra identidad
+PASS RLS usuario 2: solo su fila, incluso filtrando por otra identidad
+PASS RLS usuario 3: solo su fila, incluso filtrando por otra identidad
+PASS authenticated sin sub no obtiene pagos
+PASS anon no puede SELECT aunque suministre un sub
+PASS anon: INSERT denegado por privilegios SQL
+PASS anon: UPDATE denegado por privilegios SQL
+PASS anon: DELETE denegado por privilegios SQL
+PASS anon: TRUNCATE denegado por privilegios SQL
+PASS authenticated: INSERT denegado por privilegios SQL
+PASS authenticated: UPDATE denegado por privilegios SQL
+PASS authenticated: DELETE denegado por privilegios SQL
+PASS authenticated: TRUNCATE denegado por privilegios SQL
+PASS RLS sigue bloqueando escrituras si un grant futuro se concede por error
+PASS Sesión duplicada: 23505 sobre payments_stripe_session_id_key
+PASS Evento duplicado: 23505 sobre payments_stripe_event_id_key
+PASS Reentrega del mismo evento con ON CONFLICT no crea otra fila
+PASS Evento distinto sobre la misma sesión no queda cubierto por ON CONFLICT de evento
+PASS Estado no permitido: CHECK 23514
+PASS FK rechaza usuario inexistente: 23503
+PASS NOT NULL: campo obligatorio user_id
+PASS NOT NULL: campo obligatorio stripe_session_id
+PASS NOT NULL: campo obligatorio stripe_event_id
+PASS NOT NULL: campo obligatorio plan
+PASS NOT NULL: campo obligatorio amount_total
+PASS NOT NULL: campo obligatorio currency
+PASS NOT NULL: campo obligatorio status
+PASS Monto exige INTEGER: fracción y desbordamiento rechazados
+PASS service_role puede actualizar y eliminar en contexto backend
+PASS ON DELETE CASCADE elimina solo los pagos del usuario borrado
+PASS Tabla centinela permanece intacta tras toda la batería
+{"aprobadas":39,"fallidas":0}

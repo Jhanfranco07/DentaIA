@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe/server";
-import { handleCheckoutCompleted, handleCheckoutExpired } from "@/lib/stripe/handlers";
+import { handleAsyncPaymentSucceeded, handleCheckoutCompleted, handleCheckoutExpired } from "@/lib/stripe/handlers";
 
 export const runtime = "nodejs";
 
@@ -25,6 +25,9 @@ export async function POST(req: Request) {
     switch (event.type) {
       case "checkout.session.completed":
         await handleCheckoutCompleted(event);
+        break;
+      case "checkout.session.async_payment_succeeded":
+        await handleAsyncPaymentSucceeded(event);
         break;
       case "checkout.session.expired":
         await handleCheckoutExpired(event);

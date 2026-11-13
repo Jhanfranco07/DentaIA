@@ -30,9 +30,10 @@ export async function POST(req: Request) {
       cancel_url: `${siteUrl()}/premium/cancelado`,
     });
 
-    return NextResponse.json({ id: session.id });
-  } catch (error) {
-        console.error("Error de Stripe:", error instanceof Error ? error.message : "desconocido");
+    if (!session.url) throw new Error("Stripe no devolvió la URL de Checkout.");
+    return NextResponse.json({ id: session.id, url: session.url });
+  } catch {
+    console.error("No se pudo crear la sesión Stripe de prueba.");
     return NextResponse.json({ error: "No se pudo iniciar el pago de prueba." }, { status: 502 });
   }
 }

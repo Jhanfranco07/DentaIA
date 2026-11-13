@@ -1,5 +1,15 @@
-<<<<<<< HEAD
-﻿# Integración de Pagos con Stripe (Sandbox)
+# Integración de Pagos con Stripe (Sandbox)
+
+## Estado de la revisión del PR #48
+
+La tabla `payments` ya fue aplicada y verificada en la fase de base de datos autorizada, con versión `20261113011041` y nombre `payments`. Esta revisión de código no aplica SQL ni modifica su esquema, RLS o historial remoto.
+
+La persistencia actual respeta ambos UNIQUE: inserta primero y, ante `23505`, verifica sesión, propietario y datos económicos. Conserva el primer `stripe_event_id`; una sesión `unpaid` puede avanzar a `paid` o `expired` mediante UPDATE condicionado a `status = unpaid`. Los estados terminales no retroceden. Se soporta también `checkout.session.async_payment_succeeded`. Colisiones de eventos pertenecientes a otra sesión y errores de almacenamiento se propagan como error para conservar el reintento del webhook.
+
+No es un ledger de todos los eventos Stripe: los eventos posteriores no reemplazan el identificador inicial. No se agregaron tablas ni RPC. Los escenarios se prueban con fixtures; no se presenta esta validación como un cobro real o una prueba end-to-end de Stripe.
+
+Checkout conserva `id` y devuelve además la URL consumida por la interfaz. Las claves continúan exclusivamente en la configuración existente, sin cambios de secretos. Las pruebas Vitest se ejecutan junto a las pruebas Node en el job de pruebas de DevSecOps.
+
 
 ## 1. Objetivo y Alcance
 Este documento detalla la configuración y arquitectura del flujo de pagos en entorno de pruebas para la plataforma.
@@ -37,7 +47,6 @@ Verifica la firma con `STRIPE_WEBHOOK_SECRET` y es idempotente (`stripe_event_id
 | checkout.session.completed | Guarda el pago (`paid` o `unpaid`) |
 | checkout.session.expired | Guarda el pago como `expired` |
 | Otros | Se ignoran (200) |
-=======
 # Stripe Sandbox — Fase 3: base de datos
 
 ## Alcance y fuente
@@ -150,4 +159,3 @@ La prueba de fallo inyecta división entre cero antes de COMMIT y comprueba roll
 Stripe Test Mode no cobra dinero real. Esta tabla no fuerza por sí misma el modo de la cuenta o de las claves Stripe: eso debe garantizarlo la integración de servidor. No se registran pruebas de Checkout/webhook/Stripe CLI como realizadas en esta fase. El formato de identificadores es opaco; el backend verificará su origen. No habilitar pagos productivos ni conceder acceso premium automáticamente a partir de este trabajo.
 
 Los resultados ejecutados, limitaciones de herramientas y estado de DevSecOps se recogen en `docs/evidencias/stripe-db/VALIDACION.md` y en el Pull Request. No se modificaron variables persistentes, secretos, autenticación, AAL2, roles remotos, políticas ajenas, módulos funcionales, Vercel o Jira. El PR queda sin merge y la aplicación de la migración requiere autorización aparte.
->>>>>>> origin/main
