@@ -1,3 +1,4 @@
+"use client";
 import { PLAN_PREMIUM } from "@/lib/stripe/plan";
 
 const precio = new Intl.NumberFormat("es-PE", {
@@ -20,6 +21,7 @@ export default function PremiumPage() {
         <section className="surface panel">
         <h2>{PLAN_PREMIUM.name}</h2>
         <p className="precio">{precio}</p>
+        <button className="action">Pagar con Stripe (modo prueba)</button>
       </section>
 
         <p className="notice">
