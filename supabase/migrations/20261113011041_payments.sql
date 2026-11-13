@@ -21,4 +21,11 @@ create index payments_user_id_idx on public.payments (user_id);
 
 alter table public.payments enable row level security;
 
+-- La política no concede privilegios SQL: habilitar solo SELECT al cliente.
+grant select on table public.payments to authenticated;
+create policy "payments_select_own"
+  on public.payments for select to authenticated
+  using (user_id = (select auth.uid()));
+
+-- Sin políticas INSERT/UPDATE/DELETE para usuarios comunes.
 commit;
