@@ -1,0 +1,24 @@
+{
+  "method": "Recorded repeat 1, detection confidence order; FP32; only two samples, not a general equivalence or accuracy claim",
+  "cases": [
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "torch_count": 1,
+      "onnx_count": 1,
+      "same_count_and_class_order": true,
+      "max_confidence_absolute_error": 2.086162567138672e-07,
+      "max_normalized_box_absolute_error": 3.725290298461914e-08,
+      "within_1e_minus_4": true
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "torch_count": 0,
+      "onnx_count": 0,
+      "same_count_and_class_order": true,
+      "max_confidence_absolute_error": 0,
+      "max_normalized_box_absolute_error": 0,
+      "within_1e_minus_4": true
+    }
+  ],
+  "all_within_tolerance": true
+}

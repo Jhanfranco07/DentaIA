@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { useSesion } from "@/features/cuenta/useSesion";
 import { obtenerMisSolicitudes } from "@/features/solicitudes/solicitudes";
-import TarjetaMetrica from "@/components/TarjetaMetrica";
+import { Icono } from "@/components/Identidad";
 import EstadoPanel from "./EstadoPanel";
 import styles from "./panel.module.css";
 
@@ -101,9 +101,9 @@ export default function ResumenPanel() {
   return (
     <section aria-label="Indicadores de tu actividad" className={styles.resumen}>
       <div className={styles.metricas} aria-label="Resumen de tu cuenta">
-        <TarjetaMetrica titulo="Fotografías guardadas" valor={fotos} contexto="En tu espacio personal" icono="camara" />
-        <TarjetaMetrica titulo="Solicitudes registradas" valor={solicitudes} contexto="Historial de solicitudes" icono="calendario" />
-        <TarjetaMetrica titulo="Solicitudes pendientes" valor={pendientes} contexto="Por atender" icono="reloj" />
+        <div className={styles.indicador}><span className={styles.indicadorIcono}><Icono nombre="camara" size={26} /></span><div><span>Fotografías guardadas</span><strong>{fotos}</strong></div></div>
+        <div className={styles.indicador}><span className={styles.indicadorIcono}><Icono nombre="calendario" size={26} /></span><div><span>Solicitudes registradas</span><strong>{solicitudes}</strong></div></div>
+        <div className={styles.indicador}><span className={styles.indicadorIcono}><Icono nombre="reloj" size={26} /></span><div><span>Solicitudes pendientes</span><strong>{pendientes}</strong></div></div>
       </div>
     </section>
   );

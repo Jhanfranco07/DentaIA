@@ -14,3 +14,232 @@
 @media(max-width:1120px){.filtros{grid-template-columns:repeat(3,minmax(0,1fr))}.explorador{grid-template-columns:minmax(0,1fr) minmax(300px,.85fr)}}
 @media(max-width:760px){.cabecera{padding:22px}.filtros{grid-template-columns:1fr 1fr}.explorador{display:block}.alternarVista button{min-height:44px;font-size:14px}.tarjeta{padding:18px}.mapaPanel{position:relative;top:auto}}
 @media(max-width:430px){.filtros{grid-template-columns:1fr}.tarjeta{gap:13px}.avatar{width:48px;height:54px}.accionesTarjeta>*{flex:1;justify-content:center;text-align:center}.meta{grid-template-columns:1fr}}
+
+
+/* Portal paciente: directorio premium, sin alterar el directorio público. */
+.avatarIlustrado{background-image:url("/directorio/avatares-adultos.avif");background-size:400% 500%;background-repeat:no-repeat;background-color:#ddd7ff!important;box-shadow:0 6px 15px #463b9626;animation:avatarEntrar .35s ease both}
+.contenedorAvatarGrande{width:125px;flex:0 0 125px}.contenedorAvatarGrande .avatar{width:125px;height:125px;border-radius:24px}
+.pagina[data-vista="paciente"]{--tinta:#192454;color:var(--tinta);gap:17px;margin:-6px auto 0;max-width:1600px}
+.pagina[data-vista="paciente"] :is(a,button,input,select):focus-visible{outline:3px solid #7057fa;outline-offset:3px}
+.heroPaciente{position:relative;min-height:250px;display:grid;grid-template-columns:minmax(290px,1.2fr) minmax(210px,.95fr) minmax(220px,.88fr);align-items:center;gap:10px;overflow:hidden;padding:23px 24px;border:2px solid white;border-radius:26px;background:radial-gradient(circle at 65% 49%,#83cdff9c,transparent 35%),linear-gradient(112deg,#e9e3ff 0%,#dae8ff 56%,#cabdfd 100%);box-shadow:0 13px 28px #5960ae21}
+.heroPaciente:before{content:"";position:absolute;width:490px;height:490px;right:23%;top:-320px;border:2px solid #ffffff8c;border-radius:50%;pointer-events:none}
+.heroTexto{position:relative;z-index:2;min-width:0}.heroEtiqueta{display:flex;align-items:center;gap:9px;color:#342b92;font-size:12px;font-weight:850;letter-spacing:.04em}
+.heroTexto h1{font-size:clamp(29px,3.1vw,43px);max-width:520px;line-height:1.09;letter-spacing:-.05em;margin:11px 0;color:#171c50}.heroTexto h1 em{font-style:normal;color:#6942e7}
+.heroTexto>p{font-size:13px;line-height:1.5;color:#374b81;max-width:450px;margin:0 0 11px}
+.heroNota{font-size:10px;line-height:1.5;color:#4f4b83;display:block;max-width:460px}
+.heroProfesionales{position:relative;height:210px;min-width:0;display:flex;justify-content:center;align-items:end;isolation:isolate}
+.heroAura{position:absolute;inset:25% 1% 2%;border-radius:50%;background:#56b8f584;filter:blur(23px);z-index:-1}
+.heroProfesionales .avatarHero{width:166px;height:166px;max-width:54%;flex:0 0 166px;border:0;border-radius:18px;background-color:transparent!important;filter:drop-shadow(0 12px 12px #4f6caf45);box-shadow:none}
+.heroProfesionales .avatarHero:nth-of-type(1){transform:translate(22px,-17px) rotate(-3deg);z-index:2}
+.heroProfesionales .avatarHero:nth-of-type(2){transform:translate(-18px,14px) rotate(3deg)}
+.heroBrillo{position:absolute;top:20%;right:2%;color:#fff;font-size:37px;text-shadow:0 0 13px #fff;animation:avatarBrillo 2.7s ease-in-out infinite}
+.heroResumen{position:relative;z-index:2;display:grid;gap:12px;padding:17px;border:1px solid #ffffffbe;border-radius:21px;background:#ffffff81;backdrop-filter:blur(11px);box-shadow:0 12px 26px #514e9a24}
+.heroResumen>div{display:flex;align-items:center;gap:12px}.heroResumen svg{color:#694bdb;flex:0 0 auto}.heroResumen span{display:grid;gap:3px}.heroResumen strong{font-size:12px;color:#25275d}.heroResumen small{font-size:10px;color:#545d91;line-height:1.32}
+.pagina[data-vista="paciente"] .accionesMapa{gap:12px;padding:8px 0;align-items:center}.pagina[data-vista="paciente"] .accionesMapa>span{color:#6a75a1;line-height:1.5;font-size:11px}
+.pagina[data-vista="paciente"] .botonUbicacion{border:1px solid #8d76ef;background:linear-gradient(120deg,#7154ea,#5341d7);color:white;border-radius:13px;padding-inline:17px;box-shadow:0 6px 16px #6453c03b;cursor:pointer}
+.pagina[data-vista="paciente"] .filtros{grid-template-columns:minmax(190px,2fr) repeat(4,minmax(120px,1fr));padding:13px 15px;gap:12px;background:#ffffffaf;border:1px solid #e0dbfc;border-radius:19px;box-shadow:0 7px 20px #5952a70e}
+.pagina[data-vista="paciente"] .campo label{color:#484581;font-size:11px}.pagina[data-vista="paciente"] .campo input,.pagina[data-vista="paciente"] .campo select{min-height:45px;border:1px solid #dedaf7;border-radius:12px;background:#fff;box-shadow:0 3px 7px #6b63a51b;font-size:12px;color:#282f5c}
+.pagina[data-vista="paciente"] .conteo{margin:3px 0 1px;color:#171e4a;font-size:19px;font-weight:850;letter-spacing:-.03em}.pagina[data-vista="paciente"] .conteo span{font-weight:500;font-size:13px;color:#5743b8;letter-spacing:0}
+.pagina[data-vista="paciente"] .explorador{grid-template-columns:minmax(330px,.93fr) minmax(390px,1.18fr);gap:18px}.pagina[data-vista="paciente"] .grilla{gap:12px;max-height:650px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#afa4e4 transparent;padding:4px}
+.pagina[data-vista="paciente"] .tarjeta{gap:13px;align-items:center;padding:13px 15px;border:1px solid #e2dffa;border-radius:18px;background:linear-gradient(118deg,#fff,#f8f7ff);box-shadow:0 5px 13px #6953a41c;min-height:116px}
+.pagina[data-vista="paciente"] .tarjeta:hover{border-color:#ac99fa;transform:translateY(-2px);box-shadow:0 13px 24px #7960c32b}
+.pagina[data-vista="paciente"] .tarjeta.seleccionada{border-color:#8f6dff;box-shadow:0 0 0 2px #8f6dff24,0 8px 23px #7659c236}
+.pagina[data-vista="paciente"] .avatar{width:76px;height:79px;flex:0 0 76px;border-radius:17px;box-shadow:0 5px 12px #52459d27}
+.pagina[data-vista="paciente"] .cuerpo{gap:6px}.pagina[data-vista="paciente"] .cuerpo h2{font-size:17px;line-height:1.25;letter-spacing:-.025em;color:#1e2257}
+.pagina[data-vista="paciente"] .especialidad{color:#6842cb;font-size:12px;font-weight:750;line-height:1.3}
+.pagina[data-vista="paciente"] .ficticio{padding:3px 7px;background:#f4edff;color:#7657b8;font-size:9px;font-weight:750}
+.pagina[data-vista="paciente"] .meta{display:flex;gap:4px 12px;font-size:11px;color:#5a668d;line-height:1.35;align-items:center}
+.pagina[data-vista="paciente"] .meta span:nth-child(2){flex-basis:100%;font-size:10px;color:#77809f}
+.pagina[data-vista="paciente"] .meta svg{color:#7655cf}
+.pagina[data-vista="paciente"] .rating{font-size:10px;color:#767da3;font-weight:600}
+.pagina[data-vista="paciente"] .accionesTarjeta{gap:8px}.pagina[data-vista="paciente"] .enlace{background:linear-gradient(118deg,#7961f0,#593ad6);border:1px solid #8068e8;color:#fff;border-radius:30px;min-height:35px;padding:7px 14px;font-size:11px;box-shadow:0 5px 12px #614dd430}
+.pagina[data-vista="paciente"] .enlace:hover{filter:brightness(1.08)}.pagina[data-vista="paciente"] .verMapa,.pagina[data-vista="paciente"] .solicitar{border-color:#d3c4fb;background:#fff;color:#684ad6;border-radius:30px;min-height:35px;padding:7px 11px;font-size:11px}
+.pagina[data-vista="paciente"] .mapaPanel{top:108px}.pagina[data-vista="paciente"] .mapaPanel>div{border:4px solid #fff;border-radius:24px;box-shadow:0 10px 27px #6957a334;overflow:hidden}
+.pagina[data-vista="paciente"] .privacidadUbicacion{background:#ecf2ff;color:#4b5191}.radarEstado,.cercanos{display:flex;align-items:center;gap:11px;padding:11px 15px;border-radius:13px;background:#eae5ff;border:1px solid #cec2ff;font-size:12px;color:#4638ac;line-height:1.5}
+.radarPunto{position:relative;width:13px;height:13px;border-radius:50%;background:#7861f4;box-shadow:0 0 0 4px #7a61f537;animation:radarPulsar 1.1s ease infinite}
+.cercanos strong{font-weight:800;color:#4834a6}.pagina[data-vista="paciente"] .alternarVista{border-color:#d4c6fc;background:#eee9ff}
+.pagina[data-vista="paciente"] .alternarVista button[aria-selected=true]{color:#5f47cf}
+@keyframes avatarEntrar{from{opacity:.55;filter:blur(3px)}to{opacity:1;filter:none}}
+@keyframes avatarBrillo{0%,100%{opacity:.55;transform:scale(.82)}50%{opacity:1;transform:scale(1.18)}}
+@keyframes radarPulsar{50%{box-shadow:0 0 0 10px #7a61f509}}
+@media(max-width:1370px){.heroPaciente{grid-template-columns:minmax(260px,1.1fr) minmax(180px,.8fr) minmax(205px,.8fr)}.heroProfesionales .avatarHero{width:140px;height:140px;flex-basis:140px}.pagina[data-vista="paciente"] .explorador{grid-template-columns:minmax(300px,1fr) minmax(350px,1.1fr)}.pagina[data-vista="paciente"] .meta span:nth-child(2){display:none}}
+@media(max-width:1120px){.heroPaciente{grid-template-columns:minmax(280px,1fr) minmax(190px,.75fr)}.heroResumen{grid-column:1/-1;grid-template-columns:repeat(3,minmax(0,1fr))}.pagina[data-vista="paciente"] .filtros{grid-template-columns:repeat(3,minmax(0,1fr))}.pagina[data-vista="paciente"] .filtros .campo:first-child{grid-column:1/-1}.pagina[data-vista="paciente"] .explorador{grid-template-columns:minmax(0,1fr) minmax(280px,1fr)}}
+@media(max-width:760px){.heroPaciente{grid-template-columns:1fr 140px;padding:20px;gap:7px}.heroTexto h1{font-size:30px}.heroProfesionales{height:160px}.heroProfesionales .avatarHero{width:108px;height:108px;flex-basis:108px}.heroResumen{grid-column:1/-1;grid-template-columns:1fr;gap:10px}.heroResumen>div{gap:9px}.pagina[data-vista="paciente"] .filtros{grid-template-columns:repeat(2,minmax(0,1fr))}.pagina[data-vista="paciente"] .filtros .campo:first-child{grid-column:1/-1}.pagina[data-vista="paciente"] .explorador{display:block}.pagina[data-vista="paciente"] .grilla{max-height:none;overflow:visible}.pagina[data-vista="paciente"] .mapaPanel{position:relative;top:auto}.pagina[data-vista="paciente"] .alternarVista{display:grid}.pagina[data-vista="paciente"] .meta span:nth-child(2){display:inline}}
+@media(max-width:500px){.heroPaciente{grid-template-columns:1fr}.heroProfesionales{display:none}.heroResumen{padding:14px}.pagina[data-vista="paciente"] .filtros{grid-template-columns:1fr}.pagina[data-vista="paciente"] .filtros .campo:first-child{grid-column:auto}.pagina[data-vista="paciente"] .tarjeta{padding:13px;gap:10px}.pagina[data-vista="paciente"] .avatar{width:61px;height:64px;flex-basis:61px}.pagina[data-vista="paciente"] .cuerpo h2{font-size:15px}.pagina[data-vista="paciente"] .accionesTarjeta>*{flex:auto}.pagina[data-vista="paciente"] .mapaPanel>div{border-radius:17px}}
+@media(prefers-reduced-motion:reduce){.avatarIlustrado,.heroBrillo,.radarPunto{animation:none!important}.pagina[data-vista="paciente"] .tarjeta{transition:none}.pagina[data-vista="paciente"] .tarjeta:hover{transform:none}}
+
+
+/* Experiencia odontológica premium v2: controles compactos, retratos adultos legibles. */
+.pagina[data-vista="paciente"]{gap:15px;margin-top:-9px;scroll-margin-top:90px}
+.heroPremium{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(330px,1.42fr) minmax(235px,.82fr) minmax(200px,.75fr);align-items:center;gap:20px;min-height:274px;padding:25px clamp(25px,3.2vw,43px);overflow:hidden;border:2px solid #fff;border-radius:28px;background:radial-gradient(ellipse at 58% 46%,#9ce1ffb5 0%,transparent 33%),radial-gradient(ellipse at 90% 25%,#cfb0ff9c 0%,transparent 34%),linear-gradient(105deg,#e5dcff 0%,#e3eeff 50%,#cebdff 100%);box-shadow:0 13px 35px #5144a828}
+.heroPremium:before{content:"";position:absolute;z-index:-1;inset:-190px 21% auto auto;width:550px;height:550px;border:1px solid #ffffffb5;border-radius:50%;pointer-events:none}
+.heroPremium:after{content:"";position:absolute;z-index:-1;inset:auto auto -220px -145px;width:390px;height:390px;border:1px solid #fff8;border-radius:50%;pointer-events:none}
+.heroPremiumCopy{position:relative;z-index:3;min-width:0}
+.heroPremiumEyebrow{display:inline-flex;align-items:center;gap:8px;color:#5938b5;font-size:12px;letter-spacing:.065em;font-weight:850}
+.heroPremiumCopy h1{margin:12px 0 11px;color:#182153;line-height:1.06;letter-spacing:-.055em;font-size:clamp(29px,3.1vw,45px);font-weight:900;max-width:620px}
+.heroPremiumCopy h1 span{display:block;color:#6945e9}
+.heroPremiumCopy>p{margin:0;max-width:515px;color:#415180;line-height:1.57;font-size:13px}
+.heroPremiumAcciones{display:flex;gap:13px;align-items:center;flex-wrap:wrap;margin-top:17px}
+.heroPremiumCTA{display:inline-flex;align-items:center;gap:12px;justify-content:center;padding:10px 17px;min-height:42px;border-radius:99px;background:linear-gradient(130deg,#7c60f6,#5734d0);color:white;font-size:12px;font-weight:850;box-shadow:0 6px 16px #7156e24f;text-decoration:none;transition:transform .22s,box-shadow .22s}
+.heroPremiumCTA:hover{transform:translateY(-2px);box-shadow:0 10px 20px #7156e24f}
+.heroPremiumAcciones>span{display:flex;align-items:center;gap:7px;color:#655c9c;font-size:11px;font-weight:750}
+.heroPremiumNota{display:block;max-width:550px;margin-top:11px;font-size:10px;line-height:1.35;color:#655e96}
+.heroPremiumArte{position:relative;min-height:225px;height:100%;display:flex;justify-content:center;align-items:center;isolation:isolate;pointer-events:none}
+.heroPremiumHalo{position:absolute;inset:15% 5% 0%;border-radius:50%;background:radial-gradient(ellipse,#5eb9f7c2,transparent 70%);filter:blur(9px)}
+.heroPremiumAro{position:absolute;inset:14% -13% 12%;border:2px solid #ffffff9e;border-radius:50%;transform:rotate(-21deg);box-shadow:0 0 28px #faffffb8}
+.heroPremiumRetratoPrimario,.heroPremiumRetratoSecundario{position:absolute;display:block;overflow:hidden;border:4px solid #ffffffed;background:linear-gradient(145deg,#c8edff,#e5d5ff 66%,#faf0ff);box-shadow:0 13px 28px #443e9d50,0 0 0 7px #ffffff3f;transform-origin:50% 100%;transition:transform .35s ease}
+.heroPremiumRetratoPrimario{z-index:2;left:4%;top:0;width:min(74%,215px);height:217px;border-radius:47% 47% 22px 22px;transform:rotate(-5deg)}
+.heroPremiumRetratoSecundario{z-index:3;right:-2%;bottom:-4px;width:min(54%,155px);height:166px;border-radius:46% 46% 19px 19px;transform:rotate(6deg)}
+.heroPremiumRetratoPrimario:hover{transform:rotate(-2deg) translateY(-5px)}
+.heroPremiumRetratoSecundario:hover{transform:rotate(3deg) translateY(-5px)}
+.heroPremiumArte .avatarHero{width:100%!important;height:100%!important;max-width:none!important;flex:none!important;display:block!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important;background-color:transparent!important;transform:none!important}
+.heroPremiumDestelloUno,.heroPremiumDestelloDos{position:absolute;z-index:5;color:white;line-height:1;text-shadow:0 0 12px #fff;animation:brilloPremium 3.4s ease-in-out infinite}
+.heroPremiumDestelloUno{font-size:36px;right:-4%;top:4%}.heroPremiumDestelloDos{font-size:24px;left:-12%;bottom:15%;animation-delay:1.3s}
+.heroPremiumDiente{position:absolute;z-index:5;bottom:0;left:0;display:grid;place-items:center;width:57px;height:57px;border:2px solid #fff;border-radius:18px;background:linear-gradient(135deg,#89d6ff,#7771f3);color:#fff;box-shadow:0 6px 18px #4e5cca50;transform:rotate(-11deg)}
+.heroPremiumDatos{z-index:2;display:grid;gap:15px;align-content:center;padding:20px 16px;border:1px solid #fff;background:#ffffff9a;backdrop-filter:blur(12px);border-radius:23px;box-shadow:0 12px 30px #7160ad22;min-height:222px}
+.heroPremiumDatosTitulo{color:#1b265b;font-weight:900;letter-spacing:-.025em;font-size:14px;padding:0 2px}
+.heroPremiumDatos>div{display:flex;align-items:center;gap:10px}
+.heroPremiumMiniIcono{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:#ebe4ff;color:#6f4bdb}
+.heroPremiumDatos>div>span:last-child{min-width:0;display:grid;gap:4px}
+.heroPremiumDatos strong{font-size:11px;font-weight:850;color:#2b3069}.heroPremiumDatos small{font-size:10px;line-height:1.4;color:#616b91}
+@keyframes brilloPremium{50%{transform:scale(1.24);opacity:.55}}
+.localizadorPremium{display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:relative;padding:11px 15px;border:1px solid #e5e1fb;border-radius:17px;background:#fff;box-shadow:0 5px 13px #5553a315}
+.localizadorEmblema{display:grid;place-items:center;flex:none;width:46px;height:46px;border-radius:15px;background:linear-gradient(140deg,#e9e1ff,#e4f2ff);color:#7658eb}
+.localizadorTexto{display:grid;gap:4px;min-width:205px;flex:1}.localizadorTexto strong{font-size:13px;color:#29265f;font-weight:850}
+.localizadorTexto span{font-size:11px;color:#757897}
+.localizadorBoton{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:42px;padding:9px 17px;border:0;border-radius:14px;background:linear-gradient(120deg,#7557ed,#5a41dc);box-shadow:0 6px 14px #624bda40;color:white;font-size:12px;font-weight:850;cursor:pointer;transition:transform .2s,filter .2s}
+.localizadorBoton:disabled{opacity:.62;cursor:wait}.localizadorBoton:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.08)}
+.localizadorPrivacidad{position:relative;font-size:11px;flex:none;color:#6e7199}.localizadorPrivacidad summary{display:flex;align-items:center;gap:6px;min-height:40px;cursor:pointer;list-style:none;font-weight:700;padding:0 5px}.localizadorPrivacidad summary::-webkit-details-marker{display:none}
+.localizadorPrivacidad[open] p{position:absolute;z-index:10;right:0;top:38px;width:min(310px,83vw);margin:0;padding:13px 15px;border:1px solid #d7cffb;border-radius:14px;background:#fff;color:#4c527c;box-shadow:0 13px 27px #42358b30;line-height:1.55}
+.proximidadPremium{display:flex;align-items:center;gap:13px;padding:10px 14px;border:1px solid #cfc7fa;border-radius:18px;background:linear-gradient(105deg,#f0edff 0%,#f7faff 100%);box-shadow:0 3px 10px #6049a30d}
+.proximidadIcono{position:relative;flex:0 0 40px;display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,#ddd2ff,#c7e5ff);color:#6548d9}
+.proximidadPulso{position:absolute;inset:0;border:2px solid #7354f7;border-radius:13px;animation:radarTarjeta 1.15s ease-out infinite}
+.proximidadTexto{display:grid;gap:4px;min-width:150px}.proximidadTexto strong{font-size:12px;font-weight:850;color:#312671}.proximidadTexto small{font-size:10px;color:#666c98;line-height:1.25}
+.proximidadOpciones{flex:1;display:flex;min-width:0;gap:8px;overflow-x:auto;padding:3px;scrollbar-width:thin}
+.proximidadOpcion{flex:1 0 150px;display:flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:8px 10px;border:1px solid #d9d0ff;border-radius:12px;background:#fff;font-size:11px;color:#3c3784;text-align:left;cursor:pointer}
+.proximidadOpcion>span{display:grid;place-items:center;flex:none;width:21px;height:21px;border-radius:8px;background:#ece7ff;color:#7654e6;font-size:10px;font-weight:900}.proximidadOpcion strong{font-weight:800;line-height:1.3}.proximidadOpcion small{flex:none;font-size:10px;font-weight:800;color:#6b4bd3;white-space:nowrap}
+.proximidadOpcion:hover{border-color:#8f76ed;background:#f7f4ff}
+@keyframes radarTarjeta{to{opacity:0;transform:scale(1.32)}}
+.pagina[data-vista="paciente"] .filtros{padding:13px 14px;gap:12px;border-radius:18px;box-shadow:0 7px 15px #5f4eaf10}
+.pagina[data-vista="paciente"] .campo input,.pagina[data-vista="paciente"] .campo select{min-height:42px;box-shadow:none;border-color:#d8d2f4}
+.accesosEspecialidades{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;white-space:nowrap;padding:1px 0}
+.accesosEspecialidades>span{font-size:12px;color:#646991;font-weight:750;margin-right:4px}.accesosEspecialidades button{min-height:34px;padding:6px 13px;border:1px solid #dad7fa;border-radius:99px;background:#fff;color:#55548b;font-size:11px;font-weight:750;cursor:pointer}
+.accesosEspecialidades button:hover{border-color:#997ef8;color:#5039bc}.accesosEspecialidades .accesoActivo{background:#694ee3;color:#fff;border-color:#694ee3}
+.accesosEspecialidades .limpiarPremium{border:none;background:transparent;color:#6044e3;text-decoration:underline;margin-left:auto}
+.encabezadoResultados{display:flex;gap:10px;align-items:end;justify-content:space-between;scroll-margin-top:100px;margin:0 0 -2px}
+.seccionEyebrow{display:block;font-size:10px;color:#795bec;letter-spacing:.09em;font-weight:900}
+.encabezadoResultados h2{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;margin:4px 0 0;font-size:22px;letter-spacing:-.035em;font-weight:900;color:#182051}
+.encabezadoResultados h2 span{font-size:12px;letter-spacing:0;font-weight:700;color:#6553be}
+.leyendaResultado{display:flex;gap:6px;align-items:center;font-size:11px;color:#6c7197;font-weight:650}
+.pagina[data-vista="paciente"] .explorador{grid-template-columns:minmax(320px,.96fr) minmax(380px,1.06fr);gap:17px}
+.pagina[data-vista="paciente"] .grilla{gap:12px;max-height:625px;padding:5px 4px}
+.pagina[data-vista="paciente"] .tarjeta{min-height:142px;padding:14px 16px;gap:15px;border-radius:21px;box-shadow:0 6px 16px #56489d17}
+.pagina[data-vista="paciente"] .tarjetaAvatarMarco{display:grid;place-items:center;flex:0 0 111px;width:111px;height:115px;overflow:hidden;border-radius:18px;background:linear-gradient(145deg,#e7ebff,#ded2fa);box-shadow:0 4px 12px #6e54be21}
+.pagina[data-vista="paciente"] .tarjetaAvatarMarco .avatar{width:100%;height:100%;flex:none;border:0;border-radius:0;box-shadow:none;font-size:27px}
+.pagina[data-vista="paciente"] .tarjeta .cuerpo{gap:5px;align-content:center}
+.pagina[data-vista="paciente"] .tarjeta h2{font-size:17px;line-height:1.24}
+.pagina[data-vista="paciente"] .tarjeta .especialidad{font-size:12px}
+.pagina[data-vista="paciente"] .tarjeta .meta{margin-top:3px;font-size:11px}
+.pagina[data-vista="paciente"] .tarjeta .meta span:nth-child(2){display:inline-flex;flex-basis:100%;font-size:10px;color:#697394}
+.pagina[data-vista="paciente"] .tarjeta .meta span:nth-child(2):not(:first-child){display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.pagina[data-vista="paciente"] .tarjeta .accionesTarjeta{margin-top:3px}
+.pagina[data-vista="paciente"] .tarjeta .enlace,.pagina[data-vista="paciente"] .tarjeta .verMapa{min-height:36px;font-size:11px}
+.pagina[data-vista="paciente"] .mapaPanel{top:105px;border:1px solid #e2dbff;border-radius:23px;overflow:hidden;background:#fff;box-shadow:0 7px 19px #6455a31b;padding:10px}
+.pagina[data-vista="paciente"] .mapaPanel>div{border:0;border-radius:0;box-shadow:none;overflow:visible}
+.pagina[data-vista="paciente"] .mapaPanel>div:nth-last-child(2){border-radius:15px;overflow:hidden}
+.mapaPremiumEncabezado{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 7px 13px}
+.mapaPremiumEncabezado>div{display:flex;gap:11px;align-items:center}
+.mapaPremiumIcono{display:grid;place-items:center;width:41px;height:41px;background:linear-gradient(140deg,#eae0ff,#e2eeff);color:#6544d7;border-radius:13px}
+.mapaPremiumEncabezado>div>span:last-child{display:grid;gap:3px}.mapaPremiumEncabezado strong{font-size:15px;color:#20275c;font-weight:900}.mapaPremiumEncabezado small{font-size:11px;color:#717896}
+.mapaPremiumIndicador{display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid #ddd6fc;border-radius:99px;background:#f7f5ff;color:#6a4de0;white-space:nowrap;font-size:10px;font-weight:850}
+.mapaPremiumIndicador i{width:7px;height:7px;background:#38b6a2;border-radius:50%;box-shadow:0 0 0 3px #38b6a123}
+.mapaPremiumLeyenda{display:flex;gap:11px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:11px 7px 4px;font-size:10px;color:#555e87}
+.mapaPremiumLeyenda>span{display:flex;align-items:center;gap:6px;font-weight:750}.mapaPremiumLeyenda small{flex-basis:100%;color:#8990a9;font-size:10px}
+.mapaPinDiente{font-size:17px}.mapaPinUsuario{display:inline-block;width:11px;height:11px;border:2px solid #fff;border-radius:50%;background:#267eef;box-shadow:0 0 0 3px #267eef44}
+@media(max-width:1310px){.heroPremium{grid-template-columns:minmax(275px,1.25fr) minmax(200px,.77fr) minmax(190px,.77fr);padding:22px 27px;gap:12px}.heroPremiumDatos{padding:16px 12px}.heroPremiumRetratoPrimario{width:190px;height:210px}.heroPremiumRetratoSecundario{width:143px;height:151px}.heroPremiumCopy h1{font-size:36px}.proximidadPremium{flex-wrap:wrap}.proximidadOpciones{flex-basis:100%}}
+@media(max-width:1100px){.heroPremium{grid-template-columns:minmax(280px,1fr) minmax(200px,.7fr)}.heroPremiumDatos{display:none}.heroPremiumRetratoPrimario{left:14%}.heroPremiumRetratoSecundario{right:3%}.pagina[data-vista="paciente"] .explorador{grid-template-columns:minmax(0,1fr) minmax(300px,.9fr)}.pagina[data-vista="paciente"] .tarjetaAvatarMarco{flex-basis:82px;width:82px;height:99px}.pagina[data-vista="paciente"] .tarjeta{gap:11px}.pagina[data-vista="paciente"] .tarjeta .meta span:nth-child(2){display:none}}
+@media(max-width:760px){.heroPremium{grid-template-columns:1fr 155px;padding:21px 18px;min-height:252px;gap:7px}.heroPremiumCopy h1{font-size:29px}.heroPremiumCopy>p{font-size:12px}.heroPremiumArte{min-height:180px}.heroPremiumRetratoPrimario{left:0;top:7%;width:127px;height:172px}.heroPremiumRetratoSecundario{width:95px;height:119px;right:0}.heroPremiumAcciones>span{display:none}.heroPremiumCTA{min-height:39px}.localizadorPremium{flex-wrap:wrap}.localizadorTexto{min-width:170px}.localizadorPrivacidad{margin-left:auto}.proximidadPremium{flex-wrap:wrap}.proximidadOpciones{flex-basis:100%}.encabezadoResultados h2{font-size:19px}.pagina[data-vista="paciente"] .explorador{display:block}.pagina[data-vista="paciente"] .grilla{max-height:none;overflow:visible}.pagina[data-vista="paciente"] .mapaPanel{position:relative;top:auto}.pagina[data-vista="paciente"] .tarjetaAvatarMarco{flex-basis:103px;width:103px;height:112px}.pagina[data-vista="paciente"] .tarjeta .meta span:nth-child(2){display:inline-flex}}
+@media(max-width:490px){.heroPremium{grid-template-columns:1fr;padding:20px 18px}.heroPremiumArte{display:none}.heroPremiumCopy h1{font-size:32px}.heroPremiumNota{font-size:9px}.localizadorPremium{padding:13px}.localizadorBoton{width:100%}.localizadorPrivacidad{margin-left:auto}.proximidadPremium{padding:10px}.proximidadOpcion{flex:1 0 185px}.encabezadoResultados{align-items:start}.leyendaResultado{display:none}.pagina[data-vista="paciente"] .tarjetaAvatarMarco{flex-basis:76px;width:76px;height:96px}.pagina[data-vista="paciente"] .tarjeta{padding:12px;gap:10px}.pagina[data-vista="paciente"] .tarjeta h2{font-size:15px}.pagina[data-vista="paciente"] .tarjeta .meta span:nth-child(2){display:none}.pagina[data-vista="paciente"] .tarjeta .accionesTarjeta{flex-wrap:wrap}.pagina[data-vista="paciente"] .tarjeta .accionesTarjeta>*{flex:auto}.mapaPremiumIndicador{display:none}}
+@media(prefers-reduced-motion:reduce){.heroPremiumCTA,.heroPremiumDestelloUno,.heroPremiumDestelloDos,.heroPremiumRetratoPrimario,.heroPremiumRetratoSecundario,.localizadorBoton,.proximidadPulso{animation:none!important;transition:none!important}.heroPremiumCTA:hover,.localizadorBoton:hover{transform:none!important}}
+
+/* Acortar el recorrido hasta los resultados sin ocultar el aviso de privacidad. */
+.pagina[data-vista="paciente"] .localizadorPremium{margin-top:-24px;margin-inline:13px;z-index:5;box-shadow:0 9px 20px #5553a32b}
+.pagina[data-vista="paciente"] .proximidadPremium{padding-block:8px}
+.pagina[data-vista="paciente"] .accesosEspecialidades{margin-block:-2px}
+.pagina[data-vista="paciente"] .avatarIlustrado{background-repeat:no-repeat}
+@media(max-width:760px){.pagina[data-vista="paciente"] .localizadorPremium{margin-top:0;margin-inline:0}}
+
+/* Nueva colección editorial 3D: 20 retratos adultos originales 4×5, orden de catálogo. */
+.avatarIlustrado{background-image:url("/directorio/avatares-ilustrados-premium.avif")!important;background-color:#e9e6fa!important;background-repeat:no-repeat}
+.heroPremiumRetratoPrimario .avatarHero,.heroPremiumRetratoSecundario .avatarHero{image-rendering:auto}
+
+
+/* Portada única original, 740 × 690 píxeles, en AVIF local; sin zoom de sprites. */
+.heroPremiumArte{min-height:245px;align-self:stretch;display:grid;place-items:center;overflow:visible}
+.heroPremiumImagen{position:relative;z-index:2;display:block;max-width:none;width:115%;height:auto;max-height:280px;object-fit:contain;filter:drop-shadow(0 10px 14px #4c50a52b);-webkit-mask-image:radial-gradient(ellipse 75% 72% at center,#000 72%,transparent 100%);mask-image:radial-gradient(ellipse 75% 72% at center,#000 72%,transparent 100%)}
+@media(max-width:1310px){.heroPremiumImagen{width:125%;max-height:258px}}
+@media(max-width:760px){.heroPremiumArte{min-height:180px}.heroPremiumImagen{width:135%;max-height:190px}}
+@media(max-width:490px){.heroPremiumArte{display:none}}
+
+/* Atlas 2×2 de avatares adultos originales de cuatro perfiles ficticios legacy. */
+.avatarLegado{display:inline-block;flex:none;background-color:#dddafb;background-image:url("/directorio/cuatro-avatares-demo.avif");background-size:200% 200%;background-repeat:no-repeat;box-shadow:0 6px 13px #685db63a}
+
+/* Retrato también visible dentro de la ficha del paciente, sin depender de Storage. */
+.pagina[data-vista="paciente-perfil"] .detalle{border:1px solid #ddd7fa;background:linear-gradient(140deg,#fff,#f8f7ff);border-radius:23px;box-shadow:0 12px 28px #5e4fa018}
+.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande{flex:0 0 173px;width:173px}
+.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande .avatar{width:173px;height:185px;border-radius:21px;box-shadow:0 9px 22px #4d469038}
+.sinUbicacionPerfil{display:grid;gap:9px;margin:16px 0;padding:18px;border-radius:16px;background:#f1eeff;border:1px solid #dad1fe;color:#343171}
+.sinUbicacionPerfil strong{font-weight:850;font-size:15px}
+.sinUbicacionPerfil p{margin:0;color:#63698d;font-size:12px;line-height:1.6}
+.sinUbicacionPerfil a{color:#6042d0;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:620px){.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande{width:140px;flex-basis:140px}.pagina[data-vista="paciente-perfil"] .contenedorAvatarGrande .avatar{width:140px;height:150px}}
+
+/* Aplicación del tema del paciente a superficies existentes. */
+
+/* Conservamos la portada premium con contraste en ambos modos. */
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina{color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .filtros,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta,:global([data-area="Paciente"][data-tema="oscuro"]) .detalle,:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPanel,:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera{background:#2d254a;border-color:#625180;color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .campo input,:global([data-area="Paciente"][data-tema="oscuro"]) .campo select{background:#231b3e;border-color:#6b568f;color:#f6efff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .cuerpo h1,:global([data-area="Paciente"][data-tema="oscuro"]) .cuerpo h2,:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumEncabezado strong,:global([data-area="Paciente"][data-tema="oscuro"]) .encabezadoResultados h2{color:#f6eeff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .meta,:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumEncabezado small{color:#cec5e6}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremium{border-color:#8d6fbf;box-shadow:0 15px 33px #10072570}
+:global([data-area="Paciente"][data-tema="oscuro"]) .accesosEspecialidades button{background:#362a54;border-color:#6d548d;color:#e8ddff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .accesosEspecialidades .accesoActivo{background:#734cdd;color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .mapaPremiumIndicador{background:#3d305f;color:#d9c5ff;border-color:#7863a0}
+
+/* Imagen fotográfica editorial del hero: sin alterar fichas ficticias. */
+.heroPremiumArte{position:relative;overflow:hidden;border-radius:22px;isolation:isolate}
+.heroPremiumImagen{width:100%;height:260px;max-height:260px;object-fit:cover;object-position:center 25%;border-radius:22px;filter:none;mask-image:none;-webkit-mask-image:none;box-shadow:0 9px 24px #29205120}
+.creditoFotografia{position:absolute;right:12px;bottom:8px;z-index:3;max-width:calc(100% - 24px);padding:4px 7px;border-radius:6px;background:#151b3ec9;color:#fff;font-size:9px;line-height:1.3}
+@media(max-width:1310px){.heroPremiumImagen{width:100%;max-height:240px;height:240px}}
+@media(max-width:760px){.heroPremiumImagen{width:100%;max-height:185px;height:185px}}
+@media(max-width:490px){.heroPremiumArte{display:none}}
+
+
+/* Ajustes de coherencia con modo morado, respetando el mapa interactivo. */
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremium{
+  background:linear-gradient(125deg,#302453,#55337c 68%,#6a3b9a);
+  border-color:#8162bb;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumCopy h1{color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumCopy h1 span{color:#ddc8ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.heroPremiumCopy>p,.heroPremiumNota){color:#e2d7f5}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumDatos{
+  background:#2b2247e8;border-color:#67538d;color:#f5eeff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumDatos strong{color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroPremiumDatos small{color:#d2c6e9}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.localizadorPremium,.proximidadPremium,.sinUbicacionPerfil){
+  background:#2e264b;border-color:#665387;color:#f3edff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.localizadorTexto,.proximidadTexto,.sinUbicacionPerfil p){color:#d5cbea}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.proximidadOpcion,.mapaPremiumIndicador){
+  background:#3c315a;border-color:#765f9d;color:#eadfff;
+}
+/* La foto real también debe estar presente en móvil, no solo en escritorio. */
+.heroPremiumArte{background:#dce9f3 url("/hero/hero-1.jpg") center/cover no-repeat}
+@media(max-width:490px){
+  .heroPremiumArte{display:block;min-height:175px;margin-top:9px}
+  .heroPremiumImagen{display:block;width:100%;height:175px;max-height:175px;object-fit:cover;object-position:center 23%}
+  .creditoFotografia{right:8px;bottom:7px;font-size:9px}
+}

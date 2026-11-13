@@ -2,12 +2,13 @@ import type { EnlacePortal } from "./PortalShell";
 
 // Configuración de presentación compartida; la autorización permanece en cada módulo/API.
 export const NAVEGACION_PACIENTE: readonly EnlacePortal[] = [
-  { href: "/panel", etiqueta: "Mi panel", exacto: true, icono: "casa", grupo: "Mi espacio" },
-  { href: "/analisis", etiqueta: "Preparar fotografía", icono: "destello", grupo: "Mi espacio" },
-  { href: "/fotografias", etiqueta: "Mis fotografías", icono: "camara", grupo: "Mi espacio" },
-  { href: "/resultados", etiqueta: "Mis resultados", icono: "reporte", grupo: "Mi espacio" },
-  { href: "/solicitudes", etiqueta: "Mis solicitudes", icono: "calendario", grupo: "Mi espacio" },
-  { href: "/directorio", etiqueta: "Odontólogos", icono: "diente", grupo: "Explorar" },
+  { href: "/panel", etiqueta: "Mi panel", exacto: true, icono: "casa", grupo: "Principal" },
+  { href: "/analisis", etiqueta: "Preparar fotografía", icono: "camara", grupo: "Mi cuidado dental" },
+  { href: "/fotografias", etiqueta: "Mis fotografías", icono: "imagen", grupo: "Mi cuidado dental" },
+  { href: "/resultados", etiqueta: "Mis resultados", icono: "reporte", grupo: "Mi cuidado dental" },
+  { href: "/solicitudes", etiqueta: "Mis solicitudes", icono: "calendario", grupo: "Mi cuidado dental" },
+  { href: "/buenas-practicas", etiqueta: "Buenas prácticas", icono: "escudo", grupo: "Recursos" },
+  { href: "/panel/odontologos", etiqueta: "Odontólogos", icono: "usuarios", grupo: "Recursos" },
   { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Cuenta" },
 ];
 export const NAVEGACION_ODONTOLOGO: readonly EnlacePortal[] = [

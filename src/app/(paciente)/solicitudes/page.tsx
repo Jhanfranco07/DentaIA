@@ -25,8 +25,10 @@ export default async function RequestsPage({ searchParams }: { searchParams: Pro
         </p>
       </header>
 
-      <FormularioSolicitud odontologoInicial={odontologo ?? ""} />
+      <div className={styles.accionesPagina}><a href="#nueva-solicitud" className={styles.enlaceNuevaSolicitud}>+ Nueva solicitud</a></div>
+      {odontologo && <div id="nueva-solicitud"><FormularioSolicitud odontologoInicial={odontologo} /></div>}
       <MisSolicitudes />
+      {!odontologo && <div id="nueva-solicitud"><FormularioSolicitud /></div>}
     </section>
   </AccesoRol>;
 }

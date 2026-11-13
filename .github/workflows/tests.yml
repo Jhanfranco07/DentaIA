@@ -26,4 +26,8 @@ jobs:
       # Reservar *.test.mjs para pruebas aisladas sin red ni credenciales.
       # Las integraciones reales deben usar otra convención y ejecutarse aparte.
       - name: Ejecutar pruebas aisladas
-        run: node --experimental-strip-types --test --test-reporter=tap "src/features/**/*.test.mjs"
+        shell: bash
+        run: |
+          mapfile -d '' tests < <(find src/features src/app -name '*.test.mjs' ! -name '*integracion.test.mjs' -print0)
+          test "${#tests[@]}" -gt 0
+          node --experimental-strip-types --test --test-reporter=tap "${tests[@]}"

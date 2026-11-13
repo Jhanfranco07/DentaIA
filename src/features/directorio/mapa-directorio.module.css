@@ -16,3 +16,174 @@
 @media(prefers-reduced-motion:reduce){.marcadorDemo{transition:none}}
 
 .marcadorDentista{width:30px;height:30px;min-height:30px;cursor:pointer}.marcadorDentista[data-selected="true"]{background:#124e60;box-shadow:0 0 0 6px #f3c95e,0 3px 12px #102a4350;z-index:2}.contenedorMapa :global(.maplibregl-popup-content a){min-height:44px}.errorTeselas{position:absolute;z-index:3;left:12px;right:12px;bottom:40px;padding:12px;border:1px solid #b45555;border-radius:10px;background:#fff9f6;color:#713b31;font-size:13px;line-height:1.45}
+
+/* Marcadores premium del portal paciente y radar anclado a coordenadas reales. */
+.contenedorMapa[data-vista="paciente"]{height:min(72vh,650px);min-height:540px;border:0;border-radius:22px}
+.contenedorMapa[data-vista="paciente"] .marcadorDemo{background:linear-gradient(145deg,#8b62fc,#5c37d2);border-color:#fff;box-shadow:0 4px 16px #6247dd60;width:42px;height:42px}
+.contenedorMapa[data-vista="paciente"] .marcadorDemo:hover{background:#5734b9}
+.contenedorMapa[data-vista="paciente"] .marcadorDemo[data-cercano="true"]{box-shadow:0 0 0 5px #906ff55d,0 5px 17px #6b4de05c}
+.contenedorMapa[data-vista="paciente"] .marcadorDemo[data-selected="true"]{background:#4c22bd;box-shadow:0 0 0 6px #b79aff,0 4px 19px #6b4de060}
+.contenedorMapa[data-vista="paciente"] .marcadorDentista{background:#6f4adf}
+.radarAncla{position:relative;display:grid;place-items:center;width:24px;height:24px;pointer-events:none}
+.radarAncla .marcadorUbicacion{position:relative;z-index:2;width:20px;height:20px;border:4px solid white;border-radius:50%;background:#267eef;box-shadow:0 0 0 6px #2785f042,0 0 17px #1878ed7a}
+.radarAnillos{position:absolute;inset:0;display:block;opacity:0;pointer-events:none}
+.radarAncla[data-radar="true"] .radarAnillos{opacity:1}
+.radarAnillos:before,.radarAnillos:after{content:"";position:absolute;top:50%;left:50%;width:38px;height:38px;border:3px solid #7547ea;border-radius:50%;background:#895df02e;transform:translate(-50%,-50%) scale(.1)}
+.radarAncla[data-radar="true"] .radarAnillos:before{animation:radarExpandir 2.1s ease-out infinite}
+.radarAncla[data-radar="true"] .radarAnillos:after{animation:radarExpandir 2.1s ease-out 1.05s infinite}
+.contenedorMapa[data-vista="paciente"][data-radar="true"] .marcadorDemo[data-cercano="true"]{animation:pinCercano .95s ease-in-out infinite alternate}
+@keyframes radarExpandir{from{opacity:.9;transform:translate(-50%,-50%) scale(.1)}to{opacity:0;transform:translate(-50%,-50%) scale(5)}}
+@keyframes pinCercano{to{filter:brightness(1.19);box-shadow:0 0 0 9px #ab8cff57,0 3px 18px #6a42d5}}
+@media(max-width:760px){.contenedorMapa[data-vista="paciente"]{min-height:420px;height:62vh}}
+@media(prefers-reduced-motion:reduce){.radarAncla[data-radar="true"] .radarAnillos:before,.radarAncla[data-radar="true"] .radarAnillos:after,.contenedorMapa[data-vista="paciente"][data-radar="true"] .marcadorDemo[data-cercano="true"]{animation:none}.radarAnillos{display:none}}
+
+/* Barrido circular decorativo del radar, exclusivamente tras geolocalización consentida. */
+.radarAncla[data-radar="true"]:before{content:"";position:absolute;left:50%;top:50%;width:154px;height:154px;transform:translate(-50%,-50%);border-radius:50%;background:conic-gradient(from 0deg,transparent 0 230deg,#7657eb15 260deg,#7657eb67 355deg,transparent 360deg);border:1px solid #7357e92a;animation:radarBarridoDent 2.7s linear infinite;pointer-events:none}
+@keyframes radarBarridoDent{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.radarAncla[data-radar="true"]:before{animation:none;display:none}}
+
+
+/* Popup premium: tarjetas legibles y seguras para perfiles reales y demostrativos. */
+.contenedorMapa :global(.maplibregl-popup){z-index:5}
+.contenedorMapa :global(.maplibregl-popup-content){
+  width:min(312px,calc(100vw - 54px));
+  max-width:none;
+  padding:0;
+  overflow:hidden;
+  border:1px solid #e7defb;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 18px 45px #28205a30,0 4px 14px #22245216;
+  font-family:inherit;
+  font-size:13px;
+  line-height:1.45;
+}
+.contenedorMapa :global(.maplibregl-popup-close-button){
+  top:10px;right:10px;
+  display:grid;place-items:center;
+  width:30px;height:30px;
+  border:1px solid #e8e3f5;
+  border-radius:50%;
+  background:#ffffffed;
+  color:#48436c;
+  font-size:21px;line-height:1;
+}
+.contenedorMapa :global(.maplibregl-popup-close-button:hover){background:#eee9ff;color:#4231b4}
+.contenedorMapa :global(.maplibregl-popup-close-button:focus-visible){
+  outline:3px solid #7153e8;outline-offset:2px;
+}
+.contenedorMapa :global(.maplibregl-popup-tip){border-top-color:#fff}
+.popupTarjeta{min-width:0;color:#202650;overflow-wrap:anywhere}
+.popupEncabezado{
+  display:grid;gap:9px;padding:18px 43px 13px 17px;
+  background:linear-gradient(125deg,#eee9ff 0%,#f3f6ff 58%,#ecfaff 100%);
+  border-bottom:1px solid #e8e5f7;
+}
+.popupDistintivo{
+  display:inline-flex;justify-self:start;align-items:center;
+  max-width:100%;min-height:24px;
+  padding:5px 9px;border:1px solid #dcd1ff;border-radius:999px;
+  background:#ffffffa8;color:#5c40bd;
+  font-size:10px;font-weight:800;line-height:1.3;
+}
+.popupTitulo{margin:0;color:#212459;font-size:19px;line-height:1.18;letter-spacing:-.025em;font-weight:850}
+.popupCuerpo{display:grid;gap:12px;padding:15px 17px 17px}
+.popupBloque{display:grid;gap:4px}
+.popupEtiqueta{font-size:10px;line-height:1.4;color:#68678e;font-weight:850;letter-spacing:.025em;text-transform:uppercase}
+.contenedorMapa :global(.maplibregl-popup-content) .popupValor{
+  margin:0;color:#31375e;font-size:12px;line-height:1.55;font-weight:650;
+}
+.contenedorMapa :global(.maplibregl-popup-content) .popupZona{
+  margin:-4px 0 0;color:#656f91;font-size:11px;line-height:1.45;
+}
+.popupDireccion{
+  display:grid;gap:5px;
+  padding:11px 12px;border:1px solid #e5e9f6;
+  border-radius:12px;background:#f7f9ff;
+}
+.contenedorMapa :global(.maplibregl-popup-content) .popupAviso{
+  margin:0;padding:10px 12px;border:1px solid #f4deaf;
+  border-radius:12px;background:#fff9ed;color:#654d24;
+  font-size:11px;line-height:1.55;
+}
+.contenedorMapa :global(.maplibregl-popup-content) .popupAccion{
+  display:flex;justify-content:center;align-items:center;gap:10px;
+  width:100%;min-height:44px;margin-top:1px;padding:9px 13px;
+  border-radius:12px;
+  background:linear-gradient(120deg,#7354e7,#5b42ce);
+  box-shadow:0 7px 16px #6449da34;color:#fff;
+  text-align:center;text-decoration:none;
+  font-size:12px;font-weight:850;line-height:1.3;
+  transition:filter .2s,box-shadow .2s;
+}
+.contenedorMapa :global(.maplibregl-popup-content) .popupAccion:hover{
+  background:linear-gradient(120deg,#6346db,#4933bd);
+  box-shadow:0 9px 19px #5038bf46;color:#fff;
+}
+.contenedorMapa :global(.maplibregl-popup-content) .popupAccion:focus-visible{
+  outline:3px solid #291f80;outline-offset:3px;
+}
+.popupFlecha{font-size:18px;line-height:1;flex:none}
+
+/* MapLibre traslada el botón raíz. Giramos SOLO la silueta, no el diente SVG. */
+.contenedorMapa .marcadorDemo,.contenedorMapa .marcadorDentista{
+  position:absolute;display:grid;place-items:center;
+  width:46px;height:50px;min-width:46px;min-height:50px;
+  padding:0;
+  border:0!important;border-radius:0;
+  background:transparent!important;box-shadow:none!important;
+  color:#fff;cursor:pointer;
+  overflow:visible;isolation:isolate;
+}
+.contenedorMapa .pinForma{
+  position:absolute;left:5px;top:4px;z-index:0;
+  width:36px;height:36px;
+  border:2px solid #fff;border-radius:50% 50% 50% 11px;
+  background:linear-gradient(135deg,#18a4ac,#087f8c);
+  box-shadow:0 5px 14px #17385b55;
+  transform:rotate(-45deg);
+  transition:background .2s,box-shadow .2s;
+  pointer-events:none;
+}
+.contenedorMapa[data-vista="paciente"] .marcadorDemo .pinForma{
+  background:linear-gradient(140deg,#916bff,#6041d3);
+}
+.contenedorMapa[data-vista="paciente"] .marcadorDentista .pinForma{
+  background:linear-gradient(140deg,#47bfc1,#6749df);
+}
+.contenedorMapa .iconoDiente{
+  position:absolute;z-index:1;left:12px;top:10px;
+  display:block;width:22px;height:22px;
+  color:#fff;transform:none;filter:drop-shadow(0 1px 2px #251a6e48);
+  pointer-events:none;
+}
+.contenedorMapa .marcadorDemo:hover .pinForma,
+.contenedorMapa .marcadorDentista:hover .pinForma{background:#4f37b4}
+.contenedorMapa .marcadorDemo[data-selected="true"] .pinForma,
+.contenedorMapa .marcadorDentista[data-selected="true"] .pinForma{
+  background:#5133bb;
+  box-shadow:0 0 0 5px #c6b2ff,0 5px 17px #32256870;
+}
+.contenedorMapa .marcadorDemo[data-cercano="true"] .pinForma,
+.contenedorMapa .marcadorDentista[data-cercano="true"] .pinForma{
+  box-shadow:0 0 0 5px #906ff55d,0 5px 17px #6b4de05c;
+}
+.contenedorMapa .marcadorDemo[data-selected="true"][data-cercano="true"] .pinForma,
+.contenedorMapa .marcadorDentista[data-selected="true"][data-cercano="true"] .pinForma{
+  box-shadow:0 0 0 5px #c6b2ff,0 5px 17px #32256870;
+}
+.contenedorMapa .marcadorDemo:focus-visible,
+.contenedorMapa .marcadorDentista:focus-visible{
+  outline:3px solid #291f80!important;outline-offset:2px;
+  border-radius:14px;
+}
+@media(max-width:480px){
+  .contenedorMapa :global(.maplibregl-popup-content){width:min(290px,calc(100vw - 44px))}
+  .popupEncabezado{padding:15px 40px 12px 14px}
+  .popupCuerpo{gap:10px;padding:13px 14px 14px}
+  .popupTitulo{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .contenedorMapa .pinForma,
+  .contenedorMapa :global(.maplibregl-popup-content) .popupAccion{transition:none}
+}

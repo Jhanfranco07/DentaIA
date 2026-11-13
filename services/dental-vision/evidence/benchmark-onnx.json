@@ -1,0 +1,116 @@
+{
+  "real_inference": true,
+  "platform": "Windows-10-10.0.26200-SP0",
+  "runtime": "1.24.4",
+  "load_seconds": 0.39366960000006657,
+  "loaded_rss_mib": 143.44140625,
+  "method": "Standalone ORT with OpenCV linear letterbox, class-aware NumPy NMS; no HTTP overhead; RSS sampled every 10ms; no Torch imports",
+  "requests": [
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "repeat": 0,
+      "wall_ms": 2105.6017999999312,
+      "detections": [
+        {
+          "class_id": 0,
+          "class_name": "d",
+          "confidence": 0.43412426114082336,
+          "box": {
+            "x_min": 0.8481361269950867,
+            "y_min": 0.08097546547651291,
+            "x_max": 0.9947385787963867,
+            "y_max": 0.28546854853630066
+          }
+        }
+      ],
+      "rss_mib": 348.828125
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "repeat": 1,
+      "wall_ms": 1853.1659000000218,
+      "detections": [
+        {
+          "class_id": 0,
+          "class_name": "d",
+          "confidence": 0.43412426114082336,
+          "box": {
+            "x_min": 0.8481361269950867,
+            "y_min": 0.08097546547651291,
+            "x_max": 0.9947385787963867,
+            "y_max": 0.28546854853630066
+          }
+        }
+      ],
+      "rss_mib": 489.59375
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "repeat": 2,
+      "wall_ms": 1781.7729999997027,
+      "detections": [
+        {
+          "class_id": 0,
+          "class_name": "d",
+          "confidence": 0.43412426114082336,
+          "box": {
+            "x_min": 0.8481361269950867,
+            "y_min": 0.08097546547651291,
+            "x_max": 0.9947385787963867,
+            "y_max": 0.28546854853630066
+          }
+        }
+      ],
+      "rss_mib": 489.6015625
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg",
+      "repeat": 3,
+      "wall_ms": 1819.7615999997652,
+      "detections": [
+        {
+          "class_id": 0,
+          "class_name": "d",
+          "confidence": 0.43412426114082336,
+          "box": {
+            "x_min": 0.8481361269950867,
+            "y_min": 0.08097546547651291,
+            "x_max": 0.9947385787963867,
+            "y_max": 0.28546854853630066
+          }
+        }
+      ],
+      "rss_mib": 489.61328125
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "repeat": 0,
+      "wall_ms": 1973.690699999679,
+      "detections": [],
+      "rss_mib": 503.00390625
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "repeat": 1,
+      "wall_ms": 1896.194099999775,
+      "detections": [],
+      "rss_mib": 503.01953125
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "repeat": 2,
+      "wall_ms": 1914.8980999998457,
+      "detections": [],
+      "rss_mib": 503.078125
+    },
+    {
+      "sample": "anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg",
+      "repeat": 3,
+      "wall_ms": 1924.2107999998552,
+      "detections": [],
+      "rss_mib": 503.0546875
+    }
+  ],
+  "peak_sampled_rss_mib": 565.24609375,
+  "warm_median_wall_ms": 1874.6799999998984
+}

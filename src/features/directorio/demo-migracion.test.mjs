@@ -39,10 +39,14 @@ test("seed es repetible y acotado al slug DEMO; limpieza no elimina otros regist
   assert.doesNotMatch(limpieza, /delete from\s+(public\.)?dentists|delete from\s+clinical\./i);
 });
 
-test("el marcador odontológico usa un diente y no enlaza profesionales ficticios a atención real", () => {
-  assert.match(mapa, /icono\.textContent = "🦷"/);
+test("el marcador muestra una muela SVG vertical y conserva la separación entre DEMO y atención real", () => {
+  assert.match(mapa, /function crearMarcador\(tipo: "demo" \| "consultorio"/);
+  assert.match(mapa, /document\.createElementNS\("http:\/\/www\.w3\.org\/2000\/svg", "svg"\)/);
+  assert.match(mapa, /elemento\.append\(fondo, icono\)/);
+  assert.doesNotMatch(mapa, /icono\.textContent = "🦷"/);
   assert.match(mapa, /perfilDemo/);
-  assert.match(mapa, /no trabaja necesariamente en este centro/);
+  assert.match(mapa, /Perfil ficticio/);
+  assert.match(mapa, /No hay vinculación acreditada con este centro ni reservas mediante DentaIA/);
   assert.doesNotMatch(mapa, /elemento\.textContent = "DEMO"/);
   assert.match(directorio, /crearMarcadorDemo/);
   assert.match(directorio, /marcadoresDemo/);

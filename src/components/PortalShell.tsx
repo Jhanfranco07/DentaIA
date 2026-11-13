@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { rolesDelUsuario } from "@/features/autorizacion/roles";
 import { useSesion } from "@/features/cuenta/useSesion";
+import { useNombrePerfil } from "@/features/cuenta/useNombrePerfil";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { Icono, Marca, type NombreIcono } from "./Identidad";
 import styles from "./portal-shell.module.css";
@@ -29,6 +30,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const router = useRouter();
   const { usuario } = useSesion();
   const [abierto, setAbierto] = useState(false);
+  const [tema, setTema] = useState<"claro" | "oscuro">("claro");
   const [movil, setMovil] = useState(false);
   const [saliendo, setSaliendo] = useState(false);
   const [error, setError] = useState("");
@@ -38,10 +40,24 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const [fragmento, setFragmento] = useState("");
   const hrefActual = enlaces.find(e => e.href === ruta + fragmento)?.href;
   const pagina = enlaces.find(e => e.href === hrefActual) ?? enlaces.find(({ href, exacto }) => exacto ? ruta === href : ruta === href || ruta.startsWith(`${href}/`));
-  const nombre = usuario?.user_metadata?.full_name;
-  const nombreUsuario = typeof nombre === "string" && nombre.trim() ? nombre.trim() : usuario?.email?.split("@")[0] ?? "Cuenta";
+  const nombreUsuario = useNombrePerfil(usuario);
   const roles = rolesDelUsuario(usuario);
 
+  useEffect(() => {
+    if (area !== "Paciente") return;
+    try {
+      const guardado = window.localStorage.getItem("dentaia-tema-paciente");
+      if (guardado === "claro" || guardado === "oscuro") setTema(guardado);
+      else if (window.matchMedia("(prefers-color-scheme: dark)").matches) setTema("oscuro");
+    } catch { /* Preferencia opcional. */ }
+  }, [area]);
+  function alternarTema() {
+    setTema(actual => {
+      const siguiente = actual === "claro" ? "oscuro" : "claro";
+      try { window.localStorage.setItem("dentaia-tema-paciente", siguiente); } catch { /* Opcional. */ }
+      return siguiente;
+    });
+  }
   useEffect(() => {
     const actualizar = () => { setFragmento(window.location.hash); setAbierto(false); };
     actualizar(); window.addEventListener("hashchange", actualizar);
@@ -95,10 +111,10 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   }
 
   let grupoAnterior = "";
-  return <div className={styles.shell} data-area={area}>
+  return <div className={styles.shell} data-area={area} data-tema={area === "Paciente" ? tema : undefined}>
     <aside ref={lateral} id="navegacion-portal" className={styles.lateral} data-abierto={abierto} aria-hidden={movil && !abierto} inert={movil && !abierto ? true : undefined} aria-label={`Navegación del portal ${area}`}>
       <div className={styles.cabeceraLateral}><Link href="/" className={styles.marca} aria-label="DentaIA, página de inicio"><Marca /></Link><button type="button" className={styles.cerrarMenu} aria-label="Cerrar navegación" onClick={() => { setAbierto(false); boton.current?.focus(); }}><Icono nombre="cerrar" size={18} /></button></div>
-      <div className={styles.portalMarca}><span className={styles.portalIcono}><Icono nombre={area === "Odontología" ? "diente" : area === "Administración" ? "escudo" : "persona"} size={19} /></span><div><strong>{area}</strong><span>Espacio de trabajo</span></div></div>
+      <div className={styles.portalMarca}><span className={styles.portalIcono}>{area === "Paciente" ? nombreUsuario.slice(0, 1).toLocaleUpperCase("es") : <Icono nombre={area === "Odontología" ? "diente" : "escudo"} size={19} />}</span><div><strong>{area === "Paciente" ? nombreUsuario : area}</strong><span>{area === "Paciente" ? "Paciente" : "Espacio de trabajo"}</span></div></div>
       <p className={styles.tituloNavegacion}>Menú principal</p>
       <nav aria-label={`Secciones de ${area}`}>
         {enlaces.map(({ href, etiqueta, exacto, icono, grupo }) => {
@@ -107,7 +123,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
           if (grupo) grupoAnterior = grupo;
           return <span className={styles.itemNavegacion} key={href}>
             {encabezadoGrupo && <span className={styles.grupo}>{grupo}</span>}
-            <Link href={href} onClick={(event) => {
+            <Link href={area === "Paciente" && href === "/cuenta" ? "/cuenta?perfil=1" : href} onClick={(event) => {
               if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
               const [paginaDestino, ancla] = href.split("#");
               if (paginaDestino === ruta) {
@@ -133,6 +149,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
         </button>
         <div className={styles.tituloPagina}><span>{descripcion}</span><strong>{pagina?.etiqueta ?? area}</strong></div>
         <div className={styles.usuario}><span className={styles.avatar} aria-hidden="true">{nombreUsuario.slice(0, 1).toLocaleUpperCase("es")}</span><span className={styles.usuarioDatos}><strong>{nombreUsuario}</strong><span>{etiquetaRol(roles)}</span></span></div>
+        {area === "Paciente" && <button type="button" className={styles.temaBoton} onClick={alternarTema} aria-pressed={tema === "oscuro"} aria-label={tema === "oscuro" ? "Activar modo claro celeste" : "Activar modo oscuro morado"} title={tema === "oscuro" ? "Modo claro" : "Modo oscuro"}><span aria-hidden="true">{tema === "oscuro" ? "☀" : "☾"}</span><span>{tema === "oscuro" ? "Claro" : "Oscuro"}</span></button>}
         {mostrarCuentaHeader && !enlaces.some(e => e.href === "/cuenta") && <Link href="/cuenta" className={styles.cuenta}><Icono nombre="persona" size={17} /><span>Mi cuenta</span></Link>}
         <button type="button" className={styles.salir} aria-label={saliendo ? "Cerrando sesión" : "Cerrar sesión"} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>
           <Icono nombre="salir" size={17} /><span>{saliendo ? "Cerrando…" : "Salir"}</span>
