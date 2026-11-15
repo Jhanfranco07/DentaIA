@@ -1,10 +1,21 @@
 # DI-115 — Verificación de accesibilidad y adaptación móvil
 
-**Historia:** DI-35 · Sprint 6  
-**Responsable de la actividad:** Angie Jara  
-**Base comprobada:** `2c9c51f3a8b9d24ae543f6e5716f1cd131fa2784`  
-**Fecha de ejecución técnica:** 11 de noviembre de 2026  
-**Estado:** En curso. Verificación técnica y manual parcial.
+**Historia:** DI-35 · Sprint 6
+**Responsable de la actividad:** Angie Jara
+**Base comprobada:** `2c9c51f3a8b9d24ae543f6e5716f1cd131fa2784`
+**Fecha de ejecución técnica:** 11 de noviembre de 2026
+**Estado:** Listo en Jira, según confirmación de Angie. La cobertura de las pruebas se detalla abajo.
+
+## Resumen de cobertura
+
+| Criterio | Resultado documentado |
+| --- | --- |
+| Vista PC | Revisión manual del panel y del directorio en Windows, incluida una ventana de 390 × 618 px emulada. |
+| Vista Android | Sin ejecución registrada en dispositivo físico. La revisión Responsive corresponde al navegador de escritorio. |
+| Vista iOS | Angie confirmó que el acceso finalmente funcionó en Safari en un iPhone físico. El alcance confirmado es la apertura del sitio. |
+| Contraste | Cinco pares de colores del CSS superaron 4,5:1 para texto normal. El cálculo cubre los pares indicados en este informe. |
+| Etiquetas | Se revisó la asociación entre etiquetas y controles de búsqueda y filtros en el código. Queda pendiente la revisión del nombre accesible de enlaces repetidos. |
+| Teclado | Se verificaron navegación a cuenta y directorio, apertura y cierre del menú, retorno del foco, limpieza de filtros y apertura y retorno de una ficha. |
 
 ## Resultados ejecutados sobre la base integrada
 
@@ -36,9 +47,9 @@ Estas mediciones cubren combinaciones seleccionadas. Quedan pendientes el estilo
 | --- | --- | --- |
 | Etiquetas de filtros | `DirectorioLista.tsx` asocia búsqueda, distrito, especialidad, distancia y orden con `htmlFor` e `id`. | Confirmar los nombres en el árbol de accesibilidad y recorrer controles habilitados con Tab. |
 | Acciones repetidas | Las tarjetas renderizan «Ver perfil» y «Solicitar orientación» para cada profesional. El JSX de ambos enlaces usa el mismo texto en todas las tarjetas, sin nombre adicional del profesional. | Comparar dos tarjetas en la lista de enlaces del lector de pantalla. Registrar el contexto disponible antes de decidir el ajuste. |
-| Foco tras limpiar filtros | `limpiarFiltros` devuelve el foco al buscador con `busquedaRef.current?.focus()`. | Activar «Limpiar filtros» por teclado y comprobar el elemento activo y su indicador visual. |
+| Foco tras limpiar filtros | `limpiarFiltros` devuelve el foco al buscador con `busquedaRef.current?.focus()`. | El caso M1d confirma el retorno al buscador al activar «Limpiar filtros» con Enter. |
 | Foco tras reintentar | El botón se elimina al entrar al estado de carga. El manejador actual cambia estado y contador de intento, sin seleccionar un destino de foco. | Simular un fallo, pulsar Enter en «Reintentar» y registrar el foco durante la carga y tras la recuperación. |
-| Menú del paciente | `PortalShell.tsx` declara nombre, estado expandido y relación con la navegación. | Alcanzar el botón con Tab y comprobar apertura, Escape, retorno del foco y continuidad del recorrido. |
+| Menú del paciente | `PortalShell.tsx` declara nombre, estado expandido y relación con la navegación. | Los casos M1b y M1c confirman el recorrido, el retorno del foco y la navegación al directorio. |
 | Privacidad | El encabezado y pie públicos enlazan a `/privacidad`. La respuesta inicial de `/panel` sin sesión no contiene ese enlace. | Confirmar el camino a privacidad desde el panel con sesión y desde la navegación móvil. |
 
 ## Evidencia previa del equipo
@@ -60,22 +71,26 @@ Los registros anteriores pertenecen a sus ejecuciones originales. Las comprobaci
 | M1c | Desde `/panel`, llegar al enlace al directorio con Tab y pulsar Enter. | El foco es visible y el enlace abre `/directorio`. | Confirmación manual de Angie. |
 | M1d | En `/directorio`, buscar `zzzz`, llegar a «Limpiar filtros» con Tab y pulsar Enter. | Se borra la búsqueda y el foco vuelve al buscador. | Confirmación manual de Angie. |
 | M1e | En `/directorio`, llegar a «Ver perfil» con Tab y pulsar Enter. Revisar la ficha y activar «Volver al directorio». | «Ver perfil» muestra foco visible y abre la ficha correspondiente. La ficha se ve completa y el enlace de retorno abre el listado. | Confirmación manual de Angie. |
-| M4 | Safari en iPhone físico, conectado al mismo Wi-Fi que el PC. Intento de abrir `/directorio` mediante la dirección de red del servidor local. | **Bloqueado por conexión.** La página no cargó. Quedaron sin verificar el listado, el mapa y la ficha en iOS. | Reporte de Angie. Sin diagnóstico de la causa de conexión. |
+| M4 inicial | Safari en iPhone físico, conectado al mismo Wi-Fi que el PC. Intento de abrir `/directorio` mediante la dirección de red del servidor local. | La página no cargó en ese intento. El acceso funcionó posteriormente, según la confirmación registrada abajo. | Reporte de Angie. |
 
 La emulación a 390 px se ejecutó en un navegador de escritorio. La captura y las confirmaciones documentan los pasos indicados. El desbordamiento horizontal no se midió por separado.
 
-## Verificación manual pendiente
+## Diagnóstico de acceso desde la red local
+
+En la PC se inició el servidor en una ventana independiente con `npm run dev -- --hostname 0.0.0.0 --port 3000`. La petición `curl.exe --noproxy "*" -I --max-time 30 http://192.168.1.5:3000/directorio` devolvió `HTTP/1.1 200 OK` desde la propia PC. Después se volvió a intentar en Safari desde el iPhone y la página siguió sin cargar. Quedó confirmada la respuesta HTTP desde la PC. En el intento final, Angie confirmó que el sitio sí abrió en Safari en el iPhone. El resultado se registró a partir de su confirmación. Quedan sin registrar la fecha exacta de ese intento, la versión de iOS, el entorno utilizado y el resultado de recorrer el listado, el mapa, la ficha y el panel. La causa del fallo inicial sigue sin determinarse.
+
+## Casos pendientes de verificación
 
 | ID | Entorno | Recorrido | Evidencia por registrar |
 | --- | --- | --- | --- |
 | M1 restante | PC a 390 px emulados | Medir desbordamiento horizontal y revisar cortes en el panel con sesión. | Ancho, estado de sesión y resultado. |
 | M2 | PC, 1440 px y zoom 200 % | Panel → directorio → ficha → privacidad. Revisar Tab/Shift+Tab, nombres accesibles y lectura a zoom. | Ruta, navegador, controles afectados y captura cuando aplique. |
 | M3 | Android con Chrome | Abrir directorio y ficha. Usar búsqueda, distrito, Lista/Mapa y volver a Lista. Denegar geolocalización si se solicita. | Modelo, SO, navegador, ancho y resultado. |
-| M4 | iOS con Safari | Pendiente de acceso al entorno académico desde el iPhone. Tras resolver el bloqueo, revisar listado, mapa, ficha y, si hay sesión de prueba, panel. | Modelo, SO, navegador y resultado. |
+| M4 | iOS con Safari | El acceso funcionó en el intento final. Queda por registrar el recorrido del listado, mapa, ficha y panel con sesión de prueba, cuando corresponda. | Modelo, SO, navegador y resultado. |
 | M5 | PC con herramientas de red | Probar carga, vacío y error recuperable de directorio y ficha. Usar fixtures o una cuenta académica autorizada según el caso. Revisar mensajes, estado del foco y navegación. | Qué respuesta se simuló, texto mostrado y elemento activo tras recuperar. |
 | M6 | PC con herramienta de accesibilidad | Inspeccionar dos tarjetas y comprobar contraste de texto y foco en panel, listado y ficha. | Nombre computado de cada enlace, colores y relación observada. |
 
-Para cada ejecución, registrar `fecha | SHA | ruta | dispositivo/SO/navegador | ancho | fixture o entorno académico | pasos | esperado | observado | evidencia`. Estados sugeridos: aprobado, hallazgo, bloqueado y pendiente. Un resultado de navegador de escritorio a 390 px se registra como ancho emulado. 
+Para cada ejecución, registrar `fecha | SHA | ruta | dispositivo/SO/navegador | ancho | fixture o entorno académico | pasos | esperado | observado | evidencia`. Estados sugeridos: aprobado, hallazgo, bloqueado y pendiente. Un resultado de navegador de escritorio a 390 px se registra como ancho emulado.
 
 ### Reproducción con los scripts del repositorio
 
@@ -95,4 +110,5 @@ python scripts/qa-ux-paciente.py --output "$env:TEMP\di115-panel" --browser "$ch
 python scripts/qa-directorio-mapa.py --fase despues --output "$env:TEMP\di115-directorio" --browser "$chrome"
 ```
 
-Revisa el JSON de cada recorrido antes de adjuntarlo. Para cerrar DI-115, vincula la evidencia vigente con su commit y PR y registra los casos que sigan pendientes.
+Revisa el JSON de cada recorrido antes de adjuntarlo. Angie marcó DI-115 como Listo en Jira. Los casos pendientes de esta tabla delimitan el alcance de la verificación documentada.
+
