@@ -1,0 +1,159 @@
+# Action SHAs: checkout v6, setup-node v6, setup-python v6.1.0; artifacts v4.
+name: Backend IA
+'on':
+  push:
+    branches:
+    - main
+    - develop
+  pull_request:
+    branches:
+    - main
+    - develop
+  workflow_dispatch: {}
+  workflow_call: {}
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+jobs:
+  preparacion:
+    name: Python · resolución y pip check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements-*.txt
+    - run: python -m pip install -r services/dental-vision/requirements-onnx.txt -r services/dental-vision/requirements-linux-tests.txt
+    - run: python -m pip check
+    - run: python --version
+  fastapi:
+    name: FastAPI · evaluación aislada
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements-*.txt
+    - run: python -m pip install -r services/dental-vision/requirements-onnx.txt -r services/dental-vision/requirements-linux-tests.txt
+    - run: python -m pip check
+    - run: |-
+        mkdir -p reports
+        cd services/dental-vision
+        python -m pytest -m 'not real' --ignore=tests/test_api.py -q --junitxml=../../reports/fastapi.xml
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: backend-fastapi
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+  contratos:
+    name: Contratos /health y /predict
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements-*.txt
+    - run: python -m pip install -r services/dental-vision/requirements-onnx.txt -r services/dental-vision/requirements-linux-tests.txt
+    - run: python -m pip check
+    - run: |-
+        mkdir -p reports
+        cd services/dental-vision
+        python -m pytest tests/test_api.py -k "formats_and_normalized_contract or prediction_preserves_exact_class or class_id_and_name or load_once_and_health" -q --junitxml=../../reports/contratos.xml
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: backend-contratos
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+  autenticacion:
+    name: Autenticación y errores
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements-*.txt
+    - run: python -m pip install -r services/dental-vision/requirements-onnx.txt -r services/dental-vision/requirements-linux-tests.txt
+    - run: python -m pip check
+    - run: |-
+        mkdir -p reports
+        cd services/dental-vision
+        python -m pytest tests/test_api.py -k "not (formats_and_normalized_contract or prediction_preserves_exact_class or class_id_and_name or load_once_and_health)" -q --junitxml=../../reports/autenticacion.xml
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: backend-autenticacion
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+  seguridad:
+    name: Seguridad backend · Bandit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements-*.txt
+    - run: |-
+        python -m pip install bandit==1.9.4
+        bandit -r services/dental-vision/app -ll
+  validacion-final:
+    name: Backend IA · Validación final
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - preparacion
+    - fastapi
+    - contratos
+    - autenticacion
+    - seguridad
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}

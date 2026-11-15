@@ -1,0 +1,31 @@
+title = "DentaIA: reglas predeterminadas y falsos positivos revisados"
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+[[rules.allowlists]]
+description = "SHA-256 de archivos, revisados como hashes de integridad, no credenciales"
+condition = "AND"
+regexTarget = "secret"
+regexes = ['''^[a-f0-9]{64}$''']
+paths = [
+  '''(?:^|/)docs/arquitectura/MANIFEST_SHA256\.json$''',
+  '''(?:^|/)docs/arquitectura/http_jwt/FUENTES_PREVIAS\.json$''',
+  '''(?:^|/)docs/evidencias/DI-153/POSTGRES_LOCAL\.json$''',
+  '''(?:^|/)docs/evidencias/arquitectura/MANIFEST_SHA256\.json$''',
+  '''(?:^|/)docs/arquitectura/backend_mvp/BASELINE_ANTES_CONSOLIDACION\.json$''',
+  '''(?:^|/)docs/arquitectura/servicios_clinicos/FUENTES_PREVIAS\.json$'''
+]
+[[rules.allowlists]]
+description = "Supabase publishable key pública en ejemplo; nunca service_role"
+condition = "AND"
+regexTarget = "secret"
+regexes = ['''^sb_publishable_[A-Za-z0-9_-]+$''']
+paths = ['''(?:^|/)\.env\.example$''']
+[[rules.allowlists]]
+description = "Constante sintética exclusiva de pruebas locales de evaluación"
+condition = "AND"
+regexTarget = "secret"
+regexes = ['''^evaluation-test-secret-0123456789abcdef$''']
+paths = ['''(?:^|/)services/dental-vision/tests/test_evaluation\.py$''']
