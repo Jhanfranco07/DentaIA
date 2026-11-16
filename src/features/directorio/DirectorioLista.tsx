@@ -193,6 +193,17 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
           {cercanos.length === 0 && <span>Sin ubicaciones cercanas disponibles</span>}
         </div>
       </div>}
+      {modoPaciente && <div className={styles.encabezadoResultados} id="resultados-directorio">
+        <h2>Explora los perfiles</h2>
+        <span className={styles.conteo} aria-live="polite">{visibles.length} de {dentistas.length} perfiles</span>
+      </div>}
+      {modoPaciente && <div className={styles.accesosEspecialidades} role="group" aria-label="Filtrar por especialidad">
+        <button type="button" className={!especialidad ? styles.accesoActivo : ""} aria-pressed={!especialidad} onClick={() => setEspecialidad("")}>Todas las especialidades</button>
+        {["Odontología general", "Ortodoncia", "Endodoncia", "Odontopediatría"].filter(opcion => especialidades.includes(opcion)).map(opcion => (
+          <button key={opcion} type="button" className={especialidad === opcion ? styles.accesoActivo : ""} aria-pressed={especialidad === opcion} onClick={() => setEspecialidad(actual => actual === opcion ? "" : opcion)}>{opcion}</button>
+        ))}
+        {(busqueda || distrito || especialidad || radioKm) && <button type="button" className={styles.limpiarPremium} onClick={limpiarFiltros}>Limpiar filtros</button>}
+      </div>}
       <div className={styles.filtros}>
         <div className={styles.campo}><label htmlFor="dir-busqueda">Buscar por nombre o especialidad</label><input id="dir-busqueda" ref={busquedaRef} type="search" placeholder="Ej.: ortodoncia, Dra. …" value={busqueda} onChange={e => setBusqueda(e.target.value)} /></div>
         <div className={styles.campo}><label htmlFor="dir-distrito">Distrito</label><select id="dir-distrito" value={distrito} onChange={e => setDistrito(e.target.value)}><option value="">Todos los distritos</option>{distritos.map(d => <option key={d} value={d}>{d}</option>)}</select></div>
@@ -201,11 +212,7 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
         <div className={styles.campo}><label htmlFor="dir-orden">Ordenar por</label><select id="dir-orden" value={orden} onChange={e => setOrden(e.target.value as Orden)}><option value="nombre">Nombre</option><option value="cercania" disabled={!ubicacion || conUbicacion.length === 0}>Cercanía</option><option value="calificacion" disabled={!carga.resenasDisponibles || !dentistas.some(d => (carga.resenas[d.id]?.total ?? 0) > 0)}>Calificación publicada</option></select></div>
       </div>
       {ubicacion && conUbicacion.length === 0 && <p className={styles.privacidadUbicacion}>Aún no hay consultorios con coordenadas registradas. Puedes seguir buscando por nombre, especialidad o distrito.</p>}
-      {modoPaciente && <nav className={styles.accesosEspecialidades} aria-label="Filtrar por especialidad">
-        <span>Explorar:</span>{["Odontología general","Ortodoncia","Endodoncia","Odontopediatría"].filter(opcion=>especialidades.includes(opcion)).map(opcion=><button key={opcion} type="button" className={especialidad===opcion ? styles.accesoActivo : ""} aria-pressed={especialidad===opcion} onClick={()=>setEspecialidad(actual=>actual===opcion?"":opcion)}>{opcion}</button>)}
-        {(busqueda || distrito || especialidad || radioKm) && <button type="button" className={styles.limpiarPremium} onClick={limpiarFiltros}>Limpiar filtros</button>}
-      </nav>}
-      {modoPaciente ? <div className={styles.encabezadoResultados} id="resultados-directorio"><div><span className={styles.seccionEyebrow}>TU EXPLORACIÓN</span><h2>Conoce los perfiles del directorio <span>{visibles.length} de {dentistas.length}</span></h2></div><span className={styles.leyendaResultado}><Icono nombre="diente" size={16}/> Revisa su ficha y ubicación</span></div> : <p className={styles.conteo} aria-live="polite">Mostrando {visibles.length} de {dentistas.length} profesionales</p>}
+      {!modoPaciente && <p className={styles.conteo} aria-live="polite">Mostrando {visibles.length} de {dentistas.length} profesionales</p>}
       <div className={styles.alternarVista} role="tablist" aria-label="Vista del directorio"><button type="button" role="tab" aria-selected={vistaMovil === "lista"} onClick={() => setVistaMovil("lista")}>Lista</button><button type="button" role="tab" aria-selected={vistaMovil === "mapa"} onClick={() => setVistaMovil("mapa")}>Mapa</button></div>
       <div className={styles.explorador}>
         <section className={`${styles.resultados} ${vistaMovil === "mapa" ? styles.ocultarEnMovil : ""}`} aria-label="Resultados del directorio">

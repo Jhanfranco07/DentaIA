@@ -243,3 +243,95 @@
   .heroPremiumImagen{display:block;width:100%;height:175px;max-height:175px;object-fit:cover;object-position:center 23%}
   .creditoFotografia{right:8px;bottom:7px;font-size:9px}
 }
+
+/* Estilos de PR #53 reconciliados con main (conservando imagen móvil actual) */
+
+/* Odontólogos en el portal paciente */
+.pagina[data-vista="paciente"] {
+  max-width: 1500px;
+  margin-inline: auto;
+  gap: 20px;
+  color: #15224b;
+}
+
+.pagina[data-vista="paciente"] .heroPremium {
+  min-height: 305px;
+  padding: 28px clamp(20px, 3vw, 38px);
+  border: 2px solid #fff;
+  border-radius: 30px;
+  background:
+    radial-gradient(ellipse at 59% 50%, #9de1ff, transparent 39%),
+    radial-gradient(ellipse at 100% 0%, #b7a1ff, transparent 46%),
+    linear-gradient(112deg, #eae1ff, #dceaff 55%, #d2c9ff);
+  box-shadow: 0 16px 35px #5464af24;
+}
+
+.pagina[data-vista="paciente"] .heroPremiumCopy > p { font-size: 15px; }
+.pagina[data-vista="paciente"] .heroPremiumNota { font-size: 12px; line-height: 1.45; }
+.pagina[data-vista="paciente"] .heroPremiumDatos { min-height: 0; }
+.pagina[data-vista="paciente"] .heroPremiumDatos strong { font-size: 13px; }
+.pagina[data-vista="paciente"] .heroPremiumDatos small { font-size: 12px; }
+.pagina[data-vista="paciente"] .localizadorPremium { margin: 0; }
+
+.encabezadoResultados h2 {
+  display: block;
+  margin: 0;
+  font-size: clamp(23px, 2.3vw, 28px);
+}
+
+.encabezadoResultados h2::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 4px;
+  margin-top: 8px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #6345e6, #b1b6ff);
+}
+
+.pagina[data-vista="paciente"] .accesosEspecialidades {
+  flex-wrap: wrap;
+  overflow: visible;
+  gap: 8px;
+}
+
+.pagina[data-vista="paciente"] .accesosEspecialidades button {
+  min-height: 40px;
+  padding-inline: 14px;
+  font-size: 12px;
+}
+
+.pagina[data-vista="paciente"] .campo label { font-size: 12px; }
+.pagina[data-vista="paciente"] .campo input,
+.pagina[data-vista="paciente"] .campo select { min-height: 44px; font-size: 14px; }
+
+.pagina[data-vista="paciente"] .tarjeta {
+  border-color: #e2dcfa;
+  background: linear-gradient(155deg, #faf8ff, #fff 60%);
+}
+
+.pagina[data-vista="paciente"] .tarjeta.seleccionada { border-color: #7658eb; }
+.pagina[data-vista="paciente"] .tarjeta .meta span:nth-child(2) {
+  display: inline;
+  overflow: visible;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.pagina[data-vista="paciente"] .tarjeta .enlace,
+.pagina[data-vista="paciente"] .tarjeta .verMapa { min-height: 40px; font-size: 12px; }
+
+.pagina[data-vista="paciente"] :is(a, button, input, select, summary):focus-visible {
+  outline: 3px solid #5434c7;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .pagina[data-vista="paciente"] .heroPremium { min-height: 0; border-radius: 22px; }
+  .pagina[data-vista="paciente"] .encabezadoResultados { align-items: start; }
+}
+
+@media (max-width: 490px) {
+  /* Mantener visible la ilustración actual también en móvil */
+  .pagina[data-vista="paciente"] .localizadorTexto { min-width: 0; }
+  .pagina[data-vista="paciente"] .accesosEspecialidades .limpiarPremium { margin-left: 0; }
+}
