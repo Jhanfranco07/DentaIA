@@ -13,10 +13,15 @@ export default function HeroDirectorioPaciente() {
       </div>
       <small className={styles.heroPremiumNota}>Los perfiles ilustrados son ficticios y no están vinculados laboralmente a los centros geográficos mostrados. No se gestionan citas con ellos.</small>
     </div>
-    <div className={styles.heroPremiumArte} aria-hidden="true">
-      <Image src="/directorio/hero-odontologos-premium.avif" alt="" width={740} height={690} priority
+    <div className={styles.heroPremiumArte} style={{ background: "transparent" }}>
+      <Image src="/directorio/hero-odontologos-integrado.svg"
+        alt="Ilustración digital de dos profesionales odontológicos con uniforme y equipo clínico, integrada con formas curvas lavanda"
+        width={480} height={480} unoptimized priority
         sizes="(max-width: 760px) 180px, (max-width: 1310px) 235px, 350px"
-        className={styles.heroPremiumImagen}/>
+        className={styles.heroPremiumImagen}
+        style={{ objectFit: "contain", objectPosition: "center", borderRadius: 0, boxShadow: "none" }}
+      />
+      <small className={styles.creditoFotografia}>Ilustración digital generada con IA</small>
     </div>
     <aside className={styles.heroPremiumDatos} aria-label="Explora el directorio">
       <span className={styles.heroPremiumDatosTitulo}>Cómo explorar el directorio</span>

@@ -1,0 +1,30 @@
+rules:
+  - id: javascript-dynamic-eval
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Evitar ejecución dinámica de texto como JavaScript.
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+  - id: python-dynamic-exec
+    languages: [python]
+    severity: ERROR
+    message: Evitar ejecución dinámica de código en el backend.
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: exec(...)
+  - id: python-disabled-tls
+    languages: [python]
+    severity: ERROR
+    message: No deshabilitar verificación TLS.
+    pattern: $CLIENT.$METHOD(..., verify=False, ...)
+  - id: node-disabled-tls
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: No deshabilitar verificación TLS.
+    pattern: '{rejectUnauthorized: false, ...}'
+  - id: python-shell-execution
+    languages: [python]
+    severity: ERROR
+    message: Evitar ejecución mediante shell en el servicio.
+    pattern: subprocess.$METHOD(..., shell=True, ...)

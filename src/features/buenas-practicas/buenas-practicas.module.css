@@ -55,3 +55,46 @@
 
 /* Mascota con resolución superior (420×417) para mantener nitidez en el hero. */
 .imagen3d[data-tipo="heroe"]{background-image:url("/educacion/mascota-premium.avif");background-size:contain;background-position:center}
+
+
+/* Tema compartido del paciente: contenido educativo en celeste claro o morado oscuro.
+   Solo cambia presentación; no afecta temporizadores, pasos ni métricas. */
+:global([data-area="Paciente"][data-tema="claro"]) .hero{
+  background:radial-gradient(circle at 93% 4%,#329ac1,transparent 45%),linear-gradient(123deg,#134f7c,#187fae);
+  border-color:#8dd6e9;
+}
+:global([data-area="Paciente"][data-tema="claro"]) .hero h1,
+:global([data-area="Paciente"][data-tema="claro"]) .hero h1 span{color:#fff}
+:global([data-area="Paciente"][data-tema="claro"]) .heroCopy p{color:#e5f7ff}
+:global([data-area="Paciente"][data-tema="claro"]) :is(.tarjeta,.detalle,.reto,.tarjetaTiempo,.sabias){
+  border-color:#cee8f5;box-shadow:0 7px 22px #17577713;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina{color:#f3edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .hero{
+  background:radial-gradient(circle at 90% 0,#7046ad,transparent 46%),linear-gradient(125deg,#281b4a,#51318c);
+  border-color:#7456ad;box-shadow:0 15px 35px #10092170;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .hero h1,
+:global([data-area="Paciente"][data-tema="oscuro"]) .hero h1 span{color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .heroCopy p{color:#e8ddfc}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.tarjeta,.tarjetaProgreso,.detalle,.reto,.tarjetaTiempo,.sabias,.busqueda,.controlCarrusel){
+  background:#2c2448;border-color:#665285;color:#f3edff;box-shadow:0 8px 22px #10082145;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.tituloFila h2,.tarjetaInfo strong,.detalleContenido h3,.detalleContenido h4,.retoInterior h3,.extraTitulo h3,.tiempoContenido strong){
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.tarjetaDescripcion,.detalleContenido>p,.detalleContenido p,.retoInterior p,.sabias p,.notaFinal p,.tarjetaPie>span){
+  color:#d7cde9;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.filtro,.busqueda input,.cerrarDetalle,.botonDuracion,.controlCarrusel button,.detalleAcciones button){
+  background:#392e59;border-color:#78649e;color:#f1eaff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.pasos li,.consejo,.tipPie,.notaFinal,.extraTitulo){
+  background:#362d53;border-color:#6b578e;color:#e8dcfa;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.botonPrincipal,.botonFinal,.filtroActivo){
+  background:linear-gradient(125deg,#6a45c9,#8254dd);border-color:#8962e5;color:#fff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .tarjetaPie{border-color:#62517e}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.tarjetaProgreso strong,.detalle h3,.reto h3,.tiempoContenido h3){color:#f3edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .controlCarrusel button:hover{background:#51406e;color:#fff}

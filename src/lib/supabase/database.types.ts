@@ -1,3 +1,5 @@
+import type { PaymentStatus } from "@/types/payments";
+
 export type Json =
   | string
   | number
@@ -351,6 +353,42 @@ export type Database = {
           policy_version?: string
           purpose?: string
           revoked_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount_total: number
+          created_at: string
+          currency: string
+          id: string
+          plan: string
+          status: PaymentStatus
+          stripe_event_id: string
+          stripe_session_id: string
+          user_id: string
+        }
+        Insert: {
+          amount_total: number
+          created_at?: string
+          currency: string
+          id?: string
+          plan: string
+          status: PaymentStatus
+          stripe_event_id: string
+          stripe_session_id: string
+          user_id: string
+        }
+        Update: {
+          amount_total?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          plan?: string
+          status?: PaymentStatus
+          stripe_event_id?: string
+          stripe_session_id?: string
           user_id?: string
         }
         Relationships: []

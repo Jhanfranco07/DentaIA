@@ -16,6 +16,102 @@ function obtenerTeselas() {
   return configurada?.startsWith("https://") ? configurada : "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 }
 
+
+type DatosPopup = {
+  nombre: string;
+  distintivo: string;
+  establecimiento: string;
+  zona?: string;
+  direccion?: string;
+  aviso?: string;
+  href?: string;
+  textoEnlace?: string;
+};
+
+function etiqueta<K extends keyof HTMLElementTagNameMap>(tag: K, clase: string, texto: string) {
+  const nodo = document.createElement(tag);
+  nodo.className = clase;
+  nodo.textContent = texto;
+  return nodo;
+}
+
+// DOM seguro: ningún campo del catálogo ni de la BD se interpreta como HTML.
+function crearPopup(datos: DatosPopup) {
+  const tarjeta = document.createElement("article");
+  tarjeta.className = styles.popupTarjeta;
+  tarjeta.setAttribute("aria-label", `Información de ${datos.nombre}`);
+
+  const encabezado = document.createElement("div");
+  encabezado.className = styles.popupEncabezado;
+  encabezado.append(
+    etiqueta("span", styles.popupDistintivo, datos.distintivo),
+    etiqueta("h3", styles.popupTitulo, datos.nombre),
+  );
+  tarjeta.append(encabezado);
+
+  const cuerpo = document.createElement("div");
+  cuerpo.className = styles.popupCuerpo;
+  const referencia = document.createElement("div");
+  referencia.className = styles.popupBloque;
+  referencia.append(
+    etiqueta("span", styles.popupEtiqueta, "Centro de referencia"),
+    etiqueta("p", styles.popupValor, datos.establecimiento),
+  );
+  cuerpo.append(referencia);
+  if (datos.zona) {
+    cuerpo.append(etiqueta("p", styles.popupZona, datos.zona));
+  }
+  if (datos.direccion) {
+    const direccion = document.createElement("div");
+    direccion.className = styles.popupDireccion;
+    direccion.append(
+      etiqueta("span", styles.popupEtiqueta, "Dirección publicada"),
+      etiqueta("p", styles.popupValor, datos.direccion),
+    );
+    cuerpo.append(direccion);
+  }
+  if (datos.aviso) {
+    cuerpo.append(etiqueta("p", styles.popupAviso, datos.aviso));
+  }
+  if (datos.href) {
+    const enlace = document.createElement("a");
+    enlace.className = styles.popupAccion;
+    enlace.href = datos.href;
+    enlace.textContent = datos.textoEnlace ?? "Ver perfil";
+    const flecha = etiqueta("span", styles.popupFlecha, "→");
+    flecha.setAttribute("aria-hidden", "true");
+    enlace.append(flecha);
+    cuerpo.append(enlace);
+  }
+  tarjeta.append(cuerpo);
+  return tarjeta;
+}
+
+// MapLibre coloca su propia traslación sobre el elemento raíz del marcador.
+// Por eso se gira únicamente el fondo del pin y nunca el SVG de la muela.
+function crearMarcador(tipo: "demo" | "consultorio", descripcion: string) {
+  const elemento = document.createElement("button");
+  elemento.type = "button";
+  elemento.className = tipo === "demo" ? styles.marcadorDemo : styles.marcadorDentista;
+  elemento.setAttribute("aria-label", descripcion);
+  const fondo = etiqueta("span", styles.pinForma, "");
+  fondo.setAttribute("aria-hidden", "true");
+  const icono = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  icono.setAttribute("viewBox", "0 0 24 24");
+  icono.setAttribute("fill", "none");
+  icono.setAttribute("aria-hidden", "true");
+  icono.classList.add(styles.iconoDiente);
+  const trazo = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  trazo.setAttribute("d", "M12 5.2C9.8 4 7.6 3.4 5.8 4.1c-2.8 1.1-3 4.4-1.7 7.8l1.7 4.7c.5 1.5 1.1 3.1 2.3 3.1 1.4 0 1.7-4.8 3.9-4.8s2.5 4.8 3.9 4.8c1.2 0 1.8-1.6 2.3-3.1l1.7-4.7c1.3-3.4 1.1-6.7-1.7-7.8-1.8-.7-4 .0-6.2 1.1Z");
+  trazo.setAttribute("stroke", "currentColor");
+  trazo.setAttribute("stroke-width", "1.8");
+  trazo.setAttribute("stroke-linecap", "round");
+  trazo.setAttribute("stroke-linejoin", "round");
+  icono.append(trazo);
+  elemento.append(fondo, icono);
+  return elemento;
+}
+
 export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = "", visible = true, alSeleccionar, modoPaciente = false, radarActivo = false, idsCercanos = [], basePerfil = "/directorio" }: {
   ubicaciones: MarcadorDirectorio[];
   ubicacion: PuntoGeografico | null;
@@ -74,78 +170,48 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
       && ubicacion.latitude >= -90 && ubicacion.latitude <= 90 && ubicacion.longitude >= -180 && ubicacion.longitude <= 180);
 
     for (const consultorio of ubicacionesValidas) {
-      const popupRoot = document.createElement("div");
-      const nombre = document.createElement("strong");
-      nombre.textContent = consultorio.dentista.name || "Profesional";
-      popupRoot.append(nombre);
-      const consultorioNombre = document.createElement("p");
-      consultorioNombre.textContent = consultorio.practice_name;
-      popupRoot.append(consultorioNombre);
-      if (consultorio.practice_address) {
-        const direccion = document.createElement("p");
-        direccion.textContent = consultorio.practice_address;
-        popupRoot.append(direccion);
-      }
-      const enlace = document.createElement("a");
-      enlace.href = `${basePerfil}/${encodeURIComponent(consultorio.dentist_id)}`;
-      enlace.textContent = "Ver perfil";
-      popupRoot.append(enlace);
-      const elemento = document.createElement("button");
-      elemento.type = "button";
-      elemento.className = styles.marcadorDentista;
+      const nombre = consultorio.dentista.name || "Profesional";
+      const popupRoot = crearPopup({
+        nombre,
+        distintivo: "Consultorio publicado",
+        establecimiento: consultorio.practice_name,
+        direccion: consultorio.practice_address || undefined,
+        href: `${basePerfil}/${encodeURIComponent(consultorio.dentist_id)}`,
+        textoEnlace: "Ver perfil profesional",
+      });
+      const elemento = crearMarcador("consultorio", `Ver odontólogo ${nombre}, ${consultorio.practice_name}`);
       elemento.dataset.dentistId = consultorio.dentist_id;
-      elemento.setAttribute("aria-label", `Ver odontólogo ${consultorio.dentista.name || "sin nombre"}, ${consultorio.practice_name}`);
       elemento.addEventListener("click", () => alSeleccionar?.(consultorio.dentist_id));
       const marcador = new Marker({ element: elemento, anchor: "bottom" })
         .setLngLat([consultorio.longitude, consultorio.latitude])
-        .setPopup(new Popup({ offset: 28 }).setDOMContent(popupRoot))
+        .setPopup(new Popup({ offset: 28, maxWidth: "min(340px, calc(100vw - 42px))" }).setDOMContent(popupRoot))
         .addTo(mapa.current);
       marcadores.current.push(marcador);
       marcadoresPorDentista.current.set(consultorio.dentist_id, marcador);
     }
 
     for (const demo of demosValidas) {
-      const popupRoot = document.createElement("div");
-      const nombre = document.createElement("strong");
       const perfil = demo.dentist_id ? perfilDemo(demo.dentist_id) : undefined;
-      nombre.textContent = perfil?.name ?? demo.name;
-      if (perfil) {
-        const especialidad = document.createElement("p");
-        especialidad.textContent = perfil.specialty + " · Profesional ficticio";
-        popupRoot.append(especialidad);
-      }
-      popupRoot.append(nombre);
-      const etiqueta = document.createElement("p");
-      etiqueta.textContent = `Referencia geográfica: ${demo.name}`;
-      popupRoot.append(etiqueta);
-      const distrito = document.createElement("p");
-      distrito.textContent = `${demo.district}, ${demo.city}, ${demo.country}`;
-      popupRoot.append(distrito);
-      const nota = document.createElement("small");
-      nota.textContent = perfil ? `Dirección publicada: ${perfil.practice_address}. Este profesional ficticio no trabaja necesariamente en este centro; no hay reservas por DentaIA.` : "Punto académico no vinculado a profesionales.";
-      popupRoot.append(nota);
-      if (demo.dentist_id) {
-        const enlace = document.createElement("a");
-        enlace.href = `${basePerfil}/${encodeURIComponent(demo.dentist_id)}`;
-        enlace.textContent = "Ver ficha de ejemplo";
-        popupRoot.append(enlace);
-      }
-      const elemento = document.createElement("button");
-      elemento.type = "button";
-      elemento.className = styles.marcadorDemo;
-      const icono = document.createElement("span");
-      icono.className = styles.iconoDiente;
-      icono.textContent = "🦷";
-      icono.setAttribute("aria-hidden", "true");
-      elemento.append(icono);
-      elemento.setAttribute("aria-label", `Ver referencia geográfica de ${demo.name} en ${demo.district}`);
+      const popupRoot = crearPopup({
+        nombre: perfil?.name ?? demo.name,
+        distintivo: perfil ? `${perfil.specialty} · Perfil ficticio` : "Referencia académica",
+        establecimiento: demo.name,
+        zona: `${demo.district}, ${demo.city}, ${demo.country}`,
+        direccion: perfil?.practice_address || undefined,
+        aviso: perfil
+          ? "Perfil ficticio. No hay vinculación acreditada con este centro ni reservas mediante DentaIA."
+          : "Punto académico de referencia no vinculado a profesionales.",
+        href: demo.dentist_id ? `${basePerfil}/${encodeURIComponent(demo.dentist_id)}` : undefined,
+        textoEnlace: "Ver ficha de ejemplo",
+      });
+      const elemento = crearMarcador("demo", `Ver referencia geográfica de ${demo.name} en ${demo.district}`);
       if (demo.dentist_id) {
         elemento.dataset.dentistId = demo.dentist_id;
         elemento.addEventListener("click", () => alSeleccionar?.(demo.dentist_id!));
       }
       const marcador = new Marker({ element: elemento, anchor: "bottom" })
         .setLngLat([demo.longitude, demo.latitude])
-        .setPopup(new Popup({ offset: 28 }).setDOMContent(popupRoot))
+        .setPopup(new Popup({ offset: 28, maxWidth: "min(340px, calc(100vw - 42px))" }).setDOMContent(popupRoot))
         .addTo(mapa.current);
       marcadores.current.push(marcador);
       if (demo.dentist_id) marcadoresPorDentista.current.set(demo.dentist_id, marcador);
