@@ -16,6 +16,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      oral_care_routine_plans: {
+        Row: { created_at: string; description: string; id: string; plan_key: string; published: boolean; title: string; valid_from: string; valid_until: string | null; version: number }
+        Insert: { created_at?: string; description: string; id?: string; plan_key: string; published?: boolean; title: string; valid_from: string; valid_until?: string | null; version: number }
+        Update: { created_at?: string; description?: string; id?: string; plan_key?: string; published?: boolean; title?: string; valid_from?: string; valid_until?: string | null; version?: number }
+        Relationships: []
+      }
+      oral_care_routine_activities: {
+        Row: { activity_key: string; description: string; id: string; plan_id: string; sort_order: number; time_of_day: string; title: string }
+        Insert: { activity_key: string; description: string; id?: string; plan_id: string; sort_order: number; time_of_day: string; title: string }
+        Update: { activity_key?: string; description?: string; id?: string; plan_id?: string; sort_order?: number; time_of_day?: string; title?: string }
+        Relationships: [{ foreignKeyName: "oral_care_routine_activities_plan_id_fkey"; columns: ["plan_id"]; isOneToOne: false; referencedRelation: "oral_care_routine_plans"; referencedColumns: ["id"] }]
+      }
+      patient_routine_completions: {
+        Row: { activity_id: string; completed_at: string; completion_date: string; id: string; patient_id: string; plan_id: string }
+        Insert: { activity_id: string; completed_at?: string; completion_date: string; id?: string; patient_id?: string; plan_id: string }
+        Update: { activity_id?: string; completed_at?: string; completion_date?: string; id?: string; patient_id?: string; plan_id?: string }
+        Relationships: [
+          { foreignKeyName: "patient_routine_completions_patient_id_fkey"; columns: ["patient_id"]; isOneToOne: false; referencedRelation: "users"; referencedColumns: ["id"] },
+          { foreignKeyName: "patient_routine_completions_activity_fk"; columns: ["plan_id", "activity_id"]; isOneToOne: false; referencedRelation: "oral_care_routine_activities"; referencedColumns: ["plan_id", "id"] }
+        ]
+      }
       appointment_requests: {
         Row: {
           contact_email: string
