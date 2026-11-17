@@ -24,17 +24,6 @@ function clavePublicable(key: string) {
 }
 function api(request: Request) {
   const config = configurarClinica(process.env);
-  if (process.env.VERCEL_ENV === "preview" && !config.valid) {
-    const cursor = process.env.DENTAIA_CLINICAL_CURSOR_SECRET ?? "";
-    console.info("clinical_config_preflight", JSON.stringify({
-      previewGate: config.preview,
-      cursorPresent: cursor.length > 0,
-      cursorFormatValid: /^[A-Za-z0-9_-]{43,86}$/.test(cursor) && Buffer.from(cursor, "base64url").length >= 32,
-      allowlistCountValid: config.users.length === 5 && new Set(config.users).size === 5,
-      targetAcademic: process.env.DENTAIA_CLINICAL_TARGET === "dentalia_academic",
-      flagsEnabled: process.env.DENTAIA_CLINICAL_HTTP_ENABLED === "true" && process.env.DENTAIA_CLINICAL_ACADEMIC_ENABLED === "true",
-    }));
-  }
   const originAllowed = config.preview
     ? origenPreviewAutorizado(request, process.env)
     : origenLocalAutorizado(request);
