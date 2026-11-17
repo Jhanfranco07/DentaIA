@@ -1,0 +1,101 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database, Tables } from "../../lib/supabase/database.types";
+import { rolesDelUsuario } from "../autorizacion/roles.ts";
+import { proveedorGeneralRutinas, type ActividadCatalogo, type PlanCatalogo } from "./contrato.ts";
+import { fechaHoyLima, type MarcaRutina } from "./modelo.ts";
+
+type Cliente = SupabaseClient<Database>;
+type FilaPlan = Tables<"oral_care_routine_plans">;
+type FilaActividad = Tables<"oral_care_routine_activities">;
+type FilaMarca = Tables<"patient_routine_completions">;
+
+export type EstadoDiaRutina = {
+  plan: FilaPlan | null;
+  actividades: FilaActividad[];
+  completadas: string[];
+};
+
+async function validarPaciente(cliente: Cliente, usuarioId: string) {
+  if (!usuarioId.trim()) throw new Error("Inicia sesión para acceder a tus rutinas.");
+  const { data, error } = await cliente.auth.getUser();
+  if (error || !data.user || data.user.id !== usuarioId) throw new Error("Tu sesión no es válida.");
+  if (!rolesDelUsuario(data.user).includes("paciente")) throw new Error("Tu cuenta no tiene el rol paciente.");
+  return data.user.id;
+}
+
+async function leerCatalogo(cliente: Cliente): Promise<{ planes: FilaPlan[]; catalogo: PlanCatalogo[] }> {
+  const [respuestaPlanes, respuestaActividades] = await Promise.all([
+    cliente.from("oral_care_routine_plans").select("*").eq("published", true).order("valid_from", { ascending: false }),
+    cliente.from("oral_care_routine_activities").select("*").order("sort_order"),
+  ]);
+  if (respuestaPlanes.error) throw respuestaPlanes.error;
+  if (respuestaActividades.error) throw respuestaActividades.error;
+  const planes = respuestaPlanes.data ?? [];
+  const actividades = respuestaActividades.data ?? [];
+  return {
+    planes,
+    catalogo: planes.map(plan => ({
+      id: plan.id,
+      plan_key: plan.plan_key,
+      version: plan.version,
+      valid_from: plan.valid_from,
+      valid_until: plan.valid_until,
+      activities: actividades.filter(actividad => actividad.plan_id === plan.id) as ActividadCatalogo[],
+    })),
+  };
+}
+
+export async function leerRutinaDelDia(cliente: Cliente, usuarioId: string, fecha: string): Promise<EstadoDiaRutina> {
+  const actor = await validarPaciente(cliente, usuarioId);
+  const { planes, catalogo } = await leerCatalogo(cliente);
+  const propuesta = proveedorGeneralRutinas.obtenerPlan(fecha, catalogo);
+  const seleccion = propuesta && planes.find(plan => plan.plan_key === propuesta.clave && `${plan.version}` === propuesta.version);
+  if (!seleccion) return { plan: null, actividades: [], completadas: [] };
+  const { data, error } = await cliente.from("oral_care_routine_activities").select("*")
+    .eq("plan_id", seleccion.id).order("time_of_day").order("sort_order");
+  if (error) throw error;
+  const marcas = await cliente.from("patient_routine_completions").select("activity_id")
+    .eq("patient_id", actor).eq("completion_date", fecha).eq("plan_id", seleccion.id);
+  if (marcas.error) throw marcas.error;
+  return { plan: seleccion, actividades: data ?? [], completadas: (marcas.data ?? []).map(marca => marca.activity_id) };
+}
+
+export async function leerHistorialRutinas(cliente: Cliente, usuarioId: string): Promise<{ catalogo: PlanCatalogo[]; marcas: MarcaRutina[] }> {
+  const actor = await validarPaciente(cliente, usuarioId);
+  const [{ catalogo }, marcas] = await Promise.all([
+    leerCatalogo(cliente),
+    (async () => {
+      const resultado: MarcaRutina[] = [];
+      const pagina = 500;
+      for (let desde = 0; ; desde += pagina) {
+        const respuesta = await cliente.from("patient_routine_completions").select("activity_id,plan_id,completion_date")
+          .eq("patient_id", actor).order("completion_date", { ascending: false }).range(desde, desde + pagina - 1);
+        if (respuesta.error) throw respuesta.error;
+        const filas = (respuesta.data ?? []) as MarcaRutina[];
+        resultado.push(...filas);
+        if (filas.length < pagina) break;
+      }
+      return resultado;
+    })(),
+  ]);
+  return { catalogo, marcas };
+}
+
+export async function marcarActividadRutina(
+  cliente: Cliente, usuarioId: string, planId: string, actividadId: string, completada: boolean,
+): Promise<void> {
+  const actor = await validarPaciente(cliente, usuarioId);
+  const fecha = fechaHoyLima();
+  if (completada) {
+    const { error } = await cliente.from("patient_routine_completions").upsert({
+      plan_id: planId, activity_id: actividadId, completion_date: fecha,
+    }, { onConflict: "patient_id,activity_id,completion_date", ignoreDuplicates: true });
+    if (error) throw error;
+    return;
+  }
+  const { error } = await cliente.from("patient_routine_completions").delete()
+    .eq("patient_id", actor).eq("plan_id", planId).eq("activity_id", actividadId).eq("completion_date", fecha);
+  if (error) throw error;
+}
+
+export type MarcaPersistida = FilaMarca;
