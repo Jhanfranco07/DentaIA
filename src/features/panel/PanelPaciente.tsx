@@ -31,6 +31,10 @@ export default function PanelPaciente() {
       <EstadoPanel tipo="error" titulo="No pudimos comprobar tu sesión." accion={<button type="button" className={styles.boton} onClick={() => void verificar()}>Reintentar sesión</button>} /> : !usuario ?
         <EstadoPanel tipo="vacio" titulo="Inicia sesión para acceder a tu panel." accion={<Link href="/cuenta" className={styles.enlace}>Ir a mi perfil</Link>}>No se muestran datos personales sin sesión.</EstadoPanel> : <Fragment key={usuario.id}>
           <ResumenPanel />
+          <section className={styles.premiumUpsell} aria-label="Descubre DentaIA Premium">
+            <div><span className={styles.premiumLabel}>✦ MÁS POSIBILIDADES PARA TU SONRISA</span><h2>Desbloquea más funcionalidades con Premium</h2><p>Descubre las evaluaciones adicionales y el seguimiento ampliado previstos para DentaIA. Suscripción de prueba desde S/ 14.90 al mes; las funciones avanzadas siguen en desarrollo.</p></div>
+            <Link href="/premium" className={styles.premiumLink}>Descubrir Premium <Icono nombre="flecha" size={18} /></Link>
+          </section>
           <div className={styles.contenidoPanel}>
             <div className={styles.columnaPrincipal}>
               <div className={styles.actividad}><MisSolicitudes compacto /></div>
