@@ -55,8 +55,8 @@ describe("Checkout de suscripción mensual", () => {
       client_reference_id: "11111111-1111-4111-8111-111111111111",
       subscription_data: { metadata: { dentaia_user_id: "11111111-1111-4111-8111-111111111111", dentaia_plan: "premium" } },
       line_items: [expect.objectContaining({ price_data: expect.objectContaining({
-        unit_amount: 2000,
-        currency: "usd",
+        unit_amount: 1490,
+        currency: "pen",
         recurring: { interval: "month", interval_count: 1 },
       }) })],
     }));
