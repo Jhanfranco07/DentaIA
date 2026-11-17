@@ -78,13 +78,13 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
         const demos = (respuestaDemo.data ?? []) as DemoLocationPublica[];
         if (cancelado) return;
         const fichasDemo = completarCatalogoDemo(demos);
-        const dentistas = [...dentistasReales.filter(d => !fichasDemo.some(p => p.id === d.id)), ...fichasDemo, ...(qaPreview ? perfilesQa() : [])];
+        const dentistas = [...dentistasReales.filter(d => !fichasDemo.some(p => p.id === d.id)), ...fichasDemo, ...perfilesQa()];
         const sumarios = Object.fromEntries(dentistas.map(dentista => [dentista.id, resumirResenas(resenas.filter(r => r.dentist_id === dentista.id))]));
         setCarga({ estado: "listo", dentistas, demos, catalogoDisponible: true, resenas: sumarios, resenasDisponibles: resenasResultado.disponibles, ubicacionesDisponibles: ubicacionesResultado.disponibles });
       } catch {
         if (cancelado) return;
         setCarga({
-          estado: "listo", dentistas: [...completarCatalogoDemo([]), ...(qaPreview ? perfilesQa() : [])], demos: [], catalogoDisponible: false,
+          estado: "listo", dentistas: [...completarCatalogoDemo([]), ...perfilesQa()], demos: [], catalogoDisponible: false,
           resenas: {}, resenasDisponibles: false, ubicacionesDisponibles: false,
         });
       }
@@ -96,9 +96,9 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
   const dentistas = carga.estado === "listo" ? carga.dentistas : [];
   const distritos = useMemo(() => [...new Set(dentistas.map(d => d.district.trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es")), [dentistas]);
   const especialidades = useMemo(() => [...new Set(dentistas.map(d => d.specialty.trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es")), [dentistas]);
-  const conUbicacion = dentistas.filter(d => d.ubicaciones.length > 0);
+  const conUbicacion = dentistas.filter(d => !esPerfilQa(d.id) && d.ubicaciones.length > 0);
   const cercanos = useMemo(() => ubicacion ? dentistas.flatMap(d => {
-    const p = ubicacionMasCercana(d.ubicaciones, ubicacion);
+    const p = esPerfilQa(d.id) ? null : ubicacionMasCercana(d.ubicaciones, ubicacion);
     return p && p.distancia !== null ? [{ id: d.id, km: p.distancia, name: p.ubicacion.practice_name }] : [];
   }).sort((a,b) => (a.km ?? Number.POSITIVE_INFINITY) - (b.km ?? Number.POSITIVE_INFINITY)).slice(0, 3) : [], [dentistas,ubicacion]);
   useEffect(() => {
@@ -114,10 +114,10 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
       return coincideTexto && (!distrito || dentista.district.trim() === distrito)
         && (!especialidad || dentista.specialty.trim() === especialidad);
     });
-    if (ubicacion && radioKm) filtrados = filtrados.filter(d => tieneUbicacionDentroDelRadio(d.ubicaciones, ubicacion, Number(radioKm)));
+    if (ubicacion && radioKm) filtrados = filtrados.filter(d => !esPerfilQa(d.id) && tieneUbicacionDentroDelRadio(d.ubicaciones, ubicacion, Number(radioKm)));
     if (ubicacion && orden === "cercania") filtrados.sort((a, b) =>
-      (ubicacionMasCercana(a.ubicaciones, ubicacion)?.distancia ?? Number.POSITIVE_INFINITY)
-      - (ubicacionMasCercana(b.ubicaciones, ubicacion)?.distancia ?? Number.POSITIVE_INFINITY));
+      (esPerfilQa(a.id) ? Number.POSITIVE_INFINITY : ubicacionMasCercana(a.ubicaciones, ubicacion)?.distancia ?? Number.POSITIVE_INFINITY)
+      - (esPerfilQa(b.id) ? Number.POSITIVE_INFINITY : ubicacionMasCercana(b.ubicaciones, ubicacion)?.distancia ?? Number.POSITIVE_INFINITY));
     if (orden === "calificacion" && carga.estado === "listo") {
       filtrados.sort((a, b) => (carga.resenas[b.id]?.promedio ?? -1) - (carga.resenas[a.id]?.promedio ?? -1));
     }
@@ -125,7 +125,7 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
   }, [busqueda, carga, dentistas, distrito, especialidad, orden, radioKm, ubicacion]);
 
   const idsCercanos = useMemo(() => cercanos.map(c => c.id), [cercanos]);
-  const ubicacionesVisibles = useMemo(() => crearMarcadores(visibles), [visibles]);
+  const ubicacionesVisibles = useMemo(() => crearMarcadores(visibles.filter(d => !esPerfilQa(d.id))), [visibles]);
   const marcadoresDemo = useMemo(() => carga.estado === "listo"
     ? carga.demos.map(crearMarcadorDemo).filter((marcador): marcador is MarcadorDemo => marcador !== null)
       .flatMap(marcador => {
@@ -169,7 +169,7 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
     {modoPaciente ? <HeroDirectorioPaciente /> : <header className={styles.cabecera}>
       <span className={styles.etiqueta}>Directorio odontológico</span>
       <h1>Encuentra orientación odontológica</h1>
-      <p>Busca por nombre, especialidad o distrito. Los centros de referencia cuentan con direcciones y coordenadas publicadas. Los perfiles de odontólogos de ejemplo son ficticios.</p>
+      <p>Busca por nombre, especialidad o distrito. Los centros de referencia cuentan con direcciones y coordenadas publicadas. Los perfiles de odontólogos de ejemplo son ficticios; sus servicios son simulaciones y no permiten citas reales.</p>
       <span className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}. Las ubicaciones son referencias independientes, sin vinculación profesional ni citas mediante DentaIA.</span>
     </header>}
 
@@ -229,17 +229,17 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
           {visibles.length === 0 ? <div className={styles.aviso} role="status"><strong>No hay profesionales que coincidan.</strong><p>Prueba otro filtro. Si usas distancia, solo se incluyen consultorios con coordenadas registradas.</p><button type="button" className={styles.boton} onClick={limpiarFiltros}>Limpiar filtros</button></div> : <ul className={styles.grilla}>
             {visibles.map(d => {
               const resumen = carga.resenas[d.id];
-              const punto = ubicacionMasCercana(d.ubicaciones, ubicacion);
+              const punto = esPerfilQa(d.id) ? null : ubicacionMasCercana(d.ubicaciones, ubicacion);
               const km = punto?.distancia ?? null;
               return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`}>
                 <div className={styles.tarjetaAvatarMarco}><AvatarOdontologo id={d.id} name={d.name} initials={d.initials} avatarColor={d.avatar_color} /></div>
-                <div className={styles.cuerpo}>{d.is_demo && !esPerfilQa(d.id) && <span className={styles.ficticio}>{modoPaciente ? "Perfil ilustrado · Ficticio" : "Perfil de ejemplo · ficticio"}</span>}<h2>{modoPaciente ? tratamientoDemo(d.id) : ""}{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
+                <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>Perfil de demostración · No ofrece atención real</span>}<h2>{modoPaciente ? tratamientoDemo(d.id) : ""}{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
                   <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.ubicacionesDisponibles ? (d.is_demo ? `Sin consultorio publicado en ${d.district}` : "Ubicación no registrada") : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}{!d.is_demo && <span>{formatearPrecio(d.consultation_price, d.currency)}</span>}</div>
                   {(!modoPaciente || (resumen?.total ?? 0)>0) && <p className={styles.rating} aria-label={resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : `${resumen.promedio.toFixed(1)} de cinco, ${resumen.total} reseñas`}>
                     {resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : <>★ {resumen.promedio.toFixed(1)} · {resumen.total} {resumen.total === 1 ? "reseña" : "reseñas"}</>}
                     {!carga.resenasDisponibles && <span>Calificaciones no disponibles en este entorno</span>}
                   </p>}
-                  <div className={styles.accionesTarjeta}><Link href={`${modoPaciente ? "/panel/odontologos" : "/directorio"}/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil <span aria-hidden="true">→</span></Link>{!d.is_demo && <Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link>}{d.ubicaciones.some(p => Number.isFinite(p.latitude) && Number.isFinite(p.longitude)) && <button type="button" className={styles.verMapa} onClick={() => mostrarEnMapa(d.id)}>Ver en mapa</button>}</div>
+                  <div className={styles.accionesTarjeta}><Link href={`${modoPaciente ? "/panel/odontologos" : "/directorio"}/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil <span aria-hidden="true">→</span></Link>{!d.is_demo && <Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link>}{!esPerfilQa(d.id) && d.ubicaciones.some(p => Number.isFinite(p.latitude) && Number.isFinite(p.longitude)) && <button type="button" className={styles.verMapa} onClick={() => mostrarEnMapa(d.id)}>Ver en mapa</button>}</div>
                 </div>
               </li>;
             })}

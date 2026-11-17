@@ -33,7 +33,7 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio", qa
   useEffect(() => {
     let cancelado = false;
     async function cargar() {
-      const qa = qaPreview ? perfilQa(id) : undefined;
+      const qa = perfilQa(id);
       if (qa) {
         if (!cancelado) setCarga({ estado: "listo", dentista: qa, ubicaciones: qa.ubicaciones, ubicacionesDisponibles: true });
         return;
@@ -123,7 +123,7 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio", qa
         <article className={styles.detalle}>
           <div className={styles.contenedorAvatarGrande}><AvatarOdontologo id={carga.dentista.id} name={carga.dentista.name} initials={carga.dentista.initials} avatarColor={carga.dentista.avatar_color} /></div>
           <div className={styles.cuerpo}>
-            {carga.dentista.is_demo && !esPerfilQa(carga.dentista.id) && <><span className={styles.ficticio}>Perfil ficticio</span><p className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}</p></>}
+            {carga.dentista.is_demo && <><span className={styles.ficticio}>Perfil ficticio · Sin atención real</span><p className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}</p></>}
             <h1>{esPerfilQa(carga.dentista.id) ? "" : tratamientoDemo(carga.dentista.id)}{textoOpcional(carga.dentista.name, "Nombre no disponible")}</h1>
             <p className={styles.especialidad}>
               {textoOpcional(carga.dentista.specialty, "Especialidad no indicada")}
@@ -163,9 +163,9 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio", qa
               ) : (
                 <p>Este perfil ficticio no ofrece servicios ni atención real.</p>
               )}
-            </section> : <ServiciosPublicados key={carga.dentista.id} dentistId={carga.dentista.id} />}
+            </section> : <>{esPerfilQa(carga.dentista.id) && <p className={styles.nota}>Servicios y tarifas de prueba, creados para validar DentaIA. No representan una oferta real ni permiten reservar una atención.</p>}<ServiciosPublicados key={carga.dentista.id} dentistId={carga.dentista.id} /></>}
 
-            {carga.dentista.is_demo && !esPerfilQa(carga.dentista.id) && <p className={styles.nota}>
+            {carga.dentista.is_demo && <p className={styles.nota}>
               {carga.ubicaciones.length
                 ? "El profesional es ficticio. El establecimiento indicado es una referencia independiente; no se afirma una relación laboral ni se ofrecen citas desde DentaIA."
                 : "Este perfil es ficticio y no tiene una dirección de consultorio publicada. El distrito declarado no equivale a una ubicación exacta ni implica disponibilidad de atención."}

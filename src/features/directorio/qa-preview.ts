@@ -1,8 +1,8 @@
 import type { DentistaDirectorio, MarcadorDemo, UbicacionPublica } from "./tipos";
 
 // Estas identidades están asociadas a cuentas de QA, no a profesionales habilitados.
-// Este catálogo solo se incorpora al render de Vercel Preview de la rama de integración.
-// Los puntos son marcadores esquemáticos; no se atribuyen consultorios ni direcciones reales.
+// La vista de catálogo también puede mostrar estos perfiles como DEMO ficticios, sin activar registros ni citas.
+// Los puntos son esquemáticos y no deben mostrarse como consultorios reales en Production.
 const QA = [
   { id: "08d0c38f-2505-43ae-9c3a-2b3ccfa6b2fb", slug: "fase8-demo-a-e19e6bf1", name: "Odontologo Demo A", latitude: -12.0464, longitude: -77.0428 },
   { id: "77a82d0a-909a-4833-825d-cd4d57cf2a2b", slug: "fase8-demo-b-e19e6bf1", name: "Odontologo Demo B", latitude: -12.0514, longitude: -77.0428 },
