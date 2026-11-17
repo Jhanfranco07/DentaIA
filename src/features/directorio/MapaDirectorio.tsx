@@ -8,6 +8,7 @@ import type { PuntoGeografico } from "./geolocalizacion";
 import { ubicacionConCoordenadasValidas } from "./ubicaciones";
 import styles from "./mapa-directorio.module.css";
 import { perfilDemo } from "./catalogo-demo";
+import { esPerfilQa } from "./qa-preview";
 
 const LIMA = { longitude: -77.0428, latitude: -12.0464 };
 
@@ -192,17 +193,20 @@ export default function MapaDirectorio({ ubicaciones, ubicacion, seleccionado = 
 
     for (const demo of demosValidas) {
       const perfil = demo.dentist_id ? perfilDemo(demo.dentist_id) : undefined;
+      const qa = demo.dentist_id ? esPerfilQa(demo.dentist_id) : false;
       const popupRoot = crearPopup({
         nombre: perfil?.name ?? demo.name,
-        distintivo: perfil ? `${perfil.specialty} · Perfil ficticio` : "Referencia académica",
-        establecimiento: demo.name,
+        distintivo: qa ? "Odontología general" : perfil ? `${perfil.specialty} · Perfil ficticio` : "Referencia académica",
+        establecimiento: qa ? "Zona de referencia en Lima" : demo.name,
         zona: `${demo.district}, ${demo.city}, ${demo.country}`,
         direccion: perfil?.practice_address || undefined,
-        aviso: perfil
-          ? "Perfil ficticio. No hay vinculación acreditada con este centro ni reservas mediante DentaIA."
-          : "Punto académico de referencia no vinculado a profesionales.",
+        aviso: qa
+          ? "Punto visual para pruebas académicas. No indica la ubicación de un consultorio ni habilita citas."
+          : perfil
+            ? "Perfil ficticio. No hay vinculación acreditada con este centro ni reservas mediante DentaIA."
+            : "Punto académico de referencia no vinculado a profesionales.",
         href: demo.dentist_id ? `${basePerfil}/${encodeURIComponent(demo.dentist_id)}` : undefined,
-        textoEnlace: "Ver ficha de ejemplo",
+        textoEnlace: qa ? "Ver perfil profesional" : "Ver ficha de ejemplo",
       });
       const elemento = crearMarcador("demo", `Ver referencia geográfica de ${demo.name} en ${demo.district}`);
       if (demo.dentist_id) {
