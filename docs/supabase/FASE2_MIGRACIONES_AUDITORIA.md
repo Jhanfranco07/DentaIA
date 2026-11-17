@@ -161,3 +161,21 @@ volumen y red locales al fallar, por lo que no persiste estado parcial.
 No se creó un sustituto de `clinical` ni se debilitó ninguna guarda. Falta
 versionar las cuatro DI-36 originales y una adaptación exclusivamente local de
 sus guardas de destino, verificable y separada del SQL de producción.
+
+## Ensayo de base QA independiente
+
+Se inició el stack Docker local con las migraciones automáticas desactivadas,
+se creó `dentaia_arch_qa_fase8` y se aplicó el comentario exacto
+`DENTAIA_PHASE8_SYNTHETIC_ONLY`. La base adicional no hereda los esquemas
+internos que Supabase inicializa únicamente en `postgres`: la primera migración
+base falló con `schema "auth" does not exist` y la segunda con
+`schema "storage" does not exist`. No se crearon mocks, esquemas falsos ni
+adaptaciones de DI-36. La base QA parcial fue eliminada y el stack local se
+detuvo; `db.migrations.enabled` fue restaurado a `true`.
+
+Esto demuestra que una base adicional dentro del mismo contenedor no es una
+réplica Supabase válida. Para ejecutar DI-36 sin debilitar sus guardas se
+requiere un stack Supabase cuyo `db` inicial sea `dentaia_arch_qa_fase8` y cuyo
+bootstrap de Auth/Storage se ejecute en esa misma base, o una clonación
+verificable del catálogo local antes de arrancar los servicios. La CLI estándar
+3.2.0 no ofrece ese cambio de base inicial en `config.toml`.
