@@ -32,7 +32,8 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
   const [continuar, setContinuar] = useState<string | null>(null);
   const [continuarListo, setContinuarListo] = useState(false);
   useEffect(() => {
-    setContinuar(retornoSolicitud(new URLSearchParams(window.location.search).get("continuar")));
+    const solicitado = new URLSearchParams(window.location.search).get("continuar");
+    setContinuar(solicitado === "/premium" ? "/premium" : retornoSolicitud(solicitado));
     setContinuarListo(true);
   }, []);
 
@@ -186,7 +187,7 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
           {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}
           {aviso && <p className={styles.aviso} role="status">{aviso}</p>}
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
-            {continuar && roles.includes("paciente") && !roles.includes("odontologo") && !roles.includes("superusuario") && <div className="notice"><strong>Tu profesional sigue seleccionado.</strong><p>Ya puedes continuar con tu solicitud de demostración.</p><Link href={continuar} className="action">Continuar mi solicitud</Link></div>}
+            {continuar && roles.includes("paciente") && !roles.includes("odontologo") && !roles.includes("superusuario") && <div className="notice"><strong>Tu siguiente paso está guardado.</strong><p>{continuar === "/premium" ? "Puedes continuar a la contratación de prueba Premium." : "Ya puedes continuar con tu solicitud de demostración."}</p><Link href={continuar} className="action">{continuar === "/premium" ? "Continuar a Premium" : "Continuar mi solicitud"}</Link></div>}
             {roles.includes("paciente") && <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />}
             {roles.length === 0 && <p role="alert" className={styles.error}>Esta cuenta no tiene un rol DentaIA activo.</p>}
             {otrosEspacios.length > 0 && <section className={styles.otrosEspacios} aria-label="Otros espacios de tu cuenta"><h2>Otros espacios autorizados</h2><p>Tu cuenta tiene más de un rol. Puedes cambiar de espacio sin cerrar sesión.</p>{otrosEspacios.map(({href,titulo}) => <Link key={href} href={href} className="text-link">{titulo} →</Link>)}</section>}
