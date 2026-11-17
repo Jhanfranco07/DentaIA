@@ -8,7 +8,7 @@ import type Stripe from "stripe";
 
 const baseSubscription = {
   items: { data: [{
-    price: { id: "price_monthly_demo", currency: "usd", unit_amount: 2000, recurring: { interval: "month", interval_count: 1 } },
+    price: { id: "price_monthly_demo", currency: "pen", unit_amount: 1490, recurring: { interval: "month", interval_count: 1 } },
     current_period_start: 1794960000,
     current_period_end: 1797552000,
   }] },
