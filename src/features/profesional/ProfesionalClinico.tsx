@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { useSesion } from "@/features/cuenta/useSesion";
@@ -807,10 +808,24 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
   return (
     <section className={styles.pagina} aria-labelledby="titulo-profesional">
       <header className={styles.encabezado}>
-        <h1 id="titulo-profesional">Panel del odontólogo</h1>
-        <p>
-          Elige tu clínica de trabajo para revisar las solicitudes asignadas y consultar el historial compartido por tus pacientes.
-        </p>
+        <div className={styles.presentacion}>
+          <span className={styles.etiquetaSuperior}><Icono nombre="diente" size={17} /> TU ESPACIO PROFESIONAL</span>
+          <h1 id="titulo-profesional">Panel del odontólogo</h1>
+          <p>
+            Elige tu clínica de trabajo para revisar las solicitudes asignadas y consultar el historial compartido por tus pacientes.
+          </p>
+          {!cargandoSesion && usuario && !sesionRemotaExpirada && (
+            <a className={styles.accionPrincipal} href="#contexto-clinico">
+              <Icono nombre="clinica" size={18} /> Elegir mi clínica <span aria-hidden="true">→</span>
+            </a>
+          )}
+        </div>
+        <Image className={styles.ilustracionPortada} src="/educacion/mascota-premium.avif"
+          width={300} height={300} alt="" priority />
+        <div className={styles.privacidadPortada}>
+          <span className={styles.iconoPrivacidad}><Icono nombre="escudo" size={25} /></span>
+          <div><strong>Atención con acceso protegido</strong><p>Consulta información según tu clínica y los permisos vigentes de cada paciente.</p></div>
+        </div>
       </header>
 
       {cargandoSesion && (
@@ -893,10 +908,28 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
           </section>
 
           <nav aria-label="Accesos del panel" className={styles.accesos}>
-            <a href="#solicitudes-profesionales"><Icono nombre="calendario" size={20} /> Ver solicitudes</a>
-            <a href="#historial-clinico"><Icono nombre="usuarios" size={20} /> Consultar historial</a>
-            <a href="#perfil-profesional"><Icono nombre="persona" size={20} /> Ver perfil</a>
-            {perfil.perfil?.dentistId && <a href="#mis-servicios">Mis servicios</a>}
+            <a href="#solicitudes-profesionales">
+              <span className={styles.iconoAcceso}><Icono nombre="calendario" size={23} /></span>
+              <span><strong>Ver solicitudes</strong><small>Revisa las solicitudes asignadas</small></span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a href="#historial-clinico">
+              <span className={styles.iconoAcceso}><Icono nombre="usuarios" size={23} /></span>
+              <span><strong>Consultar historial</strong><small>Accede a pacientes autorizados</small></span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a href="#perfil-profesional">
+              <span className={styles.iconoAcceso}><Icono nombre="persona" size={23} /></span>
+              <span><strong>Ver perfil</strong><small>Consulta tu ficha profesional</small></span>
+              <span aria-hidden="true">→</span>
+            </a>
+            {perfil.perfil?.dentistId && (
+              <a href="#mis-servicios">
+                <span className={styles.iconoAcceso}><Icono nombre="diente" size={23} /></span>
+                <span><strong>Mis servicios</strong><small>Administra tu catálogo publicado</small></span>
+                <span aria-hidden="true">→</span>
+              </a>
+            )}
           </nav>
 
           {perfil.perfil?.dentistId && (

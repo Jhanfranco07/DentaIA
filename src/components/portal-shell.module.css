@@ -116,3 +116,84 @@
 .shell[data-area="Paciente"] .portalMarca div{min-width:0}
 .shell[data-area="Paciente"] .portalMarca strong{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 @media(max-width:760px){.shell[data-area="Paciente"][data-tema="claro"] .cerrarMenu{color:#18345a;background:#f4f9ff;border-color:#d8e6f4}}
+
+/* Identidad del espacio odontológico coherente con Buenas prácticas. */
+.shell[data-area="Odontología"] {
+  --ink: #252346;
+  --muted: #625d78;
+  --teal-dark: #6340a5;
+  --blue: #7145cb;
+  --line: #e5def0;
+  background: #f6f4ff;
+}
+.shell[data-area="Odontología"] .lateral {
+  background: linear-gradient(165deg, #151a3c, #211944);
+  border-color: #ffffff12;
+  color: #fff;
+}
+.shell[data-area="Odontología"] .marca :global(.marca) {
+  color: #fff;
+}
+.shell[data-area="Odontología"] .marca :global(.marca-acento) {
+  color: #69d9e1;
+}
+.shell[data-area="Odontología"] .portalMarca {
+  background: #ffffff10;
+  border-color: #ffffff24;
+}
+.shell[data-area="Odontología"] .portalMarca strong {
+  color: #fff;
+}
+.shell[data-area="Odontología"] .portalIcono {
+  background: #7450d1;
+  color: #fff;
+}
+.shell[data-area="Odontología"] .portalMarca div > span,
+.shell[data-area="Odontología"] .tituloNavegacion,
+.shell[data-area="Odontología"] .grupo,
+.shell[data-area="Odontología"] .estadoPrivado,
+.shell[data-area="Odontología"] .volver {
+  color: #d4cdec;
+}
+.shell[data-area="Odontología"] .grupo {
+  margin-top: 22px;
+  font-weight: 750;
+}
+.shell[data-area="Odontología"] .enlace,
+.shell[data-area="Odontología"] .enlace svg {
+  color: #eee8ff;
+}
+.shell[data-area="Odontología"] .enlace:hover {
+  background: #ffffff12;
+}
+.shell[data-area="Odontología"] .enlace[aria-current="page"] {
+  border-color: #b79bff55;
+  background: linear-gradient(110deg, #6943d7, #8057df);
+  box-shadow: 0 6px 17px #0b082933;
+  color: #fff;
+}
+.shell[data-area="Odontología"] .marcaActiva {
+  display: none;
+}
+.shell[data-area="Odontología"] .pieLateral {
+  border-color: #ffffff20;
+}
+.shell[data-area="Odontología"] .encabezado {
+  background: #faf9ffed;
+  border-color: #e7e0f1;
+}
+.shell[data-area="Odontología"] .contenido {
+  width: 100%;
+  max-width: 1800px;
+  padding: 28px clamp(18px, 2.5vw, 40px) 55px;
+}
+@media (max-width: 760px) {
+  .shell[data-area="Odontología"] .contenido {
+    padding: 18px 14px 40px;
+  }
+  .shell[data-area="Odontología"] .cerrarMenu {
+    background: #ffffff16;
+    color: #fff;
+    border-color: #ffffff38;
+  }
+}

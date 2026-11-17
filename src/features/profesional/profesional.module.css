@@ -852,3 +852,215 @@
   align-items: center;
   gap: 8px;
 }
+
+/* Panel profesional alineado con la portada de Buenas prácticas. */
+.pagina {
+  max-width: 1480px;
+  gap: 24px;
+}
+
+.encabezado {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(160px, .7fr) minmax(190px, .85fr);
+  align-items: center;
+  gap: 22px;
+  padding: clamp(24px, 3vw, 42px);
+  border: 1px solid #fff;
+  border-radius: 28px;
+  background: radial-gradient(ellipse at 57% 20%, #b6edff 0, transparent 55%),
+    linear-gradient(115deg, #ebe1ff 5%, #dfe9ff 53%, #bba3fa);
+  box-shadow: 0 14px 34px #68539e16;
+  color: #222144;
+}
+
+.presentacion {
+  min-width: 0;
+}
+
+.presentacion .etiquetaSuperior {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  color: #4c3788;
+  font-size: 11px;
+}
+
+.presentacion h1 {
+  max-width: 15ch;
+  margin-bottom: 16px;
+  font-size: clamp(1.9rem, 3vw, 3rem);
+  letter-spacing: -.045em;
+}
+
+.presentacion > p {
+  max-width: 48ch;
+  margin: 0;
+  color: #454760;
+  line-height: 1.65;
+}
+
+.accionPrincipal {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  margin-top: 22px;
+  padding: 10px 18px;
+  border-radius: 24px;
+  background: #7044d8;
+  box-shadow: 0 6px 15px #7044d82e;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.accionPrincipal:hover {
+  background: #5930b8;
+}
+
+.ilustracionPortada {
+  width: 100%;
+  height: auto;
+  max-width: 270px;
+  justify-self: center;
+  filter: drop-shadow(0 16px 20px #6b55bc20);
+}
+
+.privacidadPortada {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid #ffffffb3;
+  border-radius: 22px;
+  background: #ffffff70;
+  box-shadow: 0 9px 28px #5b439416;
+}
+
+.iconoPrivacidad {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 15px;
+  background: #ffffffb3;
+  color: #7044c4;
+}
+
+.privacidadPortada strong {
+  color: #302351;
+  font-size: 15px;
+}
+
+.privacidadPortada p {
+  margin: 8px 0 0;
+  color: #4d4263;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.tarjeta {
+  border-color: #e5def1;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px #34245708;
+}
+
+.cabeceraSeccion h2 {
+  color: #2a254b;
+}
+
+.accesos {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 14px;
+}
+
+.accesos a {
+  min-height: 95px;
+  padding: 18px;
+  border: 1px solid #e4dcf1;
+  border-radius: 20px;
+  background: linear-gradient(140deg, #fff, #f7f3ff);
+  box-shadow: 0 5px 17px #4b34780a;
+  color: #3c2d65;
+  text-decoration: none;
+}
+
+.accesos a:hover {
+  border-color: #ad92e4;
+  background: #f0e9ff;
+}
+
+.accesos a > span:nth-child(2) {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.accesos a > span:last-child {
+  margin-left: auto;
+}
+
+.accesos strong {
+  font-size: 15px;
+}
+
+.accesos small {
+  color: #655a7b;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.iconoAcceso {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: #e9dfff;
+  color: #7044c4;
+}
+
+@media (max-width: 1100px) {
+  .encabezado {
+    grid-template-columns: minmax(0, 1fr) minmax(140px, .65fr);
+  }
+  .privacidadPortada {
+    grid-column: 1 / -1;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    padding: 16px 20px;
+  }
+}
+
+@media (max-width: 540px) {
+  .encabezado {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 24px;
+    border-radius: 22px;
+  }
+  .presentacion h1 {
+    max-width: none;
+  }
+  .presentacion .etiquetaSuperior {
+    margin-bottom: 14px;
+  }
+  .ilustracionPortada {
+    max-width: 175px;
+  }
+  .privacidadPortada {
+    padding: 15px;
+  }
+  .accesos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accionPrincipal, .accesos a {
+    transition: none;
+  }
+}
