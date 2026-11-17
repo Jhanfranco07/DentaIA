@@ -19,6 +19,9 @@ describe("validación de suscripciones de prueba", () => {
     const env = { VERCEL_ENV: "preview", VERCEL_GIT_COMMIT_REF: "integration/pr71-pr74-compat-20261117", DENTAIA_STRIPE_SUBSCRIPTIONS_ENABLED: "true" };
     expect(suscripcionesSandboxHabilitadas(env)).toBe(true);
     expect(suscripcionesSandboxHabilitadas({ ...env, VERCEL_ENV: "production" })).toBe(false);
+    expect(suscripcionesSandboxHabilitadas({ VERCEL_ENV: "production", DENTAIA_STRIPE_SANDBOX_PRODUCTION_ENABLED: "true", STRIPE_SECRET_KEY: "sk_test_example" })).toBe(true);
+    expect(suscripcionesSandboxHabilitadas({ VERCEL_ENV: "production", DENTAIA_STRIPE_SANDBOX_PRODUCTION_ENABLED: "true", STRIPE_SECRET_KEY: "sk_live_example" })).toBe(false);
+    expect(suscripcionesSandboxHabilitadas({ VERCEL_ENV: "production", STRIPE_SECRET_KEY: "sk_test_example" })).toBe(false);
     expect(suscripcionesSandboxHabilitadas({ ...env, VERCEL_GIT_COMMIT_REF: "main" })).toBe(false);
   });
   it("valida el intervalo mensual y el importe, sin aceptar precios alterados", () => {
