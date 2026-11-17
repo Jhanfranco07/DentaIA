@@ -46,3 +46,137 @@
 @media(max-width:1050px){.contenidoPanel{grid-template-columns:1fr}.proximosPasos{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:12px}.proximosEncabezado,.avisoMotor{grid-column:1/-1}.paso{grid-template-columns:36px minmax(0,1fr);align-content:start}.paso>svg{display:none}.pasoIcono{width:36px;height:36px}}
 @media(max-width:700px){.cabecera{min-height:0;padding:25px 22px}.cabecera p{font-size:15px}.resumen{padding:18px}.metricas{grid-template-columns:1fr}.metricas>*+*{border-left:0;border-top:1px solid #dce6ec}.proximosPasos{grid-template-columns:1fr;padding:20px}.proximosEncabezado,.avisoMotor{grid-column:auto}.paso{grid-template-columns:42px minmax(0,1fr) 18px;min-height:76px}.paso>svg{display:block}.pasoIcono{width:42px;height:42px}}
 @media(max-width:420px){.accionPrincipal{width:100%;font-size:14px}.cabecera h1{font-size:32px}}
+
+/* Portal paciente: tema visual sin cambiar interacciones. */
+:global([data-area="Paciente"][data-tema="claro"]) .cabecera{background:radial-gradient(circle at 90% 0,#82d7f3,transparent 44%),linear-gradient(125deg,#134a7d,#137ca8);border:1px solid #56bad5}
+:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera{background:radial-gradient(circle at 90% 0,#7854b6,transparent 44%),linear-gradient(125deg,#241742,#4b2c89);border:1px solid #7554b9;box-shadow:0 15px 32px #100b2355}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina{color:#efeaff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen,:global([data-area="Paciente"][data-tema="oscuro"]) .proximosPasos,:global([data-area="Paciente"][data-tema="oscuro"]) .detalleClinico,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta{background:#2b2344;border-color:#594b79;color:#f1edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen h2,:global([data-area="Paciente"][data-tema="oscuro"]) .resumen h3,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta h2,:global([data-area="Paciente"][data-tema="oscuro"]) .proximosEncabezado h2,:global([data-area="Paciente"][data-tema="oscuro"]) .detalleClinico>summary,:global([data-area="Paciente"][data-tema="oscuro"]) .paso{color:#f5efff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen p,:global([data-area="Paciente"][data-tema="oscuro"]) .proximosEncabezado p,:global([data-area="Paciente"][data-tema="oscuro"]) .paso small,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta p{color:#c8c0de}
+:global([data-area="Paciente"][data-tema="oscuro"]) .paso{border-color:#594b79}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pasoIcono{background:#49346f;color:#d6c4ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .avisoMotor{background:#3d325a;color:#ebdeff;border-color:#6e5b93}
+
+
+/* Panel paciente premium: presentación únicamente; conserva datos, roles y acciones. */
+.pagina{gap:22px;max-width:1240px}
+.cabecera{isolation:isolate;position:relative;min-height:260px;padding:clamp(28px,4.2vw,52px);border-radius:24px;box-shadow:0 16px 38px #14395a17}
+:global([data-area="Paciente"][data-tema="claro"]) .cabecera{background:radial-gradient(ellipse at 88% 30%,#78d3ed 0%,transparent 42%),linear-gradient(115deg,#173e8c,#1378a6);border-color:#83d7ef}
+:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera{background:radial-gradient(ellipse at 88% 20%,#8152c7 0%,transparent 42%),linear-gradient(115deg,#21143e,#483084);border-color:#8266bf}
+.cabecera h1{font-size:clamp(34px,4.2vw,52px);line-height:1.1;letter-spacing:-.05em}
+.cabecera p{max-width:52ch;font-size:16px}
+.ilustracionHero{position:absolute;z-index:-1;right:8%;top:50%;display:grid;place-items:center;transform:translateY(-50%) rotate(-9deg);width:176px;height:176px;border:1px solid #ffffff38;border-radius:48px;background:#ffffff1c;color:#fff;box-shadow:0 20px 40px #101c5b30,inset 0 0 32px #ffffff12;animation:panelFlotar 6s ease-in-out infinite}
+.brilloHero{position:absolute;right:15px;top:12px;display:grid;place-items:center;width:45px;height:45px;border-radius:50%;background:#fff;color:#7550d5;box-shadow:0 8px 18px #142f5d33}
+.accionPrincipal{border-radius:12px;padding:12px 19px;box-shadow:0 7px 20px #10294e1c;transition:transform .22s ease,box-shadow .22s ease,background .22s ease}
+.accionPrincipal:hover{transform:translateY(-3px);box-shadow:0 11px 25px #10294e30}
+.resumen{border-radius:20px;border-color:#e4e3f2;box-shadow:0 9px 26px #243b7c0a}
+.metricas{gap:14px}
+.metricas>*+*{border-left:0}
+.encabezadoActividad{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin:6px 2px -2px}
+.etiquetaActividad{font-size:11px;letter-spacing:.14em;font-weight:850;color:#7451c5}
+.encabezadoActividad h2{margin:6px 0;color:#203456;font-size:clamp(20px,2.4vw,27px);letter-spacing:-.035em}
+.encabezadoActividad p{margin:0;color:#63758b;font-size:14px}
+.enlaceActividad{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 14px;border:1px solid #dcd5fa;border-radius:12px;background:#f6f3ff;color:#6044bd;font-size:13px;font-weight:800;text-decoration:none;transition:background .2s,transform .2s}
+.enlaceActividad:hover{background:#eae3ff;transform:translateY(-2px)}
+.contenidoPanel{grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);gap:18px}
+.proximosPasos{padding:24px;border:1px solid #e1e2f0;border-radius:20px;box-shadow:0 9px 26px #243b7c0a}
+.proximosEncabezado h2{font-size:21px;letter-spacing:-.035em}
+.paso{margin:5px 0;padding:12px;border:1px solid transparent;border-radius:13px;min-height:78px;transition:transform .22s ease,background .22s ease,border-color .22s ease,box-shadow .22s ease}
+.paso:hover{transform:translateX(4px);border-color:#ded6fb;background:#f8f6ff;box-shadow:0 7px 18px #5141a40b;color:#5d43bc}
+.pasoIcono{width:44px;height:44px;border-radius:13px;background:#efebff;color:#6d50cb;transition:transform .22s ease,background .22s ease}
+.paso:nth-of-type(2) .pasoIcono{background:#e7f4ff;color:#287bb5}
+.paso:nth-of-type(3) .pasoIcono{background:#e7f7ef;color:#288565}
+.paso:nth-of-type(4) .pasoIcono{background:#fff1e5;color:#a96a29}
+.paso:hover .pasoIcono{transform:scale(1.08)}
+.paso>svg{transition:transform .22s ease}
+.paso:hover>svg{transform:translateX(4px)}
+.avisoMotor{border-radius:12px}
+.detalleClinico{border-radius:16px;transition:border-color .2s}
+.detalleClinico[open]{border-color:#b7a8ee}
+.detalleClinico>summary:hover{color:#6d4ec9}
+:global([data-area="Paciente"][data-tema="oscuro"]) .encabezadoActividad h2{color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .encabezadoActividad p{color:#c6bcde}
+:global([data-area="Paciente"][data-tema="oscuro"]) .etiquetaActividad{color:#c6aaff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .enlaceActividad{background:#392956;border-color:#6e5495;color:#e2d0ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .enlaceActividad:hover{background:#4a3672}
+:global([data-area="Paciente"][data-tema="oscuro"]) .paso:hover{background:#3a2b5b;border-color:#765e9c;color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pasoIcono{background:#49356e;color:#d9c8ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen{border-color:#594b79;box-shadow:0 10px 28px #100b2330}
+:global([data-area="Paciente"][data-tema="oscuro"]) .proximosPasos{box-shadow:0 10px 28px #100b2330}
+@keyframes panelFlotar{0%,100%{transform:translateY(-50%) rotate(-9deg)}50%{transform:translateY(calc(-50% - 8px)) rotate(-6deg)}}
+@media(max-width:1050px){.contenidoPanel{grid-template-columns:1fr}.proximosPasos{grid-template-columns:repeat(2,minmax(0,1fr))}.proximosEncabezado,.avisoMotor{grid-column:1/-1}.paso{grid-template-columns:44px minmax(0,1fr) 18px}.paso>svg{display:block}}
+@media(max-width:700px){.cabecera{padding:30px 22px;min-height:245px}.ilustracionHero{width:104px;height:104px;right:15px;top:65px;opacity:.24}.ilustracionHero>svg{width:65px;height:65px}.brilloHero{display:none}.cabecera h1{font-size:34px}.resumen{padding:16px}.metricas{grid-template-columns:1fr}.metricas>*+*{border-top:1px solid #dce6ec}.proximosPasos{grid-template-columns:1fr;padding:18px}.proximosEncabezado,.avisoMotor{grid-column:auto}.encabezadoActividad{align-items:start}.enlaceActividad{width:100%;justify-content:center}.paso{margin:0}}
+@media(prefers-reduced-motion:reduce){.ilustracionHero{animation:none}.accionPrincipal,.paso,.pasoIcono,.paso>svg,.enlaceActividad{transition:none}.accionPrincipal:hover,.paso:hover,.paso:hover .pasoIcono,.paso:hover>svg,.enlaceActividad:hover{transform:none}}
+
+
+/* Vista Mi panel v3, fiel al diseño aprobado. Se aísla del resto de las rutas. */
+.pagina{max-width:1320px;gap:18px;color:var(--ink)}
+.cabecera{min-height:235px;overflow:hidden;isolation:isolate;position:relative;display:grid;align-content:center;padding:29px clamp(30px,3.4vw,54px);border:1px solid #d8e8fb!important;border-radius:23px;box-shadow:none}
+:global([data-area="Paciente"][data-tema="claro"]) .cabecera{
+ background:radial-gradient(ellipse at 80% 55%,#abdbf8aa 0%,transparent 42%),linear-gradient(120deg,#d6efff 0%,#f0f8ff 47%,#e4e6ff 100%);border-color:#c9def7!important
+}
+.cabecera::before{content:"";position:absolute;z-index:-1;inset:auto -13% -240px 28%;height:370px;border-radius:50%;background:linear-gradient(35deg,#a9dcff55,#b3a8ff66 75%,#8ad8ee55);transform:rotate(-13deg)}
+.cabecera::after{content:"";display:block;position:absolute;z-index:-1;right:16%;bottom:-215px;width:56%;height:360px;border:0;border-radius:50%;background:#ffffff35;transform:rotate(-23deg)}
+.etiqueta{color:#066d78;font-size:14px;font-weight:760;text-transform:none}
+.etiqueta::before{background:#10b79c;width:11px;height:11px}
+.cabecera h1{max-width:70%;margin:12px 0 7px;color:#112b50;font-size:clamp(36px,4vw,54px);letter-spacing:-.055em;line-height:1.12}
+.cabecera p{max-width:49ch;color:#344969;font-size:16px;line-height:1.55}
+.accionesCabecera{margin-top:17px}
+.accionPrincipal{min-height:45px;border-radius:12px;padding:11px 23px;background:linear-gradient(130deg,#008399,#006476);color:#fff;font-size:15px;box-shadow:0 8px 15px #00718422;transition:transform .2s,box-shadow .2s}
+.accionPrincipal:hover{background:#006e83;color:#fff;transform:translateY(-2px);box-shadow:0 13px 20px #00718425}
+.ilustracionHero{right:9%;top:50%;width:176px;height:176px;border:0;border-radius:0;background:none;box-shadow:none;color:#fff;filter:drop-shadow(0 15px 11px #2677b344);animation:panelFlotar 6s ease-in-out infinite}
+.ilustracionHero>svg{position:relative;z-index:1;fill:#faffff;stroke:#d8ecff;stroke-width:1.1px;filter:drop-shadow(0 0 10px #ffffffbb)}
+.orbitaHero{position:absolute;z-index:2;top:45%;left:-13%;width:125%;height:41%;border:2px solid #ffffffef;border-radius:50%;transform:rotate(-18deg);box-shadow:0 0 12px #ffffffc9;pointer-events:none}
+.brilloHero{top:0;right:-13px;width:53px;height:53px;background:#fff;color:#744ce4;border:0}
+.resumen{padding:0;border:0;background:none;box-shadow:none}
+.metricas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.metricas>*+*{border:1px solid #d9e2f5}
+.indicador{display:flex;align-items:center;min-width:0;gap:18px;padding:21px 23px;border:1px solid #d9e2f5;border-radius:21px;background:#ffffffed;box-shadow:0 5px 16px #375da20a}
+.indicadorIcono{display:grid;place-items:center;flex:none;width:58px;height:58px;border-radius:18px;background:#e6f6f8;color:#0c788b}
+.indicador:nth-child(2) .indicadorIcono{background:#f0eaff;color:#6d4be4}
+.indicador:nth-child(3) .indicadorIcono{background:#e7f6f7;color:#138293}
+.indicador div{display:grid;gap:5px;min-width:0}
+.indicador div>span{color:#25375a;font-size:14px;font-weight:760;line-height:1.35}
+.indicador strong{color:#0c254b;font-size:32px;line-height:1;font-weight:850;letter-spacing:-.04em}
+.contenidoPanel{grid-template-columns:minmax(0,1.58fr) minmax(320px,1fr);gap:18px;align-items:stretch}
+.columnaPrincipal{display:grid;align-content:start;gap:16px;min-width:0}
+.actividad{min-width:0}
+.proximosPasos{align-content:start;gap:10px;padding:22px;border-radius:22px;border:1px solid #d9e2f5;box-shadow:0 8px 23px #3159910b}
+.proximosEncabezado{margin-bottom:9px}
+.proximosEncabezado h2{display:flex;align-items:center;gap:10px;font-size:21px;color:#132c53}
+.proximosEncabezado p{color:#5d6c86;font-size:14px}
+.iconoAcciones{display:inline-flex;color:#6d49db}
+.paso{grid-template-columns:48px minmax(0,1fr) 19px;gap:12px;min-height:66px;padding:10px 12px;margin:0;border:1px solid #dce5f4;border-radius:13px;background:#fff;transition:transform .18s,border-color .18s,box-shadow .18s}
+.paso:hover{transform:translateY(-2px);background:#f9fbff;border-color:#a9bbf3;box-shadow:0 7px 17px #274a8f12}
+.pasoIcono{width:46px;height:46px;border-radius:13px;background:#f0eaff;color:#6f4be6}
+.paso:nth-of-type(2) .pasoIcono{background:#e6f2ff;color:#2377bd}
+.paso:nth-of-type(3) .pasoIcono{background:#e4f6ec;color:#268565}
+.paso:nth-of-type(4) .pasoIcono{background:#fff0e2;color:#b77a30}
+.paso strong{color:#172c4c;font-size:14px}
+.paso small{color:#64748e;font-size:12px}
+.avisoMotor{margin-top:4px;border-radius:12px;font-size:12px}
+.siguientePaso{display:grid;grid-template-columns:72px minmax(0,1fr) auto;align-items:center;gap:18px;padding:17px 22px;border:1px solid #d8e2f4;border-radius:20px;background:linear-gradient(110deg,#f4f8ff,#f9f7ff);color:#172d52;text-decoration:none;box-shadow:0 7px 20px #3159910b;transition:transform .2s,box-shadow .2s}
+.siguientePaso:hover{transform:translateY(-2px);box-shadow:0 12px 27px #31599118}
+.iconoSiguiente{display:grid;place-items:center;width:70px;height:70px;border-radius:17px;background:#ece7ff;color:#8062e8;transform:rotate(-8deg)}
+.textoSiguiente{display:grid;gap:4px;min-width:0}
+.textoSiguiente small{color:#7152d5;font-weight:850;font-size:12px}
+.textoSiguiente strong{color:#162b4f;font-size:16px;line-height:1.3}
+.textoSiguiente>span{color:#596b85;font-size:12px;line-height:1.4}
+.botonSiguiente{display:inline-flex;justify-content:center;align-items:center;gap:6px;min-height:44px;padding:10px 15px;border:1px solid #bbaaf5;border-radius:11px;color:#6544d0;font-size:12px;font-weight:800;white-space:nowrap;background:#fff}
+.detalleClinico{border-color:#d8e2f4}
+:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera{background:radial-gradient(ellipse at 85% 50%,#513b8f99,transparent 45%),linear-gradient(115deg,#21193e,#34305c 75%,#403469);border-color:#6e5c98!important}
+:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera::before{background:linear-gradient(40deg,#47377b77,#7853a866)}
+:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera h1,:global([data-area="Paciente"][data-tema="oscuro"]) .cabecera p,:global([data-area="Paciente"][data-tema="oscuro"]) .etiqueta{color:#f5f0ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen{background:transparent;border:0;box-shadow:none}
+:global([data-area="Paciente"][data-tema="oscuro"]) .indicador,:global([data-area="Paciente"][data-tema="oscuro"]) .proximosPasos,:global([data-area="Paciente"][data-tema="oscuro"]) .siguientePaso{background:#2b2448;border-color:#625381;color:#f3edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .indicador div>span,:global([data-area="Paciente"][data-tema="oscuro"]) .indicador strong,:global([data-area="Paciente"][data-tema="oscuro"]) .paso strong,:global([data-area="Paciente"][data-tema="oscuro"]) .textoSiguiente strong,:global([data-area="Paciente"][data-tema="oscuro"]) .proximosEncabezado h2{color:#f8f4ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .proximosEncabezado p,:global([data-area="Paciente"][data-tema="oscuro"]) .textoSiguiente>span,:global([data-area="Paciente"][data-tema="oscuro"]) .paso small{color:#cfc5e4}
+:global([data-area="Paciente"][data-tema="oscuro"]) .paso{background:#342b52;border-color:#615280;color:#f5edff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .paso:hover{background:#453565;border-color:#8c73bc}
+:global([data-area="Paciente"][data-tema="oscuro"]) .indicadorIcono,:global([data-area="Paciente"][data-tema="oscuro"]) .pasoIcono,:global([data-area="Paciente"][data-tema="oscuro"]) .iconoSiguiente{background:#493668;color:#d0baff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .botonSiguiente{background:#3e305e;border-color:#8269ad;color:#eadfff}
+@media(max-width:1150px){.contenidoPanel{grid-template-columns:1fr}.proximosPasos{grid-template-columns:repeat(2,minmax(0,1fr))}.proximosEncabezado,.avisoMotor{grid-column:1/-1}.paso{grid-template-columns:44px minmax(0,1fr) 18px}.paso>svg{display:block}}
+@media(max-width:850px){.metricas{grid-template-columns:1fr}.indicador{padding:17px}.cabecera h1{max-width:100%}.ilustracionHero{opacity:.24;right:2%}.proximosPasos{grid-template-columns:1fr}.proximosEncabezado,.avisoMotor{grid-column:auto}}
+@media(max-width:600px){.cabecera{padding:25px 21px;min-height:235px}.cabecera h1{font-size:35px}.cabecera p{font-size:14px}.ilustracionHero{width:105px;height:105px;right:2%;top:40%;opacity:.17}.ilustracionHero>svg{width:85px;height:85px}.brilloHero{display:none}.siguientePaso{grid-template-columns:54px minmax(0,1fr);gap:12px;padding:17px}.iconoSiguiente{width:52px;height:52px}.botonSiguiente{grid-column:1/-1;width:100%}.proximosPasos{padding:17px}.paso{padding:9px}.indicador strong{font-size:29px}}
+@media(prefers-reduced-motion:reduce){.ilustracionHero{animation:none}.siguientePaso,.paso,.accionPrincipal{transition:none}.siguientePaso:hover,.paso:hover,.accionPrincipal:hover{transform:none}}

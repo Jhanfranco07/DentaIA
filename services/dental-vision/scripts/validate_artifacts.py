@@ -29,7 +29,7 @@ def main():
     assert "MIT" in manifest["source_repository_code_license_declared"]
     assert manifest["dependencies"] == {
         "fastapi": "0.135.2", "starlette": "1.10.0", "pydantic": "2.14.2",
-        "uvicorn": "0.42.0", "pillow": "12.1.1", "numpy": "2.4.6",
+        "uvicorn": "0.42.0", "pillow": "13.0.0", "numpy": "2.4.6",
         "opencv-python-headless": "5.0.0.93", "onnxruntime": "1.24.4",
         "torch": "2.11.0+cpu", "torchvision": "0.26.0+cpu",
         "ultralytics-opencv-headless": "8.4.104", "onnx": "1.20.1", "onnxscript": "0.6.2",

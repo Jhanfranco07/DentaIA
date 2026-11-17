@@ -27,6 +27,7 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
   const [mensajeAccion, setMensajeAccion] = useState("");
   const [confirmacionId, setConfirmacionId] = useState<string | null>(null);
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todas");
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     let activo = true;
@@ -121,7 +122,14 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
     }
   }
 
-  const solicitudesFiltradas = solicitudes.filter(solicitud => filtroEstado === "todas" || solicitud.status === filtroEstado);
+  const solicitudesFiltradas = solicitudes.filter(solicitud => {
+    if (filtroEstado !== "todas" && solicitud.status !== filtroEstado) return false;
+    const texto = [solicitud.dentists?.name, solicitud.contact_name, solicitud.message, solicitud.preferred_date]
+      .filter(Boolean).join(" ").toLocaleLowerCase("es");
+    return texto.includes(busqueda.trim().toLocaleLowerCase("es"));
+  });
+  const totalSolicitadas = solicitudes.filter(solicitud => solicitud.status === "requested").length;
+  const totalCanceladas = solicitudes.filter(solicitud => solicitud.status === "cancelled").length;
 
   return (
     <section className={`${styles.tarjeta} ${compacto ? styles.compacto : ""}`} id="mis-solicitudes">
@@ -129,6 +137,31 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
         <div><h2 className={styles.tituloSeccion}>Mis solicitudes</h2><p className={styles.subtitulo}>Solicitudes de orientación de demostración; no representan citas clínicas confirmadas.</p></div>
         {compacto && <Link className={styles.verTodas} href="/solicitudes">Ver todas <span aria-hidden="true">→</span></Link>}
       </header>
+
+      {!compacto && !cargando && !error && usuario && (
+        <>
+          <div className={styles.resumenSolicitudes} aria-label="Resumen de solicitudes demostrativas">
+            <div className={styles.resumenTarjeta}><span>Total de solicitudes</span><strong>{solicitudes.length}</strong><small>Historial registrado</small></div>
+            <div className={styles.resumenTarjeta}><span>Solicitadas</span><strong>{totalSolicitadas}</strong><small>Sin cita confirmada</small></div>
+            <div className={styles.resumenTarjeta}><span>Canceladas</span><strong>{totalCanceladas}</strong><small>Solicitudes anuladas</small></div>
+          </div>
+          <div className={styles.herramientasSolicitudes}>
+            <div className={styles.pestanasSolicitudes} role="group" aria-label="Filtrar solicitudes por estado">
+              {([["todas", "Todas", solicitudes.length], ["requested", "Solicitadas", totalSolicitadas], ["cancelled", "Canceladas", totalCanceladas]] as const).map(([valor, etiqueta, total]) => (
+                <button key={valor} type="button" className={filtroEstado === valor ? styles.pestanaActiva : styles.pestana}
+                  aria-pressed={filtroEstado === valor} onClick={() => setFiltroEstado(valor)}>
+                  {etiqueta} <span>{total}</span>
+                </button>
+              ))}
+            </div>
+            <label className={styles.buscarSolicitud}>
+              <span>Buscar en mis solicitudes</span>
+              <input type="search" value={busqueda} onChange={evento => setBusqueda(evento.target.value)}
+                placeholder="Profesional, fecha o motivo…" />
+            </label>
+          </div>
+        </>
+      )}
 
       {mensajeAccion && (
         <p className={styles.exito} role="status">
@@ -150,9 +183,9 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
         </div>
       )}
 
-      {!compacto && solicitudes.length > 1 && <div className={styles.filtroSolicitudes}><label htmlFor="filtro-estado-solicitudes">Filtrar por estado</label><select id="filtro-estado-solicitudes" value={filtroEstado} onChange={evento => setFiltroEstado(evento.target.value as FiltroEstado)}><option value="todas">Todas</option><option value="requested">Solicitadas</option><option value="cancelled">Canceladas</option></select><span>{solicitudesFiltradas.length} de {solicitudes.length}</span></div>}
+      {!compacto && !cargando && !error && solicitudes.length > 0 && <p className={styles.contadorResultados} role="status">Mostrando {solicitudesFiltradas.length} de {solicitudes.length} solicitudes</p>}
 
-      {!cargando && !error && solicitudes.length > 0 && solicitudesFiltradas.length === 0 && <div className={styles.vacio} role="status">No hay solicitudes con este estado.</div>}
+      {!cargando && !error && solicitudes.length > 0 && solicitudesFiltradas.length === 0 && <div className={styles.vacio} role="status">No encontramos solicitudes con estos filtros. Prueba otra búsqueda o selecciona «Todas».</div>}
 
       {!cargando && !error && solicitudesFiltradas.length > 0 && (
         <div className={styles.lista}>
@@ -173,7 +206,7 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
                 </span>
               </div>
 
-              <details className={styles.detallesExpandibles}><summary>Ver detalles de solicitud</summary><dl className={styles.detalles}>
+              <details className={styles.detallesExpandibles}><summary>Ver detalles de la solicitud</summary><dl className={styles.detalles}>
                 <div className={styles.detalle}><dt>Nombre de contacto</dt><dd>{solicitud.contact_name}</dd></div>
                 <div className={styles.detalle}><dt>Correo</dt><dd>{solicitud.contact_email}</dd></div>
                 <div className={styles.detalle}><dt>Fecha preferida</dt><dd>{solicitud.preferred_date}</dd></div>

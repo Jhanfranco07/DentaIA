@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { guardarPerfil, leerPerfil, type Perfil } from "./perfiles";
+import { EVENTO_NOMBRE_PERFIL } from "./useNombrePerfil";
 import { mensajeError, validarNombre } from "./validaciones";
 import styles from "./cuenta.module.css";
 
@@ -55,6 +56,7 @@ export default function PerfilPaciente({ usuario, bloqueado }: { usuario: User; 
       const actualizado = await guardarPerfil(getSupabaseBrowserClient(), usuario.id, nombre, !perfil);
       if (version !== vigente.current) return;
       setPerfil(actualizado); setNombre(actualizado.full_name);
+      window.dispatchEvent(new CustomEvent(EVENTO_NOMBRE_PERFIL, { detail: { usuarioId: usuario.id, nombre: actualizado.full_name } }));
       setAviso("Tu nombre quedó guardado. Lo encontrarás aquí cuando vuelvas.");
     } catch (error) { if (version === vigente.current) setError(mensajeError(error)); }
     finally { operacion.current = false; if (version === vigente.current) setGuardando(false); }

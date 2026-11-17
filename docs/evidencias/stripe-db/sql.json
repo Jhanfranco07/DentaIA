@@ -1,0 +1,165 @@
+{
+  "postgres": "PostgreSQL 17.6 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0, 64-bit",
+  "contexto": "PostgreSQL local desechable por socket Unix; Auth y roles fixture, sin Supabase remoto",
+  "migration": "20261113011041_payments.sql",
+  "pruebas": [
+    {
+      "nombre": "Fallo tras CREATE TABLE revierte toda la migración y conserva la tabla centinela local",
+      "aprobada": true
+    },
+    {
+      "nombre": "Migración final completa: parseo y aplicación transaccional en PostgreSQL real",
+      "aprobada": true
+    },
+    {
+      "nombre": "Nueve columnas, tipos, NOT NULL y solo dos DEFAULT",
+      "aprobada": true
+    },
+    {
+      "nombre": "PK, FK con CASCADE, dos UNIQUE y CHECK válidos",
+      "aprobada": true
+    },
+    {
+      "nombre": "Índice B-tree válido en user_id",
+      "aprobada": true
+    },
+    {
+      "nombre": "RLS habilitado; única política SELECT para authenticated y auth.uid()",
+      "aprobada": true
+    },
+    {
+      "nombre": "Grants mínimos neutralizan privilegios heredados de PUBLIC y roles cliente",
+      "aprobada": true
+    },
+    {
+      "nombre": "service_role escribe sin identidad de usuario y DEFAULT genera UUID/fecha",
+      "aprobada": true
+    },
+    {
+      "nombre": "RLS usuario 1: solo su fila, incluso filtrando por otra identidad",
+      "aprobada": true
+    },
+    {
+      "nombre": "RLS usuario 2: solo su fila, incluso filtrando por otra identidad",
+      "aprobada": true
+    },
+    {
+      "nombre": "RLS usuario 3: solo su fila, incluso filtrando por otra identidad",
+      "aprobada": true
+    },
+    {
+      "nombre": "authenticated sin sub no obtiene pagos",
+      "aprobada": true
+    },
+    {
+      "nombre": "anon no puede SELECT aunque suministre un sub",
+      "aprobada": true
+    },
+    {
+      "nombre": "anon: INSERT denegado por privilegios SQL",
+      "aprobada": true
+    },
+    {
+      "nombre": "anon: UPDATE denegado por privilegios SQL",
+      "aprobada": true
+    },
+    {
+      "nombre": "anon: DELETE denegado por privilegios SQL",
+      "aprobada": true
+    },
+    {
+      "nombre": "anon: TRUNCATE denegado por privilegios SQL",
+      "aprobada": true
+    },
+    {
+      "nombre": "authenticated: INSERT denegado por privilegios SQL",
+      "aprobada": true
+    },
+    {
+      "nombre": "authenticated: UPDATE denegado por privilegios SQL",
+      "aprobada": true
+    },
+    {
+      "nombre": "authenticated: DELETE denegado por privilegios SQL",
+      "aprobada": true
+    },
+    {
+      "nombre": "authenticated: TRUNCATE denegado por privilegios SQL",
+      "aprobada": true
+    },
+    {
+      "nombre": "RLS sigue bloqueando escrituras si un grant futuro se concede por error",
+      "aprobada": true
+    },
+    {
+      "nombre": "Sesión duplicada: 23505 sobre payments_stripe_session_id_key",
+      "aprobada": true
+    },
+    {
+      "nombre": "Evento duplicado: 23505 sobre payments_stripe_event_id_key",
+      "aprobada": true
+    },
+    {
+      "nombre": "Reentrega del mismo evento con ON CONFLICT no crea otra fila",
+      "aprobada": true
+    },
+    {
+      "nombre": "Evento distinto sobre la misma sesión no queda cubierto por ON CONFLICT de evento",
+      "aprobada": true
+    },
+    {
+      "nombre": "Estado no permitido: CHECK 23514",
+      "aprobada": true
+    },
+    {
+      "nombre": "FK rechaza usuario inexistente: 23503",
+      "aprobada": true
+    },
+    {
+      "nombre": "NOT NULL: campo obligatorio user_id",
+      "aprobada": true
+    },
+    {
+      "nombre": "NOT NULL: campo obligatorio stripe_session_id",
+      "aprobada": true
+    },
+    {
+      "nombre": "NOT NULL: campo obligatorio stripe_event_id",
+      "aprobada": true
+    },
+    {
+      "nombre": "NOT NULL: campo obligatorio plan",
+      "aprobada": true
+    },
+    {
+      "nombre": "NOT NULL: campo obligatorio amount_total",
+      "aprobada": true
+    },
+    {
+      "nombre": "NOT NULL: campo obligatorio currency",
+      "aprobada": true
+    },
+    {
+      "nombre": "NOT NULL: campo obligatorio status",
+      "aprobada": true
+    },
+    {
+      "nombre": "Monto exige INTEGER: fracción y desbordamiento rechazados",
+      "aprobada": true
+    },
+    {
+      "nombre": "service_role puede actualizar y eliminar en contexto backend",
+      "aprobada": true
+    },
+    {
+      "nombre": "ON DELETE CASCADE elimina solo los pagos del usuario borrado",
+      "aprobada": true
+    },
+    {
+      "nombre": "Tabla centinela permanece intacta tras toda la batería",
+      "aprobada": true
+    }
+  ],
+  "aprobadas": 39,
+  "fallidas": 0
+}

@@ -9,3 +9,6 @@ __pycache__/
 *.pyc
 .vercel/
 supabase/.temp/
+
+# Informes efímeros de CI; publicados como artefactos, no como código.
+/reports/

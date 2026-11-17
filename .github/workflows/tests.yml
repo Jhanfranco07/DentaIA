@@ -1,33 +1,150 @@
-name: Tests
-
-on:
-  workflow_call:
-
+# Action SHAs: checkout v6, setup-node v6, setup-python v6.1.0; artifacts v4.
+name: Automated Testing
+'on':
+  push:
+    branches:
+    - main
+    - develop
+  pull_request:
+    branches:
+    - main
+    - develop
+  workflow_dispatch: {}
+  workflow_call: {}
 permissions:
   contents: read
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
 jobs:
-  tests:
-    name: Pruebas automatizadas con Node.js
+  preparacion:
+    name: Preparar inventario de suites
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Obtener código
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          persist-credentials: false
-      - name: Preparar Node.js 22
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
-        with:
-          node-version: '22'
-          cache: npm
-      - name: Instalar dependencias
-        run: npm ci
-      # Incluye las pruebas actuales y futuras de los módulos del equipo.
-      # Reservar *.test.mjs para pruebas aisladas sin red ni credenciales.
-      # Las integraciones reales deben usar otra convención y ejecutarse aparte.
-      - name: Ejecutar pruebas aisladas
-        shell: bash
-        run: |
-          mapfile -d '' tests < <(find src/features src/app -name '*.test.mjs' ! -name '*integracion.test.mjs' -print0)
-          test "${#tests[@]}" -gt 0
-          node --experimental-strip-types --test --test-reporter=tap "${tests[@]}"
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: |-
+        node scripts/ci/node-tests.mjs --inventory
+        node --test scripts/ci/*.test.mjs
+  unitarias:
+    name: Unitarias
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/node-tests.mjs unitarias
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: node-unitarias
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+  integracion:
+    name: Integracion
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/node-tests.mjs integracion
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: node-integracion
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+  contratos:
+    name: Contratos
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/node-tests.mjs contratos
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: node-contratos
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+  regresion:
+    name: Regresion
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/node-tests.mjs regresion
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: node-regresion
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+  resumen:
+    name: Tests · Resumen y Quality Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - preparacion
+    - unitarias
+    - integracion
+    - contratos
+    - regresion
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
