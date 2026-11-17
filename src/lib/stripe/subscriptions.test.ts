@@ -1,7 +1,8 @@
-import { describe, expect, it, vi } from "vitest";
-vi.mock("@/lib/stripe/server", () => ({ getStripe: () => ({}) }));
-vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdmin: () => ({}) }));
-import { periodoSuscripcion, procesarEventoSuscripcion, precioPremiumConfigurado } from "./subscriptions";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+const mocks = vi.hoisted(() => ({ retrieve: vi.fn(), lookup: vi.fn(), insert: vi.fn(), from: vi.fn() }));
+vi.mock("@/lib/stripe/server", () => ({ getStripe: () => ({ subscriptions: { retrieve: mocks.retrieve } }) }));
+vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdmin: () => ({ from: mocks.from }) }));
+import { periodoSuscripcion, procesarEventoSuscripcion, precioPremiumConfigurado, sincronizarSuscripcion } from "./subscriptions";
 import { suscripcionesSandboxHabilitadas } from "./subscription-runtime";
 import type Stripe from "stripe";
 
@@ -38,5 +39,60 @@ describe("validación de suscripciones de prueba", () => {
   it("permite precios dinámicos al no establecer Price ID", () => {
     vi.stubEnv("STRIPE_PREMIUM_PRICE_ID", "");
     try { expect(precioPremiumConfigurado()).toBe(null); } finally { vi.unstubAllEnvs(); }
+  });
+});
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  vi.stubEnv("STRIPE_PREMIUM_PRICE_ID", "");
+  mocks.lookup.mockResolvedValue({ data: null, error: null });
+  mocks.insert.mockResolvedValue({ error: null });
+  mocks.from.mockReturnValue({
+    select: () => ({
+      eq: () => ({ maybeSingle: mocks.lookup }),
+    }),
+    insert: mocks.insert,
+  });
+  mocks.retrieve.mockResolvedValue({
+    ...baseSubscription,
+    id: "sub_qa1234",
+    livemode: false,
+    status: "active",
+    metadata: { dentaia_user_id: "11111111-1111-4111-8111-111111111111", dentaia_plan: "premium" },
+    customer: "cus_qa1234",
+    created: 1794950000,
+    cancel_at_period_end: false,
+    canceled_at: null,
+  });
+});
+describe("persistencia verificada y vinculada a propietario", () => {
+  it("un webhook firmado permite escribir Premium con periodo mensual y dueño", async () => {
+    await sincronizarSuscripcion("sub_qa1234", 1794960100, "cs_qa1234");
+    expect(mocks.insert).toHaveBeenCalledWith(expect.objectContaining({
+      user_id: "11111111-1111-4111-8111-111111111111",
+      stripe_subscription_id: "sub_qa1234",
+      stripe_customer_id: "cus_qa1234",
+      stripe_price_id: "price_monthly_demo",
+      status: "active",
+      plan: "premium",
+      checkout_session_id: "cs_qa1234",
+      current_period_end: expect.any(String),
+    }));
+  });
+  it("rechaza suscripciones sin dueño asignado en Stripe", async () => {
+    mocks.retrieve.mockResolvedValueOnce({
+      ...baseSubscription, id: "sub_qa1234", livemode: false, status: "active",
+      metadata: {}, customer: "cus_qa1234", created: 1794950000,
+    });
+    await expect(sincronizarSuscripcion("sub_qa1234", 1794960100)).rejects.toThrow(/propietario/);
+    expect(mocks.insert).not.toHaveBeenCalled();
+  });
+  it("no concede Premium desde eventos Live", async () => {
+    mocks.retrieve.mockResolvedValueOnce({
+      ...baseSubscription, id: "sub_qa1234", livemode: true, status: "active",
+      metadata: { dentaia_user_id: "11111111-1111-4111-8111-111111111111" },
+    });
+    await expect(sincronizarSuscripcion("sub_qa1234", 1794960100)).rejects.toThrow(/Live/);
+    expect(mocks.insert).not.toHaveBeenCalled();
   });
 });
