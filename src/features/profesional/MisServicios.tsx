@@ -16,7 +16,7 @@ const VACIO: FormularioServicio = {
   nombre: "", descripcion: "", duracion: "", precio: "", moneda: "PEN", publicado: false,
 };
 
-export default function MisServicios({ dentistId }: { dentistId: string }) {
+export default function MisServicios({ dentistId, estadoDirectorio }: { dentistId: string; estadoDirectorio: "cargando" | "visible" | "oculto" | "error" }) {
   const [servicios, setServicios] = useState<ServicioOdontologico[] | null>(null);
   const [errorCarga, setErrorCarga] = useState(false);
   const [revision, setRevision] = useState(0);
@@ -109,9 +109,11 @@ export default function MisServicios({ dentistId }: { dentistId: string }) {
     <section id="mis-servicios" className={styles.tarjeta} tabIndex={-1} aria-labelledby="titulo-mis-servicios">
       <header className={styles.cabeceraSeccion}>
         <h2 id="titulo-mis-servicios">Mis servicios</h2>
-        <p>Administra los servicios de tu ficha. Los servicios publicados pueden verse en el directorio.</p>
+        <p>Administra los servicios de tu ficha. Solo se muestran públicamente cuando el servicio está activo y el perfil del odontólogo también está publicado.</p>
       </header>
 
+      {estadoDirectorio === "oculto" && <p className={styles.estadoVacio} role="status">Esta ficha no está publicada en el directorio. Puedes registrar y editar servicios de prueba, pero no aparecerán en el catálogo público mientras el perfil esté inactivo.</p>}
+      {estadoDirectorio === "error" && <p role="status">No se pudo confirmar la visibilidad pública de la ficha.</p>}
       {errorCarga && <div className={styles.estadoError} role="alert">No pudimos cargar tus servicios.</div>}
       {errorCarga && <button type="button" className={styles.botonSecundario} onClick={recargar}>Reintentar</button>}
       {!errorCarga && servicios === null && <div className={styles.estadoCarga} role="status">Cargando servicios…</div>}
@@ -122,7 +124,7 @@ export default function MisServicios({ dentistId }: { dentistId: string }) {
             <li key={servicio.id}>
               <div>
                 <strong>{servicio.name}</strong>
-                <p>{servicio.is_active ? "Publicado" : "Sin publicar"}</p>
+                <p>{servicio.is_active ? (estadoDirectorio === "visible" ? "Publicado en el directorio" : "Servicio activado · ficha no publicada") : "Sin publicar"}</p>
                 {servicio.price_amount !== null && <p>{formatearPrecio(servicio.price_amount, servicio.currency_code)}</p>}
               </div>
               <button type="button" className={styles.botonSecundario} aria-label={`Editar ${servicio.name}`}
@@ -164,7 +166,7 @@ export default function MisServicios({ dentistId }: { dentistId: string }) {
             </div>
             <label className={styles.publicarServicio}>
               <input type="checkbox" checked={formulario.publicado} onChange={evento => cambiar("publicado", evento.target.checked)} />
-              Publicar en el directorio
+              Activar servicio para el directorio (requiere una ficha pública activa)
             </label>
             <div className={styles.accionesEstado}>
               <button type="submit" className={styles.botonSecundario}>{guardando ? "Guardando…" : "Guardar servicio"}</button>
