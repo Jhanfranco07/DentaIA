@@ -1,20 +1,17 @@
-import EstadoPago from "./EstadoPago";
+import Link from "next/link";
+import EstadoPlanPremium from "@/components/EstadoPlanPremium";
 
-export default async function ExitoPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ session_id?: string }>;
-}) {
-  const { session_id } = await searchParams;
-
+export default function ExitoPage() {
   return (
     <main className="module-shell">
       <div className="page-intro">
-        <span className="pill">PAGO DE PRUEBA</span>
-        <h1>Volviste de Stripe</h1>
-        <p>Estamos confirmando tu pago de prueba.</p>
+        <span className="pill">STRIPE SANDBOX · SUSCRIPCIÓN</span>
+        <h1>Regresaste de Stripe</h1>
+        <p>La redirección no confirma por sí sola un pago. El plan se activa tras la notificación verificada de Stripe.</p>
       </div>
-      <EstadoPago sessionId={session_id} />
+      <EstadoPlanPremium />
+      <p className="notice">Si aún aparece Basic, espera la sincronización del webhook y utiliza «Volver a consultar» o visita tu plan.</p>
+      <Link href="/premium" className="action">Ver mi suscripción</Link>
     </main>
   );
 }
