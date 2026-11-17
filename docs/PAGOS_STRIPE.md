@@ -243,3 +243,47 @@ Además, una captura aportada después del reinicio de `next dev` muestra el pag
 existente en `/cuenta` con sesión autenticada. La consulta usa la política RLS
 de propietario; la prueba pgTAP verifica aparte el aislamiento entre cuentas y
 la denegación de escrituras cliente. No se repitió Checkout.
+
+---
+
+## Suscripciones Premium mensuales en PR #76 (Preview académico)
+
+Esta ampliación **no sustituye retroactivamente el pago único** de `/api/stripe/checkout`: incorpora un flujo separado `/api/stripe/subscription/checkout`, cancelación `/api/stripe/subscription/cancel` y webhooks firmados de ciclo de vida. La página `/premium` utiliza el nuevo flujo de suscripción mensual.
+
+**Alcance:** únicamente Vercel Preview de la rama `integration/pr71-pr74-compat-20261117` con `DENTAIA_STRIPE_SUBSCRIPTIONS_ENABLED=true`. Production sigue sin habilitar suscripciones desde estas rutas. Stripe permanece estrictamente en modo prueba (`sk_test_...`).
+
+### Variables de Vercel (solo del servidor, salvo SITE_URL)
+
+- `STRIPE_SECRET_KEY`: clave de Stripe Test Mode con prefijo `sk_test_`.
+- `STRIPE_WEBHOOK_SECRET`: secreto específico del endpoint de webhook Test Mode, prefijo `whsec_`.
+- `SUPABASE_SERVICE_ROLE_KEY`: credencial privilegiada de Supabase **solo en Vercel Preview, en servidor**, con permiso INSERT/UPDATE/SELECT en `public.premium_subscriptions`; imprescindible para registrar eventos verificados. Nunca colocarla en `NEXT_PUBLIC_*`, commits o mensajes.
+- `NEXT_PUBLIC_SITE_URL`: URL HTTPS del alias del Preview de integración.
+- `DENTAIA_STRIPE_SUBSCRIPTIONS_ENABLED=true`: Preview de esta rama.
+- `STRIPE_PREMIUM_PRICE_ID` (opcional): Price mensual existente en Stripe Test Mode, **USD 20 por mes**. Si falta, Checkout crea `price_data` recurrente de USD 20 mensuales del lado del servidor; no se acepta un precio o plan enviado por el navegador.
+
+El Checkout comprueba en servidor la sesión autenticada y el acceso a la base. Si falta la credencial administrativa, devuelve un error antes de crear una sesión de Stripe. El webhook no debe considerarse probado si no se ha verificado su entrega real.
+
+### Webhook Stripe Test Mode
+
+Crear un destino en Stripe Dashboard (modo prueba) apuntando a:
+
+`https://dent-ai-git-integration-pr71-pr74-aa5dad-jhan-francos-projects.vercel.app/api/stripe/webhook`
+
+Suscribirse a:
+- `checkout.session.completed`
+- `customer.subscription.created`
+- `customer.subscription.updated`
+- `customer.subscription.deleted`
+
+El endpoint verifica la firma de Stripe y rechaza eventos Live. Consulta el estado canónico de la suscripción en Stripe, verifica que la metadata identifica a un usuario DentaIA, comprueba el importe/moneda/intervalo recurrente y conserva eventos en orden por fecha, sin aceptar una activación declarada por el cliente. La tabla de Supabase solo permite lectura del propietario mediante RLS; la escritura ocurre en el backend con clave de servicio.
+
+### Comportamiento visible
+
+1. Paciente autenticado → menú **Mi plan Premium** → `/premium`.
+2. Pulsa **Contratar Premium mensual (prueba)** → Checkout `mode=subscription`, USD 20/mes.
+3. Utiliza un método de prueba Stripe. Regresa a `/premium/exito`, que **no acredita** el pago por la redirección.
+4. El webhook registra o actualiza `premium_subscriptions`. El endpoint `/api/premium/status` (token obligatorio) calcula `premium` solo si `status=active` y el período está vigente.
+5. Puede pulsar **Cancelar al final del período**. Stripe conserva el plan hasta el vencimiento y comunica el cambio por webhook; finalizado el período, el usuario vuelve a Basic. Una renovación pagada se refleja mediante el evento `customer.subscription.updated`.
+6. Una suscripción pendiente, vencida, `past_due`, `unpaid` o cancelada no proporciona acceso Premium.
+
+**Límites:** El plan Premium queda identificado y verificable en servidor, pero los módulos avanzados Smile que figuran con `implemented:false` en el catálogo siguen deshabilitados; no se presentan como prestaciones ya listas. El registro de pagos únicos y el historial de `payments` son independientes del registro de suscripciones. Pendiente una prueba extremo a extremo autenticada y confirmación de entrega del webhook con las credenciales administradas en Vercel.
