@@ -25,6 +25,15 @@ describe("validación de suscripciones de prueba", () => {
     expect(periodoSuscripcion(baseSubscription, null).priceId).toBe("price_monthly_demo");
     expect(periodoSuscripcion(baseSubscription, "price_monthly_demo").end).toBeTruthy();
     expect(() => periodoSuscripcion(baseSubscription, "price_other")).toThrow();
+    const legacy = {
+      ...baseSubscription,
+      items: { data: [{ ...baseSubscription.items.data[0], price: {
+        ...baseSubscription.items.data[0].price, id: "price_old_usd", currency: "usd", unit_amount: 2000,
+      } }] },
+    } as Stripe.Subscription;
+    expect(() => periodoSuscripcion(legacy, null)).toThrow();
+    expect(periodoSuscripcion(legacy, null, "price_old_usd").priceId).toBe("price_old_usd");
+    expect(() => periodoSuscripcion(legacy, null, "price_unrelated")).toThrow();
     expect(() => periodoSuscripcion({
       ...baseSubscription, items: { data: [{ ...baseSubscription.items.data[0], price: { ...baseSubscription.items.data[0].price, unit_amount: 100 } }] },
     } as Stripe.Subscription, null)).toThrow();
