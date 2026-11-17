@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { SMILE_PREVIEW_BRANCH, smileRuntime } from "./smile-preview.ts";
+import { SMILE_PREVIEW_BRANCH, SMILE_INTEGRATION_PREVIEW_BRANCH, smileRuntime } from "./smile-preview.ts";
 
 const enabledPreview = {
   NODE_ENV: "production",
@@ -36,4 +36,10 @@ test("Production y las configuraciones incompletas permanecen bloqueadas", () =>
 test("Production requiere una habilitación explícita y conserva HTTPS y secreto", () => {
   const runtime = smileRuntime({ ...enabledPreview, VERCEL_ENV: "production", DENTAIA_SMILE_PRODUCTION_ENABLED: "true" });
   assert.equal(runtime.enabled, true);
+});
+test("autoriza solo la rama de integración en Preview con secreto y destino válidos", () => {
+  assert.equal(smileRuntime({ ...enabledPreview, VERCEL_GIT_COMMIT_REF: SMILE_INTEGRATION_PREVIEW_BRANCH }).enabled, true);
+  const denied = smileRuntime({ ...enabledPreview, VERCEL_GIT_COMMIT_REF: "feature/random" });
+  assert.equal(denied.enabled, false);
+  assert.equal(smileRuntime({ ...enabledPreview, VERCEL_ENV: "production", VERCEL_GIT_COMMIT_REF: SMILE_INTEGRATION_PREVIEW_BRANCH }).enabled, false);
 });
