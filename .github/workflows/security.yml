@@ -33,7 +33,18 @@ jobs:
         cache: npm
     - run: npm ci
     - run: node scripts/ci/assert-dev-only-picomatch.mjs
-    - run: npm audit
+    # Track the unpatched development-only advisory without declaring it resolved.
+    # This risk exception is documented in docs/security/PICOMATCH_CVE_2026_112366.md.
+    - name: Auditoría completa (diagnóstico de dependencias de desarrollo)
+      shell: bash
+      run: |
+        npm audit > /tmp/dentaia-npm-audit-full.txt 2>&1 || audit_status=$?
+        cat /tmp/dentaia-npm-audit-full.txt
+        if [ "${audit_status:-0}" -ne 0 ]; then
+          echo "::warning title=Riesgo de desarrollo pendiente::GHSA-fc5q-39xc-vjpf sigue sin parche. Ver issue #77. La auditoría completa no es el gate de producción."
+        fi
+    - name: Auditoría bloqueante de dependencias de producción
+      run: npm audit --omit=dev
   sast:
     name: SAST · Semgrep local
     runs-on: ubuntu-latest
