@@ -61,6 +61,16 @@ describe("webhook con firma y eventos", () => {
     expect((await POST(request())).status).toBe(200);
     expect(mocks.recurring).not.toHaveBeenCalled();
   });
+  it("sincroniza eventos de Production solo con Sandbox y bandera explícita", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("STRIPE_SECRET_KEY", "sk_test_fixture");
+    vi.stubEnv("DENTAIA_STRIPE_SANDBOX_PRODUCTION_ENABLED", "true");
+    mocks.recurring.mockResolvedValue(true);
+    const event = { id: "evt_subscription", type: "customer.subscription.updated", livemode: false, data: { object: { id: "sub_test" } } };
+    mocks.construct.mockReturnValue(event);
+    expect((await POST(request())).status).toBe(200);
+    expect(mocks.recurring).toHaveBeenCalledWith(event);
+  });
   it("eventos no soportados responden 200 sin escritura", async () => {
     mocks.construct.mockReturnValue({ type: "evento.no.soportado" });
     expect((await POST(request())).status).toBe(200);
