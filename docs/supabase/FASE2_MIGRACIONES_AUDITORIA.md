@@ -142,3 +142,22 @@ Actualización posterior: la CLI local reconoce un token de perfil, pero
 responden HTTP 401 cuando se consultan sin credenciales, por lo que la red está
 disponible; el bloqueo está en el transporte de la CLI. No se imprimió,
 extrajo, sustituyó ni revocó el token, y no se ejecutó SQL remoto.
+
+## Reconstrucción tras recuperar octubre
+
+Las migraciones `20261025150315_dentaia_mvp_independent_modules.sql` y
+`20261025150507_allow_photo_owner_cleanup_after_consent_revocation.sql` se
+incorporaron con las versiones remotas y se ejecutaron correctamente en Docker
+local. La primera crea únicamente los cuatro perfiles explícitamente ficticios
+del directorio y el bucket privado `dental-photos`; la revisión manual no
+encontró secretos, credenciales, fotografías ni datos de pacientes o pagos.
+
+La reconstrucción avanzó también por DI-151 y se detuvo en
+`20261105210643_add_dentist_locations_and_reviews.sql` con `SQLSTATE 3F000`:
+`clinical.clinics` no existe. Esto confirma el orden esperado: DI-36 Modelo
+clínico debe ejecutarse antes de las ubicaciones. La CLI limpió los contenedores,
+volumen y red locales al fallar, por lo que no persiste estado parcial.
+
+No se creó un sustituto de `clinical` ni se debilitó ninguna guarda. Falta
+versionar las cuatro DI-36 originales y una adaptación exclusivamente local de
+sus guardas de destino, verificable y separada del SQL de producción.
