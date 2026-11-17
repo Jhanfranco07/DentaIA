@@ -29,7 +29,7 @@ export default function PlanesDentaIA() {
         <div className={styles.price}>S/ {precio} <small>/ mes</small></div>
         <p>Más oportunidades para explorar y dar seguimiento a tu salud bucal.</p>
         <ul>{premium.map(item => <li key={item}><span aria-hidden="true">✓</span>{item}</li>)}</ul>
-        <Link className={styles.primaryButton} href="/cuenta?modo=registro&continuar=%2Fpremium">Elegir Premium <span aria-hidden="true">→</span></Link>
+        <Link className={styles.primaryButton} href={"/cuenta?modo=registro&continuar=%2Fpremium"}>Elegir Premium <span aria-hidden="true">→</span></Link>
       </article>
     </div>
     <div className={styles.details}>
