@@ -95,6 +95,18 @@ El conjunto pgTAP documentado previamente (70 aserciones, incluido DI-172) más 
 
 ### CI/CD y límites
 
-Las pruebas locales no sustituyen CI en el commit final. DevSecOps, las acciones de GitHub y su Quality Gate quedan pendientes de la publicación de los cambios en el PR #75. El build local terminó, pero compartir `.next` con el servidor de desarrollo rompió temporalmente ese proceso; se reinició Next.js en `localhost:3000` y se verificó `/premium` con HTTP 200.
+Para el commit `ef0264a`, CI, TypeScript, Build Next.js, Automated Testing,
+Security, Backend IA, DevSecOps y los gates de Continuous Delivery terminaron
+en verde en GitHub Actions. Vercel Preview y su comprobación HTTP también
+pasaron; el workflow solo observó el estado del proveedor y una URL pública
+Preview. No hubo estado Railway para este commit. El paso `Production ·
+autorización externa` documentó que no se publica Production desde Actions;
+no se hizo promoción ni despliegue productivo.
+
+El build local terminó, pero compartir `.next` con el servidor de desarrollo
+rompió temporalmente ese proceso; se reinició Next.js en `localhost:3000` y se
+verificó `/premium` con HTTP 200. No hacer merge a `main` hasta cerrar la
+comprobación visual del historial con la sesión exacta del propietario del
+pago, además de la revisión humana requerida.
 
 La comprobación visual del historial con la sesión exacta del propietario del Checkout queda pendiente; RLS y el renderizado de la fila se verificaron por separado. Production sigue bloqueada hasta obtener autorización de despliegue y realizar las comprobaciones remotas de migraciones pertinentes. No hacer merge a `main` hasta revisar los checks del PR y cerrar esa prueba manual de propiedad del pago.
