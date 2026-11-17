@@ -33,7 +33,6 @@ export type Database = {
         Insert: { activity_id: string; completed_at?: string; completion_date: string; id?: string; patient_id?: string; plan_id: string }
         Update: { activity_id?: string; completed_at?: string; completion_date?: string; id?: string; patient_id?: string; plan_id?: string }
         Relationships: [
-          { foreignKeyName: "patient_routine_completions_patient_id_fkey"; columns: ["patient_id"]; isOneToOne: false; referencedRelation: "users"; referencedColumns: ["id"] },
           { foreignKeyName: "patient_routine_completions_activity_fk"; columns: ["plan_id", "activity_id"]; isOneToOne: false; referencedRelation: "oral_care_routine_activities"; referencedColumns: ["plan_id", "id"] }
         ]
       }
