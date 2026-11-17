@@ -4,9 +4,11 @@ import { NextResponse } from "next/server";
 import { getUserFromRequest } from "@/lib/supabase/server-auth";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getStripe } from "@/lib/stripe/server";
+import { suscripcionesSandboxHabilitadas } from "@/lib/stripe/subscription-runtime";
 
 export const runtime = "nodejs";
 export async function POST(request: Request) {
+  if (!suscripcionesSandboxHabilitadas(process.env)) return NextResponse.json({ error: "Suscripciones disponibles solo en el Preview autorizado." }, { status: 503 });
   const user = await getUserFromRequest(request).catch(() => null);
   if (!user) return NextResponse.json({ error: "Inicia sesión." }, { status: 401 });
   try {
