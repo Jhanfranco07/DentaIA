@@ -18,6 +18,7 @@ import { crearMarcadorDemo } from "./demo";
 import { AVISO_PERFILES_DEMO, completarCatalogoDemo } from "./catalogo-demo";
 import AvatarOdontologo, { tratamientoDemo } from "./AvatarOdontologo";
 import HeroDirectorioPaciente from "./HeroDirectorioPaciente";
+import { perfilesQa, esPerfilQa, marcadoresQa } from "./qa-preview";
 
 const MapaDirectorio = dynamic(() => import("./MapaDirectorio"), {
   ssr: false,
@@ -30,7 +31,7 @@ type Carga =
   | { estado: "cargando" }
   | { estado: "listo"; dentistas: DentistaDirectorio[]; demos: DemoLocationPublica[]; catalogoDisponible: boolean; resenas: Record<string, ReturnType<typeof resumirResenas>>; resenasDisponibles: boolean; ubicacionesDisponibles: boolean };
 
-export default function DirectorioLista({ modoPaciente = false }: { modoPaciente?: boolean } = {}) {
+export default function DirectorioLista({ modoPaciente = false, qaPreview = false }: { modoPaciente?: boolean; qaPreview?: boolean } = {}) {
   const [carga, setCarga] = useState<Carga>({ estado: "cargando" });
   const [intento, setIntento] = useState(0);
   const [busqueda, setBusqueda] = useState("");
@@ -77,20 +78,20 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
         const demos = (respuestaDemo.data ?? []) as DemoLocationPublica[];
         if (cancelado) return;
         const fichasDemo = completarCatalogoDemo(demos);
-        const dentistas = [...dentistasReales.filter(d => !fichasDemo.some(p => p.id === d.id)), ...fichasDemo];
+        const dentistas = [...dentistasReales.filter(d => !fichasDemo.some(p => p.id === d.id)), ...fichasDemo, ...(qaPreview ? perfilesQa() : [])];
         const sumarios = Object.fromEntries(dentistas.map(dentista => [dentista.id, resumirResenas(resenas.filter(r => r.dentist_id === dentista.id))]));
         setCarga({ estado: "listo", dentistas, demos, catalogoDisponible: true, resenas: sumarios, resenasDisponibles: resenasResultado.disponibles, ubicacionesDisponibles: ubicacionesResultado.disponibles });
       } catch {
         if (cancelado) return;
         setCarga({
-          estado: "listo", dentistas: completarCatalogoDemo([]), demos: [], catalogoDisponible: false,
+          estado: "listo", dentistas: [...completarCatalogoDemo([]), ...(qaPreview ? perfilesQa() : [])], demos: [], catalogoDisponible: false,
           resenas: {}, resenasDisponibles: false, ubicacionesDisponibles: false,
         });
       }
     }
     void cargar();
     return () => { cancelado = true; };
-  }, [intento]);
+  }, [intento, qaPreview]);
 
   const dentistas = carga.estado === "listo" ? carga.dentistas : [];
   const distritos = useMemo(() => [...new Set(dentistas.map(d => d.district.trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es")), [dentistas]);
@@ -132,7 +133,8 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
         return perfil ? [{ ...marcador, dentist_id: perfil.id }] : [];
       })
     : [], [carga, visibles]);
-  const ubicacionesMapa = useMemo(() => [...ubicacionesVisibles, ...(mostrarDemo ? marcadoresDemo : [])], [ubicacionesVisibles, marcadoresDemo, mostrarDemo]);
+  const qaMarkers = useMemo(() => qaPreview ? marcadoresQa().filter(p => visibles.some(d => d.id === p.dentist_id)) : [], [qaPreview, visibles]);
+  const ubicacionesMapa = useMemo(() => [...ubicacionesVisibles, ...(mostrarDemo ? [...marcadoresDemo, ...qaMarkers] : [])], [ubicacionesVisibles, marcadoresDemo, qaMarkers, mostrarDemo]);
 
   async function usarUbicacion() {
     setErrorUbicacion("");
@@ -231,7 +233,7 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
               const km = punto?.distancia ?? null;
               return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`}>
                 <div className={styles.tarjetaAvatarMarco}><AvatarOdontologo id={d.id} name={d.name} initials={d.initials} avatarColor={d.avatar_color} /></div>
-                <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>{modoPaciente ? "Perfil ilustrado · Ficticio" : "Perfil de ejemplo · ficticio"}</span>}<h2>{modoPaciente ? tratamientoDemo(d.id) : ""}{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
+                <div className={styles.cuerpo}>{d.is_demo && !esPerfilQa(d.id) && <span className={styles.ficticio}>{modoPaciente ? "Perfil ilustrado · Ficticio" : "Perfil de ejemplo · ficticio"}</span>}<h2>{modoPaciente ? tratamientoDemo(d.id) : ""}{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
                   <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.ubicacionesDisponibles ? (d.is_demo ? `Sin consultorio publicado en ${d.district}` : "Ubicación no registrada") : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}{!d.is_demo && <span>{formatearPrecio(d.consultation_price, d.currency)}</span>}</div>
                   {(!modoPaciente || (resumen?.total ?? 0)>0) && <p className={styles.rating} aria-label={resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : `${resumen.promedio.toFixed(1)} de cinco, ${resumen.total} reseñas`}>
                     {resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : <>★ {resumen.promedio.toFixed(1)} · {resumen.total} {resumen.total === 1 ? "reseña" : "reseñas"}</>}
