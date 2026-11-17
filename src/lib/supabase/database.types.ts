@@ -393,6 +393,68 @@ export type Database = {
         }
         Relationships: []
       }
+      premium_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean
+          canceled_at: string | null
+          checkout_session_id: string | null
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan: string
+          status: string
+          stripe_customer_id: string
+          stripe_event_created_at: string
+          stripe_price_id: string
+          stripe_subscription_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          checkout_session_id?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan?: string
+          status: string
+          stripe_customer_id: string
+          stripe_event_created_at: string
+          stripe_price_id: string
+          stripe_subscription_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: Partial<Database["public"]["Tables"]["premium_subscriptions"]["Insert"]>
+        Relationships: []
+      }
+      smile_analysis_consents: {
+        Row: { accepted_at: string; audit_metadata: Json; consent_version: string; id: string; patient_id: string; purpose: string; revoked_at: string | null }
+        Insert: { accepted_at?: string; audit_metadata?: Json; consent_version: string; id?: string; patient_id?: string; purpose?: string; revoked_at?: string | null }
+        Update: Partial<Database["public"]["Tables"]["smile_analysis_consents"]["Insert"]>
+        Relationships: []
+      }
+      smile_analyses: {
+        Row: { analyzed_at: string; consent_id: string; deleted_at: string | null; deletion_reason: string | null; educational_explanation: Json | null; engine: string; engine_version: string; explanation_source: string | null; id: string; original_mime_type: string | null; original_object_path: string | null; original_size_bytes: number | null; overlay_object_path: string | null; patient_id: string; status: string; technical_result: Json }
+        Insert: { analyzed_at?: string; consent_id: string; deleted_at?: string | null; deletion_reason?: string | null; educational_explanation?: Json | null; engine?: string; engine_version: string; explanation_source?: string | null; id?: string; original_mime_type?: string | null; original_object_path?: string | null; original_size_bytes?: number | null; overlay_object_path?: string | null; patient_id: string; status: string; technical_result: Json }
+        Update: Partial<Database["public"]["Tables"]["smile_analyses"]["Insert"]>
+        Relationships: [{ foreignKeyName: "smile_analyses_consent_id_fkey"; columns: ["consent_id"]; isOneToOne: false; referencedRelation: "smile_analysis_consents"; referencedColumns: ["id"] }]
+      }
+      smile_analysis_access_grants: {
+        Row: { analysis_id: string; expires_at: string; granted_at: string; id: string; patient_id: string; professional_id: string; revoked_at: string | null }
+        Insert: { analysis_id: string; expires_at: string; granted_at?: string; id?: string; patient_id: string; professional_id: string; revoked_at?: string | null }
+        Update: Partial<Database["public"]["Tables"]["smile_analysis_access_grants"]["Insert"]>
+        Relationships: [{ foreignKeyName: "smile_analysis_access_grants_analysis_id_fkey"; columns: ["analysis_id"]; isOneToOne: false; referencedRelation: "smile_analyses"; referencedColumns: ["id"] }]
+      }
+      stripe_webhook_events: {
+        Row: { event_type: string; payload: Json; processed_at: string | null; processing_error: string | null; received_at: string; stripe_created_at: string; stripe_event_id: string }
+        Insert: { event_type: string; payload: Json; processed_at?: string | null; processing_error?: string | null; received_at?: string; stripe_created_at: string; stripe_event_id: string }
+        Update: Partial<Database["public"]["Tables"]["stripe_webhook_events"]["Insert"]>
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -416,6 +478,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      grant_smile_analysis_access: {
+        Args: { p_analysis_id: string; p_professional_id: string; p_expires_at: string }
+        Returns: string
+      }
+      revoke_smile_analysis_access: {
+        Args: { p_grant_id: string }
+        Returns: undefined
+      }
+      revoke_smile_analysis_consent: {
+        Args: { p_consent_id: string }
+        Returns: undefined
+      }
       dentaia_manage_clinic_membership_v1: {
         Args: { p_request_id: string | null; p_operation: string; p_professional_id: string | null; p_clinic_id: string | null; p_membership_id: string | null }
         Returns: Json
