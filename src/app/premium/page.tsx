@@ -100,7 +100,7 @@ export default function PremiumPage() {
       <div className="page-intro">
         <span className="pill">STRIPE SANDBOX · SUSCRIPCIÓN MENSUAL</span>
         <h1>DentaIA Premium</h1>
-        <p><strong>S/ {(PLAN_PREMIUM_MENSUAL.amount / 100).toFixed(2)} al mes</strong> (importe de prueba, sin cargos reales).</p>
+        <p><strong>Nuevas suscripciones: S/ {(PLAN_PREMIUM_MENSUAL.amount / 100).toFixed(2)} al mes</strong> (importe de prueba, sin cargos reales).</p>
         <p>Suscripción de prueba, con confirmación segura desde Stripe. No se realizan cargos reales.</p>
       </div>
       <section className="surface panel">
@@ -109,6 +109,7 @@ export default function PremiumPage() {
           <p><strong>{vigente ? "Premium activo" : "Basic"}</strong></p>
           {suscripcion && <p>Estado de la suscripción: {suscripcion.status}. {fecha ? `Vigencia hasta: ${fecha}.` : ""}</p>}
           {suscripcion?.cancel_at_period_end && <p>Tu suscripción está programada para cancelarse al finalizar el período.</p>}
+          {existente && <p className="notice">Si contrataste antes del cambio de tarifa, tu suscripción de prueba conserva el precio anterior en Stripe hasta que sea modificada o cancelada.</p>}
           {!existente && <button type="button" className="action" disabled={procesando} onClick={() => void contratar()}>
             {procesando ? "Procesando…" : "Contratar Premium mensual (prueba)"}
           </button>}
