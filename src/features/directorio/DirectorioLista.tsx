@@ -15,7 +15,7 @@ import type { ResenaPublica } from "./resenas";
 import { crearMarcadores, tieneUbicacionDentroDelRadio, ubicacionMasCercana } from "./ubicaciones";
 import { adjuntarUbicaciones, normalizarResenas } from "./compatibilidad-esquema";
 import { crearMarcadorDemo } from "./demo";
-import { AVISO_PERFILES_DEMO, CATALOGO_DEMO, unirCatalogoDemo } from "./catalogo-demo";
+import { AVISO_PERFILES_DEMO, completarCatalogoDemo } from "./catalogo-demo";
 import AvatarOdontologo, { tratamientoDemo } from "./AvatarOdontologo";
 import HeroDirectorioPaciente from "./HeroDirectorioPaciente";
 
@@ -28,8 +28,7 @@ type Orden = "nombre" | "cercania" | "calificacion";
 type Vista = "lista" | "mapa";
 type Carga =
   | { estado: "cargando" }
-  | { estado: "error" }
-  | { estado: "listo"; dentistas: DentistaDirectorio[]; demos: DemoLocationPublica[]; demoDisponible: boolean; resenas: Record<string, ReturnType<typeof resumirResenas>>; resenasDisponibles: boolean; ubicacionesDisponibles: boolean };
+  | { estado: "listo"; dentistas: DentistaDirectorio[]; demos: DemoLocationPublica[]; catalogoDisponible: boolean; resenas: Record<string, ReturnType<typeof resumirResenas>>; resenasDisponibles: boolean; ubicacionesDisponibles: boolean };
 
 export default function DirectorioLista({ modoPaciente = false }: { modoPaciente?: boolean } = {}) {
   const [carga, setCarga] = useState<Carga>({ estado: "cargando" });
@@ -55,7 +54,7 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
         const client = getSupabaseBrowserClient();
         const { data, error } = await client.from("dentists").select("*").eq("is_active", true).order("name");
         if (cancelado) return;
-        if (error) { setCarga({ estado: "error" }); return; }
+        if (error) throw error;
         const baseDentistas = data ?? [];
         const ids = baseDentistas.map(d => d.id);
         let respuestaUbicaciones: { data: UbicacionPublica[] | null; error: unknown | null } = { data: [], error: null };
@@ -77,10 +76,17 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
           .eq("is_demo", true).eq("is_published", true).eq("requests_enabled", false);
         const demos = (respuestaDemo.data ?? []) as DemoLocationPublica[];
         if (cancelado) return;
-        const dentistas = [...dentistasReales.filter(d => !CATALOGO_DEMO.some(p => p.id === d.id)), ...unirCatalogoDemo(demos)];
+        const fichasDemo = completarCatalogoDemo(demos);
+        const dentistas = [...dentistasReales.filter(d => !fichasDemo.some(p => p.id === d.id)), ...fichasDemo];
         const sumarios = Object.fromEntries(dentistas.map(dentista => [dentista.id, resumirResenas(resenas.filter(r => r.dentist_id === dentista.id))]));
-        setCarga({ estado: "listo", dentistas, demos, demoDisponible: !respuestaDemo.error, resenas: sumarios, resenasDisponibles: resenasResultado.disponibles, ubicacionesDisponibles: ubicacionesResultado.disponibles });
-      } catch { if (!cancelado) setCarga({ estado: "error" }); }
+        setCarga({ estado: "listo", dentistas, demos, catalogoDisponible: true, resenas: sumarios, resenasDisponibles: resenasResultado.disponibles, ubicacionesDisponibles: ubicacionesResultado.disponibles });
+      } catch {
+        if (cancelado) return;
+        setCarga({
+          estado: "listo", dentistas: completarCatalogoDemo([]), demos: [], catalogoDisponible: false,
+          resenas: {}, resenasDisponibles: false, ubicacionesDisponibles: false,
+        });
+      }
     }
     void cargar();
     return () => { cancelado = true; };
@@ -121,8 +127,10 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
   const ubicacionesVisibles = useMemo(() => crearMarcadores(visibles), [visibles]);
   const marcadoresDemo = useMemo(() => carga.estado === "listo"
     ? carga.demos.map(crearMarcadorDemo).filter((marcador): marcador is MarcadorDemo => marcador !== null)
-      .filter(marcador => CATALOGO_DEMO.some(perfil => perfil.slug === marcador.slug && visibles.some(d => d.slug === marcador.slug)))
-      .map(marcador => ({ ...marcador, dentist_id: visibles.find(d => d.is_demo && d.slug === marcador.slug)?.id }))
+      .flatMap(marcador => {
+        const perfil = visibles.find(d => d.is_demo && d.slug === marcador.slug && d.ubicaciones.some(punto => punto.id === marcador.id));
+        return perfil ? [{ ...marcador, dentist_id: perfil.id }] : [];
+      })
     : [], [carga, visibles]);
   const ubicacionesMapa = useMemo(() => [...ubicacionesVisibles, ...(mostrarDemo ? marcadoresDemo : [])], [ubicacionesVisibles, marcadoresDemo, mostrarDemo]);
 
@@ -164,7 +172,7 @@ export default function DirectorioLista({ modoPaciente = false }: { modoPaciente
     </header>}
 
     {carga.estado === "cargando" && <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i /><i /><i /></div></div>}
-    {carga.estado === "error" && <div className={`${styles.aviso} ${styles.avisoError}`} role="alert"><strong>No pudimos cargar el directorio.</strong><p>Comprueba la conexión y vuelve a intentarlo.</p><button type="button" className={styles.boton} onClick={() => { setCarga({ estado: "cargando" }); setIntento(n => n + 1); }}>Reintentar</button></div>}
+    {carga.estado === "listo" && !carga.catalogoDisponible && <div className={`${styles.aviso} ${styles.avisoError}`} role="alert"><strong>Mostramos el catálogo de demostración.</strong><p>El catálogo publicado no está disponible en este momento. Puedes explorar las fichas de ejemplo o reintentar la carga.</p><button type="button" className={styles.boton} onClick={() => { setCarga({ estado: "cargando" }); setIntento(n => n + 1); }}>Reintentar</button></div>}
     {!modoPaciente && carga.estado === "listo" && marcadoresDemo.length > 0 && <section className={styles.tarjetaDemo} aria-label="Información sobre las ubicaciones de referencia">
       <div><h2>Ubicaciones geográficas de referencia</h2>
         <p>Los centros y direcciones se basan en registros públicos. Los nombres de profesionales de ejemplo son ficticios y no están vinculados con esos centros.</p>
