@@ -262,3 +262,42 @@ propietario verificado crea su servicio; y una cuenta pendiente no puede
 escribir. Angie debe consumir `dentist_services` como catalogo, sin incorporar
 una segunda tabla ni dar por sentado que todo odontologo autenticado es
 propietario verificado.
+
+## Reconstruccion integral local para PR #75
+
+Se completo una reconstruccion limpia de QA con Supabase CLI 3.2.0 y Docker
+local, sin proyecto vinculado ni comandos de escritura remota. El orden
+validado fue: migraciones de octubre; DI-36 Administracion, Modelo clinico,
+RPC clinicos y Workspace mediante `run-di36-local-qa.ps1`; ubicaciones y
+resenas; workflows; demo locations; payments; DI-172 desde
+`origin/feature/DI-172-rutinas`; y finalmente DI-131, Smile, Premium y
+`payments_failed_status`.
+
+DI-151 se omitio exclusivamente en esta reconstruccion local porque duplica
+funcionalmente DI-36 Administracion. No se modifico ni elimino ningun SQL
+historico, ni se alteraron sus hashes, guards, RLS, ACL, funciones o triggers.
+DI-172 se uso como dependencia externa temporal de QA; su SQL conserva el
+SHA-256 `f21a6050bd8fea9d6dd5a2a49cd5422e98c35f700c3336e22203f56b16f88795`,
+no se copio a esta rama y no se cambio la rama de Anelis.
+
+Las suites pgTAP terminaron correctamente: DI-172 45, DI-131 9, Smile 7,
+`payments_failed_status` 3 y Premium RLS 6, para 70 aserciones. Se verifico
+RLS en las tablas reconstruidas y que `payments_status_check` admite `failed`.
+Las pruebas DI-172 se ejecutaron como `supabase_admin` dentro del contenedor
+local; el rol `postgres` local no supera el preflight de superusuario de esa
+suite.
+
+Los tipos TypeScript se generaron desde el esquema local. La comparacion
+encontro inicialmente que faltaba `dentist_services` en
+`src/lib/supabase/database.types.ts`; se agrego su contrato `Row`, `Insert`,
+`Update` y FK. Despues, las 16 tablas de esta rama coincidieron en nombres y
+columnas con la generacion local. Las otras tres tablas generadas corresponden
+exclusivamente a DI-172 y se excluyen del contrato de esta rama mientras siga
+siendo una dependencia externa.
+
+El historial remoto de Supabase no se consulto ni modifico en esta ejecucion;
+el stack no estaba vinculado a un proyecto. La reconstruccion local no autoriza
+Production: sigue pendiente verificar el historial remoto con acceso de solo
+lectura, aprobar el orden de despliegue y ejecutar una ventana autorizada. Las
+pruebas de firma, Checkout y webhook real con Stripe Sandbox no se ejecutaron
+en esta reconstruccion.

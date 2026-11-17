@@ -8,7 +8,7 @@
 | Directorio | `public.dentists`, ubicaciones y reseñas | Aplicado en reconstruccion local. |
 | Servicios | `public.dentist_services` | DI-131; 9 pruebas pgTAP aprobadas. |
 | Historia clinica | `clinical.*`, `clinical_service`, `dentaia_admin` | DI-36; permisos por concesion, no por cita, pago o rol aislado. |
-| Rutinas | tres tablas `oral_care_routine_*` | DI-172 es una dependencia externa; sus pruebas pgTAP aun requieren ejecucion y validacion. |
+| Rutinas | tres tablas `oral_care_routine_*` | DI-172 se aplico solo en QA local desde la rama externa autorizada; 45 pruebas pgTAP aprobadas. No se incorpora a esta rama. |
 | Pagos | `public.payments` | Registra pagos Stripe; no acredita suscripcion recurrente. |
 | Suscripciones | `premium_subscriptions`, `stripe_webhook_events` | Nueva migracion; escritura exclusiva de servidor/webhook. |
 | Smile | consentimientos, analisis y grants | Nueva migracion; 7 pruebas pgTAP aprobadas. |
@@ -49,19 +49,24 @@ Premium.
 `premium_subscriptions_rls.sql` cubre aislamiento entre cuentas, denegacion de
 INSERT/UPDATE/DELETE por clientes y rechazo de eventos Stripe duplicados. La
 version extendida y `payments_failed_status.sql` pasaron localmente con pgTAP
-(9 aserciones). La prueba de firma, Checkout y webhook real de Stripe Sandbox
-sigue pendiente.
+(9 aserciones). Junto con DI-172 (45), DI-131 (9) y Smile (7), se aprobaron 70
+aserciones pgTAP en la reconstruccion local completa.
 
-La generacion local de tipos confirma las columnas de `payments`,
-`premium_subscriptions` y `stripe_webhook_events`; los campos JSONB no nulos se
-representan como `NonNullable<Json>`. No se pudo certificar una reconstruccion
-integral de todas las migraciones: el reset local se detiene en
-`20261105210643_add_dentist_locations_and_reviews.sql` porque falta el esquema
-`clinical` que aporta DI-36. El harness DI-36 paso sobre la base limpia de
-octubre, pero no puede ejecutarse despues de `20261103012414_di151_roles_auditoria_atomica.sql`,
-que crea `dentaia_admin`, esquema que el harness DI-36 exige que no exista. Resolver
-esa secuencia requiere coordinacion fuera de esta integracion; DI-172 sigue
-ademas como dependencia externa sin validar.
+La reconstruccion local se completo con el procedimiento DI-36: octubre, DI-36,
+ubicaciones/resenas, workflows, demo locations, payments, DI-172 externo y las
+migraciones nuevas. DI-151 se excluyo solo de ese ensayo por duplicar
+funcionalmente DI-36 Administracion; los SQL historicos no se alteraron. Los
+tipos se generaron desde el esquema local y se compararon con
+`database.types.ts`: coinciden todas las tablas incorporadas en esta rama,
+incluidas `dentist_services`, Smile, pagos y Premium. Las tres tablas de DI-172
+se excluyen deliberadamente del contrato comprometido porque esa migracion es
+solo una dependencia externa de QA y no forma parte de esta rama. El harness,
+las pruebas y el tipo de la migracion `payments.failed` se validaron localmente.
+
+La prueba de firma, Checkout y webhook real de Stripe Sandbox sigue pendiente.
+No se consulto ni modifico el historial remoto durante la reconstruccion; la
+comparacion de Production y cualquier despliegue requieren una autorizacion y
+una ventana independiente.
 
 ## Integracion de ramas
 
