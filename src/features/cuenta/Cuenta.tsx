@@ -15,6 +15,7 @@ import { NAVEGACION_PACIENTE, NAVEGACION_ODONTOLOGO, NAVEGACION_ADMIN } from "@/
 import { Icono } from "@/components/Identidad";
 import { retornoSolicitud } from "@/lib/navegacion";
 import { destinoEntradaPaciente } from "./destino-cuenta";
+import { provisionarRolPaciente } from "./provisionar-rol-paciente";
 import { rolesDelUsuario, rutaPrincipalPorRoles } from "@/features/autorizacion/roles";
 import { useRouter } from "next/navigation";
 
@@ -73,17 +74,7 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
 
     async function provisionarPaciente() {
       try {
-        const { data, error: errorSesionActual } = await getSupabaseBrowserClient().auth.getSession();
-        if (errorSesionActual) throw errorSesionActual;
-        if (!data.session) throw new Error("No hay una sesión activa.");
-
-        const respuesta = await fetch("/api/cuenta/provision-patient-role", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${data.session.access_token}` },
-          cache: "no-store",
-        });
-        if (!respuesta.ok) throw new Error("No se pudo activar el perfil de paciente.");
-
+        await provisionarRolPaciente();
         const usuarioActualizado = await verificar();
         if (!usuarioActualizado || rolesDelUsuario(usuarioActualizado).length === 0) {
           throw new Error("El rol de paciente no quedó activo.");
