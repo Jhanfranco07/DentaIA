@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-const mocks = vi.hoisted(() => ({ construct: vi.fn(), completed: vi.fn(), expired: vi.fn(), succeeded: vi.fn(), failed: vi.fn() }));
+const mocks = vi.hoisted(() => ({ construct: vi.fn(), completed: vi.fn(), expired: vi.fn(), succeeded: vi.fn(), failed: vi.fn(), recurring: vi.fn() }));
 vi.mock("@/lib/stripe/server", () => ({ getStripe: () => ({ webhooks: { constructEvent: mocks.construct } }) }));
+vi.mock("@/lib/stripe/subscriptions", () => ({ procesarEventoSuscripcion: mocks.recurring }));
 vi.mock("@/lib/stripe/handlers", () => ({
   handleCheckoutCompleted: mocks.completed,
   handleCheckoutExpired: mocks.expired,
@@ -41,6 +42,24 @@ describe("webhook con firma y eventos", () => {
   it("conserva 500 ante error para permitir reintento de Stripe", async () => {
     mocks.construct.mockReturnValue({ type: "checkout.session.completed" }); mocks.completed.mockRejectedValue(new Error("fixture DB no disponible"));
     expect((await POST(request())).status).toBe(500);
+  });
+  it("procesa eventos de suscripción únicamente en Preview QA autorizado", async () => {
+    vi.stubEnv("VERCEL_ENV", "preview");
+    vi.stubEnv("VERCEL_GIT_COMMIT_REF", "integration/pr71-pr74-compat-20261117");
+    vi.stubEnv("DENTAIA_STRIPE_SUBSCRIPTIONS_ENABLED", "true");
+    mocks.recurring.mockResolvedValue(true);
+    const event = { id: "evt_subscription", type: "customer.subscription.updated", livemode: false, data: { object: { id: "sub_test" } } };
+    mocks.construct.mockReturnValue(event);
+    expect((await POST(request())).status).toBe(200);
+    expect(mocks.recurring).toHaveBeenCalledWith(event);
+    expect(mocks.completed).not.toHaveBeenCalled();
+  });
+  it("no procesa suscripciones en Production", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    const event = { id: "evt_subscription", type: "customer.subscription.updated", livemode: false, data: { object: { id: "sub_test" } } };
+    mocks.construct.mockReturnValue(event);
+    expect((await POST(request())).status).toBe(200);
+    expect(mocks.recurring).not.toHaveBeenCalled();
   });
   it("eventos no soportados responden 200 sin escritura", async () => {
     mocks.construct.mockReturnValue({ type: "evento.no.soportado" });
