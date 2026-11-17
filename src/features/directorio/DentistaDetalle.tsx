@@ -163,7 +163,7 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio", qa
               ) : (
                 <p>Este perfil ficticio no ofrece servicios ni atención real.</p>
               )}
-            </section> : <ServiciosPublicados key={carga.dentista.id} dentistId={carga.dentista.id} />}
+            </section> : <>{esPerfilQa(carga.dentista.id) && <p className={styles.nota}>Servicios y tarifas de prueba, creados para validar DentaIA. No representan una oferta real ni permiten reservar una atención.</p>}<ServiciosPublicados key={carga.dentista.id} dentistId={carga.dentista.id} /></>}
 
             {carga.dentista.is_demo && <p className={styles.nota}>
               {carga.ubicaciones.length
