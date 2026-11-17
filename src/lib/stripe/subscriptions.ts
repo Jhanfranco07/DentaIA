@@ -19,15 +19,18 @@ function fechaStripe(unix: number | null | undefined): string | null {
 }
 
 /** Stripe Basil API: period belongs to each subscription item, not the root subscription. */
-export function periodoSuscripcion(subscription: Stripe.Subscription, configuredPriceId: string | null) {
+export function periodoSuscripcion(subscription: Stripe.Subscription, configuredPriceId: string | null, existingLegacyPriceId?: string | null) {
   const [item] = subscription.items.data;
   const price = item?.price;
+  const recurringMonthly = price?.recurring?.interval === "month" && price?.recurring?.interval_count === 1;
+  const currentPrice = price?.currency === PLAN_PREMIUM_MENSUAL.currency
+    && price?.unit_amount === PLAN_PREMIUM_MENSUAL.amount
+    && (!configuredPriceId || price.id === configuredPriceId);
+  // Grandfather only the already persisted USD 20 demo subscription, never new Checkout sessions.
+  const existingLegacy = !!existingLegacyPriceId && price?.id === existingLegacyPriceId
+    && price?.currency === "usd" && price?.unit_amount === 2000;
   if (!item || subscription.items.data.length !== 1 || !price
-    || (configuredPriceId && price.id !== configuredPriceId)
-    || price.currency !== PLAN_PREMIUM_MENSUAL.currency
-    || price.unit_amount !== PLAN_PREMIUM_MENSUAL.amount
-    || price.recurring?.interval !== "month"
-    || price.recurring?.interval_count !== 1) {
+    || !recurringMonthly || (!currentPrice && !existingLegacy)) {
     throw new Error("Suscripción Stripe con precio o intervalo inesperado.");
   }
   return {
@@ -45,14 +48,18 @@ export async function sincronizarSuscripcion(subscriptionId: string, eventCreate
   if (subscription.livemode) throw new Error("Stripe Live no está permitido.");
   const userId = subscription.metadata?.dentaia_user_id;
   if (!userId || !UUID.test(userId)) throw new Error("Suscripción sin propietario válido.");
+  const admin = getSupabaseAdmin();
+  const { data: existing, error: lookupError } = await admin.from("premium_subscriptions")
+    .select("user_id,stripe_customer_id,stripe_price_id,stripe_event_created_at,checkout_session_id")
+    .eq("stripe_subscription_id", subscription.id).maybeSingle();
+  if (lookupError) throw lookupError;
   const priceId = precioPremiumConfigurado();
-  const period = periodoSuscripcion(subscription, priceId);
+  const period = periodoSuscripcion(subscription, priceId, existing?.stripe_price_id);
   const customerId = typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id;
   if (!customerId.startsWith("cus_") || !estados.has(subscription.status)) throw new Error("Suscripción no reconocida.");
   const eventTime = fechaStripe(eventCreated);
   if (!eventTime) throw new Error("Fecha de evento inválida.");
 
-  const admin = getSupabaseAdmin();
   const row = {
     user_id: userId,
     created_at: fechaStripe(subscription.created) ?? eventTime,
@@ -68,10 +75,6 @@ export async function sincronizarSuscripcion(subscriptionId: string, eventCreate
     canceled_at: fechaStripe(subscription.canceled_at),
     stripe_event_created_at: eventTime,
   };
-  const { data: existing, error: lookupError } = await admin.from("premium_subscriptions")
-    .select("user_id,stripe_customer_id,stripe_price_id,stripe_event_created_at,checkout_session_id")
-    .eq("stripe_subscription_id", subscription.id).maybeSingle();
-  if (lookupError) throw lookupError;
   if (!existing) {
     const { error } = await admin.from("premium_subscriptions").insert(row);
     if (!error) return;
