@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe/server";
 import { procesarEventoSuscripcion } from "@/lib/stripe/subscriptions";
+import { suscripcionesSandboxHabilitadas } from "@/lib/stripe/subscription-runtime";
 import {
   handleAsyncPaymentFailed,
   handleAsyncPaymentSucceeded,
@@ -53,7 +54,10 @@ export async function POST(req: Request) {
   }
 
   try {
-    if (await procesarEventoSuscripcion(event)) return response(200, { received: true });
+    if (suscripcionesSandboxHabilitadas(process.env) && await procesarEventoSuscripcion(event)) return response(200, { received: true });
+    if (event.type.startsWith("customer.subscription.") || (event.type === "checkout.session.completed" && (event.data.object as Stripe.Checkout.Session).mode === "subscription")) {
+      return response(200, { received: true }); // Never interpret recurring Checkout as a one-time payment.
+    }
     switch (event.type) {
       case "checkout.session.completed":
         await handleCheckoutCompleted(event);
