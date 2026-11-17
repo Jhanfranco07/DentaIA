@@ -1,4 +1,4 @@
-export type PaymentStatus = "paid" | "unpaid" | "expired";
+export type PaymentStatus = "paid" | "unpaid" | "expired" | "failed";
 
 export type Payment = {
   id: string;

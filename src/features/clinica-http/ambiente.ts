@@ -2,10 +2,11 @@
 export const DENTALIA_REF="vwmdknzjyvmsdqpepykz";
 export const DATASET_ACADEMICO="fase8-synthetic-v1";
 export const DENTALIA_PREVIEW_BRANCH="develop";
+export const DENTALIA_INTEGRATION_PREVIEW_BRANCH="integration/pr71-pr74-compat-20261117";
 type Env=Record<string,string|undefined>;
 export function configurarClinica(env:Env){
  const local=!env.VERCEL&&!env.VERCEL_ENV&&env.NODE_ENV==="development";
- const preview=env.VERCEL==="1"&&env.VERCEL_ENV==="preview"&&env.VERCEL_GIT_COMMIT_REF===DENTALIA_PREVIEW_BRANCH&&env.DENTAIA_CLINICAL_PREVIEW_ENABLED==="true";
+ const preview=env.VERCEL==="1"&&env.VERCEL_ENV==="preview"&&[DENTALIA_PREVIEW_BRANCH,DENTALIA_INTEGRATION_PREVIEW_BRANCH].includes(env.VERCEL_GIT_COMMIT_REF??"")&&env.DENTAIA_CLINICAL_PREVIEW_ENABLED==="true";
  const enabled=(local||preview)&&env.DENTAIA_CLINICAL_HTTP_ENABLED==="true";
  const remote=env.DENTAIA_CLINICAL_TARGET==="dentalia_academic";
  const secret=env.DENTAIA_CLINICAL_CURSOR_SECRET??"",ttl=Number(env.DENTAIA_CLINICAL_CURSOR_TTL_SECONDS??"300");
@@ -33,7 +34,10 @@ export function origenPreviewAutorizado(request:Request,env:Env){
   const expected=new URL(`https://${host}`);
   if(expected.protocol!=='https:'||expected.port||expected.pathname!=='/'||expected.search||expected.hash||expected.hostname!==host.toLowerCase())return false;
   const url=new URL(request.url),origin=request.headers.get('origin');
-  return url.origin===expected.origin&&(!origin||origin===expected.origin)&&request.headers.get('sec-fetch-site')!=='cross-site';
+  const integrationAlias = env.VERCEL_ENV==='preview' && env.VERCEL_GIT_COMMIT_REF===DENTALIA_INTEGRATION_PREVIEW_BRANCH
+    ? 'https://dent-ai-git-integration-pr71-pr74-aa5dad-jhan-francos-projects.vercel.app' : null;
+  const allowed=url.origin===expected.origin||url.origin===integrationAlias;
+  return allowed&&(!origin||origin===url.origin)&&request.headers.get('sec-fetch-site')!=='cross-site';
  }catch{return false;}
 }
 export function cuentaAcademicaPermitida(id:string,metadata:Record<string,unknown>,ids:string[]){

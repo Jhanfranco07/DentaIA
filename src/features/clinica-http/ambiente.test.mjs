@@ -1,5 +1,5 @@
 import test from'node:test';import assert from'node:assert/strict';
-import{configurarClinica,origenLocalAutorizado,origenPreviewAutorizado,cuentaAcademicaPermitida,DENTALIA_REF,DATASET_ACADEMICO,DENTALIA_PREVIEW_BRANCH}from'./ambiente.ts';
+import{configurarClinica,origenLocalAutorizado,origenPreviewAutorizado,cuentaAcademicaPermitida,DENTALIA_REF,DATASET_ACADEMICO,DENTALIA_PREVIEW_BRANCH,DENTALIA_INTEGRATION_PREVIEW_BRANCH}from'./ambiente.ts';
 const ids=[1,2,3,4,5].map(n=>'00000000-0000-4000-8000-'+String(n).padStart(12,'0'));
 const env={NODE_ENV:'development',DENTAIA_CLINICAL_HTTP_ENABLED:'true',DENTAIA_CLINICAL_TARGET:'dentalia_academic',DENTAIA_CLINICAL_ACADEMIC_ENABLED:'true',DENTAIA_CLINICAL_PROJECT_REF:DENTALIA_REF,DENTAIA_CLINICAL_SUPABASE_URL:`https://${DENTALIA_REF}.supabase.co`,DENTAIA_CLINICAL_SUPABASE_PUBLISHABLE_KEY:'sb_publishable_fixture',DENTAIA_CLINICAL_CURSOR_SECRET:'a'.repeat(43),DENTAIA_CLINICAL_DEMO_USER_IDS:ids.join(',')};
 test('Remoto solo con todos los flags, origen y allowlist exactos',()=>assert.equal(configurarClinica(env).valid,true));
@@ -21,3 +21,18 @@ test('Solo cuenta en allowlist y marcador app_metadata',()=>{assert.equal(cuenta
 test('Host/origin local y sin cross-site',()=>{assert.equal(origenLocalAutorizado(new Request('http://localhost:3000/api/test')),true);assert.equal(origenLocalAutorizado(new Request('https://ejemplo.com/api/test')),false);assert.equal(origenLocalAutorizado(new Request('http://localhost:3000/api/test',{headers:{origin:'https://ajeno.test'}})),false);});
 test('Host/origin Preview se limita al URL único de Vercel',()=>{const env={VERCEL_URL:preview.VERCEL_URL};assert.equal(origenPreviewAutorizado(new Request('https://'+preview.VERCEL_URL+'/api/test'),env),true);assert.equal(origenPreviewAutorizado(new Request('https://otro.vercel.app/api/test'),env),false);assert.equal(origenPreviewAutorizado(new Request('https://'+preview.VERCEL_URL+'/api/test',{headers:{origin:'https://ajeno.test'}}),env),false);assert.equal(origenPreviewAutorizado(new Request('https://'+preview.VERCEL_URL+'/api/test',{headers:{'sec-fetch-site':'cross-site'}}),env),false);});
 test('Preview rechaza URL de sistema malformada',()=>{for(const host of ['','https://x.vercel.app','x.vercel.app/path','x.vercel.app?next=x'])assert.equal(origenPreviewAutorizado(new Request('https://x.vercel.app/api/test'),{VERCEL_URL:host}),false);});
+test('La rama de integración habilita solo el Preview académico configurado',()=>{
+ const c=configurarClinica({...preview,VERCEL_GIT_COMMIT_REF:DENTALIA_INTEGRATION_PREVIEW_BRANCH});
+ assert.equal(c.preview,true);assert.equal(c.enabled,true);assert.equal(c.valid,true);
+ assert.equal(configurarClinica({...preview,VERCEL_GIT_COMMIT_REF:DENTALIA_INTEGRATION_PREVIEW_BRANCH,VERCEL_ENV:'production'}).enabled,false);
+ assert.equal(configurarClinica({...preview,VERCEL_GIT_COMMIT_REF:'main'}).enabled,false);
+});
+test('Alias de Preview #76 aceptado solo en rama integrada y sin orígenes cruzados',()=>{
+ const hostname='dent-ai-git-integration-pr71-pr74-aa5dad-jhan-francos-projects.vercel.app';
+ const config={VERCEL_URL:preview.VERCEL_URL,VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:DENTALIA_INTEGRATION_PREVIEW_BRANCH};
+ assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me'),config),true);
+ assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me',{headers:{origin:'https://otro.vercel.app'}}),config),false);
+ assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me',{headers:{'sec-fetch-site':'cross-site'}}),config),false);
+ assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me'),{...config,VERCEL_GIT_COMMIT_REF:'develop'}),false);
+ assert.equal(origenPreviewAutorizado(new Request('https://otro.vercel.app/api/professional/me'),config),false);
+});

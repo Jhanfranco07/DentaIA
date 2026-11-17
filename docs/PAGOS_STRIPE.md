@@ -1,3 +1,54 @@
+# Integración de Pagos con Stripe (Sandbox)
+
+## Estado de la revisión del PR #48
+
+La tabla `payments` ya fue aplicada y verificada en la fase de base de datos autorizada, con versión `20261113011041` y nombre `payments`. Esta revisión de código no aplica SQL ni modifica su esquema, RLS o historial remoto.
+
+La persistencia actual respeta ambos UNIQUE: inserta primero y, ante `23505`, verifica sesión, propietario y datos económicos. Conserva el primer `stripe_event_id`; una sesión `unpaid` puede avanzar a `paid`, `failed` o `expired` mediante UPDATE condicionado por estado. Una confirmación verificada no retrocede ante un fallo asíncrono tardío; los estados `paid` y `expired` permanecen terminales. Se soportan `checkout.session.async_payment_succeeded` y `checkout.session.async_payment_failed`. Colisiones de eventos pertenecientes a otra sesión y errores de almacenamiento se propagan como error para conservar el reintento del webhook.
+
+No es un ledger de todos los eventos Stripe: los eventos posteriores no reemplazan el identificador inicial. No se agregaron tablas ni RPC. Los escenarios se prueban con fixtures; no se presenta esta validación como un cobro real o una prueba end-to-end de Stripe.
+
+Checkout conserva `id` y devuelve además la URL consumida por la interfaz. Las claves continúan exclusivamente en la configuración existente, sin cambios de secretos. Las pruebas Vitest se ejecutan junto a las pruebas Node en el job de pruebas de DevSecOps.
+
+
+## 1. Objetivo y Alcance
+Este documento detalla la configuración y arquitectura del flujo de pagos en entorno de pruebas para la plataforma.
+
+## 2. Simulación de Pagos
+Todas las transacciones se ejecutan estrictamente en modo prueba (Test Mode). No se procesan cargos reales ni se utiliza dinero real.
+
+## 3. Creación del Sandbox y Claves
+1. Crear cuenta en Stripe y activar el modo Test Mode en el dashboard.
+2. Ir a Developers > API keys y copiar la clave publicable (pk_test_...) y la clave secreta (sk_test_...).
+
+## 4. Instalación de Stripe CLI en Windows
+Ejecutar en PowerShell: winget install Stripe.StripeCLI
+
+## Tabla `payments`
+| Columna | Descripción |
+|---|---|
+| user_id | Usuario de Supabase que pagó |
+| stripe_session_id | Sesión de Checkout (única) |
+| stripe_event_id | Evento del webhook (único, evita duplicados) |
+| plan, amount_total, currency | Plan y monto en la unidad mínima definida por Stripe para esa divisa |
+| status | paid, unpaid, expired o failed |
+
+RLS activo: cada usuario solo lee sus pagos. Solo el servidor escribe.
+
+## Endpoint `POST /api/stripe/checkout`
+- Requiere el encabezado `Authorization: Bearer <access_token de Supabase>`.
+- 401 si no hay sesión válida. 502 si Stripe falla.
+- Respuesta correcta: `{ "url": "https://checkout.stripe.com/..." }`.
+
+## Webhook `POST /api/stripe/webhook`
+Verifica la firma con `STRIPE_WEBHOOK_SECRET` y es idempotente (`stripe_event_id` único).
+| Evento | Acción |
+|---|---|
+| checkout.session.completed | Guarda el pago (`paid` o `unpaid`) |
+| checkout.session.expired | Guarda el pago como `expired` |
+| checkout.session.async_payment_succeeded | Actualiza el pago a `paid` |
+| checkout.session.async_payment_failed | Actualiza el pago a `failed` |
+| Otros | Se ignoran (200) |
 # Stripe Sandbox — Fase 3: base de datos
 
 ## Alcance y fuente
@@ -25,7 +76,7 @@ Una fila por sesión Stripe, vinculada al usuario de Supabase Auth. Es un regist
 | plan | TEXT | NOT NULL | string |
 | amount_total | INTEGER | NOT NULL | number |
 | currency | TEXT | NOT NULL | string |
-| status | TEXT | NOT NULL, CHECK `paid`, `unpaid`, `expired` | PaymentStatus |
+| status | TEXT | NOT NULL, CHECK `paid`, `unpaid`, `expired` en la migración inicial | PaymentStatus |
 | created_at | TIMESTAMPTZ | NOT NULL, `now()` | string (fecha serializada) |
 
 `amount_total` se almacena en la **unidad monetaria mínima de la divisa según Stripe**, no necesariamente en centavos: hay monedas sin decimales y reglas específicas. No dividir siempre entre 100. La validación de moneda, plan e importe frente a la sesión Stripe corresponde al backend; no se agregan defaults ni restricciones comerciales no solicitadas. INTEGER limita el rango a -2147483648…2147483647; no se añade un CHECK de no negatividad ajeno al contrato recibido.
@@ -50,7 +101,7 @@ No se almacenan tarjetas, CVC, secretos Stripe ni claves de Supabase. Los identi
 - `stripe_event_id` UNIQUE impide registrar dos veces el mismo evento, también con entregas concurrentes. El backend puede ignorar una reentrega ya procesada mediante `ON CONFLICT (stripe_event_id) DO NOTHING`, sin generar una segunda fila.
 - `stripe_session_id` UNIQUE garantiza una fila por sesión.
 - **No son equivalentes**: otro evento con un nuevo event ID para una sesión existente viola el UNIQUE de sesión. El `upsert(..., { onConflict: "stripe_event_id", ignoreDuplicates: true })` de PR #48 no cubre ese caso. Debe acordarse con Stephan el tratamiento de eventos distintos y transiciones antes de dar por completa la integración; esta fase no modifica ni relaja la restricción solicitada.
-- `paid`, `unpaid`, `expired` son los únicos estados persistibles de este contrato. No hay máquina de estados ni ordenamiento automático de eventos en esta migración.
+- En la migración inicial, `paid`, `unpaid` y `expired` eran los únicos estados persistibles. Una migración aditiva de esta rama agrega `failed`; no se modifica ni reescribe la migración original.
 
 `src/types/payments.ts` se incorpora **idéntico en bytes** al del PR #48, con `PaymentStatus` y `Payment`, sin imports circulares. Los tipos de Supabase mantienen el estilo inline actual y todas las tablas/relaciones existentes. `Row` coincide con `Payment`; `Insert` exige los siete campos sin DEFAULT y permite omitir o especificar `id`/`created_at`; `Update` permite campos opcionales, sin conceder permisos SQL. `Relationships: []` sigue el patrón actual de tipos para FK a Auth fuera del esquema público; la FK SQL sí se verifica.
 
@@ -110,3 +161,131 @@ La prueba de fallo inyecta división entre cero antes de COMMIT y comprueba roll
 Stripe Test Mode no cobra dinero real. Esta tabla no fuerza por sí misma el modo de la cuenta o de las claves Stripe: eso debe garantizarlo la integración de servidor. No se registran pruebas de Checkout/webhook/Stripe CLI como realizadas en esta fase. El formato de identificadores es opaco; el backend verificará su origen. No habilitar pagos productivos ni conceder acceso premium automáticamente a partir de este trabajo.
 
 Los resultados ejecutados, limitaciones de herramientas y estado de DevSecOps se recogen en `docs/evidencias/stripe-db/VALIDACION.md` y en el Pull Request. No se modificaron variables persistentes, secretos, autenticación, AAL2, roles remotos, políticas ajenas, módulos funcionales, Vercel o Jira. El PR queda sin merge y la aplicación de la migración requiere autorización aparte.
+
+## Integración aislada Stripe Sandbox + Premium
+
+La rama de integración reutiliza el Checkout `mode: payment`, el webhook firmado,
+la escritura server-only en `payments`, el historial RLS y las páginas de PR #48.
+No se cambia a `mode: subscription`: no se encontró una definición comercial
+aprobada de precio, periodo ni reglas de renovación. Los 20 USD configurados
+por PR #48 se conservan únicamente como importe ficticio de demostración, no
+como precio comercial.
+
+Un pago confirmado crea un registro en `payments`; **no** crea ni actualiza una
+fila de `premium_subscriptions` y no habilita capacidades Premium. La interfaz
+de éxito lo informa explícitamente. Smile V17 Basic no depende de este pago.
+Las capacidades de historial, comparación, compartir y análisis avanzado
+siguen con `implemented: false`.
+
+El contrato `premium_subscriptions` y el ledger `stripe_webhook_events` de PR
+#72 se incluyen para preparar el trabajo recurrente, pero esta integración no
+los escribe. No se registran eventos de Checkout de pago único en ese ledger:
+la idempotencia actual de `payments` conserva sus dos restricciones únicas
+(`stripe_event_id` y `stripe_session_id`) y las transiciones condicionales ya
+probadas. Un futuro ciclo recurrente requerirá decisión comercial, procesamiento
+transaccional/idempotente de sus eventos y revisión de estados antes de activar
+Premium. La migración de suscripciones permanece sin aplicar remotamente.
+
+El webhook conserva el cuerpo original y valida la firma; además rechaza
+eventos Live, exige modo `payment`, UUID de usuario y coincidencia de plan,
+importe y moneda con la configuración de demostración del servidor. Los
+eventos no dirigidos a este producto se ignoran, los errores de almacenamiento
+devuelven 500 para permitir el reintento de Stripe y los cuerpos mayores a 1
+MiB se rechazan. El retorno del navegador solo consulta `payments` bajo RLS y
+nunca es autoridad de pago.
+
+El endpoint `GET /api/premium/status` requiere bearer válido, verifica la
+identidad con Auth y deriva el plan en servidor mediante el adaptador RLS
+server-only. No acepta identificador de usuario ni plan de la petición. El
+frontend presenta carga, error/reintento y estado de sesión; el plan mostrado
+no habilita por sí solo funciones Premium.
+
+Para desarrollo local, `.env.example` documenta `STRIPE_SECRET_KEY`
+(`sk_test_`), `STRIPE_WEBHOOK_SECRET`, `SUPABASE_SERVICE_ROLE_KEY` y
+`NEXT_PUBLIC_SITE_URL`. La clave service-role y los secretos Stripe son solo
+de servidor. Las URLs de retorno requieren HTTPS salvo loopback local.
+No se configuraron Railway/Vercel Production ni Stripe Live. Se validó un
+Checkout real de Stripe Sandbox por USD 20.00: `checkout.session.completed`,
+webhook HTTP 200, persistencia `paid` en Supabase local y consulta del pago en
+`/cuenta` desde una sesión autenticada. La reentrega del evento existente
+confirmó idempotencia; no se repitió Checkout. Las pruebas automatizadas siguen
+siendo fixtures y no sustituyen esa comprobación manual. No se guardan
+credenciales ni capturas con datos de cuenta en Git.
+
+La migración `payments_failed_status`, originalmente versionada como
+`20261117050000`, se conserva como
+`20261117150510_payments_failed_status_20261117050000.sql` para coincidir con
+el identificador registrado en Production. Amplía el CHECK de `payments` con
+`failed` y procesa los eventos asíncronos de fallo. Una
+confirmación verificada prevalece sobre un fallo que se haya recibido primero;
+un fallo tardío no puede degradar un pago confirmado. La expiración conserva la
+semántica terminal ya probada. Ninguna migración se aplicó en Supabase remoto.
+
+## Historial y rol inicial de paciente
+
+`/cuenta` consulta `payments` únicamente después de verificar la sesión con
+Supabase Auth y solicita solo los campos que presenta. La lectura sigue sujeta
+a `payments_select_own`; la interfaz no filtra ni decide la propiedad del pago.
+Sin sesión se ofrece iniciar sesión, y los errores de consulta permiten volver
+a intentar. Un pago de demostración no crea una suscripción Premium.
+
+El alta no confía en `user_metadata` ni en un rol recibido del navegador. Si una
+identidad confirmada no tiene asignación DentaIA, la interfaz llama al endpoint
+server-only `POST /api/cuenta/provision-patient-role`. El servidor vuelve a
+verificar la identidad, lee `app_metadata` con Auth Admin, asigna únicamente
+`paciente` cuando no existe asignación y preserva los roles ya provisionados.
+Una asignación DentaIA inválida requiere revisión administrativa; no se
+normaliza automáticamente.
+
+La comprobación funcional local cubrió carga, historial vacío, error HTTP 503,
+reintento correcto y presentación de una fila `paid` con un fixture de interfaz.
+Además, una captura aportada después del reinicio de `next dev` muestra el pago
+existente en `/cuenta` con sesión autenticada. La consulta usa la política RLS
+de propietario; la prueba pgTAP verifica aparte el aislamiento entre cuentas y
+la denegación de escrituras cliente. No se repitió Checkout.
+
+---
+
+## Suscripciones Premium mensuales en PR #76 (Preview académico)
+
+Esta ampliación **no sustituye retroactivamente el pago único** de `/api/stripe/checkout`: incorpora un flujo separado `/api/stripe/subscription/checkout`, cancelación `/api/stripe/subscription/cancel` y webhooks firmados de ciclo de vida. La página `/premium` utiliza el nuevo flujo de suscripción mensual.
+
+**Alcance:** únicamente Vercel Preview de la rama `integration/pr71-pr74-compat-20261117` con `DENTAIA_STRIPE_SUBSCRIPTIONS_ENABLED=true`. Production sigue sin habilitar suscripciones desde estas rutas. Stripe permanece estrictamente en modo prueba (`sk_test_...`).
+
+### Variables de Vercel (solo del servidor, salvo SITE_URL)
+
+- `STRIPE_SECRET_KEY`: clave de Stripe Test Mode con prefijo `sk_test_`.
+- `STRIPE_WEBHOOK_SECRET`: secreto específico del endpoint de webhook Test Mode, prefijo `whsec_`.
+- `SUPABASE_SERVICE_ROLE_KEY`: credencial privilegiada de Supabase **solo en Vercel Preview, en servidor**, con permiso INSERT/UPDATE/SELECT en `public.premium_subscriptions`; imprescindible para registrar eventos verificados. Nunca colocarla en `NEXT_PUBLIC_*`, commits o mensajes.
+- `NEXT_PUBLIC_SITE_URL`: URL HTTPS del alias del Preview de integración.
+- `DENTAIA_STRIPE_SUBSCRIPTIONS_ENABLED=true`: Preview de esta rama.
+- `STRIPE_PREMIUM_PRICE_ID` (opcional): Price mensual existente en Stripe Test Mode, **S/ 14.90 por mes**. Si falta, Checkout crea `price_data` recurrente de S/ 14.90 mensuales del lado del servidor; no se acepta un precio o plan enviado por el navegador.
+
+El Checkout comprueba en servidor la sesión autenticada y el acceso a la base. Si falta la credencial administrativa, devuelve un error antes de crear una sesión de Stripe. El webhook no debe considerarse probado si no se ha verificado su entrega real.
+
+### Webhook Stripe Test Mode
+
+Crear un destino en Stripe Dashboard (modo prueba) apuntando a:
+
+`https://dent-ai-git-integration-pr71-pr74-aa5dad-jhan-francos-projects.vercel.app/api/stripe/webhook`
+
+Suscribirse a:
+- `checkout.session.completed`
+- `customer.subscription.created`
+- `customer.subscription.updated`
+- `customer.subscription.deleted`
+
+El endpoint verifica la firma de Stripe y rechaza eventos Live. Consulta el estado canónico de la suscripción en Stripe, verifica que la metadata identifica a un usuario DentaIA, comprueba el importe/moneda/intervalo recurrente y conserva eventos en orden por fecha, sin aceptar una activación declarada por el cliente. La tabla de Supabase solo permite lectura del propietario mediante RLS; la escritura ocurre en el backend con clave de servicio.
+
+### Comportamiento visible
+
+1. Paciente autenticado → menú **Mi plan Premium** → `/premium`.
+2. Pulsa **Contratar Premium mensual (prueba)** → Checkout `mode=subscription`, S/ 14.90/mes.
+3. Utiliza un método de prueba Stripe. Regresa a `/premium/exito`, que **no acredita** el pago por la redirección.
+4. El webhook registra o actualiza `premium_subscriptions`. El endpoint `/api/premium/status` (token obligatorio) calcula `premium` solo si `status=active` y el período está vigente.
+5. Puede pulsar **Cancelar al final del período**. Stripe conserva el plan hasta el vencimiento y comunica el cambio por webhook; finalizado el período, el usuario vuelve a Basic. Una renovación pagada se refleja mediante el evento `customer.subscription.updated`.
+6. Una suscripción pendiente, vencida, `past_due`, `unpaid` o cancelada no proporciona acceso Premium.
+
+**Límites:** El plan Premium queda identificado y verificable en servidor, pero los módulos avanzados Smile que figuran con `implemented:false` en el catálogo siguen deshabilitados; no se presentan como prestaciones ya listas. El registro de pagos únicos y el historial de `payments` son independientes del registro de suscripciones. Pendiente una prueba extremo a extremo autenticada y confirmación de entrega del webhook con las credenciales administradas en Vercel.
+
+**Compatibilidad:** la suscripción de prueba creada antes del ajuste conserva su precio histórico de USD 20. El webhook sigue reconociéndola únicamente cuando su `stripe_price_id` ya existe en la base; nuevas contrataciones usan PEN 14.90 mensuales. Este cambio no migra ni cancela automáticamente las suscripciones previas.

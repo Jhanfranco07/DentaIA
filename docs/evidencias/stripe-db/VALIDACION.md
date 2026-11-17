@@ -50,3 +50,65 @@ La estructura DB está preparada para revisión, pero eso no significa que la in
 No se probó un fallo sobre producción ni se aplicó allí SQL: el ensayo de atomicidad es local y el runner rechaza destinos TCP. La ausencia de cambios remotos se debe al alcance de ejecución, no a una comparación de datos de producción. No se realizaron pruebas reales de Stripe, JWT/Auth, PostgREST ni aceptación del webhook. El fixture no reemplaza la aceptación posterior en un Supabase autorizado.
 
 La ejecución real de DevSecOps sobre el commit final y el enlace del PR se informan en el propio Pull Request; esta documentación no declara CI remoto aprobado antes de observarlo. El push de feature puede omitir Build según la política vigente; se verificará también el evento pull_request, que sí lo exige. No se cambia ese workflow ni los módulos FastAPI/visión para esta tarea.
+
+## Cierre funcional y RLS de PR #75 — 17 de noviembre de 2026
+
+### Entorno y datos
+
+- La ejecución se hizo contra Supabase local en loopback. `NEXT_PUBLIC_SUPABASE_URL` y `SUPABASE_URL` se verificaron como locales; Stripe usó una clave `sk_test_`, y había secreto de webhook y service role local. Los valores no se imprimieron.
+- `.env.local`, `.env.qa.local` y `.env.production.backup.local` permanecieron ignorados por Git. No se consultó ni modificó Supabase Production, Railway, Vercel o Stripe Live.
+- `npm run check:supabase` conectó al stack local, encontró cuatro perfiles ficticios y no permitió lecturas privadas como visitante. Auth opcional no se probó mediante ese script.
+
+### Checkout existente e idempotencia
+
+- Se reentregó una vez el evento Sandbox ya procesado `evt_1UcfwrGZ2pFOxdhPrWxHRrj` al webhook de loopback, con firma de prueba válida. El webhook respondió HTTP 200.
+- La comparación previa/posterior observó exactamente una fila para el evento y para su `stripe_session_id`; estado `paid`, USD 20.00 y propietario sin cambios. No se creó ni activó una suscripción Premium.
+- Una consulta agregada posterior volvió a confirmar una fila por evento/sesión, estado `paid`, importe esperado y ausencia de Premium para el propietario. No se repitió Checkout ni se enviaron eventos adicionales.
+
+### Historial, alta y autorización
+
+- En `/cuenta?perfil=1`, una sesión ficticia local verificó los estados de comprobación/carga y vacío. Un 503 simulado mostró el error accesible y el botón «Reintentar» recuperó la consulta.
+- Una captura aportada después del reinicio de `next dev` muestra `/cuenta` en una sesión autenticada y una fila `paid` de USD 20.00. La consulta del navegador sigue protegida por RLS (`payments_select_own`); no se repitió Checkout. La captura no se conserva en el repositorio para evitar incluir datos de cuenta.
+- El overlay de desarrollo `[object Event]` se observó antes del reinicio de `next dev`, que había compartido `.next` con `next build`. Tras el reinicio, `/cuenta` respondió HTTP 200 y la captura posterior muestra el historial sin el overlay. Los logs del servidor no registraron una excepción de render; sí mostraron advertencias Autoprefixer preexistentes y respuestas 404 del BFF clínico local, ajenas al historial de pagos.
+- El flujo local de alta confirmó que una identidad nueva confirmada recibe únicamente el rol `paciente` mediante `app_metadata` de servidor; el endpoint no confía en `user_metadata` ni en datos de rol del cliente y preserva asignaciones existentes. Se añadieron siete pruebas unitarias del endpoint, incluida la denegación de identidades no confirmadas.
+- La prueba pgTAP `payments_rls.sql` aprobó 8 aserciones dentro de una transacción revertida: lectura propia, aislamiento de la otra cuenta, denegación de INSERT/UPDATE/DELETE, bloqueo de lectura del ledger, estado `failed` y ausencia de Premium. No se modificaron privilegios para hacer pasar las pruebas.
+- Se retiraron cinco cuentas de prueba `example.test` de Supabase local tras verificar que ninguna tenía pagos ni suscripciones; no se borró el pago del Checkout Sandbox.
+
+### Validaciones de código ejecutadas
+
+| Comprobación | Resultado |
+| --- | --- |
+| Node unitarias | 473 aprobadas en 70 archivos |
+| Node integración | 11 aprobadas |
+| Node contratos | 16 aprobadas |
+| Node regresión | 4 aprobadas |
+| Vitest (`npm test`) | 66 aprobadas en 12 archivos |
+| Catálogo Basic/Premium | 2 aprobadas |
+| Pruebas focalizadas endpoint/Stripe/Premium | 23 aprobadas en 4 archivos |
+| pgTAP ejecutado en esta validación | 33 aprobadas en 5 archivos (DI-131, Smile, Premium, pagos `failed` y pagos RLS) |
+| DI-172 local | 45 aprobadas en la reconstrucción DI-36 ya documentada arriba; no se repitió una reconstrucción destructiva sobre la base con el Checkout existente |
+| TypeScript | `npm run typecheck`, exit 0 |
+| Build | `npm run build`, exit 0; muestra advertencias Autoprefixer preexistentes en CSS no relacionado |
+| Dependencias JavaScript | `npm audit`, cero vulnerabilidades |
+| Diff | `git diff --check`, sin errores |
+
+El conjunto pgTAP documentado previamente (70 aserciones, incluido DI-172) más las 8 nuevas aserciones de `payments_rls.sql` suma 78 aserciones locales acumuladas; no se ejecutaron todas en una sola invocación.
+
+### CI/CD y límites
+
+Para el commit `ac94516`, CI, TypeScript, Build Next.js, Automated Testing,
+Security, Backend IA, DevSecOps y los gates de Continuous Delivery terminaron
+en verde en GitHub Actions. Vercel Preview y su comprobación HTTP también
+pasaron; el workflow solo observó el estado del proveedor y una URL pública
+Preview. No hubo estado Railway para este commit. El paso `Production ·
+autorización externa` documentó que no se publica Production desde Actions;
+no se hizo promoción ni despliegue productivo.
+
+El build local terminó, pero compartir `.next` con el servidor de desarrollo
+rompió temporalmente ese proceso; se reinició Next.js en `localhost:3000` y se
+verificó `/premium` y `/cuenta` con HTTP 200. La captura autenticada del
+historial cierra la comprobación visual del pago existente, sin repetir
+Checkout. La recomendación de merge sigue sujeta a revisión humana y a revisar
+los checks vigentes del PR. Production sigue bloqueada hasta obtener
+autorización de despliegue y realizar las comprobaciones remotas de
+migraciones pertinentes.

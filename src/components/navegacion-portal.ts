@@ -6,9 +6,11 @@ export const NAVEGACION_PACIENTE: readonly EnlacePortal[] = [
   { href: "/analisis", etiqueta: "Preparar fotografía", icono: "camara", grupo: "Mi cuidado dental" },
   { href: "/fotografias", etiqueta: "Mis fotografías", icono: "imagen", grupo: "Mi cuidado dental" },
   { href: "/resultados", etiqueta: "Mis resultados", icono: "reporte", grupo: "Mi cuidado dental" },
+  { href: "/paciente/rutinas", etiqueta: "Mis rutinas", icono: "escudo", grupo: "Mi cuidado dental" },
   { href: "/solicitudes", etiqueta: "Mis solicitudes", icono: "calendario", grupo: "Mi cuidado dental" },
   { href: "/buenas-practicas", etiqueta: "Buenas prácticas", icono: "escudo", grupo: "Recursos" },
   { href: "/panel/odontologos", etiqueta: "Odontólogos", icono: "usuarios", grupo: "Recursos" },
+  { href: "/premium", etiqueta: "Mi plan Premium", icono: "destello", grupo: "Cuenta" },
   { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Cuenta" },
 ];
 export const NAVEGACION_ODONTOLOGO: readonly EnlacePortal[] = [

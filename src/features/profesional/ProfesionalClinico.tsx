@@ -29,6 +29,8 @@ import {
 import EstadoHistorialClinico, {
   type VistaHistorialClinico,
 } from "./EstadoHistorialClinico";
+import MisServicios from "./MisServicios";
+import { esPerfilQa } from "@/features/directorio/qa-preview";
 import styles from "./profesional.module.css";
 import { Icono } from "@/components/Identidad";
 
@@ -119,7 +121,7 @@ function mensajeSeguro(error: unknown): string {
   return "No se pudo completar la consulta clínica.";
 }
 
-export default function ProfesionalClinico() {
+export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: boolean }) {
   const { usuario, cargando: cargandoSesion, errorSesion, verificar } = useSesion();
   const control = useRef(crearControlConsultasClinicas());
   const controlRevalidacion = useRef(crearControlRevalidacionHistorial());
@@ -131,6 +133,44 @@ export default function ProfesionalClinico() {
   const [sesionRemotaExpirada, setSesionRemotaExpirada] = useState(false);
   const [mensajeContexto, setMensajeContexto] = useState("");
   const [perfil, setPerfil] = useState<EstadoPerfil>(perfilInactivo);
+  const dentistIdDirectorio = perfil.perfil?.dentistId ?? null;
+  const [visibilidadDirectorio, setVisibilidadDirectorio] = useState<{
+    dentistId: string;
+    estado: "cargando" | "visible" | "oculto" | "error";
+  } | null>(null);
+
+  // La identidad clínica no implica que el perfil esté publicado.
+  // Consultar exclusivamente la vista pública, sometida a la RLS dentists_read.
+  useEffect(() => {
+    if (!dentistIdDirectorio || !usuario || sesionRemotaExpirada) {
+      return;
+    }
+    const control = new AbortController();
+    const dentistId = dentistIdDirectorio;
+    if (qaPreview && esPerfilQa(dentistId)) {
+      setVisibilidadDirectorio({ dentistId, estado: "visible" });
+      return;
+    }
+    async function consultarVisibilidad() {
+      setVisibilidadDirectorio({ dentistId, estado: "cargando" });
+      try {
+        const { data, error } = await getSupabaseBrowserClient()
+          .from("dentists").select("id")
+          .eq("id", dentistId).eq("is_active", true)
+          .abortSignal(control.signal).maybeSingle();
+        if (control.signal.aborted) return;
+        setVisibilidadDirectorio({ dentistId, estado: error ? "error" : data ? "visible" : "oculto" });
+      } catch {
+        if (!control.signal.aborted) setVisibilidadDirectorio({ dentistId, estado: "error" });
+      }
+    }
+    void consultarVisibilidad();
+    return () => control.abort();
+  }, [dentistIdDirectorio, usuario, sesionRemotaExpirada, qaPreview]);
+
+  const estadoDirectorio = dentistIdDirectorio && visibilidadDirectorio?.dentistId === dentistIdDirectorio
+    ? visibilidadDirectorio.estado : "cargando";
+
   const [solicitudes, setSolicitudes] = useState<
     EstadoLista<SolicitudProfesionalClinica>
   >(listaInactiva);
@@ -856,7 +896,12 @@ export default function ProfesionalClinico() {
             <a href="#solicitudes-profesionales"><Icono nombre="calendario" size={20} /> Ver solicitudes</a>
             <a href="#historial-clinico"><Icono nombre="usuarios" size={20} /> Consultar historial</a>
             <a href="#perfil-profesional"><Icono nombre="persona" size={20} /> Ver perfil</a>
+            {perfil.perfil?.dentistId && <a href="#mis-servicios">Mis servicios</a>}
           </nav>
+
+          {perfil.perfil?.dentistId && (
+            <MisServicios key={`${usuario.id}:${perfil.perfil.dentistId}`} dentistId={perfil.perfil.dentistId} estadoDirectorio={estadoDirectorio} />
+          )}
 
           {mensajeContexto && <div className={styles.estadoDenegado} role="alert">{mensajeContexto}</div>}
 
@@ -941,12 +986,21 @@ export default function ProfesionalClinico() {
           <section id="perfil-profesional" className={styles.tarjeta} tabIndex={-1} aria-labelledby="titulo-perfil-profesional">
             <header className={styles.cabeceraSeccion}>
               <h2 id="titulo-perfil-profesional">Perfil profesional</h2>
-              <p>Consulta tu ficha pública y accede a las opciones disponibles de tu cuenta.</p>
+              <p>Consulta el estado de publicación de tu ficha y accede a las opciones disponibles de tu cuenta.</p>
             </header>
-            {perfil.perfil?.dentistId && (
+            {perfil.perfil?.dentistId && estadoDirectorio === "visible" && (
               <Link href={`/directorio/${encodeURIComponent(perfil.perfil.dentistId)}`} className="text-link">
                 Ver perfil en el directorio
               </Link>
+            )}
+            {perfil.perfil?.dentistId && estadoDirectorio === "oculto" && (
+              <p className={styles.estadoVacio} role="status">Tu ficha no está publicada en el directorio público. Los servicios se pueden gestionar aquí, pero no aparecerán en el directorio mientras el perfil permanezca inactivo. Los perfiles académicos ficticios no representan profesionales disponibles para atención.</p>
+            )}
+            {perfil.perfil?.dentistId && estadoDirectorio === "error" && (
+              <p className={styles.estadoError} role="status">No se pudo comprobar si tu ficha es pública. No mostraremos un enlace al directorio sin verificarlo.</p>
+            )}
+            {perfil.perfil?.dentistId && estadoDirectorio === "cargando" && (
+              <p role="status">Comprobando publicación del perfil…</p>
             )}
             {perfil.perfil && !perfil.perfil.dentistId && (
               <p className={styles.estadoVacio}>Tu cuenta aún no tiene un perfil público vinculado.</p>
