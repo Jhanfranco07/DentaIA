@@ -1,5 +1,5 @@
 import test from'node:test';import assert from'node:assert/strict';
-import{configurarClinica,origenLocalAutorizado,origenPreviewAutorizado,cuentaAcademicaPermitida,DENTALIA_REF,DATASET_ACADEMICO,DENTALIA_PREVIEW_BRANCH,DENTALIA_INTEGRATION_PREVIEW_BRANCH}from'./ambiente.ts';
+import{configurarClinica,origenLocalAutorizado,origenPreviewAutorizado,origenProductionAutorizado,cuentaAcademicaPermitida,DENTALIA_REF,DATASET_ACADEMICO,DENTALIA_PREVIEW_BRANCH,DENTALIA_INTEGRATION_PREVIEW_BRANCH}from'./ambiente.ts';
 const ids=[1,2,3,4,5].map(n=>'00000000-0000-4000-8000-'+String(n).padStart(12,'0'));
 const env={NODE_ENV:'development',DENTAIA_CLINICAL_HTTP_ENABLED:'true',DENTAIA_CLINICAL_TARGET:'dentalia_academic',DENTAIA_CLINICAL_ACADEMIC_ENABLED:'true',DENTAIA_CLINICAL_PROJECT_REF:DENTALIA_REF,DENTAIA_CLINICAL_SUPABASE_URL:`https://${DENTALIA_REF}.supabase.co`,DENTAIA_CLINICAL_SUPABASE_PUBLISHABLE_KEY:'sb_publishable_fixture',DENTAIA_CLINICAL_CURSOR_SECRET:'a'.repeat(43),DENTAIA_CLINICAL_DEMO_USER_IDS:ids.join(',')};
 test('Remoto solo con todos los flags, origen y allowlist exactos',()=>assert.equal(configurarClinica(env).valid,true));
@@ -35,4 +35,60 @@ test('Alias de Preview #76 aceptado solo en rama integrada y sin orígenes cruza
  assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me',{headers:{'sec-fetch-site':'cross-site'}}),config),false);
  assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me'),{...config,VERCEL_GIT_COMMIT_REF:'develop'}),false);
  assert.equal(origenPreviewAutorizado(new Request('https://otro.vercel.app/api/professional/me'),config),false);
+});
+
+const prod={
+  ...env,
+  NODE_ENV:"production",
+  VERCEL:"1",
+  VERCEL_ENV:"production",
+  VERCEL_GIT_COMMIT_REF:"main",
+  VERCEL_URL:"dent-ai-abc-jhan-francos-projects.vercel.app",
+  DENTAIA_CLINICAL_PRODUCTION_ENABLED:"true",
+  DENTAIA_CLINICAL_TARGET:"dentalia_production",
+  DENTAIA_CLINICAL_SUPABASE_URL:"https://production-qa.supabase.co",
+  NEXT_PUBLIC_SUPABASE_URL:"https://production-qa.supabase.co",
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:"sb_publishable_fixture",
+  DENTAIA_CLINICAL_SUPABASE_PUBLISHABLE_KEY:"sb_publishable_fixture",
+  DENTAIA_CLINICAL_DEMO_USER_IDS:"",
+  DENTAIA_CLINICAL_ACADEMIC_ENABLED:"",
+};
+test("Production requiere activación explícita y usa Auth propio sin allowlist académica",()=>{
+ const config=configurarClinica(prod);
+ assert.equal(config.enabled,true);
+ assert.equal(config.production,true);
+ assert.equal(config.valid,true);
+ assert.equal(config.remote,true);
+ assert.deepEqual(config.users,[]);
+});
+for(const changes of [
+ {DENTAIA_CLINICAL_PRODUCTION_ENABLED:""},
+ {DENTAIA_CLINICAL_HTTP_ENABLED:""},
+ {VERCEL_GIT_COMMIT_REF:"develop"},
+ {VERCEL_ENV:"preview"},
+ {VERCEL:undefined},
+ {DENTAIA_CLINICAL_TARGET:"dentalia_academic"},
+ {DENTAIA_CLINICAL_CURSOR_SECRET:""},
+ {NEXT_PUBLIC_SUPABASE_URL:"https://another.supabase.co"},
+ {NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:"sb_publishable_different"},
+ {DENTAIA_CLINICAL_SUPABASE_URL:"http://production-qa.supabase.co"}
+]){
+ test("Production falla cerrado: "+JSON.stringify(changes),()=>{
+  const config=configurarClinica({...prod,...changes});
+  assert.equal(config.enabled&&config.valid,false);
+ });
+}
+test("Production restringe host, origen y sec-fetch-site",()=>{
+ const good=new Request("https://dent-ai-five.vercel.app/api/professional/me");
+ assert.equal(origenProductionAutorizado(good,prod),true);
+ assert.equal(origenProductionAutorizado(new Request("https://"+prod.VERCEL_URL+"/api/professional/me"),prod),true);
+ assert.equal(origenProductionAutorizado(new Request("https://otro.vercel.app/api/professional/me"),prod),false);
+ assert.equal(origenProductionAutorizado(new Request("http://dent-ai-five.vercel.app/api/professional/me"),prod),false);
+ assert.equal(origenProductionAutorizado(new Request(good.url,{headers:{origin:"https://evil.example"}}),prod),false);
+ assert.equal(origenProductionAutorizado(new Request(good.url,{headers:{"sec-fetch-site":"cross-site"}}),prod),false);
+ assert.equal(origenProductionAutorizado(good,{...prod,VERCEL_ENV:"preview"}),false);
+});
+test("Se conserva la prohibición de Production académico tradicional",()=>{
+ const config=configurarClinica({...prod,DENTAIA_CLINICAL_TARGET:"dentalia_academic"});
+ assert.equal(config.valid,false);
 });

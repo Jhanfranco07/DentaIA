@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { leerAsignacionAdministrativa } from "../autorizacion/autorizacion";
 import { crearApiClinica, type Autenticacion } from "./http";
 import { esUuid } from "./validaciones";
-import { configurarClinica, origenLocalAutorizado, origenPreviewAutorizado, cuentaAcademicaPermitida } from "./ambiente";
+import { configurarClinica, origenLocalAutorizado, origenPreviewAutorizado, origenProductionAutorizado, cuentaAcademicaPermitida } from "./ambiente";
 
 function errorIdentidad(error: unknown): 401 | 503 {
   if (error instanceof TypeError || (error instanceof Error && ["TimeoutError", "AbortError", "AuthRetryableFetchError"].includes(error.name))) return 503;
@@ -12,7 +12,7 @@ function errorIdentidad(error: unknown): 401 | 503 {
 }
 
 function diagnosticoConfiguracion(config: ReturnType<typeof configurarClinica>): "ENTORNO_NO_PERMITIDO" | "BFF_DESHABILITADO" | "CONFIGURACION_INVALIDA" {
-  if (!config.preview && process.env.NODE_ENV !== "development") return "ENTORNO_NO_PERMITIDO";
+  if (!config.preview && !config.production && process.env.NODE_ENV !== "development") return "ENTORNO_NO_PERMITIDO";
   if (!config.enabled && config.valid) return "BFF_DESHABILITADO";
   return "CONFIGURACION_INVALIDA";
 }
@@ -24,9 +24,9 @@ function clavePublicable(key: string) {
 }
 function api(request: Request) {
   const config = configurarClinica(process.env);
-  const originAllowed = config.preview
-    ? origenPreviewAutorizado(request, process.env)
-    : origenLocalAutorizado(request);
+  const originAllowed = config.production
+    ? origenProductionAutorizado(request, process.env)
+    : config.preview ? origenPreviewAutorizado(request, process.env) : origenLocalAutorizado(request);
   const enabled = config.enabled && (!config.remote || originAllowed);
   return crearApiClinica({ enabled, cursorSecret: config.secret, cursorTtl: config.ttl,
     ...(!enabled ? { diagnosticoConfiguracion: diagnosticoConfiguracion(config) } : {}),
@@ -57,7 +57,7 @@ function api(request: Request) {
           return { ok: false, status, diagnostico: status === 503 ? "PROVEEDOR_IDENTIDAD_NO_DISPONIBLE" : "SESION_INVALIDA" };
         }
         const user = current.data.user;
-        if (config.remote && !cuentaAcademicaPermitida(user.id, user.app_metadata, config.users)) return { ok: false, status: 403, diagnostico: "CUENTA_FUERA_DE_ALLOWLIST" };
+        if (config.remote && !config.production && !cuentaAcademicaPermitida(user.id, user.app_metadata, config.users)) return { ok: false, status: 403, diagnostico: "CUENTA_FUERA_DE_ALLOWLIST" };
         if (!esUuid(user.id) || claims.sub !== user.id || claims.role !== "authenticated" || !esUuid(claims.session_id)
           || typeof claims.exp !== "number" || claims.exp <= Math.floor(Date.now() / 1000) || user.is_anonymous === true || user.aud !== "authenticated" || !user.confirmed_at) return { ok: false, status: 401, diagnostico: "SESION_INVALIDA" };
         // Reutiliza el contrato de DI-150, sin su autorización administrativa/AAL2.
