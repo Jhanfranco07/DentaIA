@@ -212,8 +212,11 @@ confirmó idempotencia; no se repitió Checkout. Las pruebas automatizadas sigue
 siendo fixtures y no sustituyen esa comprobación manual. No se guardan
 credenciales ni capturas con datos de cuenta en Git.
 
-Esta rama añade `20261117050000_payments_failed_status.sql`, que amplía el CHECK
-de `payments` con `failed`, y procesa los eventos asíncronos de fallo. Una
+La migración `payments_failed_status`, originalmente versionada como
+`20261117050000`, se conserva como
+`20261117150510_payments_failed_status_20261117050000.sql` para coincidir con
+el identificador registrado en Production. Amplía el CHECK de `payments` con
+`failed` y procesa los eventos asíncronos de fallo. Una
 confirmación verificada prevalece sobre un fallo que se haya recibido primero;
 un fallo tardío no puede degradar un pago confirmado. La expiración conserva la
 semántica terminal ya probada. Ninguna migración se aplicó en Supabase remoto.

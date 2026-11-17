@@ -2,40 +2,73 @@
 
 ## Estado actual de Production e integracion (17-11-2026)
 
-El estado de Production siguiente proviene del reporte del responsable y no se
-pudo volver a consultar desde esta ejecucion. No se ejecutaron migraciones ni
-se modifico `supabase_migrations.schema_migrations`.
+El responsable confirmo mediante consulta directa que Production registra las
+cinco versiones indicadas y que sus `statements` coinciden exactamente con el
+SQL local. Esta ejecucion no pudo volver a leer Production desde la CLI; el
+renombre local se basa en esa confirmacion. No se ejecutaron migraciones ni se
+modifico `supabase_migrations.schema_migrations`.
 
-| Migracion local | Version/name reportados en Production |
+| Archivo local alineado | Version/name en Production |
 | --- | --- |
-| `20261116090000_di172_rutinas.sql` | `20261117150440` / `di172_rutinas_20261116090000` |
-| `20261117041157_dentist_services.sql` | `20261117150451` / `dentist_services_20261117041157` |
-| `20261117042645_smile_analysis_history.sql` | `20261117150501` / `smile_analysis_history_20261117042645` |
-| `20261117042647_premium_subscriptions.sql` | `20261117150504` / `premium_subscriptions_20261117042647` |
-| `20261117050000_payments_failed_status.sql` | `20261117150510` / `payments_failed_status_20261117050000` |
+| `20261117150440_di172_rutinas_20261116090000.sql` | `20261117150440` / `di172_rutinas_20261116090000` |
+| `20261117150451_dentist_services_20261117041157.sql` | `20261117150451` / `dentist_services_20261117041157` |
+| `20261117150501_smile_analysis_history_20261117042645.sql` | `20261117150501` / `smile_analysis_history_20261117042645` |
+| `20261117150504_premium_subscriptions_20261117042647.sql` | `20261117150504` / `premium_subscriptions_20261117042647` |
+| `20261117150510_payments_failed_status_20261117050000.sql` | `20261117150510` / `payments_failed_status_20261117050000` |
 
-La CLI enlazada al proyecto no pudo leer el historial: `supabase migration
-list` fallo con `DbConfigIpv6Error` (la red actual no admite IPv6). No hay una
-integracion Supabase de solo lectura disponible en esta sesion ni se verifico
-un respaldo recuperable. Por ello, las versiones/SQL reportados aun no se
-compararon con `schema_migrations.statements`; no renombrar ni reparar
-migraciones hasta obtener esa lectura. No ejecutar `db push`, `db reset` ni
-`migration repair` contra Production. Si los statements no coinciden con los
-archivos, detenerse y proponer una migracion correctiva hacia delante, sin
-reescribir el SQL aplicado.
+La verificacion local comparo los blobs Git de los cinco archivos antes y
+despues del renombre; los cinco contenidos permanecen identicos.
+
+### Transicion segura para otros entornos
+
+Los cinco archivos se renombraron sin editar su SQL. Production ya registra los
+nuevos identificadores, por lo que no requiere reparacion ni reejecucion. Para
+un entorno nuevo, el runner de migraciones aplicara cada archivo una sola vez
+con el identificador alineado, siempre que la cadena base completa del
+repositorio este disponible.
+
+Un entorno local o QA existente puede conservar los cinco identificadores
+originales. Antes de usar `db push`, consultar solo su historial de migraciones
+y comparar el SQL aplicado con cada archivo; obtener un respaldo recuperable y
+confirmar que ese destino no es Production. En una ventana controlada, marcar
+primero como aplicados los cinco identificadores nuevos y luego como revertidos
+los cinco antiguos, usando `supabase migration repair` con el destino QA/local
+explicito. No ejecutar `db push` entre ambos pasos. Finalmente, comprobar que
+`supabase migration list` muestra solo los identificadores canonicos como
+aplicados. Esta reparacion es solo una estrategia documentada: no se ejecuto
+en QA ni Production en esta tarea y requiere aprobacion del responsable del
+entorno.
+
+Para un QA remoto, una vez comprobados el respaldo y el `QA_PROJECT_REF`, la
+secuencia prevista es:
+
+```powershell
+supabase migration repair --remote="QA_PROJECT_REF" --status applied 20261117150440 20261117150451 20261117150501 20261117150504 20261117150510
+supabase migration repair --remote="QA_PROJECT_REF" --status reverted 20261116090000 20261117041157 20261117042645 20261117042647 20261117050000
+```
+
+Sustituir el marcador solo por el ref verificado de QA; nunca usar el ref de
+Production. Para un entorno local se omite `--remote`. Si cualquiera de las
+comprobaciones falla, detenerse sin ejecutar `db push`.
+
+La cadena base completa aun tiene brechas historicas documentadas en esta
+auditoria (versiones de octubre y DI-36); por tanto, no se afirma que un
+entorno vacio pueda reconstruir todo Production hasta recuperar y validar esas
+migraciones por separado. Nunca ejecutar `db push`, `db reset` o `migration
+repair` contra Production como parte de esta reconciliacion.
 
 Segun el mismo reporte, las nueve tablas de rutinas (3), servicios (1), Smile
 (3) y Premium/webhooks (2) existen con RLS; tambien existen las cinco politicas
 de `dentist_services`, el bucket privado Smile de 8 MiB y la restriccion de
 pagos que admite `failed`. Estos objetos no se volvieron a consultar.
 
-El candidato local `integration/pr71-pr74-compat-20261117` integra los cambios
-de PR #71 y PR #74 sobre la base de PR #75. No se ha publicado ni fusionado a
-GitHub; el conflicto de `database.types.ts` se resolvio conservando ambas
-funcionalidades. Los checks locales actuales pasan TypeScript, unitarias,
-build, `npm audit` y 45 pruebas pgTAP de DI-172. Estas últimas corrieron con la
-migración en un proyecto Supabase local temporal y aislado; no son una
-verificación del esquema de Production.
+La rama `integration/pr71-pr74-compat-20261117` integra los cambios de PR #71
+y PR #74 sobre la base de PR #75 y esta publicada como Draft PR #76 hacia
+`main`. El conflicto de `database.types.ts` se resolvio conservando ambas
+funcionalidades. TypeScript, unitarias, build, `npm audit` y 45 pruebas pgTAP
+de DI-172 pasaron en local; estas ultimas corrieron en un proyecto Supabase
+temporal y aislado, no verifican Production. Los checks de GitHub estaban
+verdes antes del cambio de nombres; el nuevo commit debe volver a ejecutarlos.
 
 ### Credenciales e historial Git
 
@@ -123,23 +156,23 @@ aserciones pgTAP en la reconstruccion local completa.
 
 La reconstruccion local completa y la comparacion de tipos descritas arriba son
 evidencia historica de QA, no una verificacion del esquema de Production en esta
-ejecucion. El candidato actual incorpora las tres tablas y tipos de DI-172.
-Los SQL historicos no se modificaron; la conciliacion entre nombres locales y
-versiones remotas sigue pendiente de comparar los statements de Production.
+ejecucion. El candidato actual incorpora las tres tablas y tipos de DI-172. La
+coincidencia exacta del SQL local con Production fue confirmada directamente
+por el responsable; esta ejecucion alinea los nombres sin editar el SQL.
 
 La prueba de firma, Checkout y webhook real de Stripe Sandbox sigue pendiente.
-No se consulto ni modifico el historial remoto durante la reconstruccion; la
-comparacion de Production y cualquier despliegue requieren una autorizacion y
-una ventana independiente.
+Durante la reconstruccion anterior no se consulto ni modifico el historial
+remoto; posteriormente, el responsable confirmo la comparacion directa del SQL
+efectivo de Production. Esta tarea tampoco escribio en Production.
 
 ## Integracion de ramas
 
 | Modulo | Responsable | Migracion / contrato | Estado y requisito |
 | --- | --- | --- | --- |
-| Rutinas | Anelis | `20261116090000_di172_rutinas.sql` | Integrado localmente desde PR #71. Falta CI en el candidato y cotejo de contenido/version remota; no aplicar de nuevo. |
-| Servicios | Angie | `20261117041157_dentist_services.sql` | Integrado localmente desde PR #74 sobre la base incluida por PR #75. UI lista activos para visitantes y administra por profesional verificado vinculado; falta CI del candidato. |
+| Rutinas | Anelis | `20261117150440_di172_rutinas_20261116090000.sql` | Integrado desde PR #71 en Draft #76. SQL/version cotejados por el responsable; no aplicar de nuevo. |
+| Servicios | Angie | `20261117150451_dentist_services_20261117041157.sql` | Integrado desde PR #74 sobre la base incluida por PR #75 en Draft #76. UI lista activos para visitantes y administra por profesional verificado vinculado. |
 | Stripe | Stephan | `payments`, `premium_subscriptions` | PR #73 integra Checkout `payment`, webhook firmado e idempotencia en `payments`; el pago unico no crea una suscripcion ni activa Premium. Recurrencia pendiente de definicion comercial. |
-| Smile V17 | Jhan | `20261117042645_smile_analysis_history.sql` | Requiere BFF server-only para persistencia y URLs firmadas; Basic actual sigue sin persistencia. |
+| Smile V17 | Jhan | `20261117150501_smile_analysis_history_20261117042645.sql` | Requiere BFF server-only para persistencia y URLs firmadas; Basic actual sigue sin persistencia. |
 | Historia clinica | Equipo | DI-36 | No mezclar con Smile; acceso sigue sujeto a grants clinicos independientes. |
 
 ## Guia de conexion
@@ -148,8 +181,8 @@ una ventana independiente.
 | --- | --- | --- | --- |
 | Paciente Smile | `smile-history-server.ts`, `smile_analysis_consents`, `smile_analyses` | Adaptador server-only con token de usuario: aceptar/revocar consentimiento, listar analisis propios y conceder/revocar grants mediante RPC | No hay rutas API conectadas al adaptador; falta persistir resultados y gestionar carga/eliminacion de objetos privados. |
 | Odontologo | RLS de `smile_analyses` y grant por analisis | Solo leer analisis con grant activo, profesional verificado y consentimiento vigente | BFF que genere URL firmada corta tras reevaluar el grant; Storage no entrega objetos directamente. |
-| Rutinas (Anelis) | DI-172 y sus tres tablas | Paciente autenticado con rol paciente; marcas propias por dia Lima | Frontend y contrato integrados; RLS aprobada con 45 aserciones pgTAP locales. Falta CI del candidato y cotejo del historial remoto. |
-| Directorio/servicios (Angie) | `dentist_services` | Visitante lee activos; profesional verificado administra solo su `dentist_id` | Consulta RLS integrada en el candidato local; falta CI para el commit combinado. |
+| Rutinas (Anelis) | DI-172 y sus tres tablas | Paciente autenticado con rol paciente; marcas propias por dia Lima | Frontend y contrato integrados; RLS aprobada con 45 aserciones pgTAP locales. Incluido en Draft #76. |
+| Directorio/servicios (Angie) | `dentist_services` | Visitante lee activos; profesional verificado administra solo su `dentist_id` | Consulta RLS integrada en Draft #76. |
 | Premium/Stripe (Stephan) | `premium_subscriptions`, `stripe_webhook_events`, `premium-server.ts` | Adaptador server-only deriva el plan desde la suscripcion RLS del usuario; ningun cliente escribe. PR #73 agrega Checkout de pago unico, webhook firmado, historial de `payments` y consulta server-side del plan. | No hay ciclo recurrente ni portal; `payments` no se convierte en suscripcion y ninguna funcion Premium futura se activa. |
 
 Los endpoints existentes `POST /api/desarrollo/dentaia-smile` y
@@ -168,15 +201,14 @@ endpoint.
 
 ## Orden de aplicacion remoto
 
-No aplicar ninguna de las cinco migraciones de la tabla de estado mientras el
-reporte indique que Production ya las contiene. El siguiente paso es una lectura
-autorizada de solo lectura de `version`, `name` y `statements` en
-`supabase_migrations.schema_migrations`, seguida de comparacion con cada archivo
-local. Para cualquier operacion que vaya a cambiar el historial remoto, exigir
-antes un respaldo recuperable y una estrategia aprobada; si el SQL no coincide
-o no puede verificarse, detenerse. La conciliacion local no debe cambiar el SQL
-ni crear duplicados. No usar `db push`, `migration repair` ni `db reset
---linked` como mecanismo de recuperacion.
+No aplicar de nuevo ninguna de las cinco migraciones: Production ya registra
+las versiones alineadas y el responsable confirmo la coincidencia exacta de
+`statements` con el SQL local. Esta ejecucion no modifico el historial remoto.
+Para una divergencia futura de SQL, usar una migracion correctiva hacia delante;
+no reescribir los archivos aplicados. La transicion de entornos locales/QA con
+IDs antiguos esta documentada arriba y requiere respaldo, destino confirmado y
+aprobacion; nunca usar `db push`, `migration repair` ni `db reset --linked`
+contra Production para reconciliar identificadores.
 
 ## Produccion
 

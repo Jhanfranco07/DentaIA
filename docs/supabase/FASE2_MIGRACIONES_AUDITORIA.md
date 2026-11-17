@@ -8,6 +8,17 @@ Esta fase no aplica SQL ni Storage al proyecto remoto. Tampoco modifica las rama
 Anelis, Angie o Stephan. Las migraciones nuevas quedan bloqueadas hasta contrastar el
 esquema remoto y disponer de una base Supabase/PostgreSQL aislada.
 
+## Actualización de identificadores (2026-11-17)
+
+El responsable confirmó por consulta directa en Production que las cinco
+migraciones integradas tienen los identificadores registrados y contenido SQL
+exactamente coincidente. La rama de integración alinea los nombres locales con
+esos identificadores, preservando los archivos SQL; el mapeo y el procedimiento
+para entornos existentes se documentan en
+[CONSOLIDACION_SPRINT6.md](CONSOLIDACION_SPRINT6.md). Las referencias a nombres
+anteriores en esta auditoría describen el origen histórico, no archivos que
+deban duplicarse o reaplicarse.
+
 ## Inventario versionado
 
 `main` contiene las migraciones DI-151, directorio/ubicaciones/reseñas y
@@ -16,8 +27,10 @@ esquema remoto y disponer de una base Supabase/PostgreSQL aislada.
 `smile_analysis_access_grants` ni `dentist_services`.
 
 La rama `origin/feature/DI-172-rutinas` contiene
-`20261116090000_di172_rutinas.sql`. Debe incorporarse sin cambiar su versión ni
-reescribir su contenido cuando se valide en la base aislada.
+`20261116090000_di172_rutinas.sql` como nombre de origen. En la rama de
+integración, el archivo canónico es
+`20261117150440_di172_rutinas_20261116090000.sql`, con el mismo SQL y el
+identificador reportado en Production.
 
 La rama `origin/feature/angie-di131-catalogo` no aporta migración de Supabase al
 momento de esta auditoría; sus cambios son de presentación del directorio. La rama
@@ -72,7 +85,7 @@ base aislada.
 
 El orden propuesto para archivos independientes es:
 
-1. DI-172 original (`20261116090000_di172_rutinas.sql`).
+1. DI-172 (`20261117150440_di172_rutinas_20261116090000.sql`).
 2. `dentist_services`: FK y propiedad confirmadas contra `dentists` y Auth; RLS de
    lectura pública solo para perfiles activos/publicados y gestión del propietario.
 3. `smile_v17_storage`: consentimientos separados, resultados inmutables desde el
@@ -238,17 +251,18 @@ workflows administrativos, ubicaciones demo, payments y la migracion original
 DI-172 leida desde `origin/feature/DI-172-rutinas`. Todas terminaron con salida
 0. No se escribio en un proyecto remoto.
 
-La prueba pgTAP original `di172_rutinas_rls.sql` termino con `1..45` y salida
-0 al ejecutarse como `supabase_admin` dentro del Docker local. El rol local
-denominado `postgres` no es superusuario (`is_superuser=off`), por lo que el
-preflight intencional de la prueba lo rechaza; `supabase_admin` es el operador
-superusuario local equivalente. Se verificaron RLS, dos pacientes, lectura
-ajena denegada, insercion propia, idempotencia con `ON CONFLICT DO NOTHING`,
-fechas de America/Lima, vigencia de planes, cuenta sin rol paciente y anonimo.
+La prueba pgTAP `di172_rutinas_rls.sql` termino con `1..45` y salida 0 en un
+proyecto Supabase local temporal y aislado. Usa el rol `postgres` con
+`BYPASSRLS`; no exige que `is_superuser` sea verdadero. Se verificaron RLS, dos
+pacientes, lectura ajena denegada, insercion propia, idempotencia con
+`ON CONFLICT DO NOTHING`, fechas de America/Lima, vigencia de planes, cuenta
+sin rol paciente y anonimo.
 
 ## DI-131 dentist_services
 
-La migracion independiente `20261117041157_dentist_services.sql` crea el
+La migracion independiente, originada como
+`20261117041157_dentist_services.sql` y alineada como
+`20261117150451_dentist_services_20261117041157.sql`, crea el
 catalogo publico `public.dentist_services`. La lectura publica queda limitada a
 servicios activos. La administracion se limita a una cuenta profesional con
 `clinical.professional_accounts.status = 'verified'` y `dentist_id` asociado.

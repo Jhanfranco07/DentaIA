@@ -43,7 +43,7 @@ $config = [regex]::Replace($config, '(?m)^project_id\s*=\s*".*"$', "project_id =
 $config = [regex]::Replace($config, '(?m)^port\s*=\s*54322$', "port = 55432")
 Set-Content $configPath $config -Encoding UTF8
 New-Item -ItemType Directory -Force (Join-Path $qa "supabase\migrations"), (Join-Path $qa "supabase\tests") | Out-Null
-Copy-Item "$repo\supabase\migrations\20261116090000_di172_rutinas.sql" (Join-Path $qa "supabase\migrations")
+Copy-Item "$repo\supabase\migrations\20261117150440_di172_rutinas_20261116090000.sql" (Join-Path $qa "supabase\migrations")
 Copy-Item "$repo\supabase\tests\di172_rutinas_rls.sql" (Join-Path $qa "supabase\tests")
 $stackAttempted = $false
 try {
