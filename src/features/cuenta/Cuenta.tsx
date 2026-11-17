@@ -23,6 +23,9 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
   const router = useRouter();
   const roles = rolesDelUsuario(usuario);
   const operacion = useRef(false);
+  const provisionandoUsuario = useRef<string | null>(null);
+  const usuarioActualId = useRef<string | null>(usuario?.id ?? null);
+  usuarioActualId.current = usuario?.id ?? null;
   const activo = useRef(true);
   const [registro, setRegistro] = useState(modoInicial);
   const [continuar, setContinuar] = useState<string | null>(null);
@@ -59,6 +62,49 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
     setError(""); setAviso(""); setCampoInvalido(null);
   }, [usuario?.id]);
 
+  useEffect(() => {
+    if (cargando || errorSesion || !usuario || roles.length > 0
+      || provisionandoUsuario.current === usuario.id) return;
+
+    const usuarioId = usuario.id;
+    provisionandoUsuario.current = usuarioId;
+    setError("");
+    setAviso("Activando tu perfil de paciente…");
+
+    async function provisionarPaciente() {
+      try {
+        const { data, error: errorSesionActual } = await getSupabaseBrowserClient().auth.getSession();
+        if (errorSesionActual) throw errorSesionActual;
+        if (!data.session) throw new Error("No hay una sesión activa.");
+
+        const respuesta = await fetch("/api/cuenta/provision-patient-role", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${data.session.access_token}` },
+          cache: "no-store",
+        });
+        if (!respuesta.ok) throw new Error("No se pudo activar el perfil de paciente.");
+
+        const usuarioActualizado = await verificar();
+        if (!usuarioActualizado || rolesDelUsuario(usuarioActualizado).length === 0) {
+          throw new Error("El rol de paciente no quedó activo.");
+        }
+        if (activo.current && usuarioActualId.current === usuarioId) {
+          setError("");
+          setAviso("");
+        }
+      } catch {
+        if (activo.current && usuarioActualId.current === usuarioId) {
+          setError("No pudimos activar el perfil de paciente. Inténtalo de nuevo o contacta con soporte.");
+          setAviso("");
+        }
+      } finally {
+        if (provisionandoUsuario.current === usuarioId) provisionandoUsuario.current = null;
+      }
+    }
+
+    void provisionarPaciente();
+  }, [cargando, errorSesion, roles.length, usuario?.id, verificar]);
+
   function limpiarValidacion(campo: CampoCuenta) {
     if (campoInvalido === campo) { setCampoInvalido(null); setError(""); }
   }
@@ -94,7 +140,11 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
           setError("No pudimos volver a confirmar tu sesión. Comprueba la conexión y vuelve a iniciar sesión.");
           return;
         }
-        const rolesVerificados = rolesDelUsuario(verificado);
+        let rolesVerificados = rolesDelUsuario(verificado);
+        if (rolesVerificados.length === 0) {
+          setAviso("Activando tu perfil de paciente…");
+          return;
+        }
         const destino = rutaPrincipalPorRoles(rolesVerificados);
         if (!destino) {
           setError("La cuenta inició sesión, pero no tiene un rol DentaIA activo. Contacta con la administración.");

@@ -214,3 +214,26 @@ de `payments` con `failed`, y procesa los eventos asíncronos de fallo. Una
 confirmación verificada prevalece sobre un fallo que se haya recibido primero;
 un fallo tardío no puede degradar un pago confirmado. La expiración conserva la
 semántica terminal ya probada. Ninguna migración se aplicó en Supabase remoto.
+
+## Historial y rol inicial de paciente
+
+`/cuenta` consulta `payments` únicamente después de verificar la sesión con
+Supabase Auth y solicita solo los campos que presenta. La lectura sigue sujeta
+a `payments_select_own`; la interfaz no filtra ni decide la propiedad del pago.
+Sin sesión se ofrece iniciar sesión, y los errores de consulta permiten volver
+a intentar. Un pago de demostración no crea una suscripción Premium.
+
+El alta no confía en `user_metadata` ni en un rol recibido del navegador. Si una
+identidad confirmada no tiene asignación DentaIA, la interfaz llama al endpoint
+server-only `POST /api/cuenta/provision-patient-role`. El servidor vuelve a
+verificar la identidad, lee `app_metadata` con Auth Admin, asigna únicamente
+`paciente` cuando no existe asignación y preserva los roles ya provisionados.
+Una asignación DentaIA inválida requiere revisión administrativa; no se
+normaliza automáticamente.
+
+La comprobación funcional local cubrió carga, historial vacío, error HTTP 503,
+reintento correcto y presentación de una fila `paid` con un fixture de interfaz.
+La fila pagada del Checkout se verificó en la base local, pero no se inició
+sesión como su propietario en el navegador; por tanto, el fixture de UI no se
+presenta como una consulta visual de ese pago real. La autorización del
+propietario y la denegación entre cuentas se verificaron aparte con pgTAP.
