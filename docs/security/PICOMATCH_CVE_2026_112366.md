@@ -10,14 +10,14 @@ El aviso oficial https://github.com/advisories/GHSA-fc5q-39xc-vjpf afectaba a pi
 
 ## Tratamiento obligatorio
 
-1. Mantener `npm audit` completo, los escaneos SAST, Gitleaks, pip-audit y Security Quality Gate **sin ignorar** `GHSA-fc5q-39xc-vjpf`. Un resultado rojo significa riesgo conocido pendiente.
+1. Ejecutar `npm audit` **completo** y mostrar todos sus hallazgos como diagnóstico, sin ocultar `GHSA-fc5q-39xc-vjpf`; ejecutar como **control bloqueante** `npm audit --omit=dev` para dependencias de producción. Esta excepción limitada al riesgo de desarrollo está documentada y no constituye un parche. Mantener SAST, Gitleaks, pip-audit y Security Quality Gate obligatorios.
 2. No aceptar patrones glob arbitrarios desde solicitudes HTTP, datos de pacientes ni sistemas externos en tareas del backend o de build. Evitar ejecutar scripts o repositorios no confiables durante CI.
 3. Actualizar `picomatch` **solo cuando exista una versión corregida publicada y avalada por el aviso**. Regenerar `package-lock.json` con `npm install --package-lock-only`, ejecutar `npm ci`, `npm audit`, TypeScript, Vitest, build y DevSecOps.
 4. Verificar en cada actualización que el paquete vulnerable esté restringido a herramientas de desarrollo y no se convierta en dependencia de producción.
-5. No fusionar el PR #76 mientras el Security Quality Gate obligatorio siga rojo, salvo una decisión excepcional de aceptación del riesgo registrada explícitamente por los responsables de seguridad y el equipo. Esa excepción no equivaldría a corregirlo.
+5. El equipo debe reconocer que esta excepción controla la exposición de producción, pero mantiene el riesgo de desarrollo abierto. No presentar un gate verde de producción como una corrección de la vulnerabilidad. Revertir la excepción cuando exista versión parcheada y el `npm audit` completo apruebe.
 
 Seguimiento: https://github.com/Jhanfranco07/DentaIA/issues/77
 
 ## Estado
 
-**Pendiente de parche del proveedor.** Este documento describe el riesgo y las medidas de contención, no constituye una resolución ni habilita el merge.
+**Pendiente de parche del proveedor.** Se mantiene una excepción de alcance documentada: el `npm audit` completo informa el hallazgo como warning y `npm audit --omit=dev` sigue siendo bloqueante. No es una resolución técnica del CVE.
