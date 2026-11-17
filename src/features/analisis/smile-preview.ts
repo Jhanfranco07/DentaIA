@@ -1,4 +1,5 @@
 export const SMILE_PREVIEW_BRANCH = "feature/integracion-ia-premium";
+export const SMILE_INTEGRATION_PREVIEW_BRANCH = "integration/pr71-pr74-compat-20261117";
 const LOCAL_API = "http://127.0.0.1:7862/analyze";
 const SERVICE_SECRET_MIN_LENGTH = 32;
 
@@ -34,13 +35,13 @@ export function smileRuntime(env: NodeJS.ProcessEnv): SmileRuntime {
 
   const preview = env.VERCEL_ENV === "preview";
   const production = env.VERCEL_ENV === "production";
-  const previewEnabled = preview && env.VERCEL_GIT_COMMIT_REF === SMILE_PREVIEW_BRANCH
+  const previewEnabled = preview && [SMILE_PREVIEW_BRANCH, SMILE_INTEGRATION_PREVIEW_BRANCH].includes(env.VERCEL_GIT_COMMIT_REF ?? "")
     && env.DENTAIA_SMILE_PREVIEW_ENABLED === "true";
   const productionEnabled = production && env.DENTAIA_SMILE_PRODUCTION_ENABLED === "true";
   const failedChecks: SmileEnablementCheck[] = [];
   if (!previewEnabled && !productionEnabled) {
     if (!preview && !production) failedChecks.push("environment_not_enabled");
-    if (preview && env.VERCEL_GIT_COMMIT_REF !== SMILE_PREVIEW_BRANCH) failedChecks.push("branch_missing_or_not_allowed");
+    if (preview && ![SMILE_PREVIEW_BRANCH, SMILE_INTEGRATION_PREVIEW_BRANCH].includes(env.VERCEL_GIT_COMMIT_REF ?? "")) failedChecks.push("branch_missing_or_not_allowed");
     if (preview && env.DENTAIA_SMILE_PREVIEW_ENABLED !== "true") failedChecks.push("preview_flag_missing_or_disabled");
     if (production && env.DENTAIA_SMILE_PRODUCTION_ENABLED !== "true") failedChecks.push("environment_not_enabled");
   }
