@@ -30,6 +30,7 @@ import EstadoHistorialClinico, {
   type VistaHistorialClinico,
 } from "./EstadoHistorialClinico";
 import MisServicios from "./MisServicios";
+import { esPerfilQa } from "@/features/directorio/qa-preview";
 import styles from "./profesional.module.css";
 import { Icono } from "@/components/Identidad";
 
@@ -120,7 +121,7 @@ function mensajeSeguro(error: unknown): string {
   return "No se pudo completar la consulta clínica.";
 }
 
-export default function ProfesionalClinico() {
+export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: boolean }) {
   const { usuario, cargando: cargandoSesion, errorSesion, verificar } = useSesion();
   const control = useRef(crearControlConsultasClinicas());
   const controlRevalidacion = useRef(crearControlRevalidacionHistorial());
@@ -146,6 +147,10 @@ export default function ProfesionalClinico() {
     }
     const control = new AbortController();
     const dentistId = dentistIdDirectorio;
+    if (qaPreview && esPerfilQa(dentistId)) {
+      setVisibilidadDirectorio({ dentistId, estado: "visible" });
+      return;
+    }
     async function consultarVisibilidad() {
       setVisibilidadDirectorio({ dentistId, estado: "cargando" });
       try {
@@ -161,7 +166,7 @@ export default function ProfesionalClinico() {
     }
     void consultarVisibilidad();
     return () => control.abort();
-  }, [dentistIdDirectorio, usuario, sesionRemotaExpirada]);
+  }, [dentistIdDirectorio, usuario, sesionRemotaExpirada, qaPreview]);
 
   const estadoDirectorio = dentistIdDirectorio && visibilidadDirectorio?.dentistId === dentistIdDirectorio
     ? visibilidadDirectorio.estado : "cargando";
