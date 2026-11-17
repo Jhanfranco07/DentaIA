@@ -27,3 +27,12 @@ test('La rama de integración habilita solo el Preview académico configurado',(
  assert.equal(configurarClinica({...preview,VERCEL_GIT_COMMIT_REF:DENTALIA_INTEGRATION_PREVIEW_BRANCH,VERCEL_ENV:'production'}).enabled,false);
  assert.equal(configurarClinica({...preview,VERCEL_GIT_COMMIT_REF:'main'}).enabled,false);
 });
+test('Alias de Preview #76 aceptado solo en rama integrada y sin orígenes cruzados',()=>{
+ const hostname='dent-ai-git-integration-pr71-pr74-aa5dad-jhan-francos-projects.vercel.app';
+ const config={VERCEL_URL:preview.VERCEL_URL,VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:DENTALIA_INTEGRATION_PREVIEW_BRANCH};
+ assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me'),config),true);
+ assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me',{headers:{origin:'https://otro.vercel.app'}}),config),false);
+ assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me',{headers:{'sec-fetch-site':'cross-site'}}),config),false);
+ assert.equal(origenPreviewAutorizado(new Request('https://'+hostname+'/api/professional/me'),{...config,VERCEL_GIT_COMMIT_REF:'develop'}),false);
+ assert.equal(origenPreviewAutorizado(new Request('https://otro.vercel.app/api/professional/me'),config),false);
+});
