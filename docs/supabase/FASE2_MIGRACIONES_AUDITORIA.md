@@ -121,3 +121,17 @@ Por estos motivos no se crearon buckets ni tablas nuevas, no se generaron
    suspensión, upsert diario y webhooks duplicados/desordenados.
 5. Ejecutar asesores de seguridad, generar tipos desde el esquema validado y abrir
    PRs separados por funcionalidad.
+
+## Intento de lectura remota para recuperación
+
+El 16 de noviembre se intentó una única consulta con `supabase db query`, usando
+`--remote vwmdknzjyvmsdqpepykz --read-only` y limitada a las seis versiones
+faltantes. La CLI 3.2.0 la rechazó antes de enviar SQL con
+`DbQueryLoginRequiredError`: no hay sesión ni `SUPABASE_ACCESS_TOKEN` en este
+entorno. No se usó `link`, `push`, `repair`, `reset --linked` ni ninguna
+operación de escritura remota.
+
+La recuperación de octubre y la comparación directa de `statements` de DI-36
+requieren una sesión con permiso `database_read` o una exportación de solo
+lectura que entregue el responsable. Hasta entonces no se versionarán
+reconstrucciones ni se declarará una reconstrucción local fiel.
