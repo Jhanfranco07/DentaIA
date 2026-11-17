@@ -55,7 +55,7 @@ export async function POST(req: Request) {
 
   try {
     if (suscripcionesSandboxHabilitadas(process.env) && await procesarEventoSuscripcion(event)) return response(200, { received: true });
-    if (event.type.startsWith("customer.subscription.") || (event.type === "checkout.session.completed" && (event.data.object as Stripe.Checkout.Session).mode === "subscription")) {
+    if (event.type.startsWith("customer.subscription.") || (event.type === "checkout.session.completed" && (event.data?.object as Stripe.Checkout.Session | undefined)?.mode === "subscription")) {
       return response(200, { received: true }); // Never interpret recurring Checkout as a one-time payment.
     }
     switch (event.type) {
