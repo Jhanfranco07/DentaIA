@@ -23,9 +23,3 @@ condition = "AND"
 regexTarget = "secret"
 regexes = ['''^sb_publishable_[A-Za-z0-9_-]+$''']
 paths = ['''(?:^|/)\.env\.example$''']
-[[rules.allowlists]]
-description = "Constante sintética exclusiva de pruebas locales de evaluación"
-condition = "AND"
-regexTarget = "secret"
-regexes = ['''^evaluation-test-secret-0123456789abcdef$''']
-paths = ['''(?:^|/)services/dental-vision/tests/test_evaluation\.py$''']
