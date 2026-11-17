@@ -24,6 +24,31 @@ momento de esta auditoría; sus cambios son de presentación del directorio. La 
 `origin/feature/stripe-sandbox` contiene integración de aplicación, mientras que
 `payments` ya está versionada en `main`.
 
+## Recuperación de la cadena base
+
+La comparación con las once versiones remotas confirma que faltan las dos
+migraciones de octubre y las cuatro de DI-36. Se localizaron los cuatro SQL
+originales de DI-36 en el commit `869db03`, fuera de `supabase/migrations`:
+
+| Versión remota | Archivo original | SHA-256 documentado |
+| --- | --- | --- |
+| 20261104004040 | `docs/arquitectura/integracion_fase8/migraciones/20261103235358_di36_dentalia_01_administracion.sql` | `8f5117d6040e6db4190e9e66cd2198bb26f62d6da96065521e51bc505a7c8181` |
+| 20261104004047 | `docs/arquitectura/integracion_fase8/migraciones/20261103235408_di36_dentalia_02_modelo_clinico.sql` | `19c3253d3b4655e3a812a1740fb8757071dcdab7a2d6d7b812478ea3648cb6f1` |
+| 20261104004054 | `docs/arquitectura/integracion_fase8/migraciones/20261103235409_di36_dentalia_03_rpc_clinicos.sql` | `c32fb15e0d7e774d322a1fcf019a5b35d1317ce8b9ba43895d028fe5f36f4eb9` |
+| 20261104004101 | `docs/arquitectura/integracion_fase8/migraciones/20261103235411_di36_dentalia_04_workspace.sql` | `12cdef6a52dd03821a53aa295ead67b6cf39f7c97ad1f5ad0b6a0d6f176156ad` |
+
+`docs/arquitectura/integracion_fase8/EJECUCION_MIGRACIONES_REMOTAS.json`
+registra esa correspondencia y declara que el contenido aplicado fue idéntico.
+No se localizaron archivos Git para `20261025150315` ni `20261025150507`.
+
+Los cuatro SQL DI-36 contienen guardas de destino, aprobación y huella del
+esquema previo para impedir su ejecución fuera del contexto aprobado. Copiarlos
+sin más a `supabase/migrations` no permite reconstrucción local y puede ocultar
+deriva. El siguiente paso seguro es una extracción remota **solo de lectura**
+de `supabase_migrations.schema_migrations.statements` para las seis versiones
+faltantes, revisión de secretos/datos/DDL privilegiado y comparación hash a
+hash antes de versionar los originales con su versión remota.
+
 ## Hallazgos de DI-172
 
 La migración define `oral_care_routine_plans`,
