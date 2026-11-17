@@ -44,6 +44,7 @@ export async function sincronizarSuscripcion(subscriptionId: string, eventCreate
   const admin = getSupabaseAdmin();
   const row = {
     user_id: userId,
+    created_at: fechaStripe(subscription.created) ?? eventTime,
     stripe_customer_id: customerId,
     stripe_subscription_id: subscription.id,
     stripe_price_id: priceId,
@@ -83,7 +84,7 @@ export async function sincronizarSuscripcion(subscriptionId: string, eventCreate
   const { error: updateError } = await admin.from("premium_subscriptions").update({
     ...row,
     checkout_session_id: checkoutSessionId ?? newer.checkout_session_id,
-  }).eq("stripe_subscription_id", subscription.id).lt("stripe_event_created_at", eventTime);
+  }).eq("stripe_subscription_id", subscription.id).lte("stripe_event_created_at", eventTime);
   if (updateError) throw updateError;
 }
 
