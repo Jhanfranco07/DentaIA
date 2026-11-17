@@ -16,6 +16,15 @@ estas condiciones:
 No se habilita en Production. No configurar `DENTAIA_SMILE_PREVIEW_ENABLED` para
 Production ni usar `localhost` como destino remoto.
 
+## Variables de sistema de Vercel
+
+El Route Handler comprueba `VERCEL_ENV` y `VERCEL_GIT_COMMIT_REF` en runtime. En
+Project Settings debe estar habilitada la exposición de **System Environment
+Variables** para que Vercel entregue ambas; no se crean manualmente ni se sustituyen
+por valores públicos. Si falta la segunda, la respuesta autenticada incluirá solo
+`branch_missing_or_not_allowed`, sin mostrar secretos, URL del backend ni valores de
+configuración.
+
 ## Límite para FastAPI dentro de Vercel
 
 Vercel permite Functions Python/FastAPI, pero el límite de cuerpo de Function

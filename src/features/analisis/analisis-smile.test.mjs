@@ -5,6 +5,7 @@ import test from "node:test";
 const page = readFileSync(new URL("./AnalisisDental.tsx", import.meta.url), "utf8");
 const contract = readFileSync(new URL("./smile-contract.ts", import.meta.url), "utf8");
 const smileRoute = readFileSync(new URL("../../app/api/desarrollo/dentaia-smile/route.ts", import.meta.url), "utf8");
+const smilePreview = readFileSync(new URL("./smile-preview.ts", import.meta.url), "utf8");
 
 test("Smile exige consentimiento explícito y una acción antes de enviar la fotografía", () => {
   assert.match(page, /checked=\{consentimiento\}/);
@@ -17,7 +18,7 @@ test("Smile exige consentimiento explícito y una acción antes de enviar la fot
 
 test("Smile Preview requires a branch-gated HTTPS target and service secret", () => {
   for (const text of ["VERCEL_ENV", "VERCEL_GIT_COMMIT_REF", "DENTAIA_SMILE_PREVIEW_ENABLED", "DENTAIA_SMILE_SERVICE_SECRET", "target.protocol === \"https:\"", "NODE_ENV === \"development\""])
-    assert.ok(smileRoute.includes(text));
+    assert.ok(smilePreview.includes(text));
   assert.match(smileRoute, /X-Dentaia-Smile-Secret/);
 });
 
