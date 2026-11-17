@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ getUser: vi.fn(), readPlan: vi.fn() }));
+const mocks = vi.hoisted(() => ({ getUser: vi.fn(), readPlan: vi.fn(), single: vi.fn() }));
 vi.mock("@/lib/supabase/server-auth", () => ({
   getAccessTokenFromRequest: (request: Request) => {
     const match = /^Bearer (.+)$/.exec(request.headers.get("authorization") ?? "");
@@ -9,6 +9,17 @@ vi.mock("@/lib/supabase/server-auth", () => ({
   getUserFromRequest: mocks.getUser,
 }));
 vi.mock("@/features/planes/premium-server", () => ({ readEffectivePlan: mocks.readPlan }));
+vi.mock("@/lib/supabase/request.server", () => ({
+  createUserScopedSupabaseClient: () => ({
+    from: () => ({
+      select: () => ({
+        order: () => ({
+          limit: () => ({ maybeSingle: mocks.single }),
+        }),
+      }),
+    }),
+  }),
+}));
 
 import { GET } from "./route";
 
@@ -20,6 +31,7 @@ beforeEach(() => {
   vi.resetAllMocks();
   mocks.getUser.mockResolvedValue({ id: "11111111-1111-4111-8111-111111111111" });
   mocks.readPlan.mockResolvedValue("basic");
+  mocks.single.mockResolvedValue({ data: null, error: null });
 });
 
 describe("consulta server-side del plan", () => {
@@ -32,7 +44,7 @@ describe("consulta server-side del plan", () => {
     mocks.readPlan.mockResolvedValue("premium");
     const response = await GET(request("Bearer token_fixture"));
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ plan: "premium" });
+    expect(await response.json()).toEqual({ plan: "premium", subscription: null });
     expect(mocks.getUser).toHaveBeenCalledTimes(1);
     expect(mocks.readPlan).toHaveBeenCalledWith("token_fixture");
     expect(response.headers.get("Cache-Control")).toBe("no-store");
