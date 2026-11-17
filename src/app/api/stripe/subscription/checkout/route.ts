@@ -6,11 +6,14 @@ import { getStripe } from "@/lib/stripe/server";
 import { precioPremiumConfigurado } from "@/lib/stripe/subscriptions";
 import { siteUrl } from "@/lib/stripe/urls";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { PLAN_PREMIUM } from "@/lib/stripe/plan";
+import { suscripcionesSandboxHabilitadas } from "@/lib/stripe/subscription-runtime";
 
 export const runtime = "nodejs";
 const fail = (status: number, error: string) => NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });
 
 export async function POST(req: Request) {
+  if (!suscripcionesSandboxHabilitadas(process.env)) return fail(503, "Suscripciones disponibles solo en el Preview autorizado.");
   const user = await getUserFromRequest(req).catch(() => null);
   if (!user) return fail(401, "Inicia sesión para contratar Premium.");
   try {
@@ -26,7 +29,17 @@ export async function POST(req: Request) {
     // Never accept a price or user ID from the browser. Stripe validates the recurring Price.
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
-      line_items: [{ price, quantity: 1 }],
+      line_items: [{
+        quantity: 1,
+        ...(price ? { price } : {
+          price_data: {
+            currency: PLAN_PREMIUM.currency,
+            unit_amount: PLAN_PREMIUM.amount,
+            product_data: { name: "DentaIA Premium mensual (Sandbox)" },
+            recurring: { interval: "month" as const, interval_count: 1 },
+          },
+        }),
+      }],
       client_reference_id: user.id,
       customer_email: user.email ?? undefined,
       subscription_data: { metadata: { dentaia_user_id: user.id, dentaia_plan: "premium" } },
