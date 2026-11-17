@@ -58,7 +58,7 @@ export function origenProductionAutorizado(request:Request,env:Env){
   if(url.protocol!=="https:"||request.headers.get("sec-fetch-site")==="cross-site")return false;
   const hosts=new Set(["dent-ai-five.vercel.app"]);
   const vercelHost=env.VERCEL_URL??"";
-  if(/^[a-z0-9-]+(?:\\.[a-z0-9-]+)*\\.vercel\\.app$/i.test(vercelHost))hosts.add(vercelHost.toLowerCase());
+  if(/^[a-z0-9-]+(?:\.[a-z0-9-]+)*\.vercel\.app$/i.test(vercelHost))hosts.add(vercelHost.toLowerCase());
   return hosts.has(url.hostname.toLowerCase())&&(!origin||origin===url.origin);
  }catch{return false;}
 }
