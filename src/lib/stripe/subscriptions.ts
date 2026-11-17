@@ -2,7 +2,7 @@ import "server-only";
 import type Stripe from "stripe";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getStripe } from "@/lib/stripe/server";
-import { PLAN_PREMIUM } from "@/lib/stripe/plan";
+import { PLAN_PREMIUM_MENSUAL } from "@/lib/stripe/plan";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const estados = new Set(["trialing", "active", "past_due", "unpaid", "paused", "canceled", "incomplete", "incomplete_expired"]);
@@ -24,8 +24,8 @@ export function periodoSuscripcion(subscription: Stripe.Subscription, configured
   const price = item?.price;
   if (!item || subscription.items.data.length !== 1 || !price
     || (configuredPriceId && price.id !== configuredPriceId)
-    || price.currency !== PLAN_PREMIUM.currency
-    || price.unit_amount !== PLAN_PREMIUM.amount
+    || price.currency !== PLAN_PREMIUM_MENSUAL.currency
+    || price.unit_amount !== PLAN_PREMIUM_MENSUAL.amount
     || price.recurring?.interval !== "month"
     || price.recurring?.interval_count !== 1) {
     throw new Error("Suscripción Stripe con precio o intervalo inesperado.");
