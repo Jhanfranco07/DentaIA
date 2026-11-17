@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe/server";
+import { procesarEventoSuscripcion } from "@/lib/stripe/subscriptions";
 import {
   handleAsyncPaymentFailed,
   handleAsyncPaymentSucceeded,
@@ -52,6 +53,7 @@ export async function POST(req: Request) {
   }
 
   try {
+    if (await procesarEventoSuscripcion(event)) return response(200, { received: true });
     switch (event.type) {
       case "checkout.session.completed":
         await handleCheckoutCompleted(event);
