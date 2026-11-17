@@ -41,6 +41,14 @@ describe("Checkout de suscripción mensual", () => {
     expect((await POST(request())).status).toBe(503);
     expect(mocks.session).not.toHaveBeenCalled();
   });
+  it("admite Production únicamente con Sandbox y habilitación explícita", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("DENTAIA_STRIPE_SANDBOX_PRODUCTION_ENABLED", "true");
+    vi.stubEnv("STRIPE_SECRET_KEY", "sk_test_fixture");
+    expect((await POST(request())).status).toBe(200);
+    vi.stubEnv("STRIPE_SECRET_KEY", "sk_live_fixture");
+    expect((await POST(request())).status).toBe(503);
+  });
   it("requiere identidad validada", async () => {
     mocks.getUser.mockResolvedValue(null);
     expect((await POST(request())).status).toBe(401);
