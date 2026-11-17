@@ -1,77 +1,126 @@
 "use client";
-import { PLAN_PREMIUM } from "@/lib/stripe/plan";
-import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { useState } from "react";
 
-const precio = new Intl.NumberFormat("es-PE", {
-  style: "currency",
-  currency: PLAN_PREMIUM.currency.toUpperCase(),
-}).format(PLAN_PREMIUM.amount / 100);
+import { useCallback, useEffect, useState } from "react";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+
+type Estado = {
+  plan: "basic" | "premium";
+  subscription: { status: string; current_period_end: string | null; cancel_at_period_end: boolean } | null;
+};
 
 export default function PremiumPage() {
-  const [cargando, setCargando] = useState(false);
+  const [estado, setEstado] = useState<Estado | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [procesando, setProcesando] = useState(false);
   const [error, setError] = useState("");
+  const [mensaje, setMensaje] = useState("");
 
-  async function pagar() {
-    setError("");
+  const token = useCallback(async () => {
+    const { data, error } = await getSupabaseBrowserClient().auth.getSession();
+    if (error || !data.session) throw new Error("Inicia sesión para continuar.");
+    return data.session.access_token;
+  }, []);
+
+  const cargar = useCallback(async () => {
     setCargando(true);
+    setError("");
     try {
-      const client = getSupabaseBrowserClient();
-      const { data } = await client.auth.getSession();
-      if (!data.session) throw new Error("Inicia sesión para continuar.");
+      const accessToken = await token();
+      const res = await fetch("/api/premium/status", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        cache: "no-store",
+        signal: AbortSignal.timeout(10000),
+      });
+      if (!res.ok) throw new Error("No se pudo consultar tu plan.");
+      const data: Estado = await res.json();
+      setEstado(data);
+    } catch (cause) {
+      setEstado(null);
+      setError(cause instanceof Error ? cause.message : "No se pudo consultar tu plan.");
+    } finally {
+      setCargando(false);
+    }
+  }, [token]);
 
-      const res = await fetch("/api/stripe/checkout", {
+  useEffect(() => { void cargar(); }, [cargar]);
+
+  async function contratar() {
+    setProcesando(true);
+    setError("");
+    setMensaje("");
+    try {
+      const accessToken = await token();
+      const res = await fetch("/api/stripe/subscription/checkout", {
         method: "POST",
-        headers: { Authorization: `Bearer ${data.session.access_token}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
         signal: AbortSignal.timeout(15000),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.error ?? "No se pudo iniciar el pago.");
-      const checkoutUrl = new URL(json.url);
-      if (checkoutUrl.protocol !== "https:" || checkoutUrl.hostname !== "checkout.stripe.com") {
-        throw new Error("Stripe devolvió una URL de pago no válida.");
-      }
-      window.location.assign(checkoutUrl.href);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Error inesperado.");
-      setCargando(false);
+      if (!res.ok) throw new Error(json.error ?? "No se pudo iniciar la suscripción.");
+      const url = new URL(json.url);
+      if (url.protocol !== "https:" || url.hostname !== "checkout.stripe.com") throw new Error("URL de Stripe no válida.");
+      window.location.assign(url.href);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "No se pudo iniciar la suscripción.");
+      setProcesando(false);
     }
   }
+
+  async function cancelar() {
+    setProcesando(true);
+    setError("");
+    setMensaje("");
+    try {
+      const accessToken = await token();
+      const res = await fetch("/api/stripe/subscription/cancel", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${accessToken}` },
+        signal: AbortSignal.timeout(15000),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "No se pudo cancelar.");
+      setMensaje("Cancelación solicitada. Conservarás el acceso hasta que finalice el período pagado.");
+      await cargar();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "No se pudo cancelar.");
+    } finally {
+      setProcesando(false);
+    }
+  }
+
+  const suscripcion = estado?.subscription;
+  const vigente = estado?.plan === "premium";
+  const existente = suscripcion && ["active", "trialing", "past_due", "unpaid", "incomplete"].includes(suscripcion.status);
+  const fecha = suscripcion?.current_period_end && !Number.isNaN(Date.parse(suscripcion.current_period_end))
+    ? new Date(suscripcion.current_period_end).toLocaleDateString("es-PE") : null;
 
   return (
     <main className="module-shell">
       <div className="page-intro">
-        <p>
-          Demostración de Checkout de pago único en Stripe Sandbox. El monto es
-          ficticio y este flujo no activa una suscripción ni funciones Premium.
-        </p>
-        <span className="pill">PLAN PREMIUM</span>
-        <h1>DentAI Premium</h1>
+        <span className="pill">STRIPE SANDBOX · SUSCRIPCIÓN MENSUAL</span>
+        <h1>DentaIA Premium</h1>
+        <p>Suscripción de prueba, con confirmación segura desde Stripe. No se realizan cargos reales.</p>
       </div>
-
       <section className="surface panel">
-        <h2>{PLAN_PREMIUM.name}</h2>
-        <p className="precio">{precio}</p>
-        <button
-          className="action"
-          onClick={pagar}
-          disabled={cargando}
-          aria-busy={cargando}
-        >
-          {cargando ? "Redirigiendo…" : "Pagar con Stripe (modo prueba)"}
-        </button>
-        {error && (
-          <p className="notice notice-error" role="alert">
-            {error}
-          </p>
-        )}
+        <h2>Tu plan</h2>
+        {cargando ? <p role="status">Consultando tu suscripción…</p> : estado && <>
+          <p><strong>{vigente ? "Premium activo" : "Basic"}</strong></p>
+          {suscripcion && <p>Estado de la suscripción: {suscripcion.status}. {fecha ? `Vigencia hasta: ${fecha}.` : ""}</p>}
+          {suscripcion?.cancel_at_period_end && <p>Tu suscripción está programada para cancelarse al finalizar el período.</p>}
+          {!existente && <button type="button" className="action" disabled={procesando} onClick={() => void contratar()}>
+            {procesando ? "Procesando…" : "Contratar Premium mensual (prueba)"}
+          </button>}
+          {existente && !suscripcion?.cancel_at_period_end && ["active", "trialing", "past_due"].includes(suscripcion!.status) &&
+            <button type="button" className="action" disabled={procesando} onClick={() => void cancelar()}>
+              {procesando ? "Procesando…" : "Cancelar al final del período"}
+            </button>}
+          <button type="button" className="action" disabled={procesando || cargando} onClick={() => void cargar()}>Actualizar estado</button>
+        </>}
+        {!estado && !cargando && <button type="button" className="action" onClick={() => void cargar()}>Reintentar</button>}
+        {mensaje && <p className="notice" role="status">{mensaje}</p>}
+        {error && <p className="notice notice-error" role="alert">{error}</p>}
       </section>
-
-      <p className="notice">
-        <strong>Modo prueba</strong>
-        No se cobra dinero real. Usa la tarjeta 4242 4242 4242 4242, cualquier
-        fecha futura y cualquier CVC.
-      </p>
+      <p className="notice">Usa solamente la tarjeta de prueba de Stripe 4242 4242 4242 4242, una fecha futura y un CVC de prueba. El plan se activa únicamente cuando el webhook firmado confirma una suscripción activa y vigente. Las funciones avanzadas que siguen en desarrollo no se habilitan automáticamente.</p>
     </main>
   );
 }
