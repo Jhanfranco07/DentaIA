@@ -69,8 +69,8 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-  A[Python e instalación] --> B[FastAPI: evaluación]
-  A --> C[Contratos health/predict]
+  A[Python e instalación] --> B[FastAPI: Smile V17]
+  A --> C[Contratos health/analyze]
   A --> D[Autenticación y errores]
   A --> E[Bandit]
   A --> F[Backend gate]
@@ -106,17 +106,17 @@ El inventario recorre todos los `*.test.mjs` de `src/features` y `src/app`. Cada
 
 Baseline local: **493 casos Node** (463 unitarios, 11 de integración, 16 de contratos y 3 de regresión), más cuatro pruebas del observador/gate. La incorporación futura de archivos cambia los recuentos reales reflejados en JUnit.
 
-Backend conserva `pytest -m 'not real'`: las pruebas de `test_api.py` se particionan entre contratos (`formats_and_normalized_contract`, `prediction_preserves_exact_class`, `class_id_and_name`, `load_once_and_health`) y su complemento de autenticación/errores. Las demás pruebas no reales se ejecutan en FastAPI/evaluación. Baseline: 29 aprobadas y 2 pruebas reales deseleccionadas. Se usan dobles de detector, imágenes sintéticas y constantes locales de prueba, sin descargar pesos ni llamar servicios remotos.
+Backend ejecuta `tests/test_smile_api_auth.py` con pytest para producir JUnit. La suite de FastAPI cubre el secreto interno y `/health`; los jobs de contratos y autenticación ejecutan, respectivamente, el rechazo de `/analyze` sin secreto y el rechazo del secreto corto. No descarga modelos ni llama a Roboflow durante CI.
 
 No hay ESLint configurado en `main`: el job lo declara explícitamente; si aparece `scripts.lint`, lo ejecuta y exige éxito. No se presenta ese aviso como análisis ESLint aprobado. TypeScript, Semgrep y build son controles obligatorios separados.
 
 ## Herramientas, seguridad y gates
 
 - Node 22, `npm ci`, `npm run typecheck`, `npm run build`, Node test runner y JUnit.
-- Python 3.11 y requirements existentes; pytest se actualiza de 9.0.2 a **9.0.3** para corregir `PYSEC-2026-1845`, detectada por pip-audit. Solo cambian dependencias de pruebas.
+- Python 3.11, `services/dental-vision/requirements.txt` y pytest **8.3.5** instalado exclusivamente para ejecutar la suite de Smile V17.
 - `npm audit` completo, sin umbral reducido ni exclusión de devDependencies; `pip-audit 2.10.1` resuelve dependencias transitivas del runtime Python, sin ignorar advisories.
 - Semgrep OSS **1.185.0**, cinco reglas locales versionadas: ejecución dinámica JS/Python, TLS desactivado Python/Node y shell Python. `--error --strict`, sin reglas remotas cambiantes ni licencia. Alcance limitado, no equivale a SAST exhaustivo.
-- Gitleaks OSS **8.30.1**, snapshot completo de archivos versionados, resultados 100% redactados, sin subir informes con secretos. No revisa todo el historial previo. Excepciones revisadas de `generic-api-key`: SHA-256 de seis archivos de evidencia, clave explícitamente pública `sb_publishable_` de `.env.example` y una constante sintética exacta en `test_evaluation.py`. Condición AND de archivo y valor; no se excluyen carpetas completas ni credenciales privadas.
+- Gitleaks OSS **8.30.1**, snapshot completo de archivos versionados, resultados 100% redactados, sin subir informes con secretos. No revisa todo el historial previo. Excepciones revisadas de `generic-api-key`: SHA-256 de seis archivos de evidencia y clave explícitamente pública `sb_publishable_` de `.env.example`. No se excluyen carpetas completas ni credenciales privadas.
 - Bandit **1.9.4** bloquea severidad media/alta del código `services/dental-vision/app`.
 - actionlint **1.7.12** y PyYAML **6.0.3**, más validación de DAG, permisos, SHA, persistencia de credenciales, eventos y ausencia de comandos de publicación.
 - Checkout v6, setup-node v6, setup-python v6.1.0 y upload-artifact v4 fijados a SHA completos. Binarios Gitleaks/actionlint fijados a versión y SHA-256 verificado contra los checksums oficiales. No se utiliza un tag flotante `latest`.
@@ -129,7 +129,7 @@ Permisos: `contents: read` en controles; se añade `actions: read` solo a observ
 
 Vercel y Railway ya informan estados GitHub. CD espera el estado Vercel del SHA exacto y falla si no es exitoso. Consulta Railway si existe: un fallo bloquea y «No deployment needed» se informa como tal; su ausencia no acredita un despliegue del backend. No se cambia la configuración real de ninguna plataforma.
 
-La prueba posterior realiza únicamente GET HTTPS a una URL `*.vercel.app` publicada en Deployments API para ese SHA, sin enviar tokens de GitHub ni seguir redirects. HTTP 401/403 se informa como Preview protegida y **no prueba funcional ejecutada**; sin URL pública se informa la carencia. Otros errores HTTP bloquean. No se invocan `/predict`, webhooks ni rutas de escritura remotas. Una respuesta 2xx/3xx demuestra solo disponibilidad HTTP, no un pago E2E ni una promoción de Production.
+La prueba posterior realiza únicamente GET HTTPS a una URL `*.vercel.app` publicada en Deployments API para ese SHA, sin enviar tokens de GitHub ni seguir redirects. HTTP 401/403 se informa como Preview protegida y **no prueba funcional ejecutada**; sin URL pública se informa la carencia. Otros errores HTTP bloquean. No se invocan `/analyze`, webhooks ni rutas de escritura remotas. Una respuesta 2xx/3xx demuestra solo disponibilidad HTTP, no un pago E2E ni una promoción de Production.
 
 La conexión Vercel disponible durante la inspección no permite acceder directamente a `dent-ai`; se utilizan sus estados/deployments GitHub. No hay acceso a configuración interna de Railway. El estado de `main` inspeccionado indica Vercel publicado y Railway «No deployment needed - watched paths not modified». Los permisos para consultar branch protection devolvieron **403**; el endpoint de rulesets devolvió lista vacía. No se alteran protecciones. Un administrador debe revisar los checks requeridos antiguos antes del merge: se conserva «Validación final», pero los ocho jobs antiguos se distribuyen entre pipelines nuevos y sus nombres cambian.
 

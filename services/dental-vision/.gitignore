@@ -6,5 +6,4 @@ models/*
 !models/.gitkeep
 evidence/private/
 *.onnx
-!Dockerfile.onnx
 Ultralytics/
