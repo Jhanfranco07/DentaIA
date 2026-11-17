@@ -68,7 +68,8 @@ La ejecución real de DevSecOps sobre el commit final y el enlace del PR se info
 ### Historial, alta y autorización
 
 - En `/cuenta?perfil=1`, una sesión ficticia local verificó los estados de comprobación/carga y vacío. Un 503 simulado mostró el error accesible y el botón «Reintentar» recuperó la consulta.
-- La presentación de una fila `paid` (fecha, USD 20.00 y estado) se verificó con una respuesta REST simulada en el navegador; el fixture no escribió en Supabase. No se inició sesión como propietario del Checkout existente, por lo que no se declara una lectura visual de su transacción real.
+- Una captura aportada después del reinicio de `next dev` muestra `/cuenta` en una sesión autenticada y una fila `paid` de USD 20.00. La consulta del navegador sigue protegida por RLS (`payments_select_own`); no se repitió Checkout. La captura no se conserva en el repositorio para evitar incluir datos de cuenta.
+- El overlay de desarrollo `[object Event]` se observó antes del reinicio de `next dev`, que había compartido `.next` con `next build`. Tras el reinicio, `/cuenta` respondió HTTP 200 y la captura posterior muestra el historial sin el overlay. Los logs del servidor no registraron una excepción de render; sí mostraron advertencias Autoprefixer preexistentes y respuestas 404 del BFF clínico local, ajenas al historial de pagos.
 - El flujo local de alta confirmó que una identidad nueva confirmada recibe únicamente el rol `paciente` mediante `app_metadata` de servidor; el endpoint no confía en `user_metadata` ni en datos de rol del cliente y preserva asignaciones existentes. Se añadieron siete pruebas unitarias del endpoint, incluida la denegación de identidades no confirmadas.
 - La prueba pgTAP `payments_rls.sql` aprobó 8 aserciones dentro de una transacción revertida: lectura propia, aislamiento de la otra cuenta, denegación de INSERT/UPDATE/DELETE, bloqueo de lectura del ledger, estado `failed` y ausencia de Premium. No se modificaron privilegios para hacer pasar las pruebas.
 - Se retiraron cinco cuentas de prueba `example.test` de Supabase local tras verificar que ninguna tenía pagos ni suscripciones; no se borró el pago del Checkout Sandbox.
@@ -95,7 +96,7 @@ El conjunto pgTAP documentado previamente (70 aserciones, incluido DI-172) más 
 
 ### CI/CD y límites
 
-Para el commit `ef0264a`, CI, TypeScript, Build Next.js, Automated Testing,
+Para el commit `ac94516`, CI, TypeScript, Build Next.js, Automated Testing,
 Security, Backend IA, DevSecOps y los gates de Continuous Delivery terminaron
 en verde en GitHub Actions. Vercel Preview y su comprobación HTTP también
 pasaron; el workflow solo observó el estado del proveedor y una URL pública
@@ -105,8 +106,9 @@ no se hizo promoción ni despliegue productivo.
 
 El build local terminó, pero compartir `.next` con el servidor de desarrollo
 rompió temporalmente ese proceso; se reinició Next.js en `localhost:3000` y se
-verificó `/premium` con HTTP 200. No hacer merge a `main` hasta cerrar la
-comprobación visual del historial con la sesión exacta del propietario del
-pago, además de la revisión humana requerida.
-
-La comprobación visual del historial con la sesión exacta del propietario del Checkout queda pendiente; RLS y el renderizado de la fila se verificaron por separado. Production sigue bloqueada hasta obtener autorización de despliegue y realizar las comprobaciones remotas de migraciones pertinentes. No hacer merge a `main` hasta revisar los checks del PR y cerrar esa prueba manual de propiedad del pago.
+verificó `/premium` y `/cuenta` con HTTP 200. La captura autenticada del
+historial cierra la comprobación visual del pago existente, sin repetir
+Checkout. La recomendación de merge sigue sujeta a revisión humana y a revisar
+los checks vigentes del PR. Production sigue bloqueada hasta obtener
+autorización de despliegue y realizar las comprobaciones remotas de
+migraciones pertinentes.

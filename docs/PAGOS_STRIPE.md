@@ -204,10 +204,13 @@ Para desarrollo local, `.env.example` documenta `STRIPE_SECRET_KEY`
 (`sk_test_`), `STRIPE_WEBHOOK_SECRET`, `SUPABASE_SERVICE_ROLE_KEY` y
 `NEXT_PUBLIC_SITE_URL`. La clave service-role y los secretos Stripe son solo
 de servidor. Las URLs de retorno requieren HTTPS salvo loopback local.
-No se configuraron Railway/Vercel Production ni Stripe Live. No se ejecutó una
-transacción real de Sandbox en esta integración; las pruebas automatizadas son
-fixtures. Una prueba end-to-end requiere credenciales Stripe de prueba,
-Stripe CLI/túnel del webhook y una sesión Sandbox, sin guardar secretos en Git.
+No se configuraron Railway/Vercel Production ni Stripe Live. Se validó un
+Checkout real de Stripe Sandbox por USD 20.00: `checkout.session.completed`,
+webhook HTTP 200, persistencia `paid` en Supabase local y consulta del pago en
+`/cuenta` desde una sesión autenticada. La reentrega del evento existente
+confirmó idempotencia; no se repitió Checkout. Las pruebas automatizadas siguen
+siendo fixtures y no sustituyen esa comprobación manual. No se guardan
+credenciales ni capturas con datos de cuenta en Git.
 
 Esta rama añade `20261117050000_payments_failed_status.sql`, que amplía el CHECK
 de `payments` con `failed`, y procesa los eventos asíncronos de fallo. Una
@@ -233,7 +236,7 @@ normaliza automáticamente.
 
 La comprobación funcional local cubrió carga, historial vacío, error HTTP 503,
 reintento correcto y presentación de una fila `paid` con un fixture de interfaz.
-La fila pagada del Checkout se verificó en la base local, pero no se inició
-sesión como su propietario en el navegador; por tanto, el fixture de UI no se
-presenta como una consulta visual de ese pago real. La autorización del
-propietario y la denegación entre cuentas se verificaron aparte con pgTAP.
+Además, una captura aportada después del reinicio de `next dev` muestra el pago
+existente en `/cuenta` con sesión autenticada. La consulta usa la política RLS
+de propietario; la prueba pgTAP verifica aparte el aislamiento entre cuentas y
+la denegación de escrituras cliente. No se repitió Checkout.
