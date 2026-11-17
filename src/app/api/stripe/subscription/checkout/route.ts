@@ -6,7 +6,7 @@ import { getStripe } from "@/lib/stripe/server";
 import { precioPremiumConfigurado } from "@/lib/stripe/subscriptions";
 import { siteUrl } from "@/lib/stripe/urls";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
-import { PLAN_PREMIUM } from "@/lib/stripe/plan";
+import { PLAN_PREMIUM_MENSUAL } from "@/lib/stripe/plan";
 import { suscripcionesSandboxHabilitadas } from "@/lib/stripe/subscription-runtime";
 
 export const runtime = "nodejs";
@@ -33,8 +33,8 @@ export async function POST(req: Request) {
         quantity: 1,
         ...(price ? { price } : {
           price_data: {
-            currency: PLAN_PREMIUM.currency,
-            unit_amount: PLAN_PREMIUM.amount,
+            currency: PLAN_PREMIUM_MENSUAL.currency,
+            unit_amount: PLAN_PREMIUM_MENSUAL.amount,
             product_data: { name: "DentaIA Premium mensual (Sandbox)" },
             recurring: { interval: "month" as const, interval_count: 1 },
           },
