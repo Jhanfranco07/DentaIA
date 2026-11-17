@@ -432,14 +432,14 @@ export type Database = {
         Relationships: []
       }
       smile_analysis_consents: {
-        Row: { accepted_at: string; audit_metadata: Json; consent_version: string; id: string; patient_id: string; purpose: string; revoked_at: string | null }
-        Insert: { accepted_at?: string; audit_metadata?: Json; consent_version: string; id?: string; patient_id?: string; purpose?: string; revoked_at?: string | null }
+        Row: { accepted_at: string; audit_metadata: NonNullable<Json>; consent_version: string; id: string; patient_id: string; purpose: string; revoked_at: string | null }
+        Insert: { accepted_at?: string; audit_metadata?: NonNullable<Json>; consent_version: string; id?: string; patient_id?: string; purpose?: string; revoked_at?: string | null }
         Update: Partial<Database["public"]["Tables"]["smile_analysis_consents"]["Insert"]>
         Relationships: []
       }
       smile_analyses: {
-        Row: { analyzed_at: string; consent_id: string; deleted_at: string | null; deletion_reason: string | null; educational_explanation: Json | null; engine: string; engine_version: string; explanation_source: string | null; id: string; original_mime_type: string | null; original_object_path: string | null; original_size_bytes: number | null; overlay_object_path: string | null; patient_id: string; status: string; technical_result: Json }
-        Insert: { analyzed_at?: string; consent_id: string; deleted_at?: string | null; deletion_reason?: string | null; educational_explanation?: Json | null; engine?: string; engine_version: string; explanation_source?: string | null; id?: string; original_mime_type?: string | null; original_object_path?: string | null; original_size_bytes?: number | null; overlay_object_path?: string | null; patient_id: string; status: string; technical_result: Json }
+        Row: { analyzed_at: string; consent_id: string; deleted_at: string | null; deletion_reason: string | null; educational_explanation: Json | null; engine: string; engine_version: string; explanation_source: string | null; id: string; original_mime_type: string | null; original_object_path: string | null; original_size_bytes: number | null; overlay_object_path: string | null; patient_id: string; status: string; technical_result: NonNullable<Json> }
+        Insert: { analyzed_at?: string; consent_id: string; deleted_at?: string | null; deletion_reason?: string | null; educational_explanation?: Json | null; engine?: string; engine_version: string; explanation_source?: string | null; id?: string; original_mime_type?: string | null; original_object_path?: string | null; original_size_bytes?: number | null; overlay_object_path?: string | null; patient_id: string; status: string; technical_result: NonNullable<Json> }
         Update: Partial<Database["public"]["Tables"]["smile_analyses"]["Insert"]>
         Relationships: [{ foreignKeyName: "smile_analyses_consent_id_fkey"; columns: ["consent_id"]; isOneToOne: false; referencedRelation: "smile_analysis_consents"; referencedColumns: ["id"] }]
       }
@@ -450,8 +450,8 @@ export type Database = {
         Relationships: [{ foreignKeyName: "smile_analysis_access_grants_analysis_id_fkey"; columns: ["analysis_id"]; isOneToOne: false; referencedRelation: "smile_analyses"; referencedColumns: ["id"] }]
       }
       stripe_webhook_events: {
-        Row: { event_type: string; payload: Json; processed_at: string | null; processing_error: string | null; received_at: string; stripe_created_at: string; stripe_event_id: string }
-        Insert: { event_type: string; payload: Json; processed_at?: string | null; processing_error?: string | null; received_at?: string; stripe_created_at: string; stripe_event_id: string }
+        Row: { event_type: string; payload: NonNullable<Json>; processed_at: string | null; processing_error: string | null; received_at: string; stripe_created_at: string; stripe_event_id: string }
+        Insert: { event_type: string; payload: NonNullable<Json>; processed_at?: string | null; processing_error?: string | null; received_at?: string; stripe_created_at: string; stripe_event_id: string }
         Update: Partial<Database["public"]["Tables"]["stripe_webhook_events"]["Insert"]>
         Relationships: []
       }

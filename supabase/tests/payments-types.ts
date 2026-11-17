@@ -14,7 +14,7 @@ export type PaymentContractChecks = [
   Assert<Equal<OptionalKeys<Insert>, "id" | "created_at">>,
   Assert<Equal<Required<Insert>, Payment>>,
   Assert<Equal<TablesUpdate<"payments">, Partial<Payment>>>,
-  Assert<Equal<PaymentStatus, "paid" | "unpaid" | "expired">>,
+  Assert<Equal<PaymentStatus, "paid" | "unpaid" | "expired" | "failed">>,
   Assert<Equal<Database["public"]["Tables"]["payments"]["Relationships"], []>>,
 ];
 // @ts-expect-error user_id no tiene DEFAULT y no puede omitirse.

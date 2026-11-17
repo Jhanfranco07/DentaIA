@@ -8,7 +8,7 @@
 | Directorio | `public.dentists`, ubicaciones y reseñas | Aplicado en reconstruccion local. |
 | Servicios | `public.dentist_services` | DI-131; 9 pruebas pgTAP aprobadas. |
 | Historia clinica | `clinical.*`, `clinical_service`, `dentaia_admin` | DI-36; permisos por concesion, no por cita, pago o rol aislado. |
-| Rutinas | tres tablas `oral_care_routine_*` | DI-172; 45 pruebas pgTAP aprobadas. |
+| Rutinas | tres tablas `oral_care_routine_*` | DI-172 es una dependencia externa; sus pruebas pgTAP aun requieren ejecucion y validacion. |
 | Pagos | `public.payments` | Registra pagos Stripe; no acredita suscripcion recurrente. |
 | Suscripciones | `premium_subscriptions`, `stripe_webhook_events` | Nueva migracion; escritura exclusiva de servidor/webhook. |
 | Smile | consentimientos, analisis y grants | Nueva migracion; 7 pruebas pgTAP aprobadas. |
@@ -38,17 +38,30 @@ expresamente deshabilitadas aunque el plan sea Premium. `effectivePlan` solo
 acepta una suscripcion activa y vigente que haya sido obtenida por el servidor;
 nunca acepta plan desde HTTP ni metadata editable.
 
-`payments` no se reutiliza como suscripcion. `premium_subscriptions` representa
-el estado Stripe recurrente y `stripe_webhook_events` es un ledger idempotente.
-Solo un webhook cuya firma sea verificada por un endpoint server-only puede
-escribir estas tablas. Checkout, retorno del navegador, pago pendiente, fallido
-o evento no procesado no habilitan Premium. No se implemento Stripe Live ni se
-activo ninguna capacidad Premium.
+`payments` no se reutiliza como suscripcion. `premium_subscriptions` y
+`stripe_webhook_events` definen el esquema previsto para una futura integracion
+recurrente; el Checkout actual es de pago unico y su webhook firmado solo
+persiste en `payments`. No crea suscripciones ni habilita Premium. Checkout,
+retorno del navegador, pago pendiente, fallido o evento no procesado no
+habilitan Premium. No se implemento Stripe Live ni se activo ninguna capacidad
+Premium.
 
-La prueba local `premium_subscriptions_rls.sql` aprobo tres controles: cada
-paciente ve solo su suscripcion, el cliente no puede insertar una suscripcion y
-el ledger rechaza un evento Stripe duplicado. Esto no sustituye una prueba de
-firma, Checkout o webhook real de Stripe Sandbox.
+`premium_subscriptions_rls.sql` cubre aislamiento entre cuentas, denegacion de
+INSERT/UPDATE/DELETE por clientes y rechazo de eventos Stripe duplicados. La
+version extendida y `payments_failed_status.sql` pasaron localmente con pgTAP
+(9 aserciones). La prueba de firma, Checkout y webhook real de Stripe Sandbox
+sigue pendiente.
+
+La generacion local de tipos confirma las columnas de `payments`,
+`premium_subscriptions` y `stripe_webhook_events`; los campos JSONB no nulos se
+representan como `NonNullable<Json>`. No se pudo certificar una reconstruccion
+integral de todas las migraciones: el reset local se detiene en
+`20261105210643_add_dentist_locations_and_reviews.sql` porque falta el esquema
+`clinical` que aporta DI-36. El harness DI-36 paso sobre la base limpia de
+octubre, pero no puede ejecutarse despues de `20261103012414_di151_roles_auditoria_atomica.sql`,
+que crea `dentaia_admin`, esquema que el harness DI-36 exige que no exista. Resolver
+esa secuencia requiere coordinacion fuera de esta integracion; DI-172 sigue
+ademas como dependencia externa sin validar.
 
 ## Integracion de ramas
 
@@ -56,7 +69,7 @@ firma, Checkout o webhook real de Stripe Sandbox.
 | --- | --- | --- | --- |
 | Rutinas | Anelis | `20261116090000_di172_rutinas.sql` (no incluido en esta rama) | Mantener como dependencia externa; incorporar y validar desde el trabajo de Anelis por separado. |
 | Servicios | Angie | `20261117041157_dentist_services.sql` | Compatible. UI debe listar solo activos para visitantes y administrar por profesional verificado vinculado. |
-| Stripe | Stephan | `payments`, `premium_subscriptions` | Requiere endpoint webhook con verificacion de firma y Sandbox; no esta acreditado por la migracion. |
+| Stripe | Stephan | `payments`, `premium_subscriptions` | PR #73 integra Checkout `payment`, webhook firmado e idempotencia en `payments`; el pago unico no crea una suscripcion ni activa Premium. Recurrencia pendiente de definicion comercial. |
 | Smile V17 | Jhan | `20261117042645_smile_analysis_history.sql` | Requiere BFF server-only para persistencia y URLs firmadas; Basic actual sigue sin persistencia. |
 | Historia clinica | Equipo | DI-36 | No mezclar con Smile; acceso sigue sujeto a grants clinicos independientes. |
 
@@ -68,13 +81,14 @@ firma, Checkout o webhook real de Stripe Sandbox.
 | Odontologo | RLS de `smile_analyses` y grant por analisis | Solo leer analisis con grant activo, profesional verificado y consentimiento vigente | BFF que genere URL firmada corta tras reevaluar el grant; Storage no entrega objetos directamente. |
 | Rutinas (Anelis) | DI-172 y sus tres tablas | Paciente activo, autenticado y con rol paciente; marcas propias por dia Lima | Integrar su frontend sin cambiar la migracion. |
 | Directorio/servicios (Angie) | `dentist_services` | Visitante lee activos; profesional verificado administra solo su `dentist_id` | Sustituir el catalogo demo por consulta RLS cuando su PR se integre. |
-| Premium/Stripe (Stephan) | `premium_subscriptions`, `stripe_webhook_events`, `premium-server.ts` | Adaptador server-only deriva el plan desde la suscripcion RLS del usuario; ningun cliente escribe | No hay rutas API ni Checkout/portal; falta webhook Sandbox con firma Stripe, procesamiento idempotente y autorizacion server-side de funciones. |
+| Premium/Stripe (Stephan) | `premium_subscriptions`, `stripe_webhook_events`, `premium-server.ts` | Adaptador server-only deriva el plan desde la suscripcion RLS del usuario; ningun cliente escribe. PR #73 agrega Checkout de pago unico, webhook firmado, historial de `payments` y consulta server-side del plan. | No hay ciclo recurrente ni portal; `payments` no se convierte en suscripcion y ninguna funcion Premium futura se activa. |
 
 Los endpoints existentes `POST /api/desarrollo/dentaia-smile` y
 `POST /api/desarrollo/dentaia-smile/explain` siguen siendo Basic:
 autenticacion, limites de uso y V17 no se modificaron. No existen aun endpoints
 de historial/consentimiento Smile, carga o eliminacion de objetos, lectura
-profesional con URL firmada, ni de suscripciones/Checkout/portal/webhook.
+profesional con URL firmada, ni ciclo recurrente/portal de suscripciones.
+Checkout y webhook de pago unico no escriben `premium_subscriptions`.
 No deben usarse los endpoints Basic para guardar, compartir o conceder Premium.
 
 Siguen deshabilitadas las funciones Premium de historial, comparacion, compartir
@@ -89,9 +103,13 @@ El despliegue futuro no debe ejecutar las migraciones historicas que ya figuran
 en `supabase_migrations.schema_migrations`. Primero comparar ese historial con
 las versiones locales; despues aplicar, en una ventana controlada y una vez,
 `20261117041157_dentist_services`, `20261117042645_smile_analysis_history` y
-`20261117042647_premium_subscriptions`, omitiendo toda version ya registrada.
-DI-172 no esta incluida en esta rama y requiere coordinacion y validacion
-separadas con el trabajo de Anelis; no se debe inferir ni ejecutar desde este PR.
+`20261117042647_premium_subscriptions` (una sola copia compartida por PR #72 y
+PR #73), y `20261117050000_payments_failed_status` despues de la tabla
+`payments`; omitir toda version ya registrada. Si rutinas forma parte del
+alcance del despliegue, integrar primero `20261116090000_di172_rutinas` desde
+PR #71 solo despues de su aprobacion y validacion local; no esta incluida en
+esta rama ni se debe inferir o ejecutar desde este PR. Hasta resolver DI-172,
+mantener rutinas fuera de cualquier despliegue de esta integracion.
 Respaldar antes de aplicar, verificar buckets/politicas, regenerar tipos contra
 el esquema remoto resultante y ejecutar las pruebas post-despliegue. No usar
 `db push`, `migration repair` ni `db reset --linked` como mecanismo de
