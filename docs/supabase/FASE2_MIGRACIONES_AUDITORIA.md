@@ -63,16 +63,27 @@ triggers e índices existentes. Toda tabla `public` debe tener RLS y políticas 
 predicado de propiedad; no se usarán `user_metadata` ni roles por sí solos para
 autorizar.
 
-## Bloqueo reproducible
+## Validación local y bloqueo reproducible
 
-- `supabase` CLI no está instalada en este entorno.
-- El conector de Supabase no inicia, por lo que no se pudo consultar el proyecto
-  remoto en modo solo lectura ni crear una rama aislada.
-- No hay Docker/Supabase local validado durante esta auditoría.
+La validación se ejecutó con Supabase CLI 3.2.0 y Docker Engine 29.9.3, sin
+proyecto vinculado. `supabase start` creó una base vacía y aplicó
+`20261103012414_di151_roles_auditoria_atomica.sql`; falló al aplicar
+`20261105210643_add_dentist_locations_and_reviews.sql` porque
+`public.dentists` no existe (`SQLSTATE 42P01`). La CLI eliminó los contenedores,
+red y volumen locales tras el fallo, por lo que no quedó estado parcial.
 
-Por estos motivos no se aplicaron migraciones, no se crearon buckets, no se
-generaron `database.types.ts` y no se declararon pruebas RLS o Storage como
-aprobadas.
+Existe `supabase/tests/fixtures/directorio-local-base.sql`, pero es un esquema
+sintético desechable para pruebas y no una migración base: crea objetos mínimos
+de `auth`, `clinical` y `public` que no representan una instalación Supabase
+real. No debe promoverse como migración ni aplicarse a remoto.
+
+El conector de Supabase remoto no inicia, por lo que tampoco fue posible
+comparar el esquema alojado en modo solo lectura. Hasta que se incorpore o se
+recupere la migración base que crea `dentists` y `clinical.*`, no es seguro
+aplicar DI-172, DI-131, Smile, Premium ni grants desde una base limpia.
+
+Por estos motivos no se crearon buckets ni tablas nuevas, no se generaron
+`database.types.ts` y no se declararon pruebas RLS o Storage como aprobadas.
 
 ## Siguiente ejecución controlada
 

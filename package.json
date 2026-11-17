@@ -23,6 +23,7 @@
     "@types/node": "22.18.11",
     "@types/react": "19.1.13",
     "@types/react-dom": "19.1.9",
+    "supabase": "3.2.0",
     "typescript": "5.9.3"
   },
   "engines": {
