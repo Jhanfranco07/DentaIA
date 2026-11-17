@@ -10,6 +10,7 @@ export const NAVEGACION_PACIENTE: readonly EnlacePortal[] = [
   { href: "/solicitudes", etiqueta: "Mis solicitudes", icono: "calendario", grupo: "Mi cuidado dental" },
   { href: "/buenas-practicas", etiqueta: "Buenas prácticas", icono: "escudo", grupo: "Recursos" },
   { href: "/panel/odontologos", etiqueta: "Odontólogos", icono: "usuarios", grupo: "Recursos" },
+  { href: "/premium", etiqueta: "Mi plan Premium", icono: "destello", grupo: "Cuenta" },
   { href: "/cuenta", etiqueta: "Mi perfil", icono: "persona", grupo: "Cuenta" },
 ];
 export const NAVEGACION_ODONTOLOGO: readonly EnlacePortal[] = [
