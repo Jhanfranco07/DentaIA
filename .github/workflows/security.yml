@@ -32,6 +32,7 @@ jobs:
         node-version: '22'
         cache: npm
     - run: npm ci
+    - run: node scripts/ci/assert-dev-only-picomatch.mjs
     - run: npm audit
   sast:
     name: SAST · Semgrep local
