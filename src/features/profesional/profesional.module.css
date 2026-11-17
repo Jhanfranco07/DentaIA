@@ -787,3 +787,68 @@
     grid-template-columns: 1fr;
   }
 }
+
+.listaServicios {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.listaServicios li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+
+.listaServicios p {
+  margin: 4px 0;
+}
+
+.formularioServicio {
+  margin-top: 16px;
+}
+
+.formularioServicio fieldset {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.formularioServicio input:not([type="checkbox"]),
+.formularioServicio textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #bdced1;
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.formularioServicio textarea {
+  resize: vertical;
+}
+
+.formularioServicio .accionesEstado,
+.formularioServicio .publicarServicio {
+  grid-column: 1 / -1;
+}
+
+.publicarServicio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
