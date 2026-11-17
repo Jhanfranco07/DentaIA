@@ -29,6 +29,7 @@ import {
 import EstadoHistorialClinico, {
   type VistaHistorialClinico,
 } from "./EstadoHistorialClinico";
+import MisServicios from "./MisServicios";
 import styles from "./profesional.module.css";
 import { Icono } from "@/components/Identidad";
 
@@ -856,7 +857,12 @@ export default function ProfesionalClinico() {
             <a href="#solicitudes-profesionales"><Icono nombre="calendario" size={20} /> Ver solicitudes</a>
             <a href="#historial-clinico"><Icono nombre="usuarios" size={20} /> Consultar historial</a>
             <a href="#perfil-profesional"><Icono nombre="persona" size={20} /> Ver perfil</a>
+            {perfil.perfil?.dentistId && <a href="#mis-servicios">Mis servicios</a>}
           </nav>
+
+          {perfil.perfil?.dentistId && (
+            <MisServicios key={`${usuario.id}:${perfil.perfil.dentistId}`} dentistId={perfil.perfil.dentistId} />
+          )}
 
           {mensajeContexto && <div className={styles.estadoDenegado} role="alert">{mensajeContexto}</div>}
 

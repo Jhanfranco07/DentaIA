@@ -158,6 +158,50 @@ export type Database = {
         }
         Relationships: []
       }
+      dentist_services: {
+        Row: {
+          id: string
+          dentist_id: string
+          name: string
+          description: string | null
+          duration_minutes: number | null
+          price_amount: number | null
+          currency_code: string
+          is_active: boolean
+          sort_order: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          dentist_id: string
+          name: string
+          description?: string | null
+          duration_minutes?: number | null
+          price_amount?: number | null
+          currency_code?: string
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          dentist_id?: string
+          name?: string
+          description?: string | null
+          duration_minutes?: number | null
+          price_amount?: number | null
+          currency_code?: string
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          { foreignKeyName: "dentist_services_dentist_id_fkey"; columns: ["dentist_id"]; isOneToOne: false; referencedRelation: "dentists"; referencedColumns: ["id"] },
+        ]
+      }
       dentist_public_locations: {
         Row: {
           clinic_id: string
