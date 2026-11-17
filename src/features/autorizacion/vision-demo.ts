@@ -48,14 +48,17 @@ export async function authorizeVisionDemo(
 
 export type LimitResult = { allowed: true } | { allowed: false; status: 429 | 503; retryAfter?: number };
 const RATE_WINDOW_SECONDS = 600;
-const RATE_LIMIT = 5;
+const EXPLANATION_RATE_LIMIT = 5;
+const ANALYSIS_RATE_LIMIT = 3;
 const RATE_SCRIPT = "local count=redis.call('INCR',KEYS[1]); if count==1 then redis.call('EXPIRE',KEYS[1],ARGV[1]) end; return {count,redis.call('TTL',KEYS[1])}";
 
 /** Atomic user-scoped Upstash REST limiter. Missing configuration and service failures fail closed. */
-export async function consumeVisionExplanationLimit(
+async function consumeVisionLimit(
   userId: string,
   urlValue: string | undefined,
   token: string | undefined,
+  namespace: "analyze" | "explain",
+  limit: number,
   fetcher: typeof fetch = fetch,
 ): Promise<LimitResult> {
   if (!urlValue || !token) return { allowed: false, status: 503 };
@@ -71,7 +74,7 @@ export async function consumeVisionExplanationLimit(
     const response = await fetcher(url, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify(["EVAL", RATE_SCRIPT, 1, `dentaia:vision:explain:${userHash}`, RATE_WINDOW_SECONDS]),
+      body: JSON.stringify(["EVAL", RATE_SCRIPT, 1, `dentaia:vision:${namespace}:${userHash}`, RATE_WINDOW_SECONDS]),
       cache: "no-store",
       redirect: "error",
       signal: AbortSignal.timeout(2_000),
@@ -82,9 +85,29 @@ export async function consumeVisionExplanationLimit(
     if (!Array.isArray(result) || typeof result[0] !== "number" || typeof result[1] !== "number") {
       return { allowed: false, status: 503 };
     }
-    if (result[0] > RATE_LIMIT) return { allowed: false, status: 429, retryAfter: Math.max(1, result[1]) };
+    if (result[0] > limit) return { allowed: false, status: 429, retryAfter: Math.max(1, result[1]) };
     return { allowed: true };
   } catch {
     return { allowed: false, status: 503 };
   }
+}
+
+/** Limits expensive image processing before the uploaded body is parsed. */
+export function consumeVisionAnalysisLimit(
+  userId: string,
+  urlValue: string | undefined,
+  token: string | undefined,
+  fetcher: typeof fetch = fetch,
+): Promise<LimitResult> {
+  return consumeVisionLimit(userId, urlValue, token, "analyze", ANALYSIS_RATE_LIMIT, fetcher);
+}
+
+/** Limits explanations independently from image analysis. */
+export function consumeVisionExplanationLimit(
+  userId: string,
+  urlValue: string | undefined,
+  token: string | undefined,
+  fetcher: typeof fetch = fetch,
+): Promise<LimitResult> {
+  return consumeVisionLimit(userId, urlValue, token, "explain", EXPLANATION_RATE_LIMIT, fetcher);
 }

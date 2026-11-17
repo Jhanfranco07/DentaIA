@@ -16,6 +16,15 @@ estas condiciones:
 No se habilita en Production. No configurar `DENTAIA_SMILE_PREVIEW_ENABLED` para
 Production ni usar `localhost` como destino remoto.
 
+## Activación controlada en Production
+
+Production permanece cerrada hasta definir `DENTAIA_SMILE_PRODUCTION_ENABLED=true`
+como variable **Production**. Deben existir también `DENTAIA_SMILE_API_URL` HTTPS y
+`DENTAIA_SMILE_SERVICE_SECRET` (32+ caracteres) solo en servidor; Railway conserva
+el mismo secreto. Mantener `OPENAI_API_KEY`, `OPENAI_MODEL`, `UPSTASH_REDIS_REST_URL`
+y `UPSTASH_REDIS_REST_TOKEN` como secretos server-only. No usar `localhost`,
+variables `NEXT_PUBLIC_` ni la clave de Roboflow en Vercel.
+
 ## Variables de sistema de Vercel
 
 El Route Handler comprueba `VERCEL_ENV` y `VERCEL_GIT_COMMIT_REF` en runtime. En

@@ -26,9 +26,14 @@ test("diagnostica la variable de sistema de rama ausente sin revelar configuraci
 test("Production y las configuraciones incompletas permanecen bloqueadas", () => {
   const production = smileRuntime({ ...enabledPreview, VERCEL_ENV: "production" });
   assert.equal(production.enabled, false);
-  if (!production.enabled) assert.ok(production.failedChecks.includes("environment_missing_or_not_preview"));
+  if (!production.enabled) assert.ok(production.failedChecks.includes("environment_not_enabled"));
 
   const missingSecret = smileRuntime({ ...enabledPreview, DENTAIA_SMILE_SERVICE_SECRET: "short" });
   assert.equal(missingSecret.enabled, false);
   if (!missingSecret.enabled) assert.ok(missingSecret.failedChecks.includes("service_secret_missing_or_too_short"));
+});
+
+test("Production requiere una habilitación explícita y conserva HTTPS y secreto", () => {
+  const runtime = smileRuntime({ ...enabledPreview, VERCEL_ENV: "production", DENTAIA_SMILE_PRODUCTION_ENABLED: "true" });
+  assert.equal(runtime.enabled, true);
 });

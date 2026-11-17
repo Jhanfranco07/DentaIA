@@ -230,16 +230,16 @@ export default function AnalisisDental() {
         </div>
       </div>
       {camaraAbierta && <section className={styles.camaraPanel}><video ref={video} playsInline muted aria-label="Vista previa de la cámara" /><div><button type="button" className={styles.primario} onClick={() => void capturar()}>Capturar fotografía</button><button type="button" className={styles.secundario} onClick={detenerCamara}>Cerrar cámara</button></div></section>}
-      <label className={styles.consentimiento}><input type="checkbox" checked={consentimiento} onChange={event => setConsentimiento(event.target.checked)} /><span><strong>Consentimiento de procesamiento</strong> Autorizo el envío temporal de esta fotografía al servicio Roboflow. No se almacenará ni se enviará a OpenAI.</span></label>
+      <label className={styles.consentimiento}><input type="checkbox" checked={consentimiento} onChange={event => setConsentimiento(event.target.checked)} /><span><strong>Consentimiento de procesamiento</strong> Autorizo el envío temporal de esta fotografía al servicio de análisis. El resultado es temporal y todavía no se guarda en Mis resultados.</span></label>
       <div className={styles.acciones}><button type="button" className={styles.secundario} onClick={() => setFase("preparacion")}>← Volver</button><button type="button" className={styles.primario} disabled={!archivo || !consentimiento} onClick={() => void analizar()}>Analizar fotografía <Icono nombre="flecha" size={20} /></button></div>
     </div>}
 
     {fase === "analizando" && <div className={styles.vistaFlujo} aria-busy={!error}>
       <div className={styles.encabezadoVista}><div><h1>Analizando tu sonrisa…</h1><p>La segmentación y las mediciones se realizan en una única solicitud. Esto puede tardar unos segundos.</p></div><Mascota compacta /></div>
       <div className={styles.procesoGrid}><figure className={styles.fotoProceso}>{vista && <img src={vista} alt="Fotografía enviada para análisis" />}<figcaption>Segmentación y medición en curso</figcaption></figure><div className={styles.estadosProceso}>
-        <div data-estado={error ? "error" : "activo"}><span>{error ? "!" : <i />}</span><strong>Detectando dientes</strong></div>
-        <div data-estado={error ? "pendiente" : "activo"}><span>{error ? "2" : <i />}</span><strong>Analizando color CIELAB</strong></div>
-        <div data-estado="pendiente"><span>3</span><strong>Preparando resumen técnico</strong></div>
+        <div data-estado={error ? "error" : "activo"}><span>{error ? "!" : <i />}</span><div><strong>Identificando tus dientes</strong><small>Estamos revisando los dientes visibles en tu fotografía.</small></div></div>
+        <div data-estado="pendiente"><span>2</span><div><strong>Revisando el color de tus dientes</strong><small>Observamos las diferencias de tonalidad presentes en la imagen.</small></div></div>
+        <div data-estado="pendiente"><span>3</span><div><strong>Preparando tus resultados</strong><small>Estamos organizando lo observado para explicártelo de forma sencilla.</small></div></div>
       </div></div>
       {!error && <div className={styles.progresoIndeterminado} role="progressbar" aria-label="Análisis en curso"><span /></div>}
       <aside className={styles.nota}><Icono nombre="privacidad" size={22} /><p>El resultado es orientativo. No constituye diagnóstico ni confirma el estado de salud dental.</p></aside>

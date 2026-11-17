@@ -2,7 +2,7 @@ import "server-only";
 
 import { NextRequest, NextResponse } from "next/server";
 import { smileRuntime } from "@/features/analisis/smile-preview";
-import { authorizeVisionDemoRequest } from "@/features/autorizacion/vision-demo-server";
+import { authorizeVisionDemoRequest, consumeVisionAnalysisRequestLimit } from "@/features/autorizacion/vision-demo-server";
 
 const MAX_BYTES = 8 * 1024 * 1024;
 const ACCEPTED = new Set(["image/jpeg", "image/png", "image/webp"]);
@@ -11,10 +11,19 @@ function failure(status: number, detail: string) {
   return NextResponse.json({ detail }, { status, headers: { "Cache-Control": "no-store" } });
 }
 
+function rateFailure(retryAfter?: number) {
+  return NextResponse.json(
+    { detail: "Has alcanzado el limite temporal de analisis. Intentalo mas tarde." },
+    { status: 429, headers: { "Cache-Control": "no-store", ...(retryAfter ? { "Retry-After": String(retryAfter) } : {}) } },
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const access = await authorizeVisionDemoRequest(request.headers);
     if (!access.allowed) return failure(access.status, access.code === "AUTH_REQUIRED" ? "Inicia sesión para usar esta demostración." : "Tu cuenta no está autorizada para esta demostración.");
+    const limit = await consumeVisionAnalysisRequestLimit(access.userId);
+    if (!limit.allowed) return limit.status === 429 ? rateFailure(limit.retryAfter) : failure(503, "El analisis no esta disponible temporalmente.");
     const form = await request.formData();
     const file = form.get("file");
     if (!(file instanceof File)) return failure(422, "Selecciona una fotografía.");

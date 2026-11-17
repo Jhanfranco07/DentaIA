@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { authorizeVisionDemo, consumeVisionExplanationLimit } from "./vision-demo.ts";
+import { authorizeVisionDemo, consumeVisionAnalysisLimit, consumeVisionExplanationLimit } from "./vision-demo.ts";
 
 const id = "11111111-2222-4333-8444-555555555555";
 const headers = (value = "Bearer valid-session-token") => new Headers(value ? { authorization: value } : {});
@@ -49,10 +49,19 @@ test("distributed explanation limit blocks at six and fails closed on provider e
   assert.equal((await consumeVisionExplanationLimit(id, "https://redis.example.test", "token", async () => { throw new Error("private"); })).status, 503);
 });
 
+test("analysis limit uses an isolated lower-cost key", async () => {
+  const limited = await consumeVisionAnalysisLimit(id, "https://redis.example.test", "test-token", async (_url, init) => {
+    assert.match(init.body, /dentaia:vision:analyze:/);
+    return Response.json({ result: [4, 600] });
+  });
+  assert.deepEqual(limited, { allowed: false, status: 429, retryAfter: 600 });
+});
+
 test("Smile endpoints authorize before reading input or calling downstream services", () => {
   const smileRoute = readFileSync(new URL("../../app/api/desarrollo/dentaia-smile/route.ts", import.meta.url), "utf8");
   const smileExplainRoute = readFileSync(new URL("../../app/api/desarrollo/dentaia-smile/explain/route.ts", import.meta.url), "utf8");
   assert.ok(smileRoute.indexOf("authorizeVisionDemoRequest(request.headers)") < smileRoute.indexOf("request.formData()"));
+  assert.ok(smileRoute.indexOf("consumeVisionAnalysisRequestLimit(access.userId)") < smileRoute.indexOf("request.formData()"));
   assert.ok(smileExplainRoute.indexOf("authorizeVisionDemoRequest(request.headers)") < smileExplainRoute.indexOf("request.text()"));
   assert.ok(smileExplainRoute.indexOf("consumeVisionExplanationLimit") < smileExplainRoute.indexOf("https://api.openai.com/v1/responses"));
 });
