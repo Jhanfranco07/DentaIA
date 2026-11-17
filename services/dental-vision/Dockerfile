@@ -1,17 +1,24 @@
-FROM python:3.11.9-slim
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
-    MODEL_BACKEND=torch MODEL_PATH=models/best.pt \
-    OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
-    YOLO_AUTOINSTALL=false YOLO_CONFIG_DIR=/tmp/dentaia-yolo
-WORKDIR /service
-RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 \
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    DENTAIA_SMILE_REQUIRE_SERVICE_SECRET=true
+
+WORKDIR /app
+
+# OpenCV needs these runtime libraries in the slim Debian image.
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
-COPY requirements.txt .
+
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+
 COPY app ./app
-COPY scripts/download_model.py ./scripts/download_model.py
-RUN python scripts/download_model.py
-RUN useradd --create-home vision && chown -R vision:vision /service
-USER vision
-EXPOSE 10000
-CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000} --workers 1 --limit-concurrency 4 --timeout-keep-alive 5 --no-access-log"]
+
+EXPOSE 7862
+
+# Railway provides PORT. Refuse to start a remote container that would expose
+# /analyze without the service-to-service credential.
+CMD ["sh", "-ec", "secret=${DENTAIA_SMILE_SERVICE_SECRET:-}; if [ ${#secret} -lt 32 ]; then echo 'DENTAIA_SMILE_SERVICE_SECRET must be at least 32 characters' >&2; exit 1; fi; exec uvicorn app.smile_api:app --host 0.0.0.0 --port ${PORT:-7862}"]

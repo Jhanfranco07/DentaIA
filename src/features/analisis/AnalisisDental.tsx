@@ -1,54 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { Icono } from "@/components/Identidad";
 import { useFotografiaPreparacion } from "./FotografiaPreparacionContexto";
 import { mensajeErrorCamara, mensajeValidacionFotografia, restriccionesCamara, validarFotografia } from "./fotografia";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { countReviewRegions, isSmileAnalysisResponse, isSmileExplanation, summarizeRegionStates, type SmileExplanation, type SmileResult } from "./smile-contract";
 import styles from "./analisis-dental.module.css";
 
-type Fase = "seleccion" | "revision" | "preparacion";
-type Detection = { class_id: number; class_name: "d" | "D"; class_description: string; confidence: number; box: { x_min: number; y_min: number; x_max: number; y_max: number } };
-type Prediction = { model: string; width: number; height: number; inference_ms: number; detections: Detection[] };
-type Explanation = { source: "ai" | "default"; explanation: string };
-const PUBLIC_SAMPLE_HASHES = new Set(["5dc8ba6309984f4c44050dc672051ccb2e60e66992a373910f9c225a9c483be4", "2f50d26eb8c907bc391432e1022c2240ec61010bba7fc65d1104cbbdc4905569"]);
-const CLASS_DISPLAY = { d: { class_id: 0, description: "Posible caries en diente temporal" }, D: { class_id: 1, description: "Posible caries en diente permanente" } } as const;
-
-async function sha256(archivo: File) {
-  const digest = await crypto.subtle.digest("SHA-256", await archivo.arrayBuffer());
-  return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("");
-}
-
-async function authenticatedHeaders(headers: HeadersInit = {}) {
-  const { data, error } = await getSupabaseBrowserClient().auth.getSession();
-  const token = data.session?.access_token;
-  if (error || !token) throw new Error("Inicia sesión con una cuenta autorizada para usar esta demostración.");
-  const result = new Headers(headers);
-  result.set("Authorization", `Bearer ${token}`);
-  return result;
-}
-
-function isPrediction(value: unknown): value is Prediction {
-  if (!value || typeof value !== "object") return false;
-  const candidate = value as Partial<Prediction>;
-  return typeof candidate.model === "string" && Number.isFinite(candidate.width) && Number.isFinite(candidate.height)
-    && Number.isFinite(candidate.inference_ms) && Array.isArray(candidate.detections)
-    && candidate.detections.every(item => {
-      if (!item || (item.class_name !== "d" && item.class_name !== "D")) return false;
-      const expected = CLASS_DISPLAY[item.class_name]; const box = item.box;
-      return item.class_id === expected.class_id && item.class_description === expected.description
-        && Number.isFinite(item.confidence) && item.confidence >= 0 && item.confidence <= 1
-        && !!box && [box.x_min, box.y_min, box.x_max, box.y_max].every(n => Number.isFinite(n) && n >= 0 && n <= 1)
-        && box.x_min <= box.x_max && box.y_min <= box.y_max;
-    });
-}
-
-function isExplanation(value: unknown): value is Explanation {
-  if (!value || typeof value !== "object") return false;
-  const result = value as Partial<Explanation>;
-  return (result.source === "ai" || result.source === "default") && typeof result.explanation === "string" && result.explanation.length > 0 && result.explanation.length <= 350;
-}
+type Fase = "preparacion" | "carga" | "analizando" | "resultado" | "detalle";
+const PASOS = ["Preparación", "Carga", "Análisis", "Resultado"] as const;
 
 function validarDecodificacion(archivo: File) {
   return new Promise<void>((resolve, reject) => {
@@ -60,49 +22,76 @@ function validarDecodificacion(archivo: File) {
   });
 }
 
+function pasoActual(fase: Fase) {
+  if (fase === "preparacion") return 0;
+  if (fase === "carga") return 1;
+  if (fase === "analizando") return 2;
+  return 3;
+}
+
+function fallbackExplanation(result: SmileResult): SmileExplanation {
+  const review = countReviewRegions(result);
+  const variations = result.regions.filter(region => region.evaluable && (region.partial || region.level !== "Sin amarillo destacado")).length;
+  const lighting = result.regions.filter(region => region.evaluable && region.illumination_warning).length;
+  return {
+    summary: result.status === "not_evaluable"
+      ? "No pude evaluar bien la tonalidad de tu sonrisa con esta foto. Prueba otra vez con luz natural, de frente y sin filtros."
+      : variations
+        ? `En esta foto, ${variations} ${variations === 1 ? "región dental muestra" : "regiones dentales muestran"} una tonalidad diferente al resto.`
+        : `Pude revisar ${result.evaluable_regions} regiones dentales y ninguna mostró una diferencia de tonalidad por encima del umbral orientativo.`,
+    observations: [
+      ...(variations ? ["La imagen sugiere una diferencia de color visible; por sí sola no permite saber la causa ni confirmar un problema dental."] : []),
+      ...(lighting ? [`La iluminación, las sombras o los reflejos podrían estar influyendo en ${lighting} ${lighting === 1 ? "región" : "regiones"}.`] : []),
+      ...(!review ? ["Aun así, una fotografía no permite confirmar que todos los dientes estén sanos."] : []),
+    ],
+    recommendation: "Si esa diferencia también se nota en persona, ha cambiado recientemente o te preocupa, conviene que la revise un odontólogo.",
+    disclaimer: "Orientación basada en una fotografía: no es un diagnóstico y las regiones detectadas no equivalen necesariamente a dientes afectados.",
+    source: "template",
+  };
+}
+
+function Stepper({ fase }: { fase: Fase }) {
+  const actual = pasoActual(fase);
+  return <ol className={styles.stepper} aria-label="Progreso del análisis">
+    {PASOS.map((paso, index) => <li key={paso} data-activo={index === actual} data-completo={index < actual} aria-current={index === actual ? "step" : undefined}>
+      <span>{index < actual ? <Icono nombre="check" size={18} /> : index + 1}</span><strong>{paso}</strong>
+    </li>)}
+  </ol>;
+}
+
+function Mascota({ compacta = false }: { compacta?: boolean }) {
+  return <div className={compacta ? styles.mascotaCompacta : styles.mascota} aria-hidden="true">
+    <span><Icono nombre="diente" size={compacta ? 38 : 76} /></span><i>✦</i><b>✦</b>
+  </div>;
+}
+
 export default function AnalisisDental() {
   const { fotografia, establecerFotografia, limpiarFotografia } = useFotografiaPreparacion();
+  const [fase, setFase] = useState<Fase>(fotografia ? "carga" : "preparacion");
   const [archivo, setArchivo] = useState<File | null>(fotografia);
   const [vista, setVista] = useState("");
-  const [fase, setFase] = useState<Fase>(fotografia ? "revision" : "seleccion");
-  const [error, setError] = useState("");
   const [consentimiento, setConsentimiento] = useState(false);
-  const [analizando, setAnalizando] = useState(false);
+  const [error, setError] = useState("");
+  const [resultado, setResultado] = useState<SmileResult | null>(null);
+  const [overlay, setOverlay] = useState("");
+  const [explicacion, setExplicacion] = useState<SmileExplanation | null>(null);
   const [explicando, setExplicando] = useState(false);
-  const [prediccion, setPrediccion] = useState<Prediction | null>(null);
-  const [explicacion, setExplicacion] = useState<Explanation | null>(null);
-  const [muestraPublica, setMuestraPublica] = useState(false);
   const [camaraAbierta, setCamaraAbierta] = useState(false);
   const [camaraCargando, setCamaraCargando] = useState(false);
-  const [flujoOrigen, setFlujoOrigen] = useState(false);
   const entrada = useRef<HTMLInputElement>(null);
-  const botonCamara = useRef<HTMLButtonElement>(null);
-  const botonSubir = useRef<HTMLButtonElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const stream = useRef<MediaStream | null>(null);
   const solicitudCamara = useRef(0);
-
-  useEffect(() => {
-    let vigente = true;
-    if (!archivo) { setMuestraPublica(false); return; }
-    void sha256(archivo).then(hash => { if (vigente) setMuestraPublica(PUBLIC_SAMPLE_HASHES.has(hash)); }).catch(() => { if (vigente) setMuestraPublica(false); });
-    return () => { vigente = false; };
-  }, [archivo]);
+  const explicacionSolicitada = useRef<string | null>(null);
+  const explicacionAbortada = useRef<AbortController | null>(null);
 
   const detenerCamara = useCallback(() => {
     solicitudCamara.current += 1;
-    stream.current?.getTracks().forEach(pista => pista.stop());
+    stream.current?.getTracks().forEach(track => track.stop());
     stream.current = null;
     setCamaraAbierta(false);
     setCamaraCargando(false);
   }, []);
-
-  useEffect(() => {
-    if (!fotografia) return;
-    setArchivo(fotografia);
-    setFase("revision");
-    setFlujoOrigen(true);
-  }, [fotografia]);
 
   useEffect(() => {
     if (!archivo) { setVista(""); return; }
@@ -112,191 +101,165 @@ export default function AnalisisDental() {
   }, [archivo]);
 
   useEffect(() => {
-    if (!stream.current || !video.current) return;
-    video.current.srcObject = stream.current;
-    void video.current.play().catch(() => setError("No se pudo mostrar la vista previa de la cámara."));
+    if (stream.current && video.current) {
+      video.current.srcObject = stream.current;
+      void video.current.play().catch(() => setError("No se pudo mostrar la vista previa de la cámara."));
+    }
   }, [camaraAbierta]);
 
-  useEffect(() => () => {
-    detenerCamara();
-    limpiarFotografia();
-  }, [detenerCamara, limpiarFotografia]);
+  useEffect(() => () => detenerCamara(), [detenerCamara]);
+  useEffect(() => () => explicacionAbortada.current?.abort(), []);
 
-  useEffect(() => {
-    const modo = new URLSearchParams(window.location.search).get("modo");
-    if (modo === "camara") botonCamara.current?.focus();
-    if (modo === "subir") botonSubir.current?.focus();
-  }, []);
-
-  const elegirArchivo = useCallback(async (seleccion: File | undefined) => {
+  const elegirArchivo = useCallback(async (seleccion?: File) => {
     if (!seleccion) return;
     setError("");
     const validacion = validarFotografia(seleccion);
-    if (!validacion.valido) {
-      setError(mensajeValidacionFotografia(validacion.motivo));
-      return;
-    }
+    if (!validacion.valido) { setError(mensajeValidacionFotografia(validacion.motivo)); return; }
     try {
       await validarDecodificacion(seleccion);
+      explicacionAbortada.current?.abort(); explicacionSolicitada.current = null;
+      detenerCamara();
       establecerFotografia(seleccion);
       setArchivo(seleccion);
-      setFase("revision");
-      setFlujoOrigen(false);
-      detenerCamara();
-    } catch {
-      setError("El archivo no se pudo abrir como una imagen válida.");
-    }
+      setResultado(null); setOverlay(""); setExplicacion(null);
+    } catch { setError("El archivo no se pudo abrir como una imagen válida."); }
   }, [detenerCamara, establecerFotografia]);
 
-  function manejarArchivo(evento: ChangeEvent<HTMLInputElement>) {
-    void elegirArchivo(evento.target.files?.[0]);
-    evento.target.value = "";
+  function manejarArchivo(event: ChangeEvent<HTMLInputElement>) {
+    void elegirArchivo(event.target.files?.[0]);
+    event.target.value = "";
+  }
+
+  function soltar(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    void elegirArchivo(event.dataTransfer.files?.[0]);
   }
 
   async function abrirCamara() {
-    setError("");
-    if (!navigator.mediaDevices?.getUserMedia) {
-      setError("Este navegador no permite acceder a la cámara. Puedes subir una fotografía.");
-      return;
-    }
-    detenerCamara();
-    const id = solicitudCamara.current;
-    setCamaraCargando(true);
+    setError(""); detenerCamara(); setCamaraCargando(true);
+    if (!navigator.mediaDevices?.getUserMedia) { setCamaraCargando(false); setError("Este navegador no permite usar la cámara. Puedes subir una fotografía."); return; }
+    const requestId = solicitudCamara.current;
     try {
-      const nueva = await navigator.mediaDevices.getUserMedia(restriccionesCamara());
-      if (id !== solicitudCamara.current) {
-        nueva.getTracks().forEach(pista => pista.stop());
-        return;
-      }
-      stream.current = nueva;
-      setCamaraAbierta(true);
+      const next = await navigator.mediaDevices.getUserMedia(restriccionesCamara());
+      if (requestId !== solicitudCamara.current) { next.getTracks().forEach(track => track.stop()); return; }
+      stream.current = next; setCamaraAbierta(true); setCamaraCargando(false);
+    } catch (cause) {
       setCamaraCargando(false);
-    } catch (fallo) {
-      if (id === solicitudCamara.current) {
-        setCamaraCargando(false);
-        setError(mensajeErrorCamara(fallo instanceof DOMException ? fallo.name : ""));
-      }
+      setError(mensajeErrorCamara(cause instanceof DOMException ? cause.name : ""));
     }
   }
 
-  async function capturarFotografia() {
-    const elemento = video.current;
-    if (!elemento || !elemento.videoWidth || !elemento.videoHeight) {
-      setError("La cámara todavía está preparando la imagen. Espera un momento y vuelve a intentarlo.");
-      return;
-    }
-    const lienzo = document.createElement("canvas");
-    lienzo.width = elemento.videoWidth;
-    lienzo.height = elemento.videoHeight;
-    const contexto = lienzo.getContext("2d");
-    if (!contexto) { setError("No se pudo preparar la fotografía en este navegador."); return; }
-    contexto.drawImage(elemento, 0, 0, lienzo.width, lienzo.height);
-    const blob = await new Promise<Blob | null>(resolver => lienzo.toBlob(resolver, "image/jpeg", .9));
-    if (!blob) { setError("No se pudo capturar la imagen. Inténtalo nuevamente."); return; }
-    const captura = new File([blob], `dentaia-fotografia-${Date.now()}.jpg`, { type: "image/jpeg" });
-    await elegirArchivo(captura);
+  async function capturar() {
+    const source = video.current;
+    if (!source?.videoWidth || !source.videoHeight) { setError("Espera a que la cámara termine de preparar la imagen."); return; }
+    const canvas = document.createElement("canvas"); canvas.width = source.videoWidth; canvas.height = source.videoHeight;
+    canvas.getContext("2d")?.drawImage(source, 0, 0);
+    const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, "image/jpeg", .9));
+    if (!blob) { setError("No se pudo capturar la fotografía."); return; }
+    await elegirArchivo(new File([blob], `dentaia-sonrisa-${Date.now()}.jpg`, { type: "image/jpeg" }));
   }
 
-  function cambiarFotografia() {
-    detenerCamara();
-    limpiarFotografia();
-    setArchivo(null);
-    setFase("seleccion");
-    setError("");
-    setConsentimiento(false);
-    setPrediccion(null);
-    setExplicacion(null);
+  function nuevaFoto() {
+    detenerCamara(); limpiarFotografia(); setArchivo(null); setConsentimiento(false); setError("");
+    explicacionAbortada.current?.abort(); explicacionSolicitada.current = null; setResultado(null); setOverlay(""); setExplicacion(null); setFase("carga");
   }
 
   async function analizar() {
-    if (!archivo || !consentimiento || !muestraPublica || analizando) return;
-    setError(""); setPrediccion(null); setExplicacion(null); setAnalizando(true);
+    if (!archivo || !consentimiento) return;
+    setError(""); setFase("analizando");
     try {
-      const hash = await sha256(archivo);
-      if (!PUBLIC_SAMPLE_HASHES.has(hash)) throw new Error("Esta imagen no coincide con las dos muestras públicas autorizadas; no se envió al servicio.");
-      const response = await fetch("/api/desarrollo/vision-poc", { method: "POST", headers: await authenticatedHeaders({ "Content-Type": archivo.type }), body: archivo, cache: "no-store" });
-      const body: unknown = await response.json().catch(() => null);
-      if (!response.ok) throw new Error(body && typeof body === "object" && "detail" in body ? String(body.detail) : "No se pudo analizar la imagen.");
-      if (!isPrediction(body)) throw new Error("El servicio devolvió un resultado inesperado.");
-      setPrediccion(body);
-    } catch (cause) { setError(cause instanceof Error ? cause.message : "No se pudo analizar la imagen."); }
-    finally { setAnalizando(false); }
+      const body = new FormData();
+      body.set("file", archivo);
+      const { data, error: sessionError } = await getSupabaseBrowserClient().auth.getSession();
+      if (sessionError || !data.session?.access_token) throw new Error("Inicia sesión con una cuenta autorizada para usar esta demostración.");
+      const response = await fetch("/api/desarrollo/dentaia-smile", { method: "POST", headers: { Authorization: `Bearer ${data.session.access_token}` }, body, cache: "no-store" });
+      const payload: unknown = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(payload && typeof payload === "object" && "detail" in payload ? String(payload.detail) : "El servicio de análisis no está disponible.");
+      if (!isSmileAnalysisResponse(payload)) throw new Error("El servicio devolvió un resultado Smile inesperado.");
+      setResultado(payload.result); setOverlay(payload.overlay_url ?? ""); setFase("resultado"); void explicar(payload.result);
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "No se pudo analizar la fotografía."); }
   }
 
-  async function explicar() {
-    if (!prediccion || explicando) return;
-    setError(""); setExplicando(true);
+  async function explicar(result = resultado) {
+    if (!result || explicando) return;
+    const key = JSON.stringify(result);
+    if (explicacionSolicitada.current === key) return;
+    explicacionSolicitada.current = key;
+    explicacionAbortada.current?.abort();
+    const controller = new AbortController();
+    explicacionAbortada.current = controller;
+    setExplicando(true); setError("");
     try {
-      const response = await fetch("/api/desarrollo/vision-poc/explain", { method: "POST", headers: await authenticatedHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ detections: prediccion.detections.map(({ class_name, confidence }) => ({ class_name, confidence })) }), cache: "no-store" });
-      const body: unknown = await response.json().catch(() => null);
-      if (!response.ok) throw new Error(body && typeof body === "object" && "detail" in body ? String(body.detail) : "No se pudo obtener la explicación.");
-      if (!isExplanation(body)) throw new Error("El servicio devolvió una explicación inesperada.");
-      setExplicacion(body);
-    } catch (cause) { setError(cause instanceof Error ? cause.message : "No se pudo obtener la explicación."); }
-    finally { setExplicando(false); }
+      const { data, error: sessionError } = await getSupabaseBrowserClient().auth.getSession();
+      if (sessionError || !data.session?.access_token) throw new Error("Inicia sesión con una cuenta autorizada para usar esta demostración.");
+      const response = await fetch("/api/desarrollo/dentaia-smile/explain", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session.access_token}` }, body: JSON.stringify(result), cache: "no-store", signal: controller.signal });
+      const payload: unknown = await response.json().catch(() => null);
+      if (!response.ok || !isSmileExplanation(payload)) throw new Error("No se pudo generar la explicación opcional.");
+      setExplicacion(payload);
+    } catch { if (!controller.signal.aborted) setExplicacion(fallbackExplanation(result)); }
+    finally { if (!controller.signal.aborted) setExplicando(false); }
   }
 
-  return <section className={styles.pagina}>
-    <header className={styles.hero}>
-      <div className={styles.heroCopia}>
-        <span className={styles.eyebrow}><Icono nombre="destello" size={15} /> ANÁLISIS DENTAL</span>
-        <h1>Análisis dental <span>con IA</span></h1>
-        <p>Prepara una fotograf&iacute;a y revisa el resultado educativo del modelo ONNX. El procesamiento est&aacute; limitado a dos muestras p&uacute;blicas verificadas.</p>
-        <span className={styles.estadoMotor}><span aria-hidden="true" /> Motor ONNX conectado &middot; solo muestras p&uacute;blicas</span>
+  const regionStates = resultado ? summarizeRegionStates(resultado) : null;
+  const dientesAmarillentos = resultado?.regions.filter(region => region.evaluable && (region.partial || region.level !== "Sin amarillo destacado")).length ?? 0;
+
+  return <section className={styles.modulo}>
+    {fase !== "preparacion" && <Stepper fase={fase} />}
+    {error && <div className={styles.error} role="alert"><Icono nombre="alerta" size={20} /><p>{error}</p>{fase === "analizando" && <button type="button" onClick={() => void analizar()}>Reintentar</button>}</div>}
+
+    {fase === "preparacion" && <div className={styles.preparacionInicio}>
+      <section className={styles.banner}><div><span><Icono nombre="diente" size={19} /> ANÁLISIS</span><h1>Prepara una buena fotografía de tu sonrisa</h1><p>Sigue estas recomendaciones para obtener mediciones más consistentes.</p></div><Mascota /></section>
+      <div className={styles.preparacionGrid}>
+        <article className={styles.tarjeta}><h2>Consejos para una buena foto</h2><ul className={styles.consejos}>{["Usa buena iluminación natural o neutra.", "Mira de frente y sonríe de forma natural.", "Evita sombras intensas en la boca.", "No utilices filtros ni edites la fotografía."].map(text => <li key={text}><span><Icono nombre="check" size={20} /></span>{text}</li>)}</ul></article>
+        <article className={styles.tarjeta}><h2>Ejemplos de fotografía</h2><div className={styles.ejemplos}><div><span className={styles.ejemploBueno}><Icono nombre="diente" size={46} /></span><strong>✓ Correcto</strong><small>Buena luz y ángulo frontal</small></div><div><span className={styles.ejemploMalo}><Icono nombre="diente" size={46} /></span><strong>× Evitar</strong><small>Poca luz o ángulo lateral</small></div></div></article>
       </div>
-      <div className={styles.heroDibujo} aria-hidden="true"><Icono nombre="diente" size={76} /><span><Icono nombre="destello" size={23} /></span></div>
-    </header>
-
-    <ol className={styles.pasos} aria-label="Etapas del recorrido">
-      {(["Fotografía", "Revisión", "Preparación"] as const).map((paso, indice) => {
-        const actual = fase === "seleccion" ? 0 : fase === "revision" ? 1 : 2;
-        return <li key={paso} aria-current={actual === indice ? "step" : undefined} data-activo={actual === indice} data-completo={actual > indice}><span>{actual > indice ? <Icono nombre="check" size={15} /> : indice + 1}</span>{paso}</li>;
-      })}
-    </ol>
-
-    {error && <div className={styles.error} role="alert"><Icono nombre="alerta" size={19} /><p>{error}</p></div>}
-
-    {fase === "seleccion" && <div className={styles.contenido}>
-      <div className={styles.seccionIntro}><span className={styles.numeroPaso}>01 / TU FOTOGRAFÍA</span><h2>Elige cómo empezar</h2><p>Usa una fotografía de demostración tomada por ti. La cámara no se activa hasta que pulses el botón.</p></div>
-      <div className={styles.opciones}>
-        <article className={styles.opcion}>
-          <span className={styles.iconoOpcion}><Icono nombre="camara" size={24} /></span><h3>Tomar fotografía</h3><p>Solicitaremos acceso a la cámara después de tu acción. En móviles se prioriza la cámara posterior.</p>
-          <button ref={botonCamara} type="button" className={styles.botonPrimario} onClick={() => void abrirCamara()} disabled={camaraCargando}><Icono nombre="camara" size={17} />{camaraCargando ? "Abriendo cámara…" : "Abrir cámara"}</button>
-        </article>
-        <article className={styles.opcion}>
-          <span className={`${styles.iconoOpcion} ${styles.azul}`}><Icono nombre="subir" size={24} /></span><h3>Subir fotografía</h3><p>Selecciona un archivo local JPG, PNG o WebP de hasta 8 MB. No se carga a Supabase.</p>
-          <input ref={entrada} type="file" accept="image/jpeg,image/png,image/webp" onChange={manejarArchivo} className={styles.entradaOculta} aria-label="Seleccionar una fotografía" tabIndex={-1} />
-          <button ref={botonSubir} type="button" className={styles.botonSecundario} onClick={() => entrada.current?.click()}><Icono nombre="imagen" size={17} /> Elegir del dispositivo</button>
-        </article>
-      </div>
-      {camaraAbierta && <section className={styles.camara} aria-labelledby="titulo-camara">
-        <div className={styles.camaraTitulo}><div><span className={styles.numeroPaso}>CÁMARA ACTIVA</span><h2 id="titulo-camara">Encuadra tu fotografía</h2></div><button type="button" className={styles.botonCerrar} onClick={detenerCamara} aria-label="Cerrar cámara"><Icono nombre="cerrar" size={18} /></button></div>
-        <div className={styles.marcoCamara}><video ref={video} playsInline muted aria-label="Vista previa de la cámara" /><span className={styles.guiaCamara} aria-hidden="true" /></div>
-        <p className={styles.ayudaCamara}>Mantén el teléfono estable y busca buena iluminación. La guía de encuadre es orientativa y no evalúa tu salud dental.</p>
-        <button type="button" className={styles.botonPrimario} onClick={() => void capturarFotografia()}><Icono nombre="camara" size={17} /> Capturar fotografía</button>
-      </section>}
-      <aside className={styles.privacidad}><Icono nombre="privacidad" size={19} /><div><strong>Tu imagen se mantiene en este dispositivo</strong><p>El flujo no la almacena ni la envía. El consentimiento para guardar fotos en “Mis fotografías” es independiente, igual que el consentimiento para procesarlas se solicitar&aacute; antes del an&aacute;lisis.</p></div></aside>
-      <div className={styles.enlacesSecundarios}><Link href="/fotografias">Abrir Mis fotografías guardadas <Icono nombre="flecha" size={16} /></Link><Link href="/directorio">Encontrar odontólogos <Icono nombre="flecha" size={16} /></Link></div>
+      <button type="button" className={styles.primarioGrande} onClick={() => setFase("carga")}>Comenzar análisis <Icono nombre="flecha" size={21} /></button>
     </div>}
 
-    {fase === "revision" && archivo && <div className={styles.contenido}>
-      <div className={styles.seccionIntro}><span className={styles.numeroPaso}>02 / REVISIÓN</span><h2>Revisa la fotografía</h2><p>Comprueba que la imagen se vea clara. Aún no se ha guardado ni procesado.</p></div>
-      <div className={styles.revision}>
-        <figure className={styles.vistaImagen}><img src={vista} alt="Vista previa local de la fotografía seleccionada" /><figcaption>Vista previa temporal · solo en este dispositivo</figcaption></figure>
-        <div className={styles.detalleImagen}><span className={styles.tagImagen}><Icono nombre="imagen" size={15} /> {flujoOrigen ? "FOTO PRIVADA GUARDADA" : "FOTO LOCAL"}</span><h3>{archivo.name}</h3><dl><div><dt>Formato</dt><dd>{archivo.type.replace("image/", "").toUpperCase()}</dd></div><div><dt>Tamaño</dt><dd>{(archivo.size / 1024 / 1024).toFixed(2)} MB</dd></div></dl><h4>Consejos para revisar</h4><ul><li>Busca una imagen enfocada y con iluminación suficiente.</li><li>Evita sombras que cubran la zona que quieres mostrar.</li><li>No uses fotografías de otras personas sin autorización.</li></ul>
-          <div className={styles.acciones}><button type="button" className={styles.botonSecundario} onClick={cambiarFotografia}>Cambiar fotografía</button><button type="button" className={styles.botonPrimario} onClick={() => { setConsentimiento(false); setFase("preparacion"); }}><Icono nombre="check" size={17} /> Confirmar fotografía</button></div>
+    {fase === "carga" && <div className={styles.vistaFlujo}>
+      <div className={styles.encabezadoVista}><div><h1>Sube la fotografía de tu sonrisa</h1><p>Carga una imagen clara y sin filtros. No se analizará hasta que pulses el botón.</p></div><Mascota compacta /></div>
+      <div className={styles.cargaGrid}>
+        <div className={styles.dropzone} onDragOver={event => event.preventDefault()} onDrop={soltar}>
+          <Icono nombre="subir" size={56} /><h2>Arrastra y suelta tu fotografía aquí</h2><p>o selecciona un archivo desde tu equipo</p>
+          <input ref={entrada} type="file" accept="image/jpeg,image/png,image/webp" onChange={manejarArchivo} className={styles.oculto} />
+          <button type="button" className={styles.secundario} onClick={() => entrada.current?.click()}>Seleccionar archivo</button><small>JPG, PNG o WebP · máximo 8 MB</small>
+        </div>
+        <div className={styles.cargaLateral}>
+          <button type="button" className={styles.camaraBoton} onClick={() => void abrirCamara()} disabled={camaraCargando}><Icono nombre="camara" size={30} />{camaraCargando ? "Abriendo cámara…" : "Tomar fotografía con tu cámara"}</button>
+          <article className={styles.preview}><h2><Icono nombre="imagen" size={20} /> Vista previa</h2>{vista ? <><img src={vista} alt="Vista previa local de la sonrisa" /><button type="button" onClick={() => { setArchivo(null); limpiarFotografia(); }} aria-label="Eliminar fotografía"><Icono nombre="cerrar" size={19} /></button></> : <p>Aún no has seleccionado una fotografía.</p>}</article>
         </div>
       </div>
-      <aside className={styles.privacidad}><Icono nombre="privacidad" size={19} /><div><strong>Sin consentimiento de procesamiento</strong><p>Confirmar aquí solo conserva temporalmente la selección en la página. No autoriza almacenamiento ni análisis automatizado.</p></div></aside>
+      {camaraAbierta && <section className={styles.camaraPanel}><video ref={video} playsInline muted aria-label="Vista previa de la cámara" /><div><button type="button" className={styles.primario} onClick={() => void capturar()}>Capturar fotografía</button><button type="button" className={styles.secundario} onClick={detenerCamara}>Cerrar cámara</button></div></section>}
+      <label className={styles.consentimiento}><input type="checkbox" checked={consentimiento} onChange={event => setConsentimiento(event.target.checked)} /><span><strong>Consentimiento de procesamiento</strong> Autorizo el envío temporal de esta fotografía al servicio Roboflow. No se almacenará ni se enviará a OpenAI.</span></label>
+      <div className={styles.acciones}><button type="button" className={styles.secundario} onClick={() => setFase("preparacion")}>← Volver</button><button type="button" className={styles.primario} disabled={!archivo || !consentimiento} onClick={() => void analizar()}>Analizar fotografía <Icono nombre="flecha" size={20} /></button></div>
     </div>}
 
-    {fase === "preparacion" && archivo && <div className={styles.contenido}>
-      <div className={styles.seccionIntro}><span className={styles.numeroPaso}>03 / AN&Aacute;LISIS EDUCATIVO</span><h2>Revisa y procesa tu fotograf&iacute;a</h2><p>El servicio est&aacute; limitado a dos muestras p&uacute;blicas verificadas. Las fotos privadas, las capturas de c&aacute;mara y cualquier otra imagen no se enviar&aacute;n al servicio.</p></div>
-      <div className={styles.preparacion}><figure className={styles.vistaPreparacion}><img src={vista} alt="Fotograf&iacute;a preparada para revisi&oacute;n educativa" /><figcaption>{archivo.name}</figcaption></figure><div className={styles.pasosFuturos}><span className={styles.tagPendiente}>{muestraPublica ? "Muestra p\u00fablica verificada" : "Solo muestras p&uacute;blicas"}</span><h3>Consentimiento de procesamiento</h3><p>Al continuar, autorizas el env&iacute;o temporal de esta muestra p&uacute;blica verificada al servicio ONNX. No se guardar&aacute; la imagen.</p><label className={styles.consentimiento}><input type="checkbox" checked={consentimiento} onChange={e => setConsentimiento(e.target.checked)} /> Entiendo y doy mi consentimiento para procesar esta imagen.</label><p>Solo se admiten <code>anonymous_003-007-1004-00_1731042060585_Mandibular_View.jpg</code> y <code>anonymous_003-007-1004-00_1731042060585_Maxillary_Occlusal_View.jpg</code>, verificadas por SHA-256.</p></div></div>
-      <div className={styles.accionesFinales}><button type="button" className={styles.botonSecundario} onClick={() => setFase("revision")}>Volver a la fotograf&iacute;a</button><button type="button" className={styles.botonSecundario} onClick={cambiarFotografia}>Elegir otra</button><button type="button" className={styles.botonPrimario} disabled={!muestraPublica || !consentimiento || analizando} onClick={() => void analizar()}><Icono nombre="destello" size={17} />{analizando ? "Analizando..." : "Analizar muestra p&uacute;blica"}</button></div>
-      {prediccion && <section className={styles.resultado} aria-live="polite"><h3>Resultado educativo</h3><p>Modelo {prediccion.model} | inferencia {prediccion.inference_ms.toFixed(3)} ms</p><div className={styles.marcoResultado}><img src={vista} alt="Fotograf&iacute;a del resultado educativo" /><svg viewBox={"0 0 " + prediccion.width + " " + prediccion.height} role="img" aria-label="Detecciones ONNX sobre la fotografia">{prediccion.detections.map((d,i)=><g key={i}><rect x={d.box.x_min*prediccion.width} y={d.box.y_min*prediccion.height} width={(d.box.x_max-d.box.x_min)*prediccion.width} height={(d.box.y_max-d.box.y_min)*prediccion.height}/><text x={d.box.x_min*prediccion.width+4} y={Math.max(17,d.box.y_min*prediccion.height-4)}>{d.class_name} | {Math.round(d.confidence*100)}%</text></g>)}</svg></div>{prediccion.detections.length ? <ul>{prediccion.detections.map((d,i)=><li key={i}><b>{d.class_name}</b> - {d.class_description} | confianza {Math.round(d.confidence*100)}%</li>)}</ul> : <p>No hay detecciones en esta imagen. Esto no significa que los dientes est&eacute;n sanos.</p>}<button type="button" className={styles.botonSecundario} disabled={explicando||!!explicacion} onClick={() => void explicar()}>{explicando?"Preparando explicaci&oacute;n...":"Solicitar explicaci&oacute;n educativa"}</button>{explicacion&&<aside className={styles.explicacion}><strong>{explicacion.source==="ai"?"Explicaci\u00f3n generada por OpenAI":"Texto predeterminado - no generado por IA"}</strong><p>{explicacion.explanation}</p></aside>}</section>}
-      <aside className={styles.privacidad}><Icono nombre="privacidad" size={19}/><div><strong>Herramienta educativa, no diagn&oacute;stica</strong><p>Las detecciones no confirman una caries. La confianza no expresa gravedad ni certeza cl&iacute;nica. No reemplaza la evaluaci&oacute;n de un odont&oacute;logo.</p></div></aside>
-      <div className={styles.enlacesSecundarios}><Link href="/resultados">Ir a Mis resultados <Icono nombre="flecha" size={16}/></Link><Link href="/directorio">Encontrar odontologos <Icono nombre="flecha" size={16}/></Link></div>
+    {fase === "analizando" && <div className={styles.vistaFlujo} aria-busy={!error}>
+      <div className={styles.encabezadoVista}><div><h1>Analizando tu sonrisa…</h1><p>La segmentación y las mediciones se realizan en una única solicitud. Esto puede tardar unos segundos.</p></div><Mascota compacta /></div>
+      <div className={styles.procesoGrid}><figure className={styles.fotoProceso}>{vista && <img src={vista} alt="Fotografía enviada para análisis" />}<figcaption>Segmentación y medición en curso</figcaption></figure><div className={styles.estadosProceso}>
+        <div data-estado={error ? "error" : "activo"}><span>{error ? "!" : <i />}</span><strong>Detectando dientes</strong></div>
+        <div data-estado={error ? "pendiente" : "activo"}><span>{error ? "2" : <i />}</span><strong>Analizando color CIELAB</strong></div>
+        <div data-estado="pendiente"><span>3</span><strong>Preparando resumen técnico</strong></div>
+      </div></div>
+      {!error && <div className={styles.progresoIndeterminado} role="progressbar" aria-label="Análisis en curso"><span /></div>}
+      <aside className={styles.nota}><Icono nombre="privacidad" size={22} /><p>El resultado es orientativo. No constituye diagnóstico ni confirma el estado de salud dental.</p></aside>
+    </div>}
+
+    {fase === "resultado" && resultado && <div className={styles.vistaFlujo}>
+      <div className={styles.tituloResultado}><h1>Resultado de tu sonrisa</h1><p>Una observación visual orientativa de esta fotografía.</p></div>
+      <div className={styles.resultadoHero}><figure><img src={overlay || vista} alt={overlay ? "Fotografía con dientes detectados y áreas visuales resaltadas" : "Fotografía analizada; el servicio no proporcionó superposición"} /></figure><article><span><Icono nombre="diente" size={45} /></span><h2>{resultado.status === "not_evaluable" ? "Necesitamos otra fotografía" : dientesAmarillentos ? `Detectamos ${dientesAmarillentos} ${dientesAmarillentos === 1 ? "diente con amarillo destacado" : "dientes con amarillo destacado"}` : "No observamos amarillo destacado"}</h2><p>{resultado.status === "not_evaluable" ? "Prueba con luz natural o neutra, de frente y sin filtros." : "Los niveles leve, moderado e intenso describen el aspecto visual de esta foto; no son un diagnóstico."}</p></article></div>
+      <div className={styles.metricas}><article><Icono nombre="alerta" size={30} /><span>Dientes con amarillo destacado<strong>{dientesAmarillentos}</strong></span></article><article><Icono nombre="check" size={30} /><span>Calidad de la foto<strong>{regionStates?.lightingWarnings ? "Revisar luz" : resultado.status === "not_evaluable" ? "Repetir" : "Adecuada"}</strong></span></article></div>
+      <div className={styles.leyenda} aria-label="Leyenda del resultado"><span data-color="verde">Sin amarillo destacado</span><span data-color="rojo">Amarillo intenso</span><span data-color="naranja">Amarillo moderado</span><span data-color="morado">Zona con amarillo destacado</span><span data-color="gris">No se pudo evaluar</span></div>
+      <div className={styles.resultadoInferior}><aside className={styles.explicacion} aria-live="polite"><div><Mascota compacta /><h2>Tu orientación educativa</h2></div>{explicacion ? <><p>{explicacion.summary}</p><p>{explicacion.recommendation}</p><small>{explicacion.disclaimer}</small></> : <p>{explicando ? "Preparando una explicación sencilla…" : "Preparando tu orientación…"}</p>}</aside><aside className={styles.importante}><Icono nombre="privacidad" size={24} /><div><h2>Importante</h2><p>La luz, sombras y filtros pueden cambiar el aspecto. Esto no confirma una condición dental.</p></div></aside></div>
+      <div className={`${styles.acciones} ${styles.resultadoAcciones}`}><Link className={styles.primario} href="/panel/odontologos"><Icono nombre="calendario" size={20} /> Consultar odontólogo</Link><button type="button" className={styles.secundario} onClick={nuevaFoto}><Icono nombre="actualizar" size={19} /> Tomar otra foto</button></div>
+    </div>}
+
+    {fase === "detalle" && resultado && <div className={styles.vistaFlujo}>
+      <div className={styles.tituloResultado}><h1>Detalle por región dental</h1><p>Consulta las mediciones experimentales y su calidad de imagen.</p></div>
+      <div className={styles.detalleGrid}><div className={styles.tablaWrap}><table><caption className={styles.soloLectores}>Mediciones por región dental</caption><thead><tr><th>Región</th><th>b* mediana</th><th>Δb* mitades</th><th>Estado V17</th><th>Zona parcial</th><th>Iluminación</th></tr></thead><tbody>{resultado.regions.map(region => <tr key={region.region_id} data-alerta={!region.evaluable || region.partial || region.illumination_warning}><th>Región {region.region_id}</th><td>{region.b_median?.toFixed(1) ?? "—"}</td><td>{region.delta_b_halves?.toFixed(1) ?? "—"}</td><td><span>{region.level}</span></td><td>{region.partial ? `${(region.zone_fraction * 100).toFixed(1)}%` : "No"}</td><td>{region.evaluable ? (region.illumination_warning ? "Revisar" : "Sin advertencia") : "—"}</td></tr>)}</tbody></table></div>
+        <aside className={styles.explicacion}><div><Mascota compacta /><h2>Explicación opcional</h2></div>{explicacion ? <><p>{explicacion.summary}</p><ul>{explicacion.observations.map(item => <li key={item}>{item}</li>)}</ul><p>{explicacion.recommendation}</p><small>{explicacion.disclaimer}</small></> : <><p>OpenAI recibirá únicamente este JSON técnico, nunca la fotografía ni datos personales.</p><button type="button" className={styles.secundario} onClick={() => void explicar()} disabled={explicando}>{explicando ? "Generando…" : "Generar explicación"}</button></>}</aside></div>
+      <aside className={styles.nota}><Icono nombre="privacidad" size={22} /><p>Este análisis es orientativo y no sustituye la evaluación de un odontólogo.</p></aside>
+      <div className={styles.acciones}><button type="button" className={styles.secundario} onClick={() => setFase("resultado")}>← Volver al resumen</button><Link className={styles.primario} href="/panel/odontologos"><Icono nombre="calendario" size={20} /> Buscar odontólogo</Link></div>
     </div>}
   </section>;
 }

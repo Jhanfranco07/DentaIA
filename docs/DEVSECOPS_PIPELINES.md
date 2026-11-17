@@ -102,7 +102,7 @@ El job «Production · autorización externa» documenta el límite: **no solici
 
 ## Pruebas reales y cobertura preservada
 
-El inventario recorre todos los `*.test.mjs` de `src/features` y `src/app`. Cada archivo se ejecuta una sola vez: los `*integracion.test.mjs` forman integración; `profesional/api-clinica.test.mjs` verifica contratos HTTP/DTO; `analisis/analisis-onnx.test.mjs` verifica regresiones de consentimiento, autenticación y alcance educativo; el resto integra unitarias. La regresión citada incluye comprobaciones estructurales de código: no acredita navegación E2E ni inferencia real. Una categoría vacía falla, no se inventa una suite.
+El inventario recorre todos los `*.test.mjs` de `src/features` y `src/app`. Cada archivo se ejecuta una sola vez: los `*integracion.test.mjs` forman integración; `profesional/api-clinica.test.mjs` verifica contratos HTTP/DTO; `analisis/analisis-smile.test.mjs` verifica regresiones de consentimiento, autenticación y alcance educativo; el resto integra unitarias. La regresión citada incluye comprobaciones estructurales de código: no acredita navegación E2E ni inferencia real. Una categoría vacía falla, no se inventa una suite.
 
 Baseline local: **493 casos Node** (463 unitarios, 11 de integración, 16 de contratos y 3 de regresión), más cuatro pruebas del observador/gate. La incorporación futura de archivos cambia los recuentos reales reflejados en JUnit.
 
@@ -114,10 +114,10 @@ No hay ESLint configurado en `main`: el job lo declara explícitamente; si apare
 
 - Node 22, `npm ci`, `npm run typecheck`, `npm run build`, Node test runner y JUnit.
 - Python 3.11 y requirements existentes; pytest se actualiza de 9.0.2 a **9.0.3** para corregir `PYSEC-2026-1845`, detectada por pip-audit. Solo cambian dependencias de pruebas.
-- `npm audit` completo, sin umbral reducido ni exclusión de devDependencies; `pip-audit 2.10.1` resuelve también dependencias transitivas de runtime ONNX y pruebas Linux, sin ignorar advisories.
+- `npm audit` completo, sin umbral reducido ni exclusión de devDependencies; `pip-audit 2.10.1` resuelve dependencias transitivas del runtime Python, sin ignorar advisories.
 - Semgrep OSS **1.185.0**, cinco reglas locales versionadas: ejecución dinámica JS/Python, TLS desactivado Python/Node y shell Python. `--error --strict`, sin reglas remotas cambiantes ni licencia. Alcance limitado, no equivale a SAST exhaustivo.
 - Gitleaks OSS **8.30.1**, snapshot completo de archivos versionados, resultados 100% redactados, sin subir informes con secretos. No revisa todo el historial previo. Excepciones revisadas de `generic-api-key`: SHA-256 de seis archivos de evidencia, clave explícitamente pública `sb_publishable_` de `.env.example` y una constante sintética exacta en `test_evaluation.py`. Condición AND de archivo y valor; no se excluyen carpetas completas ni credenciales privadas.
-- Bandit **1.9.4** bloquea severidad media/alta del código `services/dental-vision/app`. El análisis inicial informa una observación baja de uso de `assert` al validar la forma de salida ONNX (B101); no es una auditoría libre de observaciones.
+- Bandit **1.9.4** bloquea severidad media/alta del código `services/dental-vision/app`.
 - actionlint **1.7.12** y PyYAML **6.0.3**, más validación de DAG, permisos, SHA, persistencia de credenciales, eventos y ausencia de comandos de publicación.
 - Checkout v6, setup-node v6, setup-python v6.1.0 y upload-artifact v4 fijados a SHA completos. Binarios Gitleaks/actionlint fijados a versión y SHA-256 verificado contra los checksums oficiales. No se utiliza un tag flotante `latest`.
 
@@ -155,7 +155,7 @@ python scripts/ci/validate-workflows.py
 bash scripts/ci/actionlint.sh
 ```
 
-En entorno Python aislado instalar requirements ONNX/Linux y ejecutar desde `services/dental-vision`: `python -m pip check` y `python -m pytest -m 'not real' -q`. Los comandos exactos de cada partición y scanner constan en los YAML. No ejecutar scripts administrativos `setup:test-users` o `check:supabase` para esta validación.
+En entorno Python aislado instalar `requirements.txt` y ejecutar las validaciones del servicio Smile. No ejecutar scripts administrativos `setup:test-users` o `check:supabase` para esta validación.
 
 ## Evidencias para la exposición — Proyecto Final de Carrera III
 

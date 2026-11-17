@@ -1,7 +1,7 @@
 import { readdirSync, mkdirSync, existsSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 const contracts = new Set(['src/features/profesional/api-clinica.test.mjs']);
-const regressions = new Set(['src/features/analisis/analisis-onnx.test.mjs']);
+const regressions = new Set(['src/features/analisis/analisis-smile.test.mjs']);
 function walk(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`]);
 }

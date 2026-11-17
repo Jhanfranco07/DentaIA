@@ -1,29 +1,20 @@
 import { createHash } from "node:crypto";
+import { rolesDesdeAppMetadata } from "./roles.ts";
 
 type IdentityClient = { auth: { getUser: (token: string) => Promise<{ data: { user: unknown | null }; error: { status?: number } | null }> } };
 type CreateIdentityClient = () => IdentityClient;
 
 export type VisionAccess =
   | { allowed: true; userId: string }
-  | { allowed: false; status: 401 | 403 | 503; code: "AUTH_REQUIRED" | "ACCESS_DENIED" | "AUTH_UNAVAILABLE" | "ALLOWLIST_UNCONFIGURED" };
+  | { allowed: false; status: 401 | 403 | 503; code: "AUTH_REQUIRED" | "ACCESS_DENIED" | "AUTH_UNAVAILABLE" };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-function allowedIds(value: string | undefined): Set<string> | null {
-  if (!value?.trim()) return null;
-  const items = value.split(",").map((item) => item.trim().toLowerCase());
-  if (items.length > 100 || items.some((item) => !UUID.test(item))) return null;
-  return new Set(items);
-}
-
-/** Verify a fresh Supabase Auth user and allow only configured demo accounts. */
+/** Authorizes active patients and superadministrators from Auth app_metadata only. */
 export async function authorizeVisionDemo(
   headers: Headers,
   createClient: CreateIdentityClient,
-  allowlistValue: string | undefined,
 ): Promise<VisionAccess> {
-  const ids = allowedIds(allowlistValue);
-  if (!ids) return { allowed: false, status: 503, code: "ALLOWLIST_UNCONFIGURED" };
   const authorization = headers.get("authorization");
   if (!authorization || authorization.length > 8192) {
     return { allowed: false, status: 401, code: "AUTH_REQUIRED" };
@@ -37,14 +28,18 @@ export async function authorizeVisionDemo(
       const invalid = [400, 401, 403, 422].includes(error.status ?? 0);
       return { allowed: false, status: invalid ? 401 : 503, code: invalid ? "AUTH_REQUIRED" : "AUTH_UNAVAILABLE" };
     }
-    const user = data.user as { id?: unknown; aud?: unknown; is_anonymous?: unknown; deleted_at?: unknown; confirmed_at?: unknown; banned_until?: unknown } | null;
-    const bannedUntil = typeof user?.banned_until === "string" ? Date.parse(user.banned_until) : null;
+    const user = data.user as { id?: unknown; aud?: unknown; is_anonymous?: unknown; deleted_at?: unknown; confirmed_at?: unknown; banned_until?: unknown; app_metadata?: unknown } | null;
+    const bannedUntil = user?.banned_until;
+    const suspensionInvalid = bannedUntil != null && bannedUntil !== "" && (typeof bannedUntil !== "string" || !Number.isFinite(Date.parse(bannedUntil)));
+    const suspended = typeof bannedUntil === "string" && Number.isFinite(Date.parse(bannedUntil)) && Date.parse(bannedUntil) > Date.now();
+    const confirmed = typeof user?.confirmed_at === "string" && Number.isFinite(Date.parse(user.confirmed_at));
+    const roles = rolesDesdeAppMetadata(user?.app_metadata);
     if (!user || typeof user.id !== "string" || !UUID.test(user.id)
       || user.aud !== "authenticated" || user.is_anonymous === true || user.deleted_at
-      || !user.confirmed_at || (bannedUntil !== null && (!Number.isFinite(bannedUntil) || bannedUntil > Date.now()))) {
+      || !confirmed || suspensionInvalid || suspended
+      || !roles.some(role => role === "paciente" || role === "superusuario")) {
       return { allowed: false, status: 403, code: "ACCESS_DENIED" };
     }
-    if (!ids.has(user.id.toLowerCase())) return { allowed: false, status: 403, code: "ACCESS_DENIED" };
     return { allowed: true, userId: user.id };
   } catch {
     return { allowed: false, status: 503, code: "AUTH_UNAVAILABLE" };
