@@ -179,3 +179,86 @@ requiere un stack Supabase cuyo `db` inicial sea `dentaia_arch_qa_fase8` y cuyo
 bootstrap de Auth/Storage se ejecute en esa misma base, o una clonación
 verificable del catálogo local antes de arrancar los servicios. La CLI estándar
 3.2.0 no ofrece ese cambio de base inicial en `config.toml`.
+
+## Harness DI-36 local (validacion reproducible)
+
+El harness `scripts/supabase/run-di36-local-qa.ps1` ejecuta solo contra el
+contenedor local `supabase_db_DentaIA`, verifica su red Docker local y calcula
+los cuatro SHA-256 de las fuentes originales. Usa un arreglo explicito, no una
+tabla hash, en este orden: Administracion, Modelo clinico, RPC clinicos y
+Workspace. Cada invocacion de `psql` usa `ON_ERROR_STOP=1`, comprueba su codigo
+de salida y conserva copias adaptadas y logs temporales si falla.
+
+La unica adaptacion, fuera de `supabase/migrations`, reemplaza la rama de
+identificacion de destino para exigir en la base local `postgres` el comentario
+`DENTAIA_PHASE8_SYNTHETIC_ONLY` y la GUC
+`dentaia.integration_approval=fase8_local_simulation`. No modifica las fuentes
+originales, el fingerprint de `public`, DDL, RLS, ACL, triggers ni funciones.
+
+El 16 de noviembre se elimino el volumen Docker local, se inicio un stack
+nuevo, se aplicaron las dos migraciones base de octubre y se ejecutaron las
+cuatro DI-36 con el harness. Las cuatro finalizaron con codigo 0. Se verifico:
+
+- `clinical` (11 tablas con RLS), `clinical_service` y `dentaia_admin` (3
+  tablas con RLS) existen.
+- `clinical` contiene 21 claves foraneas y 17 triggers no internos;
+  `dentaia_admin` contiene un trigger no interno.
+- Hay 9 funciones en `clinical` (ninguna `SECURITY DEFINER`), 12 en
+  `clinical_service` (6 `SECURITY DEFINER`) y 4 en `dentaia_admin` (1
+  `SECURITY DEFINER`).
+- Los roles `anon` y `authenticated` no tienen `SELECT` sobre
+  `clinical.clinics`, y `authenticated` no tiene `USAGE` sobre el esquema
+  `clinical`.
+
+Una ejecucion anterior no era limpia: el volumen local conservaba una aplicacion
+parcial y Modelo clinico se detuvo por `CLINICAL_SCHEMA_ALREADY_EXISTS`. El
+problema no correspondia a una dependencia de Administracion ni a una deriva
+del fingerprint. Tras limpiar el volumen, `PUBLIC_SCHEMA_DRIFT_ABORT` no se
+reprodujo. No se aplicaron migraciones posteriores ni se modifico Supabase
+remoto.
+
+## Cierre local de DI-151, DI-36 y DI-172
+
+`20261103012414_di151_roles_auditoria_atomica.sql` y la fuente original
+DI-36 Administracion crean los mismos objetos funcionales de `dentaia_admin`:
+tres tablas, las funciones de roles, el trigger de auditoria y la funcion
+publica controlada. El diff solamente incorpora a DI-36 las guardas de destino,
+aprobacion y fingerprint, junto con diferencias de formato. DI-151 no aporta
+un cambio posterior independiente.
+
+Por ello, el harness QA reconstruye con DI-36 Administracion y excluye DI-151
+solo de ese ensayo local. Los dos SQL historicos permanecen intactos y no se
+usan `IF NOT EXISTS` ni reparaciones de historial. La evidencia remota ya
+recuperada registra DI-36 Administracion con version `20261104004040`; no
+registra DI-151 entre las once migraciones del proyecto remoto.
+
+Sobre un volumen Docker eliminado y recreado se aplicaron, en este orden: las
+dos migraciones de octubre, DI-36 mediante el harness, ubicaciones y resenas,
+workflows administrativos, ubicaciones demo, payments y la migracion original
+DI-172 leida desde `origin/feature/DI-172-rutinas`. Todas terminaron con salida
+0. No se escribio en un proyecto remoto.
+
+La prueba pgTAP original `di172_rutinas_rls.sql` termino con `1..45` y salida
+0 al ejecutarse como `supabase_admin` dentro del Docker local. El rol local
+denominado `postgres` no es superusuario (`is_superuser=off`), por lo que el
+preflight intencional de la prueba lo rechaza; `supabase_admin` es el operador
+superusuario local equivalente. Se verificaron RLS, dos pacientes, lectura
+ajena denegada, insercion propia, idempotencia con `ON CONFLICT DO NOTHING`,
+fechas de America/Lima, vigencia de planes, cuenta sin rol paciente y anonimo.
+
+## DI-131 dentist_services
+
+La migracion independiente `20261117041157_dentist_services.sql` crea el
+catalogo publico `public.dentist_services`. La lectura publica queda limitada a
+servicios activos. La administracion se limita a una cuenta profesional con
+`clinical.professional_accounts.status = 'verified'` y `dentist_id` asociado.
+No se concede lectura de `clinical`: una funcion `SECURITY DEFINER` estrecha en
+`clinical_service` evalua exclusivamente esa relacion y solo es ejecutable por
+`authenticated`.
+
+`supabase/tests/di131_dentist_services_rls.sql` paso `1..9` en Docker local:
+visitante solo lee activos; dos odontologos sinteticos quedan aislados; el
+propietario verificado crea su servicio; y una cuenta pendiente no puede
+escribir. Angie debe consumir `dentist_services` como catalogo, sin incorporar
+una segunda tabla ni dar por sentado que todo odontologo autenticado es
+propietario verificado.
