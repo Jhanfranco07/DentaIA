@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { formatearPrecio, textoOpcional } from "./formato";
-import type { Dentista, MarcadorConsultorio, UbicacionPublica } from "./tipos";
+import type { Dentista, DemoLocationPublica, MarcadorConsultorio, UbicacionPublica } from "./tipos";
 import styles from "./directorio.module.css";
 import { enlaceSolicitud } from "@/lib/navegacion";
 import dynamic from "next/dynamic";
 import ResenasOdontologo from "./ResenasOdontologo";
 import mapStyles from "./mapa-directorio.module.css";
-import { AVISO_PERFILES_DEMO, perfilDemo, unirCatalogoDemo } from "./catalogo-demo";
+import { AVISO_PERFILES_DEMO, completarCatalogoDemo, perfilDemo } from "./catalogo-demo";
 import AvatarOdontologo, { tratamientoDemo } from "./AvatarOdontologo";
 
 const MapaDirectorio = dynamic(() => import("./MapaDirectorio"), { ssr: false, loading: () => <div className={mapStyles.contenedorMapa} role="status">Cargando mapa…</div> });
@@ -31,20 +31,27 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio" }: 
   useEffect(() => {
     let cancelado = false;
     async function cargar() {
-      try {
-        const client = getSupabaseBrowserClient();
-        const demo = perfilDemo(id);
-        if (demo) {
-          const respuesta = await client.from("directory_demo_locations")
+      const demo = perfilDemo(id);
+      if (demo) {
+        let referencias: DemoLocationPublica[] = [];
+        let ubicacionesDisponibles = false;
+        try {
+          const respuesta = await getSupabaseBrowserClient().from("directory_demo_locations")
             .select("id,slug,name,district,city,country,latitude,longitude,is_demo,is_published,requests_enabled,public_label")
             .eq("slug", demo.slug).eq("is_demo", true).eq("is_published", true).eq("requests_enabled", false).maybeSingle();
-          if (cancelado) return;
-          if (respuesta.error) { setCarga({ estado: "error", mensaje: respuesta.error.message }); return; }
-          const perfil = respuesta.data ? unirCatalogoDemo([respuesta.data])[0] : undefined;
-          if (!perfil) { setCarga({ estado: "noEncontrado" }); return; }
-          setCarga({ estado: "listo", dentista: perfil, ubicaciones: perfil.ubicaciones, ubicacionesDisponibles: true });
-          return;
+          ubicacionesDisponibles = !respuesta.error;
+          if (respuesta.data && ubicacionesDisponibles) referencias = [respuesta.data];
+        } catch {
+          // La ficha de ejemplo se puede consultar sin el servicio de ubicaciones.
         }
+        if (cancelado) return;
+        const ficha = completarCatalogoDemo(referencias).find(perfil => perfil.id === demo.id);
+        if (ficha) setCarga({ estado: "listo", dentista: ficha, ubicaciones: ficha.ubicaciones, ubicacionesDisponibles });
+        return;
+      }
+
+      try {
+        const client = getSupabaseBrowserClient();
         const { data, error } = await client
           .from("dentists")
           .select("*")
@@ -109,7 +116,7 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio" }: 
         <article className={styles.detalle}>
           <div className={styles.contenedorAvatarGrande}><AvatarOdontologo id={carga.dentista.id} name={carga.dentista.name} initials={carga.dentista.initials} avatarColor={carga.dentista.avatar_color} /></div>
           <div className={styles.cuerpo}>
-            {carga.dentista.is_demo && <><span className={styles.ficticio}>Perfil ficticio</span><p className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}.</p></>}
+            {carga.dentista.is_demo && <><span className={styles.ficticio}>Perfil ficticio</span><p className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}</p></>}
             <h1>{tratamientoDemo(carga.dentista.id)}{textoOpcional(carga.dentista.name, "Nombre no disponible")}</h1>
             <p className={styles.especialidad}>
               {textoOpcional(carga.dentista.specialty, "Especialidad no indicada")}
@@ -167,7 +174,7 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio" }: 
                   <Link href={baseDirectorio}>Explorar otras ubicaciones de referencia</Link>
                 </section>
               : <p className={styles.nota}>{carga.ubicacionesDisponibles ? "Ubicación no registrada. Este perfil no se coloca en el mapa." : "El servicio de ubicaciones aún no está disponible en este entorno."}</p>}
-            <ResenasOdontologo dentistId={carga.dentista.id} />
+            {!perfilDemo(carga.dentista.id) && <ResenasOdontologo dentistId={carga.dentista.id} />}
           </div>
         </article>
       )}

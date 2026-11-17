@@ -20,7 +20,6 @@ const filas = [
   {
     "name": "Bruno Lévano",
     "specialty": "Ortodoncia",
-    "serviciosIlustrativos": ["Evaluación de alineación dental", "Control de ortodoncia"],
     "district": "Jesús María",
     "latitude": -12.089279,
     "longitude": -77.058167,
@@ -210,13 +209,23 @@ const filas = [
   }
 ] as const;
 
+const serviciosPorEspecialidad = {
+  "Odontología general": ["Consulta odontológica", "Limpieza dental"],
+  Ortodoncia: ["Evaluación de alineación dental", "Control de ortodoncia"],
+  Endodoncia: ["Evaluación endodóntica", "Tratamiento de conductos"],
+  Periodoncia: ["Evaluación periodontal", "Mantenimiento periodontal"],
+  Odontopediatría: ["Consulta odontopediátrica", "Control preventivo infantil"],
+  "Rehabilitación oral": ["Evaluación para prótesis dental", "Revisión de prótesis"],
+  "Cirugía oral": ["Consulta de cirugía oral", "Evaluación para extracción dental"],
+} satisfies Record<(typeof filas)[number]["specialty"], readonly string[]>;
+
 export const CATALOGO_DEMO = filas.map((fila, index) => {
   const numero = String(index + 1).padStart(2, "0");
   return {
     id: `d36a2026-0000-4000-8000-0000000000${numero}`,
     slug: `odontologo-demo-s6-${numero}`,
     ...fila,
-    serviciosIlustrativos: "serviciosIlustrativos" in fila ? fila.serviciosIlustrativos : [],
+    serviciosIlustrativos: serviciosPorEspecialidad[fila.specialty],
     description: `Perfil ficticio de ${fila.specialty.toLowerCase()}, creado para una demostración académica. ${fila.practice_name} es únicamente una referencia geográfica basada en una ficha pública; no existe vinculación laboral ni atención disponible mediante este perfil.`,
     source: VERSION_CATALOGO_DEMO,
   };
@@ -231,17 +240,26 @@ export function unirCatalogoDemo(ubicaciones: readonly DemoLocationPublica[]): D
     if (!punto || punto.district !== perfil.district || punto.name !== perfil.practice_name
         || Math.abs(punto.latitude - perfil.latitude) > 0.000001
         || Math.abs(punto.longitude - perfil.longitude) > 0.000001) return [];
-    const dentista: Dentista = {
-      id: perfil.id, slug: perfil.slug, name: perfil.name, specialty: perfil.specialty,
-      district: perfil.district, description: perfil.description, initials: perfil.name.split(" ").map(p => p[0]).join(""),
-      avatar_color: "#e3f6f0", consultation_price: 0, currency: "PEN", created_at: "2026-11-11T00:00:00Z",
-      is_active: true, is_demo: true,
-    };
     const ubicacion: UbicacionPublica = {
       id: punto.id, dentist_id: perfil.id, practice_name: punto.name,
       practice_address: perfil.practice_address,
       latitude: punto.latitude, longitude: punto.longitude, created_at: "2026-11-11T00:00:00Z",
     };
-    return [{ ...dentista, ubicaciones: [ubicacion] }];
+    return [crearFichaDemo(perfil, [ubicacion])];
   });
+}
+
+function crearFichaDemo(perfil: (typeof CATALOGO_DEMO)[number], ubicaciones: UbicacionPublica[] = []): DentistaDirectorio {
+  const dentista: Dentista = {
+    id: perfil.id, slug: perfil.slug, name: perfil.name, specialty: perfil.specialty,
+    district: perfil.district, description: perfil.description, initials: perfil.name.split(" ").map(p => p[0]).join(""),
+    avatar_color: "#e3f6f0", consultation_price: 0, currency: "PEN", created_at: "2026-11-11T00:00:00Z",
+    is_active: true, is_demo: true,
+  };
+  return { ...dentista, ubicaciones };
+}
+
+export function completarCatalogoDemo(ubicaciones: readonly DemoLocationPublica[]) {
+  const fichasConUbicacion = new Map(unirCatalogoDemo(ubicaciones).map(ficha => [ficha.id, ficha]));
+  return CATALOGO_DEMO.map(perfil => fichasConUbicacion.get(perfil.id) ?? crearFichaDemo(perfil));
 }
