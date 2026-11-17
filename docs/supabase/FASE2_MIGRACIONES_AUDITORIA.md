@@ -135,3 +135,10 @@ La recuperación de octubre y la comparación directa de `statements` de DI-36
 requieren una sesión con permiso `database_read` o una exportación de solo
 lectura que entregue el responsable. Hasta entonces no se versionarán
 reconstrucciones ni se declarará una reconstrucción local fiel.
+
+Actualización posterior: la CLI local reconoce un token de perfil, pero
+`supabase whoami --debug` falla al solicitar `GET /v1/profile` con
+`WhoamiNetworkError`/`TransportError`. `api.supabase.com` y `mcp.supabase.com`
+responden HTTP 401 cuando se consultan sin credenciales, por lo que la red está
+disponible; el bloqueo está en el transporte de la CLI. No se imprimió,
+extrajo, sustituyó ni revocó el token, y no se ejecutó SQL remoto.
