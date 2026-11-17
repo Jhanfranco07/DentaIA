@@ -1,4 +1,5 @@
 import HeroCarousel from "@/components/HeroCarousel";
+import PlanesDentaIA from "@/components/PlanesDentaIA";
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
 import styles from "./home.module.css";
@@ -12,7 +13,7 @@ export default function Home() {
         <span className={`eyebrow ${styles.heroEyebrow}`}><span aria-hidden="true" /> CONOCE DENTAIA</span>
         <h1 id="inicio-titulo">Una forma más simple de <span>cuidar tu sonrisa.</span></h1>
         <p>DentaIA reúne tu espacio personal, un directorio odontológico y herramientas de atención con acceso protegido. Encuentra lo que necesitas, sin perder de vista tu privacidad.</p>
-        <div className="actions"><Link href="/cuenta?modo=registro" className="action">Comenzar ahora <Icono nombre="flecha" size={18} /></Link><Link href="/directorio" className="action action-secondary">Explorar odontólogos</Link></div>
+        <div className="actions"><Link href="#planes" className="action">Ver planes <Icono nombre="flecha" size={18} /></Link><Link href="/directorio" className="action action-secondary">Explorar odontólogos</Link></div>
         <Link className={styles.enlaceProfesional} href="/profesional">¿Eres odontólogo? Accede a tu espacio profesional <Icono nombre="flecha" size={16} /></Link>
         <div className={styles.aviso}><span className={styles.check}><Icono nombre="check" size={20} /></span><div><strong>Tu bienestar es lo primero</strong><br />Sin diagnósticos automáticos. El análisis con IA está en desarrollo.</div></div>
       </div>
@@ -20,6 +21,8 @@ export default function Home() {
       </div>
       <div className={styles.principios}><span><Icono nombre="destello" size={18} /> Información clara</span><span><Icono nombre="clinica" size={18} /> Encuentra profesionales</span><span><Icono nombre="escudo" size={18} /> Privacidad y control</span></div>
     </section>
+
+    <PlanesDentaIA />
 
     <section className={styles.seccion} id="funcionalidades" aria-labelledby="funciones-titulo">
       <div className={styles.intro}><span className="eyebrow">DESCUBRE DENTAIA</span><h2 id="funciones-titulo">Todo lo que necesitas, <span>más fácil.</span></h2><p>Desde preparar tu próxima consulta hasta revisar información autorizada: cada función tiene su lugar y cada cuenta, sus permisos.</p></div>

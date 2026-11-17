@@ -180,3 +180,16 @@
 @media(max-width:850px){.metricas{grid-template-columns:1fr}.indicador{padding:17px}.cabecera h1{max-width:100%}.ilustracionHero{opacity:.24;right:2%}.proximosPasos{grid-template-columns:1fr}.proximosEncabezado,.avisoMotor{grid-column:auto}}
 @media(max-width:600px){.cabecera{padding:25px 21px;min-height:235px}.cabecera h1{font-size:35px}.cabecera p{font-size:14px}.ilustracionHero{width:105px;height:105px;right:2%;top:40%;opacity:.17}.ilustracionHero>svg{width:85px;height:85px}.brilloHero{display:none}.siguientePaso{grid-template-columns:54px minmax(0,1fr);gap:12px;padding:17px}.iconoSiguiente{width:52px;height:52px}.botonSiguiente{grid-column:1/-1;width:100%}.proximosPasos{padding:17px}.paso{padding:9px}.indicador strong{font-size:29px}}
 @media(prefers-reduced-motion:reduce){.ilustracionHero{animation:none}.siguientePaso,.paso,.accionPrincipal{transition:none}.siguientePaso:hover,.paso:hover,.accionPrincipal:hover{transform:none}}
+
+/* Invitación contextual: no añade un módulo al menú. */
+.premiumUpsell{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:24px 30px;border:1px solid #6bcac3;border-radius:20px;background:linear-gradient(110deg,#ecfffb,#f3f8ff);box-shadow:0 12px 30px #076a8212}
+.premiumUpsell h2{margin:6px 0;color:#11384a;font-size:clamp(19px,2.4vw,25px);letter-spacing:-.03em}
+.premiumUpsell p{max-width:66ch;margin:0;color:#426270;font-size:14px;line-height:1.65}
+.premiumLabel{font-size:11px;font-weight:800;letter-spacing:.08em;color:#007a78}
+.premiumLink{display:inline-flex;justify-content:center;align-items:center;flex-shrink:0;gap:10px;min-height:46px;padding:12px 18px;border-radius:11px;background:#087c83;color:white;text-decoration:none;font-weight:750;font-size:14px}
+.premiumLink:hover{background:#065f67}
+@media(max-width:720px){.premiumUpsell{flex-direction:column;align-items:stretch;padding:20px}.premiumLink{width:100%}}
+:global([data-area="Paciente"][data-tema="oscuro"]) .premiumUpsell{background:linear-gradient(115deg,#273d5b,#302950);border-color:#756bb0}
+:global([data-area="Paciente"][data-tema="oscuro"]) .premiumUpsell h2{color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .premiumUpsell p{color:#d9d8ee}
+:global([data-area="Paciente"][data-tema="oscuro"]) .premiumLabel{color:#a6f1dd}
