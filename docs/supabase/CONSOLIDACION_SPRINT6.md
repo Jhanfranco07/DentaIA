@@ -33,9 +33,9 @@ El candidato local `integration/pr71-pr74-compat-20261117` integra los cambios
 de PR #71 y PR #74 sobre la base de PR #75. No se ha publicado ni fusionado a
 GitHub; el conflicto de `database.types.ts` se resolvio conservando ambas
 funcionalidades. Los checks locales actuales pasan TypeScript, unitarias,
-build y `npm audit`; la prueba pgTAP de DI-172 no pudo iniciarse porque el
-arranque aislado de Supabase local quedo bloqueado durante la descarga de la
-imagen de PostgreSQL. Esto no es una aprobacion de RLS.
+build, `npm audit` y 45 pruebas pgTAP de DI-172. Estas últimas corrieron con la
+migración en un proyecto Supabase local temporal y aislado; no son una
+verificación del esquema de Production.
 
 ### Credenciales e historial Git
 
@@ -76,7 +76,7 @@ comprometidas ni se subieron; se reemplazaron sin usarlas.
 | Directorio | `public.dentists`, ubicaciones y reseñas | Aplicado en reconstruccion local. |
 | Servicios | `public.dentist_services` | DI-131; 9 pruebas pgTAP aprobadas. |
 | Historia clinica | `clinical.*`, `clinical_service`, `dentaia_admin` | DI-36; permisos por concesion, no por cita, pago o rol aislado. |
-| Rutinas | tres tablas `oral_care_routine_*` | Evidencia historica de QA documenta 45 aserciones pgTAP; no se reejecutaron en este candidato. El codigo y la migracion DI-172 ya estan integrados en el candidato local. |
+| Rutinas | tres tablas `oral_care_routine_*` | Migración DI-172 y 45 aserciones pgTAP aprobadas en proyecto local temporal aislado; no verifica el esquema de Production. |
 | Pagos | `public.payments` | Registra pagos Stripe; no acredita suscripcion recurrente. |
 | Suscripciones | `premium_subscriptions`, `stripe_webhook_events` | RLS sin politica cliente; escritura destinada al backend. Evidencia historica registra pruebas pgTAP, no reejecutadas en este candidato. |
 | Smile | consentimientos, analisis y grants | RLS con acceso por propietario/concesion. Evidencia historica registra 7 pruebas pgTAP, no reejecutadas en este candidato. |
@@ -148,7 +148,7 @@ una ventana independiente.
 | --- | --- | --- | --- |
 | Paciente Smile | `smile-history-server.ts`, `smile_analysis_consents`, `smile_analyses` | Adaptador server-only con token de usuario: aceptar/revocar consentimiento, listar analisis propios y conceder/revocar grants mediante RPC | No hay rutas API conectadas al adaptador; falta persistir resultados y gestionar carga/eliminacion de objetos privados. |
 | Odontologo | RLS de `smile_analyses` y grant por analisis | Solo leer analisis con grant activo, profesional verificado y consentimiento vigente | BFF que genere URL firmada corta tras reevaluar el grant; Storage no entrega objetos directamente. |
-| Rutinas (Anelis) | DI-172 y sus tres tablas | Paciente autenticado con rol paciente; marcas propias por dia Lima | Frontend y contrato integrados en el candidato local; RLS pgTAP pendiente de reejecucion en esta ejecucion. |
+| Rutinas (Anelis) | DI-172 y sus tres tablas | Paciente autenticado con rol paciente; marcas propias por dia Lima | Frontend y contrato integrados; RLS aprobada con 45 aserciones pgTAP locales. Falta CI del candidato y cotejo del historial remoto. |
 | Directorio/servicios (Angie) | `dentist_services` | Visitante lee activos; profesional verificado administra solo su `dentist_id` | Consulta RLS integrada en el candidato local; falta CI para el commit combinado. |
 | Premium/Stripe (Stephan) | `premium_subscriptions`, `stripe_webhook_events`, `premium-server.ts` | Adaptador server-only deriva el plan desde la suscripcion RLS del usuario; ningun cliente escribe. PR #73 agrega Checkout de pago unico, webhook firmado, historial de `payments` y consulta server-side del plan. | No hay ciclo recurrente ni portal; `payments` no se convierte en suscripcion y ninguna funcion Premium futura se activa. |
 
