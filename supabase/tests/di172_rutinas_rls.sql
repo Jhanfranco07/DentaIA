@@ -12,7 +12,11 @@ do $setup$
 declare
   hoy date := (now() at time zone 'America/Lima')::date;
 begin
-  if current_setting('is_superuser') <> 'on' then
+  if current_user <> 'postgres'
+    or not coalesce(
+      (select rolbypassrls from pg_roles where rolname = current_user),
+      false
+    ) then
     raise exception 'DI172_TEST_REQUIRES_LOCAL_DB_OWNER';
   end if;
 

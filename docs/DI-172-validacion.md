@@ -27,32 +27,48 @@ Cobertura preparada:
 
 ### Requisitos para ejecutar
 
-Docker Engine accesible, Supabase CLI `3.0.0` (versión fijada en la guía local del repositorio), Node/npm y descarga de imágenes oficiales. Docker, CLI y PostgreSQL cliente no están disponibles en el entorno actual. `supabase/config.toml` no existe en el repositorio.
-
-Cuando se autorice instalar/arrancar el entorno, crear un proyecto temporal nuevo y sin vincular desde la raíz del repositorio. El siguiente procedimiento copia **solo** la migración y el test DI-172; no copia el resto de migraciones ni los tests SQL del equipo:
+Docker Engine, Node/npm y la versión de Supabase CLI fijada en `package.json` (`3.2.0`). Aunque el repositorio tiene su propio `supabase/config.toml`, no se debe usar para esta prueba: puede coincidir con un stack QA activo. Crear un proyecto temporal sin vincular, con ID y puerto de base de datos distintos. El siguiente procedimiento copia **solo** la migración y el test DI-172:
 
 ```powershell
 $repo = (Get-Location).Path
-$qa = Join-Path $env:TEMP ("di172-rutinas-" + [guid]::NewGuid().ToString("N"))
+$projectId = "di172-rutinas-" + [guid]::NewGuid().ToString("N").Substring(0, 12)
+$qa = Join-Path $env:TEMP $projectId
+$cli = Join-Path $repo "node_modules\.bin\supabase.cmd"
 New-Item -ItemType Directory -Path $qa | Out-Null
-Push-Location $qa
-npx.cmd --yes supabase@3.0.0 init
-New-Item -ItemType Directory -Force .\supabase\migrations, .\supabase\tests | Out-Null
-Copy-Item "$repo\supabase\migrations\20261116090000_di172_rutinas.sql" .\supabase\migrations\
-Copy-Item "$repo\supabase\tests\di172_rutinas_rls.sql" .\supabase\tests\
-npx.cmd --yes supabase@3.0.0 start --exclude realtime,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
-npx.cmd --yes supabase@3.0.0 db reset --local
-npx.cmd --yes supabase@3.0.0 test db --local
-Pop-Location
+& $cli init --workdir $qa
+if ($LASTEXITCODE -ne 0) { throw "Supabase init failed." }
+$configPath = Join-Path $qa "supabase\config.toml"
+$config = Get-Content $configPath -Raw
+$config = [regex]::Replace($config, '(?m)^project_id\s*=\s*".*"$', "project_id = `"$projectId`"")
+$config = [regex]::Replace($config, '(?m)^port\s*=\s*54322$', "port = 55432")
+Set-Content $configPath $config -Encoding UTF8
+New-Item -ItemType Directory -Force (Join-Path $qa "supabase\migrations"), (Join-Path $qa "supabase\tests") | Out-Null
+Copy-Item "$repo\supabase\migrations\20261116090000_di172_rutinas.sql" (Join-Path $qa "supabase\migrations")
+Copy-Item "$repo\supabase\tests\di172_rutinas_rls.sql" (Join-Path $qa "supabase\tests")
+$stackAttempted = $false
+try {
+    $stackAttempted = $true
+    & $cli start --workdir $qa --exclude gotrue,realtime,storage-api,imgproxy,kong,mailpit,postgrest,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+    if ($LASTEXITCODE -ne 0) { throw "Supabase local start failed." }
+    & $cli db reset --workdir $qa --no-seed
+    if ($LASTEXITCODE -ne 0) { throw "DI-172 migration failed." }
+    & $cli test db --workdir $qa (Join-Path $qa "supabase\tests\di172_rutinas_rls.sql")
+    if ($LASTEXITCODE -ne 0) { throw "DI-172 pgTAP failed." }
+}
+finally {
+    if ($stackAttempted) {
+        & $cli stop --workdir $qa --project-id $projectId --no-backup
+    }
+}
 ```
 
-El nombre aleatorio da un proyecto/volumen separado. `db reset --local` es destructivo para ese stack temporal, que solo contiene DI-172. No ejecutar `supabase link`, `supabase login`, `--linked`, `--remote` ni `--db-url`; inspeccionar la línea `Target` de CLI antes de continuar. Los comandos `db reset --local` y `test db --local` se documentan explícitamente como destino local; Supabase CLI ejecuta `test db` sobre PostgreSQL local y usa pgTAP ([referencia CLI](https://supabase.com/docs/reference/cli/introduction), [reset local](https://supabase.com/docs/reference/cli/supabase-db-reset)).
+El ID y puerto únicos aíslan los contenedores del stack QA. `db reset` es destructivo solo para este proyecto temporal, que contiene exclusivamente DI-172 y no ejecuta seeds. Supabase CLI usa el destino local de forma predeterminada; no ejecutar `supabase link`, `--linked`, `--remote` ni `--db-url`. `start` y `stop` se limitan al `project_id` indicado ([referencia CLI](https://supabase.com/docs/reference/cli/introduction), [reset local](https://supabase.com/docs/reference/cli/supabase-db-reset)).
 
-La prueba SQL usa el rol propietario local solo para insertar fixtures en `auth.users` y en el catálogo. Las operaciones bajo prueba cambian a `authenticated`/`anon` con claims sintéticos. No necesita claves de producción ni clave `service_role` en el navegador. Todas las cuentas y filas son sintéticas y se revierten al acabar.
+La prueba requiere que la sesión local sea el rol `postgres` con `BYPASSRLS`; Supabase local no marca ese rol como superusuario. Ese rol inserta fixtures en `auth.users` y el catálogo, mientras que las operaciones bajo prueba cambian a `authenticated`/`anon` con claims sintéticos. No requiere claves de producción ni clave `service_role` en el navegador. Todas las cuentas y filas son sintéticas y se revierten al acabar.
 
 ### Resultados esperados
 
-`supabase test db --local` debe terminar con `ok` para `di172_rutinas_rls.sql`, sin errores TAP ni SQL. Las marcas, planes y cuentas sintéticas no deben permanecer después de la transacción. Una falla de la prueba cuenta como hallazgo; no se debe editar la migración para hacerla pasar sin revisión.
+`supabase test db` debe terminar con `ok` para `di172_rutinas_rls.sql`, sin errores TAP ni SQL. Las marcas, planes y cuentas sintéticas no deben permanecer después de la transacción. Una falla de la prueba cuenta como hallazgo; no se debe editar la migración para hacerla pasar sin revisión.
 
 La conversión de instantes fijos prueba la semántica de zona horaria; la aceptación/rechazo RLS usa el día Lima calculado por la misma transacción. No equivale a congelar el reloj de PostgreSQL ni a validar un JWT firmado justo en el instante de cambio de fecha.
 
@@ -85,11 +101,10 @@ Las capturas y `resultado.json` van fuera del repositorio. El modo `contenido` p
 
 | Verificación | Estado actual |
 |---|---|
-| Preparar SQL para RLS con cuatro contextos | Preparada; no ejecutada |
-| Aplicar migración DI-172 en Supabase local | Pendiente: no hay Docker/CLI y no se aplicó SQL |
-| Consultas/inserciones/eliminaciones con políticas reales | Pendientes |
+| Aplicar migración DI-172 en Supabase local | Aprobado en proyecto temporal aislado; sin seeds |
+| Consultas/inserciones/eliminaciones con políticas reales | pgTAP aprobado: 45 pruebas |
 | Interfaz visual móvil/escritorio y temas | Harness preparado; no ejecutado |
 | Auth HTTP con JWT firmado y dos sesiones | Pendiente; no cubierto por mocks/claims SQL |
 | QA remoto | No identificado ni autorizado; no usar el proyecto configurado sin confirmación de Jhan |
 
-No se modificó la migración ni el código de aplicación. No se instalaron dependencias, iniciaron servicios, crearon cuentas, ejecutaron migraciones ni se tocaron Supabase remoto, Jira, main o módulos ajenos a DI-172.
+Se ajustó únicamente la precondición del test para aceptar el rol `postgres` local con `BYPASSRLS`; la migración y el código de aplicación no se modificaron. Se ejecutaron la migración y 45 pruebas pgTAP en un proyecto temporal, aislado y eliminado al finalizar. No se usó el stack QA, ni se tocaron Supabase remoto, Jira, `main` o módulos ajenos a DI-172.
