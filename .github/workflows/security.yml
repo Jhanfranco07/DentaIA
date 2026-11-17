@@ -61,22 +61,8 @@ jobs:
     - run: |-
         python -m pip install semgrep==1.185.0
         mkdir -p reports
-        # --error falla ante hallazgos; security-summary.py también falla ante errores del analizador.
-        # Evitar --strict: Semgrep puede devolver código 3 por avisos del CLI sin hallazgos.
-        scan_status=0
-        semgrep scan --config .github/security/semgrep.yml --error --metrics off --disable-version-check --json --output reports/semgrep.json src services/dental-vision/app || scan_status=$?
-        python - <<'PY'
-        import json
-        from pathlib import Path
-        p = Path('reports/semgrep.json')
-        if p.exists():
-            report = json.loads(p.read_text())
-            print('Semgrep JSON diagnostic:', json.dumps({'results_count': len(report.get('results', [])), 'errors': report.get('errors', []), 'skipped_rules': report.get('skipped_rules', [])}, ensure_ascii=False)[:6000])
-        else:
-            print('Semgrep did not produce a JSON report')
-        PY
+        semgrep scan --config .github/security/semgrep.yml --error --strict --metrics off --disable-version-check --json --output reports/semgrep.json src services/dental-vision/app
         python scripts/ci/security-summary.py reports/semgrep.json
-        test "$scan_status" -eq 0
   secretos:
     name: Secretos · Gitleaks OSS
     runs-on: ubuntu-latest
