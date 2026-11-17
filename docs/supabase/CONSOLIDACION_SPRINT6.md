@@ -37,6 +37,37 @@ build y `npm audit`; la prueba pgTAP de DI-172 no pudo iniciarse porque el
 arranque aislado de Supabase local quedo bloqueado durante la descarga de la
 imagen de PostgreSQL. Esto no es una aprobacion de RLS.
 
+### Credenciales e historial Git
+
+Se saneo solo `.env.example`: conserva los nombres de variables del template y
+usa placeholders descriptivos; no se modifico `.env.local` ni otros archivos
+privados. El analisis Gitleaks de todos los refs locales y la revision de 17
+versiones historicas de `.env.example` encontraron:
+
+- `562ce9a888d5`: valor no vacio con formato de clave secreta Supabase en
+  `DENTAIA_SUPABASE_ADMIN_READ_SECRET`. No aparece en refs remotos y GitHub no
+  encontro el objeto del commit. Si la clave sigue activa, crear otra en
+  Supabase Dashboard > Project Settings > API Keys > Secret keys, actualizar
+  el secret del servidor y revocar la anterior.
+- `7e906d13fde7`: clave API Stripe de modo test y secreto de firma de webhook.
+  El JWT service-role asociado tiene issuer demo/local, no Production. El
+  commit tampoco aparece en refs remotos ni GitHub encontro el objeto. Si los
+  secretos Stripe siguen activos, rotar la clave en modo Test desde Developers
+  > API keys y el secreto en Developers > Webhooks > endpoint > Roll secret;
+  actualizar `STRIPE_SECRET_KEY`/`STRIPE_WEBHOOK_SECRET` en el secret store del
+  servidor y redeplegar.
+- `07383d9ab0e7`: Gitleaks marco una cadena generica en
+  `services/dental-vision/tests/test_evaluation.py`; el valor es un fixture
+  estatico usado por `TestClient`/`monkeypatch`, sin prefijo de proveedor
+  reconocido. No hay evidencia de una credencial de proveedor en ese hallazgo.
+
+Los dos commits con credenciales de proveedor no son alcanzables desde refs
+remotos y la consulta de GitHub no encontro sus objetos; no hay evidencia de
+que se publicaran, aunque no se puede descartar que se hayan compartido por
+otro medio o que refs remotos anteriores fueran eliminadas. Las credenciales
+que se agregaron despues al working tree de `.env.example` no estaban
+comprometidas ni se subieron; se reemplazaron sin usarlas.
+
 ## Inventario historico de QA local
 
 | Dominio | Esquema o tabla | Estado comprobado |
