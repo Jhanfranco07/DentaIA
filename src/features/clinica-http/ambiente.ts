@@ -12,7 +12,7 @@ export function configurarClinica(env:Env){
  const remote=env.DENTAIA_CLINICAL_TARGET==="dentalia_academic";
  const secret=env.DENTAIA_CLINICAL_CURSOR_SECRET??"",ttl=Number(env.DENTAIA_CLINICAL_CURSOR_TTL_SECONDS??"300");
  const users=(env.DENTAIA_CLINICAL_DEMO_USER_IDS??"").split(',').filter(Boolean);
- let origin="",valid=false;
+ let origin="",valid=false,productionConfig=false;
  try{
   const url=new URL(env.DENTAIA_CLINICAL_SUPABASE_URL??"");origin=url.origin;
   const publicKey=env.DENTAIA_CLINICAL_SUPABASE_PUBLISHABLE_KEY??"";
@@ -23,7 +23,7 @@ export function configurarClinica(env:Env){
   // Production usa el proyecto de autenticación de la propia aplicación; nunca
   // una lista fija de cuentas de demostración como sustituto de los permisos RPC/RLS.
   const appOrigin=(()=>{try{return new URL(env.NEXT_PUBLIC_SUPABASE_URL??"").origin;}catch{return "";}})();
-  const productionConfig=production&&env.DENTAIA_CLINICAL_TARGET==="dentalia_production"&&env.DENTAIA_CLINICAL_PRODUCTION_ENABLED==="true"&&url.protocol==="https:"&&url.origin===appOrigin&&url.hostname.endsWith(".supabase.co");
+  productionConfig=production&&env.DENTAIA_CLINICAL_TARGET==="dentalia_production"&&env.DENTAIA_CLINICAL_PRODUCTION_ENABLED==="true"&&url.protocol==="https:"&&url.origin===appOrigin&&url.hostname.endsWith(".supabase.co")&&publicKey===env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   const target=remote?(local&&academicConfig||preview&&academicConfig):productionConfig||((!env.DENTAIA_CLINICAL_TARGET||env.DENTAIA_CLINICAL_TARGET==='local')&&url.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(url.hostname));
   valid=common&&target;
  }catch{}
