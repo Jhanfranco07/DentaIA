@@ -29,7 +29,7 @@ export default function PlanesDentaIA() {
         <div className={styles.price}>S/ {precio} <small>/ mes</small></div>
         <p>Más oportunidades para explorar y dar seguimiento a tu salud bucal.</p>
         <ul>{premium.map(item => <li key={item}><span aria-hidden="true">✓</span>{item}</li>)}</ul>
-        <Link className={styles.primaryButton} href={"/cuenta?modo=registro&continuar=%2Fpremium"}>Elegir Premium <span aria-hidden="true">→</span></Link>
+        <Link className={styles.primaryButton} href="/premium?iniciar=1">Elegir Premium <span aria-hidden="true">→</span></Link>
       </article>
     </div>
     <div className={styles.details}>
@@ -51,7 +51,7 @@ export default function PlanesDentaIA() {
       <h3>¿Cómo funciona?</h3>
       <ol>
         <li><strong>1. Regístrate o inicia sesión</strong><span>Tu cuenta de paciente protege tus datos.</span></li>
-        <li><strong>2. Completa la contratación</strong><span>Stripe Sandbox procesa la suscripción de prueba.</span></li>
+        <li><strong>2. Confirma tu correo si te registras y continúa</strong><span>Con tu sesión verificada, accede al pago de prueba en Stripe.</span></li>
         <li><strong>3. Vuelve a DentaIA</strong><span>El plan se activa tras confirmación del webhook.</span></li>
       </ol>
     </div>
