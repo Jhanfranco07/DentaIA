@@ -1,6 +1,6 @@
 export const PLAN_PREMIUM = {
   id: "premium-demo",
-  name: "DentAI Premium (demostración)",
-  amount: 2000, // en centavos: precio ficticio de prueba
-  currency: "usd", // usa "pen" solo si tu cuenta de Stripe lo permite
+  name: "DentaIA Premium mensual (Sandbox)",
+  amount: 1490, // S/ 14.90 en céntimos (Stripe Sandbox)
+  currency: "pen",
 } as const;
