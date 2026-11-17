@@ -259,7 +259,7 @@ Esta ampliación **no sustituye retroactivamente el pago único** de `/api/strip
 - `SUPABASE_SERVICE_ROLE_KEY`: credencial privilegiada de Supabase **solo en Vercel Preview, en servidor**, con permiso INSERT/UPDATE/SELECT en `public.premium_subscriptions`; imprescindible para registrar eventos verificados. Nunca colocarla en `NEXT_PUBLIC_*`, commits o mensajes.
 - `NEXT_PUBLIC_SITE_URL`: URL HTTPS del alias del Preview de integración.
 - `DENTAIA_STRIPE_SUBSCRIPTIONS_ENABLED=true`: Preview de esta rama.
-- `STRIPE_PREMIUM_PRICE_ID` (opcional): Price mensual existente en Stripe Test Mode, **USD 20 por mes**. Si falta, Checkout crea `price_data` recurrente de USD 20 mensuales del lado del servidor; no se acepta un precio o plan enviado por el navegador.
+- `STRIPE_PREMIUM_PRICE_ID` (opcional): Price mensual existente en Stripe Test Mode, **S/ 14.90 por mes**. Si falta, Checkout crea `price_data` recurrente de S/ 14.90 mensuales del lado del servidor; no se acepta un precio o plan enviado por el navegador.
 
 El Checkout comprueba en servidor la sesión autenticada y el acceso a la base. Si falta la credencial administrativa, devuelve un error antes de crear una sesión de Stripe. El webhook no debe considerarse probado si no se ha verificado su entrega real.
 
@@ -280,10 +280,12 @@ El endpoint verifica la firma de Stripe y rechaza eventos Live. Consulta el esta
 ### Comportamiento visible
 
 1. Paciente autenticado → menú **Mi plan Premium** → `/premium`.
-2. Pulsa **Contratar Premium mensual (prueba)** → Checkout `mode=subscription`, USD 20/mes.
+2. Pulsa **Contratar Premium mensual (prueba)** → Checkout `mode=subscription`, S/ 14.90/mes.
 3. Utiliza un método de prueba Stripe. Regresa a `/premium/exito`, que **no acredita** el pago por la redirección.
 4. El webhook registra o actualiza `premium_subscriptions`. El endpoint `/api/premium/status` (token obligatorio) calcula `premium` solo si `status=active` y el período está vigente.
 5. Puede pulsar **Cancelar al final del período**. Stripe conserva el plan hasta el vencimiento y comunica el cambio por webhook; finalizado el período, el usuario vuelve a Basic. Una renovación pagada se refleja mediante el evento `customer.subscription.updated`.
 6. Una suscripción pendiente, vencida, `past_due`, `unpaid` o cancelada no proporciona acceso Premium.
 
 **Límites:** El plan Premium queda identificado y verificable en servidor, pero los módulos avanzados Smile que figuran con `implemented:false` en el catálogo siguen deshabilitados; no se presentan como prestaciones ya listas. El registro de pagos únicos y el historial de `payments` son independientes del registro de suscripciones. Pendiente una prueba extremo a extremo autenticada y confirmación de entrega del webhook con las credenciales administradas en Vercel.
+
+**Compatibilidad:** la suscripción de prueba creada antes del ajuste conserva su precio histórico de USD 20. El webhook sigue reconociéndola únicamente cuando su `stripe_price_id` ya existe en la base; nuevas contrataciones usan PEN 14.90 mensuales. Este cambio no migra ni cancela automáticamente las suscripciones previas.
