@@ -93,14 +93,16 @@ export async function procesarEventoSuscripcion(event: Stripe.Event): Promise<bo
   if (event.livemode) throw new Error("Se rechazó un evento Live.");
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    if (session.mode !== "subscription") return false;
+    if (session.mode !== "subscription" || session.metadata?.dentaia_plan !== "premium") return false;
     const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
     if (!subscriptionId || session.client_reference_id === null) throw new Error("Checkout sin suscripción.");
     await sincronizarSuscripcion(subscriptionId, event.created, session.id);
     return true;
   }
   if (event.type === "customer.subscription.created" || event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
-    await sincronizarSuscripcion((event.data.object as Stripe.Subscription).id, event.created);
+    const subscription = event.data.object as Stripe.Subscription;
+    if (subscription.metadata?.dentaia_plan !== "premium") return false;
+    await sincronizarSuscripcion(subscription.id, event.created);
     return true;
   }
   return false;
