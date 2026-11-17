@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { PLAN_PREMIUM } from "@/lib/stripe/plan";
+import { PLAN_PREMIUM_MENSUAL } from "@/lib/stripe/plan";
 
 type Estado = {
   plan: "basic" | "premium";
@@ -100,7 +100,7 @@ export default function PremiumPage() {
       <div className="page-intro">
         <span className="pill">STRIPE SANDBOX · SUSCRIPCIÓN MENSUAL</span>
         <h1>DentaIA Premium</h1>
-        <p><strong>S/ {(PLAN_PREMIUM.amount / 100).toFixed(2)} al mes</strong> (importe de prueba, sin cargos reales).</p>
+        <p><strong>S/ {(PLAN_PREMIUM_MENSUAL.amount / 100).toFixed(2)} al mes</strong> (importe de prueba, sin cargos reales).</p>
         <p>Suscripción de prueba, con confirmación segura desde Stripe. No se realizan cargos reales.</p>
       </div>
       <section className="surface panel">
