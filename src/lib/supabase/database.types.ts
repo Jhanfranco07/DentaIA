@@ -393,6 +393,66 @@ export type Database = {
         }
         Relationships: []
       }
+      premium_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean
+          canceled_at: string | null
+          checkout_session_id: string | null
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan: string
+          status: string
+          stripe_customer_id: string
+          stripe_event_created_at: string
+          stripe_price_id: string
+          stripe_subscription_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          checkout_session_id?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan?: string
+          status: string
+          stripe_customer_id: string
+          stripe_event_created_at: string
+          stripe_price_id: string
+          stripe_subscription_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: Partial<Database["public"]["Tables"]["premium_subscriptions"]["Insert"]>
+        Relationships: []
+      }
+      stripe_webhook_events: {
+        Row: {
+          event_type: string
+          payload: Json
+          processed_at: string | null
+          processing_error: string | null
+          received_at: string
+          stripe_created_at: string
+          stripe_event_id: string
+        }
+        Insert: {
+          event_type: string
+          payload: Json
+          processed_at?: string | null
+          processing_error?: string | null
+          received_at?: string
+          stripe_created_at: string
+          stripe_event_id: string
+        }
+        Update: Partial<Database["public"]["Tables"]["stripe_webhook_events"]["Insert"]>
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

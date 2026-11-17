@@ -49,6 +49,10 @@ jobs:
         cache: npm
     - run: npm ci
     - run: node scripts/ci/node-tests.mjs unitarias
+    - name: Stripe Sandbox tests
+      run: npm test
+    - name: Premium catalog tests
+      run: npm run test:planes
     - run: python scripts/ci/test-summary.py reports/*.xml
       if: ${{ always() }}
     - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
