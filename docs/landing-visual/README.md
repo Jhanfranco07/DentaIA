@@ -1,3 +1,5 @@
+> **Actualización del landing (noviembre de 2026, PR #87):** se restauró el carrusel original de cinco fotografías con fundidos automáticos, carga progresiva y pausa automática en segundo plano o con preferencia de movimiento reducido. Solo se eliminó el botón visible «Pausar fotos». Los encabezados, tarjetas, planes y secciones utilizan IntersectionObserver para animarse al entrar en el viewport y volver a animarse al hacer scroll en ambas direcciones; sin JavaScript o con movimiento reducido el contenido sigue visible. Las métricas y pruebas históricas detalladas abajo corresponden al carrusel original y no deben asumirse como mediciones del nuevo diseño.
+
 # Integración de la propuesta visual del landing
 
 ## Base y comparación
