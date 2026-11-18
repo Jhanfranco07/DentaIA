@@ -174,7 +174,7 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
     ...(roles.includes("superusuario") && roles.includes("odontologo") ? [{ href: "/profesional", titulo: "Espacio profesional" }] : []),
     ...(roles.includes("paciente") && (roles.includes("odontologo") || roles.includes("superusuario")) ? [{ href: "/panel", titulo: "Espacio del paciente" }] : []),
   ];
-  const contenido = <section className={`${styles.pagina} ${usuario ? styles.paginaAutenticada : ""}`} aria-labelledby="cuenta-titulo">
+  const contenido = <section className={`${styles.pagina} ${usuario ? styles.paginaAutenticada : ""} ${continuar?.startsWith("/premium") ? styles.paginaPremium : ""}`} aria-labelledby="cuenta-titulo">
     {usuario ? <header className={styles.cabeceraPerfil}>
       <span className={styles.avatarCuenta} aria-hidden="true">{etiquetaUsuario.slice(0, 1).toLocaleUpperCase("es")}</span>
       <div><span className={styles.etiqueta}>PERFIL DE CUENTA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>{etiquetaUsuario}<span aria-hidden="true"> · </span>{usuario.email ?? "Correo no disponible"}</p></div>
