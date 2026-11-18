@@ -8,13 +8,13 @@ const premium = ["Todo lo incluido en Gratis", "Más tipos de evaluaciones denta
 
 export default function PlanesDentaIA() {
   return <section className={styles.section} id="planes" aria-labelledby="planes-titulo">
-    <div className={styles.intro}>
+    <div className={styles.intro} data-reveal>
       <span className={styles.eyebrow}>PLANES DENTAIA</span>
       <h2 id="planes-titulo">Tu sonrisa merece más opciones.</h2>
       <p>Empieza gratis y, cuando quieras explorar más posibilidades, descubre Premium. Elige el plan que mejor se adapte a ti.</p>
     </div>
     <div className={styles.grid}>
-      <article className={styles.card}>
+      <article className={styles.card} data-reveal>
         <span className={styles.kicker}>PARA EMPEZAR</span>
         <h3>Gratis</h3>
         <div className={styles.price}>S/ 0 <small>/ siempre</small></div>
@@ -22,7 +22,7 @@ export default function PlanesDentaIA() {
         <ul>{gratis.map(item => <li key={item}><span aria-hidden="true">✓</span>{item}</li>)}</ul>
         <Link className={styles.secondaryButton} href="/cuenta?modo=registro">Comenzar gratis <span aria-hidden="true">→</span></Link>
       </article>
-      <article className={styles.featured}>
+      <article className={styles.featured} data-reveal>
         <span className={styles.badge}>✦ Recomendado</span>
         <span className={styles.kicker}>UNA EXPERIENCIA MÁS COMPLETA</span>
         <h3>Premium</h3>
@@ -32,7 +32,7 @@ export default function PlanesDentaIA() {
         <Link className={styles.primaryButton} href="/premium?iniciar=1">Elegir Premium <span aria-hidden="true">→</span></Link>
       </article>
     </div>
-    <div className={styles.details}>
+    <div className={styles.details} data-reveal>
       <h3>Compara lo que incluye cada plan</h3>
       <div className={styles.scroll}>
         <table>
@@ -47,7 +47,7 @@ export default function PlanesDentaIA() {
         </table>
       </div>
     </div>
-    <div className={styles.steps}>
+    <div className={styles.steps} data-reveal>
       <h3>¿Cómo funciona?</h3>
       <ol>
         <li><strong>1. Regístrate o inicia sesión</strong><span>Tu cuenta de paciente protege tus datos.</span></li>
@@ -55,6 +55,6 @@ export default function PlanesDentaIA() {
         <li><strong>3. Vuelve a DentaIA</strong><span>El plan se activa tras confirmación del webhook.</span></li>
       </ol>
     </div>
-    <p className={styles.disclaimer}>* Las evaluaciones automatizadas y las funcionalidades Premium avanzadas todavía están en desarrollo: esta comparación describe el alcance previsto, no funciones clínicas ya disponibles. Stripe opera en entorno Sandbox, sin cobros reales. Los resultados orientativos no sustituyen la atención odontológica.</p>
+    <p className={styles.disclaimer} data-reveal>* Las evaluaciones automatizadas y las funcionalidades Premium avanzadas todavía están en desarrollo: esta comparación describe el alcance previsto, no funciones clínicas ya disponibles. Stripe opera en entorno Sandbox, sin cobros reales. Los resultados orientativos no sustituyen la atención odontológica.</p>
   </section>;
 }
