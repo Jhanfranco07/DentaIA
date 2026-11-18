@@ -111,12 +111,16 @@ with sync_playwright() as p:
     check('Carrusel: cambia de fotografía automáticamente sin botón visible',carousel)
     def scroll_both_directions():
         page.goto(BASE + '/')
-        item = page.locator('#planes [data-reveal]').first
+        item = page.locator('#funcionalidades .beneficios article').first
         page.evaluate('window.scrollTo(0,0)')
         page.wait_for_timeout(300)
         item.scroll_into_view_if_needed()
         expect(item).to_have_attribute('data-motion-state','visible',timeout=4000)
         page.evaluate('window.scrollTo(0,0)')
+        expect(item).to_have_attribute('data-motion-state','hidden',timeout=4000)
+        item.scroll_into_view_if_needed()
+        expect(item).to_have_attribute('data-motion-state','visible',timeout=4000)
+        page.evaluate('window.scrollTo(0,document.body.scrollHeight)')
         expect(item).to_have_attribute('data-motion-state','hidden',timeout=4000)
         item.scroll_into_view_if_needed()
         expect(item).to_have_attribute('data-motion-state','visible',timeout=4000)
