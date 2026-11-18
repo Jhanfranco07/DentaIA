@@ -24,7 +24,7 @@ export default function Encabezado() {
     document.addEventListener("keydown", escape);
     return () => { document.removeEventListener("pointerdown", close); document.removeEventListener("keydown", escape); };
   }, [abierto]);
-  return <header className="site-header" ref={header}><div className="site-header-inner">
+  return <header className="site-header" data-landing-header={ruta === "/" ? "true" : undefined} ref={header}><div className="site-header-inner">
     <Link href="/" aria-label="DentaIA, inicio" className="marca-enlace"><Marca /></Link>
     <span className="header-divider" aria-hidden="true" />
     <button ref={toggle} type="button" className={`menu-toggle ${abierto ? "is-open" : ""}`} aria-label={abierto ? "Cerrar menú" : "Abrir menú"} aria-expanded={abierto} aria-controls="navegacion-principal" onClick={() => setAbierto(!abierto)}><span className="menu-bars" aria-hidden="true"><i /><i /><i /></span><span>Menú</span></button>
@@ -33,6 +33,6 @@ export default function Encabezado() {
         const activo = href === "/" ? ruta === "/" : href.includes("#") ? false : ruta === href || ruta.startsWith(`${href}/`);
         return <Link key={href} href={href} onClick={() => setAbierto(false)} aria-current={activo ? "page" : undefined}>{texto}</Link>;
       })}
-    </nav><TemaBoton cabecera /><Link href={destino} className="action action-small action-account" aria-label={usuario ? "Ir a mi espacio" : "Iniciar sesión o crear una cuenta"} aria-current={ruta === "/cuenta" ? "page" : undefined}><Icono nombre="persona" size={17} /> {usuario ? "Mi espacio" : "Iniciar sesión"}</Link>
+    </nav>{ruta !== "/" && <TemaBoton cabecera />}<Link href={destino} className="action action-small action-account" aria-label={usuario ? "Ir a mi espacio" : "Iniciar sesión o crear una cuenta"} aria-current={ruta === "/cuenta" ? "page" : undefined}><Icono nombre="persona" size={17} /> {usuario ? "Mi espacio" : "Iniciar sesión"}</Link>
   </div></header>;
 }

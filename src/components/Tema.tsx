@@ -1,12 +1,14 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { CLAVE_TEMA, guardarTema, leerTema, temaDesdeEvento, type Tema } from "@/lib/tema/preferencia";
 
 const ContextoTema = createContext<{ tema: Tema; alternar: () => void } | null>(null);
 
 export function TemaProvider({ children }: { children: ReactNode }) {
   const [tema, setTema] = useState<Tema>("claro");
+  const ruta = usePathname();
   useEffect(() => {
     try { setTema(leerTema(window.localStorage)); } catch { /* Modo claro por defecto. */ }
     const sincronizar = (evento: StorageEvent) => {
@@ -15,7 +17,9 @@ export function TemaProvider({ children }: { children: ReactNode }) {
     window.addEventListener("storage", sincronizar);
     return () => window.removeEventListener("storage", sincronizar);
   }, []);
-  useEffect(() => { document.documentElement.dataset.tema = tema; }, [tema]);
+  // La portada usa siempre el contraste claro sin alterar la preferencia guardada.
+  // Al salir, los módulos recuperan inmediatamente el tema elegido por el usuario.
+  useEffect(() => { document.documentElement.dataset.tema = ruta === "/" ? "claro" : tema; }, [tema, ruta]);
 
   function alternar() {
     const siguiente = tema === "claro" ? "oscuro" : "claro";

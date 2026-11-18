@@ -52,3 +52,6 @@ html[data-tema="oscuro"] .notice-error { background:#462838;color:#ffd6df;border
 @media print {
   .tema-selector,.tema-flotante { display:none!important; }
 }
+
+/* El landing siempre se presenta en claro y no ofrece otro selector flotante. */
+body:has(.site-header[data-landing-header="true"]) .tema-flotante { display: none; }
