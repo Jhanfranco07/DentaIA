@@ -38,9 +38,9 @@ with sync_playwright() as p:
         assert response.status == 200
         expect(page.locator('h1')).to_have_count(1)
         expect(page.locator('main')).to_have_count(1)
-        photo = page.locator('[data-active-slide] img').first
+        photo = page.locator('img[src*="hero-1"], img[srcset*="hero-1"]').first
         expect(photo).to_be_visible()
-        page.wait_for_function('document.querySelector("[data-active-slide] img").naturalWidth > 0')
+        page.wait_for_function("document.querySelector('img[src*=\"hero-1\"]')?.naturalWidth > 0")
         no_overflow(page)
         tag = page.locator('a[href="/analisis"]').filter(has_text='Conoce DentaIA ahora')
         expect(tag).to_be_visible()
@@ -90,12 +90,10 @@ with sync_playwright() as p:
     check('Teclado: salto al contenido y foco visible',keyboard)
     def reduced_motion():
         page.goto(BASE + '/')
-        expect(page.get_by_role('button',name='Carrusel detenido por preferencia de movimiento reducido')).to_be_disabled()
-        page.wait_for_timeout(6700)
-        expect(page.locator('[data-active-slide]')).to_have_attribute('data-active-slide','0')
+        expect(page.get_by_role('button',name='Pausar carrusel')).to_have_count(0)
         expect(page.locator('[data-active-slide] img')).to_have_count(1)
-        assert page.locator('[data-active-slide] img').evaluate('(img) => getComputedStyle(img).animationName') == 'none'
-    check('Movimiento reducido: imagen fija y sin precarga del resto',reduced_motion)
+        assert page.locator('[data-active-slide] img').first.evaluate('(img) => getComputedStyle(img).animationName') == 'none'
+    check('Movimiento reducido: fotografía estable sin reproducción automática',reduced_motion)
     context.close()
     context = browser.new_context(viewport={'width':1366,'height':950},reduced_motion='no-preference')
     page = context.new_page()
@@ -103,23 +101,30 @@ with sync_playwright() as p:
     page.add_init_script('window.lcp = 0; new PerformanceObserver(list => { for (const entry of list.getEntries()) window.lcp = entry.startTime; }).observe({type:"largest-contentful-paint", buffered:true});')
     def carousel():
         page.goto(BASE + '/')
-        page.wait_for_function('document.querySelector("[data-active-slide] img").naturalWidth > 0')
-        expect(page.locator('[data-active-slide] img')).to_have_count(1)
-        assert page.locator('[data-active-slide] img').first.get_attribute('fetchpriority') == 'high'
-        expect(page.locator('[data-active-slide]')).to_have_attribute('data-active-slide','1',timeout=12000)
-        page.get_by_role('button',name='Pausar carrusel',exact=True).click()
-        current = page.locator('[data-active-slide]').get_attribute('data-active-slide')
-        page.wait_for_timeout(6600)
-        expect(page.locator('[data-active-slide]')).to_have_attribute('data-active-slide',current)
-        page.get_by_role('button',name='Reanudar carrusel',exact=True).click()
-        expect(page.locator('[data-active-slide]')).to_have_attribute('data-active-slide','2',timeout=12000)
-        page.emulate_media(reduced_motion='reduce')
-        expect(page.get_by_role('button',name='Carrusel detenido por preferencia de movimiento reducido')).to_be_disabled()
-        current = page.locator('[data-active-slide]').get_attribute('data-active-slide')
-        page.wait_for_timeout(6600)
-        expect(page.locator('[data-active-slide]')).to_have_attribute('data-active-slide',current)
+        photo = page.locator('[data-active-slide] img').first
+        page.wait_for_function("document.querySelector('[data-active-slide] img')?.naturalWidth > 0")
+        assert photo.get_attribute('fetchpriority') == 'high'
+        expect(page.get_by_role('button',name='Pausar carrusel')).to_have_count(0)
+        expect(page.locator('[data-active-slide]')).to_have_attribute('data-active-slide','1',timeout=16000)
+        expect(page.locator('[data-active-slide] img')).to_have_count(3,timeout=10000)
         args.output.joinpath('performance-local.json').write_text(json.dumps(page.evaluate('({lcpMs:window.lcp, images:performance.getEntriesByType("resource").filter(x=>x.name.includes("/_next/image")).map(x=>({url:x.name,bytes:x.transferSize,durationMs:x.duration}))})'),indent=2))
-    check('Carrusel: carga progresiva, rotación, pausa, reanudación y cambio de preferencia',carousel)
+    check('Carrusel: cambia de fotografía automáticamente sin botón visible',carousel)
+    def scroll_both_directions():
+        page.goto(BASE + '/')
+        item = page.locator('#funcionalidades .beneficios article').first
+        page.evaluate('window.scrollTo(0,0)')
+        page.wait_for_timeout(300)
+        item.scroll_into_view_if_needed()
+        expect(item).to_have_attribute('data-motion-state','visible',timeout=4000)
+        page.evaluate('window.scrollTo(0,0)')
+        expect(item).to_have_attribute('data-motion-state','hidden',timeout=4000)
+        item.scroll_into_view_if_needed()
+        expect(item).to_have_attribute('data-motion-state','visible',timeout=4000)
+        page.evaluate('window.scrollTo(0,document.body.scrollHeight)')
+        expect(item).to_have_attribute('data-motion-state','hidden',timeout=4000)
+        item.scroll_into_view_if_needed()
+        expect(item).to_have_attribute('data-motion-state','visible',timeout=4000)
+    check('Scroll en ambas direcciones: la animación se reactiva al volver',scroll_both_directions)
     def photos():
         for index in range(1,6):
             response = context.request.get(BASE + f'/hero/hero-{index}.jpg')

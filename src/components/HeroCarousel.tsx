@@ -17,7 +17,6 @@ export default function HeroCarousel() {
   const [active, setActive] = useState(0);
   const [mounted, setMounted] = useState(1);
   const [firstLoaded, setFirstLoaded] = useState(false);
-  const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [hidden, setHidden] = useState(false);
   const ready = useRef(new Set<number>());
@@ -38,13 +37,13 @@ export default function HeroCarousel() {
 
   // Only the LCP image is requested initially. Warm the next slide afterwards.
   useEffect(() => {
-    if (!firstLoaded || paused || reducedMotion || hidden) return;
+    if (!firstLoaded || reducedMotion || hidden) return;
     const warmup = window.setTimeout(() => setMounted((count) => Math.max(count, 2)), 1500);
     return () => window.clearTimeout(warmup);
-  }, [firstLoaded, paused, reducedMotion, hidden]);
+  }, [firstLoaded, reducedMotion, hidden]);
 
   useEffect(() => {
-    if (!firstLoaded || paused || reducedMotion || hidden) return;
+    if (!firstLoaded || reducedMotion || hidden) return;
     const timer = window.setInterval(() => {
       const next = (active + 1) % SLIDES.length;
       // Keep the previous photograph visible on a slow or failed request.
@@ -53,9 +52,9 @@ export default function HeroCarousel() {
       setMounted((count) => Math.max(count, Math.min(next + 2, SLIDES.length)));
     }, INTERVAL_MS);
     return () => window.clearInterval(timer);
-  }, [active, firstLoaded, paused, reducedMotion, hidden]);
+  }, [active, firstLoaded, reducedMotion, hidden]);
 
-  const stopped = paused || reducedMotion || hidden;
+  const stopped = reducedMotion || hidden;
   return <>
     <div className={`${styles.carousel} ${stopped ? styles.stopped : ""}`} aria-hidden="true" data-active-slide={active}>
       {SLIDES.slice(0, mounted).map((src, index) => (
@@ -69,9 +68,5 @@ export default function HeroCarousel() {
       <div className={styles.grade} />
       <div className={styles.scrim} />
     </div>
-    <button type="button" className={styles.control} onClick={() => setPaused((value) => !value)} disabled={reducedMotion} aria-label={reducedMotion ? "Carrusel detenido por preferencia de movimiento reducido" : paused ? "Reanudar carrusel" : "Pausar carrusel"}>
-      <span aria-hidden="true">{paused || reducedMotion ? "▶" : "Ⅱ"}</span>
-      {reducedMotion ? "Imagen fija" : paused ? "Reanudar fotos" : "Pausar fotos"}
-    </button>
   </>;
 }

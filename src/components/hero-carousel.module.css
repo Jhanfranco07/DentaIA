@@ -7,8 +7,6 @@
 .grade,.scrim { position: absolute; inset: 0; }
 .grade { background: linear-gradient(135deg,#087e8b29,#102a431a); mix-blend-mode: multiply; }
 .scrim { background: linear-gradient(90deg,rgba(246,249,252,.99) 0%,rgba(246,249,252,.96) 39%,rgba(246,249,252,.83) 51%,rgba(246,249,252,.16) 73%,rgba(246,249,252,.04) 100%),linear-gradient(0deg,rgba(246,249,252,.98),transparent 22%); }
-.control { position: absolute; z-index: 2; top: 20px; right: max(24px,calc((100% - 1240px)/2)); display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; min-height: 44px; border: 1px solid #dce6ec; border-radius: 10px; background: #fffffff2; color: #102a43; font-size: 12px; font-weight: 650; }
-.control:disabled { opacity: 1; cursor: default; }
 @keyframes cinematic { from { transform: scale(1); } to { transform: scale(1.07); } }
 @media(max-width:900px) {
   .carousel { bottom: auto; height: 260px; }
