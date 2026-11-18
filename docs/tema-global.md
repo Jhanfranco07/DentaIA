@@ -30,3 +30,17 @@ preferencia se conserva al navegar y se sincroniza entre pestañas.
 
 Esta validación automática no acredita una auditoría visual ni de accesibilidad
 completa. No se han realizado cambios en permisos, datos o procesos clínicos.
+
+## Verificación de las suites de GitHub
+
+Después de actualizar el contrato de estilos del panel al alcance global solicitado:
+
+- `node scripts/ci/node-tests.mjs unitarias`: 508 correctas, más 91 de Vitest.
+- `node scripts/ci/node-tests.mjs integracion`: 11 correctas.
+- `node scripts/ci/node-tests.mjs contratos`: 16 correctas.
+- `node scripts/ci/node-tests.mjs regresion`: 4 correctas.
+- `npm run test:planes`: 2 correctas.
+- `node --test scripts/ci/*.test.mjs`: 4 correctas.
+
+Se conserva la comprobación de los grupos del paciente y se comprueba que ambos
+modos y el selector se aplican al área activa, sin exclusividad del paciente.
