@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
   const rate = await consumeVisionExplanationLimit(access.userId, process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN);
   if (!rate.allowed) return response(rate.status === 429 ? 429 : 200, rate.status === 429 ? { detail: "Alcanzaste el límite de explicaciones. Inténtalo más tarde." } : { ...template(deterministic), ...(oralSummary ? {oral_summary: oralSummary} : {}) });
   const apiKey = process.env.OPENAI_API_KEY?.trim(), model = process.env.OPENAI_MODEL?.trim();
-  if (!apiKey || !model) return response(200, template(deterministic));
+  if (!apiKey || !model) return response(200, { ...template(deterministic), ...(oralSummary ? { oral_summary: oralSummary } : {}) });
   const summary = await openAIText(apiKey, model, smile, oral);
   const parsedLines = oral && summary ? /^COLOR:\s*(.{1,160})\s*\nESTRUCTURA:\s*(.{1,160})\s*$/i.exec(summary) : null;
   const colorSummary = parsedLines ? parsedLines[1] : (!oral ? summary : null);
