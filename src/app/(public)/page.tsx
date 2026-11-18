@@ -9,7 +9,7 @@ export default function Home() {
     <section className={styles.hero} aria-labelledby="inicio-titulo">
       <HeroCarousel />
       <div className={styles.heroInner}>
-      <div className={styles.heroCopy}>
+      <div className={styles.heroCopy} data-hero-enter>
         <span className={`eyebrow ${styles.heroEyebrow}`}><span aria-hidden="true" /> CONOCE DENTAIA</span>
         <h1 id="inicio-titulo">Una forma más simple de <span>cuidar tu sonrisa.</span></h1>
         <p>DentaIA reúne tu espacio personal, un directorio odontológico y herramientas de atención con acceso protegido. Encuentra lo que necesitas, sin perder de vista tu privacidad.</p>
@@ -17,36 +17,36 @@ export default function Home() {
         <Link className={styles.enlaceProfesional} href="/profesional">¿Eres odontólogo? Accede a tu espacio profesional <Icono nombre="flecha" size={16} /></Link>
         <div className={styles.aviso}><span className={styles.check}><Icono nombre="check" size={20} /></span><div><strong>Tu bienestar es lo primero</strong><br />Sin diagnósticos automáticos. El análisis con IA está en desarrollo.</div></div>
       </div>
-      <Link href="/analisis" className={styles.heroTag}><span>Conoce DentaIA ahora</span><span>Prepara una fotografía, paso a paso <Icono nombre="flecha" size={16} /></span></Link>
+      <Link href="/analisis" className={styles.heroTag} data-hero-enter><span>Conoce DentaIA ahora</span><span>Prepara una fotografía, paso a paso <Icono nombre="flecha" size={16} /></span></Link>
       </div>
-      <div className={styles.principios}><span><Icono nombre="destello" size={18} /> Información clara</span><span><Icono nombre="clinica" size={18} /> Encuentra profesionales</span><span><Icono nombre="escudo" size={18} /> Privacidad y control</span></div>
+      <div className={styles.principios} data-hero-enter><span><Icono nombre="destello" size={18} /> Información clara</span><span><Icono nombre="clinica" size={18} /> Encuentra profesionales</span><span><Icono nombre="escudo" size={18} /> Privacidad y control</span></div>
     </section>
 
     <PlanesDentaIA />
 
     <section className={styles.seccion} id="funcionalidades" aria-labelledby="funciones-titulo">
-      <div className={styles.intro}><span className="eyebrow">DESCUBRE DENTAIA</span><h2 id="funciones-titulo">Todo lo que necesitas, <span>más fácil.</span></h2><p>Desde preparar tu próxima consulta hasta revisar información autorizada: cada función tiene su lugar y cada cuenta, sus permisos.</p></div>
+      <div className={styles.intro} data-reveal><span className="eyebrow">DESCUBRE DENTAIA</span><h2 id="funciones-titulo">Todo lo que necesitas, <span>más fácil.</span></h2><p>Desde preparar tu próxima consulta hasta revisar información autorizada: cada función tiene su lugar y cada cuenta, sus permisos.</p></div>
       <div className={styles.beneficios}>
-        <article><div className={styles.beneficioTop}><span className={styles.beneficioIcon}><Icono nombre="persona" size={26} /></span><span className={styles.numero}>01</span></div><h3>Tu espacio personal</h3><p>Consulta tu perfil, organiza tus fotografías de prueba y revisa tus solicitudes desde el panel del paciente.</p><Link className="text-link" href="/panel">Ir a mi panel <span aria-hidden="true">→</span></Link></article>
+        <article data-reveal><div className={styles.beneficioTop}><span className={styles.beneficioIcon}><Icono nombre="persona" size={26} /></span><span className={styles.numero}>01</span></div><h3>Tu espacio personal</h3><p>Consulta tu perfil, organiza tus fotografías de prueba y revisa tus solicitudes desde el panel del paciente.</p><Link className="text-link" href="/panel">Ir a mi panel <span aria-hidden="true">→</span></Link></article>
         <article><div className={styles.beneficioTop}><span className={styles.beneficioIcon}><Icono nombre="diente" size={26} /></span><span className={styles.numero}>02</span></div><h3>Opciones de atención</h3><p>Busca por especialidad o distrito y consulta las ubicaciones publicadas. Los perfiles y establecimientos de ejemplo están identificados.</p><Link className="text-link" href="/directorio">Consultar el directorio <span aria-hidden="true">→</span></Link></article>
         <article><div className={styles.beneficioTop}><span className={styles.beneficioIcon}><Icono nombre="clinica" size={26} /></span><span className={styles.numero}>03</span></div><h3>Un entorno profesional</h3><p>Los odontólogos autorizados pueden consultar sus clínicas, solicitudes e historial según su membresía y los permisos vigentes.</p><Link className="text-link" href="/profesional">Acceder como profesional <span aria-hidden="true">→</span></Link></article>
       </div>
     </section>
 
     <section className={`${styles.seccion} ${styles.como}`} id="como-funciona" aria-labelledby="como-titulo">
-      <div className={styles.intro}><span className="eyebrow">COMIENZA A TU RITMO</span><h2 id="como-titulo">Un recorrido sencillo.</h2><p>No necesitas conocer la plataforma para encontrar tu próximo paso.</p></div>
+      <div className={styles.intro} data-reveal><span className="eyebrow">COMIENZA A TU RITMO</span><h2 id="como-titulo">Un recorrido sencillo.</h2><p>No necesitas conocer la plataforma para encontrar tu próximo paso.</p></div>
       <ol className={styles.pasos}>
-        <li><span aria-hidden="true">01</span><h3>Crea tu cuenta</h3><p>Registra tus datos y confirma tu correo para entrar a tu espacio personal.</p><Link href="/cuenta?modo=registro" className="text-link">Crear una cuenta →</Link></li>
-        <li><span aria-hidden="true">02</span><h3>Organiza lo importante</h3><p>Completa tu perfil y consulta las herramientas disponibles desde la navegación de tu panel.</p></li>
-        <li><span aria-hidden="true">03</span><h3>Prepara tu siguiente consulta</h3><p>Explora el directorio y revisa el alcance de cada solicitud. Enviar una solicitud no confirma una cita.</p></li>
+        <li data-reveal><span aria-hidden="true">01</span><h3>Crea tu cuenta</h3><p>Registra tus datos y confirma tu correo para entrar a tu espacio personal.</p><Link href="/cuenta?modo=registro" className="text-link">Crear una cuenta →</Link></li>
+        <li data-reveal><span aria-hidden="true">02</span><h3>Organiza lo importante</h3><p>Completa tu perfil y consulta las herramientas disponibles desde la navegación de tu panel.</p></li>
+        <li data-reveal><span aria-hidden="true">03</span><h3>Prepara tu siguiente consulta</h3><p>Explora el directorio y revisa el alcance de cada solicitud. Enviar una solicitud no confirma una cita.</p></li>
       </ol>
     </section>
 
     <section className={`${styles.seccion} ${styles.confianza}`} aria-label="Privacidad y alcance del producto">
-      <div><Icono nombre="escudo" size={28} /><h2>Tus datos merecen cuidado.</h2><p>Tu información personal requiere sesión y permisos. Guardar fotografías exige un consentimiento independiente y no autoriza utilizarlas para entrenamiento o análisis con IA.</p><Link href="/privacidad" className="text-link">Conocer privacidad y consentimiento →</Link></div>
-      <div className={styles.ia}><span className="eyebrow">INTELIGENCIA ARTIFICIAL EN DESARROLLO</span><h3>Hoy puedes preparar una fotografía.</h3><p>La captura y revisión local están disponibles para pacientes. El motor de análisis aún no está conectado: no genera resultados ni diagnósticos. Las muestras educativas se mantienen separadas de tus fotografías.</p><Link href="/analisis" className="text-link">Conocer la preparación de imágenes →</Link></div>
+      <div data-reveal><Icono nombre="escudo" size={28} /><h2>Tus datos merecen cuidado.</h2><p>Tu información personal requiere sesión y permisos. Guardar fotografías exige un consentimiento independiente y no autoriza utilizarlas para entrenamiento o análisis con IA.</p><Link href="/privacidad" className="text-link">Conocer privacidad y consentimiento →</Link></div>
+      <div className={styles.ia} data-reveal><span className="eyebrow">INTELIGENCIA ARTIFICIAL EN DESARROLLO</span><h3>Hoy puedes preparar una fotografía.</h3><p>La captura y revisión local están disponibles para pacientes. El motor de análisis aún no está conectado: no genera resultados ni diagnósticos. Las muestras educativas se mantienen separadas de tus fotografías.</p><Link href="/analisis" className="text-link">Conocer la preparación de imágenes →</Link></div>
     </section>
 
-    <section className={styles.cierre} aria-labelledby="comenzar-titulo"><div><span className="eyebrow">TU SIGUIENTE PASO</span><h2 id="comenzar-titulo">Todo comienza con tu espacio.</h2><p>Accede a tu cuenta y continúa donde lo dejaste.</p></div><Link href="/cuenta" className="action">Entrar a DentaIA <Icono nombre="flecha" size={18} /></Link></section>
+    <section className={styles.cierre} aria-labelledby="comenzar-titulo"><div data-reveal><span className="eyebrow">TU SIGUIENTE PASO</span><h2 id="comenzar-titulo">Todo comienza con tu espacio.</h2><p>Accede a tu cuenta y continúa donde lo dejaste.</p></div><Link href="/cuenta" className="action">Entrar a DentaIA <Icono nombre="flecha" size={18} /></Link></section>
   </>;
 }
