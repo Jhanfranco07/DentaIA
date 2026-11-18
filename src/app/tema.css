@@ -1,0 +1,54 @@
+/* La apariencia clara es la inicial; el modo oscuro requiere elección guardada. */
+html[data-tema="claro"] { color-scheme: light; }
+html[data-tema="oscuro"] {
+  color-scheme: dark;
+  --ink:#f5efff;
+  --muted:#d7cde9;
+  --canvas:#19142e;
+  --line:#78649e;
+  --soft:#392e59;
+  --soft-blue:#352e60;
+  --teal:#7651c7;
+  --teal-dark:#d0bdff;
+  --blue:#c5afff;
+  --success:#b9f2d8;
+  --warning:#ffe2ad;
+  --danger:#ffd6df;
+  --tema-superficie:#2c2448;
+  --shadow:0 12px 32px #09061c60;
+  --shadow-card:0 6px 18px #09061c4d;
+}
+.tema-selector {
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-width:44px;min-height:44px;padding:8px 12px;border:1px solid var(--line);
+  border-radius:11px;background:var(--tema-superficie,#fff);color:var(--ink);
+  font:inherit;font-size:13px;font-weight:750;flex-shrink:0;
+}
+.tema-selector>span:first-child { font-size:20px;line-height:1; }
+.tema-selector:hover { border-color:var(--blue); }
+.tema-flotante { position:fixed;right:16px;bottom:16px;z-index:60; }
+body:has([data-control-tema="cabecera"]) .tema-flotante { display:none; }
+html[data-tema="oscuro"] :is(.site-header,.site-footer,.site-nav.is-open,.panel,.surface,.dentist-card,.dentist-detail,.feature-card,.hero-photo-card,.result-card,.tip-panel,.filters,.empty,.sidebar,.personal-space,.privacy,.home-principles,.home-invitation) {
+  background:#2c2448;border-color:#78649e;color:#f5efff;
+}
+html[data-tema="oscuro"] :is(.action-secondary,.action-account,.pill,.fake-tag,.notice,.drop,.preview,.hero-floating-note) {
+  background:#392e59;border-color:#78649e;color:#f5efff;
+}
+html[data-tema="oscuro"] :is(.site-nav a,.site-footer p,.site-footer a,.muted,.heading-muted,.dentist-meta,.footer-note) { color:#d7cde9; }
+html[data-tema="oscuro"] :is(.text-link,.link-inline) { color:#d0bdff; }
+html[data-tema="oscuro"] :is(.action,.action:hover) { background:#6844b9;border-color:#ac8be8;color:#fff; }
+html[data-tema="oscuro"] :is(.action-secondary,.action-account) { background:#392e59;color:#f5efff; }
+html[data-tema="oscuro"] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),select,textarea) {
+  background-color:#231b3e;color:#f5efff;border-color:#78649e;
+}
+html[data-tema="oscuro"] ::placeholder { color:#d7cde9;opacity:1; }
+html[data-tema="oscuro"] .skip-link { background:#362d54;color:#fff; }
+html[data-tema="oscuro"] ::selection { background:#6844b9;color:#fff; }
+html[data-tema="oscuro"] .notice-error { background:#462838;color:#ffd6df;border-color:#bd7a92; }
+@media(max-width:760px) {
+  .site-header-inner { gap:10px;flex-wrap:wrap; }
+  .site-header .tema-selector>span:last-child { display:none; }
+}
+@media print {
+  .tema-selector,.tema-flotante { display:none!important; }
+}

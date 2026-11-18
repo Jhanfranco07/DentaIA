@@ -9,6 +9,7 @@ import { useNombrePerfil } from "@/features/cuenta/useNombrePerfil";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { Icono, Marca, type NombreIcono } from "./Identidad";
 import styles from "./portal-shell.module.css";
+import { TemaBoton, useTema } from "./Tema";
 
 export type EnlacePortal = { href: string; etiqueta: string; exacto?: boolean; icono?: NombreIcono; grupo?: string };
 
@@ -30,7 +31,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const router = useRouter();
   const { usuario } = useSesion();
   const [abierto, setAbierto] = useState(false);
-  const [tema, setTema] = useState<"claro" | "oscuro">("claro");
+  const { tema } = useTema();
   const [movil, setMovil] = useState(false);
   const [saliendo, setSaliendo] = useState(false);
   const [error, setError] = useState("");
@@ -43,21 +44,6 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   const nombreUsuario = useNombrePerfil(usuario);
   const roles = rolesDelUsuario(usuario);
 
-  useEffect(() => {
-    if (area !== "Paciente") return;
-    try {
-      const guardado = window.localStorage.getItem("dentaia-tema-paciente");
-      if (guardado === "claro" || guardado === "oscuro") setTema(guardado);
-      else if (window.matchMedia("(prefers-color-scheme: dark)").matches) setTema("oscuro");
-    } catch { /* Preferencia opcional. */ }
-  }, [area]);
-  function alternarTema() {
-    setTema(actual => {
-      const siguiente = actual === "claro" ? "oscuro" : "claro";
-      try { window.localStorage.setItem("dentaia-tema-paciente", siguiente); } catch { /* Opcional. */ }
-      return siguiente;
-    });
-  }
   useEffect(() => {
     const actualizar = () => { setFragmento(window.location.hash); setAbierto(false); };
     actualizar(); window.addEventListener("hashchange", actualizar);
@@ -111,7 +97,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
   }
 
   let grupoAnterior = "";
-  return <div className={styles.shell} data-area={area} data-tema={area === "Paciente" ? tema : undefined}>
+  return <div className={styles.shell} data-area={area} data-tema={tema}>
     <aside ref={lateral} id="navegacion-portal" className={styles.lateral} data-abierto={abierto} aria-hidden={movil && !abierto} inert={movil && !abierto ? true : undefined} aria-label={`Navegación del portal ${area}`}>
       <div className={styles.cabeceraLateral}><Link href="/" className={styles.marca} aria-label="DentaIA, página de inicio"><Marca /></Link><button type="button" className={styles.cerrarMenu} aria-label="Cerrar navegación" onClick={() => { setAbierto(false); boton.current?.focus(); }}><Icono nombre="cerrar" size={18} /></button></div>
       <div className={styles.portalMarca}><span className={styles.portalIcono}>{area === "Paciente" ? nombreUsuario.slice(0, 1).toLocaleUpperCase("es") : <Icono nombre={area === "Odontología" ? "diente" : "escudo"} size={19} />}</span><div><strong>{area === "Paciente" ? nombreUsuario : area}</strong><span>{area === "Paciente" ? "Paciente" : "Espacio de trabajo"}</span></div></div>
@@ -149,7 +135,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
         </button>
         <div className={styles.tituloPagina}><span>{descripcion}</span><strong>{pagina?.etiqueta ?? area}</strong></div>
         <div className={styles.usuario}><span className={styles.avatar} aria-hidden="true">{nombreUsuario.slice(0, 1).toLocaleUpperCase("es")}</span><span className={styles.usuarioDatos}><strong>{nombreUsuario}</strong><span>{etiquetaRol(roles)}</span></span></div>
-        {area === "Paciente" && <button type="button" className={styles.temaBoton} onClick={alternarTema} aria-pressed={tema === "oscuro"} aria-label={tema === "oscuro" ? "Activar modo claro celeste" : "Activar modo oscuro morado"} title={tema === "oscuro" ? "Modo claro" : "Modo oscuro"}><span aria-hidden="true">{tema === "oscuro" ? "☀" : "☾"}</span><span>{tema === "oscuro" ? "Claro" : "Oscuro"}</span></button>}
+        <TemaBoton className={styles.temaBoton} cabecera />
         {mostrarCuentaHeader && !enlaces.some(e => e.href === "/cuenta") && <Link href="/cuenta" className={styles.cuenta}><Icono nombre="persona" size={17} /><span>Mi cuenta</span></Link>}
         <button type="button" className={styles.salir} aria-label={saliendo ? "Cerrando sesión" : "Cerrar sesión"} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>
           <Icono nombre="salir" size={17} /><span>{saliendo ? "Cerrando…" : "Salir"}</span>

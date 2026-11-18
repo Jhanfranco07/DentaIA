@@ -1064,3 +1064,35 @@
     transition: none;
   }
 }
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .tarjeta,
+:global(html[data-tema="oscuro"]) .controles,
+:global(html[data-tema="oscuro"]) .opcionEscenario,
+:global(html[data-tema="oscuro"]) .estadoCarga,
+:global(html[data-tema="oscuro"]) .estadoVacio,
+:global(html[data-tema="oscuro"]) .solicitudProfesional,
+:global(html[data-tema="oscuro"]) .referenciaExamen{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .campo select,
+:global(html[data-tema="oscuro"]) .formularioServicio input:not([type="checkbox"]),
+:global(html[data-tema="oscuro"]) .formularioServicio textarea,
+:global(html[data-tema="oscuro"]) .botonSecundario,
+:global(html[data-tema="oscuro"]) .accesos a{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .avisoDemostracion,
+:global(html[data-tema="oscuro"]) .avisoClinico,
+:global(html[data-tema="oscuro"]) .avisoEducativo,
+:global(html[data-tema="oscuro"]) .procedencia{background:#443624;border-color:#b2996c;color:#ffe2ad}
+:global(html[data-tema="oscuro"]) .avisoDemostracion p,
+:global(html[data-tema="oscuro"]) .avisoClinico p,
+:global(html[data-tema="oscuro"]) .avisoEducativo p{color:inherit}
+:global(html[data-tema="oscuro"]) .estadoDenegado,
+:global(html[data-tema="oscuro"]) .estadoError{background:#462838;border-color:#bd7a92;color:#ffd6df}
+:global(html[data-tema="oscuro"]) .cabeceraSeccion h2,
+:global(html[data-tema="oscuro"]) .privacidadPortada strong{color:#f5efff}
+:global(html[data-tema="oscuro"]) .accesos small,
+:global(html[data-tema="oscuro"]) .privacidadPortada p,
+:global(html[data-tema="oscuro"]) .examenNoDisponible{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .encabezado{background:linear-gradient(125deg,#302453,#55337c);color:#fff;border-color:#8162bb}
+:global(html[data-tema="oscuro"]) .privacidadPortada{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .presentacion .etiquetaSuperior{color:#d0bdff}

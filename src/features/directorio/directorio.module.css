@@ -335,3 +335,74 @@
   .pagina[data-vista="paciente"] .localizadorTexto { min-width: 0; }
   .pagina[data-vista="paciente"] .accesosEspecialidades .limpiarPremium { margin-left: 0; }
 }
+
+/* Contraste del directorio del paciente, exclusivamente en modo oscuro.
+   Se sitúa después del diseño reconciliado para conservar sus superficies oscuras. */
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] {
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .heroPremium {
+  background:linear-gradient(125deg,#302453,#55337c 68%,#6a3b9a);
+  border-color:#8162bb;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.heroPremiumEyebrow,.heroPremiumAcciones>span,.seccionEyebrow) {
+  color:#ddc8ff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.heroPremiumDatosTitulo,.localizadorTexto strong,.proximidadTexto strong) {
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.localizadorTexto span,.proximidadTexto small,.localizadorPrivacidad,.conteo,.campo label,.leyendaResultado,.encabezadoResultados h2 span,.accesosEspecialidades>span,.mapaPremiumLeyenda,.mapaPremiumLeyenda small,.tarjeta .meta span:nth-child(2)) {
+  color:#d7cde9;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.tarjeta,.localizadorPrivacidad[open] p) {
+  background:#2d254a;
+  border-color:#78649e;
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.enlace,.verMapa,.solicitar,.alternarVista) {
+  background:#392e59;
+  border-color:#a18ac3;
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.enlace:hover,.verMapa:hover,.solicitar:hover) {
+  background:#51406e;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.proximidadOpcion small,.limpiarPremium,.especialidad) {
+  color:#d0bdff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .rating {color:#ffe0a3}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .campo input::placeholder {color:#d7cde9;opacity:1}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .alternarVista button {color:#d7cde9}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .alternarVista button[aria-selected="true"] {background:#6844b9;color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(a,button,input,select,summary):focus-visible {outline-color:#d0bdff}
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .pagina{color:#f5efff}
+:global(html[data-tema="oscuro"]) .pagina .tarjeta,
+:global(html[data-tema="oscuro"]) .cabecera,
+:global(html[data-tema="oscuro"]) .detalle,
+:global(html[data-tema="oscuro"]) .filtros,
+:global(html[data-tema="oscuro"]) .aviso,
+:global(html[data-tema="oscuro"]) .mapaPanel{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .cuerpo h1,
+:global(html[data-tema="oscuro"]) .cuerpo h2,
+:global(html[data-tema="oscuro"]) .cabecera h1{color:#f5efff}
+:global(html[data-tema="oscuro"]) .campo label,
+:global(html[data-tema="oscuro"]) .conteo,
+:global(html[data-tema="oscuro"]) .meta,
+:global(html[data-tema="oscuro"]) .meta span,
+:global(html[data-tema="oscuro"]) .mapaPremiumLeyenda,
+:global(html[data-tema="oscuro"]) .mapaPremiumLeyenda small{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .campo input,
+:global(html[data-tema="oscuro"]) .campo select,
+:global(html[data-tema="oscuro"]) .enlace,
+:global(html[data-tema="oscuro"]) .verMapa,
+:global(html[data-tema="oscuro"]) .solicitar,
+:global(html[data-tema="oscuro"]) .ubicacionPerfil,
+:global(html[data-tema="oscuro"]) .nota,
+:global(html[data-tema="oscuro"]) .retorno{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .avisoMapa{background:#2c2448;color:#d7cde9;border-color:#78649e}
+:global(html[data-tema="oscuro"]) .pagina .tarjeta .meta span:nth-child(2){color:#d7cde9}
+:global(html[data-tema="oscuro"]) .campo input::placeholder{color:#d7cde9;opacity:1}
+:global(html[data-tema="oscuro"]) .avisoError{background:#462838;border-color:#bd7a92;color:#ffd6df}

@@ -98,3 +98,49 @@
 :global([data-area="Paciente"][data-tema="oscuro"]) .tarjetaPie{border-color:#62517e}
 :global([data-area="Paciente"][data-tema="oscuro"]) :is(.tarjetaProgreso strong,.detalle h3,.reto h3,.tiempoContenido h3){color:#f3edff}
 :global([data-area="Paciente"][data-tema="oscuro"]) .controlCarrusel button:hover{background:#51406e;color:#fff}
+
+/* Contraste de textos y controles sobre las superficies del tema oscuro. */
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.extraTitulo h2,.retoInterior strong,.sabias>p strong){
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.extraTitulo p,.progresoLinea p,.retoCantidad){
+  color:#d7cde9;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.heroEtiqueta,.heroEtiqueta svg,.seccionEtiqueta){
+  color:#d8c6ff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.detalleAcciones a,.tipPie a,.notaFinal a){
+  color:#d0bdff;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .retoInterior{
+  background:#392e59;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.dias button,.reset,.tipPie button){
+  background:#44365f;
+  border-color:#a18ac3;
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .dias button[aria-pressed="true"]{
+  background:#6844b9;
+  border-color:#c5aaff;
+  color:#fff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.dias button:hover,.reset:hover,.tipPie button:hover){
+  background:#594375;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) :is(.cuentaAtras,.progresoAnillo>div){
+  background:#211a37;
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .finalizado{color:#9ee6c2}
+:global([data-area="Paciente"][data-tema="oscuro"]) .sinResultados{
+  background:#2c2448;
+  border-color:#665285;
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .busqueda input::placeholder{color:#d7cde9;opacity:1}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina :is(button,a,input):focus-visible{
+  outline-color:#d0bdff;
+}

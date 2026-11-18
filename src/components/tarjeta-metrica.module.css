@@ -18,3 +18,10 @@
   .tarjeta:first-child{padding-top:0}
   .tarjeta:last-child{padding-bottom:0}
 }
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .valor{color:#f5efff}
+:global(html[data-tema="oscuro"]) .titulo,
+:global(html[data-tema="oscuro"]) .contexto{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .icono{background:#392e59;border-color:#78649e;color:#f5efff}

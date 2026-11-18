@@ -9,3 +9,8 @@
 :global([data-area="Paciente"][data-tema="oscuro"]) .secundario{background:#3d335b;color:#f4edff;border-color:#745d96}
 :global([data-area="Paciente"][data-tema="oscuro"]) .icono{background:#44316e;color:#dbc9ff}
 :global([data-area="Paciente"][data-tema="oscuro"]) .primario{background:#7049d9}
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .secundario{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .estado{color:#d0bdff}

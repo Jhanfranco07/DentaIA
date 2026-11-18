@@ -35,3 +35,12 @@
 @media(max-width:830px){.hero,.columnas{grid-template-columns:1fr}.hero{gap:22px}.precio{max-width:330px}.estadoCuenta{align-items:flex-start}}
 @media(max-width:480px){.pagina{padding:20px 13px 60px}.hero{padding:26px 21px;border-radius:22px}.panel,.lateral{padding:23px 18px}.acciones>*{width:100%}.precio{padding:22px}}
 @media(prefers-reduced-motion:reduce){.primario,.secundario{transition:none}}
+
+/* El nuevo recorrido Premium utiliza la preferencia global de apariencia. */
+:global(html[data-tema="oscuro"]) .pagina{color:#f5efff}
+:global(html[data-tema="oscuro"]) :is(.estadoCuenta,.panel,.lateral){background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) :is(.estadoCuenta span,.panel p,.lateral p,.lista li,.ayuda){color:#d7cde9}
+:global(html[data-tema="oscuro"]) :is(.secundario,.nota,.etiqueta){background:#392e59;border-color:#a18ac3;color:#f5efff}
+:global(html[data-tema="oscuro"]) .destacado{color:#d0bdff!important}
+:global(html[data-tema="oscuro"]) .error{background:#462838;border-color:#bd7a92;color:#ffd6df}
+:global(html[data-tema="oscuro"]) .ok{background:#173e37;color:#b9f2d8}

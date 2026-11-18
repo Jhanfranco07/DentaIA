@@ -28,13 +28,17 @@ test("métricas siguen siendo consultas propias de Supabase, no números simulad
   assert.match(resumen, /\{pendientes\}/);
 });
 
-test("solo el portal paciente adopta los grupos de navegación y las dos variantes visuales", () => {
+test("el paciente conserva sus grupos y ambos temas se comparten entre portales", () => {
   const nav = leer("src/components/navegacion-portal.ts");
   const shell = leer("src/components/portal-shell.module.css");
   const panel = leer("src/features/panel/panel.module.css");
   const solicitudes = leer("src/features/solicitudes/solicitudes.module.css");
+  const portal = leer("src/components/PortalShell.tsx");
   for (const grupo of ["Principal", "Mi cuidado dental", "Recursos", "Cuenta"]) assert.ok(nav.includes('grupo: "' + grupo + '"'));
-  assert.match(shell, /data-area="Paciente"\]\[data-tema="claro"/);
+  assert.match(shell, /\.shell\[data-area\]\[data-tema="claro"\]/);
+  assert.match(shell, /\.shell\[data-area\]\[data-tema="oscuro"\]/);
+  assert.match(portal, /data-area=\{area\} data-tema=\{tema\}/);
+  assert.match(portal, /<TemaBoton className=\{styles\.temaBoton\} cabecera \/>/);
   assert.match(panel, /data-area="Paciente"\]\[data-tema="oscuro"/);
   assert.match(panel, /prefers-reduced-motion/);
   assert.match(solicitudes, /\.tarjeta\.compacto/);
