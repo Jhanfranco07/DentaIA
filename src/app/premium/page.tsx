@@ -5,6 +5,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { PLAN_PREMIUM_MENSUAL } from "@/lib/stripe/plan";
 import styles from "./premium.module.css";
+import PortalShell from "@/components/PortalShell";
+import { NAVEGACION_PACIENTE } from "@/components/navegacion-portal";
+import { useSesion } from "@/features/cuenta/useSesion";
+import { rolesDelUsuario } from "@/features/autorizacion/roles";
 
 type Estado = {
   plan: "basic" | "premium";
@@ -14,6 +18,8 @@ type Estado = {
 const ESTADOS_EXISTENTES = ["active", "trialing", "past_due", "unpaid", "incomplete"];
 
 export default function PremiumPage() {
+  const { usuario } = useSesion();
+  const paciente = rolesDelUsuario(usuario).includes("paciente");
   const [estado, setEstado] = useState<Estado | null>(null);
   const [correo, setCorreo] = useState<string | null>(null);
   const [cargando, setCargando] = useState(true);
@@ -129,8 +135,8 @@ export default function PremiumPage() {
     ? new Date(suscripcion.current_period_end).toLocaleDateString("es-PE") : null;
   const precio = (PLAN_PREMIUM_MENSUAL.amount / 100).toFixed(2);
 
-  return (
-    <main className={styles.pagina}>
+  const contenido = (
+    <main id="contenido" tabIndex={-1} className={styles.pagina}>
       <section className={styles.hero} aria-labelledby="premium-titulo">
         <div>
           <span className={styles.eyebrow}>✦ DentaIA Premium · Experiencia de prueba</span>
@@ -197,4 +203,8 @@ export default function PremiumPage() {
       </div>
     </main>
   );
+
+  // La suscripción es una sección del portal, no un destino aislado sin navegación.
+  if (paciente) return <PortalShell area="Paciente" descripcion="Tu espacio personal" enlaces={NAVEGACION_PACIENTE} mostrarCuentaHeader={false}>{contenido}</PortalShell>;
+  return contenido;
 }
