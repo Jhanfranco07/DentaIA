@@ -6,8 +6,9 @@ import { Icono } from "@/components/Identidad";
 import { useFotografiaPreparacion } from "./FotografiaPreparacionContexto";
 import { mensajeErrorCamara, mensajeValidacionFotografia, restriccionesCamara, validarFotografia } from "./fotografia";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { countReviewRegions, isSmileAnalysisResponse, isSmileExplanation, summarizeRegionStates, type SmileExplanation, type SmileResult, type OralBasicAnalysis } from "./smile-contract";
+import { countReviewRegions, isSmileAnalysisResponse, isSmileExplanation, type SmileExplanation, type SmileResult, type OralBasicAnalysis } from "./smile-contract";
 import styles from "./analisis-dental.module.css";
+import ResultadosVisuales from "./ResultadosVisuales";
 
 type Fase = "preparacion" | "carga" | "analizando" | "resultado" | "detalle";
 const PASOS = ["Preparación", "Carga", "Análisis", "Resultado"] as const;
@@ -201,8 +202,6 @@ export default function AnalisisDental() {
     finally { if (!controller.signal.aborted) setExplicando(false); }
   }
 
-  const regionStates = resultado ? summarizeRegionStates(resultado) : null;
-  const dientesAmarillentos = resultado?.regions.filter(region => region.evaluable && (region.partial || region.level !== "Sin amarillo destacado")).length ?? 0;
 
   return <section className={styles.modulo}>
     {fase !== "preparacion" && <Stepper fase={fase} />}
@@ -246,24 +245,9 @@ export default function AnalisisDental() {
       <aside className={styles.nota}><Icono nombre="privacidad" size={22} /><p>El resultado es orientativo. No constituye diagnóstico ni confirma el estado de salud dental.</p></aside>
     </div>}
 
-    {fase === "resultado" && resultado && <div className={styles.vistaFlujo}>
-      <div className={styles.tituloResultado}><h1>Resultado de tu sonrisa</h1><p>Una observación visual orientativa de esta fotografía.</p></div>
-      <div className={styles.resultadoHero}><figure><img src={overlay || vista} alt={overlay ? "Fotografía con dientes detectados y áreas visuales resaltadas" : "Fotografía analizada; el servicio no proporcionó superposición"} /></figure><article><span><Icono nombre="diente" size={45} /></span><h2>{resultado.status === "not_evaluable" ? "Necesitamos otra fotografía" : dientesAmarillentos ? `Detectamos ${dientesAmarillentos} ${dientesAmarillentos === 1 ? "diente con amarillo destacado" : "dientes con amarillo destacado"}` : "No observamos amarillo destacado"}</h2><p>{resultado.status === "not_evaluable" ? "Prueba con luz natural o neutra, de frente y sin filtros." : "Los niveles leve, moderado e intenso describen el aspecto visual de esta foto; no son un diagnóstico."}</p></article></div>
-      {oral && <section aria-label="Análisis básico de posición dental" style={{marginTop:24, padding:20, border:"1px solid #d4dcf0", borderRadius:16, background:"#fff"}}>
-        <h2 style={{fontSize:"1.25rem",fontWeight:700,marginBottom:8}}>Posición y posibles ausencias dentales</h2>
-        {oral.status === "unavailable" ? <p>Este análisis no está disponible temporalmente. El análisis de color se completó por separado.</p> : <>
-          {oral.overlay_url && <img src={oral.overlay_url} alt="Fotografía con regiones de posible ausencia o apiñamiento marcadas" style={{width:"100%",maxWidth:700,height:"auto",borderRadius:12}} />}
-          {oral.detections.length ? <ul style={{marginTop:12,paddingLeft:22}}>{oral.detections.map((d,i) => <li key={i}>{d.label} ({Math.round(d.confidence * 100)}% de confianza del modelo)</li>)}</ul>
-            : <p>No se identificaron las dos anomalías buscadas por encima del umbral de detección. Esto no confirma que la dentadura esté sana.</p>}
-          <h3 style={{fontSize:"1rem",fontWeight:650,marginTop:12}}>Orientación sobre la posición dental</h3>
-          <p>{explicacion?.oral_summary ?? (oral.detections.length ? "Se marcaron zonas que podrían corresponder a apiñamiento o ausencia dental. Un odontólogo debe confirmar cualquier hallazgo." : "La fotografía no mostró hallazgos de las dos categorías evaluadas por encima del umbral; no equivale a un examen clínico.")}</p>
-          <small>Detección visual experimental; no constituye un diagnóstico.</small>
-        </>}
-      </section>}
-      <div className={styles.metricas}><article><Icono nombre="alerta" size={30} /><span>Dientes con amarillo destacado<strong>{dientesAmarillentos}</strong></span></article><article><Icono nombre="check" size={30} /><span>Calidad de la foto<strong>{regionStates?.lightingWarnings ? "Revisar luz" : resultado.status === "not_evaluable" ? "Repetir" : "Adecuada"}</strong></span></article></div>
-      <div className={styles.leyenda} aria-label="Leyenda del resultado"><span data-color="verde">Sin amarillo destacado</span><span data-color="rojo">Amarillo intenso</span><span data-color="naranja">Amarillo moderado</span><span data-color="morado">Zona con amarillo destacado</span><span data-color="gris">No se pudo evaluar</span></div>
-      <div className={styles.resultadoInferior}><aside className={styles.explicacion} aria-live="polite"><div><Mascota compacta /><h2>Tu orientación educativa</h2></div>{explicacion ? <><p>{explicacion.summary}</p><p>{explicacion.recommendation}</p><small>{explicacion.disclaimer}</small></> : <p>{explicando ? "Preparando una explicación sencilla…" : "Preparando tu orientación…"}</p>}</aside><aside className={styles.importante}><Icono nombre="privacidad" size={24} /><div><h2>Importante</h2><p>La luz, sombras y filtros pueden cambiar el aspecto. Esto no confirma una condición dental.</p></div></aside></div>
-      <div className={`${styles.acciones} ${styles.resultadoAcciones}`}><Link className={styles.primario} href="/panel/odontologos"><Icono nombre="calendario" size={20} /> Consultar odontólogo</Link><button type="button" className={styles.secundario} onClick={nuevaFoto}><Icono nombre="actualizar" size={19} /> Tomar otra foto</button></div>
+    {fase === "resultado" && resultado && <div className={styles.vistaFlujo} aria-live="polite">
+      <ResultadosVisuales result={resultado} oral={oral} image={vista} smileOverlay={overlay} explanation={explicacion} explaining={explicando} onNewPhoto={nuevaFoto} />
+      <p className={styles.soloLectores}>Esta fotografía ofrece una observación educativa que no constituye diagnóstico y no confirma una condición dental.</p>
     </div>}
 
     {fase === "detalle" && resultado && <div className={styles.vistaFlujo}>
