@@ -1,3 +1,5 @@
+> **Actualización del landing (noviembre de 2026):** el PR de movimiento premium elimina el control «Pausar fotos» y la rotación automática. La portada mantiene `hero-1.jpg` como fotografía decorativa estática, priorizada para LCP, y presenta títulos, tarjetas, planes y secciones con transiciones ligadas al scroll vertical en ambos sentidos cuando el navegador admite CSS View Timelines. Con `prefers-reduced-motion: reduce`, o sin soporte de View Timelines, el contenido permanece completamente visible sin animaciones. Las pruebas de carrusel y métricas históricas descritas a continuación documentan la versión anterior; no representan el comportamiento actual.
+
 # Integración de la propuesta visual del landing
 
 ## Base y comparación
