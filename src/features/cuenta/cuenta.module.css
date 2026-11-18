@@ -26,6 +26,22 @@
 :global([data-area="Paciente"][data-tema="oscuro"]) .enlaceAcceso{background:#3a2e57;border-color:#6a558c;color:#f4e8ff}
 
 
+/* Acceso contextual Premium: mantiene la elección sin esconder el inicio de sesión. */
+.paginaPremium{width:min(100%,1100px)}
+.paginaPremium .cabecera{max-width:790px}
+.paginaPremium .cabecera h1{font-size:clamp(32px,4.5vw,48px);color:#17304c}
+.paginaPremium .cabecera p{font-size:15px;line-height:1.6}
+.paginaPremium .panelPublico{max-width:1030px;box-shadow:0 25px 55px #15395812;border-color:#d8e6ec;border-radius:25px}
+.paginaPremium .presentacion{background:linear-gradient(140deg,#e3f7f4,#e9f3ff 60%,#f0eafe);padding:clamp(26px,4vw,46px)}
+.paginaPremium .presentacion h2{font-size:clamp(24px,3vw,31px);line-height:1.16}
+.paginaPremium .opciones{background:#eaf4f6}
+.paginaPremium .opciones button{font-size:14px}
+.premiumContexto{display:grid;gap:9px;margin-top:23px;padding:18px;border:1px solid #b3dedc;border-radius:16px;background:#ffffffc9}
+.premiumContexto strong{color:#126e72;font-size:17px}
+.premiumContexto span{color:#46647c;font-size:13px;line-height:1.55}
+.paginaPremium .boton{background:#087f87;color:white;box-shadow:0 8px 20px #087f8726}
+@media(max-width:740px){.paginaPremium .presentacion{padding:24px}.paginaPremium .premiumContexto{padding:14px}}
+
 /* Tema global: superficies y textos de este módulo. */
 :global(html[data-tema="oscuro"]) .panel,
 :global(html[data-tema="oscuro"]) .datos>div,
@@ -46,3 +62,12 @@
 :global(html[data-tema="oscuro"]) .error{background:#462838;border-color:#bd7a92;color:#ffd6df}
 :global(html[data-tema="oscuro"]) .aviso,
 :global(html[data-tema="oscuro"]) .estado{background:#173e37;border-color:#609d88;color:#b9f2d8}
+
+
+/* El acceso contextual Premium comparte el mismo contraste del resto de cuenta. */
+:global(html[data-tema="oscuro"]) .paginaPremium .cabecera h1{color:#f5efff}
+:global(html[data-tema="oscuro"]) .paginaPremium .presentacion,
+:global(html[data-tema="oscuro"]) .paginaPremium .opciones,
+:global(html[data-tema="oscuro"]) .premiumContexto{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .premiumContexto strong{color:#f5efff}
+:global(html[data-tema="oscuro"]) .premiumContexto span{color:#d7cde9}

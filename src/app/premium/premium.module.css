@@ -1,0 +1,46 @@
+.pagina{max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,54px) 20px 90px;color:#142e47}
+.hero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(245px,.65fr);gap:36px;align-items:center;padding:clamp(28px,5vw,60px);border-radius:30px;background:linear-gradient(128deg,#102b42 0%,#124b5b 65%,#198389 100%);color:#fff;box-shadow:0 22px 50px #103c4b23}
+.hero:after{content:"";position:absolute;width:400px;height:400px;right:-170px;top:-210px;border:1px solid #ffffff47;border-radius:50%;pointer-events:none}
+.eyebrow{display:inline-block;padding:8px 13px;background:#ffffff21;border:1px solid #ffffff41;border-radius:999px;font-size:11px;letter-spacing:.12em;font-weight:800;text-transform:uppercase}
+.hero h1{margin:21px 0 15px;font-size:clamp(34px,5vw,64px);letter-spacing:-.055em;line-height:1.06;color:#fff}
+.hero p{max-width:54ch;color:#e1f0f1;line-height:1.7;margin:0}
+.precio{display:grid;gap:5px;padding:27px;border:1px solid #ffffff4d;border-radius:24px;background:#ffffff1c;backdrop-filter:blur(8px)}
+.precio strong{font-size:clamp(35px,4vw,49px);line-height:1;letter-spacing:-.05em}
+.precio small{font-size:14px;color:#e5f8f8;font-weight:500}
+.precio span{font-size:12px;color:#dafaf6}
+.estadoCuenta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:24px 0;padding:17px 22px;border:1px solid #d7e9e9;background:#f6fbfc;border-radius:16px}
+.estadoCuenta div{display:grid;gap:3px;min-width:0}
+.estadoCuenta strong{font-size:15px}
+.estadoCuenta span{color:#55707f;font-size:13px;overflow-wrap:anywhere}
+.etiqueta{padding:8px 13px;border-radius:999px;background:#e2f4ef;color:#0b6866;font-size:12px;font-weight:800}
+.columnas{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:22px}
+.panel,.lateral{min-width:0;padding:clamp(23px,3vw,36px);border:1px solid #dce8ea;border-radius:24px;background:#fff;box-shadow:0 12px 32px #143d4a0d}
+.panel h2,.lateral h2{font-size:clamp(22px,2.5vw,29px);margin:0 0 10px;letter-spacing:-.04em}
+.panel p,.lateral p{color:#526e7e;line-height:1.65}
+.destacado{font-weight:800;font-size:18px!important;color:#086e72!important}
+.acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.primario,.secundario{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 20px;border-radius:13px;font-weight:800;font-size:14px;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:background .2s,transform .2s}
+.primario{background:#087f87;color:#fff;box-shadow:0 7px 15px #087f8729}
+.primario:hover{background:#05626a;transform:translateY(-1px)}
+.secundario{background:#f5f9fa;color:#195363;border-color:#cddfe2}
+.secundario:hover{background:#e6f5f5}
+.primario:disabled,.secundario:disabled{opacity:.6;cursor:wait;transform:none}
+.nota{padding:14px 17px;border-radius:12px;background:#eff8f8;color:#23586a;font-size:13px;line-height:1.65;margin-top:20px}
+.error{background:#fff2f3;border:1px solid #f5c7cc;color:#962e3c;padding:15px;border-radius:12px;line-height:1.5;margin-top:16px}
+.ok{background:#eaf9f1;color:#175d46;border-radius:12px;padding:15px;margin-top:16px}
+.lista{display:grid;gap:18px;list-style:none;padding:10px 0 0;margin:0}
+.lista li{display:grid;grid-template-columns:28px 1fr;gap:10px;line-height:1.45;color:#324e62;font-size:14px}
+.lista li span{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#dcf5ef;color:#006e6d;font-weight:900}
+.ayuda{margin-top:20px;padding-top:20px;border-top:1px solid #e6eff0;font-size:12px;color:#607b8a;line-height:1.6}
+@media(max-width:830px){.hero,.columnas{grid-template-columns:1fr}.hero{gap:22px}.precio{max-width:330px}.estadoCuenta{align-items:flex-start}}
+@media(max-width:480px){.pagina{padding:20px 13px 60px}.hero{padding:26px 21px;border-radius:22px}.panel,.lateral{padding:23px 18px}.acciones>*{width:100%}.precio{padding:22px}}
+@media(prefers-reduced-motion:reduce){.primario,.secundario{transition:none}}
+
+/* El nuevo recorrido Premium utiliza la preferencia global de apariencia. */
+:global(html[data-tema="oscuro"]) .pagina{color:#f5efff}
+:global(html[data-tema="oscuro"]) :is(.estadoCuenta,.panel,.lateral){background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) :is(.estadoCuenta span,.panel p,.lateral p,.lista li,.ayuda){color:#d7cde9}
+:global(html[data-tema="oscuro"]) :is(.secundario,.nota,.etiqueta){background:#392e59;border-color:#a18ac3;color:#f5efff}
+:global(html[data-tema="oscuro"]) .destacado{color:#d0bdff!important}
+:global(html[data-tema="oscuro"]) .error{background:#462838;border-color:#bd7a92;color:#ffd6df}
+:global(html[data-tema="oscuro"]) .ok{background:#173e37;color:#b9f2d8}
