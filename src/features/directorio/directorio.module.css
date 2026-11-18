@@ -335,3 +335,43 @@
   .pagina[data-vista="paciente"] .localizadorTexto { min-width: 0; }
   .pagina[data-vista="paciente"] .accesosEspecialidades .limpiarPremium { margin-left: 0; }
 }
+
+/* Contraste del directorio del paciente, exclusivamente en modo oscuro.
+   Se sitúa después del diseño reconciliado para conservar sus superficies oscuras. */
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] {
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .heroPremium {
+  background:linear-gradient(125deg,#302453,#55337c 68%,#6a3b9a);
+  border-color:#8162bb;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.heroPremiumEyebrow,.heroPremiumAcciones>span,.seccionEyebrow) {
+  color:#ddc8ff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.heroPremiumDatosTitulo,.localizadorTexto strong,.proximidadTexto strong) {
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.localizadorTexto span,.proximidadTexto small,.localizadorPrivacidad,.conteo,.campo label,.leyendaResultado,.encabezadoResultados h2 span,.accesosEspecialidades>span,.mapaPremiumLeyenda,.mapaPremiumLeyenda small,.tarjeta .meta span:nth-child(2)) {
+  color:#d7cde9;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.tarjeta,.localizadorPrivacidad[open] p) {
+  background:#2d254a;
+  border-color:#78649e;
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.enlace,.verMapa,.solicitar,.alternarVista) {
+  background:#392e59;
+  border-color:#a18ac3;
+  color:#f5efff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.enlace:hover,.verMapa:hover,.solicitar:hover) {
+  background:#51406e;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(.proximidadOpcion small,.limpiarPremium,.especialidad) {
+  color:#d0bdff;
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .rating {color:#ffe0a3}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .campo input::placeholder {color:#d7cde9;opacity:1}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .alternarVista button {color:#d7cde9}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] .alternarVista button[aria-selected="true"] {background:#6844b9;color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .pagina[data-vista="paciente"] :is(a,button,input,select,summary):focus-visible {outline-color:#d0bdff}
