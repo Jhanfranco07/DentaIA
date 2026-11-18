@@ -1,0 +1,59 @@
+.dashboard{display:grid;gap:22px;max-width:1240px;margin:0 auto;color:var(--navy,#142a50)}
+.intro{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:10px 0 4px}
+.intro h1{font-size:clamp(2rem,4vw,3rem);line-height:1.1;letter-spacing:-.045em;margin:6px 0 8px}
+.intro p{margin:0;color:var(--texto,#596581);font-size:1rem}
+.eyebrow,.kicker,.findingsEyebrow{display:block;letter-spacing:.13em;font-size:.72rem;font-weight:900;color:#7954cf}
+.status,.modelLabel{flex:none;align-self:center;border:1px solid #ded8f4;background:#f6f3ff;color:#59439e;padding:8px 12px;border-radius:100px;font-size:.75rem;font-weight:750}
+.analysisCard,.explanationCard{background:var(--panel,#fff);border:1px solid var(--borde,#d7dfef);border-radius:24px;overflow:hidden;box-shadow:0 12px 35px #172c5810}
+.cardHeading{display:flex;align-items:center;gap:16px;padding:24px 28px 20px}
+.cardHeading .modelLabel{margin-left:auto}
+.cardHeading h2{font-size:clamp(1.2rem,2.3vw,1.65rem);margin:4px 0 0;letter-spacing:-.025em}
+.cardHeading p{margin:0}
+.number{display:grid;place-items:center;flex:none;width:45px;height:45px;border-radius:15px;background:#efeafd;color:#6541bc;font-size:1rem;font-weight:900}
+.contentGrid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:26px;padding:0 28px 25px}
+.photo{margin:0;min-width:0;padding:10px;border:1px solid var(--borde,#d7dfef);background:#f6f8fd;border-radius:19px}
+.photo img{display:block;width:100%;height:clamp(250px,30vw,365px);object-fit:contain;border-radius:13px;background:#171624}
+.photo figcaption{padding:11px 8px 3px;color:#5e6a7f;font-size:.79rem;line-height:1.5}
+.findings{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0;padding:12px 2px}
+.findingsIcon{display:grid;place-items:center;width:54px;height:54px;margin-bottom:16px;border-radius:17px;background:#ede9fe;color:#6740d9;font-size:1.8rem}
+.findingsEyebrow{margin:0 0 9px}
+.findings h3{font-size:clamp(1.4rem,2.3vw,1.85rem);line-height:1.22;letter-spacing:-.03em;margin:0 0 14px;overflow-wrap:anywhere}
+.description{color:var(--texto,#596581);line-height:1.65;margin:0 0 18px}
+.stats,.findingList{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 13px}
+.stats>div,.findingList>div{display:grid;gap:7px;min-width:0;border-radius:15px;border:1px solid var(--borde,#d7dfef);padding:15px;background:var(--panel,#fff)}
+.stats span,.findingList span{color:var(--texto,#596581);font-size:.8rem;line-height:1.35}
+.stats strong,.findingList strong{font-size:1.1rem;font-weight:850;overflow-wrap:anywhere}
+.coverage{width:100%;margin-top:4px}
+.coverage>div:first-child{display:flex;justify-content:space-between;gap:10px;font-size:.8rem;font-weight:750}
+.coverage>div:first-child strong{color:#7350c9}
+.track{height:9px;margin:9px 0 8px;border-radius:20px;overflow:hidden;background:#e9e3fb}
+.track span{display:block;height:100%;background:linear-gradient(90deg,#8c71f3,#5b31d0);border-radius:20px}
+.coverage small,.hint{color:var(--texto,#596581);font-size:.76rem;line-height:1.55}
+.cardFooter{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 28px;border-top:1px solid var(--borde,#d7dfef);color:var(--texto,#596581);font-size:.84rem}
+.textLink{color:#6944c9;font-weight:850;text-decoration:none}
+.textLink:hover,.premiumLink:hover{text-decoration:underline}
+.explanationCard{padding:28px 30px}
+.explanationHeader{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:17px}
+.explanationHeader h2{font-size:1.55rem;letter-spacing:-.03em;margin:5px 0}
+.explanationCard>p{line-height:1.7;max-width:80ch;color:var(--texto,#596581);margin:0 0 13px}
+.explanationCard>small{display:block;margin-top:20px;padding-top:15px;border-top:1px solid var(--borde,#d7dfef);color:var(--texto,#596581);line-height:1.5}
+.educationActions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.primaryLink,.secondaryLink,.newPhoto,.premiumLink{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:45px;padding:11px 20px;border-radius:100px;text-decoration:none;font-weight:800;font-size:.91rem}
+.primaryLink{color:#fff;background:linear-gradient(110deg,#8452e9,#6335c9)}
+.secondaryLink,.newPhoto{border:1px solid #cec1ed;background:var(--panel,#fff);color:#6543b4}
+.premiumCard{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:28px 30px;border:1px solid #bcb0eb;border-radius:23px;background:linear-gradient(115deg,#242044,#47318e);color:#fff}
+.premiumCard h2{color:white;font-size:1.45rem;margin:13px 0 8px}
+.premiumCard p{max-width:78ch;color:#e2daf9;line-height:1.65;margin:0}
+.premiumPill{display:inline-block;font-size:.72rem;letter-spacing:.06em;font-weight:900;color:#ddceff}
+.premiumLink{flex:none;border:1px solid #b9a6ee;color:white;white-space:nowrap}
+.bottomBar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:4px 2px 24px}
+.bottomBar>span{color:var(--texto,#596581);font-size:.8rem}
+.newPhoto{cursor:pointer}
+@media(max-width:900px){.contentGrid{grid-template-columns:1fr;gap:8px}.photo img{height:auto;max-height:440px}.findings{padding:14px 0 0}.premiumCard{align-items:flex-start;flex-direction:column}}
+@media(max-width:620px){.intro{align-items:flex-start;flex-direction:column;gap:12px}.intro h1{font-size:2rem}.cardHeading{padding:18px;gap:10px;flex-wrap:wrap}.cardHeading .modelLabel{margin-left:0}.number{width:38px;height:38px}.contentGrid{padding:0 17px 18px}.photo img{max-height:300px}.cardFooter{align-items:flex-start;flex-direction:column;padding:16px 18px}.stats,.findingList{grid-template-columns:1fr 1fr}.explanationCard,.premiumCard{padding:21px}.explanationHeader{align-items:flex-start;flex-direction:column}.educationActions>a{width:100%}.bottomBar{align-items:flex-start;flex-direction:column}.newPhoto{width:100%}}
+:global([data-tema="oscuro"]) .status,:global([data-tema="oscuro"]) .modelLabel{color:#e5d5ff;background:#3b2c5e;border-color:#705c9b}
+:global([data-tema="oscuro"]) .photo{background:#231b3a}
+:global([data-tema="oscuro"]) .photo figcaption{color:#c9bedb}
+:global([data-tema="oscuro"]) .findingsIcon,:global([data-tema="oscuro"]) .number{background:#453365;color:#e0d0ff}
+:global([data-tema="oscuro"]) .stats>div,:global([data-tema="oscuro"]) .findingList>div{background:#302645}
+:global([data-tema="oscuro"]) .secondaryLink,:global([data-tema="oscuro"]) .newPhoto{background:#3a2b55;color:#f1e9ff;border-color:#72589f}
