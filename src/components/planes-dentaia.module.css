@@ -15,21 +15,14 @@
 .primaryButton,.secondaryButton { min-height:56px;border-radius:14px;transition:background .25s,box-shadow .25s,translate .25s; }
 .primaryButton:hover,.secondaryButton:hover { translate:0 -2px;box-shadow:0 10px 22px #0a77762c; }
 .details,.steps { border-radius:24px;box-shadow:0 10px 28px #133e4e09; }
-@supports (animation-timeline:view(block)) {
- .section :global([data-reveal]) {
-  animation-name:planReveal;
-  animation-duration:1ms;
-  animation-timing-function:linear;
-  animation-fill-mode:both;
-  animation-timeline:view(block);
-  animation-range:cover 0% cover 100%;
- }
+/* Replays when scrolling back as well as forward; no unsupported view timelines. */
+.section :global([data-reveal][data-motion-state]) {
+ transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);
+ will-change:opacity,transform;
 }
-@keyframes planReveal {
- 0% { opacity:.45;translate:0 30px; }
- 22%,76% { opacity:1;translate:0 0; }
- 100% { opacity:.7;translate:0 -12px; }
-}
+.section :global([data-reveal][data-motion-state="hidden"]) {opacity:.28;transform:translate3d(0,38px,0) scale(.985)}
+.section :global([data-reveal][data-motion-state="visible"]) {opacity:1;transform:translate3d(0,0,0) scale(1)}
+.featured {transition-delay:90ms}
 @media(max-width:760px) {
  .section { padding-block:64px; }
  .intro { margin-bottom:35px; }
@@ -38,7 +31,7 @@
  .card,.featured { padding:28px; }
 }
 @media(prefers-reduced-motion:reduce) {
- .section :global([data-reveal]) { animation:none!important;opacity:1!important;translate:none!important; }
+ .section :global([data-reveal]) { animation:none!important;transition:none!important;opacity:1!important;translate:none!important;transform:none!important; }
  .card,.featured,.primaryButton,.secondaryButton { transition:none!important; }
  .card:hover,.featured:hover { transform:none; }
  .primaryButton:hover,.secondaryButton:hover { translate:none; }
