@@ -15,3 +15,17 @@
 .leyenda{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;color:var(--texto);font-size:13px}.leyenda span{display:inline-flex;align-items:center;gap:7px}.leyenda span:before{content:"";width:12px;height:12px;border-radius:50%;background:#18be73}.leyenda span[data-color=rojo]:before{background:#ef3038}.leyenda span[data-color=naranja]:before{background:#ffa500}.leyenda span[data-color=morado]:before{background:#b43cb4}.leyenda span[data-color=gris]:before{background:#787878}
 .umbrales{margin-top:16px;padding:17px 19px;border:1px solid #cfc8ef;border-radius:17px;background:#ffffffb5}.umbrales summary{cursor:pointer;color:var(--navy);font-weight:850}.umbrales>p{margin:12px 0;color:var(--texto);font-size:14px}.umbrales>div{display:grid;grid-template-columns:1fr 1fr;gap:24px}.umbrales label{display:grid;gap:10px}.umbrales label span{display:flex;justify-content:space-between;gap:14px;color:var(--texto);font-size:14px}.umbrales output{min-width:48px;padding:3px 8px;border-radius:999px;background:#ede6ff;color:#5720c7;text-align:center;font-weight:850}.umbrales input{width:100%;accent-color:var(--violeta)}.umbrales>button{margin-top:13px;border:0;background:transparent;color:#5c2bc9;text-decoration:underline;cursor:pointer}@media(max-width:620px){.umbrales>div{grid-template-columns:1fr}}
 :global([data-tema="oscuro"]) .modulo{--navy:#f4efff;--texto:#cec5e7;--borde:#564776;--panel:#282043e8}.modulo :global([data-tema="oscuro"]){}:global([data-tema="oscuro"]) .tarjeta,:global([data-tema="oscuro"]) .dropzone,:global([data-tema="oscuro"]) .preview,:global([data-tema="oscuro"]) .camaraBoton,:global([data-tema="oscuro"]) .fotoProceso,:global([data-tema="oscuro"]) .estadosProceso,:global([data-tema="oscuro"]) .resultadoHero figure,:global([data-tema="oscuro"]) .resultadoHero article,:global([data-tema="oscuro"]) .metricas article,:global([data-tema="oscuro"]) .grafica,:global([data-tema="oscuro"]) .importante,:global([data-tema="oscuro"]) .tablaWrap,:global([data-tema="oscuro"]) .explicacion{background:#282043e8}:global([data-tema="oscuro"]) .estadosProceso>div,:global([data-tema="oscuro"]) .nota,:global([data-tema="oscuro"]) .consentimiento{background:#332951;color:#eae3ff}:global([data-tema="oscuro"]) .secundario{background:#34294f;border-color:#705e99;color:#f4efff}:global([data-tema="oscuro"]) .tablaWrap thead{background:#3a2e5e}:global([data-tema="oscuro"]) .tablaWrap th,:global([data-tema="oscuro"]) .tablaWrap td{border-color:#51446d}
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .modulo{background:linear-gradient(145deg,#19142e,#241c42);--navy:#f5efff;--texto:#d7cde9;--borde:#78649e;--panel:#2c2448;color:#f5efff}
+:global(html[data-tema="oscuro"]) .umbrales,
+:global(html[data-tema="oscuro"]) .camaraBoton,
+:global(html[data-tema="oscuro"]) .dropzone,
+:global(html[data-tema="oscuro"]) .preview>button,
+:global(html[data-tema="oscuro"]) .stepper li>span{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .stepper li,
+:global(html[data-tema="oscuro"]) .dropzone small,
+:global(html[data-tema="oscuro"]) .preview>p{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .stepper li[data-activo=true] strong,
+:global(html[data-tema="oscuro"]) .umbrales>button{color:#d0bdff}

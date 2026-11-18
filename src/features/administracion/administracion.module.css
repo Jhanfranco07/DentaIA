@@ -217,3 +217,33 @@
   .tarjeta, .bloque { padding: 20px 16px; }
   .tablaUsuarios { overscroll-behavior-x: contain; }
 }
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .panel,
+:global(html[data-tema="oscuro"]) .lateral,
+:global(html[data-tema="oscuro"]) .encabezado,
+:global(html[data-tema="oscuro"]) .tarjeta,
+:global(html[data-tema="oscuro"]) .indicador{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .tabla th,
+:global(html[data-tema="oscuro"]) .tablaUsuarios th,
+:global(html[data-tema="oscuro"]) .filtrosAdmin input,
+:global(html[data-tema="oscuro"]) .filtrosAdmin select,
+:global(html[data-tema="oscuro"]) .formularioAdmin input,
+:global(html[data-tema="oscuro"]) .formularioAdmin select,
+:global(html[data-tema="oscuro"]) .selectorEstado select,
+:global(html[data-tema="oscuro"]) .selectorCanal select,
+:global(html[data-tema="oscuro"]) .accionEstado,
+:global(html[data-tema="oscuro"]) .botonMenu,
+:global(html[data-tema="oscuro"]) .chipsRoles>span{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .identidadEncabezado strong,
+:global(html[data-tema="oscuro"]) .tablaUsuarios td strong{color:#f5efff}
+:global(html[data-tema="oscuro"]) .identidadEncabezado small{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .introduccion{background:linear-gradient(125deg,#302453,#55337c);color:#f5efff}
+:global(html[data-tema="oscuro"]) .introduccion h1{color:#f5efff}
+:global(html[data-tema="oscuro"]) .introduccion p,
+:global(html[data-tema="oscuro"]) .introduccion .eyebrow{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .navegacion button[aria-pressed="true"]{background:#6844b9;color:#fff}
+:global(html[data-tema="oscuro"]) .navegacion button:hover{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .limiteClinico{background:#443624;border-color:#b2996c;color:#ffe2ad}
+:global(html[data-tema="oscuro"]) .saltarContenido{background:#362d54;color:#fff}

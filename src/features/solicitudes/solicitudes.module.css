@@ -392,3 +392,49 @@
 :global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta.compacto .subtitulo,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta.compacto .solicitudResumen p{color:#cabfe2}
 :global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta.compacto .verTodas,:global([data-area="Paciente"][data-tema="oscuro"]) .tarjeta.compacto .detallesExpandibles summary{color:#bca4ff}
 @media(max-width:560px){.tarjeta.compacto{padding:16px}.tarjeta.compacto .solicitud{grid-template-columns:1fr}.tarjeta.compacto .botonCancelar{grid-column:1;justify-self:start;margin-top:5px}.tarjeta.compacto .encabezadoSolicitudes{align-items:start}.tarjeta.compacto .verTodas{white-space:normal}}
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .tarjeta,
+:global(html[data-tema="oscuro"]) .tarjeta.compacto,
+:global(html[data-tema="oscuro"]) .solicitud,
+:global(html[data-tema="oscuro"]) .tarjeta.compacto .solicitud,
+:global(html[data-tema="oscuro"]) .resumenTarjeta,
+:global(html[data-tema="oscuro"]) .resumenTarjeta:nth-child(2),
+:global(html[data-tema="oscuro"]) .resumenTarjeta:nth-child(3){background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .input,
+:global(html[data-tema="oscuro"]) .select,
+:global(html[data-tema="oscuro"]) .textarea,
+:global(html[data-tema="oscuro"]) .buscarSolicitud input,
+:global(html[data-tema="oscuro"]) .filtroSolicitudes select,
+:global(html[data-tema="oscuro"]) .botonNeutral,
+:global(html[data-tema="oscuro"]) .pestana,
+:global(html[data-tema="oscuro"]) .confirmacion{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .solicitudTitulo,
+:global(html[data-tema="oscuro"]) .tarjeta.compacto .tituloSeccion,
+:global(html[data-tema="oscuro"]) .resumenTarjeta strong,
+:global(html[data-tema="oscuro"]) .detalle dd{color:#f5efff}
+:global(html[data-tema="oscuro"]) .aviso,
+:global(html[data-tema="oscuro"]) .solicitudResumen p,
+:global(html[data-tema="oscuro"]) .detalle dt,
+:global(html[data-tema="oscuro"]) .filtroSolicitudes label,
+:global(html[data-tema="oscuro"]) .filtroSolicitudes>span,
+:global(html[data-tema="oscuro"]) .resumenTarjeta span,
+:global(html[data-tema="oscuro"]) .resumenTarjeta small,
+:global(html[data-tema="oscuro"]) .buscarSolicitud,
+:global(html[data-tema="oscuro"]) .contadorResultados,
+:global(html[data-tema="oscuro"]) .tarjeta.compacto .subtitulo{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .verTodas,
+:global(html[data-tema="oscuro"]) .detallesExpandibles summary,
+:global(html[data-tema="oscuro"]) .tarjeta:not(.compacto) .detallesExpandibles summary,
+:global(html[data-tema="oscuro"]) .mensajeCompacto a{color:#d0bdff}
+:global(html[data-tema="oscuro"]) .pestanaActiva,
+:global(html[data-tema="oscuro"]) .enlaceNuevaSolicitud{background:#6844b9;border-color:#ac8be8;color:#fff}
+:global(html[data-tema="oscuro"]) .estadoSolicitada,
+:global(html[data-tema="oscuro"]) .tarjeta:not(.compacto) .estadoSolicitada{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .botonCancelar,
+:global(html[data-tema="oscuro"]) .botonCancelar:hover:not(:disabled),
+:global(html[data-tema="oscuro"]) .estadoCancelado,
+:global(html[data-tema="oscuro"]) .tarjeta:not(.compacto) .estadoCancelado,
+:global(html[data-tema="oscuro"]) .error{background:#462838;border-color:#bd7a92;color:#ffd6df}
+:global(html[data-tema="oscuro"]) .exito{background:#173e37;border-color:#609d88;color:#b9f2d8}

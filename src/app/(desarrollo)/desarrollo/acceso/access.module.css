@@ -9,3 +9,6 @@
 .links { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1.5rem; }
 .links a { text-decoration: underline; color: #08695f; }
 .status { overflow-wrap: anywhere; border-left: 3px solid #08695f; padding: .75rem; }
+
+:global(html[data-tema="oscuro"]) .page{color:#f5efff}
+:global(html[data-tema="oscuro"]) .links a{color:#d0bdff}

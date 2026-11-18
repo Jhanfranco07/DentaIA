@@ -55,3 +55,18 @@
 @media(max-width:390px) { .hero :global(.actions)>a { width: 100%; } .enlaceProfesional { font-size: 12px; } }
 @media(prefers-reduced-motion:reduce) { .heroTag,.beneficios article { transition: none; } .heroTag:hover,.beneficios article:hover { transform: none; } }
 .hero a:focus-visible, .seccion a:focus-visible, .cierre a:focus-visible { outline: 3px solid var(--teal-dark); outline-offset: 3px; }
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .beneficios article,
+:global(html[data-tema="oscuro"]) .heroTag{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .ia{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .heroCopy>p,
+:global(html[data-tema="oscuro"]) .beneficios p,
+:global(html[data-tema="oscuro"]) .pasos p,
+:global(html[data-tema="oscuro"]) .intro p,
+:global(html[data-tema="oscuro"]) .aviso{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .hero h1 span,
+:global(html[data-tema="oscuro"]) .intro h2>span,
+:global(html[data-tema="oscuro"]) .enlaceProfesional,
+:global(html[data-tema="oscuro"]) .aviso strong{color:#d0bdff}

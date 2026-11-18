@@ -20,3 +20,26 @@
 :global([data-area="Paciente"][data-tema="oscuro"]) .button{background:#7049d9}
 :global([data-area="Paciente"][data-tema="oscuro"]) .page input[type=file]{background:#31274d;border-color:#7b63a3;color:#f0e6ff}
 :global([data-area="Paciente"][data-tema="oscuro"]) .page input::file-selector-button{background:#453461;border-color:#806b9e;color:#f5edff}
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .card,
+:global(html[data-tema="oscuro"]) .photoCard,
+:global(html[data-tema="oscuro"]) .previewBox,
+:global(html[data-tema="oscuro"]) .placeholder{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .secondaryButton,
+:global(html[data-tema="oscuro"]) .page input[type=file],
+:global(html[data-tema="oscuro"]) .page input::file-selector-button,
+:global(html[data-tema="oscuro"]) .progress,
+:global(html[data-tema="oscuro"]) .consentSummary,
+:global(html[data-tema="oscuro"]) .guidance>div,
+:global(html[data-tema="oscuro"]) .privacyNote{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .progress li,
+:global(html[data-tema="oscuro"]) .progressCurrent,
+:global(html[data-tema="oscuro"]) .stepLabel,
+:global(html[data-tema="oscuro"]) .textButton{color:#d0bdff}
+:global(html[data-tema="oscuro"]) .dangerButton,
+:global(html[data-tema="oscuro"]) .error{background:#462838;border-color:#bd7a92;color:#ffd6df}
+:global(html[data-tema="oscuro"]) .success{background:#173e37;border-color:#609d88;color:#b9f2d8}
+:global(html[data-tema="oscuro"]) .header{background:linear-gradient(125deg,#302453,#55337c);border-color:#8162bb;color:#fff}
+:global(html[data-tema="oscuro"]) .header h1{color:#f5efff}

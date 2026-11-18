@@ -8,3 +8,10 @@
 .bloque [role="alert"] { color: #9c2121; }
 .bloque button:focus-visible, .bloque input:focus-visible, .bloque select:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
 @media (max-width: 480px) { .bloque { padding: 16px; } }
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .bloque{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .bloque input,
+:global(html[data-tema="oscuro"]) .control select{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .bloque [role="alert"]{color:#ffd6df}

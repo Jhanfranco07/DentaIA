@@ -187,3 +187,15 @@
   .contenedorMapa .pinForma,
   .contenedorMapa :global(.maplibregl-popup-content) .popupAccion{transition:none}
 }
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .contenedorMapa :global(.maplibregl-popup-content),
+:global(html[data-tema="oscuro"]) .popupEncabezado,
+:global(html[data-tema="oscuro"]) .popupDireccion{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .popupTitulo,
+:global(html[data-tema="oscuro"]) .contenedorMapa :global(.maplibregl-popup-content) .popupValor{color:#f5efff}
+:global(html[data-tema="oscuro"]) .contenedorMapa :global(.maplibregl-popup-content p),
+:global(html[data-tema="oscuro"]) .popupEtiqueta,
+:global(html[data-tema="oscuro"]) .contenedorMapa :global(.maplibregl-popup-content) .popupZona{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .contenedorMapa :global(.maplibregl-popup-close-button){background:#392e59;border-color:#78649e;color:#f5efff}

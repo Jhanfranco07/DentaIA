@@ -24,3 +24,25 @@
 :global([data-area="Paciente"][data-tema="oscuro"]) .avatarCuenta,:global([data-area="Paciente"][data-tema="oscuro"]) .simbolo{background:#42346a;border-color:#6b5598;color:#d4c1ff}
 :global([data-area="Paciente"][data-tema="oscuro"]) .boton{background:#714bd9;border-color:#714bd9}
 :global([data-area="Paciente"][data-tema="oscuro"]) .enlaceAcceso{background:#3a2e57;border-color:#6a558c;color:#f4e8ff}
+
+
+/* Tema global: superficies y textos de este módulo. */
+:global(html[data-tema="oscuro"]) .panel,
+:global(html[data-tema="oscuro"]) .datos>div,
+:global(html[data-tema="oscuro"]) .enlaceAcceso{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .presentacion,
+:global(html[data-tema="oscuro"]) .opciones,
+:global(html[data-tema="oscuro"]) .formulario input,
+:global(html[data-tema="oscuro"]) .formulario input[aria-invalid="true"],
+:global(html[data-tema="oscuro"]) .secundario{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]) .formulario label,
+:global(html[data-tema="oscuro"]) .datos dd{color:#f5efff}
+:global(html[data-tema="oscuro"]) .formulario small,
+:global(html[data-tema="oscuro"]) .datos dt,
+:global(html[data-tema="oscuro"]) .enlaceAcceso small,
+:global(html[data-tema="oscuro"]) .nota,
+:global(html[data-tema="oscuro"]) .opciones button{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .opciones button[aria-pressed="true"]{background:#6844b9;border-color:#a18ac3;color:#fff}
+:global(html[data-tema="oscuro"]) .error{background:#462838;border-color:#bd7a92;color:#ffd6df}
+:global(html[data-tema="oscuro"]) .aviso,
+:global(html[data-tema="oscuro"]) .estado{background:#173e37;border-color:#609d88;color:#b9f2d8}
