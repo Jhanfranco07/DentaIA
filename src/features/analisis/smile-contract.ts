@@ -1,3 +1,32 @@
+export type OralBasicDetection = {
+  class: "toothLoss" | "dentalCrowding";
+  label: string;
+  confidence: number;
+  box: { x1: number; y1: number; x2: number; y2: number };
+};
+
+export type OralBasicAnalysis = {
+  status: "evaluated" | "unavailable";
+  model: "oral-disease-union-xfe9b/8";
+  detections: OralBasicDetection[];
+  limitations: string;
+  overlay_url?: string;
+};
+
+export function isOralBasicAnalysis(value: unknown): value is OralBasicAnalysis {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Partial<OralBasicAnalysis>;
+  return (item.status === "evaluated" || item.status === "unavailable")
+    && item.model === "oral-disease-union-xfe9b/8"
+    && Array.isArray(item.detections)
+    && item.detections.length <= 30
+    && item.detections.every(d => d && ["toothLoss", "dentalCrowding"].includes(d.class)
+      && typeof d.label === "string" && finite(d.confidence) && d.confidence >= 0.5 && d.confidence <= 1
+      && d.box && [d.box.x1, d.box.x2, d.box.y1, d.box.y2].every(finite))
+    && typeof item.limitations === "string"
+    && (item.overlay_url === undefined || (typeof item.overlay_url === "string" && item.overlay_url.startsWith("data:image/png;base64,")));
+}
+
 export type SmileRegion = {
   region_id: number;
   label: "tooth";
@@ -34,6 +63,7 @@ export type SmileResult = {
 export type SmileAnalysisResponse = {
   result: SmileResult;
   overlay_url?: string;
+  oral_analysis?: OralBasicAnalysis;
 };
 
 export type SmileExplanation = {
@@ -42,6 +72,7 @@ export type SmileExplanation = {
   recommendation: string;
   disclaimer: string;
   source: "openai" | "mock" | "template";
+  oral_summary?: string;
 };
 
 function finite(value: unknown): value is number {
@@ -86,7 +117,8 @@ export function isSmileResult(value: unknown): value is SmileResult {
 export function isSmileAnalysisResponse(value: unknown): value is SmileAnalysisResponse {
   if (!value || typeof value !== "object") return false;
   const item = value as Partial<SmileAnalysisResponse>;
-  return isSmileResult(item.result) && (item.overlay_url === undefined || typeof item.overlay_url === "string");
+  return isSmileResult(item.result) && (item.overlay_url === undefined || typeof item.overlay_url === "string")
+    && (item.oral_analysis === undefined || isOralBasicAnalysis(item.oral_analysis));
 }
 
 export function isSmileExplanation(value: unknown): value is SmileExplanation {

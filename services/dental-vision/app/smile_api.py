@@ -12,6 +12,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 from starlette.concurrency import run_in_threadpool
 
 from app.smile_v17 import analizar
+from app.oral_basic import analyze as analyze_oral
 
 logger = logging.getLogger("dentaia_smile")
 MAX_BYTES = 8 * 1024 * 1024
@@ -84,7 +85,17 @@ async def analyze(request: Request):
         raise HTTPException(413, "Image exceeds byte limit")
     image = await run_in_threadpool(decode, data, media_type)
     try:
-        return await run_in_threadpool(analizar, image)
+        smile = await run_in_threadpool(analizar, image)
+        if os.environ.get("DENTAIA_ORAL_BASIC_ENABLED", "").lower() == "true":
+            try:
+                smile["oral_analysis"] = await run_in_threadpool(analyze_oral, image)
+            except Exception:
+                logger.warning("Optional oral basic inference unavailable", exc_info=False)
+                smile["oral_analysis"] = {
+                    "status": "unavailable", "model": "oral-disease-union-xfe9b/8",
+                    "detections": [], "limitations": "El análisis de posición no está disponible.",
+                }
+        return smile
     except HTTPException:
         raise
     except Exception:

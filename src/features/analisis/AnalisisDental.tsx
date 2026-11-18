@@ -6,7 +6,7 @@ import { Icono } from "@/components/Identidad";
 import { useFotografiaPreparacion } from "./FotografiaPreparacionContexto";
 import { mensajeErrorCamara, mensajeValidacionFotografia, restriccionesCamara, validarFotografia } from "./fotografia";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { countReviewRegions, isSmileAnalysisResponse, isSmileExplanation, summarizeRegionStates, type SmileExplanation, type SmileResult } from "./smile-contract";
+import { countReviewRegions, isSmileAnalysisResponse, isSmileExplanation, summarizeRegionStates, type SmileExplanation, type SmileResult, type OralBasicAnalysis } from "./smile-contract";
 import styles from "./analisis-dental.module.css";
 
 type Fase = "preparacion" | "carga" | "analizando" | "resultado" | "detalle";
@@ -74,6 +74,7 @@ export default function AnalisisDental() {
   const [error, setError] = useState("");
   const [resultado, setResultado] = useState<SmileResult | null>(null);
   const [overlay, setOverlay] = useState("");
+  const [oral, setOral] = useState<OralBasicAnalysis | null>(null);
   const [explicacion, setExplicacion] = useState<SmileExplanation | null>(null);
   const [explicando, setExplicando] = useState(false);
   const [camaraAbierta, setCamaraAbierta] = useState(false);
@@ -121,7 +122,7 @@ export default function AnalisisDental() {
       detenerCamara();
       establecerFotografia(seleccion);
       setArchivo(seleccion);
-      setResultado(null); setOverlay(""); setExplicacion(null);
+      setResultado(null); setOverlay(""); setOral(null); setExplicacion(null);
     } catch { setError("El archivo no se pudo abrir como una imagen válida."); }
   }, [detenerCamara, establecerFotografia]);
 
@@ -161,7 +162,7 @@ export default function AnalisisDental() {
 
   function nuevaFoto() {
     detenerCamara(); limpiarFotografia(); setArchivo(null); setConsentimiento(false); setError("");
-    explicacionAbortada.current?.abort(); explicacionSolicitada.current = null; setResultado(null); setOverlay(""); setExplicacion(null); setFase("carga");
+    explicacionAbortada.current?.abort(); explicacionSolicitada.current = null; setResultado(null); setOverlay(""); setOral(null); setExplicacion(null); setFase("carga");
   }
 
   async function analizar() {
@@ -176,13 +177,13 @@ export default function AnalisisDental() {
       const payload: unknown = await response.json().catch(() => null);
       if (!response.ok) throw new Error(payload && typeof payload === "object" && "detail" in payload ? String(payload.detail) : "El servicio de análisis no está disponible.");
       if (!isSmileAnalysisResponse(payload)) throw new Error("El servicio devolvió un resultado Smile inesperado.");
-      setResultado(payload.result); setOverlay(payload.overlay_url ?? ""); setFase("resultado"); void explicar(payload.result);
+      setResultado(payload.result); setOverlay(payload.overlay_url ?? ""); setOral(payload.oral_analysis ?? null); setFase("resultado"); void explicar(payload.result, payload.oral_analysis);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "No se pudo analizar la fotografía."); }
   }
 
-  async function explicar(result = resultado) {
+  async function explicar(result = resultado, oralResult: OralBasicAnalysis | null = oral) {
     if (!result || explicando) return;
-    const key = JSON.stringify(result);
+    const key = JSON.stringify({ result, oralResult });
     if (explicacionSolicitada.current === key) return;
     explicacionSolicitada.current = key;
     explicacionAbortada.current?.abort();
@@ -192,7 +193,7 @@ export default function AnalisisDental() {
     try {
       const { data, error: sessionError } = await getSupabaseBrowserClient().auth.getSession();
       if (sessionError || !data.session?.access_token) throw new Error("Inicia sesión con una cuenta autorizada para usar esta demostración.");
-      const response = await fetch("/api/desarrollo/dentaia-smile/explain", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session.access_token}` }, body: JSON.stringify(result), cache: "no-store", signal: controller.signal });
+      const response = await fetch("/api/desarrollo/dentaia-smile/explain", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session.access_token}` }, body: JSON.stringify({ ...result, ...(oralResult ? { oral_analysis: { status: oralResult.status, model: oralResult.model, detections: oralResult.detections.map(d => ({ class: d.class, confidence: d.confidence })) } } : {}) }), cache: "no-store", signal: controller.signal });
       const payload: unknown = await response.json().catch(() => null);
       if (!response.ok || !isSmileExplanation(payload)) throw new Error("No se pudo generar la explicación opcional.");
       setExplicacion(payload);
@@ -248,6 +249,17 @@ export default function AnalisisDental() {
     {fase === "resultado" && resultado && <div className={styles.vistaFlujo}>
       <div className={styles.tituloResultado}><h1>Resultado de tu sonrisa</h1><p>Una observación visual orientativa de esta fotografía.</p></div>
       <div className={styles.resultadoHero}><figure><img src={overlay || vista} alt={overlay ? "Fotografía con dientes detectados y áreas visuales resaltadas" : "Fotografía analizada; el servicio no proporcionó superposición"} /></figure><article><span><Icono nombre="diente" size={45} /></span><h2>{resultado.status === "not_evaluable" ? "Necesitamos otra fotografía" : dientesAmarillentos ? `Detectamos ${dientesAmarillentos} ${dientesAmarillentos === 1 ? "diente con amarillo destacado" : "dientes con amarillo destacado"}` : "No observamos amarillo destacado"}</h2><p>{resultado.status === "not_evaluable" ? "Prueba con luz natural o neutra, de frente y sin filtros." : "Los niveles leve, moderado e intenso describen el aspecto visual de esta foto; no son un diagnóstico."}</p></article></div>
+      {oral && <section aria-label="Análisis básico de posición dental" style={{marginTop:24, padding:20, border:"1px solid #d4dcf0", borderRadius:16, background:"#fff"}}>
+        <h2 style={{fontSize:"1.25rem",fontWeight:700,marginBottom:8}}>Posición y posibles ausencias dentales</h2>
+        {oral.status === "unavailable" ? <p>Este análisis no está disponible temporalmente. El análisis de color se completó por separado.</p> : <>
+          {oral.overlay_url && <img src={oral.overlay_url} alt="Fotografía con regiones de posible ausencia o apiñamiento marcadas" style={{width:"100%",maxWidth:700,height:"auto",borderRadius:12}} />}
+          {oral.detections.length ? <ul style={{marginTop:12,paddingLeft:22}}>{oral.detections.map((d,i) => <li key={i}>{d.label} ({Math.round(d.confidence * 100)}% de confianza del modelo)</li>)}</ul>
+            : <p>No se identificaron las dos anomalías buscadas por encima del umbral de detección. Esto no confirma que la dentadura esté sana.</p>}
+          <h3 style={{fontSize:"1rem",fontWeight:650,marginTop:12}}>Orientación sobre la posición dental</h3>
+          <p>{explicacion?.oral_summary ?? (oral.detections.length ? "Se marcaron zonas que podrían corresponder a apiñamiento o ausencia dental. Un odontólogo debe confirmar cualquier hallazgo." : "La fotografía no mostró hallazgos de las dos categorías evaluadas por encima del umbral; no equivale a un examen clínico.")}</p>
+          <small>Detección visual experimental; no constituye un diagnóstico.</small>
+        </>}
+      </section>}
       <div className={styles.metricas}><article><Icono nombre="alerta" size={30} /><span>Dientes con amarillo destacado<strong>{dientesAmarillentos}</strong></span></article><article><Icono nombre="check" size={30} /><span>Calidad de la foto<strong>{regionStates?.lightingWarnings ? "Revisar luz" : resultado.status === "not_evaluable" ? "Repetir" : "Adecuada"}</strong></span></article></div>
       <div className={styles.leyenda} aria-label="Leyenda del resultado"><span data-color="verde">Sin amarillo destacado</span><span data-color="rojo">Amarillo intenso</span><span data-color="naranja">Amarillo moderado</span><span data-color="morado">Zona con amarillo destacado</span><span data-color="gris">No se pudo evaluar</span></div>
       <div className={styles.resultadoInferior}><aside className={styles.explicacion} aria-live="polite"><div><Mascota compacta /><h2>Tu orientación educativa</h2></div>{explicacion ? <><p>{explicacion.summary}</p><p>{explicacion.recommendation}</p><small>{explicacion.disclaimer}</small></> : <p>{explicando ? "Preparando una explicación sencilla…" : "Preparando tu orientación…"}</p>}</aside><aside className={styles.importante}><Icono nombre="privacidad" size={24} /><div><h2>Importante</h2><p>La luz, sombras y filtros pueden cambiar el aspecto. Esto no confirma una condición dental.</p></div></aside></div>
