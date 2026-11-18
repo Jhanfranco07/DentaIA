@@ -85,22 +85,27 @@
 }
 /* View timelines track the element in BOTH directions; scrolling up reverses the motion.
    Unsupported browsers show the complete content without hiding anything. */
-@supports (animation-timeline:view(block)) {
- .seccion :global([data-reveal]),
- .cierre :global([data-reveal]) {
-   animation-name:landmarkReveal;
-   animation-duration:1ms;
-   animation-timing-function:linear;
-   animation-fill-mode:both;
-   animation-timeline:view(block);
-   animation-range:cover 0% cover 100%;
- }
+/* Animated by IntersectionObserver on entry and re-entry, including scroll up.
+   Offscreen elements remain readable rather than disappearing. */
+.seccion :global([data-reveal][data-motion-state]),
+.cierre :global([data-reveal][data-motion-state]) {
+ transition: opacity .78s cubic-bezier(.2,.7,.2,1), transform .78s cubic-bezier(.2,.7,.2,1);
+ will-change: opacity,transform;
 }
-@keyframes landmarkReveal {
- 0% { opacity:.46;translate:0 25px; }
- 22%,75% { opacity:1;translate:0 0; }
- 100% { opacity:.68;translate:0 -12px; }
+.seccion :global([data-reveal][data-motion-state="hidden"]),
+.cierre :global([data-reveal][data-motion-state="hidden"]) {
+ opacity:.3;
+ transform:translate3d(0,35px,0) scale(.985);
 }
+.seccion :global([data-reveal][data-motion-state="visible"]),
+.cierre :global([data-reveal][data-motion-state="visible"]) {
+ opacity:1;
+ transform:translate3d(0,0,0) scale(1);
+}
+.beneficios article:nth-child(2) { transition-delay:75ms; }
+.beneficios article:nth-child(3) { transition-delay:150ms; }
+.pasos li:nth-child(2) { transition-delay:75ms; }
+.pasos li:nth-child(3) { transition-delay:150ms; }
 @media(max-width:900px) {
  .heroInner { min-height:0; }
 }
@@ -113,7 +118,7 @@
 @media(prefers-reduced-motion:reduce) {
  .hero [data-hero-enter],
  .seccion :global([data-reveal]),
- .cierre :global([data-reveal]) { animation:none!important;opacity:1!important;translate:none!important;filter:none!important; }
+ .cierre :global([data-reveal]) { animation:none!important;transition:none!important;opacity:1!important;translate:none!important;transform:none!important;filter:none!important; }
  .heroTag,.beneficios article { transition:none!important; }
  .heroTag:hover,.beneficios article:hover { transform:none;translate:none; }
 }
