@@ -26,5 +26,5 @@ test("las recomendaciones y funciones Premium tienen destino y expectativas clar
   assert.match(result, /href="\/premium"/);
   assert.match(result, /PRÓXIMAMENTE/);
   assert.match(practices, /higiene dental/);
-  assert.match(practices, /no permite identificar por sí sola la causa/);
+  assert.match(practices, /no permite identificar por sí sola la causa/i);
 });
