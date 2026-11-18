@@ -33,7 +33,7 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
   const [continuarListo, setContinuarListo] = useState(false);
   useEffect(() => {
     const solicitado = new URLSearchParams(window.location.search).get("continuar");
-    setContinuar(solicitado === "/premium" ? "/premium" : retornoSolicitud(solicitado));
+    setContinuar(solicitado === "/premium?iniciar=1" || solicitado === "/premium" ? "/premium?iniciar=1" : retornoSolicitud(solicitado));
     setContinuarListo(true);
   }, []);
 
@@ -121,7 +121,7 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
     try {
       const client = getSupabaseBrowserClient();
       const { data, error } = registro
-        ? await client.auth.signUp({ email: email.trim(), password, options: { data: { full_name: nombre.trim() } } })
+        ? await client.auth.signUp({ email: email.trim(), password, options: { data: { full_name: nombre.trim() }, ...(continuar?.startsWith("/premium") ? { emailRedirectTo: `${window.location.origin}/cuenta?continuar=%2Fpremium%3Finiciar%3D1` } : {}) } })
         : await client.auth.signInWithPassword({ email: email.trim(), password });
       if (error) throw error;
       if (!activo.current) return;
@@ -146,7 +146,7 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
         const soloPaciente = rolesVerificados.length === 1 && rolesVerificados[0] === "paciente";
         router.replace(soloPaciente ? continuar ?? destino : destino);
       } else {
-        setAviso("Si el registro puede completarse, recibirás un correo de confirmación. Revisa tu bandeja de entrada y spam, confirma el correo y vuelve para iniciar sesión.");
+        setAviso(continuar?.startsWith("/premium") ? "Te enviamos las instrucciones de confirmación si el registro se pudo completar. Abre el enlace desde Gmail para continuar tu elección Premium; si no se abre, vuelve aquí e inicia sesión." : "Si el registro puede completarse, recibirás un correo de confirmación. Revisa tu bandeja de entrada y spam, confirma el correo y vuelve para iniciar sesión.");
         setRegistro(false);
       }
     } catch (error) { if (activo.current) setError(mensajeError(error)); }
@@ -174,20 +174,20 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
     ...(roles.includes("superusuario") && roles.includes("odontologo") ? [{ href: "/profesional", titulo: "Espacio profesional" }] : []),
     ...(roles.includes("paciente") && (roles.includes("odontologo") || roles.includes("superusuario")) ? [{ href: "/panel", titulo: "Espacio del paciente" }] : []),
   ];
-  const contenido = <section className={`${styles.pagina} ${usuario ? styles.paginaAutenticada : ""}`} aria-labelledby="cuenta-titulo">
+  const contenido = <section className={`${styles.pagina} ${usuario ? styles.paginaAutenticada : ""} ${continuar?.startsWith("/premium") ? styles.paginaPremium : ""}`} aria-labelledby="cuenta-titulo">
     {usuario ? <header className={styles.cabeceraPerfil}>
       <span className={styles.avatarCuenta} aria-hidden="true">{etiquetaUsuario.slice(0, 1).toLocaleUpperCase("es")}</span>
       <div><span className={styles.etiqueta}>PERFIL DE CUENTA</span><h1 id="cuenta-titulo">Mi cuenta</h1><p>{etiquetaUsuario}<span aria-hidden="true"> · </span>{usuario.email ?? "Correo no disponible"}</p></div>
       <span className={styles.rolCuenta}>{roles.includes("superusuario") ? "Superadministrador" : roles.includes("odontologo") ? "Odontólogo" : roles.includes("paciente") ? "Paciente" : "Sin rol activo"}</span>
-    </header> : <header className={styles.cabecera}><h1 id="cuenta-titulo">Accede a DentaIA</h1><p>Inicia sesión o crea tu cuenta para continuar.</p></header>}
+    </header> : <header className={styles.cabecera}><h1 id="cuenta-titulo">{continuar?.startsWith("/premium") ? "Tu Premium comienza aquí" : "Accede a DentaIA"}</h1><p>{continuar?.startsWith("/premium") ? "¿Ya tienes una cuenta? Inicia sesión. Si eres nuevo, regístrate y confirma tu correo; conservaremos tu elección." : "Inicia sesión o crea tu cuenta para continuar."}</p></header>}
     <div className={`${styles.panel} ${usuario ? styles.panelAutenticado : styles.panelPublico}`}>
-      {!usuario && <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32} /></span><h2>Tu cuidado bucal, en un solo lugar.</h2><p>Consulta tu perfil y las herramientas disponibles para tu cuenta.</p><span className={styles.nota}>El análisis automático está pendiente y no sustituye una evaluación odontológica.</span></aside>}
+      {!usuario && <aside className={styles.presentacion}><span className={styles.simbolo}><Icono size={32} /></span><h2>Tu cuidado bucal, en un solo lugar.</h2><p>Consulta tu perfil y las herramientas disponibles para tu cuenta.</p>{continuar?.startsWith("/premium") && <div className={styles.premiumContexto}><strong>✦ Tu elección: Premium</strong><span>S/ 14.90 al mes · Stripe Sandbox · sin cargos reales</span><span>Tras verificar tu correo podrás continuar al checkout de prueba. Las ventajas avanzadas siguen en desarrollo.</span></div>}<span className={styles.nota}>El análisis automático está pendiente y no sustituye una evaluación odontológica.</span></aside>}
       <div className={styles.contenido}>
         {cargando ? <p role="status">Comprobando tu sesión…</p> : <>
           {error && <p id="cuenta-error" className={styles.error} role="alert">{error}</p>}
           {aviso && <p className={styles.aviso} role="status">{aviso}</p>}
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
-            {continuar && roles.includes("paciente") && !roles.includes("odontologo") && !roles.includes("superusuario") && <div className="notice"><strong>Tu siguiente paso está guardado.</strong><p>{continuar === "/premium" ? "Puedes continuar a la contratación de prueba Premium." : "Ya puedes continuar con tu solicitud de demostración."}</p><Link href={continuar} className="action">{continuar === "/premium" ? "Continuar a Premium" : "Continuar mi solicitud"}</Link></div>}
+            {continuar && roles.includes("paciente") && !roles.includes("odontologo") && !roles.includes("superusuario") && <div className="notice"><strong>Tu siguiente paso está guardado.</strong><p>{continuar?.startsWith("/premium") ? "Tu elección de Premium está guardada. Te llevaremos a Stripe Sandbox tras verificar tu acceso." : "Ya puedes continuar con tu solicitud de demostración."}</p><Link href={continuar} className="action">{continuar?.startsWith("/premium") ? "Continuar con Premium" : "Continuar mi solicitud"}</Link></div>}
             {roles.includes("paciente") && <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />}
             {roles.length === 0 && <p role="alert" className={styles.error}>Esta cuenta no tiene un rol DentaIA activo.</p>}
             {otrosEspacios.length > 0 && <section className={styles.otrosEspacios} aria-label="Otros espacios de tu cuenta"><h2>Otros espacios autorizados</h2><p>Tu cuenta tiene más de un rol. Puedes cambiar de espacio sin cerrar sesión.</p>{otrosEspacios.map(({href,titulo}) => <Link key={href} href={href} className="text-link">{titulo} →</Link>)}</section>}
