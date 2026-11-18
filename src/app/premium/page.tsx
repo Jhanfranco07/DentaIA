@@ -164,7 +164,7 @@ export default function PremiumPage() {
             {!cargando && !correo && (
               <>
                 <Link className={styles.primario} href="/cuenta?continuar=%2Fpremium%3Finiciar%3D1">Ya tengo cuenta · Iniciar sesión</Link>
-                <Link className={styles.secundario} href="/cuenta?modo=registro&continuar=%2Fpremium%3Finiciar%3D1">Crear cuenta</Link>
+                <Link className={styles.secundario} href={"/cuenta?modo=registro&continuar=%2Fpremium%3Finiciar%3D1"}>Crear cuenta</Link>
               </>
             )}
             {!cargando && correo && estado && !existente && !vigente && (
