@@ -22,11 +22,13 @@ test("Smile Preview requires a branch-gated HTTPS target and service secret", ()
   assert.match(smileRoute, /X-Dentaia-Smile-Secret/);
 });
 
-test("Smile envía únicamente el JSON técnico al endpoint autenticado de explicación", () => {
+test("Smile envía únicamente resúmenes técnicos de color y posición al endpoint autenticado de explicación", () => {
   assert.match(page, /getSupabaseBrowserClient\(\)\.auth\.getSession/);
   assert.match(page, /Authorization: `Bearer \$\{data\.session\.access_token\}`/);
   assert.match(page, /fetch\("\/api\/desarrollo\/dentaia-smile\/explain"/);
-  assert.match(page, /body: JSON\.stringify\(result\)/);
+  assert.match(page, /body: JSON\.stringify\(\{ \.\.\.result, /);
+  assert.match(page, /oral_analysis: \{ status: oralResult\.status, model: oralResult\.model/);
+  assert.doesNotMatch(page, /body: JSON\.stringify\(\{[^\n]*overlay_url/);
   assert.doesNotMatch(page, /JSON\.stringify\(archivo\)/);
   assert.match(page, /explicacionSolicitada/);
   assert.match(page, /AbortController/);
