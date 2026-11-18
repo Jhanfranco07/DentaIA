@@ -40,7 +40,7 @@ with sync_playwright() as p:
         expect(page.locator('main')).to_have_count(1)
         photo = page.locator('img[src*="hero-1"], img[srcset*="hero-1"]').first
         expect(photo).to_be_visible()
-        page.wait_for_function('document.querySelector('img[src*="hero-1"]')?.naturalWidth > 0')
+        page.wait_for_function("document.querySelector('img[src*=\"hero-1\"]')?.naturalWidth > 0")
         no_overflow(page)
         tag = page.locator('a[href="/analisis"]').filter(has_text='Conoce DentaIA ahora')
         expect(tag).to_be_visible()
