@@ -1,4 +1,5 @@
 import HeroCarousel from "@/components/HeroCarousel";
+import LandingMotion from "@/components/LandingMotion";
 import PlanesDentaIA from "@/components/PlanesDentaIA";
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
@@ -6,6 +7,7 @@ import styles from "./home.module.css";
 
 export default function Home() {
   return <>
+    <LandingMotion />
     <section className={styles.hero} aria-labelledby="inicio-titulo">
       <HeroCarousel />
       <div className={styles.heroInner}>
