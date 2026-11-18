@@ -91,25 +91,36 @@ with sync_playwright() as p:
     def reduced_motion():
         page.goto(BASE + '/')
         expect(page.get_by_role('button',name='Pausar carrusel')).to_have_count(0)
-        expect(page.locator('img[src*="hero-1"]')).to_have_count(1)
-        assert page.locator('img[src*="hero-1"]').evaluate('(img) => getComputedStyle(img).animationName') == 'none'
+        expect(page.locator('[data-active-slide] img')).to_have_count(1)
+        assert page.locator('[data-active-slide] img').first.evaluate('(img) => getComputedStyle(img).animationName') == 'none'
     check('Movimiento reducido: fotografía estable sin reproducción automática',reduced_motion)
     context.close()
     context = browser.new_context(viewport={'width':1366,'height':950},reduced_motion='no-preference')
     page = context.new_page()
     page.on('pageerror',lambda error:errors.append(str(error)))
     page.add_init_script('window.lcp = 0; new PerformanceObserver(list => { for (const entry of list.getEntries()) window.lcp = entry.startTime; }).observe({type:"largest-contentful-paint", buffered:true});')
-    def hero_static():
+    def carousel():
         page.goto(BASE + '/')
-        photo = page.locator('img[src*="hero-1"]').first
-        page.wait_for_function('document.querySelector(\'img[src*="hero-1"]\')?.naturalWidth > 0')
-        expect(photo).to_have_count(1)
+        photo = page.locator('[data-active-slide] img').first
+        page.wait_for_function("document.querySelector('[data-active-slide] img')?.naturalWidth > 0")
         assert photo.get_attribute('fetchpriority') == 'high'
         expect(page.get_by_role('button',name='Pausar carrusel')).to_have_count(0)
-        page.wait_for_timeout(1100)
-        expect(photo).to_be_visible()
+        expect(page.locator('[data-active-slide]')).to_have_attribute('data-active-slide','1',timeout=16000)
+        expect(page.locator('[data-active-slide] img')).to_have_count(3,timeout=10000)
         args.output.joinpath('performance-local.json').write_text(json.dumps(page.evaluate('({lcpMs:window.lcp, images:performance.getEntriesByType("resource").filter(x=>x.name.includes("/_next/image")).map(x=>({url:x.name,bytes:x.transferSize,durationMs:x.duration}))})'),indent=2))
-    check('Fotografía hero: imagen accesible, carga prioritaria y sin controles de rotación',hero_static)
+    check('Carrusel: cambia de fotografía automáticamente sin botón visible',carousel)
+    def scroll_both_directions():
+        page.goto(BASE + '/')
+        item = page.locator('#planes [data-reveal]').first
+        page.evaluate('window.scrollTo(0,0)')
+        page.wait_for_timeout(300)
+        item.scroll_into_view_if_needed()
+        expect(item).to_have_attribute('data-motion-state','visible',timeout=4000)
+        page.evaluate('window.scrollTo(0,0)')
+        expect(item).to_have_attribute('data-motion-state','hidden',timeout=4000)
+        item.scroll_into_view_if_needed()
+        expect(item).to_have_attribute('data-motion-state','visible',timeout=4000)
+    check('Scroll en ambas direcciones: la animación se reactiva al volver',scroll_both_directions)
     def photos():
         for index in range(1,6):
             response = context.request.get(BASE + f'/hero/hero-{index}.jpg')
