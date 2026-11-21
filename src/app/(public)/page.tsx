@@ -1,4 +1,5 @@
 import HeroCarousel from "@/components/HeroCarousel";
+import EntradaDentaIA from "@/components/EntradaDentaIA";
 import LandingMotion from "@/components/LandingMotion";
 import PlanesDentaIA from "@/components/PlanesDentaIA";
 import Link from "next/link";
@@ -7,13 +8,14 @@ import styles from "./home.module.css";
 
 export default function Home() {
   return <>
+    <EntradaDentaIA />
     <LandingMotion />
     <section className={styles.hero} aria-labelledby="inicio-titulo">
       <HeroCarousel />
       <div className={styles.heroInner}>
       <div className={styles.heroCopy} data-hero-enter>
         <span className={`eyebrow ${styles.heroEyebrow}`}><span aria-hidden="true" /> CONOCE DENTAIA</span>
-        <h1 id="inicio-titulo">Una forma más simple de <span>cuidar tu sonrisa.</span></h1>
+        <h1 id="inicio-titulo" tabIndex={-1}>Una forma más simple de <span>cuidar tu sonrisa.</span></h1>
         <p>DentaIA reúne tu espacio personal, un directorio odontológico y herramientas de atención con acceso protegido. Encuentra lo que necesitas, sin perder de vista tu privacidad.</p>
         <div className="actions"><Link href="#planes" className="action">Ver planes <Icono nombre="flecha" size={18} /></Link><Link href="/directorio" className="action action-secondary">Explorar odontólogos</Link></div>
         <Link className={styles.enlaceProfesional} href="/profesional">¿Eres odontólogo? Accede a tu espacio profesional <Icono nombre="flecha" size={16} /></Link>
