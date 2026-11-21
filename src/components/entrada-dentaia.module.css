@@ -1,19 +1,19 @@
 .entrada {
-  position:fixed;inset:0;width:100%;max-width:none;height:100%;height:100dvh;
+  position:fixed;inset:0;z-index:10000;display:block;width:100%;max-width:none;height:100%;height:100dvh;
   max-height:none;margin:0;padding:0;border:0;overflow:hidden;
   background:#087f8c;color:#fff;color-scheme:dark;
+  animation:revelar .4s ease-in 1.35s forwards;
 }
-.entrada::backdrop{background:#087f8c}
 .escena {
   position:relative;display:grid;place-items:center;width:100%;height:100%;
-  padding:32px 24px 100px;isolation:isolate;
+  padding:32px 24px;isolation:isolate;
   background:#087f8c;
 }
 .halo {
   position:absolute;z-index:-1;width:min(66vw,480px);aspect-ratio:1;
   border-radius:50%;background:radial-gradient(circle,#ffffff12,transparent 65%);
 }
-.identidad{display:grid;justify-items:center;text-align:center;animation:aparecer .55s ease-out both}
+.identidad{display:grid;justify-items:center;text-align:center}
 .emblema{position:relative;display:grid;place-items:center;width:200px;height:200px;margin-bottom:30px}
 .anillo{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform:rotate(-90deg)}
 .pista{stroke:#ffffff38;stroke-width:1}
@@ -23,12 +23,7 @@
 .marca{margin:0;font-size:clamp(32px,5vw,42px);font-weight:650;line-height:1.2;letter-spacing:-.05em;color:#fff}
 .marca span{color:#c6fffa}
 .mensaje{margin:14px 0 0;color:#ffffff;font-size:16px;line-height:1.6;max-width:28ch}
-.omitir{position:absolute;bottom:max(32px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);min-height:44px;padding:10px 20px;border:1px solid #ffffff88;border-radius:99px;background:transparent;color:#ffffff;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
-.omitir:hover{background:#ffffff0d;border-color:#c6fffa;color:#fff}
-.omitir:focus-visible{outline:3px solid #c6fffa;outline-offset:5px}
-.entrada[data-saliendo="true"]{animation:revelar .4s ease-in forwards}
 @keyframes recorrer{to{stroke-dashoffset:0}}
-@keyframes aparecer{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes revelar{to{opacity:0;transform:translateY(-10px)}}
+@keyframes revelar{from{opacity:1;visibility:visible}to{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-10px)}}
 @media(max-width:480px){.emblema{width:172px;height:172px;margin-bottom:25px}.diente svg{width:68px;height:68px}}
-@media(prefers-reduced-motion:reduce){.identidad,.trazo,.entrada[data-saliendo="true"]{animation:none}.trazo{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){.entrada{display:none;animation:none}.trazo{animation:none;stroke-dashoffset:0}}
