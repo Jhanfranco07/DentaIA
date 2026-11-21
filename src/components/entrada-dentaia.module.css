@@ -1,19 +1,18 @@
 .entrada {
   position:fixed;inset:0;z-index:10000;display:block;width:100%;max-width:none;height:100%;height:100dvh;
   max-height:none;margin:0;padding:0;border:0;overflow:hidden;
-  background:#087f8c;color:#fff;color-scheme:dark;
-  animation:revelar .4s ease-in 1.35s forwards;
+  background:transparent;color:#fff;color-scheme:dark;
+  animation:finalizar .01s linear 2.35s forwards;
 }
 .escena {
   position:relative;display:grid;place-items:center;width:100%;height:100%;
   padding:32px 24px;isolation:isolate;
-  background:#087f8c;
+  background:transparent;
 }
-.halo {
-  position:absolute;z-index:-1;width:min(66vw,480px);aspect-ratio:1;
-  border-radius:50%;background:radial-gradient(circle,#ffffff12,transparent 65%);
-}
-.identidad{display:grid;justify-items:center;text-align:center}
+.velo{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none}
+.apertura{transform-origin:0 0;transform:scale(0);animation:abrirDiente 1s cubic-bezier(.65,0,.25,1) 1.35s forwards}
+.borde{fill:none;stroke:#c6fffa;stroke-width:1.5;opacity:.75}
+.identidad{position:absolute;top:50%;left:50%;width:calc(100% - 48px);display:grid;justify-items:center;text-align:center;transform:translate(-50%,-100px);animation:retirarIdentidad .28s ease-in 1.3s forwards}
 .emblema{position:relative;display:grid;place-items:center;width:200px;height:200px;margin-bottom:30px}
 .anillo{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform:rotate(-90deg)}
 .pista{stroke:#ffffff38;stroke-width:1}
@@ -24,6 +23,8 @@
 .marca span{color:#c6fffa}
 .mensaje{margin:14px 0 0;color:#ffffff;font-size:16px;line-height:1.6;max-width:28ch}
 @keyframes recorrer{to{stroke-dashoffset:0}}
-@keyframes revelar{from{opacity:1;visibility:visible}to{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-10px)}}
-@media(max-width:480px){.emblema{width:172px;height:172px;margin-bottom:25px}.diente svg{width:68px;height:68px}}
-@media(prefers-reduced-motion:reduce){.entrada{display:none;animation:none}.trazo{animation:none;stroke-dashoffset:0}}
+@keyframes abrirDiente{0%{transform:scale(0)}35%{transform:scale(.65)}75%{transform:scale(5)}100%{transform:scale(20)}}
+@keyframes retirarIdentidad{to{opacity:0;visibility:hidden}}
+@keyframes finalizar{to{visibility:hidden;pointer-events:none}}
+@media(max-width:480px){.identidad{transform:translate(-50%,-86px)}.emblema{width:172px;height:172px;margin-bottom:25px}.diente svg{width:68px;height:68px}}
+@media(prefers-reduced-motion:reduce){.entrada{display:none;animation:none}.trazo,.apertura,.identidad{animation:none}.trazo{stroke-dashoffset:0}}
