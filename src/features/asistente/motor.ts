@@ -21,7 +21,7 @@ const BASE = "Te acompaño con orientación educativa. No sustituyo a un odontó
 export function esUrgenciaBucal(pregunta: string): boolean {
   const texto = pregunta.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   const respiracion = /(?:no (?:puedo|logro|consigo) (?:bien )?(?:respirar|tragar)|(?:me cuesta|dificultad(?:es)? (?:para|al)) .*?(?:respirar|tragar)|(?:falta (?:de |el )?aire|me ahogo|asfixia|no puedo pasar saliva))/.test(texto);
-  const hinchazon = /(?:hincha(?:zon|da|do|miento)?|inflama(?:cion|da|do|do)?).*?(?:cara|rostro|cuello|mejilla)|(?:cara|rostro|cuello|mejilla).*?(?:hincha|inflama)/.test(texto);
+  const hinchazon = /(?:hinch(?:a(?:zon|da|do|miento)?|o)|inflama(?:cion|da|do)?).*?(?:cara|rostro|cuello|mejilla)|(?:cara|rostro|cuello|mejilla).*?(?:hincha|inflama)/.test(texto);
   const hemorragia = /(?:hemorragia|(?:sangra|sangrado|sangre).*?(?:mucho|abundante|sin parar|no para|no se detiene)|(?:no (?:deja|paro) de sangrar))/.test(texto);
   const trauma = /(?:traumatismo|golpe|accidente).*?(?:fuerte|grave|severo)/.test(texto);
   const dolor = /dolor.*?(?:insoportable|inaguantable|muy intenso)/.test(texto);
