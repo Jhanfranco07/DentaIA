@@ -1,6 +1,6 @@
 /* La apariencia clara es la inicial; el modo oscuro requiere elección guardada. */
-html[data-tema="claro"] { color-scheme: light; }
-html[data-tema="oscuro"] {
+html[data-tema="claro"], html:has(.public-site) { color-scheme: light; }
+html[data-tema="oscuro"]:not(:has(.public-site)) {
   color-scheme: dark;
   --ink:#f5efff;
   --muted:#d7cde9;
@@ -24,34 +24,25 @@ html[data-tema="oscuro"] {
   border-radius:11px;background:var(--tema-superficie,#fff);color:var(--ink);
   font:inherit;font-size:13px;font-weight:750;flex-shrink:0;
 }
-.tema-selector>span:first-child { font-size:20px;line-height:1; }
 .tema-selector:hover { border-color:var(--blue); }
-.tema-flotante { position:fixed;right:16px;bottom:16px;z-index:60; }
-body:has([data-control-tema="cabecera"]) .tema-flotante { display:none; }
-html[data-tema="oscuro"] :is(.site-header,.site-footer,.site-nav.is-open,.panel,.surface,.dentist-card,.dentist-detail,.feature-card,.hero-photo-card,.result-card,.tip-panel,.filters,.empty,.sidebar,.personal-space,.privacy,.home-principles,.home-invitation) {
+html[data-tema="oscuro"]:not(:has(.public-site)) :is(.site-header,.site-footer,.site-nav.is-open,.panel,.surface,.dentist-card,.dentist-detail,.feature-card,.hero-photo-card,.result-card,.tip-panel,.filters,.empty,.sidebar,.personal-space,.privacy,.home-principles,.home-invitation) {
   background:#2c2448;border-color:#78649e;color:#f5efff;
 }
-html[data-tema="oscuro"] :is(.action-secondary,.action-account,.pill,.fake-tag,.notice,.drop,.preview,.hero-floating-note) {
+html[data-tema="oscuro"]:not(:has(.public-site)) :is(.action-secondary,.action-account,.pill,.fake-tag,.notice,.drop,.preview,.hero-floating-note) {
   background:#392e59;border-color:#78649e;color:#f5efff;
 }
-html[data-tema="oscuro"] :is(.site-nav a,.site-footer p,.site-footer a,.muted,.heading-muted,.dentist-meta,.footer-note) { color:#d7cde9; }
-html[data-tema="oscuro"] :is(.text-link,.link-inline) { color:#d0bdff; }
-html[data-tema="oscuro"] :is(.action,.action:hover) { background:#6844b9;border-color:#ac8be8;color:#fff; }
-html[data-tema="oscuro"] :is(.action-secondary,.action-account) { background:#392e59;color:#f5efff; }
-html[data-tema="oscuro"] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),select,textarea) {
+html[data-tema="oscuro"]:not(:has(.public-site)) :is(.site-nav a,.site-footer p,.site-footer a,.muted,.heading-muted,.dentist-meta,.footer-note) { color:#d7cde9; }
+html[data-tema="oscuro"]:not(:has(.public-site)) :is(.text-link,.link-inline) { color:#d0bdff; }
+html[data-tema="oscuro"]:not(:has(.public-site)) :is(.action,.action:hover) { background:#6844b9;border-color:#ac8be8;color:#fff; }
+html[data-tema="oscuro"]:not(:has(.public-site)) :is(.action-secondary,.action-account) { background:#392e59;color:#f5efff; }
+html[data-tema="oscuro"]:not(:has(.public-site)) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),select,textarea) {
   background-color:#231b3e;color:#f5efff;border-color:#78649e;
 }
-html[data-tema="oscuro"] ::placeholder { color:#d7cde9;opacity:1; }
-html[data-tema="oscuro"] .skip-link { background:#362d54;color:#fff; }
-html[data-tema="oscuro"] ::selection { background:#6844b9;color:#fff; }
-html[data-tema="oscuro"] .notice-error { background:#462838;color:#ffd6df;border-color:#bd7a92; }
+html[data-tema="oscuro"]:not(:has(.public-site)) ::placeholder { color:#d7cde9;opacity:1; }
+html[data-tema="oscuro"]:not(:has(.public-site)) .skip-link { background:#362d54;color:#fff; }
+html[data-tema="oscuro"]:not(:has(.public-site)) ::selection { background:#6844b9;color:#fff; }
+html[data-tema="oscuro"]:not(:has(.public-site)) .notice-error { background:#462838;color:#ffd6df;border-color:#bd7a92; }
 @media(max-width:760px) {
   .site-header-inner { gap:10px;flex-wrap:wrap; }
-  .site-header .tema-selector>span:last-child { display:none; }
 }
-@media print {
-  .tema-selector,.tema-flotante { display:none!important; }
-}
-
-/* El landing siempre se presenta en claro y no ofrece otro selector flotante. */
-body:has(.site-header[data-landing-header="true"]) .tema-flotante { display: none; }
+@media print { .tema-selector { display: none; } }
