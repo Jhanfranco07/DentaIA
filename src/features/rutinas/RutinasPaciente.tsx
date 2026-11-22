@@ -92,7 +92,7 @@ export default function RutinasPaciente() {
     <header className={styles.encabezado}>
       <span className={styles.etiqueta}><Icono nombre="escudo" size={17} /> MI CUIDADO DENTAL</span>
       <h1 id="rutinas-titulo">Mis rutinas</h1>
-      <p>Registra tus hábitos, aprende con las guías y revisa tu progreso. Este es un plan preventivo general, no un tratamiento personalizado.</p>
+      <p>Registra tus hábitos, aprende con las guías y revisa tu progreso. Las propuestas educativas se activan únicamente después de tu aceptación; no reemplazan un tratamiento odontológico.</p>
     </header>
 
     <div className={styles.resumen} aria-label="Resumen de actividades">
@@ -105,7 +105,7 @@ export default function RutinasPaciente() {
       <div className={styles.principal}>
         <section className={styles.tarjeta} aria-labelledby="rutina-dia-titulo">
           <div className={styles.tituloFila}>
-            <div><span className={styles.sobrelinea}>HÁBITOS PREVENTIVOS</span><h2 id="rutina-dia-titulo">{dia?.plan?.title ?? "Rutina del día"}</h2></div>
+            <div><span className={styles.sobrelinea}>{dia?.origen === "personalizado" ? "PLAN EDUCATIVO ACEPTADO" : "HÁBITOS PREVENTIVOS"}</span><h2 id="rutina-dia-titulo">{dia?.plan?.title ?? "Rutina del día"}</h2></div>
             <div className={styles.fechaAcciones}>
             {!esHoy && <button type="button" className={styles.volverHoy} onClick={() => setFecha(hoy)}>Volver a hoy</button>}
             <label className={styles.selectorFecha}>Fecha
@@ -178,7 +178,7 @@ export default function RutinasPaciente() {
             </label>
           </div>}
         </section>
-        <p className={styles.nota}>Esta rutina es preventiva y general. No se adapta automáticamente a hallazgos de fotografías ni sustituye la orientación profesional.</p>
+        <p className={styles.nota}>Las rutinas se basan en actividades preventivas. La selección aceptada por ti no constituye tratamiento ni se genera automáticamente a partir de fotografías.</p>
       </div>
 
       <aside className={styles.historial} aria-labelledby="historial-titulo">
