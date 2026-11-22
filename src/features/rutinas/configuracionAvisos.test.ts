@@ -12,6 +12,7 @@ describe("Rutinas: horarios de avisos educativos en la aplicación", () => {
   it("utiliza valores predeterminados para configuraciones corruptas", () => {
     expect(normalizarHorario(null)).toEqual(HORARIO_PREDETERMINADO);
     expect(normalizarHorario({ manana: "56:21", frecuencia: "cualquier" })).toEqual(HORARIO_PREDETERMINADO);
+    expect(normalizarHorario({ manana: "22:00", tarde: "13:00", noche: "20:00" })).toEqual(HORARIO_PREDETERMINADO);
   });
   it("respeta el inicio de cada momento sin anticipar avisos", () => {
     expect(momentoAviso("07:59", HORARIO_PREDETERMINADO)).toBeNull();
