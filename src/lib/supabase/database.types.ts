@@ -548,6 +548,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      operar_seguimiento_rutina: {
+        Args: {
+          p_actor_user_id: string;
+          p_accion: string;
+          p_membership_id?: string | null;
+          p_patient_record_id?: string | null;
+          p_consent_id?: string | null;
+          p_proposal_id?: string | null;
+          p_plan_id?: string | null;
+          p_activity_ids?: string[] | null;
+        };
+        Returns: Json;
+      };
+      consultar_seguimiento_rutina: {
+        Args: { p_actor_user_id: string; p_membership_id?: string | null };
+        Returns: Json;
+      };
       dentaia_buscar_directorio: {
         Args: { p_query: string; p_district: string; p_specialty: string; p_order: string; p_page: number; p_size: number;
           p_lat?: number; p_lon?: number; p_radius?: number };
