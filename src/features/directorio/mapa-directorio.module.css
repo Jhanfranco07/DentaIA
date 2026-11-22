@@ -199,3 +199,65 @@
 :global(html[data-tema="oscuro"]:not(:has(.public-site))) .popupEtiqueta,
 :global(html[data-tema="oscuro"]:not(:has(.public-site))) .contenedorMapa :global(.maplibregl-popup-content) .popupZona{color:#d7cde9}
 :global(html[data-tema="oscuro"]:not(:has(.public-site))) .contenedorMapa :global(.maplibregl-popup-close-button){background:#392e59;border-color:#78649e;color:#f5efff}
+
+/* La ficha conserva su cabecera y su botón de cierre aunque el contenido sea largo.
+   La altura también está limitada al mapa, no únicamente a la ventana. */
+.contenedorMapa :global(.maplibregl-popup){
+  z-index:6;
+  max-width:calc(100% - 24px)!important;
+}
+.contenedorMapa :global(.maplibregl-popup-content){
+  position:relative;
+  max-height:min(365px,calc(100dvh - 112px));
+  overflow:hidden;
+  overscroll-behavior:contain;
+}
+.popupTarjeta{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  max-height:min(365px,calc(100dvh - 112px));
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:#bcb2dc transparent;
+}
+.popupTarjeta::-webkit-scrollbar{width:7px}
+.popupTarjeta::-webkit-scrollbar-thumb{background:#bcb2dc;border-radius:999px}
+.popupEncabezado{
+  position:sticky;
+  top:0;
+  z-index:2;
+  flex:none;
+  padding-right:52px;
+  box-shadow:0 2px 8px #21145e0a;
+}
+.popupCuerpo{flex:none;padding-bottom:22px}
+.contenedorMapa :global(.maplibregl-popup-close-button){
+  position:absolute;
+  z-index:5;
+  top:11px;
+  right:11px;
+  width:34px;
+  height:34px;
+  box-shadow:0 3px 9px #24215e1b;
+}
+.contenedorMapa :global(.maplibregl-popup-content):focus-within{
+  outline:2px solid #8172d3;
+  outline-offset:2px;
+}
+.contenedorMapa :global(.maplibregl-popup-content) .popupAccion{
+  position:relative;
+  z-index:1;
+}
+@media(max-width:760px){
+  .contenedorMapa :global(.maplibregl-popup-content),
+  .popupTarjeta{max-height:min(310px,calc(100dvh - 132px))}
+  .popupEncabezado{padding-right:52px}
+}
+@media(max-width:480px){
+  .contenedorMapa :global(.maplibregl-popup){max-width:calc(100% - 16px)!important}
+  .contenedorMapa :global(.maplibregl-popup-content),
+  .popupTarjeta{max-height:min(285px,calc(100dvh - 132px))}
+}
