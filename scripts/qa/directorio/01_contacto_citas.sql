@@ -25,7 +25,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',true);
 do $$
 begin
-  if (select count(*) from public.dentist_contact_channels) <> 1 then
+  if (select count(*) from public.dentist_contact_channels) <> 0 then
     raise exception 'RLS_SELECCION_INCORRECTA';
   end if;
 end $$;
