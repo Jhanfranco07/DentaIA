@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
+import { crearIndiceBm25, MAX_CONSULTA } from "@/lib/busqueda/bm25";
 import { GUIAS_BUCALES, type GuiaBucal } from "./contenido";
 import Ilustracion3D from "./Ilustracion3D";
 import styles from "./buenas-practicas.module.css";
@@ -16,6 +17,10 @@ const TEMAS: readonly { titulo: Tema; emoji: string }[] = [
 ];
 const TITULOS: Record<string, string> = { cepillado: "Cepillado correcto", hilo: "Uso del hilo dental", alimentacion: "Alimentación saludable", fluor: "Prevención de caries", encias: "Cuidado de encías", controles: "Controles odontológicos" };
 const ORDEN: Record<string, number> = { cepillado: 0, hilo: 1, alimentacion: 2, fluor: 3, encias: 4, controles: 5 };
+const buscarGuias = crearIndiceBm25([...GUIAS_BUCALES].sort((a, b) => (ORDEN[a.id] ?? 99) - (ORDEN[b.id] ?? 99)), guia => [
+  { texto: guia.titulo, peso: 3 }, { texto: TITULOS[guia.id] ?? "", peso: 2 },
+  { texto: guia.descripcion, peso: 1 }, { texto: guia.pasos.join(" "), peso: 1 },
+]);
 const TIPS = [
   { titulo: "Dos minutos que cuentan", cuerpo: "Cepilla tus dientes durante dos minutos, dos veces al día, utilizando pasta dental fluorada.", fuente: "American Dental Association", url: "https://www.mouthhealthy.org/all-topics-a-z/brushing-your-teeth/" },
   { titulo: "Cuida cada espacio", cuerpo: "Limpia entre los dientes todos los días con hilo dental u otro limpiador interdental adecuado.", fuente: "American Dental Association", url: "https://www.mouthhealthy.org/all-topics-a-z/flossing/" },
@@ -49,10 +54,7 @@ export default function BuenasPracticas() {
   }, [reproduciendo]);
   useEffect(() => { if (segundos === 0) setReproduciendo(false); }, [segundos]);
 
-  const visibles = useMemo(() => GUIAS_BUCALES.filter((g) =>
-    coincideConTema(g, tema) &&
-    (g.titulo + " " + g.descripcion + " " + g.pasos.join(" ")).toLocaleLowerCase("es").includes(busqueda.trim().toLocaleLowerCase("es"))
-  ).sort((a,b)=>(ORDEN[a.id]??99)-(ORDEN[b.id]??99)), [tema, busqueda]);
+  const visibles = useMemo(() => buscarGuias(busqueda, guia => coincideConTema(guia, tema)), [tema, busqueda]);
   const actual = visibles.find((g) => g.id === seleccion) ?? visibles[0];
   const porcentaje = Math.round(100 * revisadas.length / GUIAS_BUCALES.length);
   const tiempo = String(Math.floor(segundos / 60)).padStart(2, "0") + ":" + String(segundos % 60).padStart(2, "0");
@@ -102,7 +104,7 @@ export default function BuenasPracticas() {
           <span aria-hidden="true">{f.emoji}</span> {f.titulo}
         </button>
       )}</div></div>
-      <label className={styles.busqueda}><Icono nombre="buscar" size={18}/><span className={styles.srOnly}>Buscar guía educativa</span><input type="search" placeholder="Buscar un tema o consejo" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value);setMostrarDetalle(false);}}/></label>
+      <label className={styles.busqueda}><Icono nombre="buscar" size={18}/><span className={styles.srOnly}>Buscar guía educativa</span><input type="search" placeholder="Buscar un tema o consejo" value={busqueda} maxLength={MAX_CONSULTA} onChange={(e)=>{setBusqueda(e.target.value);setMostrarDetalle(false);}}/></label>
       {visibles.length ? <><div className={styles.controlCarrusel}><span>Explora nuestras seis guías de cuidado bucal</span><div><button type="button" aria-label="Mostrar guías anteriores" onClick={()=>moverTarjetas(-1)}>‹</button><button type="button" aria-label="Mostrar más guías" onClick={()=>moverTarjetas(1)}>›</button></div></div><div ref={pistaRef} className={styles.tarjetas} aria-label="Carrusel de guías educativas">{visibles.map((g, indice) => <button type="button" key={g.id} className={styles.tarjeta} style={{animationDelay: `${indice * 60}ms`}} onClick={()=>abrirGuia(g.id)} aria-label={`Abrir guía de ${g.titulo}`}>
         <span className={styles.dibujo} data-tema={g.id}>
           <span className={styles.circuloFondo} aria-hidden="true" />
