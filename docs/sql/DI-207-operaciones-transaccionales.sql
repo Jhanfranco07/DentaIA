@@ -46,7 +46,7 @@ begin
     select pa.user_id into v_professional_user
     from clinical.clinic_memberships cm
     join clinical.professional_accounts pa on pa.id=cm.professional_id
-    where cm.id=p_membership_id and cm.status='active' and pa.status='active'
+    where cm.id=p_membership_id and cm.status='active' and pa.status='verified'
       and cm.valid_from<=now() and (cm.valid_until is null or cm.valid_until>now());
     if v_professional_user is distinct from p_actor_user_id then
       raise exception 'ACCESO_DENEGADO' using errcode = '42501';
@@ -133,7 +133,7 @@ begin
   select pa.user_id into v_professional_user
   from clinical.clinic_memberships cm
   join clinical.professional_accounts pa on pa.id=cm.professional_id
-  where cm.id=v_consent.membership_id and cm.status='active' and pa.status='active'
+  where cm.id=v_consent.membership_id and cm.status='active' and pa.status='verified'
     and cm.valid_from<=now() and (cm.valid_until is null or cm.valid_until>now());
   if v_professional_user is null or v_consent.expires_at<=now() then
     raise exception 'ACCESO_DENEGADO' using errcode='42501';
