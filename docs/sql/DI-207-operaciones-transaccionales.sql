@@ -5,7 +5,7 @@ create or replace function public.operar_seguimiento_rutina(
   p_actor_user_id uuid,
   p_accion text,
   p_membership_id uuid default null,
-  p_patient_user_id uuid default null,
+  p_patient_record_id uuid default null,
   p_consent_id uuid default null,
   p_proposal_id uuid default null,
   p_plan_id uuid default null,
@@ -20,6 +20,7 @@ declare
   v_proposal public.routine_plan_proposals%rowtype;
   v_professional_user uuid;
   v_patient_record uuid;
+  v_patient_user_id uuid;
   v_consent_id uuid;
   v_proposal_id uuid;
   v_actor_roles jsonb;
@@ -39,7 +40,7 @@ begin
   end if;
 
   if p_accion = 'invitar' then
-    if not (v_actor_roles ? 'odontologo') or p_membership_id is null or p_patient_user_id is null then
+    if not (v_actor_roles ? 'odontologo') or p_membership_id is null or p_patient_record_id is null then
       raise exception 'ACCESO_DENEGADO' using errcode = '42501';
     end if;
     select pa.user_id into v_professional_user
@@ -50,8 +51,8 @@ begin
     if v_professional_user is distinct from p_actor_user_id then
       raise exception 'ACCESO_DENEGADO' using errcode = '42501';
     end if;
-    select pr.id into v_patient_record from clinical.patient_records pr
-    where pr.user_id=p_patient_user_id and pr.status='active';
+    select pr.id, pr.user_id into v_patient_record,v_patient_user_id from clinical.patient_records pr
+    where pr.id=p_patient_record_id and pr.status='active';
     -- No se permiten invitaciones por tanteo de UUID:
     -- debe existir autorización clínica vigente de ese paciente en esa membresía.
     if v_patient_record is null or not exists (
@@ -62,7 +63,7 @@ begin
       raise exception 'ACCESO_DENEGADO' using errcode = '42501';
     end if;
     insert into public.routine_followup_consents(patient_id,membership_id,expires_at)
-    values(p_patient_user_id,p_membership_id,now()+interval '14 days')
+    values(v_patient_user_id,p_membership_id,now()+interval '14 days')
     returning id into v_consent_id;
     insert into clinical.routine_followup_audit(consent_id,actor_user_id,action)
     values(v_consent_id,p_actor_user_id,'solicitud');
@@ -123,8 +124,8 @@ begin
        or exists (select 1 from unnest(p_activity_ids) as a(id) where a.id is null)
        or not exists (
          select 1 from public.oral_care_routine_plans plan
-         where plan.id=p_plan_id and plan.published and plan.valid_from<=current_date
-           and (plan.valid_until is null or plan.valid_until>=current_date)
+         where plan.id=p_plan_id and plan.published and plan.valid_from<=(now() at time zone 'America/Lima')::date
+           and (plan.valid_until is null or plan.valid_until>=(now() at time zone 'America/Lima')::date)
        )
        or (select count(distinct a.id)
            from public.oral_care_routine_activities a
