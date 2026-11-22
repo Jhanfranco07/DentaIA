@@ -10,6 +10,7 @@ import { enlaceSolicitud } from "@/lib/navegacion";
 import dynamic from "next/dynamic";
 import ServiciosPublicados from "./ServiciosPublicados";
 import ResenasOdontologo from "./ResenasOdontologo";
+import ContactoDirecto from "./ContactoDirecto";
 import mapStyles from "./mapa-directorio.module.css";
 import { AVISO_PERFILES_DEMO, completarCatalogoDemo, perfilDemo } from "./catalogo-demo";
 import AvatarOdontologo, { tratamientoDemo } from "./AvatarOdontologo";
@@ -179,7 +180,7 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio", qa
                   <Link href={baseDirectorio}>Explorar otras ubicaciones de referencia</Link>
                 </section>
               : <p className={styles.nota}>{carga.ubicacionesDisponibles ? "Ubicación no registrada. Este perfil no se coloca en el mapa." : "El servicio de ubicaciones aún no está disponible en este entorno."}</p>}
-            {!perfilDemo(carga.dentista.id) && !esPerfilQa(carga.dentista.id) && <ResenasOdontologo dentistId={carga.dentista.id} />}
+            {!carga.dentista.is_demo && !esPerfilQa(carga.dentista.id) && <><ContactoDirecto dentistId={carga.dentista.id} nombre={carga.dentista.name} /><ResenasOdontologo dentistId={carga.dentista.id} /></>}
           </div>
         </article>
       )}
