@@ -38,8 +38,10 @@ begin
     select coalesce(jsonb_agg(jsonb_build_object(
       'id',p.id,'consentimientoId',p.consent_id,'estado',p.status,
       'planId',p.plan_id,'planTitulo',plan.title,'creado',p.created_at,
-      'actividades',coalesce((select jsonb_agg(pa.activity_id)
-       from public.routine_proposal_activities pa where pa.proposal_id=p.id),'[]'::jsonb)
+      'actividades',coalesce((select jsonb_agg(jsonb_build_object('id',pa.activity_id,'titulo',a.title,'momento',a.time_of_day) order by a.sort_order)
+       from public.routine_proposal_activities pa
+       join public.oral_care_routine_activities a on a.id=pa.activity_id
+       where pa.proposal_id=p.id),'[]'::jsonb)
     ) order by p.created_at desc), '[]'::jsonb) into v_propuestas
     from public.routine_plan_proposals p
     join public.oral_care_routine_plans plan on plan.id=p.plan_id
@@ -85,7 +87,7 @@ begin
     ) order by c.created_at desc), '[]'::jsonb) into v_consentimientos
     from public.routine_followup_consents c
     join clinical.patient_records pr on pr.user_id=c.patient_id and pr.status='active'
-    where c.membership_id=p_membership_id;
+    where c.membership_id=p_membership_id and c.status in ('pendiente','aprobado') and c.expires_at>now();
 
     select coalesce(jsonb_agg(jsonb_build_object(
       'id',plan.id,'titulo',plan.title,'actividades',coalesce((
