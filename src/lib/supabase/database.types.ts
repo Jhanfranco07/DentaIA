@@ -572,6 +572,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      contacto_odontologo_autorizado: {
+        Args: { p_dentist_id: string; p_propietario: boolean }
+        Returns: boolean
+      }
+      gestionar_cita_profesional: {
+        Args: { p_solicitud_id: string; p_accion: string }
+        Returns: Json
+      }
       operar_seguimiento_rutina: {
         Args: {
           p_actor_user_id: string;
