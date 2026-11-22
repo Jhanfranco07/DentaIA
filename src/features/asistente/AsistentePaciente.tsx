@@ -6,7 +6,7 @@ import { leerRutinaDelDia } from "@/features/rutinas/datos";
 import { fechaHoyLima } from "@/features/rutinas/modelo";
 import { avisoRutinaDenti, type AvisoDenti } from "./avisos";
 import { GUIAS_BUCALES } from "@/features/buenas-practicas/contenido";
-import { leerPreferenciaAvisos } from "@/features/rutinas/configuracionAvisos";
+import { claveVentanaAviso, leerHorarioAvisos, leerPreferenciaAvisos, momentoAviso } from "@/features/rutinas/configuracionAvisos";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { detectarDestinoDenti, responderOrientacion, type DestinoDenti, type ObservacionAsistente, type RespuestaAsistente } from "./motor";
 import styles from "./asistente.module.css";
@@ -66,15 +66,26 @@ export default function AsistentePaciente() {
         if (!vigente || !data.user) return;
         if (!leerPreferenciaAvisos(data.user.id)) { setAviso(null); return; }
         const fecha = fechaHoyLima();
-        const hora = Number(new Intl.DateTimeFormat("en-GB", {
-          hour: "2-digit", hourCycle: "h23", timeZone: "America/Lima",
-        }).format(new Date()));
+        const ahoraLima = new Intl.DateTimeFormat("en-GB", {
+          hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: "America/Lima",
+        }).format(new Date());
+        const hora = Number(ahoraLima.slice(0, 2));
+        const horario = leerHorarioAvisos(data.user.id);
+        const momento = momentoAviso(ahoraLima, horario);
         let estado = null;
         try { estado = await leerRutinaDelDia(cliente, data.user.id, fecha); }
         catch { /* No mostramos progreso sin datos verificados. */ }
         if (!vigente) return;
         const siguiente = avisoRutinaDenti(hora, fecha, estado);
-        const clave = `denti:aviso:${data.user.id}:${siguiente.clave}`;
+        const completada = Boolean(estado?.plan && estado.actividades.length > 0
+          && estado.actividades.every(a => estado?.completadas.includes(a.id)));
+        // Sin actividades, el saludo puede mostrarse una vez al día.
+        // Con actividades pendientes, respetamos los horarios configurados.
+        if (estado?.plan && estado.actividades.length > 0 && !completada && !momento) return;
+        const claveLocal = estado?.plan && estado.actividades.length > 0
+          ? claveVentanaAviso(fecha, horario, momento ?? "fin", completada)
+          : "saludo:" + fecha;
+        const clave = "denti:aviso:" + data.user.id + ":" + claveLocal;
         if (window.sessionStorage.getItem(clave) === "visto") return;
         window.sessionStorage.setItem(clave, "visto");
         setAviso(siguiente);
@@ -85,7 +96,8 @@ export default function AsistentePaciente() {
     window.addEventListener("focus", alVolver);
     window.addEventListener("dentaia:preferencia-avisos", alVolver);
     window.addEventListener("dentaia:rutina-actualizada", alVolver);
-    return () => { vigente = false; window.removeEventListener("focus", alVolver); window.removeEventListener("dentaia:preferencia-avisos", alVolver); window.removeEventListener("dentaia:rutina-actualizada", alVolver); };
+    const intervalo = window.setInterval(alVolver, 60_000);
+    return () => { vigente = false; window.removeEventListener("focus", alVolver); window.removeEventListener("dentaia:preferencia-avisos", alVolver); window.removeEventListener("dentaia:rutina-actualizada", alVolver); window.clearInterval(intervalo); };
   }, [abierto]);
   function configurarIA(activar: boolean) {
     if (usuarioIA) {
