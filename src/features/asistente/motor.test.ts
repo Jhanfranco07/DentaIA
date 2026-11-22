@@ -69,7 +69,7 @@ describe("Denti — navegación con aprobación", () => {
     expect(detectarDestinoDenti("¿Qué significa sensibilidad dental?")).toBeNull();
   });
   it("nunca retrasa una urgencia proponiendo una guía", () => {
-    expect(detectarDestinoDenti("Me duele insoportablemente y quiero la guía de cepillado")).toBeNull();
+    expect(detectarDestinoDenti("Tengo dolor insoportable y quiero la guía de cepillado")).toBeNull();
     expect(detectarDestinoDenti("Tengo hinchazón en el cuello y dificultad para respirar")).toBeNull();
   });
 });
