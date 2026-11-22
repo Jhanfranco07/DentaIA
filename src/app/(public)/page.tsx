@@ -51,21 +51,7 @@ function VistaPanel() {
 export default function Home() {
   return <>
     <LandingMotion />
-    <section className={styles.hero} aria-labelledby="inicio-titulo">
-      <HeroCarousel />
-      <div className={styles.heroInner}>
-      <div className={styles.heroCopy} data-hero-enter>
-        <span className={`eyebrow ${styles.heroEyebrow}`}><span aria-hidden="true" /> CONOCE DENTAIA</span>
-        <h1 id="inicio-titulo">Una forma más simple de <span>cuidar tu sonrisa.</span></h1>
-        <p>DentaIA reúne tu espacio personal, un directorio odontológico y herramientas de atención con acceso protegido. Encuentra lo que necesitas, sin perder de vista tu privacidad.</p>
-        <div className="actions"><Link href="#planes" className="action">Ver planes <Icono nombre="flecha" size={18} /></Link><Link href="/directorio" className="action action-secondary">Explorar odontólogos</Link></div>
-        <Link className={styles.enlaceProfesional} href="/profesional">¿Eres odontólogo? Accede a tu espacio profesional <Icono nombre="flecha" size={16} /></Link>
-        <div className={styles.aviso}><span className={styles.check}><Icono nombre="check" size={20} /></span><div><strong>Tu bienestar es lo primero</strong><br />Sin diagnósticos automáticos. El análisis con IA está en desarrollo.</div></div>
-      </div>
-      <Link href="/analisis" className={styles.heroTag} data-hero-enter><span>Conoce DentaIA ahora</span><span>Prepara una fotografía, paso a paso <Icono nombre="flecha" size={16} /></span></Link>
-      </div>
-      <div className={styles.principios} data-hero-enter><span><Icono nombre="destello" size={18} /> Información clara</span><span><Icono nombre="clinica" size={18} /> Encuentra profesionales</span><span><Icono nombre="escudo" size={18} /> Privacidad y control</span></div>
-    </section>
+    <HeroCarousel />
 
     <section className={styles.recorrido} id="como-funciona" aria-labelledby="como-titulo">
       <div className={`${styles.recorridoInner} public-wrap`}>
