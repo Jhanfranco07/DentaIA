@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import styles from "./estela-agua.module.css";
+import { useAccesibilidad } from "./Accesibilidad";
 
 const CANTIDAD = 24;
 const VIDA = 1350;
@@ -45,10 +46,11 @@ type Gota = { x: number; y: number; radio: number; nacimiento: number };
 /** Decoración transparente: no lee el DOM ni captura clics, teclado o desplazamiento. */
 export default function EstelaAgua() {
   const lienzo = useRef<HTMLCanvasElement>(null);
+  const { preferencias } = useAccesibilidad();
 
   useEffect(() => {
     const canvas = lienzo.current;
-    if (!canvas) return;
+    if (!canvas || preferencias.movimiento || preferencias.imagenes || preferencias.escala !== 100) return;
     const movimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
     const raton = window.matchMedia("(hover: hover) and (pointer: fine)");
     let destruir: (() => void) | undefined;
@@ -187,7 +189,7 @@ export default function EstelaAgua() {
       raton.removeEventListener("change", iniciar);
       destruir?.();
     };
-  }, []);
+  }, [preferencias.movimiento, preferencias.imagenes, preferencias.escala]);
 
-  return <canvas ref={lienzo} className={styles.lienzo} aria-hidden="true" />;
+  return <canvas ref={lienzo} className={styles.lienzo} aria-hidden="true" data-a11y-decorativa="true" />;
 }

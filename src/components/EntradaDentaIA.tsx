@@ -5,7 +5,7 @@ const SILUETA_DIENTE = "M12 5C8 1 3 4 5 10c1 3 1 10 4 10 2 0 1-7 3-7s1 7 3 7c3 0
 
 /** Se incluye en el HTML inicial; la transición funciona sin esperar a JavaScript. */
 export default function EntradaDentaIA() {
-  return <div className={styles.entrada} role="status" aria-label="Bienvenido a DentaIA">
+  return <div className={styles.entrada} data-a11y-intro="true" data-a11y-decorativa="true" role="status" aria-label="Bienvenido a DentaIA">
     <svg className={styles.velo} viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <mask id="dentaia-entrada-revelado" x="-100" y="-100" width="200" height="200" maskUnits="userSpaceOnUse" style={{ maskType: "luminance" }}>
