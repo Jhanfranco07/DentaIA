@@ -41,8 +41,9 @@ begin;
 set local role authenticated;
 select set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 insert into public.appointment_requests(
-  user_id,dentist_id,contact_name,contact_email,preferred_date,message,status,is_demo
+  id,user_id,dentist_id,contact_name,contact_email,preferred_date,message,status,is_demo
 ) values (
+  '88888888-8888-4888-8888-888888888888',
   '11111111-1111-4111-8111-111111111111',
   'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
   'Paciente de prueba','prueba@example.invalid',current_date,'Consulta de prueba','requested',false
@@ -76,7 +77,7 @@ declare v_denied boolean:=false;
 begin
   begin
     perform public.gestionar_cita_profesional(
-      (select id from public.appointment_requests where is_demo=false limit 1),'cancelar');
+      '88888888-8888-4888-8888-888888888888','cancelar');
   exception when sqlstate '42501' then v_denied:=true;
   end;
   if not v_denied then raise exception 'PROFESIONAL_AJENO_ACEPTADO'; end if;
