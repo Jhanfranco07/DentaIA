@@ -75,6 +75,44 @@ jobs:
         TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         TARGET_EVENT: ${{ github.event_name }}
         TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
+  rutinas-sql:
+    name: Rutinas · PostgreSQL y permisos RLS
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: prueba-local-sintetica
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 15
+    env:
+      PGHOST: localhost
+      PGPORT: '5432'
+      PGDATABASE: postgres
+      PGUSER: postgres
+      PGPASSWORD: prueba-local-sintetica
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Crear datos ficticios en PostgreSQL temporal
+        run: psql -v ON_ERROR_STOP=1 -f scripts/qa/rutinas/01_entorno_sintetico.sql
+      - name: Verificar esquema y políticas RLS
+        run: psql -v ON_ERROR_STOP=1 -f docs/sql/DI-207-propuesta-esquema-rutinas.sql
+      - name: Verificar operaciones transaccionales
+        run: psql -v ON_ERROR_STOP=1 -f docs/sql/DI-207-operaciones-transaccionales.sql
+      - name: Verificar consultas autorizadas
+        run: psql -v ON_ERROR_STOP=1 -f docs/sql/DI-207-consultas-autorizadas.sql
+      - name: Probar consentimiento, acceso cruzado, progreso y revocación
+        run: psql -v ON_ERROR_STOP=1 -f scripts/qa/rutinas/02_pruebas_rls.sql
   validacion-final:
     name: Validación final
     runs-on: ubuntu-latest
@@ -84,6 +122,7 @@ jobs:
     - tests
     - security
     - backend
+    - rutinas-sql
     if: ${{ always() }}
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
