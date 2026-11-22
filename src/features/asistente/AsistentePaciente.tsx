@@ -53,6 +53,7 @@ export default function AsistentePaciente() {
         if (identidadMensajes.current !== id) {
           identidadMensajes.current = id;
           consultasRutina.current += 1;
+          setPensando(false);
           setMensajes([{ id: contador.current++, respuesta: SALUDO }]);
           setObservacion(null);
           setPrecios([]);
@@ -191,7 +192,7 @@ export default function AsistentePaciente() {
             guias: [], enlaces, especialidad: null, alerta: false,
           },
         } : m));
-      } finally { setPensando(false); }
+      } finally { if (solicitud === consultasRutina.current) setPensando(false); }
       return;
     }
     const destino = detectarDestinoDenti(limpia);
