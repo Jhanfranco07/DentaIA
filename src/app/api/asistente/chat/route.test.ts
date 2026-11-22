@@ -65,7 +65,7 @@ describe("POST /api/asistente/chat — integración simulada sin secretos", () =
         const req = JSON.parse(String(init?.body));
         expect(req.store).toBe(false);
         expect(req.tools).toEqual([]);
-        expect(req.instructions).toContain("Cepillado");
+        expect(req.instructions).toContain("guías incluidas");
         const context = JSON.parse(req.input);
         expect(context.pregunta).toBe("¿Cómo debo cepillarme correctamente?");
         expect(context.historial).toEqual([{ rol: "usuario", texto: "Quiero mejorar mi higiene" },
