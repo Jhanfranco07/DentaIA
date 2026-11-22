@@ -3,9 +3,10 @@ import { lecturasAdministrativasDisponibles } from "./entorno-panel.ts";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../../lib/supabase/database.types";
 import type { LecturasUsuariosReales } from "./usuarios-reales";
+import { paginaReal } from "./pagina-usuarios-reales.ts";
 
 /** No importar desde React. Activación explícita del propietario, nunca desde una petición. */
-export function crearLecturasSupabase(): LecturasUsuariosReales {
+export function crearLecturasSupabase(signal?: AbortSignal): LecturasUsuariosReales {
   const habilitado = lecturasAdministrativasDisponibles(process.env);
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const secret = process.env.DENTAIA_SUPABASE_ADMIN_READ_SECRET;
@@ -17,6 +18,7 @@ export function crearLecturasSupabase(): LecturasUsuariosReales {
     throw new Error("Origen administrativo no válido.");
   }
   const plazo = AbortSignal.timeout(20000);
+  const rutas = new Set(["/auth/v1/admin/users", "/rest/v1/profiles", "/rest/v1/rpc/dentaia_buscar_usuarios"]);
   // La credencial tiene privilegios amplios en Supabase. El puerto expuesto aquí NO los tiene.
   const cliente = createClient<Database>(url, secret, {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
@@ -24,14 +26,24 @@ export function crearLecturasSupabase(): LecturasUsuariosReales {
       // Defensa adicional: este cliente no debe emitir ninguna mutación ni seguir redirects.
       const destino = new URL(input instanceof Request ? input.url : String(input));
       if ((init?.method ?? (input instanceof Request ? input.method : "GET")).toUpperCase() !== "GET"
-        || destino.origin !== origen.origin || !["/auth/v1/admin/users", "/rest/v1/profiles"].includes(destino.pathname)) {
+        || destino.origin !== origen.origin || !rutas.has(destino.pathname)) {
         throw new Error("Solo lecturas administrativas permitidas.");
       }
       return fetch(input, { ...init, cache: "no-store", redirect: "error",
-        signal: AbortSignal.any([plazo, AbortSignal.timeout(8000), ...(init?.signal ? [init.signal] : [])]) });
+        signal: AbortSignal.any([plazo, AbortSignal.timeout(8000), ...(signal ? [signal] : []), ...(init?.signal ? [init.signal] : [])]) });
     } },
   });
   return Object.freeze({
+    async buscar({ q, rol, estado, pagina, tamano }: Parameters<NonNullable<LecturasUsuariosReales["buscar"]>>[0]) {
+      const { data, error } = await cliente.rpc("dentaia_buscar_usuarios", {
+        p_query: q, p_role: rol, p_status: estado, p_page: pagina, p_size: tamano,
+      }, { get: true }).retry(false);
+      const resultado = error ? null : paginaReal(data);
+      if (!resultado || resultado.tamano !== tamano || resultado.pagina !== Math.min(pagina, resultado.paginas)) {
+        throw new Error("Búsqueda administrativa no disponible.");
+      }
+      return resultado;
+    },
     async listarCuentas(pagina: number, tamano: number) {
       if (!Number.isSafeInteger(pagina) || pagina < 1 || !Number.isSafeInteger(tamano) || tamano < 1 || tamano > 100) {
         throw new Error("Paginación Auth no válida.");

@@ -12,7 +12,7 @@ export function crearConsultaUsuariosReales(ejecutar: Ejecutor, proveedor: Prove
       }
       entrada[clave] = ["pagina", "tamano"].includes(clave) && /^\d+$/.test(valor) ? Number(valor) : valor;
     }
-    const r = await proveedor.listar(entrada);
+    const r = await proveedor.listar(entrada, request.signal);
     if (!r.ok) return Response.json({ error: r.mensaje, codigo: r.codigo }, { status: r.status });
     const { total, pagina, paginas, tamano } = r.valor;
     return Response.json({ origen: "supabase", consistencia: "lectura_no_transaccional", total, pagina, paginas, tamano,

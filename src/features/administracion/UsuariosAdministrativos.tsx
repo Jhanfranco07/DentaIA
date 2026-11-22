@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { MAX_PAGINA_BUSQUEDA } from "@/lib/busqueda/bm25";
+import { useConsultaEstable } from "@/lib/busqueda/useConsultaEstable";
 import { crearClientePanelReal } from "./cliente-panel-real";
 import { esDenegacionDeAcceso } from "./cliente";
 import { useAccesoPanel } from "./UsuariosAdministrativosConectados";
@@ -15,6 +17,7 @@ const ESTADOS_ASIGNACION = { activa: "Asignación activa", suspendida: "Asignaci
 export default function UsuariosAdministrativos({ onSeleccionar, revision }: { onSeleccionar: (id: string) => void; revision: number }) {
   const { invalidar } = useAccesoPanel();
   const [q, setQ] = useState(""), [rol, setRol] = useState("todos"), [estado, setEstado] = useState("todos");
+  const texto = useConsultaEstable(q);
   const [pagina, setPagina] = useState(1), [tamano, setTamano] = useState(5), [reintento, setReintento] = useState(0);
   const [resultado, setResultado] = useState<PaginaUsuariosReales | null>(null), [error, setError] = useState(""), [cargando, setCargando] = useState(true);
   const resumen = useRef<HTMLParagraphElement>(null), enfocar = useRef(false);
@@ -24,15 +27,16 @@ export default function UsuariosAdministrativos({ onSeleccionar, revision }: { o
     return data.session?.access_token ?? null;
   }), []);
   useEffect(() => {
-    let vigente = true;
     setCargando(true); setResultado(null); setError("");
-    void cliente.listar({ q, rol, estado, pagina, tamano }).then(r => {
-      if (!vigente) return;
+    if (texto === undefined) return;
+    const controller = new AbortController();
+    void cliente.listar({ q: texto, rol, estado, pagina, tamano }, controller.signal).then(r => {
+      if (controller.signal.aborted) return;
       if (r.ok) setResultado(r.valor);
       else { setError(r.status === 503 ? "La lectura administrativa está desactivada o no disponible. No se muestran datos simulados." : r.mensaje); if (esDenegacionDeAcceso(r)) invalidar(r); }
-    }).finally(() => { if (vigente) setCargando(false); });
-    return () => { vigente = false; };
-  }, [cliente, invalidar, q, rol, estado, pagina, tamano, revision, reintento]);
+    }).finally(() => { if (!controller.signal.aborted) setCargando(false); });
+    return () => controller.abort();
+  }, [cliente, invalidar, texto, rol, estado, pagina, tamano, revision, reintento]);
   useEffect(() => { if (!cargando && resultado && enfocar.current) { resumen.current?.focus(); enfocar.current = false; } }, [cargando, resultado]);
   function filtrar(cambio: () => void) { cambio(); setPagina(1); enfocar.current = false; }
   return <section className={styles.bloque} aria-labelledby="admin-usuarios">
@@ -65,7 +69,7 @@ export default function UsuariosAdministrativos({ onSeleccionar, revision }: { o
       </div>}
       <nav className={styles.paginacionAdmin} aria-label="Paginación del listado administrativo">
         <button type="button" className={styles.accionEstado} disabled={resultado.pagina <= 1} onClick={() => { enfocar.current = true; setPagina(resultado.pagina - 1); }}>Anterior</button>
-        <button type="button" className={styles.accionEstado} disabled={resultado.pagina >= resultado.paginas} onClick={() => { enfocar.current = true; setPagina(resultado.pagina + 1); }}>Siguiente</button>
+        <button type="button" className={styles.accionEstado} disabled={resultado.pagina >= Math.min(resultado.paginas, MAX_PAGINA_BUSQUEDA)} onClick={() => { enfocar.current = true; setPagina(resultado.pagina + 1); }}>Siguiente</button>
       </nav>
     </>}
   </section>;
