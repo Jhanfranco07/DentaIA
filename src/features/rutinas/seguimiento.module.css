@@ -1,9 +1,9 @@
 .seccion{display:grid;gap:16px;border:1px solid var(--rutina-borde,#d7e6e9);background:var(--rutina-fondo,#fff);border-radius:20px;padding:22px;margin:24px 0;color:var(--rutina-texto,#173c4c)}
-.cabecera{display:flex;justify-content:space-between;align-items:start;gap:15px;flex-wrap:wrap}
+.cabecera{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;flex-wrap:wrap}
 .cabecera h2{margin:6px 0 7px;font-size:clamp(18px,2vw,23px);letter-spacing:-.025em}
 .cabecera p,.elemento p{font-size:13px;color:var(--rutina-muted,#536d7b);line-height:1.55;margin:6px 0}
 .etiqueta{font-size:10px;color:var(--rutina-acento,#087b84);font-weight:850;letter-spacing:.07em}
-.elemento{display:flex;justify-content:space-between;align-items:start;gap:14px;flex-wrap:wrap;background:var(--rutina-suave,#f4fafb);border:1px solid var(--rutina-borde,#dae9eb);border-radius:15px;padding:15px 18px}
+.elemento{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;background:var(--rutina-suave,#f4fafb);border:1px solid var(--rutina-borde,#dae9eb);border-radius:15px;padding:15px 18px}
 .elemento>div:first-child{flex:1;min-width:210px}
 .elemento h3{margin:6px 0;font-size:16px}.elemento strong{font-size:14px}
 .elemento ul{margin:9px 0;padding-left:19px;color:var(--rutina-texto,#173c4c);font-size:12px;line-height:1.7}
