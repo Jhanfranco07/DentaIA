@@ -2,21 +2,21 @@
 
 
 /* Tema global: superficies y textos de este módulo. */
-:global(html[data-tema="oscuro"]) .seccion,
-:global(html[data-tema="oscuro"]) .formResena{background:#2c2448;border-color:#78649e;color:#f5efff}
-:global(html[data-tema="oscuro"]) .sinPromedio,
-:global(html[data-tema="oscuro"]) .botonReporte,
-:global(html[data-tema="oscuro"]) .orden select,
-:global(html[data-tema="oscuro"]) .formReporte select,
-:global(html[data-tema="oscuro"]) .formReporte textarea,
-:global(html[data-tema="oscuro"]) .formResena select,
-:global(html[data-tema="oscuro"]) .formResena textarea,
-:global(html[data-tema="oscuro"]) .vacio,
-:global(html[data-tema="oscuro"]) .aviso{background:#392e59;border-color:#78649e;color:#f5efff}
-:global(html[data-tema="oscuro"]) .resena>p,
-:global(html[data-tema="oscuro"]) .cabecera p,
-:global(html[data-tema="oscuro"]) .resenaMeta time,
-:global(html[data-tema="oscuro"]) .resenaMeta>span,
-:global(html[data-tema="oscuro"]) .formResena p{color:#d7cde9}
-:global(html[data-tema="oscuro"]) .error{background:#462838;border-color:#bd7a92;color:#ffd6df}
-:global(html[data-tema="oscuro"]) .exito{background:#173e37;border-color:#609d88;color:#b9f2d8}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .seccion,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .formResena{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .sinPromedio,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .botonReporte,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .orden select,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .formReporte select,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .formReporte textarea,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .formResena select,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .formResena textarea,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .vacio,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .aviso{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .resena>p,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .cabecera p,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .resenaMeta time,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .resenaMeta>span,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .formResena p{color:#d7cde9}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .error{background:#462838;border-color:#bd7a92;color:#ffd6df}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .exito{background:#173e37;border-color:#609d88;color:#b9f2d8}

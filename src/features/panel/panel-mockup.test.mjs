@@ -34,11 +34,15 @@ test("el paciente conserva sus grupos y ambos temas se comparten entre portales"
   const panel = leer("src/features/panel/panel.module.css");
   const solicitudes = leer("src/features/solicitudes/solicitudes.module.css");
   const portal = leer("src/components/PortalShell.tsx");
+  const cuenta = leer("src/features/cuenta/Cuenta.tsx");
+  const encabezado = leer("src/components/Encabezado.tsx");
+  const tema = leer("src/components/Tema.tsx");
   for (const grupo of ["Principal", "Mi cuidado dental", "Recursos", "Cuenta"]) assert.ok(nav.includes('grupo: "' + grupo + '"'));
   assert.match(shell, /\.shell\[data-area\]\[data-tema="claro"\]/);
   assert.match(shell, /\.shell\[data-area\]\[data-tema="oscuro"\]/);
   assert.match(portal, /data-area=\{area\} data-tema=\{tema\}/);
-  assert.match(portal, /<TemaBoton className=\{styles\.temaBoton\} cabecera \/>/);
+  assert.match(cuenta, /id="cuenta-apariencia"[\s\S]*?<TemaBoton \/>/);
+  for (const archivo of [portal, encabezado, tema]) assert.doesNotMatch(archivo, /<TemaBoton\b/);
   assert.match(panel, /data-area="Paciente"\]\[data-tema="oscuro"/);
   assert.match(panel, /prefers-reduced-motion/);
   assert.match(solicitudes, /\.tarjeta\.compacto/);

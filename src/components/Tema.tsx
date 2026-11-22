@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { Icono } from "./Identidad";
 import { CLAVE_TEMA, guardarTema, leerTema, temaDesdeEvento, type Tema } from "@/lib/tema/preferencia";
 
 const ContextoTema = createContext<{ tema: Tema; alternar: () => void } | null>(null);
@@ -27,7 +28,7 @@ export function TemaProvider({ children }: { children: ReactNode }) {
     try { guardarTema(window.localStorage, siguiente); } catch { /* Preferencia opcional. */ }
   }
 
-  return <ContextoTema.Provider value={{ tema, alternar }}>{children}<div className="tema-flotante"><TemaBoton /></div></ContextoTema.Provider>;
+  return <ContextoTema.Provider value={{ tema, alternar }}>{children}</ContextoTema.Provider>;
 }
 
 export function useTema() {
@@ -36,10 +37,9 @@ export function useTema() {
   return contexto;
 }
 
-export function TemaBoton({ className = "", cabecera = false }: { className?: string; cabecera?: boolean }) {
+export function TemaBoton() {
   const { tema, alternar } = useTema();
-  return <button type="button" className={`tema-selector ${className}`} data-control-tema={cabecera ? "cabecera" : undefined} onClick={alternar}
-    aria-pressed={tema === "oscuro"} aria-label={tema === "oscuro" ? "Activar modo claro" : "Activar modo oscuro"}>
-    <span aria-hidden="true">{tema === "oscuro" ? "☀" : "☾"}</span><span>{tema === "oscuro" ? "Claro" : "Oscuro"}</span>
+  return <button type="button" className="tema-selector" onClick={alternar} aria-pressed={tema === "oscuro"}>
+    <Icono nombre="destello" size={18} /> Modo oscuro
   </button>;
 }

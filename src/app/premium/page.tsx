@@ -6,6 +6,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { PLAN_PREMIUM_MENSUAL } from "@/lib/stripe/plan";
 import styles from "./premium.module.css";
 import PortalShell from "@/components/PortalShell";
+import PublicShell from "@/components/PublicShell";
 import { NAVEGACION_PACIENTE } from "@/components/navegacion-portal";
 import { useSesion } from "@/features/cuenta/useSesion";
 import { rolesDelUsuario } from "@/features/autorizacion/roles";
@@ -136,7 +137,7 @@ export default function PremiumPage() {
   const precio = (PLAN_PREMIUM_MENSUAL.amount / 100).toFixed(2);
 
   const contenido = (
-    <main id="contenido" tabIndex={-1} className={styles.pagina}>
+    <div className={styles.pagina}>
       <section className={styles.hero} aria-labelledby="premium-titulo">
         <div>
           <span className={styles.eyebrow}>✦ DentaIA Premium · Experiencia de prueba</span>
@@ -201,10 +202,10 @@ export default function PremiumPage() {
           <div className={styles.ayuda}>El pago de demostración no equivale a una atención clínica ni habilita funciones todavía no implementadas. <Link href="/panel">Volver al panel</Link></div>
         </aside>
       </div>
-    </main>
+    </div>
   );
 
   // La suscripción es una sección del portal, no un destino aislado sin navegación.
   if (paciente) return <PortalShell area="Paciente" descripcion="Tu espacio personal" enlaces={NAVEGACION_PACIENTE} mostrarCuentaHeader={false}>{contenido}</PortalShell>;
-  return contenido;
+  return <PublicShell>{contenido}</PublicShell>;
 }

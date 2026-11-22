@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -166,11 +167,14 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
   }
 
   return <section className={styles.pagina} data-vista={modoPaciente ? "paciente" : "publica"}>
-    {modoPaciente ? <HeroDirectorioPaciente /> : <header className={styles.cabecera}>
-      <span className={styles.etiqueta}>Directorio odontológico</span>
-      <h1>Encuentra orientación odontológica</h1>
-      <p>Busca por nombre, especialidad o distrito. Los centros de referencia cuentan con direcciones y coordenadas publicadas. Los perfiles de odontólogos de ejemplo son ficticios; sus servicios son simulaciones y no permiten citas reales.</p>
-      <span className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}. Las ubicaciones son referencias independientes, sin vinculación profesional ni citas mediante DentaIA.</span>
+    {modoPaciente ? <HeroDirectorioPaciente /> : <header className="public-intro">
+      <div>
+        <p className="eyebrow">Directorio odontológico</p>
+        <h1>Encuentra odontólogos</h1>
+        <p>Busca por nombre, especialidad o distrito y consulta las ubicaciones publicadas.</p>
+        <span className={styles.avisoDemo}>{AVISO_PERFILES_DEMO}</span>
+      </div>
+      <Image src="/landing/equipo.webp" alt="" width={1300} height={867} sizes="(max-width: 760px) 100vw, 520px" />
     </header>}
 
     {carga.estado === "cargando" && <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i /><i /><i /></div></div>}

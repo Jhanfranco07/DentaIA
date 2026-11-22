@@ -1,9 +1,10 @@
 import Link from "next/link";
 import EstadoPlanPremium from "@/components/EstadoPlanPremium";
+import PublicShell from "@/components/PublicShell";
 
 export default function ExitoPage() {
   return (
-    <main className="module-shell">
+    <PublicShell><div className="module-shell">
       <div className="page-intro">
         <span className="pill">STRIPE SANDBOX · SUSCRIPCIÓN</span>
         <h1>Regresaste de Stripe</h1>
@@ -12,6 +13,6 @@ export default function ExitoPage() {
       <EstadoPlanPremium />
       <p className="notice">Si aún aparece Basic, espera la sincronización del webhook y utiliza «Volver a consultar» o visita tu plan.</p>
       <Link href="/premium" className="action">Ver mi suscripción</Link>
-    </main>
+    </div></PublicShell>
   );
 }

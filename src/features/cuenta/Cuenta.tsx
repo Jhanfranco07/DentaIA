@@ -8,8 +8,8 @@ import PerfilPaciente from "./PerfilPaciente";
 import { useSesion } from "./useSesion";
 import { useNombrePerfil } from "./useNombrePerfil";
 import Link from "next/link";
-import Encabezado from "@/components/Encabezado";
-import Pie from "@/components/Pie";
+import PublicShell from "@/components/PublicShell";
+import { TemaBoton } from "@/components/Tema";
 import PortalShell from "@/components/PortalShell";
 import { NAVEGACION_PACIENTE, NAVEGACION_ODONTOLOGO, NAVEGACION_ADMIN } from "@/components/navegacion-portal";
 import { Icono } from "@/components/Identidad";
@@ -189,6 +189,10 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
           {errorSesion ? <><p className={styles.error} role="alert">{errorSesion}</p><button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar la sesión</button></> : usuario ? <>
             {continuar && roles.includes("paciente") && !roles.includes("odontologo") && !roles.includes("superusuario") && <div className="notice"><strong>Tu siguiente paso está guardado.</strong><p>{continuar?.startsWith("/premium") ? "Tu elección de Premium está guardada. Te llevaremos a Stripe Sandbox tras verificar tu acceso." : "Ya puedes continuar con tu solicitud de demostración."}</p><Link href={continuar} className="action">{continuar?.startsWith("/premium") ? "Continuar con Premium" : "Continuar mi solicitud"}</Link></div>}
             {roles.includes("paciente") && <PerfilPaciente key={usuario.id} usuario={usuario} bloqueado={ocupado} />}
+            <section className={styles.apariencia} aria-labelledby="cuenta-apariencia">
+              <div><h2 id="cuenta-apariencia">Apariencia</h2><p>Elige el tema de tu cuenta y tus espacios privados en este navegador.</p></div>
+              <TemaBoton />
+            </section>
             {roles.length === 0 && <p role="alert" className={styles.error}>Esta cuenta no tiene un rol DentaIA activo.</p>}
             {otrosEspacios.length > 0 && <section className={styles.otrosEspacios} aria-label="Otros espacios de tu cuenta"><h2>Otros espacios autorizados</h2><p>Tu cuenta tiene más de un rol. Puedes cambiar de espacio sin cerrar sesión.</p>{otrosEspacios.map(({href,titulo}) => <Link key={href} href={href} className="text-link">{titulo} →</Link>)}</section>}
             {roles.length > 0 ? <p className={styles.nota}>Para cambiar de sección o cerrar sesión, utiliza la navegación de tu espacio. Los permisos de la cuenta se verifican en el servidor.</p>
@@ -219,5 +223,5 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
     const odontologo = !superusuario && roles.includes("odontologo");
     return <PortalShell area={superusuario ? "Administración" : odontologo ? "Odontología" : "Paciente"} descripcion="Perfil y preferencias" enlaces={superusuario ? NAVEGACION_ADMIN : odontologo ? NAVEGACION_ODONTOLOGO : NAVEGACION_PACIENTE}>{contenido}</PortalShell>;
   }
-  return <><Encabezado /><main id="contenido" tabIndex={-1}>{contenido}</main><Pie /></>;
+  return <PublicShell>{contenido}</PublicShell>;
 }
