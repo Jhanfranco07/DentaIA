@@ -24,14 +24,12 @@
 /* Mejora progresiva: sin JavaScript, las tarjetas se muestran completas. */
 @media (prefers-reduced-motion: no-preference) {
   .grid[data-apertura="activa"] .card {
-    opacity: var(--plan-opacidad, 1);
-    clip-path: inset(0 0 var(--plan-corte, 0%) 0 round var(--public-panel));
-    transform: translateY(var(--plan-desplazamiento, 0px));
+    transform-origin: left center;
+    backface-visibility: hidden;
+    transform: perspective(1400px) rotateY(var(--plan-giro, 0deg));
   }
   .grid[data-apertura="activa"] .card:focus-within,
   :global(html[data-a11y-movimiento="true"]) .grid[data-apertura="activa"] .card {
-    opacity: 1;
-    clip-path: none;
     transform: none;
   }
 }

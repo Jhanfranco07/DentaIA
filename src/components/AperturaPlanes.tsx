@@ -20,12 +20,11 @@ export default function AperturaPlanes({ children, className }: {
     const limpiar = () => {
       delete grid.dataset.apertura;
       tarjetas.forEach(tarjeta => {
-        tarjeta.style.removeProperty("--plan-opacidad");
-        tarjeta.style.removeProperty("--plan-corte");
-        tarjeta.style.removeProperty("--plan-desplazamiento");
+        tarjeta.style.removeProperty("--plan-giro");
       });
     };
     const actualizar = () => {
+      window.cancelAnimationFrame(frame);
       frame = 0;
       if (media.matches) { limpiar(); return; }
       const alto = window.innerHeight;
@@ -36,9 +35,8 @@ export default function AperturaPlanes({ children, className }: {
         const progreso = enfocado ? 1 : Math.min(1, Math.max(0,
           (inicio - tarjeta.getBoundingClientRect().top) / recorrido,
         ));
-        tarjeta.style.setProperty("--plan-opacidad", String(.3 + progreso * .7));
-        tarjeta.style.setProperty("--plan-corte", `${(1 - progreso) * 55}%`);
-        tarjeta.style.setProperty("--plan-desplazamiento", `${(1 - progreso) * 56}px`);
+        // Como una hoja que se abre hacia la derecha desde el borde izquierdo.
+        tarjeta.style.setProperty("--plan-giro", `${(1 - progreso) * 78}deg`);
       });
       grid.dataset.apertura = "activa";
     };
