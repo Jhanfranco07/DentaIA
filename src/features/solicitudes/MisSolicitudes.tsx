@@ -2,24 +2,28 @@
 
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { MAX_CONSULTA, MAX_PAGINA_BUSQUEDA } from "@/lib/busqueda/bm25";
+import { useConsultaEstable } from "@/lib/busqueda/useConsultaEstable";
 import { useSesion } from "@/features/cuenta/useSesion";
 import { puedeCancelarSolicitud } from "./validaciones";
 import {
-  obtenerMisSolicitudes,
+  obtenerMisSolicitudesPaginadas,
   cancelarSolicitudDemo,
+  type FiltroEstado,
+  type PaginaSolicitudes,
 } from "./solicitudes";
-import type { Tables } from "@/lib/supabase/database.types";
 import styles from "./solicitudes.module.css";
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
 
-type Solicitud = Tables<"appointment_requests"> & { dentists: Pick<Tables<"dentists">, "name"> | null };
-type FiltroEstado = "todas" | "requested" | "cancelled";
-
 export default function MisSolicitudes({ compacto = false }: { compacto?: boolean }) {
   const { usuario, cargando: cargandoSesion } = useSesion();
+  const usuarioId = usuario?.id;
 
-  const [solicitudes, setSolicitudes] = useState<Solicitud[]>([]);
+  const [carga, setCarga] = useState<{ usuarioId: string; resultado: PaginaSolicitudes } | null>(null);
+  const resultado = carga?.usuarioId === usuarioId ? carga?.resultado : undefined;
+  const [pagina, setPagina] = useState(1);
+  const [revision, setRevision] = useState(0);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
 
@@ -28,66 +32,42 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
   const [confirmacionId, setConfirmacionId] = useState<string | null>(null);
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todas");
   const [busqueda, setBusqueda] = useState("");
+  const texto = useConsultaEstable(busqueda);
 
   useEffect(() => {
-    let activo = true;
-    let numeroConsulta = 0;
+    const actualizar = () => { setPagina(1); setRevision(n => n + 1); };
+    window.addEventListener("dentai:solicitud-registrada", actualizar);
+    return () => window.removeEventListener("dentai:solicitud-registrada", actualizar);
+  }, []);
 
-    async function cargarSolicitudes() {
-    if (!activo || cargandoSesion) return;
-
-    const consultaActual = ++numeroConsulta;
-    const esConsultaVigente = () =>
-        activo && consultaActual === numeroConsulta;
-
-      if (!usuario) {
-        if (esConsultaVigente()) {
-            setSolicitudes([]);
-            setError("");
-            setMensajeAccion("");
-            setCargando(false);
-        }
-        return;
-     }
-
-        setCargando(true);
-        setError("");
-        setSolicitudes([]);
-
-        try {
-            const cliente = getSupabaseBrowserClient();
-
-            const solicitudesObtenidas = await obtenerMisSolicitudes(
-            cliente,
-            usuario.id,
-            );
-
-            if (esConsultaVigente()) {
-            setSolicitudes(solicitudesObtenidas);
-            }
-        } catch {
-          if (esConsultaVigente()) {
-            setError("No se pudieron cargar tus solicitudes.");
-        }
-
-        } finally {
-          if (esConsultaVigente()) setCargando(false);
-        }
+  useEffect(() => {
+    if (cargandoSesion) return;
+    if (!usuarioId) {
+      setCarga(null);
+      setError("");
+      setMensajeAccion("");
+      setCargando(false);
+      return;
     }
-
+    setCargando(true);
+    setError("");
+    if (texto === undefined) return;
+    const id = usuarioId;
+    const controller = new AbortController();
+    const consulta = { texto, estado: filtroEstado, pagina, tamano: compacto ? 3 : 12 };
+    async function cargarSolicitudes() {
+      try {
+        const respuesta = await obtenerMisSolicitudesPaginadas(getSupabaseBrowserClient(), consulta, controller.signal);
+        if (!controller.signal.aborted) setCarga({ usuarioId: id, resultado: respuesta });
+      } catch {
+        if (!controller.signal.aborted) setError("No se pudieron cargar tus solicitudes.");
+      } finally {
+        if (!controller.signal.aborted) setCargando(false);
+      }
+    }
     void cargarSolicitudes();
-
-    window.addEventListener("dentai:solicitud-registrada", cargarSolicitudes);
-
-    return () => {
-      activo = false;
-
-      window.removeEventListener(
-        "dentai:solicitud-registrada",
-        cargarSolicitudes,
-      );
-    };
-  }, [usuario, cargandoSesion]);
+    return () => controller.abort();
+  }, [usuarioId, cargandoSesion, texto, filtroEstado, pagina, revision, compacto]);
 
   async function cancelarSolicitud(id: string) {
     if (!usuario || cancelandoId) return;
@@ -99,21 +79,10 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
     setConfirmacionId(null);
 
     try {
-    const cliente = getSupabaseBrowserClient();
-
-    await cancelarSolicitudDemo(cliente, usuario.id, id);
-
-    setSolicitudes((actuales) =>
-        actuales.map((solicitud) =>
-        solicitud.id === id
-            ? { ...solicitud, status: "cancelled" }
-            : solicitud,
-        ),
-    );
-
-    setMensajeAccion("Solicitud cancelada correctamente.");
-    
-    } catch (error) {
+      await cancelarSolicitudDemo(getSupabaseBrowserClient(), usuario.id, id);
+      setRevision(n => n + 1);
+      setMensajeAccion("Solicitud cancelada correctamente.");
+    } catch {
       setError(
         "No se pudo cancelar la solicitud. Actualiza la página e inténtalo nuevamente.",
       );
@@ -122,14 +91,9 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
     }
   }
 
-  const solicitudesFiltradas = solicitudes.filter(solicitud => {
-    if (filtroEstado !== "todas" && solicitud.status !== filtroEstado) return false;
-    const texto = [solicitud.dentists?.name, solicitud.contact_name, solicitud.message, solicitud.preferred_date]
-      .filter(Boolean).join(" ").toLocaleLowerCase("es");
-    return texto.includes(busqueda.trim().toLocaleLowerCase("es"));
-  });
-  const totalSolicitadas = solicitudes.filter(solicitud => solicitud.status === "requested").length;
-  const totalCanceladas = solicitudes.filter(solicitud => solicitud.status === "cancelled").length;
+  const solicitudes = resultado?.items ?? [];
+  const total = resultado?.totalSolicitudes ?? 0;
+  const paginas = resultado ? Math.max(1, Math.ceil(resultado.total / resultado.tamano)) : 1;
 
   return (
     <section className={`${styles.tarjeta} ${compacto ? styles.compacto : ""}`} id="mis-solicitudes">
@@ -138,25 +102,25 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
         {compacto && <Link className={styles.verTodas} href="/solicitudes">Ver todas <span aria-hidden="true">→</span></Link>}
       </header>
 
-      {!compacto && !cargando && !error && usuario && (
+      {!compacto && usuarioId && (
         <>
-          <div className={styles.resumenSolicitudes} aria-label="Resumen de solicitudes demostrativas">
-            <div className={styles.resumenTarjeta}><span>Total de solicitudes</span><strong>{solicitudes.length}</strong><small>Historial registrado</small></div>
-            <div className={styles.resumenTarjeta}><span>Solicitadas</span><strong>{totalSolicitadas}</strong><small>Sin cita confirmada</small></div>
-            <div className={styles.resumenTarjeta}><span>Canceladas</span><strong>{totalCanceladas}</strong><small>Solicitudes anuladas</small></div>
-          </div>
+          {resultado && <div className={styles.resumenSolicitudes} aria-label="Resumen de solicitudes demostrativas">
+            <div className={styles.resumenTarjeta}><span>Total de solicitudes</span><strong>{total}</strong><small>Historial registrado</small></div>
+            <div className={styles.resumenTarjeta}><span>Solicitadas</span><strong>{resultado.solicitadas}</strong><small>Sin cita confirmada</small></div>
+            <div className={styles.resumenTarjeta}><span>Canceladas</span><strong>{resultado.canceladas}</strong><small>Solicitudes anuladas</small></div>
+          </div>}
           <div className={styles.herramientasSolicitudes}>
             <div className={styles.pestanasSolicitudes} role="group" aria-label="Filtrar solicitudes por estado">
-              {([["todas", "Todas", solicitudes.length], ["requested", "Solicitadas", totalSolicitadas], ["cancelled", "Canceladas", totalCanceladas]] as const).map(([valor, etiqueta, total]) => (
+              {([["todas", "Todas", resultado?.totalSolicitudes], ["requested", "Solicitadas", resultado?.solicitadas], ["cancelled", "Canceladas", resultado?.canceladas]] as const).map(([valor, etiqueta, cantidad]) => (
                 <button key={valor} type="button" className={filtroEstado === valor ? styles.pestanaActiva : styles.pestana}
-                  aria-pressed={filtroEstado === valor} onClick={() => setFiltroEstado(valor)}>
-                  {etiqueta} <span>{total}</span>
+                  aria-pressed={filtroEstado === valor} onClick={() => { setFiltroEstado(valor); setPagina(1); }}>
+                  {etiqueta} {cantidad !== undefined && <span>{cantidad}</span>}
                 </button>
               ))}
             </div>
             <label className={styles.buscarSolicitud}>
               <span>Buscar en mis solicitudes</span>
-              <input type="search" value={busqueda} onChange={evento => setBusqueda(evento.target.value)}
+              <input type="search" value={busqueda} maxLength={MAX_CONSULTA} onChange={evento => { setBusqueda(evento.target.value); setPagina(1); }}
                 placeholder="Profesional, fecha o motivo…" />
             </label>
           </div>
@@ -172,24 +136,22 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
       {cargando && <div className={styles.esqueletoSolicitudes} role="status"><span className="sr-only">Cargando tus solicitudes…</span><i /><i /><i /></div>}
 
       {error && (
-        <p className={styles.error} role="alert">
-          {error}
-        </p>
+        <div className={styles.error} role="alert">{error} <button type="button" className={styles.botonNeutral} onClick={() => setRevision(n => n + 1)}>Reintentar</button></div>
       )}
 
-      {!cargando && !error && solicitudes.length === 0 && (
+      {!cargando && !error && (!usuarioId || (resultado && total === 0)) && (
         <div className={styles.vacio}>
           {usuario ? <>{compacto ? "Todavía no tienes solicitudes registradas." : "Todavía no tienes solicitudes. Puedes registrar una desde el formulario."} {compacto && <Link href="/directorio">Explorar odontólogos</Link>}</> : <><p>Inicia sesión para consultar tus solicitudes personales.</p><Link href="/cuenta">Ir a Mi perfil</Link></>}
         </div>
       )}
 
-      {!compacto && !cargando && !error && solicitudes.length > 0 && <p className={styles.contadorResultados} role="status">Mostrando {solicitudesFiltradas.length} de {solicitudes.length} solicitudes</p>}
+      {!compacto && !cargando && !error && resultado && total > 0 && <p className={styles.contadorResultados} role="status">{resultado.total} de {total} solicitudes</p>}
 
-      {!cargando && !error && solicitudes.length > 0 && solicitudesFiltradas.length === 0 && <div className={styles.vacio} role="status">No encontramos solicitudes con estos filtros. Prueba otra búsqueda o selecciona «Todas».</div>}
+      {!cargando && !error && total > 0 && solicitudes.length === 0 && <div className={styles.vacio} role="status">No encontramos solicitudes con estos filtros. Prueba otra búsqueda o selecciona «Todas».</div>}
 
-      {!cargando && !error && solicitudesFiltradas.length > 0 && (
+      {!cargando && !error && solicitudes.length > 0 && (
         <div className={styles.lista}>
-          {(compacto ? solicitudesFiltradas.slice(0, 3) : solicitudesFiltradas).map((solicitud) => (
+          {solicitudes.map((solicitud) => (
             <article key={solicitud.id} className={styles.solicitud}>
               <div className={styles.solicitudCabecera}>
                 <div className={styles.solicitudResumen}><span className={styles.iconoSolicitud}><Icono nombre={solicitud.status === "cancelled" ? "cerrar" : "reloj"} size={16} /></span><div><h3 className={styles.solicitudTitulo}>{solicitud.dentists?.name ?? "Profesional no disponible"}</h3><p>Orientación · <time dateTime={solicitud.preferred_date}>{solicitud.preferred_date}</time>{solicitud.preferred_time ? ` · ${solicitud.preferred_time}` : ""}</p></div></div>
@@ -221,7 +183,12 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
           ))}
         </div>
       )}
-      {compacto && !cargando && !error && solicitudesFiltradas.length > 3 && <p className={styles.mensajeCompacto}>Se muestran las tres solicitudes más recientes. <Link href="/solicitudes">Abrir el historial completo</Link>.</p>}
+      {!compacto && !error && resultado && paginas > 1 && <nav className={styles.herramientasSolicitudes} aria-label="Paginación de solicitudes">
+        <button type="button" className={styles.botonNeutral} disabled={cargando || resultado.pagina <= 1} onClick={() => setPagina(resultado.pagina - 1)}>Anterior</button>
+        <span>Página {resultado.pagina} de {paginas}</span>
+        <button type="button" className={styles.botonNeutral} disabled={cargando || resultado.pagina >= Math.min(paginas, MAX_PAGINA_BUSQUEDA)} onClick={() => setPagina(resultado.pagina + 1)}>Siguiente</button>
+      </nav>}
+      {compacto && !cargando && !error && total > 3 && <p className={styles.mensajeCompacto}>Se muestran las tres solicitudes más recientes. <Link href="/solicitudes">Abrir el historial completo</Link>.</p>}
     </section>
   );
 }

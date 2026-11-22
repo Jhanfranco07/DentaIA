@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useConsultaEstable } from "@/lib/busqueda/useConsultaEstable";
 import EstadoAdministrativo from "./EstadoAdministrativo";
 import PropuestaRolDemo from "./PropuestaRolDemo";
 import { ACTOR_ADMINISTRATIVO_DEMO, crearProveedorAdministrativoSimulado, type EscenarioAdministrativo, type PaginaUsuarios } from "./servicios";
@@ -11,6 +12,7 @@ import styles from "./administracion.module.css";
 type Props = { cliente?: ClientePanelAdministrativo; onAccesoDenegado?: (error: ErrorClienteAdministrativo) => void };
 export default function UsuariosAdministrativosDemo({ cliente, onAccesoDenegado }: Props) {
   const [q, setQ] = useState("");
+  const texto = useConsultaEstable(q);
   const [rol, setRol] = useState("todos");
   const [estado, setEstado] = useState("todos");
   const [pagina, setPagina] = useState(1);
@@ -28,16 +30,17 @@ export default function UsuariosAdministrativosDemo({ cliente, onAccesoDenegado 
   }, [escenario]);
   const proveedor = cliente ?? local;
   useEffect(() => {
-    let vigente = true;
     setCargando(true); setError(""); setResultado(null);
-    proveedor.listar({ q, rol, estado, pagina, tamano: 5 }).then(respuesta => {
-      if (!vigente) return;
+    if (texto === undefined) return;
+    const controller = new AbortController();
+    proveedor.listar({ q: texto, rol, estado, pagina, tamano: 5 }, controller.signal).then(respuesta => {
+      if (controller.signal.aborted) return;
       if (respuesta.ok) setResultado(respuesta.valor);
       else { setError(respuesta.mensaje); if (esDenegacionDeAcceso(respuesta)) onAccesoDenegado?.(respuesta); }
-    }).catch(() => { if (vigente) setError("No se pudo consultar la fuente seleccionada."); })
-      .finally(() => { if (vigente) setCargando(false); });
-    return () => { vigente = false; };
-  }, [proveedor, q, rol, estado, pagina, reintento, onAccesoDenegado]);
+    }).catch(() => { if (!controller.signal.aborted) setError("No se pudo consultar la fuente seleccionada."); })
+      .finally(() => { if (!controller.signal.aborted) setCargando(false); });
+    return () => controller.abort();
+  }, [proveedor, texto, rol, estado, pagina, reintento, onAccesoDenegado]);
   useEffect(() => {
     if (!cargando && resultado && enfocarResumen.current) { resumen.current?.focus(); enfocarResumen.current = false; }
   }, [cargando, resultado]);

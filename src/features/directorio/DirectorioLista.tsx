@@ -5,37 +5,36 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { formatearPrecio, inicialesDe, normalizar, textoOpcional } from "./formato";
-import type { DemoLocationPublica, DentistaDirectorio, MarcadorDemo, UbicacionPublica } from "./tipos";
+import { MAX_CONSULTA, MAX_PAGINA_BUSQUEDA } from "@/lib/busqueda/bm25";
+import { useConsultaEstable } from "@/lib/busqueda/useConsultaEstable";
+import { buscarDirectorio, buscarDirectorioDemo, type OrdenDirectorio, type PaginaDirectorio } from "./busqueda";
+import { formatearPrecio, textoOpcional } from "./formato";
+import type { MarcadorDemo } from "./tipos";
 import { distanciaEnKm, formatearDistancia, mensajeErrorUbicacion, obtenerUbicacionActual, type PuntoGeografico } from "./geolocalizacion";
-import { resumirResenas } from "./resenas";
 import styles from "./directorio.module.css";
 import mapStyles from "./mapa-directorio.module.css";
 import { Icono } from "@/components/Identidad";
-import type { ResenaPublica } from "./resenas";
-import { crearMarcadores, tieneUbicacionDentroDelRadio, ubicacionMasCercana } from "./ubicaciones";
-import { adjuntarUbicaciones, normalizarResenas } from "./compatibilidad-esquema";
+import { crearMarcadores, ubicacionMasCercana } from "./ubicaciones";
 import { crearMarcadorDemo } from "./demo";
-import { AVISO_PERFILES_DEMO, completarCatalogoDemo } from "./catalogo-demo";
+import { AVISO_PERFILES_DEMO } from "./catalogo-demo";
 import AvatarOdontologo, { tratamientoDemo } from "./AvatarOdontologo";
 import HeroDirectorioPaciente from "./HeroDirectorioPaciente";
-import { perfilesQa, esPerfilQa, marcadoresQa } from "./qa-preview";
+import { esPerfilQa, marcadoresQa } from "./qa-preview";
 
 const MapaDirectorio = dynamic(() => import("./MapaDirectorio"), {
   ssr: false,
   loading: () => <div className={mapStyles.contenedorMapa} role="status">Cargando mapa interactivo…</div>,
 });
 
-type Orden = "nombre" | "cercania" | "calificacion";
 type Vista = "lista" | "mapa";
-type Carga =
-  | { estado: "cargando" }
-  | { estado: "listo"; dentistas: DentistaDirectorio[]; demos: DemoLocationPublica[]; catalogoDisponible: boolean; resenas: Record<string, ReturnType<typeof resumirResenas>>; resenasDisponibles: boolean; ubicacionesDisponibles: boolean };
 
 export default function DirectorioLista({ modoPaciente = false, qaPreview = false }: { modoPaciente?: boolean; qaPreview?: boolean } = {}) {
-  const [carga, setCarga] = useState<Carga>({ estado: "cargando" });
+  const [carga, setCarga] = useState<PaginaDirectorio | null>(null);
+  const [cargando, setCargando] = useState(true);
   const [intento, setIntento] = useState(0);
+  const [pagina, setPagina] = useState(1);
   const [busqueda, setBusqueda] = useState("");
+  const texto = useConsultaEstable(busqueda);
   const [distrito, setDistrito] = useState("");
   const [especialidad, setEspecialidad] = useState("");
   const [ubicacion, setUbicacion] = useState<PuntoGeografico | null>(null);
@@ -43,91 +42,48 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
   const [cargandoUbicacion, setCargandoUbicacion] = useState(false);
   const [radarActivo, setRadarActivo] = useState(false);
   const [radioKm, setRadioKm] = useState("");
-  const [orden, setOrden] = useState<Orden>("nombre");
+  const [orden, setOrden] = useState<OrdenDirectorio>("nombre");
   const [vistaMovil, setVistaMovil] = useState<Vista>("lista");
   const [seleccionado, setSeleccionado] = useState("");
   const [mostrarDemo, setMostrarDemo] = useState(true);
   const busquedaRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    let cancelado = false;
+    setCargando(true);
+    if (texto === undefined) return;
+    const controller = new AbortController();
+    const consulta = { texto, distrito, especialidad, orden, pagina, ubicacion, radio: ubicacion && radioKm ? Number(radioKm) : undefined };
     async function cargar() {
       try {
-        const client = getSupabaseBrowserClient();
-        const { data, error } = await client.from("dentists").select("*").eq("is_active", true).order("name");
-        if (cancelado) return;
-        if (error) throw error;
-        const baseDentistas = data ?? [];
-        const ids = baseDentistas.map(d => d.id);
-        let respuestaUbicaciones: { data: UbicacionPublica[] | null; error: unknown | null } = { data: [], error: null };
-        if (ids.length) {
-          respuestaUbicaciones = await client.from("dentist_public_locations")
-            .select("id,dentist_id,practice_name,practice_address,latitude,longitude,created_at")
-            .in("dentist_id", ids);
-        }
-        const ubicacionesResultado = adjuntarUbicaciones(baseDentistas, respuestaUbicaciones);
-        const dentistasReales = ubicacionesResultado.dentistas as DentistaDirectorio[];
-        let respuestaResenas: { data: ResenaPublica[] | null; error: unknown | null } = { data: [], error: null };
-        if (ids.length) {
-          respuestaResenas = await client.from("dentist_reviews").select("id,dentist_id,rating,comment,created_at").in("dentist_id", ids);
-        }
-        const resenasResultado = normalizarResenas(respuestaResenas);
-        const resenas = resenasResultado.resenas as ResenaPublica[];
-        const respuestaDemo = await client.from("directory_demo_locations")
-          .select("id,slug,name,district,city,country,latitude,longitude,is_demo,is_published,requests_enabled,public_label")
-          .eq("is_demo", true).eq("is_published", true).eq("requests_enabled", false);
-        const demos = (respuestaDemo.data ?? []) as DemoLocationPublica[];
-        if (cancelado) return;
-        const fichasDemo = completarCatalogoDemo(demos);
-        const dentistas = [...dentistasReales.filter(d => !fichasDemo.some(p => p.id === d.id)), ...fichasDemo, ...perfilesQa()];
-        const sumarios = Object.fromEntries(dentistas.map(dentista => [dentista.id, resumirResenas(resenas.filter(r => r.dentist_id === dentista.id))]));
-        setCarga({ estado: "listo", dentistas, demos, catalogoDisponible: true, resenas: sumarios, resenasDisponibles: resenasResultado.disponibles, ubicacionesDisponibles: ubicacionesResultado.disponibles });
+        const resultado = await buscarDirectorio(getSupabaseBrowserClient(), consulta, controller.signal);
+        if (!controller.signal.aborted) setCarga(resultado);
       } catch {
-        if (cancelado) return;
-        setCarga({
-          estado: "listo", dentistas: [...completarCatalogoDemo([]), ...perfilesQa()], demos: [], catalogoDisponible: false,
-          resenas: {}, resenasDisponibles: false, ubicacionesDisponibles: false,
-        });
+        if (!controller.signal.aborted) setCarga(buscarDirectorioDemo(consulta));
+      } finally {
+        if (!controller.signal.aborted) setCargando(false);
       }
     }
     void cargar();
-    return () => { cancelado = true; };
-  }, [intento, qaPreview]);
+    return () => controller.abort();
+  }, [texto, distrito, especialidad, orden, pagina, ubicacion, radioKm, intento]);
 
-  const dentistas = carga.estado === "listo" ? carga.dentistas : [];
-  const distritos = useMemo(() => [...new Set(dentistas.map(d => d.district.trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es")), [dentistas]);
-  const especialidades = useMemo(() => [...new Set(dentistas.map(d => d.specialty.trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es")), [dentistas]);
-  const conUbicacion = dentistas.filter(d => !esPerfilQa(d.id) && d.ubicaciones.length > 0);
-  const cercanos = useMemo(() => ubicacion ? dentistas.flatMap(d => {
+  const visibles = useMemo(() => cargando || texto === undefined ? [] : carga?.dentistas ?? [], [carga, cargando, texto]);
+  const distritos = useMemo(() => [...(carga?.distritos ?? [])].sort((a, b) => a.localeCompare(b, "es")), [carga]);
+  const especialidades = useMemo(() => [...(carga?.especialidades ?? [])].sort((a, b) => a.localeCompare(b, "es")), [carga]);
+  const paginas = carga ? Math.max(1, Math.ceil(carga.total / carga.tamano)) : 1;
+  const cercanos = useMemo(() => ubicacion ? visibles.flatMap(d => {
     const p = esPerfilQa(d.id) ? null : ubicacionMasCercana(d.ubicaciones, ubicacion);
     return p && p.distancia !== null ? [{ id: d.id, km: p.distancia, name: p.ubicacion.practice_name }] : [];
-  }).sort((a,b) => (a.km ?? Number.POSITIVE_INFINITY) - (b.km ?? Number.POSITIVE_INFINITY)).slice(0, 3) : [], [dentistas,ubicacion]);
+  }).sort((a,b) => a.km - b.km).slice(0, 3) : [], [visibles, ubicacion]);
   useEffect(() => {
     if (!radarActivo) return;
     const timeout = window.setTimeout(() => setRadarActivo(false), 3300);
     return () => window.clearTimeout(timeout);
   }, [radarActivo, ubicacion]);
 
-  const visibles = useMemo(() => {
-    const query = normalizar(busqueda);
-    let filtrados = dentistas.filter(dentista => {
-      const coincideTexto = !query || normalizar(dentista.name).includes(query) || normalizar(dentista.specialty).includes(query);
-      return coincideTexto && (!distrito || dentista.district.trim() === distrito)
-        && (!especialidad || dentista.specialty.trim() === especialidad);
-    });
-    if (ubicacion && radioKm) filtrados = filtrados.filter(d => !esPerfilQa(d.id) && tieneUbicacionDentroDelRadio(d.ubicaciones, ubicacion, Number(radioKm)));
-    if (ubicacion && orden === "cercania") filtrados.sort((a, b) =>
-      (esPerfilQa(a.id) ? Number.POSITIVE_INFINITY : ubicacionMasCercana(a.ubicaciones, ubicacion)?.distancia ?? Number.POSITIVE_INFINITY)
-      - (esPerfilQa(b.id) ? Number.POSITIVE_INFINITY : ubicacionMasCercana(b.ubicaciones, ubicacion)?.distancia ?? Number.POSITIVE_INFINITY));
-    if (orden === "calificacion" && carga.estado === "listo") {
-      filtrados.sort((a, b) => (carga.resenas[b.id]?.promedio ?? -1) - (carga.resenas[a.id]?.promedio ?? -1));
-    }
-    return filtrados;
-  }, [busqueda, carga, dentistas, distrito, especialidad, orden, radioKm, ubicacion]);
-
   const idsCercanos = useMemo(() => cercanos.map(c => c.id), [cercanos]);
   const ubicacionesVisibles = useMemo(() => crearMarcadores(visibles.filter(d => !esPerfilQa(d.id))), [visibles]);
-  const marcadoresDemo = useMemo(() => carga.estado === "listo"
+  const marcadoresDemo = useMemo(() => carga
     ? carga.demos.map(crearMarcadorDemo).filter((marcador): marcador is MarcadorDemo => marcador !== null)
       .flatMap(marcador => {
         const perfil = visibles.find(d => d.is_demo && d.slug === marcador.slug && d.ubicaciones.some(punto => punto.id === marcador.id));
@@ -147,6 +103,7 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
       setUbicacion(resultado);
       if (modoPaciente) { setRadarActivo(true); setVistaMovil("mapa"); }
       setRadioKm("");
+      setPagina(1);
       if (orden === "nombre") setOrden("cercania");
     } catch (error) {
       const codigo = error && typeof error === "object" && "code" in error ? error.code : "";
@@ -156,8 +113,14 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
     } finally { setCargandoUbicacion(false); }
   }
 
+  function filtrar(cambio: () => void) {
+    cambio();
+    setPagina(1);
+  }
+
   function limpiarFiltros() {
     setBusqueda(""); setDistrito(""); setEspecialidad(""); setRadioKm(""); setOrden("nombre");
+    setPagina(1);
     busquedaRef.current?.focus();
   }
 
@@ -177,17 +140,15 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
       <Image src="/landing/equipo.webp" alt="" width={1300} height={867} sizes="(max-width: 760px) 100vw, 520px" />
     </header>}
 
-    {carga.estado === "cargando" && <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i /><i /><i /></div></div>}
-    {carga.estado === "listo" && !carga.catalogoDisponible && <div className={`${styles.aviso} ${styles.avisoError}`} role="alert"><strong>Mostramos el catálogo de demostración.</strong><p>El catálogo publicado no está disponible en este momento. Puedes explorar las fichas de ejemplo o reintentar la carga.</p><button type="button" className={styles.boton} onClick={() => { setCarga({ estado: "cargando" }); setIntento(n => n + 1); }}>Reintentar</button></div>}
-    {!modoPaciente && carga.estado === "listo" && marcadoresDemo.length > 0 && <section className={styles.tarjetaDemo} aria-label="Información sobre las ubicaciones de referencia">
+    {!carga && <div className={styles.carga} role="status" aria-live="polite"><span>Cargando odontólogos…</span><div className={styles.esqueleto} aria-hidden="true"><i /><i /><i /></div></div>}
+    {carga && !carga.catalogoDisponible && <div className={`${styles.aviso} ${styles.avisoError}`} role="alert"><strong>Mostramos el catálogo de demostración.</strong><p>El catálogo publicado no está disponible en este momento. Puedes explorar las fichas de ejemplo o reintentar la carga.</p><button type="button" className={styles.boton} disabled={cargando} onClick={() => setIntento(n => n + 1)}>Reintentar</button></div>}
+    {!modoPaciente && marcadoresDemo.length > 0 && <section className={styles.tarjetaDemo} aria-label="Información sobre las ubicaciones de referencia">
       <div><h2>Ubicaciones geográficas de referencia</h2>
         <p>Los centros y direcciones se basan en registros públicos. Los nombres de profesionales de ejemplo son ficticios y no están vinculados con esos centros.</p>
       </div>
       <button type="button" aria-pressed={mostrarDemo} className={styles.botonDemo} onClick={() => setMostrarDemo(value => !value)}>{mostrarDemo ? "Ocultar referencias" : "Mostrar referencias"}</button>
     </section>}
-    {carga.estado === "listo" && dentistas.length === 0 && marcadoresDemo.length === 0 && <div className={styles.aviso} role="status">Por ahora no hay odontólogos activos ni ubicaciones publicadas en el directorio.</div>}
-
-    {carga.estado === "listo" && (dentistas.length > 0 || marcadoresDemo.length > 0) && <>
+    {carga && <>
       {modoPaciente ? <div className={styles.localizadorPremium}>
         <span className={styles.localizadorEmblema} aria-hidden="true"><Icono nombre="ubicacion" size={24}/></span>
         <div className={styles.localizadorTexto}>
@@ -195,8 +156,8 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
           <span>Compara ubicaciones y ordénalas por distancia real en línea recta.</span>
         </div>
         <button type="button" onClick={() => void usarUbicacion()} disabled={cargandoUbicacion} className={styles.localizadorBoton}><Icono nombre="ubicacion" size={17}/>{cargandoUbicacion ? "Localizando…" : ubicacion ? "Actualizar ubicación" : "Activar radar de cercanía"}</button>
-        <details className={styles.localizadorPrivacidad}><summary><Icono nombre="privacidad" size={15}/> Privacidad</summary><p>Solo solicitamos permiso al pulsar el botón. Tu posición permanece temporalmente en esta sesión y no se guarda en DentaIA. El mapa solicita las teselas necesarias al proveedor. Las distancias son aproximadas y en línea recta.</p></details>
-      </div> : <div className={styles.accionesMapa}><button type="button" onClick={() => void usarUbicacion()} disabled={cargandoUbicacion} className={styles.botonUbicacion}><Icono nombre="buscar" size={16} />{cargandoUbicacion ? "Buscando ubicación…" : ubicacion ? "Actualizar mi ubicación" : "Usar mi ubicación"}</button><span>El permiso solo se solicita al pulsar el botón. El punto se mantiene en esta sesión y no se guarda; el proveedor de mapas recibe solicitudes normales de teselas para el área visible.</span></div>}
+        <details className={styles.localizadorPrivacidad}><summary><Icono nombre="privacidad" size={15}/> Privacidad</summary><p>Solo solicitamos permiso al pulsar el botón. DentaIA usa tu posición de forma temporal para calcular distancias en línea recta. El mapa solicita las teselas necesarias al proveedor.</p></details>
+      </div> : <div className={styles.accionesMapa}><button type="button" onClick={() => void usarUbicacion()} disabled={cargandoUbicacion} className={styles.botonUbicacion}><Icono nombre="buscar" size={16} />{cargandoUbicacion ? "Buscando ubicación…" : ubicacion ? "Actualizar mi ubicación" : "Usar mi ubicación"}</button><span>El permiso solo se solicita al pulsar el botón. DentaIA usa el punto de forma temporal para calcular distancias. El proveedor de mapas recibe solicitudes de teselas para el área visible.</span></div>}
       {errorUbicacion && <p className={styles.errorUbicacion} role="alert">{errorUbicacion}</p>}
       {ubicacion && !modoPaciente && <p className={styles.privacidadUbicacion} role="status">Ubicación temporal recibida (precisión aproximada de {Math.round(ubicacion.accuracy ?? 0)} m). Se usa para ordenar y calcular distancias en línea recta.</p>}
       {modoPaciente && ubicacion && <div className={styles.proximidadPremium} role="status" aria-live="polite">
@@ -209,28 +170,33 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
       </div>}
       {modoPaciente && <div className={styles.encabezadoResultados} id="resultados-directorio">
         <h2>Explora los perfiles</h2>
-        <span className={styles.conteo} aria-live="polite">{visibles.length} de {dentistas.length} perfiles</span>
+        <span className={styles.conteo} aria-live="polite">{cargando ? "Buscando…" : `${carga.total} de ${carga.totalCatalogo} perfiles`}</span>
       </div>}
       {modoPaciente && <div className={styles.accesosEspecialidades} role="group" aria-label="Filtrar por especialidad">
-        <button type="button" className={!especialidad ? styles.accesoActivo : ""} aria-pressed={!especialidad} onClick={() => setEspecialidad("")}>Todas las especialidades</button>
+        <button type="button" className={!especialidad ? styles.accesoActivo : ""} aria-pressed={!especialidad} onClick={() => filtrar(() => setEspecialidad(""))}>Todas las especialidades</button>
         {["Odontología general", "Ortodoncia", "Endodoncia", "Odontopediatría"].filter(opcion => especialidades.includes(opcion)).map(opcion => (
-          <button key={opcion} type="button" className={especialidad === opcion ? styles.accesoActivo : ""} aria-pressed={especialidad === opcion} onClick={() => setEspecialidad(actual => actual === opcion ? "" : opcion)}>{opcion}</button>
+          <button key={opcion} type="button" className={especialidad === opcion ? styles.accesoActivo : ""} aria-pressed={especialidad === opcion} onClick={() => filtrar(() => setEspecialidad(actual => actual === opcion ? "" : opcion))}>{opcion}</button>
         ))}
         {(busqueda || distrito || especialidad || radioKm) && <button type="button" className={styles.limpiarPremium} onClick={limpiarFiltros}>Limpiar filtros</button>}
       </div>}
       <div className={styles.filtros}>
-        <div className={styles.campo}><label htmlFor="dir-busqueda">Buscar por nombre o especialidad</label><input id="dir-busqueda" ref={busquedaRef} type="search" placeholder="Ej.: ortodoncia, Dra. …" value={busqueda} onChange={e => setBusqueda(e.target.value)} /></div>
-        <div className={styles.campo}><label htmlFor="dir-distrito">Distrito</label><select id="dir-distrito" value={distrito} onChange={e => setDistrito(e.target.value)}><option value="">Todos los distritos</option>{distritos.map(d => <option key={d} value={d}>{d}</option>)}</select></div>
-        <div className={styles.campo}><label htmlFor="dir-especialidad">Especialidad</label><select id="dir-especialidad" value={especialidad} onChange={e => setEspecialidad(e.target.value)}><option value="">Todas las especialidades</option>{especialidades.map(e => <option key={e} value={e}>{e}</option>)}</select></div>
-        <div className={styles.campo}><label htmlFor="dir-distancia">Distancia aproximada</label><select id="dir-distancia" value={radioKm} onChange={e => setRadioKm(e.target.value)} disabled={!ubicacion || conUbicacion.length === 0}><option value="">Cualquier distancia</option><option value="5">Hasta 5 km</option><option value="10">Hasta 10 km</option><option value="25">Hasta 25 km</option></select></div>
-        <div className={styles.campo}><label htmlFor="dir-orden">Ordenar por</label><select id="dir-orden" value={orden} onChange={e => setOrden(e.target.value as Orden)}><option value="nombre">Nombre</option><option value="cercania" disabled={!ubicacion || conUbicacion.length === 0}>Cercanía</option><option value="calificacion" disabled={!carga.resenasDisponibles || !dentistas.some(d => (carga.resenas[d.id]?.total ?? 0) > 0)}>Calificación publicada</option></select></div>
+        <div className={styles.campo}><label htmlFor="dir-busqueda">Buscar por nombre o especialidad</label><input id="dir-busqueda" ref={busquedaRef} type="search" placeholder="Ej.: ortodoncia, Dra. …" value={busqueda} maxLength={MAX_CONSULTA} onChange={e => filtrar(() => setBusqueda(e.target.value))} /></div>
+        <div className={styles.campo}><label htmlFor="dir-distrito">Distrito</label><select id="dir-distrito" value={distrito} onChange={e => filtrar(() => setDistrito(e.target.value))}><option value="">Todos los distritos</option>{distritos.map(d => <option key={d} value={d}>{d}</option>)}</select></div>
+        <div className={styles.campo}><label htmlFor="dir-especialidad">Especialidad</label><select id="dir-especialidad" value={especialidad} onChange={e => filtrar(() => setEspecialidad(e.target.value))}><option value="">Todas las especialidades</option>{especialidades.map(e => <option key={e} value={e}>{e}</option>)}</select></div>
+        <div className={styles.campo}><label htmlFor="dir-distancia">Distancia aproximada</label><select id="dir-distancia" value={radioKm} onChange={e => filtrar(() => setRadioKm(e.target.value))} disabled={!ubicacion || (!radioKm && !carga.hayUbicaciones)}><option value="">Cualquier distancia</option><option value="5">Hasta 5 km</option><option value="10">Hasta 10 km</option><option value="25">Hasta 25 km</option></select></div>
+        <div className={styles.campo}><label htmlFor="dir-orden">Ordenar por</label><select id="dir-orden" value={orden} onChange={e => filtrar(() => setOrden(e.target.value as OrdenDirectorio))}><option value="nombre">Nombre</option><option value="cercania" disabled={!ubicacion || !carga.hayUbicaciones}>Cercanía</option><option value="calificacion" disabled={!carga.hayResenas}>Calificación publicada</option></select></div>
       </div>
-      {ubicacion && conUbicacion.length === 0 && <p className={styles.privacidadUbicacion}>Aún no hay consultorios con coordenadas registradas. Puedes seguir buscando por nombre, especialidad o distrito.</p>}
-      {!modoPaciente && <p className={styles.conteo} aria-live="polite">Mostrando {visibles.length} de {dentistas.length} profesionales</p>}
+      {ubicacion && !carga.hayUbicaciones && <p className={styles.privacidadUbicacion}>Aún no hay consultorios con coordenadas registradas. Puedes seguir buscando por nombre, especialidad o distrito.</p>}
+      {!modoPaciente && <p className={styles.conteo} aria-live="polite">{cargando ? "Buscando…" : `Mostrando ${visibles.length} de ${carga.total} profesionales`}</p>}
+      {paginas > 1 && <nav aria-label="Paginación del directorio" className={styles.accionesMapa}>
+        <button type="button" className={styles.boton} disabled={cargando || carga.pagina <= 1} onClick={() => setPagina(carga.pagina - 1)}>Anterior</button>
+        <span>Página {carga.pagina} de {paginas}</span>
+        <button type="button" className={styles.boton} disabled={cargando || carga.pagina >= Math.min(paginas, MAX_PAGINA_BUSQUEDA)} onClick={() => setPagina(carga.pagina + 1)}>Siguiente</button>
+      </nav>}
       <div className={styles.alternarVista} role="tablist" aria-label="Vista del directorio"><button type="button" role="tab" aria-selected={vistaMovil === "lista"} onClick={() => setVistaMovil("lista")}>Lista</button><button type="button" role="tab" aria-selected={vistaMovil === "mapa"} onClick={() => setVistaMovil("mapa")}>Mapa</button></div>
       <div className={styles.explorador}>
         <section className={`${styles.resultados} ${vistaMovil === "mapa" ? styles.ocultarEnMovil : ""}`} aria-label="Resultados del directorio">
-          {visibles.length === 0 ? <div className={styles.aviso} role="status"><strong>No hay profesionales que coincidan.</strong><p>Prueba otro filtro. Si usas distancia, solo se incluyen consultorios con coordenadas registradas.</p><button type="button" className={styles.boton} onClick={limpiarFiltros}>Limpiar filtros</button></div> : <ul className={styles.grilla}>
+          {cargando ? <div className={styles.carga} role="status">Buscando odontólogos…</div> : visibles.length === 0 ? <div className={styles.aviso} role="status"><strong>No hay profesionales que coincidan.</strong><p>Prueba otro filtro. Si usas distancia, solo se incluyen consultorios con coordenadas registradas.</p><button type="button" className={styles.boton} onClick={limpiarFiltros}>Limpiar filtros</button></div> : <ul className={styles.grilla}>
             {visibles.map(d => {
               const resumen = carga.resenas[d.id];
               const punto = esPerfilQa(d.id) ? null : ubicacionMasCercana(d.ubicaciones, ubicacion);
@@ -238,10 +204,10 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
               return <li key={d.id} className={`${styles.tarjeta} ${seleccionado === d.id ? styles.seleccionada : ""}`}>
                 <div className={styles.tarjetaAvatarMarco}><AvatarOdontologo id={d.id} name={d.name} initials={d.initials} avatarColor={d.avatar_color} /></div>
                 <div className={styles.cuerpo}>{d.is_demo && <span className={styles.ficticio}>Perfil de demostración · No ofrece atención real</span>}<h2>{modoPaciente ? tratamientoDemo(d.id) : ""}{textoOpcional(d.name, "Nombre no disponible")}</h2><p className={styles.especialidad}>{textoOpcional(d.specialty, "Especialidad no indicada")}</p>
-                  <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.ubicacionesDisponibles ? (d.is_demo ? `Sin consultorio publicado en ${d.district}` : "Ubicación no registrada") : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}{!d.is_demo && <span>{formatearPrecio(d.consultation_price, d.currency)}</span>}</div>
+                  <div className={styles.meta}><span><Icono nombre="clinica" size={15} />{textoOpcional(d.district, "Distrito no indicado")}</span><span>{punto ? `${punto.ubicacion.practice_name} · ${punto.ubicacion.practice_address}` : carga.catalogoDisponible ? (d.is_demo ? `Sin consultorio publicado en ${d.district}` : "Ubicación no registrada") : "Ubicaciones no disponibles en este entorno"}</span>{punto && ubicacion && <span>{formatearDistancia(km)}</span>}{!d.is_demo && <span>{formatearPrecio(d.consultation_price, d.currency)}</span>}</div>
                   {(!modoPaciente || (resumen?.total ?? 0)>0) && <p className={styles.rating} aria-label={resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : `${resumen.promedio.toFixed(1)} de cinco, ${resumen.total} reseñas`}>
                     {resumen?.promedio === null || !resumen ? "Sin reseñas publicadas" : <>★ {resumen.promedio.toFixed(1)} · {resumen.total} {resumen.total === 1 ? "reseña" : "reseñas"}</>}
-                    {!carga.resenasDisponibles && <span>Calificaciones no disponibles en este entorno</span>}
+                    {!carga.catalogoDisponible && <span>Calificaciones no disponibles en este entorno</span>}
                   </p>}
                   <div className={styles.accionesTarjeta}><Link href={`${modoPaciente ? "/panel/odontologos" : "/directorio"}/${encodeURIComponent(d.id)}`} className={styles.enlace}>Ver perfil <span aria-hidden="true">→</span></Link>{!d.is_demo && <Link href={`/solicitudes?odontologo=${encodeURIComponent(d.id)}`} className={styles.solicitar}>Solicitar orientación</Link>}{!esPerfilQa(d.id) && d.ubicaciones.some(p => Number.isFinite(p.latitude) && Number.isFinite(p.longitude)) && <button type="button" className={styles.verMapa} onClick={() => mostrarEnMapa(d.id)}>Ver en mapa</button>}</div>
                 </div>
@@ -251,7 +217,7 @@ export default function DirectorioLista({ modoPaciente = false, qaPreview = fals
         </section>
         <section className={`${styles.mapaPanel} ${vistaMovil === "lista" ? styles.ocultarEnMovil : ""}`} aria-label="Mapa de consultorios">
           {modoPaciente && <div className={styles.mapaPremiumEncabezado}><div><span className={styles.mapaPremiumIcono}><Icono nombre="ubicacion" size={20}/></span><span><strong>Explora el mapa</strong><small>{ubicacion ? "Puntos ordenados por cercanía" : "Encuentra centros por distrito y especialidad"}</small></span></div><span className={styles.mapaPremiumIndicador}><i aria-hidden="true"/> Mapa interactivo</span></div>}
-          {conUbicacion.length === 0 && marcadoresDemo.length === 0 && <p className={styles.avisoMapa}>{carga.estado === "listo" && carga.ubicacionesDisponibles ? "No hay consultorios con ubicación registrada. El mapa no asigna puntos a perfiles sin coordenadas verificadas." : "El servicio de ubicaciones no está disponible en este entorno. El directorio por lista sigue disponible."}</p>}
+          {!cargando && ubicacionesMapa.length === 0 && <p className={styles.avisoMapa}>{carga.catalogoDisponible ? "No hay ubicaciones registradas para estos resultados." : "El servicio de ubicaciones no está disponible en este entorno. El directorio por lista sigue disponible."}</p>}
           <MapaDirectorio ubicaciones={ubicacionesMapa} ubicacion={ubicacion} seleccionado={seleccionado} visible={vistaMovil === "mapa"} alSeleccionar={setSeleccionado} modoPaciente={modoPaciente} radarActivo={radarActivo} idsCercanos={idsCercanos} basePerfil={modoPaciente ? "/panel/odontologos" : "/directorio"} />
           {modoPaciente && <div className={styles.mapaPremiumLeyenda}><span><b className={styles.mapaPinDiente}>🦷</b> Centros de referencia</span>{ubicacion && <span><b className={styles.mapaPinUsuario}/> Tu ubicación temporal</span>}<small>Ubicaciones orientativas · no indican vinculación laboral</small></div>}
         </section>
