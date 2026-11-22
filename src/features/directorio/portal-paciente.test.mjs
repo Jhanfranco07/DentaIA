@@ -43,7 +43,7 @@ test("el radar requiere consentimiento y usa puntos reales del directorio", () =
   assert.match(directorio,/setRadarActivo\(true\)/);
   assert.match(directorio,/ubicacionMasCercana\(d\.ubicaciones, ubicacion\)/);
   assert.match(directorio,/p\.ubicacion\.practice_name/);
-  assert.match(directorio,/orden === "cercania"/);
+  assert.match(directorio,/if \(orden === "nombre"\) setOrden\("cercania"\)/);
   assert.match(mapa,/dataset\.radar = String\(modoPaciente && radarActivo\)/);
   assert.match(mapa,/setLngLat\(\[ubicacion\.longitude, ubicacion\.latitude\]\)/);
   assert.match(estilos,/prefers-reduced-motion:reduce/);
