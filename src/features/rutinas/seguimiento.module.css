@@ -1,0 +1,19 @@
+.seccion{display:grid;gap:16px;border:1px solid var(--rutina-borde,#d7e6e9);background:var(--rutina-fondo,#fff);border-radius:20px;padding:22px;margin:24px 0;color:var(--rutina-texto,#173c4c)}
+.cabecera{display:flex;justify-content:space-between;align-items:start;gap:15px;flex-wrap:wrap}
+.cabecera h2{margin:6px 0 7px;font-size:clamp(18px,2vw,23px);letter-spacing:-.025em}
+.cabecera p,.elemento p{font-size:13px;color:var(--rutina-muted,#536d7b);line-height:1.55;margin:6px 0}
+.etiqueta{font-size:10px;color:var(--rutina-acento,#087b84);font-weight:850;letter-spacing:.07em}
+.elemento{display:flex;justify-content:space-between;align-items:start;gap:14px;flex-wrap:wrap;background:var(--rutina-suave,#f4fafb);border:1px solid var(--rutina-borde,#dae9eb);border-radius:15px;padding:15px 18px}
+.elemento>div:first-child{flex:1;min-width:210px}
+.elemento h3{margin:6px 0;font-size:16px}.elemento strong{font-size:14px}
+.elemento ul{margin:9px 0;padding-left:19px;color:var(--rutina-texto,#173c4c);font-size:12px;line-height:1.7}
+.elemento small{font-size:11px;color:var(--rutina-muted,#536d7b)}
+.acciones{display:flex;flex-wrap:wrap;gap:8px}
+.acciones button,.elemento>button,.cabecera button{min-height:42px;border-radius:10px;cursor:pointer;border:1px solid var(--rutina-acento,#0b7180);padding:9px 13px;background:var(--rutina-acento,#0b7180);color:#fff;font-size:12px;font-weight:800}
+.acciones button:hover,.elemento>button:hover{filter:brightness(.95)}
+.acciones button:disabled,.elemento button:disabled{opacity:.6;cursor:not-allowed}
+.botonSecundario,.acciones .botonSecundario,.elemento .botonSecundario,.cabecera .botonSecundario{background:var(--rutina-fondo,#fff);color:var(--rutina-acento,#0b7180);border:1px solid var(--rutina-borde,#d7e6e9)}
+.nota,.vacio{font-size:12px;line-height:1.55;color:var(--rutina-muted,#536d7b)}
+.vacio{border:1px dashed var(--rutina-borde,#d7e6e9);border-radius:14px;padding:18px}
+.error{color:#a32231;background:#fff1f0;border-radius:10px;padding:12px;font-size:12px}
+@media(max-width:600px){.seccion{padding:14px}.elemento{padding:13px}.acciones{width:100%}.acciones button{flex:1}}
