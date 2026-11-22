@@ -31,7 +31,7 @@ async function autenticar(request: Request): Promise<Sesion | null> {
   const meta = data.user.app_metadata?.dentaia;
   if (!meta || typeof meta !== "object" || !("estado" in meta) || meta.estado !== "activo") return null;
   const roles = "roles" in meta && Array.isArray(meta.roles)
-    ? meta.roles.filter((r): r is string => typeof r === "string") : [];
+    ? meta.roles.filter((r: unknown): r is string => typeof r === "string") : [];
   if (!roles.includes("paciente") && !roles.includes("odontologo")) return null;
   return { usuarioId: data.user.id, roles, administrador };
 }
