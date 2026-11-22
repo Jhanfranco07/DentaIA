@@ -66,3 +66,46 @@
 .public-site .eyebrow, .public-label { margin: 0 0 16px; font-size: .875rem; font-weight: 600; letter-spacing: 0; }
 .public-title { margin: 0; font: 400 var(--public-h2)/.98 var(--public-display); letter-spacing: -.035em; text-wrap: pretty; }
 .public-site :focus-visible { outline-color: var(--public-focus) !important; }
+
+.public-site .action {
+  min-height: 48px;
+  padding: 10px 20px;
+  gap: 8px;
+  border-radius: var(--public-control);
+  border-color: var(--public-button-border, var(--public-cobalt));
+  background: var(--public-button-bg, var(--public-cobalt));
+  color: var(--public-button-ink, var(--public-paper));
+  font-weight: 600;
+  box-shadow: none;
+  transition: background-color var(--public-speed) var(--public-easing), color var(--public-speed) var(--public-easing), border-color var(--public-speed) var(--public-easing);
+}
+.public-site .action:hover {
+  background: var(--public-button-hover, var(--public-navy));
+  border-color: var(--public-button-hover, var(--public-navy));
+  box-shadow: none;
+  transform: none;
+}
+.public-site .action-secondary {
+  border-color: var(--public-secondary-rule, var(--public-cobalt));
+  background: transparent;
+  color: var(--public-secondary-ink, var(--public-navy));
+}
+.public-site .action-secondary:hover {
+  border-color: var(--public-secondary-rule, var(--public-cobalt));
+  background: var(--public-secondary-hover, #2759a512);
+}
+.public-site .actions { gap: 12px; }
+.public-site .text-link { color: inherit; font-weight: 600; }
+.public-site :is(.action, .text-link) svg { flex: none; transition: transform var(--public-speed) var(--public-easing); }
+
+.public-inverse {
+  --public-focus: var(--public-mist);
+  --public-button-bg: var(--public-paper);
+  --public-button-border: var(--public-paper);
+  --public-button-ink: var(--public-navy);
+  --public-button-hover: var(--public-mist);
+  --public-secondary-rule: #dcecf8a6;
+  --public-secondary-ink: var(--public-paper);
+  --public-secondary-hover: #fbfdfe16;
+  color: var(--public-paper);
+}
