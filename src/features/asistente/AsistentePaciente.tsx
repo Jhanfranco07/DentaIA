@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { leerRutinaDelDia } from "@/features/rutinas/datos";
 import { fechaHoyLima } from "@/features/rutinas/modelo";
 import { avisoRutinaDenti, type AvisoDenti } from "./avisos";
+import { consultaProgresoRutina, explicarProgresoRutina } from "./progresoRutina";
 import { GUIAS_BUCALES } from "@/features/buenas-practicas/contenido";
 import { claveVentanaAviso, leerHorarioAvisos, leerPreferenciaAvisos, momentoAviso } from "@/features/rutinas/configuracionAvisos";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
@@ -16,7 +17,7 @@ type Mensaje = { id: number; pregunta?: string; respuesta: RespuestaAsistente; o
 type Precio = { id: string; nombre: string; profesional: string; distrito: string; especialidad: string; demo: boolean; monto: number | null; moneda: string; slug: string };
 type Fila = { id: string; name: string; price_amount: number | null; currency_code: string; dentist_id: string;
   dentists: { name: string; district: string; specialty: string; is_demo: boolean; is_active: boolean; slug: string } | null };
-const EJEMPLOS = ["Guía de cepillado", "¿Cómo uso hilo dental?", "Preparar fotografía", "¿Por qué tengo dientes amarillos?"];
+const EJEMPLOS = ["¿Cómo va mi rutina?", "Guía de cepillado", "Preparar fotografía", "¿Por qué tengo dientes amarillos?"];
 const SALUDO: RespuestaAsistente = {
   texto: "¡Hola! Soy Denti. Puedo llevarte a una guía o módulo con tu permiso, o responder aquí tus dudas generales sobre salud bucal. ¿Qué necesitas?",
   guias: [], especialidad: null, alerta: false, enlaces: [],
@@ -152,6 +153,34 @@ export default function AsistentePaciente() {
   async function enviar(pregunta: string) {
     const limpia = pregunta.trim().slice(0, 500);
     if (!limpia || pensando) return;
+    if (consultaProgresoRutina(limpia)) {
+      const id = contador.current++;
+      const enlaces = [{ href: "/paciente/rutinas", etiqueta: "Abrir Mis rutinas" }];
+      setTexto("");
+      setMensajes(prev => [...prev.slice(-19), {
+        id, pregunta: limpia, respuesta: {
+          texto: "Consultando tus actividades registradas…", guias: [], enlaces: [], especialidad: null, alerta: false,
+        }, origen: "guiado",
+      }]);
+      setPensando(true);
+      try {
+        const cliente = getSupabaseBrowserClient();
+        const { data, error } = await cliente.auth.getUser();
+        if (error || !data.user) throw new Error("SESION_INVALIDA");
+        const estado = await leerRutinaDelDia(cliente, data.user.id, fechaHoyLima());
+        setMensajes(prev => prev.map(m => m.id === id ? {
+          ...m, respuesta: { texto: explicarProgresoRutina(estado), guias: [], enlaces, especialidad: null, alerta: false },
+        } : m));
+      } catch {
+        setMensajes(prev => prev.map(m => m.id === id ? {
+          ...m, respuesta: {
+            texto: "No pude consultar tu progreso en este momento. Abre Mis rutinas para revisar tus registros e inténtalo nuevamente.",
+            guias: [], enlaces, especialidad: null, alerta: false,
+          },
+        } : m));
+      } finally { setPensando(false); }
+      return;
+    }
     const destino = detectarDestinoDenti(limpia);
     const respuesta: RespuestaAsistente = destino
       ? { texto: `Encontré ${destino.tipo === "guia" ? "una guía" : "un espacio de DentaIA"} para ayudarte: ${destino.titulo}. ¿Quieres que te lleve allí?`, guias: [], enlaces: [], especialidad: null, alerta: false }
