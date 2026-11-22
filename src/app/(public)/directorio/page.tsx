@@ -2,5 +2,5 @@ import DirectorioLista from "@/features/directorio/DirectorioLista";
 import { qaPreviewPermitido } from "@/features/directorio/qa-preview";
 
 export default function DirectoryPage() {
-  return <DirectorioLista qaPreview={qaPreviewPermitido(process.env)} />;
+  return <div className="module-shell"><DirectorioLista qaPreview={qaPreviewPermitido(process.env)} /></div>;
 }
