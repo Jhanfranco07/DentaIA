@@ -25,6 +25,7 @@ grant execute on function auth.uid() to authenticated;
 grant execute on function auth.jwt() to authenticated;
 
 create table public.dentists(id uuid primary key,name text,is_demo boolean not null default false,is_active boolean not null default true);
+grant select on public.dentists to anon, authenticated;
 create table clinical.professional_accounts(
   id uuid primary key,user_id uuid not null,dentist_id uuid,
   status text not null check(status in('pending','verified','suspended'))
