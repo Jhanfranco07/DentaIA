@@ -61,6 +61,7 @@ export default function RutinasPaciente() {
     try {
       await marcarActividadRutina(getSupabaseBrowserClient(), usuario.id, dia.plan.id, actividadId, completada);
       await cargar();
+      window.dispatchEvent(new Event("dentaia:rutina-actualizada"));
     } catch {
       setError("No se pudo guardar el cambio. Tu progreso no se actualizó; puedes volver a intentarlo.");
     } finally { setGuardando(null); }

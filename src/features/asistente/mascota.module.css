@@ -17,3 +17,12 @@
 @keyframes saludar{0%,6%,20%,100%{transform:rotate(0deg)}10%,16%{transform:rotate(-12deg)}}
 @keyframes brillo{0%,100%{opacity:.65;transform:scale(.9)}50%{opacity:1;transform:scale(1.08)}}
 @media(prefers-reduced-motion:reduce){.escena,.ojos,.brazoDer,.brazoIzq,.estrella{animation:none!important;transform:none!important}}
+
+/* La tarjeta y el botón permanecen quietos: solo se mueve la ilustración SVG. */
+.escena{animation:none!important;transform:none!important}
+.dibujo{animation:dentiFlotar 3.1s ease-in-out infinite;transform-origin:50% 64%;will-change:transform}
+.brazoDer{animation:saludar 3.8s ease-in-out infinite}
+.ojos{animation:parpadear 5.2s ease-in-out infinite}
+.pensando .dibujo{animation:dentiFlotar 1.9s ease-in-out infinite}
+@keyframes dentiFlotar{0%,100%{transform:translateY(1px) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+@media(prefers-reduced-motion:reduce){.dibujo{animation:none!important;transform:none!important}}

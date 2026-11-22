@@ -126,3 +126,19 @@
 .sugerencias button:hover{border-color:#54a4a9;background:#e7f5f6}
 .pie{border-top-color:#dde9ed;box-shadow:0 -5px 16px rgba(13,61,75,.035)}
 @media(max-width:480px){.accionesDestino a,.accionesDestino button{flex:1}.invitacionIA{flex-direction:row;align-items:center}.invitacionIA button{align-self:center}}
+
+/* Avisos de Denti fuera del chat: solo aparece una notificación y se puede descartar. */
+.activador:hover,.activador:active{transform:none!important}
+.avisoFlotante{position:fixed;right:clamp(12px,2vw,28px);bottom:159px;z-index:89;box-sizing:border-box;display:flex;align-items:flex-start;gap:10px;width:min(340px,calc(100vw - 24px));padding:15px 13px;border:1px solid #d7e8eb;border-radius:18px;background:#fff;color:#143749;box-shadow:0 14px 38px rgba(15,60,77,.2);animation:avisoEntrar .25s ease-out}
+.avisoFlotante:after{content:"";position:absolute;right:38px;bottom:-7px;width:13px;height:13px;transform:rotate(45deg);background:#fff;border-right:1px solid #d7e8eb;border-bottom:1px solid #d7e8eb}
+.avisoIcono{flex:0 0 39px;display:grid;place-items:center;width:39px;height:42px;border-radius:12px;background:#eef9fa;overflow:hidden}
+.avisoIcono>span{width:37px!important;height:39px!important;max-width:37px;max-height:39px}
+.avisoTexto{flex:1;min-width:0}
+.avisoTexto strong{font-size:13px;color:#104355}
+.avisoTexto p{margin:5px 0 8px;font-size:12px;line-height:1.5;color:#45677a}
+.avisoTexto a{font-size:12px;font-weight:750;color:#087a83;text-decoration:underline;text-underline-offset:3px}
+.cerrarAviso{flex:0 0 25px;border:0;background:transparent;color:#547184;font-size:13px;cursor:pointer;min-height:27px}
+.cerrarAviso:focus-visible{outline:3px solid #eca954;outline-offset:2px}
+@keyframes avisoEntrar{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.avisoFlotante{right:12px;bottom:83px}}
+@media(prefers-reduced-motion:reduce){.avisoFlotante{animation:none}}

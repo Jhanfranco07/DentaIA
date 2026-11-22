@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { leerRutinaDelDia } from "@/features/rutinas/datos";
+import { fechaHoyLima } from "@/features/rutinas/modelo";
+import { avisoRutinaDenti, type AvisoDenti } from "./avisos";
 import { GUIAS_BUCALES } from "@/features/buenas-practicas/contenido";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { detectarDestinoDenti, responderOrientacion, type DestinoDenti, type ObservacionAsistente, type RespuestaAsistente } from "./motor";
@@ -23,6 +26,8 @@ export default function AsistentePaciente() {
   const [abierto, setAbierto] = useState(false);
   const [texto, setTexto] = useState("");
   const [usarIA, setUsarIA] = useState(false);
+  const [usuarioIA, setUsuarioIA] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<AvisoDenti | null>(null);
   const [pensando, setPensando] = useState(false);
   const [mensajes, setMensajes] = useState<Mensaje[]>([{ id: 0, respuesta: SALUDO }]);
   const [observacion, setObservacion] = useState<ObservacionAsistente | null>(null);
@@ -33,6 +38,59 @@ export default function AsistentePaciente() {
   const activador = useRef<HTMLButtonElement>(null);
   const contador = useRef(1);
   const consultaActual = useRef(0);
+  useEffect(() => {
+    let activo = true;
+    const cliente = getSupabaseBrowserClient();
+    async function recuperarConsentimiento() {
+      try {
+        const { data } = await cliente.auth.getUser();
+        if (!activo) return;
+        const id = data.user?.id ?? null;
+        setUsuarioIA(id);
+        setUsarIA(id ? window.localStorage.getItem(`dentaia:denti:ia-consent:${id}`) === "true" : false);
+      } catch { if (activo) { setUsuarioIA(null); setUsarIA(false); } }
+    }
+    void recuperarConsentimiento();
+    const { data: escucha } = cliente.auth.onAuthStateChange(() => { void recuperarConsentimiento(); });
+    return () => { activo = false; escucha.subscription.unsubscribe(); };
+  }, []);
+
+  useEffect(() => {
+    let vigente = true;
+    const cargarAviso = async () => {
+      if (abierto) return;
+      try {
+        const cliente = getSupabaseBrowserClient();
+        const { data } = await cliente.auth.getUser();
+        if (!vigente || !data.user) return;
+        const fecha = fechaHoyLima();
+        const hora = Number(new Intl.DateTimeFormat("en-GB", {
+          hour: "2-digit", hourCycle: "h23", timeZone: "America/Lima",
+        }).format(new Date()));
+        let estado = null;
+        try { estado = await leerRutinaDelDia(cliente, data.user.id, fecha); }
+        catch { /* No mostramos progreso sin datos verificados. */ }
+        if (!vigente) return;
+        const siguiente = avisoRutinaDenti(hora, fecha, estado);
+        const clave = `denti:aviso:${data.user.id}:${siguiente.clave}`;
+        if (window.sessionStorage.getItem(clave) === "visto") return;
+        window.sessionStorage.setItem(clave, "visto");
+        setAviso(siguiente);
+      } catch { /* Nunca mostramos datos de otro usuario. */ }
+    };
+    void cargarAviso();
+    const alVolver = () => { if (document.visibilityState === "visible") void cargarAviso(); };
+    window.addEventListener("focus", alVolver);
+    window.addEventListener("dentaia:rutina-actualizada", alVolver);
+    return () => { vigente = false; window.removeEventListener("focus", alVolver); window.removeEventListener("dentaia:rutina-actualizada", alVolver); };
+  }, [abierto]);
+  function configurarIA(activar: boolean) {
+    if (usuarioIA) {
+      if (activar) window.localStorage.setItem(`dentaia:denti:ia-consent:${usuarioIA}`, "true");
+      else window.localStorage.removeItem(`dentaia:denti:ia-consent:${usuarioIA}`);
+    }
+    setUsarIA(activar && !!usuarioIA);
+  }
 
   useEffect(() => {
     const recibir = (evento: Event) => {
@@ -140,10 +198,19 @@ export default function AsistentePaciente() {
     || ultimo.respuesta.especialidad === "general"
     || filtrar(p.especialidad).includes(ultimo.respuesta.especialidad === "ortodoncia" ? "ortodoncia" : "periodoncia")).slice(0, 5);
   return <>
-    <button ref={activador} type="button" className={styles.activador} onClick={() => setAbierto(a => !a)}
+    <button ref={activador} type="button" className={styles.activador} onClick={() => { setAviso(null); setAbierto(a => !a); }}
       aria-expanded={abierto} aria-controls="asistente-dentaia" aria-label={abierto ? "Cerrar asistente DentaIA" : "Abrir asistente DentaIA"}>
       <MascotaDenti pequeno /><span>Habla con Denti</span>
     </button>
+    {!abierto && aviso && <aside className={styles.avisoFlotante} role="status" aria-label="Aviso de Denti">
+      <div className={styles.avisoIcono}><MascotaDenti pequeno /></div>
+      <div className={styles.avisoTexto}>
+        <strong>{aviso.titulo}</strong>
+        <p>{aviso.texto}</p>
+        {aviso.href && <Link href={aviso.href} onClick={() => setAviso(null)}>{aviso.accion ?? "Ver más"} <span aria-hidden="true">↗</span></Link>}
+      </div>
+      <button type="button" className={styles.cerrarAviso} aria-label="Descartar aviso de Denti" onClick={() => setAviso(null)}>✕</button>
+    </aside>}
     {abierto && <section id="asistente-dentaia" className={styles.panel} role="dialog" aria-label="Asistente de cuidado bucal" aria-modal="false">
       <header className={styles.encabezado}><MascotaDenti pequeno pensando={pensando} /><div><strong>Denti ✦ Asistente inteligente</strong><small>{pensando ? "Preparando tu respuesta…" : "Tu guía personal dentro de DentaIA"}</small></div>
         <button type="button" aria-label="Cerrar asistente" onClick={() => setAbierto(false)}>✕</button>
@@ -192,12 +259,12 @@ export default function AsistentePaciente() {
       </div>
       <div className={styles.pie}>
         {usarIA
-          ? <div className={styles.estadoIA}><span aria-label="IA activada">✦ IA activada</span>
-              <button type="button" disabled={pensando} onClick={() => setUsarIA(false)}>Usar modo privado</button></div>
+          ? <div className={styles.estadoIA}><span aria-label="IA activada">✦ Conversación IA activada</span>
+              <button type="button" disabled={pensando} onClick={() => configurarIA(false)}>Usar modo privado</button></div>
           : <div className={styles.invitacionIA}>
-              <div><strong>IA para consultas generales</strong>
-                <p>Opcional. Tus preguntas y los últimos mensajes se enviarán a OpenAI; no enviamos fotos. Los resultados visuales solo se comparten si tú lo solicitas.</p></div>
-              <button type="button" onClick={() => setUsarIA(true)}>✦ Activar</button>
+              <div><strong>Denti activo · IA conversacional</strong>
+                <p>Los saludos y recordatorios ya funcionan. Para respuestas con OpenAI, autoriza enviar tus preguntas y últimos mensajes. No enviamos fotos.</p></div>
+              <button type="button" onClick={() => configurarIA(true)}>✦ Activar</button>
             </div>}
         <div className={styles.sugerencias}>{EJEMPLOS.map(e => <button key={e} type="button" onClick={() => void enviar(e)}>{e}</button>)}</div>
         <form onSubmit={submit} className={styles.formulario}><label htmlFor="pregunta-asistente" className={styles.sr}>Escribe tu pregunta</label>
@@ -205,7 +272,7 @@ export default function AsistentePaciente() {
             placeholder="Pregunta o busca una guía…" />
           <button type="submit" disabled={!texto.trim()} aria-label="Enviar pregunta">➤</button>
         </form>
-                <small>{usarIA ? "IA educativa, no diagnóstico. Si la IA no está disponible, Denti responderá con orientación local." : "Modo privado: no enviamos preguntas a modelos externos hasta que actives la IA."}</small>
+                <small>{usarIA ? "IA educativa, no diagnóstico. Si la IA no está disponible, Denti responderá con orientación local." : "Denti te acompaña automáticamente. OpenAI solo recibe preguntas si activas la conversación con IA."}</small>
       </div>
     </section>}
   </>;
