@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { guardarPreferenciaAvisos, leerPreferenciaAvisos } from "./configuracionAvisos";
+import { guardarPreferenciaAvisos, leerPreferenciaAvisos, leerHorarioAvisos, guardarHorarioAvisos, normalizarHorario, type HorarioAvisos } from "./configuracionAvisos";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Icono } from "@/components/Identidad";
 import { useSesion } from "@/features/cuenta/useSesion";
@@ -30,7 +30,8 @@ export default function RutinasPaciente() {
   const [guardando, setGuardando] = useState<string | null>(null);
   const [intento, setIntento] = useState(0);
   const [avisosHabilitados, setAvisosHabilitados] = useState(true);
-  useEffect(() => { if (usuario?.id) setAvisosHabilitados(leerPreferenciaAvisos(usuario.id)); }, [usuario?.id]);
+  const [horarioAvisos, setHorarioAvisos] = useState<HorarioAvisos>(() => normalizarHorario(null));
+  useEffect(() => { if (usuario?.id) { setAvisosHabilitados(leerPreferenciaAvisos(usuario.id)); setHorarioAvisos(leerHorarioAvisos(usuario.id)); } }, [usuario?.id]);
   const esHoy = fecha === hoy;
   const pendientes = (dia?.actividades ?? []).filter(a => !dia?.completadas.includes(a.id));
   const siguiente = pendientes[0];
@@ -154,6 +155,26 @@ export default function RutinasPaciente() {
             setAvisosHabilitados(evento.target.checked);
             if (usuario?.id) guardarPreferenciaAvisos(usuario.id, evento.target.checked);
           }} /> Activar avisos flotantes</label>
+          {avisosHabilitados && <div className={styles.horariosAvisos}>
+            <p>Configura desde qué hora Denti puede mostrarte recordatorios. Solo aparecen cuando usas DentaIA.</p>
+            {([["manana", "Mañana"], ["tarde", "Tarde"], ["noche", "Noche"]] as const).map(([momento, titulo]) => <label key={momento}>{titulo}
+              <input type="time" value={horarioAvisos[momento]} onChange={evento => {
+                const nuevo = normalizarHorario({ ...horarioAvisos, [momento]: evento.target.value });
+                setHorarioAvisos(nuevo);
+                if (usuario?.id) guardarHorarioAvisos(usuario.id, nuevo);
+              }} />
+            </label>)}
+            <label>Frecuencia
+              <select value={horarioAvisos.frecuencia} onChange={evento => {
+                const nuevo = { ...horarioAvisos, frecuencia: evento.target.value as HorarioAvisos["frecuencia"] };
+                setHorarioAvisos(nuevo);
+                if (usuario?.id) guardarHorarioAvisos(usuario.id, nuevo);
+              }}>
+                <option value="por_momento">Una vez por momento del día</option>
+                <option value="una_vez">Una vez al día</option>
+              </select>
+            </label>
+          </div>}
         </section>
         <p className={styles.nota}>Esta rutina es preventiva y general. No se adapta automáticamente a hallazgos de fotografías ni sustituye la orientación profesional.</p>
       </div>
