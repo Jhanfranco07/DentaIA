@@ -1,8 +1,27 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/supabase/database.types";
+import type { Database, Tables } from "@/lib/supabase/database.types";
 
 type ClienteSupabase = SupabaseClient<Database>;
+type Solicitud = Tables<"appointment_requests"> & { dentists: Pick<Tables<"dentists">, "name"> | null };
+export type FiltroEstado = "todas" | "requested" | "cancelled";
+export type PaginaSolicitudes = {
+  items: Solicitud[]; total: number; pagina: number; tamano: number;
+  totalSolicitudes: number; solicitadas: number; canceladas: number;
+};
+
+export async function obtenerMisSolicitudesPaginadas(
+  cliente: ClienteSupabase, consulta: { texto: string; estado: FiltroEstado; pagina: number; tamano: number },
+  signal: AbortSignal,
+): Promise<PaginaSolicitudes> {
+  const { data, error } = await cliente.rpc("dentaia_buscar_solicitudes", {
+    p_query: consulta.texto, p_status: consulta.estado, p_page: consulta.pagina, p_size: consulta.tamano,
+  }).abortSignal(AbortSignal.any([signal, AbortSignal.timeout(8000)])).retry(false);
+  if (error || !data || typeof data !== "object" || !("items" in data) || !Array.isArray(data.items)) {
+    throw new Error("No se pudieron cargar tus solicitudes.");
+  }
+  return data as unknown as PaginaSolicitudes;
+}
 
 export async function obtenerMisSolicitudes(
   cliente: ClienteSupabase,
