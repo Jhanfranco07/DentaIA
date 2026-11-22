@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { guardarPreferenciaAvisos, leerPreferenciaAvisos } from "./configuracionAvisos";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Icono } from "@/components/Identidad";
 import { useSesion } from "@/features/cuenta/useSesion";
@@ -28,6 +29,8 @@ export default function RutinasPaciente() {
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState<string | null>(null);
   const [intento, setIntento] = useState(0);
+  const [avisosHabilitados, setAvisosHabilitados] = useState(true);
+  useEffect(() => { if (usuario?.id) setAvisosHabilitados(leerPreferenciaAvisos(usuario.id)); }, [usuario?.id]);
   const esHoy = fecha === hoy;
   const pendientes = (dia?.actividades ?? []).filter(a => !dia?.completadas.includes(a.id));
   const siguiente = pendientes[0];
@@ -142,6 +145,15 @@ export default function RutinasPaciente() {
                 </section>;
               })}
             </>}
+        </section>
+        <section className={styles.ajustesAvisos} aria-labelledby="avisos-rutina-titulo">
+          <div><h2 id="avisos-rutina-titulo">Avisos de Denti</h2>
+            <p>Permite que Denti te salude y recuerde tus actividades cuando utilices DentaIA. No enviamos notificaciones fuera de la aplicación.</p>
+          </div>
+          <label><input type="checkbox" checked={avisosHabilitados} onChange={evento => {
+            setAvisosHabilitados(evento.target.checked);
+            if (usuario?.id) guardarPreferenciaAvisos(usuario.id, evento.target.checked);
+          }} /> Activar avisos flotantes</label>
         </section>
         <p className={styles.nota}>Esta rutina es preventiva y general. No se adapta automáticamente a hallazgos de fotografías ni sustituye la orientación profesional.</p>
       </div>

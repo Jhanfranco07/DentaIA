@@ -6,6 +6,7 @@ import { leerRutinaDelDia } from "@/features/rutinas/datos";
 import { fechaHoyLima } from "@/features/rutinas/modelo";
 import { avisoRutinaDenti, type AvisoDenti } from "./avisos";
 import { GUIAS_BUCALES } from "@/features/buenas-practicas/contenido";
+import { leerPreferenciaAvisos } from "@/features/rutinas/configuracionAvisos";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { detectarDestinoDenti, responderOrientacion, type DestinoDenti, type ObservacionAsistente, type RespuestaAsistente } from "./motor";
 import styles from "./asistente.module.css";
@@ -63,6 +64,7 @@ export default function AsistentePaciente() {
         const cliente = getSupabaseBrowserClient();
         const { data } = await cliente.auth.getUser();
         if (!vigente || !data.user) return;
+        if (!leerPreferenciaAvisos(data.user.id)) { setAviso(null); return; }
         const fecha = fechaHoyLima();
         const hora = Number(new Intl.DateTimeFormat("en-GB", {
           hour: "2-digit", hourCycle: "h23", timeZone: "America/Lima",
@@ -81,8 +83,9 @@ export default function AsistentePaciente() {
     void cargarAviso();
     const alVolver = () => { if (document.visibilityState === "visible") void cargarAviso(); };
     window.addEventListener("focus", alVolver);
+    window.addEventListener("dentaia:preferencia-avisos", alVolver);
     window.addEventListener("dentaia:rutina-actualizada", alVolver);
-    return () => { vigente = false; window.removeEventListener("focus", alVolver); window.removeEventListener("dentaia:rutina-actualizada", alVolver); };
+    return () => { vigente = false; window.removeEventListener("focus", alVolver); window.removeEventListener("dentaia:preferencia-avisos", alVolver); window.removeEventListener("dentaia:rutina-actualizada", alVolver); };
   }, [abierto]);
   function configurarIA(activar: boolean) {
     if (usuarioIA) {
