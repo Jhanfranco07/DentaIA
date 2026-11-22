@@ -46,7 +46,7 @@ export default function RutinasPaciente() {
 
   const cargar = useCallback(async (activo: () => boolean = () => true) => {
     if (!usuario?.id) { if (activo()) { setDia(null); setMarcas([]); setCatalogo([]); setCargando(false); } return; }
-    setCargando(true); setError(""); setDia(null);
+    setCargando(true); setError(""); setDia(null); setMarcas([]); setCatalogo([]);
     try {
       const cliente = getSupabaseBrowserClient();
       const [estado, historial] = await Promise.all([
