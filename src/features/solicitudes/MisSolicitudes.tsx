@@ -15,6 +15,7 @@ import {
 import styles from "./solicitudes.module.css";
 import Link from "next/link";
 import { Icono } from "@/components/Identidad";
+import MisCitasRealesPaciente from "./MisCitasRealesPaciente";
 
 export default function MisSolicitudes({ compacto = false }: { compacto?: boolean }) {
   const { usuario, cargando: cargandoSesion } = useSesion();
@@ -96,9 +97,11 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
   const paginas = resultado ? Math.max(1, Math.ceil(resultado.total / resultado.tamano)) : 1;
 
   return (
+    <>
+    {!compacto && usuarioId && <MisCitasRealesPaciente />}
     <section className={`${styles.tarjeta} ${compacto ? styles.compacto : ""}`} id="mis-solicitudes">
       <header className={styles.encabezadoSolicitudes}>
-        <div><h2 className={styles.tituloSeccion}>Mis solicitudes</h2><p className={styles.subtitulo}>Solicitudes de orientación de demostración; no representan citas clínicas confirmadas.</p></div>
+        <div><h2 className={styles.tituloSeccion}>Mis solicitudes</h2><p className={styles.subtitulo}>Este listado contiene las solicitudes de demostración; las citas reales se consultan en la sección superior.</p></div>
         {compacto && <Link className={styles.verTodas} href="/solicitudes">Ver todas <span aria-hidden="true">→</span></Link>}
       </header>
 
@@ -190,5 +193,6 @@ export default function MisSolicitudes({ compacto = false }: { compacto?: boolea
       </nav>}
       {compacto && !cargando && !error && total > 3 && <p className={styles.mensajeCompacto}>Se muestran las tres solicitudes más recientes. <Link href="/solicitudes">Abrir el historial completo</Link>.</p>}
     </section>
+    </>
   );
 }
