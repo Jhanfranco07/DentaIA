@@ -8,17 +8,18 @@ import styles from "@/features/directorio/contacto.module.css";
 export default function MiWhatsappProfesional({ dentistId }: { dentistId: string }) {
   const [telefono, setTelefono] = useState("");
   const [publicado, setPublicado] = useState(false);
+  const [existente, setExistente] = useState(false);
   const [estado, setEstado] = useState<"cargando" | "listo" | "error">("cargando");
   const [mensaje, setMensaje] = useState("");
   const [guardando, setGuardando] = useState(false);
   useEffect(() => {
-    let vivo = true; setEstado("cargando"); setTelefono(""); setPublicado(false);
+    let vivo = true; setEstado("cargando"); setTelefono(""); setPublicado(false); setExistente(false);
     void (async () => {
       const { data, error } = await getSupabaseBrowserClient().from("dentist_contact_channels")
         .select("whatsapp_e164,whatsapp_publicado").eq("dentist_id", dentistId).maybeSingle();
       if (!vivo) return;
       if (error) setEstado("error");
-      else { setTelefono(data?.whatsapp_e164 ?? ""); setPublicado(Boolean(data?.whatsapp_publicado)); setEstado("listo"); }
+      else { setExistente(Boolean(data)); setTelefono(data?.whatsapp_e164 ?? ""); setPublicado(Boolean(data?.whatsapp_publicado)); setEstado("listo"); }
     })();
     return () => { vivo = false; };
   }, [dentistId]);
@@ -27,12 +28,14 @@ export default function MiWhatsappProfesional({ dentistId }: { dentistId: string
     const numero = normalizarWhatsapp(telefono);
     if (!numero) { setMensaje("Ingresa un número válido, por ejemplo +519XXXXXXXX."); return; }
     setGuardando(true); setMensaje("");
-    const resultado = await getSupabaseBrowserClient().from("dentist_contact_channels").upsert({
-      dentist_id: dentistId, whatsapp_e164: numero, whatsapp_publicado: publicado,
-      consentimiento_publicacion_en: publicado ? new Date().toISOString() : null,
-    }, { onConflict: "dentist_id" });
+    const cliente = getSupabaseBrowserClient();
+    const datos = { whatsapp_e164: numero, whatsapp_publicado: publicado,
+      consentimiento_publicacion_en: publicado ? new Date().toISOString() : null };
+    const resultado = existente ? await cliente.from("dentist_contact_channels")
+      .update(datos).eq("dentist_id", dentistId)
+      : await cliente.from("dentist_contact_channels").insert({ dentist_id: dentistId, ...datos });
     if (resultado.error) setMensaje("No fue posible guardar. Comprueba que tu cuenta esté verificada y tenga una membresía activa.");
-    else { setTelefono(numero); setMensaje(publicado ? "Tu WhatsApp profesional puede mostrarse en tu ficha pública." : "Contacto guardado como privado. No aparece en el directorio."); }
+    else { setExistente(true); setTelefono(numero); setMensaje(publicado ? "Tu WhatsApp profesional puede mostrarse en tu ficha pública." : "Contacto guardado como privado. No aparece en el directorio."); }
     setGuardando(false);
   }
   return <section className={styles.tarjeta} aria-labelledby="mi-whatsapp-titulo">
