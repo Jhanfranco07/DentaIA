@@ -50,3 +50,57 @@
   .pie>small{font-size:10px}
   .panel{height:min(94dvh,850px)}
 }
+
+
+/* V3 · Compact Denti. Explicit sizes override the old first-child rule that
+   accidentally let the SVG expand to hundreds of pixels in the patient portal. */
+.activador {
+  box-sizing:border-box!important;
+  right:clamp(14px,2vw,28px);bottom:clamp(14px,2vw,26px);
+  width:auto;max-width:min(205px,calc(100vw - 28px));height:56px;
+  min-height:56px;max-height:56px;
+  gap:9px;padding:6px 17px 6px 8px;
+  border:1px solid rgba(255,255,255,.38);border-radius:18px;
+  background:linear-gradient(132deg,#0d5367,#087e8c);
+  box-shadow:0 7px 22px rgba(14,75,94,.21),inset 0 1px 0 rgba(255,255,255,.15);
+  font-size:12px;line-height:1.2;font-weight:750;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;
+  transition:box-shadow .2s ease,transform .2s ease,background .2s ease;
+}
+.activador:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(14,75,94,.24),inset 0 1px 0 rgba(255,255,255,.2)}
+.activador:active{transform:translateY(0)}
+.activador > span:first-child {
+  box-sizing:border-box;
+  display:inline-flex;
+  width:38px!important;height:40px!important;min-width:38px;max-width:38px;
+  flex:0 0 38px!important;place-items:center;
+  border-radius:12px;background:linear-gradient(145deg,#fff,#e2f6f6);
+  overflow:hidden;
+}
+.activador > span:first-child svg{
+  display:block;width:100%!important;height:100%!important;
+  max-width:100%!important;max-height:100%!important;
+}
+.activador > span:last-child{display:block;min-width:0;white-space:nowrap}
+.panel{
+  box-sizing:border-box;
+  right:clamp(12px,2vw,28px);bottom:95px;
+  width:min(408px,calc(100vw - 24px));height:min(620px,calc(100dvh - 115px));
+  border-radius:20px;border-color:#d9e8ed;
+  box-shadow:0 22px 65px rgba(18,53,72,.22),0 3px 13px rgba(18,53,72,.08);
+}
+.encabezado{gap:10px;min-height:72px;padding:12px 16px}
+.encabezado > span:first-child{width:42px!important;height:44px!important;flex:0 0 42px!important}
+.encabezado > span:first-child svg{width:100%;height:100%;max-width:100%;max-height:100%}
+.encabezado strong{font-size:14px}
+.encabezado small{font-size:11px;line-height:1.4}
+.cuerpo{padding:15px 14px}
+.pie{flex:none;background:#fff}
+.invitacionIA{gap:8px}
+@media(max-width:600px){
+  .activador{right:12px;bottom:12px;height:52px;min-height:52px;max-height:52px;padding:5px 12px 5px 6px;border-radius:16px;font-size:11px}
+  .activador > span:first-child{width:36px!important;height:38px!important;min-width:36px;max-width:36px;flex:0 0 36px!important}
+  .panel{right:0;bottom:0;width:100%;height:min(90dvh,740px);border-radius:20px 20px 0 0;max-height:90dvh}
+}
+@media(max-width:360px){.activador{max-width:58px;padding-right:7px;gap:0}.activador > span:last-child{display:none}}
+@media(prefers-reduced-motion:reduce){.activador{transition:none!important}.activador:hover,.activador:active{transform:none!important}}
