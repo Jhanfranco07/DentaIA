@@ -4,7 +4,7 @@ import type { PaginaUsuarios, PropuestaValidada, UsuarioAdministrativo } from ".
 export type ErrorClienteAdministrativo = { ok: false; status: number; codigo: string; mensaje: string };
 export type ResultadoCliente<T> = { ok: true; valor: T } | ErrorClienteAdministrativo;
 export type ClientePanelAdministrativo = {
-  listar: (entrada: unknown) => Promise<ResultadoCliente<PaginaUsuarios>>;
+  listar: (entrada: unknown, signal?: AbortSignal) => Promise<ResultadoCliente<PaginaUsuarios>>;
   validarPropuesta: (entrada: unknown) => Promise<ResultadoCliente<PropuestaValidada>>;
 };
 
@@ -72,7 +72,7 @@ export function crearTransporteAdministrativo(
         // La ruta es same-origin: permite que Vercel Deployment Protection reciba su
         // cookie para este hostname. Nunca se envían cookies a otros orígenes.
         credentials: "same-origin", cache: "no-store", redirect: "error", referrerPolicy: "no-referrer",
-        signal: AbortSignal.timeout(10000),
+        signal: init.signal ? AbortSignal.any([init.signal, AbortSignal.timeout(10000)]) : AbortSignal.timeout(10000),
       });
       if (!respuesta.ok) {
         // Aceptar únicamente códigos públicos conocidos; ignorar cuerpo, correo y detalles del proveedor.
@@ -102,11 +102,11 @@ export function crearClienteAdministrativo(obtenerToken: () => Promise<string | 
       if (!r.ok) return r;
       return objeto(r.valor) && r.valor.autorizado === true ? { ok: true, valor: { autorizado: true } } : fallo(502, "RESPUESTA_INVALIDA");
     },
-    async listar(entrada: unknown): Promise<ResultadoCliente<PaginaUsuarios>> {
+    async listar(entrada: unknown, signal?: AbortSignal): Promise<ResultadoCliente<PaginaUsuarios>> {
       const consulta = validarConsultaUsuarios(entrada);
       if (!consulta.ok) return fallo(400, consulta.codigo);
       const parametros = new URLSearchParams(Object.entries(consulta.valor).map(([k, v]) => [k, String(v)]));
-      const r = await enviar("/api/administracion/usuarios?" + parametros);
+      const r = await enviar("/api/administracion/usuarios?" + parametros, { signal });
       if (!r.ok) return r;
       if (!paginaValida(r.valor)) return fallo(502, "RESPUESTA_INVALIDA");
       const { origen, total, pagina, paginas, tamano } = r.valor;
