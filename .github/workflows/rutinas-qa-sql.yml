@@ -1,0 +1,57 @@
+name: Rutinas · QA SQL aislada
+
+'on':
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/sql/DI-207-*.sql'
+      - 'scripts/qa/rutinas/**'
+      - '.github/workflows/rutinas-qa-sql.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rutinas-sql-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validar-seguimiento:
+    name: Validar consentimientos y RLS en PostgreSQL temporal
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: prueba-local-sintetica
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 15
+    env:
+      PGHOST: localhost
+      PGPORT: '5432'
+      PGDATABASE: postgres
+      PGUSER: postgres
+      PGPASSWORD: prueba-local-sintetica
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Crear datos exclusivamente ficticios
+        run: psql -v ON_ERROR_STOP=1 -f scripts/qa/rutinas/01_entorno_sintetico.sql
+      - name: Crear esquema con RLS denegado por defecto
+        run: psql -v ON_ERROR_STOP=1 -f docs/sql/DI-207-propuesta-esquema-rutinas.sql
+      - name: Instalar funciones transaccionales restringidas
+        run: psql -v ON_ERROR_STOP=1 -f docs/sql/DI-207-operaciones-transaccionales.sql
+      - name: Instalar consultas autorizadas
+        run: psql -v ON_ERROR_STOP=1 -f docs/sql/DI-207-consultas-autorizadas.sql
+      - name: Comprobar acceso cruzado, progreso, aceptación y revocación
+        run: psql -v ON_ERROR_STOP=1 -f scripts/qa/rutinas/02_pruebas_rls.sql

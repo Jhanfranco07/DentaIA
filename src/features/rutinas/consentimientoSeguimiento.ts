@@ -4,11 +4,12 @@
  * Estas validaciones son reglas del dominio, NO reemplazan la autorización
  * de Supabase RLS ni una operación transaccional del servidor.
  */
-export type EstadoConsentimiento = "pendiente" | "aprobado" | "revocado";
+export type EstadoConsentimiento = "pendiente" | "aprobado" | "rechazado" | "revocado" | "expirado";
 export type EstadoPropuesta = "propuesta" | "aceptada" | "rechazada" | "revocada";
 export type ActorRutina = "paciente" | "odontologo";
 export type OperacionRutina =
   | "aprobar_seguimiento"
+  | "rechazar_seguimiento"
   | "revocar_seguimiento"
   | "proponer_plan"
   | "aceptar_plan"
@@ -38,6 +39,7 @@ export function puedeOperarSeguimiento(
   const esProfesional = actor === "odontologo" && usuarioId === contexto.profesionalId;
   if (operacion === "aprobar_seguimiento") return esPaciente && contexto.consentimiento === "pendiente"
     && contexto.profesionalVerificado && contexto.membresiaActiva;
+  if (operacion === "rechazar_seguimiento") return esPaciente && contexto.consentimiento === "pendiente";
   if (operacion === "revocar_seguimiento") return esPaciente && contexto.consentimiento === "aprobado";
   const accesoVigente = contexto.consentimiento === "aprobado"
     && contexto.autorizacionVigente && contexto.profesionalVerificado && contexto.membresiaActiva;

@@ -2,6 +2,12 @@ import type { PlanCatalogo } from "./contrato";
 
 export type MarcaRutina = { activity_id: string; plan_id: string; completion_date: string };
 export type ProgresoRutina = { completadas: number; total: number; porcentaje: number };
+export type IntervaloAsignacion = {
+  planId: string;
+  actividadIds: readonly string[];
+  aceptadaEn: string;
+  revocadaEn: string | null;
+};
 
 export function fechaHoyLima(ahora = new Date()): string {
   const partes = new Intl.DateTimeFormat("en-CA", {
@@ -19,14 +25,38 @@ export function progresoDelDia(total: number, marcas: readonly MarcaRutina[]): P
 export function progresoHistorial(
   catalogo: readonly PlanCatalogo[],
   marcas: readonly MarcaRutina[],
+  asignaciones: readonly IntervaloAsignacion[] = [],
 ): { fecha: string; progreso: ProgresoRutina | null }[] {
   const fechas = [...new Set(marcas.map(marca => marca.completion_date))].sort((a, b) => b.localeCompare(a));
   return fechas.map(fecha => {
     const delDia = marcas.filter(marca => marca.completion_date === fecha);
+    const aplicables = asignaciones.filter(asignacion => {
+      const inicio = Date.parse(asignacion.aceptadaEn);
+      const fin = asignacion.revocadaEn ? Date.parse(asignacion.revocadaEn) : null;
+      if (!Number.isFinite(inicio) || (fin !== null && !Number.isFinite(fin))) return false;
+      return fechaHoyLima(new Date(inicio)) <= fecha
+        && (fin === null || fechaHoyLima(new Date(fin)) >= fecha);
+    }).sort((a, b) => b.aceptadaEn.localeCompare(a.aceptadaEn));
+    const vigente = aplicables[0];
+    if (vigente) {
+      const plan = catalogo.find(item => item.id === vigente.planId);
+      if (!plan) return { fecha, progreso: null };
+      const permitidas = new Set(vigente.actividadIds);
+      if (!permitidas.size || plan.activities.filter(a => permitidas.has(
+        "id" in a && typeof a.id === "string" ? a.id : ""
+      )).length !== permitidas.size) return { fecha, progreso: null };
+      return {
+        fecha, progreso: progresoDelDia(permitidas.size, delDia.filter(
+          marca => marca.plan_id === vigente.planId && permitidas.has(marca.activity_id)
+        )),
+      };
+    }
+    // No sumar marcas de versiones distintas del plan del día.
     const planId = delDia[0]?.plan_id;
     const plan = catalogo.find(item => item.id === planId);
     if (!plan) return { fecha, progreso: null };
-    return { fecha, progreso: progresoDelDia(plan.activities.length, delDia) };
+    return { fecha, progreso: progresoDelDia(plan.activities.length,
+      delDia.filter(marca => marca.plan_id === planId)) };
   });
 }
 

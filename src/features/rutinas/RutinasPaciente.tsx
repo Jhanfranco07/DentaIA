@@ -7,8 +7,9 @@ import { Icono } from "@/components/Identidad";
 import { useSesion } from "@/features/cuenta/useSesion";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { marcarActividadRutina, leerHistorialRutinas, leerRutinaDelDia, type EstadoDiaRutina } from "./datos";
-import { fechaHoyLima, progresoDelDia, progresoHistorial, type MarcaRutina } from "./modelo";
+import { fechaHoyLima, progresoDelDia, progresoHistorial, type MarcaRutina, type IntervaloAsignacion } from "./modelo";
 import type { PlanCatalogo } from "./contrato";
+import SeguimientoRutinasPaciente from "./SeguimientoRutinasPaciente";
 import styles from "./rutinas.module.css";
 
 const MOMENTOS = [
@@ -25,6 +26,7 @@ export default function RutinasPaciente() {
   const [dia, setDia] = useState<EstadoDiaRutina | null>(null);
   const [marcas, setMarcas] = useState<MarcaRutina[]>([]);
   const [catalogo, setCatalogo] = useState<PlanCatalogo[]>([]);
+  const [asignaciones, setAsignaciones] = useState<IntervaloAsignacion[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState<string | null>(null);
@@ -49,15 +51,15 @@ export default function RutinasPaciente() {
   }, []);
 
   const cargar = useCallback(async (activo: () => boolean = () => true) => {
-    if (!usuario?.id) { if (activo()) { setDia(null); setMarcas([]); setCatalogo([]); setCargando(false); } return; }
-    setCargando(true); setError(""); setDia(null); setMarcas([]); setCatalogo([]);
+    if (!usuario?.id) { if (activo()) { setDia(null); setMarcas([]); setCatalogo([]); setAsignaciones([]); setCargando(false); } return; }
+    setCargando(true); setError(""); setDia(null); setMarcas([]); setCatalogo([]); setAsignaciones([]);
     try {
       const cliente = getSupabaseBrowserClient();
       const [estado, historial] = await Promise.all([
         leerRutinaDelDia(cliente, usuario.id, fecha),
         leerHistorialRutinas(cliente, usuario.id),
       ]);
-      if (activo()) { setDia(estado); setMarcas(historial.marcas); setCatalogo(historial.catalogo); }
+      if (activo()) { setDia(estado); setMarcas(historial.marcas); setCatalogo(historial.catalogo); setAsignaciones(historial.asignaciones); }
     } catch {
       if (activo()) { setDia(null); setError("No pudimos cargar tus rutinas. Comprueba tu conexión e inténtalo otra vez."); }
     } finally { if (activo()) setCargando(false); }
@@ -72,7 +74,7 @@ export default function RutinasPaciente() {
   const progreso = progresoDelDia(dia?.actividades.length ?? 0,
     (dia?.actividades ?? []).filter(actividad => dia?.completadas.includes(actividad.id))
       .map(actividad => ({ activity_id: actividad.id, plan_id: dia?.plan?.id ?? "", completion_date: fecha })));
-  const historial = useMemo(() => progresoHistorial(catalogo, marcas), [catalogo, marcas]);
+  const historial = useMemo(() => progresoHistorial(catalogo, marcas, asignaciones), [catalogo, marcas, asignaciones]);
   const diasCompletos = historial.filter(d => d.progreso && d.progreso.total > 0 && d.progreso.completadas === d.progreso.total).length;
 
   async function alternar(actividadId: string, completada: boolean) {
@@ -91,7 +93,7 @@ export default function RutinasPaciente() {
     <header className={styles.encabezado}>
       <span className={styles.etiqueta}><Icono nombre="escudo" size={17} /> MI CUIDADO DENTAL</span>
       <h1 id="rutinas-titulo">Mis rutinas</h1>
-      <p>Registra tus hábitos, aprende con las guías y revisa tu progreso. Este es un plan preventivo general, no un tratamiento personalizado.</p>
+      <p>Registra tus hábitos, aprende con las guías y revisa tu progreso. Las propuestas educativas se activan únicamente después de tu aceptación; no reemplazan un tratamiento odontológico.</p>
     </header>
 
     <div className={styles.resumen} aria-label="Resumen de actividades">
@@ -104,7 +106,7 @@ export default function RutinasPaciente() {
       <div className={styles.principal}>
         <section className={styles.tarjeta} aria-labelledby="rutina-dia-titulo">
           <div className={styles.tituloFila}>
-            <div><span className={styles.sobrelinea}>HÁBITOS PREVENTIVOS</span><h2 id="rutina-dia-titulo">{dia?.plan?.title ?? "Rutina del día"}</h2></div>
+            <div><span className={styles.sobrelinea}>{dia?.origen === "personalizado" ? "PLAN EDUCATIVO ACEPTADO" : "HÁBITOS PREVENTIVOS"}</span><h2 id="rutina-dia-titulo">{dia?.plan?.title ?? "Rutina del día"}</h2></div>
             <div className={styles.fechaAcciones}>
             {!esHoy && <button type="button" className={styles.volverHoy} onClick={() => setFecha(hoy)}>Volver a hoy</button>}
             <label className={styles.selectorFecha}>Fecha
@@ -147,6 +149,7 @@ export default function RutinasPaciente() {
               })}
             </>}
         </section>
+        <SeguimientoRutinasPaciente />
         <section className={styles.ajustesAvisos} aria-labelledby="avisos-rutina-titulo">
           <div><h2 id="avisos-rutina-titulo">Avisos de Denti</h2>
             <p>Permite que Denti te salude y recuerde tus actividades cuando utilices DentaIA. No enviamos notificaciones fuera de la aplicación.</p>
@@ -176,7 +179,7 @@ export default function RutinasPaciente() {
             </label>
           </div>}
         </section>
-        <p className={styles.nota}>Esta rutina es preventiva y general. No se adapta automáticamente a hallazgos de fotografías ni sustituye la orientación profesional.</p>
+        <p className={styles.nota}>Las rutinas se basan en actividades preventivas. La selección aceptada por ti no constituye tratamiento ni se genera automáticamente a partir de fotografías.</p>
       </div>
 
       <aside className={styles.historial} aria-labelledby="historial-titulo">
