@@ -576,6 +576,10 @@ export type Database = {
         Args: { p_dentist_id: string; p_propietario: boolean }
         Returns: boolean
       }
+      cancelar_cita_paciente: {
+        Args: { p_solicitud_id: string }
+        Returns: boolean
+      }
       gestionar_cita_profesional: {
         Args: { p_solicitud_id: string; p_accion: string }
         Returns: Json
