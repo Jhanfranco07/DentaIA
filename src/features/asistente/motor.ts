@@ -17,10 +17,22 @@ export type RespuestaAsistente = {
 const ruta = (href: string, etiqueta: string) => ({ href, etiqueta });
 const BASE = "Te acompaño con orientación educativa. No sustituyo a un odontólogo ni puedo confirmar un diagnóstico a partir de una foto.";
 
+/** Triage conservador: variantes habituales sin tildes; compartido por chat y servidor. */
+export function esUrgenciaBucal(pregunta: string): boolean {
+  const texto = pregunta.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const respiracion = /(?:no (?:puedo|logro|consigo) (?:bien )?(?:respirar|tragar)|(?:me cuesta|dificultad(?:es)? (?:para|al)) .*?(?:respirar|tragar)|(?:falta (?:de |el )?aire|me ahogo|asfixia|no puedo pasar saliva))/.test(texto);
+  const hinchazon = /(?:hincha(?:zon|da|do|miento)?|inflama(?:cion|da|do|do)?).*?(?:cara|rostro|cuello|mejilla)|(?:cara|rostro|cuello|mejilla).*?(?:hincha|inflama)/.test(texto);
+  const hemorragia = /(?:hemorragia|(?:sangra|sangrado|sangre).*?(?:mucho|abundante|sin parar|no para|no se detiene)|(?:no (?:deja|paro) de sangrar))/.test(texto);
+  const trauma = /(?:traumatismo|golpe|accidente).*?(?:fuerte|grave|severo)/.test(texto);
+  const dolor = /dolor.*?(?:insoportable|inaguantable|muy intenso)/.test(texto);
+  const fiebre = /fiebre/.test(texto) && /(?:hincha|inflama|absceso)/.test(texto);
+  return respiracion || hinchazon || hemorragia || trauma || dolor || fiebre;
+}
+
 export function responderOrientacion(pregunta: string, observacion: ObservacionAsistente | null = null): RespuestaAsistente {
   const texto = pregunta.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().slice(0, 500);
   const gui = (ids: string[]) => ids.filter(id => GUIAS_BUCALES.some(g => g.id === id));
-  const urgencia = /hinchazon.*(cara|cuello)|dificultad.*(respirar|tragar)|sangrado.*(abundante|no para)|traumatismo.*(fuerte|grave)|fiebre.*(hinchazon|inflamacion)|dolor.*insoportable/.test(texto);
+  const urgencia = esUrgenciaBucal(pregunta);
   if (urgencia) return {
     texto: "Lo que describes podría requerir atención urgente. Busca atención médica u odontológica presencial inmediata; si tienes dificultad para respirar o tragar, acude a emergencias. No esperes un resultado de IA.",
     guias: [], especialidad: null, enlaces: [ruta("/directorio", "Ver directorio (no sustituye urgencias)")], alerta: true,
