@@ -10,6 +10,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { Icono, Marca, type NombreIcono } from "./Identidad";
 import styles from "./portal-shell.module.css";
 import { useTema } from "./Tema";
+import AsistentePaciente from "@/features/asistente/AsistentePaciente";
 
 export type EnlacePortal = { href: string; etiqueta: string; exacto?: boolean; icono?: NombreIcono; grupo?: string };
 
@@ -142,6 +143,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
       </header>
       {error && <p className={styles.error} role="alert">{error}</p>}
       <main id="contenido" tabIndex={-1} className={styles.contenido}>{children}</main>
+      {area === "Paciente" && <AsistentePaciente />}
     </div>
   </div>;
 }
