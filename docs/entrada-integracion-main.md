@@ -5,7 +5,7 @@ Rama de trabajo: `feature/angie-entrada-diente`.
 
 Se conserva el nuevo inicio editorial y el carrusel de campaña de main.
 La entrada animada de DentaIA se renderiza antes de ese contenido, con fondo
-`#087f8c`, anillo y revelado mediante la silueta del diente, sin botón.
+`#0A2358`, anillo y revelado mediante la silueta del diente, sin botón.
 El conflicto de `src/app/(public)/page.tsx` se resolvió conservando la página
 actual de main e incorporando solamente la entrada.
 

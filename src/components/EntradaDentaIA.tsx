@@ -13,7 +13,7 @@ export default function EntradaDentaIA() {
           <g className={styles.apertura}><path d={SILUETA_DIENTE} transform="translate(-12 -9)" fill="black" /></g>
         </mask>
       </defs>
-      <rect x="-100" y="-100" width="200" height="200" fill="#087f8c" mask="url(#dentaia-entrada-revelado)" />
+      <rect x="-100" y="-100" width="200" height="200" fill="#0a2358" mask="url(#dentaia-entrada-revelado)" />
       <g className={styles.apertura}><path className={styles.borde} d={SILUETA_DIENTE} transform="translate(-12 -9)" vectorEffect="non-scaling-stroke" /></g>
     </svg>
     <div className={styles.escena}>
