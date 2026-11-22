@@ -4,17 +4,17 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { GUIAS_BUCALES } from "@/features/buenas-practicas/contenido";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { responderOrientacion, type ObservacionAsistente, type RespuestaAsistente } from "./motor";
+import { detectarDestinoDenti, responderOrientacion, type DestinoDenti, type ObservacionAsistente, type RespuestaAsistente } from "./motor";
 import styles from "./asistente.module.css";
 import MascotaDenti from "./MascotaDenti";
 
-type Mensaje = { id: number; pregunta?: string; respuesta: RespuestaAsistente; origen?: "llm" | "guiado" | "seguridad"; intentoIA?: boolean };
+type Mensaje = { id: number; pregunta?: string; respuesta: RespuestaAsistente; origen?: "llm" | "guiado" | "seguridad"; intentoIA?: boolean; destino?: DestinoDenti };
 type Precio = { id: string; nombre: string; profesional: string; distrito: string; especialidad: string; demo: boolean; monto: number | null; moneda: string; slug: string };
 type Fila = { id: string; name: string; price_amount: number | null; currency_code: string; dentist_id: string;
   dentists: { name: string; district: string; specialty: string; is_demo: boolean; is_active: boolean; slug: string } | null };
-const EJEMPLOS = ["¿Cómo me cepillo mejor?", "¿Por qué se ven amarillos mis dientes?", "Ayúdame con mi rutina", "Busco odontólogo y precios"];
+const EJEMPLOS = ["Guía de cepillado", "¿Cómo uso hilo dental?", "Preparar fotografía", "¿Por qué tengo dientes amarillos?"];
 const SALUDO: RespuestaAsistente = {
-  texto: "¡Hola! 🦷 Soy Denti. Cuéntame qué te preocupa de tu sonrisa o qué quieres aprender. Te lo explicaré aquí mismo, sin hacerte leer guías. No reemplazo una evaluación odontológica.",
+  texto: "¡Hola! Soy Denti. Puedo llevarte a una guía o módulo con tu permiso, o responder aquí tus dudas generales sobre salud bucal. ¿Qué necesitas?",
   guias: [], especialidad: null, alerta: false, enlaces: [],
 };
 const filtrar = (texto: string) => texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -78,19 +78,22 @@ export default function AsistentePaciente() {
   async function enviar(pregunta: string) {
     const limpia = pregunta.trim().slice(0, 500);
     if (!limpia || pensando) return;
-    const respuesta = responderOrientacion(limpia, observacion);
+    const destino = detectarDestinoDenti(limpia);
+    const respuesta: RespuestaAsistente = destino
+      ? { texto: `Encontré ${destino.tipo === "guia" ? "una guía" : "un espacio de DentaIA"} para ayudarte: ${destino.titulo}. ¿Quieres que te lleve allí?`, guias: [], enlaces: [], especialidad: null, alerta: false }
+      : responderOrientacion(limpia, observacion);
     const id = contador.current++;
     const historial = mensajes.filter(m => m.pregunta).slice(-3).flatMap(m => [
       { rol: "usuario" as const, texto: m.pregunta ?? "" },
       { rol: "asistente" as const, texto: m.respuesta.texto },
     ]);
-    const consultarIA = usarIA && !respuesta.alerta;
+    const consultarIA = usarIA && !respuesta.alerta && !destino;
     // La respuesta de emergencia es inmediata y determinista. Para las consultas
     // con IA no mostramos una respuesta genérica y luego la reemplazamos.
     const temporal = consultarIA
       ? { ...respuesta, texto: "Estoy preparando una explicación para ti…", guias: [], enlaces: [] }
       : respuesta;
-    setMensajes(prev => [...prev.slice(-19), { id, pregunta: limpia, respuesta: temporal, origen: consultarIA ? undefined : "guiado", intentoIA: consultarIA }]);
+    setMensajes(prev => [...prev.slice(-19), { id, pregunta: limpia, respuesta: temporal, origen: consultarIA ? undefined : "guiado", intentoIA: consultarIA, destino: destino ?? undefined }]);
     setTexto("");
     if (respuesta.especialidad && /precio|costo|tarifa|cuanto|odontologo|dentista|profesional|limpieza|ortodoncia/.test(filtrar(limpia))) {
       void consultarPrecios();
@@ -139,17 +142,23 @@ export default function AsistentePaciente() {
   return <>
     <button ref={activador} type="button" className={styles.activador} onClick={() => setAbierto(a => !a)}
       aria-expanded={abierto} aria-controls="asistente-dentaia" aria-label={abierto ? "Cerrar asistente DentaIA" : "Abrir asistente DentaIA"}>
-      <MascotaDenti pequeno /><span>Denti te acompaña</span>
+      <MascotaDenti pequeno /><span>Habla con Denti</span>
     </button>
     {abierto && <section id="asistente-dentaia" className={styles.panel} role="dialog" aria-label="Asistente de cuidado bucal" aria-modal="false">
-      <header className={styles.encabezado}><MascotaDenti pequeno pensando={pensando} /><div><strong>Denti · Tu asistente</strong><small>{pensando ? "Denti está pensando…" : usarIA ? "Conversación con IA · orientación educativa" : "Te respondo aquí · activa IA si lo deseas"}</small></div>
+      <header className={styles.encabezado}><MascotaDenti pequeno pensando={pensando} /><div><strong>Denti ✦ Asistente inteligente</strong><small>{pensando ? "Preparando tu respuesta…" : "Tu guía personal dentro de DentaIA"}</small></div>
         <button type="button" aria-label="Cerrar asistente" onClick={() => setAbierto(false)}>✕</button>
       </header>
       <div className={styles.cuerpo} ref={cuerpo} role="log" aria-live="polite" aria-relevant="additions">
         {mensajes.map(m => <div className={styles.intercambio} key={m.id}>
           {m.pregunta && <p className={styles.pregunta}>{m.pregunta}</p>}
           <div className={m.respuesta.alerta ? styles.alerta : styles.respuesta}>
-            <p>{m.respuesta.texto}</p>{m.origen === "llm" && <small className={styles.origen}>Respuesta de IA · información educativa</small>}
+            {m.destino && <span className={styles.etiquetaDestino}>{m.destino.tipo === "guia" ? "GUÍA RECOMENDADA" : "ESPACIO RECOMENDADO"}</span>}
+            <p>{m.respuesta.texto}</p>
+            {m.destino && <div className={styles.accionesDestino}>
+              <Link href={m.destino.href} onClick={() => setAbierto(false)}>Sí, ir ahora <span aria-hidden="true">↗</span></Link>
+              <button type="button" onClick={() => setMensajes(prev => prev.map(item => item.id === m.id ? { ...item, destino: undefined, respuesta: { ...item.respuesta, texto: "Perfecto, seguimos aquí. ¿Qué más deseas consultar?" } } : item))}>Ahora no</button>
+            </div>}
+            {m.origen === "llm" && <small className={styles.origen}>Respuesta de IA · información educativa</small>}
             {m.origen === "guiado" && m.pregunta && m.intentoIA && !m.respuesta.alerta && <small className={styles.origen}>Respuesta local de respaldo: IA no disponible en esta consulta</small>}
             {m.respuesta.guias.length > 0 && <details className={styles.fuentes}>
               <summary>Ver fuentes de esta respuesta (opcional)</summary>
@@ -186,14 +195,14 @@ export default function AsistentePaciente() {
           ? <div className={styles.estadoIA}><span aria-label="IA activada">✦ IA activada</span>
               <button type="button" disabled={pensando} onClick={() => setUsarIA(false)}>Usar modo privado</button></div>
           : <div className={styles.invitacionIA}>
-              <div><strong>¿Quieres que Denti te responda con IA?</strong>
-                <p>Explicaciones directas, sin leer guías. Tus preguntas y los últimos mensajes se enviarán a OpenAI; no enviamos fotos. Los resultados visuales solo se comparten si tú lo solicitas.</p></div>
-              <button type="button" onClick={() => setUsarIA(true)}>✦ Activar IA</button>
+              <div><strong>IA para consultas generales</strong>
+                <p>Opcional. Tus preguntas y los últimos mensajes se enviarán a OpenAI; no enviamos fotos. Los resultados visuales solo se comparten si tú lo solicitas.</p></div>
+              <button type="button" onClick={() => setUsarIA(true)}>✦ Activar</button>
             </div>}
         <div className={styles.sugerencias}>{EJEMPLOS.map(e => <button key={e} type="button" onClick={() => void enviar(e)}>{e}</button>)}</div>
         <form onSubmit={submit} className={styles.formulario}><label htmlFor="pregunta-asistente" className={styles.sr}>Escribe tu pregunta</label>
           <input ref={entrada} id="pregunta-asistente" value={texto} maxLength={500} onChange={e => setTexto(e.target.value)}
-            placeholder="¿Qué puedo hacer por mi sonrisa?" />
+            placeholder="Pregunta o busca una guía…" />
           <button type="submit" disabled={!texto.trim()} aria-label="Enviar pregunta">➤</button>
         </form>
                 <small>{usarIA ? "IA educativa, no diagnóstico. Si la IA no está disponible, Denti responderá con orientación local." : "Modo privado: no enviamos preguntas a modelos externos hasta que actives la IA."}</small>
