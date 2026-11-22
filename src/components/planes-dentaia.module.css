@@ -8,7 +8,9 @@
 .intro > p:last-child { max-width: 35ch; margin-block: 20px 0; color: var(--public-muted); }
 .intro h2 { font-size: clamp(2.55rem, 4vw, 3.75rem); }
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.cardSlot { display: flex; min-width: 0; }
 .card {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -19,35 +21,18 @@
 }
 .featured { background: var(--public-navy); }
 
-/* La apertura sigue el desplazamiento, sin alterar el espacio de las tarjetas.
-   Sin soporte de view-timeline, el contenido queda visible normalmente. */
-@supports (animation-timeline: view()) and (animation-range: entry 0% entry 100%) {
-  @media (prefers-reduced-motion: no-preference) {
-    .card {
-      animation: abrirTarjeta linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 85%;
-    }
-    .featured { animation-range: entry 18% entry 100%; }
-    .card:focus-within { animation: none; }
-    :global(html[data-a11y-movimiento="true"]) .card { animation: none; }
+/* Mejora progresiva: sin JavaScript, las tarjetas se muestran completas. */
+@media (prefers-reduced-motion: no-preference) {
+  .grid[data-apertura="activa"] .card {
+    opacity: var(--plan-opacidad, 1);
+    clip-path: inset(0 0 var(--plan-corte, 0%) 0 round var(--public-panel));
+    transform: translateY(var(--plan-desplazamiento, 0px));
   }
-}
-
-@keyframes abrirTarjeta {
-  from {
-    opacity: .4;
-    clip-path: inset(0 0 48% 0 round var(--public-panel));
-    transform: translateY(48px);
-  }
-  60% {
-    opacity: .9;
-    clip-path: inset(0 0 12% 0 round var(--public-panel));
-  }
-  to {
+  .grid[data-apertura="activa"] .card:focus-within,
+  :global(html[data-a11y-movimiento="true"]) .grid[data-apertura="activa"] .card {
     opacity: 1;
-    clip-path: inset(0 0 0 0 round var(--public-panel));
-    transform: translateY(0);
+    clip-path: none;
+    transform: none;
   }
 }
 .card h3 { margin: 0; font-size: 1.1875rem; font-weight: 600; letter-spacing: -.02em; }
