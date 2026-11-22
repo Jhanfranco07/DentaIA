@@ -31,12 +31,22 @@ export default function AperturaPlanes({ children, className }: {
       tarjetas.forEach((tarjeta, indice) => {
         const inicio = alto * (.96 - indice * .12);
         const recorrido = Math.max(1, alto * .6);
+        const rect = tarjeta.getBoundingClientRect();
         const enfocado = tarjeta.contains(document.activeElement);
-        const progreso = enfocado ? 1 : Math.min(1, Math.max(0,
-          (inicio - tarjeta.getBoundingClientRect().top) / recorrido,
+        const progreso = Math.min(1, Math.max(0,
+          (inicio - rect.top) / recorrido,
         ));
-        // Como una hoja que se abre hacia la derecha desde el borde izquierdo.
-        tarjeta.style.setProperty("--plan-giro", `${(1 - progreso) * 78}deg`);
+        // Conserva un tramo de lectura de frente antes de cerrar por el otro lado.
+        // Medir el borde inferior permite leer también tarjetas altas en móviles.
+        const inicioSalida = Math.min(
+          alto * (.58 - indice * .1),
+          inicio - recorrido + rect.height - alto * .12,
+        );
+        const salida = Math.min(1, Math.max(0,
+          (inicioSalida - rect.bottom) / Math.max(1, alto * .5),
+        ));
+        const giro = enfocado ? 0 : (1 - progreso) * 78 - salida * 78;
+        tarjeta.style.setProperty("--plan-giro", `${giro}deg`);
       });
       grid.dataset.apertura = "activa";
     };

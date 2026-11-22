@@ -20,7 +20,7 @@
   border: 1px solid var(--public-rule);
   border-radius: var(--public-panel);
   background: var(--public-paper);
-  box-shadow: 0 18px 32px -22px rgb(10 35 88 / .38);
+  box-shadow: 0 30px 46px -22px rgb(10 35 88 / .38), 0 8px 18px -12px rgb(10 35 88 / .18);
   transition: box-shadow 280ms ease, border-color 280ms ease;
 }
 .featured { background: var(--public-navy); }
@@ -43,16 +43,15 @@
     transform: perspective(1400px) rotateY(var(--plan-giro, 0deg));
     transition: transform 180ms ease-out;
   }
-  .grid[data-apertura="activa"] .cardFloat { animation: flotarPlan 5s ease-in-out infinite; }
-  .cardSlot:nth-child(2) .cardFloat { animation-delay: -2.5s; }
+  .grid[data-apertura="activa"] .cardFloat { animation: flotarPlan 4.6s ease-in-out infinite; }
+  .cardSlot:nth-child(2) .cardFloat { animation-delay: -2.3s; }
   .card { transition: transform 350ms ease, box-shadow 280ms ease, border-color 280ms ease; }
   .grid[data-apertura="activa"] .cardSlot:focus-within .cardStage { transform: perspective(1400px) rotateY(0deg); }
-  .cardSlot:focus-within .card { transform: perspective(1000px) translateZ(30px) rotateY(-2deg); }
+  .cardSlot:focus-within .card { transform: perspective(1000px) translateZ(44px) rotateY(-3deg); }
   .cardSlot:focus-within .cardFloat { animation-play-state: paused; }
   @media (hover: hover) and (pointer: fine) {
-    .grid[data-apertura="activa"] .cardSlot:hover .cardStage { transform: perspective(1400px) rotateY(0deg); }
     .cardSlot:hover .cardFloat { animation-play-state: paused; }
-    .cardSlot:hover .card { transform: perspective(1000px) translateZ(30px) rotateY(-2deg); }
+    .cardSlot:hover .card { transform: perspective(1000px) translateZ(44px) rotateY(-3deg); }
   }
   :global(html[data-a11y-movimiento="true"]) .grid .cardStage,
   :global(html[data-a11y-movimiento="true"]) .grid .card {
@@ -61,8 +60,8 @@
   :global(html[data-a11y-movimiento="true"]) .grid .cardFloat { animation: none; }
 }
 @keyframes flotarPlan {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
+  0%, 100% { transform: perspective(1400px) translateY(2px) rotateX(-.6deg) rotateZ(.45deg); }
+  50% { transform: perspective(1400px) translateY(-16px) rotateX(1deg) rotateZ(-.6deg); }
 }
 .card h3 { margin: 0; font-size: 1.1875rem; font-weight: 600; letter-spacing: -.02em; }
 .card > p { margin: 12px 0 0; }
