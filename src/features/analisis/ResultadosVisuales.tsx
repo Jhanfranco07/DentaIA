@@ -117,6 +117,7 @@ export default function ResultadosVisuales({ result, oral, image, smileOverlay, 
       {explanation?.recommendation && <p>{explanation.recommendation}</p>}
       <div className={styles.educationActions}>
         <Link href="/paciente/buenas-practicas" className={styles.primaryLink}>Conocer buenas prácticas <span aria-hidden="true">↗</span></Link>
+        <Link href="/paciente/rutinas" className={styles.secondaryLink}>Seguir mi rutina preventiva</Link>
         <Link href="/panel/odontologos" className={styles.secondaryLink}>Buscar odontólogo</Link>
       </div>
       <small>{explanation?.disclaimer ?? "El resultado es orientativo y no constituye diagnóstico. No confirma una condición dental."}</small>
