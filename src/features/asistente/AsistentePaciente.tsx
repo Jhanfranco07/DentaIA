@@ -48,6 +48,7 @@ export default function AsistentePaciente() {
         if (!activo) return;
         const id = data.user?.id ?? null;
         setUsuarioIA(id);
+        setAviso(null);
         setUsarIA(id ? window.localStorage.getItem(`dentaia:denti:ia-consent:${id}`) === "true" : false);
       } catch { if (activo) { setUsuarioIA(null); setUsarIA(false); } }
     }
