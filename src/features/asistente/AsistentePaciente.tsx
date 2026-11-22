@@ -8,7 +8,7 @@ import { responderOrientacion, type ObservacionAsistente, type RespuestaAsistent
 import styles from "./asistente.module.css";
 import MascotaDenti from "./MascotaDenti";
 
-type Mensaje = { id: number; pregunta?: string; respuesta: RespuestaAsistente; origen?: "llm" | "guiado" | "seguridad" };
+type Mensaje = { id: number; pregunta?: string; respuesta: RespuestaAsistente; origen?: "llm" | "guiado" | "seguridad"; intentoIA?: boolean };
 type Precio = { id: string; nombre: string; profesional: string; distrito: string; especialidad: string; demo: boolean; monto: number | null; moneda: string; slug: string };
 type Fila = { id: string; name: string; price_amount: number | null; currency_code: string; dentist_id: string;
   dentists: { name: string; district: string; specialty: string; is_demo: boolean; is_active: boolean; slug: string } | null };
@@ -90,7 +90,7 @@ export default function AsistentePaciente() {
     const temporal = consultarIA
       ? { ...respuesta, texto: "Estoy preparando una explicación para ti…", guias: [], enlaces: [] }
       : respuesta;
-    setMensajes(prev => [...prev.slice(-19), { id, pregunta: limpia, respuesta: temporal, origen: consultarIA ? undefined : "guiado" }]);
+    setMensajes(prev => [...prev.slice(-19), { id, pregunta: limpia, respuesta: temporal, origen: consultarIA ? undefined : "guiado", intentoIA: consultarIA }]);
     setTexto("");
     if (respuesta.especialidad && /precio|costo|tarifa|cuanto|odontologo|dentista|profesional|limpieza|ortodoncia/.test(filtrar(limpia))) {
       void consultarPrecios();
@@ -150,7 +150,7 @@ export default function AsistentePaciente() {
           {m.pregunta && <p className={styles.pregunta}>{m.pregunta}</p>}
           <div className={m.respuesta.alerta ? styles.alerta : styles.respuesta}>
             <p>{m.respuesta.texto}</p>{m.origen === "llm" && <small className={styles.origen}>Respuesta de IA · información educativa</small>}
-            {m.origen === "guiado" && m.pregunta && usarIA && !m.respuesta.alerta && <small className={styles.origen}>Respuesta local de respaldo: IA no disponible en esta consulta</small>}
+            {m.origen === "guiado" && m.pregunta && m.intentoIA && !m.respuesta.alerta && <small className={styles.origen}>Respuesta local de respaldo: IA no disponible en esta consulta</small>}
             {m.respuesta.guias.length > 0 && <details className={styles.fuentes}>
               <summary>Ver fuentes de esta respuesta (opcional)</summary>
               <div className={styles.listaFuentes}>

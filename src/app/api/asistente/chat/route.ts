@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import { getUserFromRequest } from "@/lib/supabase/server-auth";
 import { rolesDesdeAppMetadata } from "@/features/autorizacion/roles";
 import { GUIAS_BUCALES } from "@/features/buenas-practicas/contenido";
-import { responderOrientacion, type ObservacionAsistente } from "@/features/asistente/motor";
+import { esUrgenciaBucal, responderOrientacion, type ObservacionAsistente } from "@/features/asistente/motor";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,7 +14,6 @@ const reply = (status: number, data: Record<string, unknown>) =>
   NextResponse.json(data, { status, headers: { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
 
 type Contexto = { pregunta: string; historial: { rol: "usuario" | "asistente"; texto: string }[]; observacion: ObservacionAsistente | null };
-const emergencia = /hinchaz[oó]n.*(cara|cuello)|dificultad.*(respirar|tragar)|sangrado.*(abundante|no para)|fiebre.*(hinchaz[oó]n|inflamaci[oó]n)|dolor.*insoportable/i;
 function validar(raw: unknown): Contexto | null {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
   const v = raw as Record<string, unknown>;
@@ -80,7 +79,7 @@ export async function POST(req: Request) {
   if (!contexto) return reply(400, { error: "Consulta no válida." });
   const orientacion = responderOrientacion(contexto.pregunta, contexto.observacion);
   // Urgent symptom guidance always comes from a deterministic safety path.
-  if (orientacion.alerta || emergencia.test(contexto.pregunta)) return reply(200, { texto: orientacion.texto, origen: "seguridad" });
+  if (orientacion.alerta || esUrgenciaBucal(contexto.pregunta)) return reply(200, { texto: orientacion.texto, origen: "seguridad" });
   const apiKey = process.env.OPENAI_API_KEY?.trim();
   const model = process.env.OPENAI_MODEL?.trim();
   if (!apiKey || !model || !await permisoLLM(user.id)) return reply(200, { texto: orientacion.texto, origen: "guiado" });
