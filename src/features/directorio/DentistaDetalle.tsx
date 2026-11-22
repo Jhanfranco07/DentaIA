@@ -11,6 +11,7 @@ import dynamic from "next/dynamic";
 import ServiciosPublicados from "./ServiciosPublicados";
 import ResenasOdontologo from "./ResenasOdontologo";
 import ContactoDirecto from "./ContactoDirecto";
+import ValoracionPerfil from "./ValoracionPerfil";
 import mapStyles from "./mapa-directorio.module.css";
 import { AVISO_PERFILES_DEMO, completarCatalogoDemo, perfilDemo } from "./catalogo-demo";
 import AvatarOdontologo, { tratamientoDemo } from "./AvatarOdontologo";
@@ -144,6 +145,7 @@ export default function DentistaDetalle({ id, baseDirectorio = "/directorio", qa
             <p className={styles.especialidad}>
               {textoOpcional(carga.dentista.specialty, "Especialidad no indicada")}
             </p>
+            {!carga.dentista.is_demo && <ValoracionPerfil dentistId={carga.dentista.id} />}
 
             <dl className={styles.datos}>
               <div>
