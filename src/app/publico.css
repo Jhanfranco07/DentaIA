@@ -110,6 +110,20 @@
   color: var(--public-paper);
 }
 
+.public-viewfinder {
+  position: absolute;
+  pointer-events: none;
+}
+.public-viewfinder::before, .public-viewfinder::after {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 1px solid currentColor;
+  content: "";
+}
+.public-viewfinder::before { inset: 0 auto auto 0; border-right: 0; border-bottom: 0; }
+.public-viewfinder::after { inset: auto 0 0 auto; border-top: 0; border-left: 0; }
+
 .public-site .site-header {
   border-color: var(--public-light-rule);
   background: var(--public-deep);
@@ -195,6 +209,29 @@
 }
 .public-site .footer-note p { color: var(--public-light-text); margin: 0; font-size: .8125rem; max-width: 75ch; }
 
+.public-site .public-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .92fr);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border-radius: var(--public-panel);
+  background: var(--public-navy);
+  color: var(--public-paper);
+}
+.public-intro > div { padding: clamp(24px, 4vw, 60px); }
+.public-site .public-intro .eyebrow { color: var(--public-mist); }
+.public-site .public-intro h1 { margin: 0; font: 400 var(--public-h1)/.97 var(--public-display); letter-spacing: -.045em; text-wrap: pretty; }
+.public-site .public-intro h1 + p { max-width: 46ch; color: var(--public-light-text); }
+.public-site .public-intro img {
+  align-self: stretch;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 0 var(--public-panel) var(--public-panel) 0;
+}
+
 @media (max-width: 900px) {
   .public-site .site-header-inner {
     min-height: 64px;
@@ -240,6 +277,8 @@
   .public-site .site-nav a { white-space: normal; }
   .public-site .site-footer-inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding-block: 40px 32px; gap: 24px 16px; }
   .public-site .footer-brand { grid-column: 1 / -1; }
+  .public-site .public-intro { grid-template-columns: minmax(0, 1fr); }
+  .public-site .public-intro img { height: auto; max-height: 340px; border-radius: 0 0 var(--public-panel) var(--public-panel); }
 }
 
 @keyframes public-menu-in {
