@@ -23,6 +23,7 @@ export default function PlanesDentaIA() {
     </div>
     <AperturaPlanes className={styles.grid}>
       <div className={styles.cardSlot}>
+      <div className={styles.cardStage}><div className={styles.cardFloat}>
       <article className={styles.card}>
         <h3>Gratis</h3>
         <p className={styles.price}>S/ 0 <small>/ siempre</small></p>
@@ -34,8 +35,10 @@ export default function PlanesDentaIA() {
         </ul>
         <Link className="action action-secondary" href="/cuenta?modo=registro">Comenzar gratis <Icono nombre="flecha" size={16} /></Link>
       </article>
+      </div></div>
       </div>
       <div className={styles.cardSlot}>
+      <div className={styles.cardStage}><div className={styles.cardFloat}>
       <article className={`${styles.card} ${styles.featured} public-inverse`}>
         <h3>Premium</h3>
         <p className={styles.price}>S/ {precio} <small>/ mes</small></p>
@@ -48,6 +51,7 @@ export default function PlanesDentaIA() {
         <Link className="action" href="/premium?iniciar=1">Elegir Premium <Icono nombre="flecha" size={16} /></Link>
         <small className={styles.nota}>Pago de prueba. Stripe Sandbox no realiza cobros reales.</small>
       </article>
+      </div></div>
       </div>
     </AperturaPlanes>
     <div className={styles.details} data-reveal>

@@ -29,8 +29,8 @@ export default function AperturaPlanes({ children, className }: {
       if (media.matches) { limpiar(); return; }
       const alto = window.innerHeight;
       tarjetas.forEach((tarjeta, indice) => {
-        const inicio = alto * (.94 - indice * .1);
-        const recorrido = Math.max(1, alto * .42);
+        const inicio = alto * (.96 - indice * .12);
+        const recorrido = Math.max(1, alto * .6);
         const enfocado = tarjeta.contains(document.activeElement);
         const progreso = enfocado ? 1 : Math.min(1, Math.max(0,
           (inicio - tarjeta.getBoundingClientRect().top) / recorrido,

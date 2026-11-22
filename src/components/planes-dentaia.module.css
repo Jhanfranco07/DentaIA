@@ -8,7 +8,9 @@
 .intro > p:last-child { max-width: 35ch; margin-block: 20px 0; color: var(--public-muted); }
 .intro h2 { font-size: clamp(2.55rem, 4vw, 3.75rem); }
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.cardSlot { display: flex; min-width: 0; }
+.cardSlot { display: flex; min-width: 0; position: relative; }
+.cardStage, .cardFloat { display: flex; width: 100%; min-width: 0; }
+.cardSlot:hover, .cardSlot:focus-within { z-index: 1; }
 .card {
   width: 100%;
   display: flex;
@@ -18,20 +20,49 @@
   border: 1px solid var(--public-rule);
   border-radius: var(--public-panel);
   background: var(--public-paper);
+  box-shadow: 0 18px 32px -22px rgb(10 35 88 / .38);
+  transition: box-shadow 280ms ease, border-color 280ms ease;
 }
 .featured { background: var(--public-navy); }
+.cardSlot:focus-within .card {
+  border-color: var(--public-sky, #54a2d9);
+  box-shadow: 0 0 0 2px rgb(84 162 217 / .7), 0 0 30px rgb(84 162 217 / .35), 0 28px 44px -20px rgb(10 35 88 / .45);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cardSlot:hover .card {
+    border-color: var(--public-sky, #54a2d9);
+    box-shadow: 0 0 0 2px rgb(84 162 217 / .7), 0 0 30px rgb(84 162 217 / .35), 0 28px 44px -20px rgb(10 35 88 / .45);
+  }
+}
 
 /* Mejora progresiva: sin JavaScript, las tarjetas se muestran completas. */
 @media (prefers-reduced-motion: no-preference) {
-  .grid[data-apertura="activa"] .card {
+  .grid[data-apertura="activa"] .cardStage {
     transform-origin: left center;
     backface-visibility: hidden;
     transform: perspective(1400px) rotateY(var(--plan-giro, 0deg));
+    transition: transform 180ms ease-out;
   }
-  .grid[data-apertura="activa"] .card:focus-within,
-  :global(html[data-a11y-movimiento="true"]) .grid[data-apertura="activa"] .card {
-    transform: none;
+  .grid[data-apertura="activa"] .cardFloat { animation: flotarPlan 5s ease-in-out infinite; }
+  .cardSlot:nth-child(2) .cardFloat { animation-delay: -2.5s; }
+  .card { transition: transform 350ms ease, box-shadow 280ms ease, border-color 280ms ease; }
+  .grid[data-apertura="activa"] .cardSlot:focus-within .cardStage { transform: perspective(1400px) rotateY(0deg); }
+  .cardSlot:focus-within .card { transform: perspective(1000px) translateZ(30px) rotateY(-2deg); }
+  .cardSlot:focus-within .cardFloat { animation-play-state: paused; }
+  @media (hover: hover) and (pointer: fine) {
+    .grid[data-apertura="activa"] .cardSlot:hover .cardStage { transform: perspective(1400px) rotateY(0deg); }
+    .cardSlot:hover .cardFloat { animation-play-state: paused; }
+    .cardSlot:hover .card { transform: perspective(1000px) translateZ(30px) rotateY(-2deg); }
   }
+  :global(html[data-a11y-movimiento="true"]) .grid .cardStage,
+  :global(html[data-a11y-movimiento="true"]) .grid .card {
+    transform: none !important;
+  }
+  :global(html[data-a11y-movimiento="true"]) .grid .cardFloat { animation: none; }
+}
+@keyframes flotarPlan {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
 }
 .card h3 { margin: 0; font-size: 1.1875rem; font-weight: 600; letter-spacing: -.02em; }
 .card > p { margin: 12px 0 0; }
