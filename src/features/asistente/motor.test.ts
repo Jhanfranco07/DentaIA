@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { responderOrientacion } from "./motor";
+import { detectarDestinoDenti, responderOrientacion } from "./motor";
 
 describe("asistente DentaIA — orientación segura", () => {
   it("incluye guías existentes y enlaces al módulo de rutinas", () => {
@@ -52,5 +52,24 @@ describe("asistente DentaIA — orientación segura", () => {
   });
   it("no desvía un tema de pagos hacia orientación clínica", () => {
     expect(responderOrientacion("¿Dónde veo Premium?").enlaces[0].href).toBe("/premium");
+  });
+});
+
+describe("Denti — navegación con aprobación", () => {
+  it("propone la guía publicada sin inventar ruta", () => {
+    expect(detectarDestinoDenti("¿Cómo me cepillo mejor?")).toEqual({
+      tipo: "guia", titulo: "Cepillado correcto", href: "/buenas-practicas?guia=cepillado",
+    });
+    expect(detectarDestinoDenti("¿Cómo uso el hilo dental?")?.href).toBe("/buenas-practicas?guia=hilo");
+  });
+  it("reconoce módulos reales y conserva preguntas generales en chat", () => {
+    expect(detectarDestinoDenti("Quiero preparar una fotografía dental")?.href).toBe("/analisis");
+    expect(detectarDestinoDenti("Quiero registrar mi rutina")?.href).toBe("/paciente/rutinas");
+    expect(detectarDestinoDenti("¿Por qué mis dientes están amarillos?")).toBeNull();
+    expect(detectarDestinoDenti("¿Qué significa sensibilidad dental?")).toBeNull();
+  });
+  it("nunca retrasa una urgencia proponiendo una guía", () => {
+    expect(detectarDestinoDenti("Tengo dolor insoportable y quiero la guía de cepillado")).toBeNull();
+    expect(detectarDestinoDenti("Tengo hinchazón en el cuello y dificultad para respirar")).toBeNull();
   });
 });
