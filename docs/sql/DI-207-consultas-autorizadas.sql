@@ -60,7 +60,7 @@ begin
     join clinical.professional_accounts pa on pa.id=cm.professional_id
     where p.patient_id=p_actor_user_id and p.status='aceptada'
       and c.status='aprobado' and c.expires_at>now()
-      and cm.status='active' and pa.status='active'
+      and cm.status='active' and pa.status='verified'
       and cm.valid_from<=now() and (cm.valid_until is null or cm.valid_until>now())
       and plan.published and plan.valid_from<=(now() at time zone 'America/Lima')::date
       and (plan.valid_until is null or plan.valid_until>=(now() at time zone 'America/Lima')::date)
@@ -74,7 +74,7 @@ begin
     select pa.user_id into v_professional_user
     from clinical.clinic_memberships cm
     join clinical.professional_accounts pa on pa.id=cm.professional_id
-    where cm.id=p_membership_id and cm.status='active' and pa.status='active'
+    where cm.id=p_membership_id and cm.status='active' and pa.status='verified'
       and cm.valid_from<=now() and (cm.valid_until is null or cm.valid_until>now());
     if v_professional_user is distinct from p_actor_user_id then
       raise exception 'ACCESO_DENEGADO' using errcode='42501';
