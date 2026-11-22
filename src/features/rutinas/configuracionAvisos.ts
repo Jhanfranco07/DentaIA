@@ -23,12 +23,15 @@ export function horarioValido(valor: string): boolean {
 export function normalizarHorario(valor: unknown): HorarioAvisos {
   if (!valor || typeof valor !== "object") return { ...HORARIO_PREDETERMINADO };
   const config = valor as Record<string, unknown>;
-  return {
+  const horario: HorarioAvisos = {
     manana: typeof config.manana === "string" && horarioValido(config.manana) ? config.manana : HORARIO_PREDETERMINADO.manana,
     tarde: typeof config.tarde === "string" && horarioValido(config.tarde) ? config.tarde : HORARIO_PREDETERMINADO.tarde,
     noche: typeof config.noche === "string" && horarioValido(config.noche) ? config.noche : HORARIO_PREDETERMINADO.noche,
     frecuencia: config.frecuencia === "una_vez" ? "una_vez" : "por_momento",
   };
+  // Horarios crecientes: si el usuario introduce un orden inválido se usa el predeterminado.
+  if (!(horario.manana < horario.tarde && horario.tarde < horario.noche)) return { ...HORARIO_PREDETERMINADO };
+  return horario;
 }
 export function leerHorarioAvisos(usuarioId: string): HorarioAvisos {
   if (typeof window === "undefined" || !usuarioId) return { ...HORARIO_PREDETERMINADO };
