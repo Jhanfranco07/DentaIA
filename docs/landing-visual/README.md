@@ -2,6 +2,28 @@
 
 # Integración de la propuesta visual del landing
 
+## Validación del rediseño actual
+
+El recorrido actual de Chromium se ejecuta con el servidor local en el puerto 3181. [Pruebas de las rutas públicas](../../scripts/qa-landing-editorial.mjs) · [Pruebas de la campaña del hero](../../scripts/qa-hero-campana.mjs)
+
+Para probar las rutas públicas y la persistencia de preferencias con respuestas simuladas, usa una compilación local con estas dos variables.
+
+```powershell
+$env:NEXT_PUBLIC_SUPABASE_URL = 'https://dentai-qa.invalid'
+$env:NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_local_browser_fixture'
+npm.cmd run build
+npm.cmd run start -- --hostname 127.0.0.1 --port 3181
+```
+
+En otro terminal, guarda las capturas y los informes en una carpeta local.
+
+```powershell
+node scripts/qa-landing-editorial.mjs --output (Join-Path ([IO.Path]::GetTempPath()) 'dentai-landing-qa')
+node scripts/qa-hero-campana.mjs --output (Join-Path ([IO.Path]::GetTempPath()) 'dentai-hero-qa')
+```
+
+## Integración anterior
+
 ## Base y comparación
 
 Rama `refactor/landing-experiencia-visual`, desde `main` **d6b3f89aae6ec6aa9dac4af76b6e2c1df2bd4ca8** (merge del PR #31). Se consultaron GitHub y las referencias remotas actualizadas. `develop` está en **7c0244fa247eb5f020156b71d42bddaed7a6d524**: sus cambios están incluidos en main, que añade cinco commits. El árbol de la base estaba limpio.
