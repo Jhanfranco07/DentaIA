@@ -7,7 +7,7 @@ create table public.routine_followup_consents (
   patient_id uuid not null references auth.users(id) on delete cascade,
   membership_id uuid not null references clinical.clinic_memberships(id) on delete restrict,
   status text not null default 'pendiente'
-    check (status in ('pendiente','aprobado','revocado')),
+    check (status in ('pendiente','aprobado','rechazado','revocado','expirado')),
   purpose text not null default 'seguimiento_rutinas'
     check (purpose = 'seguimiento_rutinas'),
   policy_version text not null default 'di207-v1'
@@ -24,7 +24,8 @@ create table public.routine_followup_consents (
   constraint routine_consent_status_dates check (
     (status = 'pendiente' and approved_at is null and revoked_at is null)
     or (status = 'aprobado' and approved_at is not null and revoked_at is null)
-    or (status = 'revocado' and revoked_at is not null)
+    or (status = 'rechazado' and approved_at is null and revoked_at is not null)
+    or (status in ('revocado','expirado') and revoked_at is not null)
   ),
   constraint routine_consent_patient_key unique(id, patient_id)
 );
@@ -80,7 +81,7 @@ create table clinical.routine_followup_audit (
   proposal_id uuid references public.routine_plan_proposals(id) on delete restrict,
   actor_user_id uuid not null references auth.users(id) on delete restrict,
   action text not null check (action in (
-    'solicitud', 'aprobar_seguimiento', 'revocar_seguimiento',
+    'solicitud', 'aprobar_seguimiento', 'rechazar_seguimiento', 'revocar_seguimiento', 'expirar',
     'proponer_plan', 'aceptar_plan', 'rechazar_plan', 'revocar_plan'
   )),
   occurred_at timestamptz not null default now(),
