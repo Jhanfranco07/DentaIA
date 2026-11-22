@@ -76,4 +76,30 @@ revoke all on function public.gestionar_cita_profesional(uuid,text)
   from public,anon,authenticated;
 grant execute on function public.gestionar_cita_profesional(uuid,text)
   to authenticated;
+
+-- El paciente puede cancelar sus solicitudes reales antes de ser atendido.
+create function public.cancelar_cita_paciente(p_solicitud_id uuid)
+returns boolean language plpgsql security definer set search_path='' as $
+declare
+  v_actor uuid:=auth.uid();
+  v_cita public.appointment_requests%rowtype;
+begin
+  if v_actor is null or p_solicitud_id is null then
+    raise exception 'NO_AUTORIZADO' using errcode='42501';
+  end if;
+  select * into v_cita from public.appointment_requests
+    where id=p_solicitud_id for update;
+  if not found or v_cita.user_id<>v_actor or v_cita.is_demo
+    or v_cita.status not in ('requested','confirmed') then
+    raise exception 'NO_AUTORIZADO' using errcode='42501';
+  end if;
+  update public.appointment_requests set status='cancelled'
+    where id=v_cita.id;
+  return true;
+end;
+$;
+revoke all on function public.cancelar_cita_paciente(uuid)
+  from public,anon,authenticated;
+grant execute on function public.cancelar_cita_paciente(uuid)
+  to authenticated;
 commit;
