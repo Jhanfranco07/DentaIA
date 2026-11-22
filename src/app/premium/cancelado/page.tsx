@@ -1,8 +1,9 @@
 import Link from "next/link";
+import PublicShell from "@/components/PublicShell";
 
 export default function CanceladoPage() {
   return (
-    <main className="module-shell">
+    <PublicShell><div className="module-shell">
       <div className="page-intro">
         <span className="pill">PAGO DE PRUEBA</span>
         <h1>Cancelaste el pago</h1>
@@ -11,6 +12,6 @@ export default function CanceladoPage() {
       <Link className="action" href="/premium">
         Volver a Premium
       </Link>
-    </main>
+    </div></PublicShell>
   );
 }
