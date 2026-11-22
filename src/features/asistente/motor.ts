@@ -66,3 +66,31 @@ export function responderOrientacion(pregunta: string, observacion: ObservacionA
     guias: gui(["cepillado", "controles"]), especialidad: null,
     enlaces: [ruta("/analisis", "Preparar fotografía"), ruta("/paciente/rutinas", "Mis rutinas"), ruta("/directorio", "Ver profesionales")], alerta: false };
 }
+
+/** Navegación local: no deriva preguntas generales ni situaciones urgentes. */
+export type DestinoDenti = { titulo: string; href: string; tipo: "guia" | "modulo" };
+export function detectarDestinoDenti(pregunta: string): DestinoDenti | null {
+  if (esUrgenciaBucal(pregunta)) return null;
+  const t = pregunta.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  const modulo = (titulo: string, href: string): DestinoDenti => ({ titulo, href, tipo: "modulo" });
+  const guia = (id: string): DestinoDenti | null => {
+    const g = GUIAS_BUCALES.find(item => item.id === id);
+    return g ? { titulo: g.titulo, href: `/buenas-practicas?guia=${encodeURIComponent(id)}`, tipo: "guia" } : null;
+  };
+  // Rutas operativas únicamente cuando la intención de navegar es clara.
+  if (/(?:prepar|tom|sub|captur|hacer).{0,35}(?:foto|fotografia)|(?:foto|fotografia).{0,35}(?:analisis|prepar|subir)/.test(t)) return modulo("Preparar fotografía dental", "/analisis");
+  if (/(?:ver|consult|revis|abrir|mostrar|donde).{0,35}(?:mis )?(?:resultado|analisis)/.test(t)) return modulo("Mis resultados dentales", "/analisis");
+  if (/(?:rutina|habito).{0,35}(?:registr|crear|seguir|llevar|organizar)|(?:registr|crear|seguir|llevar|organizar).{0,35}(?:rutina|habito)|mis rutinas/.test(t)) return modulo("Mis rutinas", "/paciente/rutinas");
+  if (/(?:reserv|agend|solicit|pedir|sacar|program).{0,35}(?:cita|turno)|(?:ver|revis|seguir).{0,35}(?:solicitud)/.test(t)) return modulo("Solicitudes de atención", "/solicitudes");
+  if (/(?:busc|encontr|ver|consult|explor).{0,35}(?:odontolog|dentista|profesional|consultorio|precio|tarifa)/.test(t)) return modulo("Directorio de odontólogos", "/directorio");
+  if (/(?:ver|revis|consult|abrir).{0,35}(?:plan|premium|suscrip|pago)/.test(t)) return modulo("Mi plan Premium", "/premium");
+  // Preguntas de técnica o aprendizaje cubiertas exactamente por una guía publicada.
+  if (/cepill|cepillo de dientes|lavar(?:me)? los dientes/.test(t)) return guia("cepillado");
+  if (/hilo dental|limpieza interdental|limpiar entre (?:los )?dientes/.test(t)) return guia("hilo");
+  if (/alimentacion|azucar|gaseosa|bebidas azucaradas/.test(t)) return guia("alimentacion");
+  if (/fluor|pasta fluorada|prevenir caries/.test(t)) return guia("fluor");
+  if (/(?:cuidar|higiene|limpiar).{0,20}encias|guia de encias/.test(t)) return guia("encias");
+  if (/control(?:es)? (?:preventiv|dental|odontologic)|revision(?:es)? odontologic/.test(t)) return guia("controles");
+  // "¿Por qué tengo dientes amarillos?" y otras dudas generales se responden en chat.
+  return null;
+}
