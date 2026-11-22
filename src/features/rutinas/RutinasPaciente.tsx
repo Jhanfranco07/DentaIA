@@ -7,7 +7,7 @@ import { Icono } from "@/components/Identidad";
 import { useSesion } from "@/features/cuenta/useSesion";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { marcarActividadRutina, leerHistorialRutinas, leerRutinaDelDia, type EstadoDiaRutina } from "./datos";
-import { fechaHoyLima, progresoDelDia, progresoHistorial, type MarcaRutina } from "./modelo";
+import { fechaHoyLima, progresoDelDia, progresoHistorial, type MarcaRutina, type IntervaloAsignacion } from "./modelo";
 import type { PlanCatalogo } from "./contrato";
 import SeguimientoRutinasPaciente from "./SeguimientoRutinasPaciente";
 import styles from "./rutinas.module.css";
@@ -26,6 +26,7 @@ export default function RutinasPaciente() {
   const [dia, setDia] = useState<EstadoDiaRutina | null>(null);
   const [marcas, setMarcas] = useState<MarcaRutina[]>([]);
   const [catalogo, setCatalogo] = useState<PlanCatalogo[]>([]);
+  const [asignaciones, setAsignaciones] = useState<IntervaloAsignacion[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState<string | null>(null);
@@ -50,15 +51,15 @@ export default function RutinasPaciente() {
   }, []);
 
   const cargar = useCallback(async (activo: () => boolean = () => true) => {
-    if (!usuario?.id) { if (activo()) { setDia(null); setMarcas([]); setCatalogo([]); setCargando(false); } return; }
-    setCargando(true); setError(""); setDia(null); setMarcas([]); setCatalogo([]);
+    if (!usuario?.id) { if (activo()) { setDia(null); setMarcas([]); setCatalogo([]); setAsignaciones([]); setCargando(false); } return; }
+    setCargando(true); setError(""); setDia(null); setMarcas([]); setCatalogo([]); setAsignaciones([]);
     try {
       const cliente = getSupabaseBrowserClient();
       const [estado, historial] = await Promise.all([
         leerRutinaDelDia(cliente, usuario.id, fecha),
         leerHistorialRutinas(cliente, usuario.id),
       ]);
-      if (activo()) { setDia(estado); setMarcas(historial.marcas); setCatalogo(historial.catalogo); }
+      if (activo()) { setDia(estado); setMarcas(historial.marcas); setCatalogo(historial.catalogo); setAsignaciones(historial.asignaciones); }
     } catch {
       if (activo()) { setDia(null); setError("No pudimos cargar tus rutinas. Comprueba tu conexión e inténtalo otra vez."); }
     } finally { if (activo()) setCargando(false); }
@@ -73,7 +74,7 @@ export default function RutinasPaciente() {
   const progreso = progresoDelDia(dia?.actividades.length ?? 0,
     (dia?.actividades ?? []).filter(actividad => dia?.completadas.includes(actividad.id))
       .map(actividad => ({ activity_id: actividad.id, plan_id: dia?.plan?.id ?? "", completion_date: fecha })));
-  const historial = useMemo(() => progresoHistorial(catalogo, marcas), [catalogo, marcas]);
+  const historial = useMemo(() => progresoHistorial(catalogo, marcas, asignaciones), [catalogo, marcas, asignaciones]);
   const diasCompletos = historial.filter(d => d.progreso && d.progreso.total > 0 && d.progreso.completadas === d.progreso.total).length;
 
   async function alternar(actividadId: string, completada: boolean) {
