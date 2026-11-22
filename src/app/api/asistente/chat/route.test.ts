@@ -52,9 +52,16 @@ describe("POST /api/asistente/chat — integración simulada sin secretos", () =
   });
 
   it("rechaza datos inválidos y limita el tamaño del historial", async () => {
-    expect((await POST(request(body("a", Array.from({ length: 7 }, () => ({ rol: "usuario", texto: "x" }))))).status).toBe(400);
-    expect((await POST(request({ pregunta: "a", historial: [], observacion: { evaluable: true, variacionesColor: 99, posiblesAusencias: 0, posiblesApiñamientos: 0 } }))).status).toBe(400);
-    expect((await POST(request(body("a"), { contentType: "text/plain" }))).status).toBe(415);
+    const tooLong = body("a", Array.from({ length: 7 }, () => ({ rol: "usuario", texto: "x" })));
+    const invalidResult = { pregunta: "a", historial: [], observacion: {
+      evaluable: true, variacionesColor: 99, posiblesAusencias: 0, posiblesApiñamientos: 0,
+    } };
+    const longResult = await POST(request(tooLong));
+    const invalidObservation = await POST(request(invalidResult));
+    const invalidType = await POST(request(body("a"), { contentType: "text/plain" }));
+    expect(longResult.status).toBe(400);
+    expect(invalidObservation.status).toBe(400);
+    expect(invalidType.status).toBe(415);
   });
 
   it("realiza la ruta completa Upstash + OpenAI y etiqueta la respuesta real", async () => {
