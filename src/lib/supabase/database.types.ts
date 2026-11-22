@@ -329,6 +329,30 @@ export type Database = {
         }
         Relationships: []
       }
+      dentist_contact_channels: {
+        Row: {
+          dentist_id: string
+          whatsapp_e164: string
+          whatsapp_publicado: boolean
+          consentimiento_publicacion_en: string | null
+          actualizado_en: string
+        }
+        Insert: {
+          dentist_id: string
+          whatsapp_e164: string
+          whatsapp_publicado?: boolean
+          consentimiento_publicacion_en?: string | null
+          actualizado_en?: string
+        }
+        Update: {
+          dentist_id?: string
+          whatsapp_e164?: string
+          whatsapp_publicado?: boolean
+          consentimiento_publicacion_en?: string | null
+          actualizado_en?: string
+        }
+        Relationships: [{ foreignKeyName: "dentist_contact_channels_dentist_id_fkey"; columns: ["dentist_id"]; isOneToOne: true; referencedRelation: "dentists"; referencedColumns: ["id"] }]
+      }
       dentist_reviews: {
         Row: {
           appointment_request_id: string
