@@ -9,6 +9,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { marcarActividadRutina, leerHistorialRutinas, leerRutinaDelDia, type EstadoDiaRutina } from "./datos";
 import { fechaHoyLima, progresoDelDia, progresoHistorial, type MarcaRutina } from "./modelo";
 import type { PlanCatalogo } from "./contrato";
+import SeguimientoRutinasPaciente from "./SeguimientoRutinasPaciente";
 import styles from "./rutinas.module.css";
 
 const MOMENTOS = [
@@ -147,6 +148,7 @@ export default function RutinasPaciente() {
               })}
             </>}
         </section>
+        <SeguimientoRutinasPaciente />
         <section className={styles.ajustesAvisos} aria-labelledby="avisos-rutina-titulo">
           <div><h2 id="avisos-rutina-titulo">Avisos de Denti</h2>
             <p>Permite que Denti te salude y recuerde tus actividades cuando utilices DentaIA. No enviamos notificaciones fuera de la aplicación.</p>
