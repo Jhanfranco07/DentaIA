@@ -35,7 +35,20 @@ describe("asistente DentaIA — orientación segura", () => {
   it("orienta a revisión cuando preocupa una mancha amarilla", () => {
     const respuesta = responderOrientacion("Tengo dientes amarillos, ¿es caries?");
     expect(respuesta.guias).toContain("controles");
-    expect(respuesta.texto).toContain("no identifica");
+    expect(respuesta.texto).toContain("no significa necesariamente caries");
+    expect(respuesta.texto).toContain("cepíllate dos veces al día");
+  });
+  it("explica el cuidado bucal directamente sin obligar a leer una guía", () => {
+    const respuesta = responderOrientacion("¿Cómo puedo mejorar mi rutina de cepillado?");
+    expect(respuesta.texto).toContain("dos minutos");
+    expect(respuesta.texto).toContain("dos veces al día");
+    expect(respuesta.texto).not.toMatch(/leer (una|la) guía/i);
+    expect(respuesta.guias).toContain("cepillado");
+  });
+  it("explica la limpieza interdental paso a paso", () => {
+    const respuesta = responderOrientacion("¿Cómo uso el hilo dental?");
+    expect(respuesta.texto).toContain("forma de C");
+    expect(respuesta.texto).toContain("una vez al día");
   });
   it("no desvía un tema de pagos hacia orientación clínica", () => {
     expect(responderOrientacion("¿Dónde veo Premium?").enlaces[0].href).toBe("/premium");
