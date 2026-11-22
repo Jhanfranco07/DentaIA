@@ -79,7 +79,7 @@ grant execute on function public.gestionar_cita_profesional(uuid,text)
 
 -- El paciente puede cancelar sus solicitudes reales antes de ser atendido.
 create function public.cancelar_cita_paciente(p_solicitud_id uuid)
-returns boolean language plpgsql security definer set search_path='' as $
+returns boolean language plpgsql security definer set search_path='' as $$
 declare
   v_actor uuid:=auth.uid();
   v_cita public.appointment_requests%rowtype;
@@ -97,7 +97,7 @@ begin
     where id=v_cita.id;
   return true;
 end;
-$;
+$$;
 revoke all on function public.cancelar_cita_paciente(uuid)
   from public,anon,authenticated;
 grant execute on function public.cancelar_cita_paciente(uuid)
