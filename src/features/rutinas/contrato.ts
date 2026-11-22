@@ -1,4 +1,5 @@
 export type ActividadCatalogo = {
+  id?: string;
   activity_key: string;
   title: string;
   description: string;
