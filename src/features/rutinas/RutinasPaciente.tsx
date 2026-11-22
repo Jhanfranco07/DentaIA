@@ -159,7 +159,7 @@ export default function RutinasPaciente() {
             <p>Configura desde qué hora Denti puede mostrarte recordatorios. Solo aparecen cuando usas DentaIA.</p>
             {([["manana", "Mañana"], ["tarde", "Tarde"], ["noche", "Noche"]] as const).map(([momento, titulo]) => <label key={momento}>{titulo}
               <input type="time" value={horarioAvisos[momento]} onChange={evento => {
-                const nuevo = { ...horarioAvisos, [momento]: evento.target.value };
+                const nuevo = normalizarHorario({ ...horarioAvisos, [momento]: evento.target.value });
                 setHorarioAvisos(nuevo);
                 if (usuario?.id) guardarHorarioAvisos(usuario.id, nuevo);
               }} />
