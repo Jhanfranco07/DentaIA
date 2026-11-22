@@ -85,7 +85,20 @@ begin
       'vence',c.expires_at,'propuestas',coalesce((
         select jsonb_agg(jsonb_build_object('id',p.id,'estado',p.status,'planId',p.plan_id))
         from public.routine_plan_proposals p where p.consent_id=c.id
-      ),'[]'::jsonb)
+      ),'[]'::jsonb),
+      'progresoHoy',case when c.status='aprobado' then (
+        select jsonb_build_object(
+          'completadas',(select count(distinct m.activity_id)
+            from public.patient_routine_completions m
+            join public.routine_proposal_activities a on a.proposal_id=p.id and a.activity_id=m.activity_id
+            where m.patient_id=c.patient_id and m.plan_id=p.plan_id
+              and m.completion_date=(now() at time zone 'America/Lima')::date),
+          'total',(select count(*) from public.routine_proposal_activities a where a.proposal_id=p.id)
+        )
+        from public.routine_plan_proposals p
+        where p.consent_id=c.id and p.status='aceptada'
+        limit 1
+      ) else null end
     ) order by c.created_at desc), '[]'::jsonb) into v_consentimientos
     from public.routine_followup_consents c
     join clinical.patient_records pr on pr.user_id=c.patient_id and pr.status='active'
