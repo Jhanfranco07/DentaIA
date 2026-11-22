@@ -40,6 +40,8 @@ export default function AsistentePaciente() {
   const activador = useRef<HTMLButtonElement>(null);
   const contador = useRef(1);
   const consultaActual = useRef(0);
+  const consultasRutina = useRef(0);
+  const identidadMensajes = useRef<string | null>(null);
   useEffect(() => {
     let activo = true;
     const cliente = getSupabaseBrowserClient();
@@ -48,6 +50,14 @@ export default function AsistentePaciente() {
         const { data } = await cliente.auth.getUser();
         if (!activo) return;
         const id = data.user?.id ?? null;
+        if (identidadMensajes.current !== id) {
+          identidadMensajes.current = id;
+          consultasRutina.current += 1;
+          setMensajes([{ id: contador.current++, respuesta: SALUDO }]);
+          setObservacion(null);
+          setPrecios([]);
+          setPreciosEstado("inicial");
+        }
         setUsuarioIA(id);
         setAviso(null);
         setUsarIA(id ? window.localStorage.getItem(`dentaia:denti:ia-consent:${id}`) === "true" : false);
@@ -155,6 +165,7 @@ export default function AsistentePaciente() {
     if (!limpia || pensando) return;
     if (consultaProgresoRutina(limpia)) {
       const id = contador.current++;
+      const solicitud = ++consultasRutina.current;
       const enlaces = [{ href: "/paciente/rutinas", etiqueta: "Abrir Mis rutinas" }];
       setTexto("");
       setMensajes(prev => [...prev.slice(-19), {
@@ -168,10 +179,12 @@ export default function AsistentePaciente() {
         const { data, error } = await cliente.auth.getUser();
         if (error || !data.user) throw new Error("SESION_INVALIDA");
         const estado = await leerRutinaDelDia(cliente, data.user.id, fechaHoyLima());
+        if (solicitud !== consultasRutina.current || identidadMensajes.current !== data.user.id) return;
         setMensajes(prev => prev.map(m => m.id === id ? {
           ...m, respuesta: { texto: explicarProgresoRutina(estado), guias: [], enlaces, especialidad: null, alerta: false },
         } : m));
       } catch {
+        if (solicitud !== consultasRutina.current) return;
         setMensajes(prev => prev.map(m => m.id === id ? {
           ...m, respuesta: {
             texto: "No pude consultar tu progreso en este momento. Abre Mis rutinas para revisar tus registros e inténtalo nuevamente.",
