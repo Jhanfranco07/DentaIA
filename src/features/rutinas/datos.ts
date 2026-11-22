@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "../../lib/supabase/database.types";
 import { rolesDelUsuario } from "../autorizacion/roles.ts";
 import { proveedorGeneralRutinas, type ActividadCatalogo, type PlanCatalogo } from "./contrato.ts";
-import { fechaHoyLima, type MarcaRutina } from "./modelo.ts";
+import { fechaHoyLima, type IntervaloAsignacion, type MarcaRutina } from "./modelo.ts";
 
 type Cliente = SupabaseClient<Database>;
 type FilaPlan = Tables<"oral_care_routine_plans">;
@@ -104,9 +104,43 @@ export async function leerRutinaDelDia(cliente: Cliente, usuarioId: string, fech
   return { plan: seleccion, actividades: visibles, completadas: (marcas.data ?? []).map(marca => marca.activity_id), origen: asignacion ? "personalizado" : "general" };
 }
 
-export async function leerHistorialRutinas(cliente: Cliente, usuarioId: string): Promise<{ catalogo: PlanCatalogo[]; marcas: MarcaRutina[] }> {
+async function leerIntervalosAsignacion(cliente: Cliente): Promise<IntervaloAsignacion[]> {
+  if (!seguimientoHabilitado) return [];
+  const { data, error } = await cliente.auth.getSession();
+  if (error || !data.session?.access_token) throw new Error("Sesión de historial no disponible.");
+  const response = await fetch("/api/rutinas/seguimiento", {
+    headers: { Authorization: `Bearer ${data.session.access_token}` },
+    cache: "no-store", signal: AbortSignal.timeout(8000),
+  });
+  if (!response.ok) throw new Error("No se pudo leer la versión de tus planes.");
+  const cuerpo: unknown = await response.json();
+  if (!cuerpo || typeof cuerpo !== "object" || !("tipo" in cuerpo)
+      || cuerpo.tipo !== "paciente" || !("propuestas" in cuerpo) || !Array.isArray(cuerpo.propuestas)) {
+    throw new Error("Historial de propuestas incompatible.");
+  }
+  const propuestas = cuerpo.propuestas as unknown[];
+  return propuestas.flatMap((valor): IntervaloAsignacion[] => {
+    if (!valor || typeof valor !== "object") return [];
+    const p = valor as Record<string, unknown>;
+    if (!["aceptada","revocada"].includes(String(p.estado))
+      || typeof p.planId !== "string" || typeof p.aceptadaEn !== "string"
+      || (p.revocadaEn !== null && typeof p.revocadaEn !== "string")
+      || !Array.isArray(p.actividades)) return [];
+    const ids = p.actividades.flatMap((a: unknown) => {
+      if (!a || typeof a !== "object" || !("id" in a) || typeof a.id !== "string") return [];
+      return [a.id];
+    });
+    if (!ids.length || ids.length !== p.actividades.length || new Set(ids).size !== ids.length) return [];
+    return [{ planId: p.planId, actividadIds: ids, aceptadaEn: p.aceptadaEn,
+      revocadaEn: p.revocadaEn as string | null }];
+  });
+}
+
+export async function leerHistorialRutinas(cliente: Cliente, usuarioId: string): Promise<{
+  catalogo: PlanCatalogo[]; marcas: MarcaRutina[]; asignaciones: IntervaloAsignacion[];
+}> {
   const actor = await validarPaciente(cliente, usuarioId);
-  const [{ catalogo }, marcas] = await Promise.all([
+  const [{ catalogo }, marcas, asignaciones] = await Promise.all([
     leerCatalogo(cliente),
     (async () => {
       const resultado: MarcaRutina[] = [];
@@ -121,8 +155,9 @@ export async function leerHistorialRutinas(cliente: Cliente, usuarioId: string):
       }
       return resultado;
     })(),
+    leerIntervalosAsignacion(cliente),
   ]);
-  return { catalogo, marcas };
+  return { catalogo, marcas, asignaciones };
 }
 
 export async function marcarActividadRutina(
