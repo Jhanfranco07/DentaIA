@@ -24,10 +24,16 @@ begin;
 set local role authenticated;
 select set_config('request.jwt.claim.sub','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',true);
 do $$
+declare filas integer;
 begin
-  if (select count(*) from public.dentist_contact_channels) <> 0 then
-    raise exception 'RLS_SELECCION_INCORRECTA';
+  -- La publicación es visible a todos; la edición es exclusiva del titular.
+  if (select count(*) from public.dentist_contact_channels) <> 1 then
+    raise exception 'CONTACTO_PUBLICADO_NO_VISIBLE';
   end if;
+  update public.dentist_contact_channels set whatsapp_e164='+51900000000'
+    where dentist_id='dddddddd-dddd-4ddd-8ddd-dddddddddddd';
+  get diagnostics filas=row_count;
+  if filas<>0 then raise exception 'EDICION_AJENA_AUTORIZADA'; end if;
 end $$;
 rollback;
 
