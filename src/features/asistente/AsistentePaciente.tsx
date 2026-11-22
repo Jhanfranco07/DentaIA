@@ -81,7 +81,8 @@ export default function AsistentePaciente() {
     void cargarAviso();
     const alVolver = () => { if (document.visibilityState === "visible") void cargarAviso(); };
     window.addEventListener("focus", alVolver);
-    return () => { vigente = false; window.removeEventListener("focus", alVolver); };
+    window.addEventListener("dentaia:rutina-actualizada", alVolver);
+    return () => { vigente = false; window.removeEventListener("focus", alVolver); window.removeEventListener("dentaia:rutina-actualizada", alVolver); };
   }, [abierto]);
   function configurarIA(activar: boolean) {
     if (usuarioIA) {
