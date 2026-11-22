@@ -12,7 +12,7 @@ import { enlaceSolicitud } from "@/lib/navegacion";
 
 type Odontologo = Pick<
   Tables<"dentists">,
-  "id" | "name" | "specialty" | "district"
+  "id" | "name" | "specialty" | "district" | "is_demo"
 >;
 
 export default function FormularioSolicitud({ odontologoInicial = "" }: { odontologoInicial?: string }) {
@@ -52,16 +52,23 @@ export default function FormularioSolicitud({ odontologoInicial = "" }: { odonto
       try {
         const { data, error } = await getSupabaseBrowserClient()
           .from("dentists")
-          .select("id, name, specialty, district")
+          .select("id, name, specialty, district, is_demo")
           .eq("is_active", true)
-          .eq("is_demo", true)
           .order("name");
 
         if (error) throw error;
 
         if (activo) {
-          setOdontologos(data ?? []);
-          setOdontologoId(data?.some(d => d.id === odontologoInicial) ? odontologoInicial : "");
+          const habilitados = await Promise.all((data ?? []).map(async d => {
+            if (d.is_demo) return d;
+            const { data: valido, error: errorValidacion } = await getSupabaseBrowserClient()
+              .rpc("contacto_odontologo_autorizado", { p_dentist_id: d.id, p_propietario: false });
+            return !errorValidacion && valido ? d : null;
+          }));
+          if (!activo) return;
+          const disponibles = habilitados.filter((d): d is Odontologo => d !== null);
+          setOdontologos(disponibles);
+          setOdontologoId(disponibles.some(d => d.id === odontologoInicial) ? odontologoInicial : "");
         }
       } catch {
         if (activo) {
@@ -92,7 +99,8 @@ export default function FormularioSolicitud({ odontologoInicial = "" }: { odonto
       return;
     }
 
-    if (!odontologos.some((item) => item.id === odontologoId)) {
+    const seleccionado = odontologos.find(item => item.id === odontologoId);
+    if (!seleccionado) {
       setErrorRegistro("Selecciona un odontólogo válido.");
       return;
     }
@@ -149,12 +157,12 @@ export default function FormularioSolicitud({ odontologoInicial = "" }: { odonto
         message: mensajeLimpio,
         user_id: identidad.user.id,
         status: "requested",
-        is_demo: true,
+        is_demo: seleccionado.is_demo,
       });
 
       if (error) throw error;
 
-      setExitoRegistro("Solicitud de demostración registrada correctamente.");
+      setExitoRegistro(seleccionado.is_demo ? "Solicitud de demostración registrada. No corresponde a una cita real." : "Solicitud de cita enviada. Está pendiente de confirmación por el odontólogo.");
       window.dispatchEvent(new Event("dentai:solicitud-registrada"));
       setOdontologoId("");
       setNombre("");
@@ -173,11 +181,10 @@ export default function FormularioSolicitud({ odontologoInicial = "" }: { odonto
 
   return (
     <section className={styles.tarjeta}>
-      <h2 className={styles.tituloSeccion}>Nueva solicitud de demostración</h2>
+      <h2 className={styles.tituloSeccion}>{odontologos.find(d => d.id === odontologoId)?.is_demo === false ? "Solicitar cita odontológica" : "Nueva solicitud de cita"}</h2>
 
       <p className={styles.subtitulo}>
-        Selecciona un odontólogo y completa tus datos para registrar una
-        solicitud de orientación.
+        Selecciona un profesional y una fecha preferida. En perfiles reales, la cita queda pendiente hasta que el odontólogo la confirme.
       </p>
 
       <form className={styles.formulario} onSubmit={registrarSolicitud}>
@@ -203,7 +210,7 @@ export default function FormularioSolicitud({ odontologoInicial = "" }: { odonto
 
               {odontologos.map((odontologo) => (
                 <option key={odontologo.id} value={odontologo.id}>
-                  {odontologo.name} — {odontologo.specialty}
+                  {odontologo.name} — {odontologo.specialty} {odontologo.is_demo ? "(demostración)" : "(atención real)"}
                   {" · "}
                   {odontologo.district}
                 </option>
@@ -295,8 +302,9 @@ export default function FormularioSolicitud({ odontologoInicial = "" }: { odonto
         </div>
 
         <div className={styles.aviso}>
-          Esta solicitud es únicamente demostrativa. No confirma una cita
-          clínica real ni envía mensajes a profesionales.
+          {odontologos.find(d => d.id === odontologoId)?.is_demo === false
+            ? "La solicitud será revisada por el odontólogo. No se considera confirmada hasta que cambie a estado Confirmada. No incluyas datos clínicos sensibles."
+            : "Los perfiles de demostración no representan consultas ni citas reales."}
         </div>
 
         {errorSesion && (

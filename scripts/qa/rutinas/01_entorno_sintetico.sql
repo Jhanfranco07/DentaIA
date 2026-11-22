@@ -24,7 +24,8 @@ create function auth.jwt() returns jsonb
 grant execute on function auth.uid() to authenticated;
 grant execute on function auth.jwt() to authenticated;
 
-create table public.dentists(id uuid primary key,name text,is_demo boolean not null default false);
+create table public.dentists(id uuid primary key,name text,is_demo boolean not null default false,is_active boolean not null default true);
+grant select on public.dentists to anon, authenticated;
 create table clinical.professional_accounts(
   id uuid primary key,user_id uuid not null,dentist_id uuid,
   status text not null check(status in('pending','verified','suspended'))
@@ -100,3 +101,30 @@ insert into public.oral_care_routine_activities values
 ('66666666-6666-4666-8666-666666666663',
  '55555555-5555-4555-8555-555555555555','cepillado-noche','Cepillado de noche','evening',3);
 grant select,insert on public.patient_routine_completions to service_role;
+
+-- Entorno mínimo de solicitudes para el nodo adicional de citas y contacto.
+create table public.appointment_requests(
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id),
+  dentist_id uuid not null references public.dentists(id),
+  contact_name text not null,
+  contact_email text not null,
+  preferred_date date not null,
+  preferred_time time,
+  message text not null default '',
+  status text not null default 'requested',
+  is_demo boolean not null default true,
+  created_at timestamptz not null default now(),
+  constraint appointment_requests_is_demo_check check (is_demo),
+  constraint appointment_requests_status_check check (status in ('requested','cancelled'))
+);
+alter table public.appointment_requests enable row level security;
+grant select,insert on public.appointment_requests to authenticated;
+grant all on public.appointment_requests to service_role;
+create policy requests_read on public.appointment_requests for select
+to authenticated using (user_id=(select auth.uid()));
+create policy requests_create on public.appointment_requests for insert
+to authenticated with check (
+  user_id=(select auth.uid()) and status='requested'
+  and preferred_date>=current_date
+);

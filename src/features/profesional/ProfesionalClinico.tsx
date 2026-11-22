@@ -31,6 +31,8 @@ import EstadoHistorialClinico, {
   type VistaHistorialClinico,
 } from "./EstadoHistorialClinico";
 import MisServicios from "./MisServicios";
+import MiWhatsappProfesional from "./MiWhatsappProfesional";
+import MisCitasProfesional from "./MisCitasProfesional";
 import SeguimientoRutinasProfesional from "@/features/rutinas/SeguimientoRutinasProfesional";
 import { esPerfilQa } from "@/features/directorio/qa-preview";
 import styles from "./profesional.module.css";
@@ -1017,6 +1019,7 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
               />
             )}
           </section>
+          {dentistIdDirectorio && <><MisCitasProfesional dentistId={dentistIdDirectorio} /><MiWhatsappProfesional dentistId={dentistIdDirectorio} /></>}
           <SeguimientoRutinasProfesional membershipId={contextoId} patientRecordId={pacienteId || null} />
           <section id="perfil-profesional" className={styles.tarjeta} tabIndex={-1} aria-labelledby="titulo-perfil-profesional">
             <header className={styles.cabeceraSeccion}>
