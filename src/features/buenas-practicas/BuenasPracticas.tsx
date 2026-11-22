@@ -46,6 +46,24 @@ export default function BuenasPracticas() {
   const [reproduciendo, setReproduciendo] = useState(false);
   const [tip, setTip] = useState(0);
   const [mostrarDetalle, setMostrarDetalle] = useState(false);
+  // Enlaces confirmados desde Denti: solo acepta IDs publicados.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("guia");
+    if (!id || !GUIAS_BUCALES.some(g => g.id === id)) return;
+    setTema("Todos");
+    setBusqueda("");
+    setSeleccion(id);
+    setMostrarDetalle(true);
+  }, []);
+  useEffect(() => {
+    if (!mostrarDetalle) return;
+    if (new URLSearchParams(window.location.search).get("guia") !== seleccion) return;
+    const frame = window.requestAnimationFrame(() => document.getElementById("guia-detalle")?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start",
+    }));
+    return () => window.cancelAnimationFrame(frame);
+  }, [mostrarDetalle, seleccion]);
 
   useEffect(() => {
     if (!reproduciendo) return;
