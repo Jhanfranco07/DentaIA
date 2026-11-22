@@ -38,6 +38,8 @@ begin
     select coalesce(jsonb_agg(jsonb_build_object(
       'id',p.id,'consentimientoId',p.consent_id,'estado',p.status,
       'planId',p.plan_id,'planTitulo',plan.title,'creado',p.created_at,
+      'aceptadaEn',case when p.status in ('aceptada','revocada') then p.responded_at else null end,
+      'revocadaEn',p.revoked_at,
       'actividades',coalesce((select jsonb_agg(jsonb_build_object('id',pa.activity_id,'titulo',a.title,'momento',a.time_of_day) order by a.sort_order)
        from public.routine_proposal_activities pa
        join public.oral_care_routine_activities a on a.id=pa.activity_id
