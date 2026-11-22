@@ -1,0 +1,28 @@
+/* Denti · illustration capped at a predictable size in every host container. */
+.escena {
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  box-sizing:border-box;width:64px;height:68px;min-width:0;flex:0 0 64px;
+  vertical-align:middle;transform-origin:center 75%;isolation:isolate;
+  animation:respirar 4.2s ease-in-out infinite;
+}
+.pequeno{width:34px;height:36px;flex:0 0 34px}
+.dibujo{display:block;width:100%;height:100%;max-width:100%;max-height:100%;flex:none;overflow:visible}
+.ojos{transform-box:fill-box;transform-origin:center;animation:parpadear 7s ease-in-out infinite}
+.brazoDer{transform-box:fill-box;transform-origin:12% 72%;animation:saludar 5.8s ease-in-out infinite}
+.brazoIzq{transform-box:fill-box;transform-origin:88% 72%}
+.pensando{animation:respirar 2.2s ease-in-out infinite}
+.pensando .estrella{animation:brillo 1.7s ease-in-out infinite}
+@keyframes respirar{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes parpadear{0%,44%,47%,100%{transform:scaleY(1)}45.5%{transform:scaleY(.12)}}
+@keyframes saludar{0%,6%,20%,100%{transform:rotate(0deg)}10%,16%{transform:rotate(-12deg)}}
+@keyframes brillo{0%,100%{opacity:.65;transform:scale(.9)}50%{opacity:1;transform:scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.escena,.ojos,.brazoDer,.brazoIzq,.estrella{animation:none!important;transform:none!important}}
+
+/* La tarjeta y el botón permanecen quietos: solo se mueve la ilustración SVG. */
+.escena{animation:none!important;transform:none!important}
+.dibujo{animation:dentiFlotar 3.1s ease-in-out infinite;transform-origin:50% 64%;will-change:transform}
+.brazoDer{animation:saludar 3.8s ease-in-out infinite}
+.ojos{animation:parpadear 5.2s ease-in-out infinite}
+.pensando .dibujo{animation:dentiFlotar 1.9s ease-in-out infinite}
+@keyframes dentiFlotar{0%,100%{transform:translateY(1px) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+@media(prefers-reduced-motion:reduce){.dibujo{animation:none!important;transform:none!important}}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PublicShell from "@/components/PublicShell";
 import styles from "./buenas-practicas.module.css";
 
 const recomendaciones = [
@@ -9,7 +10,7 @@ const recomendaciones = [
 ];
 
 export default function BuenasPracticasDentales() {
-  return <main className={styles.page}>
+  return <PublicShell><div className={styles.page}>
     <div className={styles.container}>
       <nav className={styles.breadcrumb} aria-label="Navegación"><Link href="/panel">Mi espacio</Link><span aria-hidden="true">/</span><span>Buenas prácticas</span></nav>
       <header className={styles.hero}>
@@ -23,5 +24,5 @@ export default function BuenasPracticasDentales() {
       <aside className={styles.note}><strong>Si el análisis marcó amarillo o una posible ausencia dental</strong><p>Una fotografía puede cambiar con la luz, los filtros o los reflejos. No permite identificar por sí sola la causa de un cambio de color ni confirmar que falte un diente. Consulta con un odontólogo antes de decidir cualquier tratamiento o blanqueamiento.</p></aside>
       <div className={styles.actions}><Link href="/panel/odontologos" className={styles.primary}>Buscar un odontólogo</Link><Link href="/panel" className={styles.secondary}>Volver a mi espacio</Link></div>
     </div>
-  </main>;
+  </div></PublicShell>;
 }

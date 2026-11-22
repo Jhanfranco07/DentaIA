@@ -1,5 +1,6 @@
 import "./globals.css";
 import "./tema.css";
+import "./publico.css";
 import type { Metadata } from "next";
 import { TemaProvider } from "@/components/Tema";
 export const metadata: Metadata = {title:"DentaIA | Cuida tu sonrisa",description:"Tu espacio de cuidado dental: cuenta personal, directorio odontológico y herramientas para profesionales autorizados.",robots:{index:false,follow:false}};

@@ -27,7 +27,7 @@
 .heroTexto h1{font-size:clamp(29px,3.1vw,43px);max-width:520px;line-height:1.09;letter-spacing:-.05em;margin:11px 0;color:#171c50}.heroTexto h1 em{font-style:normal;color:#6942e7}
 .heroTexto>p{font-size:13px;line-height:1.5;color:#374b81;max-width:450px;margin:0 0 11px}
 .heroNota{font-size:10px;line-height:1.5;color:#4f4b83;display:block;max-width:460px}
-.heroProfesionales{position:relative;height:210px;min-width:0;display:flex;justify-content:center;align-items:end;isolation:isolate}
+.heroProfesionales{position:relative;height:210px;min-width:0;display:flex;justify-content:center;align-items:flex-end;isolation:isolate}
 .heroAura{position:absolute;inset:25% 1% 2%;border-radius:50%;background:#56b8f584;filter:blur(23px);z-index:-1}
 .heroProfesionales .avatarHero{width:166px;height:166px;max-width:54%;flex:0 0 166px;border:0;border-radius:18px;background-color:transparent!important;filter:drop-shadow(0 12px 12px #4f6caf45);box-shadow:none}
 .heroProfesionales .avatarHero:nth-of-type(1){transform:translate(22px,-17px) rotate(-3deg);z-index:2}
@@ -126,7 +126,7 @@
 .accesosEspecialidades>span{font-size:12px;color:#646991;font-weight:750;margin-right:4px}.accesosEspecialidades button{min-height:34px;padding:6px 13px;border:1px solid #dad7fa;border-radius:99px;background:#fff;color:#55548b;font-size:11px;font-weight:750;cursor:pointer}
 .accesosEspecialidades button:hover{border-color:#997ef8;color:#5039bc}.accesosEspecialidades .accesoActivo{background:#694ee3;color:#fff;border-color:#694ee3}
 .accesosEspecialidades .limpiarPremium{border:none;background:transparent;color:#6044e3;text-decoration:underline;margin-left:auto}
-.encabezadoResultados{display:flex;gap:10px;align-items:end;justify-content:space-between;scroll-margin-top:100px;margin:0 0 -2px}
+.encabezadoResultados{display:flex;gap:10px;align-items:flex-end;justify-content:space-between;scroll-margin-top:100px;margin:0 0 -2px}
 .seccionEyebrow{display:block;font-size:10px;color:#795bec;letter-spacing:.09em;font-weight:900}
 .encabezadoResultados h2{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;margin:4px 0 0;font-size:22px;letter-spacing:-.035em;font-weight:900;color:#182051}
 .encabezadoResultados h2 span{font-size:12px;letter-spacing:0;font-weight:700;color:#6553be}
@@ -378,31 +378,89 @@
 
 
 /* Tema global: superficies y textos de este módulo. */
-:global(html[data-tema="oscuro"]) .pagina{color:#f5efff}
-:global(html[data-tema="oscuro"]) .pagina .tarjeta,
-:global(html[data-tema="oscuro"]) .cabecera,
-:global(html[data-tema="oscuro"]) .detalle,
-:global(html[data-tema="oscuro"]) .filtros,
-:global(html[data-tema="oscuro"]) .aviso,
-:global(html[data-tema="oscuro"]) .mapaPanel{background:#2c2448;border-color:#78649e;color:#f5efff}
-:global(html[data-tema="oscuro"]) .cuerpo h1,
-:global(html[data-tema="oscuro"]) .cuerpo h2,
-:global(html[data-tema="oscuro"]) .cabecera h1{color:#f5efff}
-:global(html[data-tema="oscuro"]) .campo label,
-:global(html[data-tema="oscuro"]) .conteo,
-:global(html[data-tema="oscuro"]) .meta,
-:global(html[data-tema="oscuro"]) .meta span,
-:global(html[data-tema="oscuro"]) .mapaPremiumLeyenda,
-:global(html[data-tema="oscuro"]) .mapaPremiumLeyenda small{color:#d7cde9}
-:global(html[data-tema="oscuro"]) .campo input,
-:global(html[data-tema="oscuro"]) .campo select,
-:global(html[data-tema="oscuro"]) .enlace,
-:global(html[data-tema="oscuro"]) .verMapa,
-:global(html[data-tema="oscuro"]) .solicitar,
-:global(html[data-tema="oscuro"]) .ubicacionPerfil,
-:global(html[data-tema="oscuro"]) .nota,
-:global(html[data-tema="oscuro"]) .retorno{background:#392e59;border-color:#78649e;color:#f5efff}
-:global(html[data-tema="oscuro"]) .avisoMapa{background:#2c2448;color:#d7cde9;border-color:#78649e}
-:global(html[data-tema="oscuro"]) .pagina .tarjeta .meta span:nth-child(2){color:#d7cde9}
-:global(html[data-tema="oscuro"]) .campo input::placeholder{color:#d7cde9;opacity:1}
-:global(html[data-tema="oscuro"]) .avisoError{background:#462838;border-color:#bd7a92;color:#ffd6df}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .pagina{color:#f5efff}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .pagina .tarjeta,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .cabecera,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .detalle,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .filtros,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .aviso,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .mapaPanel{background:#2c2448;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .cuerpo h1,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .cuerpo h2,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .cabecera h1{color:#f5efff}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .campo label,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .conteo,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .meta,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .meta span,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .mapaPremiumLeyenda,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .mapaPremiumLeyenda small{color:#d7cde9}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .campo input,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .campo select,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .enlace,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .verMapa,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .solicitar,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .ubicacionPerfil,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .nota,
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .retorno{background:#392e59;border-color:#78649e;color:#f5efff}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .avisoMapa{background:#2c2448;color:#d7cde9;border-color:#78649e}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .pagina .tarjeta .meta span:nth-child(2){color:#d7cde9}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .campo input::placeholder{color:#d7cde9;opacity:1}
+:global(html[data-tema="oscuro"]:not(:has(.public-site))) .avisoError{background:#462838;border-color:#bd7a92;color:#ffd6df}
+
+/* Public directory surfaces use the same tokens as the landing. */
+.pagina[data-vista="publica"] { gap: 28px; }
+.pagina[data-vista="publica"] :global(.public-intro) { --public-h1: clamp(2.7rem, 5.1vw, 4.5rem); }
+.pagina[data-vista="publica"] .avisoDemo {
+  max-width: 48ch;
+  padding: 0 0 0 12px;
+  border-radius: 0;
+  border-left: 2px solid var(--public-sky);
+  background: transparent;
+  color: var(--public-light-text);
+  font-size: .875rem;
+}
+.pagina:is([data-vista="publica"], [data-vista="publico-perfil"]) :is(.aviso, .tarjetaDemo, .retorno, .mapaPanel, .filtros, .tarjeta, .detalle, .ubicacionPerfil) {
+  border-radius: var(--public-panel);
+  border-color: var(--public-rule);
+  box-shadow: none;
+}
+.pagina[data-vista="publica"] :is(.filtros, .tarjeta, .mapaPanel),
+.pagina[data-vista="publico-perfil"] .detalle { background: var(--public-paper); }
+.pagina:is([data-vista="publica"], [data-vista="publico-perfil"]) :is(.aviso, .tarjetaDemo, .retorno, .ubicacionPerfil):not(.avisoError) { background: var(--public-paper); }
+.pagina[data-vista="publica"] .esqueleto i { background: var(--public-paper); border-color: var(--public-rule); animation: none; }
+.pagina[data-vista="publica"] .tarjeta {
+  padding: clamp(16px, 2vw, 28px);
+  transition: border-color var(--public-speed) var(--public-easing);
+}
+.pagina[data-vista="publica"] .tarjeta:hover { transform: none; border-color: var(--public-cobalt); box-shadow: none; }
+.pagina[data-vista="publica"] .tarjetaAvatarMarco { background: var(--public-pale); box-shadow: none; }
+.pagina[data-vista="publica"] .campo :is(input, select) { min-height: 48px; font-size: 16px; border-radius: var(--public-control); border-color: #8b9cb2; }
+.pagina[data-vista="publica"] .campo select { text-overflow: ellipsis; }
+.pagina[data-vista="publica"] .campo label { color: var(--public-navy); font-weight: 600; font-size: .875rem; }
+.pagina:is([data-vista="publica"], [data-vista="publico-perfil"]) .ficticio {
+  padding: 0;
+  color: var(--public-muted);
+  background: transparent;
+  font-size: .8125rem;
+  font-weight: 500;
+  text-transform: none;
+}
+.pagina:is([data-vista="publica"], [data-vista="publico-perfil"]) .cuerpo h2 { color: var(--public-navy); font-weight: 600; }
+.pagina[data-vista="publica"] .enlace { color: var(--public-cobalt); background: var(--public-pale); border-color: var(--public-rule); }
+.pagina[data-vista="publica"] .enlace:hover { background: var(--public-fog); }
+.pagina[data-vista="publica"] .alternarVista { background: var(--public-paper); border-color: var(--public-rule); }
+.pagina[data-vista="publica"] .alternarVista button[aria-selected="true"] { background: var(--public-navy); color: var(--public-paper); box-shadow: none; }
+.pagina[data-vista="publico-perfil"] .detalle .cuerpo h1 {
+  color: var(--public-navy);
+  font: 400 var(--public-h2)/1 var(--public-display);
+  letter-spacing: -.035em;
+  text-wrap: pretty;
+}
+.pagina[data-vista="publico-perfil"] .nota { background: var(--public-pale); }
+
+@media (min-width: 1240px) {
+  .pagina[data-vista="publica"] .filtros { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.05fr) minmax(0, .9fr); }
+}
+@media (1121px <= width < 1240px) {
+  .pagina[data-vista="publica"] .filtros { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

@@ -1,60 +1,66 @@
 import Link from "next/link";
 import { PLAN_PREMIUM_MENSUAL } from "@/lib/stripe/plan";
+import { Icono } from "./Identidad";
 import styles from "./planes-dentaia.module.css";
 
 const precio = (PLAN_PREMIUM_MENSUAL.amount / 100).toFixed(2);
-const gratis = ["Evaluación básica de la sonrisa", "Solicitudes de análisis limitadas", "Detección orientativa de coloración amarillenta y alineación dental"];
-const premium = ["Todo lo incluido en Gratis", "Más tipos de evaluaciones dentales (en desarrollo)", "Mayor capacidad de solicitudes cuando se habilite", "Historial y seguimiento ampliados (en desarrollo)"];
+const comparacion = [
+  ["Análisis dental básico", "En desarrollo", "En desarrollo"],
+  ["Evaluación de coloración y alineación", "Alcance previsto", "Alcance previsto"],
+  ["Solicitudes de análisis", "Límite previsto", "Ampliación prevista"],
+  ["Más tipos de evaluaciones", "—", "En desarrollo"],
+  ["Historial y seguimiento ampliado", "—", "En desarrollo"],
+];
 
 export default function PlanesDentaIA() {
   return <section className={styles.section} id="planes" aria-labelledby="planes-titulo">
+    <div className={`${styles.layout} public-wrap`}>
     <div className={styles.intro} data-reveal>
-      <span className={styles.eyebrow}>PLANES DENTAIA</span>
-      <h2 id="planes-titulo">Tu sonrisa merece más opciones.</h2>
-      <p>Empieza gratis y, cuando quieras explorar más posibilidades, descubre Premium. Elige el plan que mejor se adapte a ti.</p>
+      <p className="public-label">Planes DentaIA</p>
+      <h2 className="public-title" id="planes-titulo">Empieza gratis, explora Premium</h2>
+      <p>Elige según lo que necesitas hoy y consulta qué funciones están previstas para cada plan.</p>
     </div>
     <div className={styles.grid}>
       <article className={styles.card} data-reveal>
-        <span className={styles.kicker}>PARA EMPEZAR</span>
         <h3>Gratis</h3>
-        <div className={styles.price}>S/ 0 <small>/ siempre</small></div>
-        <p>Conoce las herramientas esenciales de DentaIA.</p>
-        <ul>{gratis.map(item => <li key={item}><span aria-hidden="true">✓</span>{item}</li>)}</ul>
-        <Link className={styles.secondaryButton} href="/cuenta?modo=registro">Comenzar gratis <span aria-hidden="true">→</span></Link>
+        <p className={styles.price}>S/ 0 <small>/ siempre</small></p>
+        <p>Accede a las herramientas esenciales de DentaIA.</p>
+        <ul>
+          <li><Icono nombre="check" size={18} /> Cuenta y espacio personal del paciente</li>
+          <li><Icono nombre="check" size={18} /> Directorio odontológico y preparación local de fotografías</li>
+          <li><Icono nombre="reloj" size={18} /> Evaluación básica y solicitudes de análisis limitadas, en desarrollo</li>
+        </ul>
+        <Link className="action action-secondary" href="/cuenta?modo=registro">Comenzar gratis <Icono nombre="flecha" size={16} /></Link>
       </article>
-      <article className={styles.featured} data-reveal>
-        <span className={styles.badge}>✦ Recomendado</span>
-        <span className={styles.kicker}>UNA EXPERIENCIA MÁS COMPLETA</span>
+      <article className={`${styles.card} ${styles.featured} public-inverse`} data-reveal>
         <h3>Premium</h3>
-        <div className={styles.price}>S/ {precio} <small>/ mes</small></div>
-        <p>Más oportunidades para explorar y dar seguimiento a tu salud bucal.</p>
-        <ul>{premium.map(item => <li key={item}><span aria-hidden="true">✓</span>{item}</li>)}</ul>
-        <Link className={styles.primaryButton} href="/premium?iniciar=1">Elegir Premium <span aria-hidden="true">→</span></Link>
+        <p className={styles.price}>S/ {precio} <small>/ mes</small></p>
+        <p>Suscripción de demostración con Stripe Sandbox.</p>
+        <ul>
+          <li><Icono nombre="check" size={18} /> Todo lo incluido en Gratis</li>
+          <li><Icono nombre="reloj" size={18} /> Más tipos de evaluaciones y mayor capacidad de solicitudes, en desarrollo</li>
+          <li><Icono nombre="reloj" size={18} /> Historial y seguimiento ampliados, en desarrollo</li>
+        </ul>
+        <Link className="action" href="/premium?iniciar=1">Elegir Premium <Icono nombre="flecha" size={16} /></Link>
+        <small className={styles.nota}>Pago de prueba. Stripe Sandbox no realiza cobros reales.</small>
       </article>
     </div>
     <div className={styles.details} data-reveal>
-      <h3>Compara lo que incluye cada plan</h3>
-      <div className={styles.scroll}>
-        <table>
-          <thead><tr><th scope="col">Funcionalidad</th><th scope="col">Gratis</th><th scope="col">Premium</th></tr></thead>
-          <tbody>
-            <tr><th scope="row">Análisis dental básico</th><td>Incluido*</td><td>Incluido*</td></tr>
-            <tr><th scope="row">Coloración amarillenta y alineación dental</th><td>Alcance inicial*</td><td>Alcance inicial*</td></tr>
-            <tr><th scope="row">Cantidad de solicitudes</th><td>Limitada</td><td>Ampliación prevista</td></tr>
-            <tr><th scope="row">Más tipos de evaluaciones</th><td>—</td><td>En desarrollo</td></tr>
-            <tr><th scope="row">Historial y seguimiento ampliado</th><td>—</td><td>En desarrollo</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <h3 id="planes-comparacion">Compara los planes</h3>
+      <table aria-labelledby="planes-comparacion">
+        <thead><tr><th scope="col">Función</th><th scope="col">Gratis</th><th scope="col">Premium</th></tr></thead>
+        <tbody>{comparacion.map(([funcion, gratis, premium]) => <tr key={funcion}><th scope="row">{funcion}</th><td>{gratis}</td><td>{premium}</td></tr>)}</tbody>
+      </table>
     </div>
     <div className={styles.steps} data-reveal>
-      <h3>¿Cómo funciona?</h3>
+      <h3>Cómo probar Premium</h3>
       <ol>
-        <li><strong>1. Regístrate o inicia sesión</strong><span>Tu cuenta de paciente protege tus datos.</span></li>
-        <li><strong>2. Confirma tu correo si te registras y continúa</strong><span>Con tu sesión verificada, accede al pago de prueba en Stripe.</span></li>
-        <li><strong>3. Vuelve a DentaIA</strong><span>El plan se activa tras confirmación del webhook.</span></li>
+        <li>Regístrate o inicia sesión con tu cuenta de paciente.</li>
+        <li>Si te registras, confirma tu correo y continúa al pago de prueba.</li>
+        <li>Vuelve a DentaIA. El plan se activa tras la confirmación del pago de prueba.</li>
       </ol>
+      <p className={styles.nota}>Las evaluaciones automatizadas están en desarrollo y no sustituyen la atención odontológica.</p>
     </div>
-    <p className={styles.disclaimer} data-reveal>* Las evaluaciones automatizadas y las funcionalidades Premium avanzadas todavía están en desarrollo: esta comparación describe el alcance previsto, no funciones clínicas ya disponibles. Stripe opera en entorno Sandbox, sin cobros reales. Los resultados orientativos no sustituyen la atención odontológica.</p>
+    </div>
   </section>;
 }

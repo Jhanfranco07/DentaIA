@@ -9,7 +9,8 @@ import { useNombrePerfil } from "@/features/cuenta/useNombrePerfil";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { Icono, Marca, type NombreIcono } from "./Identidad";
 import styles from "./portal-shell.module.css";
-import { TemaBoton, useTema } from "./Tema";
+import { useTema } from "./Tema";
+import AsistentePaciente from "@/features/asistente/AsistentePaciente";
 
 export type EnlacePortal = { href: string; etiqueta: string; exacto?: boolean; icono?: NombreIcono; grupo?: string };
 
@@ -135,7 +136,6 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
         </button>
         <div className={styles.tituloPagina}><span>{descripcion}</span><strong>{pagina?.etiqueta ?? area}</strong></div>
         <div className={styles.usuario}><span className={styles.avatar} aria-hidden="true">{nombreUsuario.slice(0, 1).toLocaleUpperCase("es")}</span><span className={styles.usuarioDatos}><strong>{nombreUsuario}</strong><span>{etiquetaRol(roles)}</span></span></div>
-        <TemaBoton className={styles.temaBoton} cabecera />
         {mostrarCuentaHeader && !enlaces.some(e => e.href === "/cuenta") && <Link href="/cuenta" className={styles.cuenta}><Icono nombre="persona" size={17} /><span>Mi cuenta</span></Link>}
         <button type="button" className={styles.salir} aria-label={saliendo ? "Cerrando sesión" : "Cerrar sesión"} onClick={() => { void cerrarSesion(); }} disabled={saliendo}>
           <Icono nombre="salir" size={17} /><span>{saliendo ? "Cerrando…" : "Salir"}</span>
@@ -143,6 +143,7 @@ export default function PortalShell({ area, descripcion, enlaces, children, most
       </header>
       {error && <p className={styles.error} role="alert">{error}</p>}
       <main id="contenido" tabIndex={-1} className={styles.contenido}>{children}</main>
+      {area === "Paciente" && <AsistentePaciente />}
     </div>
   </div>;
 }

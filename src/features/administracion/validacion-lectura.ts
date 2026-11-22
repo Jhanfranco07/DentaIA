@@ -74,10 +74,15 @@ export async function ejecutarMatrizLectura(solicitar: SolicitarCasoLectura): Pr
     }
     if (todas.length) {
       await comparar("busqueda_uuid", { q: todas[0].id }, [todas[0]]);
-      const conNombre = todas.find(u => u.perfil.nombre?.trim());
+      const conNombre = todas.find(u => u.perfil.nombre?.trim() && u.perfil.nombre.trim().length <= 80);
       if (conNombre) {
-        const texto = Array.from(conNombre.perfil.nombre!.trim()).slice(0, 16).join("");
-        await comparar("busqueda_nombre", { q: texto }, todas.filter(u => normalizar(u.id + " " + (u.perfil.nombre ?? "")).includes(normalizar(texto))));
+        const r = await consultar("busqueda_nombre", q({ q: conNombre.perfil.nombre!.trim(), tamano: 20 }));
+        let encontrada = r.pagina!.usuarios.some(u => u.id === conNombre.id);
+        for (let pagina = 2; pagina <= r.pagina!.paginas && !encontrada; pagina++) {
+          const siguiente = await consultar(`busqueda_nombre_${pagina}`, q({ q: conNombre.perfil.nombre!.trim(), tamano: 20, pagina }));
+          encontrada = siguiente.pagina!.usuarios.some(u => u.id === conNombre.id);
+        }
+        r.fila.correcto = r.fila.correcto && encontrada;
       }
     }
     let sinCoincidencias = "qa-sin-coincidencias-di151";

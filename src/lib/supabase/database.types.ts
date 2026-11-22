@@ -548,6 +548,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      dentaia_buscar_directorio: {
+        Args: { p_query: string; p_district: string; p_specialty: string; p_order: string; p_page: number; p_size: number;
+          p_lat?: number; p_lon?: number; p_radius?: number };
+        Returns: Json;
+      };
+      dentaia_buscar_solicitudes: {
+        Args: { p_query: string; p_status: string; p_page: number; p_size: number };
+        Returns: Json;
+      };
+      dentaia_buscar_usuarios: {
+        Args: { p_query: string; p_role: string; p_status: string; p_page: number; p_size: number };
+        Returns: Json;
+      };
       grant_smile_analysis_access: {
         Args: { p_analysis_id: string; p_professional_id: string; p_expires_at: string }
         Returns: string

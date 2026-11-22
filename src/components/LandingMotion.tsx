@@ -2,39 +2,36 @@
 
 import { useEffect } from "react";
 
-/**
- * Reveal sections on every entry into the viewport, in either scroll direction.
- * Content stays fully visible without JS, IntersectionObserver support or when
- * the visitor asks for reduced motion.
- */
 export default function LandingMotion() {
   useEffect(() => {
-    const targets = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    const section = document.getElementById("contenido");
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let observer: IntersectionObserver | null = null;
-
-    const cleanup = () => {
-      observer?.disconnect();
-      observer = null;
-      targets.forEach((element) => element.removeAttribute("data-motion-state"));
+    if (!section || !("IntersectionObserver" in window)) return;
+    const animaciones = new Map<HTMLElement, Animation>();
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const elemento = entry.target as HTMLElement;
+        observer.unobserve(elemento);
+        if (motion.matches || elemento.contains(document.activeElement)) continue;
+        const animacion = elemento.animate(
+          [{ opacity: .82, transform: "translateY(8px)" }, { opacity: 1, transform: "translateY(0)" }],
+          { duration: 320, easing: "cubic-bezier(.22, 1, .36, 1)" },
+        );
+        animaciones.set(elemento, animacion);
+        animacion.onfinish = () => animaciones.delete(elemento);
+      }
+    }, { threshold: .08 });
+    const cancelar = () => {
+      animaciones.forEach(animacion => animacion.cancel());
+      animaciones.clear();
     };
-
-    const setup = () => {
-      cleanup();
-      if (motion.matches || !("IntersectionObserver" in window)) return;
-      observer = new IntersectionObserver((entries) => {
-        for (const entry of entries) {
-          (entry.target as HTMLElement).dataset.motionState = entry.isIntersecting ? "visible" : "hidden";
-        }
-      }, { threshold: 0.08, rootMargin: "0px 0px -9% 0px" });
-      targets.forEach((element) => observer?.observe(element));
-    };
-
-    setup();
-    motion.addEventListener("change", setup);
+    section.querySelectorAll("[data-reveal]").forEach(elemento => observer.observe(elemento));
+    motion.addEventListener("change", cancelar);
     return () => {
-      motion.removeEventListener("change", setup);
-      cleanup();
+      observer.disconnect();
+      cancelar();
+      motion.removeEventListener("change", cancelar);
     };
   }, []);
   return null;

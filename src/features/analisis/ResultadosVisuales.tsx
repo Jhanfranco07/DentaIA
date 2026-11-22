@@ -14,6 +14,15 @@ type Props = {
   onNewPhoto: () => void;
 };
 
+function compartirOrientacion(result: SmileResult, oral: OralBasicAnalysis | null) {
+  window.dispatchEvent(new CustomEvent("dentaia:asistente-resultado", { detail: {
+    evaluable: result.status !== "not_evaluable",
+    variacionesColor: result.regions.filter(r => r.evaluable && (r.partial || r.level !== "Sin amarillo destacado")).length,
+    posiblesAusencias: oral?.status === "evaluated" ? oral.detections.filter(d => d.class === "toothLoss").length : 0,
+    posiblesApiñamientos: oral?.status === "evaluated" ? oral.detections.filter(d => d.class === "dentalCrowding").length : 0,
+  } }));
+}
+
 function plural(total: number, singular: string, pluralValue: string) {
   return total === 1 ? singular : pluralValue;
 }
@@ -36,6 +45,7 @@ export default function ResultadosVisuales({ result, oral, image, smileOverlay, 
         <span className={styles.eyebrow}>TU EVALUACIÓN VISUAL</span>
         <h1>Resultado de tu sonrisa</h1>
         <p>Dos observaciones independientes, explicadas de forma sencilla.</p>
+        <button type="button" onClick={() => compartirOrientacion(result, oral)} style={{ marginTop: 14, borderRadius: 12, padding: "12px 16px", border: "1px solid #087e86", background: "#e7f7f7", color: "#006c74", fontWeight: 700, cursor: "pointer" }}>✦ Consultar al asistente sobre estas observaciones</button>
       </div>
       <span className={styles.status}>Análisis orientativo</span>
     </header>

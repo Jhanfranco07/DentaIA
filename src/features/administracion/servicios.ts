@@ -1,4 +1,5 @@
 import type { RolNegocio } from "../autorizacion/autorizacion";
+import { crearIndiceBm25 } from "../../lib/busqueda/bm25.ts";
 
 export type RolAdministrado = Exclude<RolNegocio, "visitante">;
 export type UsuarioAdministrativo = {
@@ -40,7 +41,6 @@ function objeto(valor: unknown): valor is Record<string, unknown> {
 export function identificadorAdministrativoValido(valor: unknown): valor is string {
   return typeof valor === "string" && UUID.test(valor);
 }
-const normalizar = (texto: string) => texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
 export function validarConsultaUsuarios(entrada: unknown) {
   if (!objeto(entrada) || Object.keys(entrada).some(clave => !["q", "rol", "estado", "pagina", "tamano"].includes(clave))) {
@@ -65,6 +65,7 @@ const CUENTAS_SINTETICAS: readonly UsuarioAdministrativo[] = Array.from({ length
   origenRoles: "sintetico",
   estado: indice % 5 === 4 ? "suspendido" : "activo",
 }));
+const buscarCuentasDemo = crearIndiceBm25(CUENTAS_SINTETICAS, usuario => [{ texto: usuario.etiqueta, peso: 1 }]);
 
 /** Solo memoria: no contiene ni ofrece métodos de escritura, Auth Admin o Supabase. */
 export function crearProveedorAdministrativoSimulado(
@@ -79,10 +80,11 @@ export function crearProveedorAdministrativoSimulado(
       await esperar();
       if (escenario === "error") return fallo(503, "PROVEEDOR_NO_DISPONIBLE", "No se pudo consultar el proveedor simulado. No se consultó Supabase.");
       const { q, rol, estado, pagina: pedida, tamano } = consulta.valor;
-      const registros = (escenario === "vacio" ? [] : CUENTAS_SINTETICAS).filter(usuario =>
-        (!q || normalizar(usuario.etiqueta + " " + usuario.id).includes(normalizar(q)))
+      const idExacto = identificadorAdministrativoValido(q);
+      const registros = escenario === "vacio" ? [] : buscarCuentasDemo(idExacto ? "" : q, usuario =>
+        (!idExacto || usuario.id === q.toLowerCase())
         && (rol === "todos" || (rol === "sin_asignacion" ? usuario.roles.length === 0 : usuario.roles.some(valor => valor === rol)))
-        && (estado === "todos" || usuario.estado === estado));
+        && (estado === "todos" || usuario.estado === estado), true);
       const paginas = Math.max(1, Math.ceil(registros.length / tamano));
       const pagina = Math.min(pedida, paginas);
       return { ok: true, valor: {

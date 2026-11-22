@@ -1,4 +1,5 @@
 import type { RolAdministrado, ResultadoAdministrativo } from "./servicios";
+import { crearIndiceBm25 } from "../../lib/busqueda/bm25.ts";
 
 /** DTO de lectura: no concede permisos ni sustituye la autorización de DI-150. */
 export type EstadoCuentaReal = "habilitada" | "suspendida" | "sin_confirmar" | "anonima" | "eliminada" | "inconsistente";
@@ -26,16 +27,16 @@ export type PaginaUsuariosReales = {
 export type LecturasUsuariosReales = {
   listarCuentas: (pagina: number, tamano: number) => Promise<{ usuarios: unknown[] }>;
   consultarPerfiles: (ids: readonly string[]) => Promise<unknown[]>;
+  buscar?: (consulta: NonNullable<ReturnType<typeof validarConsultaReal>>) => Promise<PaginaUsuariosReales>;
 };
 export type ProveedorUsuariosReales = {
-  listar: (entrada: unknown) => Promise<ResultadoAdministrativo<PaginaUsuariosReales>>;
+  listar: (entrada: unknown, signal?: AbortSignal) => Promise<ResultadoAdministrativo<PaginaUsuariosReales>>;
 };
 
 const ROLES = ["paciente", "odontologo", "superusuario"] as const;
 const ESTADOS = ["habilitada", "suspendida", "sin_confirmar", "anonima", "eliminada", "inconsistente"] as const;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const objeto = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
-const normalizar = (v: string) => v.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 const fallo = (codigo: string) => ({ ok: false as const, status: 503 as const, codigo,
   mensaje: "No se pudo completar la lectura administrativa real. No se muestran datos parciales ni simulados." });
 
@@ -81,16 +82,17 @@ function estadoCuenta(u: Record<string, unknown>, ahora: number): EstadoCuentaRe
  * Nunca reutilizar este resultado como contexto de una escritura.
  */
 export function crearProveedorUsuariosReales(
-  crearLecturas: () => LecturasUsuariosReales,
+  crearLecturas: (signal?: AbortSignal) => LecturasUsuariosReales,
   ahora: () => number = Date.now,
 ): ProveedorUsuariosReales {
   return {
-    async listar(entrada) {
+    async listar(entrada, signal) {
       const consulta = validarConsultaReal(entrada);
       if (!consulta) return { ok: false, status: 400, codigo: "CONSULTA_INVALIDA", mensaje: "Revisa los filtros y la paginación de usuarios reales." };
       try {
         // Instancia por petición, solo después de validar y dentro del guard del endpoint.
-        const lecturas = crearLecturas();
+        const lecturas = crearLecturas(signal);
+        if (consulta.q && lecturas.buscar) return { ok: true, valor: await lecturas.buscar(consulta) };
         const cuentas = new Map<string, Record<string, unknown>>();
         const lote = 100;
         const maximo = 2000;
@@ -130,11 +132,15 @@ export function crearProveedorUsuariosReales(
           asignacion: leerAsignacion(u.app_metadata),
         }));
         const { q, rol, estado, tamano } = consulta;
-        const filtrados = registros.filter(u => (!q || normalizar(u.id + " " + (u.perfil.nombre ?? "")).includes(normalizar(q)))
+        registros.sort((a, b) => a.id.localeCompare(b.id));
+        const idExacto = UUID.test(q);
+        const cumple = (u: UsuarioReal) => (!idExacto || u.id === q.toLowerCase())
           && (estado === "todos" || u.cuenta === estado)
           && (rol === "todos" || (rol === "sin_asignacion" ? u.asignacion.estado === "ausente"
-            : rol === "asignacion_invalida" ? u.asignacion.estado === "invalida" : u.asignacion.roles.some(r => r === rol))))
-          .sort((a, b) => a.id.localeCompare(b.id));
+            : rol === "asignacion_invalida" ? u.asignacion.estado === "invalida" : u.asignacion.roles.some(r => r === rol)));
+        const filtrados = q && !idExacto
+          ? crearIndiceBm25(registros, u => [{ texto: u.perfil.nombre ?? "", peso: 1 }])(q, cumple, true)
+          : registros.filter(cumple);
         const paginas = Math.max(1, Math.ceil(filtrados.length / tamano));
         const pagina = Math.min(consulta.pagina, paginas);
         return { ok: true, valor: {

@@ -1,6 +1,5 @@
-import Encabezado from "@/components/Encabezado";
-import Pie from "@/components/Pie";
+import PublicShell from "@/components/PublicShell";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
-  return <><Encabezado /><main id="contenido" tabIndex={-1}>{children}</main><Pie /></>;
+  return <PublicShell>{children}</PublicShell>;
 }

@@ -68,7 +68,7 @@ test('SDK real con fetch interceptado: GET Auth y profiles mínimo, sin caché, 
       return Response.json([{id,full_name:'Nombre ficticio',email:'no-publicar'}],{headers:{'content-range':'0-0/1'}});
     };
     const {crearLecturasSupabase}=await import(${JSON.stringify(archivo)});
-    const p=crearLecturasSupabase();assert.deepEqual(Object.keys(p),['listarCuentas','consultarPerfiles']);
+    const p=crearLecturasSupabase();assert.deepEqual(Object.keys(p).sort(),['buscar','consultarPerfiles','listarCuentas']);
     const cuentas=await p.listarCuentas(1,100);
     assert.deepEqual(cuentas.usuarios[0].app_metadata,{});
     assert.doesNotMatch(JSON.stringify(cuentas),/no-publicar|email|factors|user_metadata/);
@@ -94,6 +94,42 @@ test('SDK: errores de Auth/PostgreSQL y truncamiento no se convierten en lista v
     await assert.rejects(()=>crearLecturasSupabase().consultarPerfiles(['00000000-0000-4000-8000-000000000001']),/perfiles no disponible/);
     globalThis.fetch=async()=>Response.json([],{headers:{'content-range':'*/1'}});
     await assert.rejects(()=>crearLecturasSupabase().consultarPerfiles(['00000000-0000-4000-8000-000000000001']),/incompleta/);
+  `);
+  assert.equal(r.status,0,r.stderr);
+});
+
+test('la consulta textual usa solo el RPC GET autorizado y valida su DTO',()=>{
+  const r=ejecutar(`
+    import assert from 'node:assert/strict';
+    ${configuracion}
+    let llamadas=0;
+    const id='00000000-0000-4000-8000-000000000001';
+    globalThis.fetch=async(input,init)=>{
+      const url=new URL(String(input));
+      assert.equal(url.pathname,'/rest/v1/rpc/dentaia_buscar_usuarios');
+      assert.equal(url.searchParams.get('p_query'),'Lucía');
+      assert.equal(url.searchParams.get('p_role'),'paciente');
+      assert.equal(init.method,'GET');
+      assert.equal(init.cache,'no-store');
+      assert.equal(new Headers(init.headers).get('apikey'),process.env.DENTAIA_SUPABASE_ADMIN_READ_SECRET);
+      if (++llamadas === 2) return Response.json({message:'Detalle privado'}, {status:503});
+      return Response.json({origen:'supabase',consistencia:'lectura_no_transaccional',
+        total:1,pagina:1,paginas:1,tamano:5,usuarios:[{id,cuenta:'habilitada',
+          perfil:{estado:'presente',nombre:'Lucía'},asignacion:{estado:'activa',roles:['paciente']},
+          email:'no-publicar'}]});
+    };
+    const {crearLecturasSupabase}=await import(${JSON.stringify(archivo)});
+    const {crearProveedorUsuariosReales}=await import('./src/features/administracion/usuarios-reales.ts');
+    const proveedor=crearProveedorUsuariosReales(crearLecturasSupabase);
+    const consulta={q:'Lucía',rol:'paciente'};
+    const resultado=await proveedor.listar(consulta);
+    assert.equal(llamadas,1);
+    assert.equal(resultado.valor.usuarios[0].id,id);
+    assert.doesNotMatch(JSON.stringify(resultado),/no-publicar|email/);
+    const error=await proveedor.listar(consulta);
+    assert.equal(error.status,503);
+    assert.doesNotMatch(JSON.stringify(error),/Detalle privado/);
+    assert.equal(llamadas,2);
   `);
   assert.equal(r.status,0,r.stderr);
 });
@@ -151,7 +187,7 @@ test('Production main: opt-in y credencial dedicada habilitan solo el puerto GET
     delete process.env.DENTAIA_SUPABASE_ADMIN_READ_SECRET;
     assert.throws(()=>crearLecturasSupabase(),/no configurada/);assert.equal(llamadas,0);
     process.env.DENTAIA_SUPABASE_ADMIN_READ_SECRET='credencial-sintetica-exclusiva-de-prueba';
-    const puerto=crearLecturasSupabase();assert.deepEqual(Object.keys(puerto),['listarCuentas','consultarPerfiles']);
+    const puerto=crearLecturasSupabase();assert.deepEqual(Object.keys(puerto).sort(),['buscar','consultarPerfiles','listarCuentas']);
     assert.deepEqual(await puerto.listarCuentas(1,5),{usuarios:[]});assert.equal(llamadas,1);
   `);
   assert.equal(r.status,0,r.stderr);

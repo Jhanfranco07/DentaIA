@@ -67,10 +67,6 @@
 .shell[data-area="Paciente"] .encabezado{background:#f8fcffef;border-color:#cfe5f4}
 .shell[data-area="Paciente"] .tituloPagina>strong{color:#193456}
 .shell[data-area="Paciente"] .contenido{width:100%;max-width:1800px;padding:20px clamp(17px,2vw,32px) 55px}
-.temaBoton{display:none}
-.shell[data-area="Paciente"] .temaBoton{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:8px 13px;border:1px solid #bddce9;border-radius:11px;background:#e3f5ff;color:#144d77;font-size:12px;font-weight:750}
-.shell[data-area="Paciente"] .temaBoton>span:first-child{font-size:20px;line-height:1}
-.shell[data-area="Paciente"] .temaBoton:hover{background:#d5efff}
 .shell[data-area][data-tema="oscuro"]{--ink:#f0ecff;--muted:#c7bde4;--teal:#b19aff;--teal-dark:#c0afff;--blue:#b19aff;--line:#4d436e;--soft:#322b57;--soft-blue:#352e60;--shadow:0 13px 34px #09061c60;--shadow-card:0 8px 24px #09061c4d;background:radial-gradient(circle at 85% 0%,#392a62,transparent 41%),linear-gradient(150deg,#15122d,#241c42 75%,#181432);color:#f0ecff}
 .shell[data-area][data-tema="oscuro"] .lateral{background:linear-gradient(158deg,#120c2a,#21143f 77%,#402277);border-color:#3d2e63}
 .shell[data-area][data-tema="oscuro"] .marca :global(.marca-acento){color:#bdacff}
@@ -81,11 +77,10 @@
 .shell[data-area][data-tema="oscuro"] .tituloPagina>span,.shell[data-area][data-tema="oscuro"] .usuarioDatos>span{color:#c5bde0}
 .shell[data-area][data-tema="oscuro"] .usuario{border-color:#53436f}
 .shell[data-area][data-tema="oscuro"] .avatar{background:#3a2d64;color:#f0e8ff;border-color:#755cac}
-.shell[data-area][data-tema="oscuro"] .temaBoton,.shell[data-area][data-tema="oscuro"] .salir,.shell[data-area][data-tema="oscuro"] .botonMenu{background:#362d54;border-color:#685889;color:#f6efff}
-.shell[data-area][data-tema="oscuro"] .temaBoton:hover,.shell[data-area][data-tema="oscuro"] .salir:hover{background:#4c3b75}
+.shell[data-area][data-tema="oscuro"] .salir,.shell[data-area][data-tema="oscuro"] .botonMenu{background:#362d54;border-color:#685889;color:#f6efff}
+.shell[data-area][data-tema="oscuro"] .salir:hover{background:#4c3b75}
 .shell[data-area][data-tema="oscuro"] .contenido :global(input),.shell[data-area][data-tema="oscuro"] .contenido :global(select),.shell[data-area][data-tema="oscuro"] .contenido :global(textarea){color-scheme:dark}
-@media(max-width:760px){.shell[data-area="Paciente"] .contenido{padding:15px 13px 44px}.shell[data-area="Paciente"] .cerrarMenu{background:#ffffff1b;border-color:#ffffff38;color:white}.shell[data-area="Paciente"] .temaBoton{min-width:44px;padding:7px}.shell[data-area="Paciente"] .temaBoton>span:last-child{display:none}}
-@media(prefers-reduced-motion:reduce){.shell[data-area="Paciente"] .temaBoton{transition:none}}
+@media(max-width:760px){.shell[data-area="Paciente"] .contenido{padding:15px 13px 44px}.shell[data-area="Paciente"] .cerrarMenu{background:#ffffff1b;border-color:#ffffff38;color:white}}
 
 
 /* Navegación del paciente del mockup: sidebar claro, identidad y grupos. */
@@ -106,8 +101,6 @@
 .shell[data-area][data-tema="claro"] .estadoPrivado,.shell[data-area][data-tema="claro"] .volver{color:#516984}
 .shell[data-area][data-tema="claro"] .pieLateral{border-color:#e8edf6}
 .shell[data-area][data-tema="claro"] .encabezado{background:#ffffffec;border-color:#e1e8f6}
-.shell[data-area][data-tema="claro"] .temaBoton{background:#fff;border-color:#dce6f3;color:#27466d}
-.shell[data-area][data-tema="claro"] .temaBoton:hover{background:#eaf6ff}
 .shell[data-area][data-tema="oscuro"] .portalMarca{background:#30264c;border-color:#655481}
 .shell[data-area][data-tema="oscuro"] .portalMarca strong{color:#f3edff}
 .shell[data-area][data-tema="oscuro"] .portalIcono{border-radius:50%;font-weight:850}
@@ -199,9 +192,7 @@
 }
 
 
-/* Selector compartido por todas las áreas del portal. */
-.shell .temaBoton{display:inline-flex;gap:7px;align-items:center;min-height:44px;padding:8px 13px;border:1px solid var(--line);border-radius:11px;background:var(--tema-superficie,#fff);color:var(--ink);font-size:12px;font-weight:750}
+/* Controles de navegación del portal en modo oscuro. */
 .shell[data-area][data-tema="oscuro"] .cuenta,.shell[data-area][data-tema="oscuro"] .cerrarMenu{background:#362d54;border-color:#685889;color:#f6efff}
 .shell[data-area][data-tema="oscuro"] :is(.enlace,.enlace svg,.volver,.estadoPrivado,.tituloNavegacion){color:#e8ddff}
 .shell[data-area][data-tema="oscuro"] .enlace:hover{background:#392e59;color:#fff}
-@media(max-width:760px){.shell .temaBoton>span:last-child{display:none}.shell .temaBoton{padding:7px;min-width:44px}}

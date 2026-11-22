@@ -1,38 +1,78 @@
 "use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSesion } from "@/features/cuenta/useSesion";
 import { rolesDelUsuario, rutaPrincipalPorRoles } from "@/features/autorizacion/roles";
 import { Icono, Marca } from "./Identidad";
-import { TemaBoton } from "./Tema";
 
-const enlaces = [["/", "Inicio"], ["/#como-funciona", "Cómo funciona"], ["/#funcionalidades", "Funcionalidades"], ["/directorio", "Odontólogos"], ["/privacidad", "Privacidad"]] as const;
+const enlaces = [
+  ["/", "Inicio"],
+  ["/#como-funciona", "Cómo funciona"],
+  ["/#funcionalidades", "Funcionalidades"],
+  ["/directorio", "Odontólogos"],
+  ["/privacidad", "Privacidad"],
+] as const;
+
 export default function Encabezado() {
   const ruta = usePathname();
   const { usuario } = useSesion();
   const destino = usuario ? rutaPrincipalPorRoles(rolesDelUsuario(usuario)) ?? "/cuenta" : "/cuenta";
   const [abierto, setAbierto] = useState(false);
+  const [ancla, setAncla] = useState("");
   const header = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
-  useEffect(() => { setAbierto(false); }, [ruta]);
+
+  useEffect(() => {
+    const sincronizar = () => setAncla(window.location.hash);
+    sincronizar();
+    setAbierto(false);
+    window.addEventListener("hashchange", sincronizar);
+    window.addEventListener("popstate", sincronizar);
+    return () => {
+      window.removeEventListener("hashchange", sincronizar);
+      window.removeEventListener("popstate", sincronizar);
+    };
+  }, [ruta]);
+
   useEffect(() => {
     if (!abierto) return;
-    const close = (event: PointerEvent) => { if (!header.current?.contains(event.target as Node)) setAbierto(false); };
-    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") { setAbierto(false); toggle.current?.focus(); } };
-    document.addEventListener("pointerdown", close);
-    document.addEventListener("keydown", escape);
-    return () => { document.removeEventListener("pointerdown", close); document.removeEventListener("keydown", escape); };
+    const cerrarFuera = (event: PointerEvent) => {
+      if (!header.current?.contains(event.target as Node)) setAbierto(false);
+    };
+    const cerrarConEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setAbierto(false);
+      toggle.current?.focus();
+    };
+    document.addEventListener("pointerdown", cerrarFuera);
+    document.addEventListener("keydown", cerrarConEscape);
+    return () => {
+      document.removeEventListener("pointerdown", cerrarFuera);
+      document.removeEventListener("keydown", cerrarConEscape);
+    };
   }, [abierto]);
-  return <header className="site-header" data-landing-header={ruta === "/" ? "true" : undefined} ref={header}><div className="site-header-inner">
-    <Link href="/" aria-label="DentaIA, inicio" className="marca-enlace"><Marca /></Link>
-    <span className="header-divider" aria-hidden="true" />
-    <button ref={toggle} type="button" className={`menu-toggle ${abierto ? "is-open" : ""}`} aria-label={abierto ? "Cerrar menú" : "Abrir menú"} aria-expanded={abierto} aria-controls="navegacion-principal" onClick={() => setAbierto(!abierto)}><span className="menu-bars" aria-hidden="true"><i /><i /><i /></span><span>Menú</span></button>
-    <nav id="navegacion-principal" aria-label="Navegación principal" className={`site-nav ${abierto ? "is-open" : ""}`}>
-      {enlaces.map(([href, texto]) => {
-        const activo = href === "/" ? ruta === "/" : href.includes("#") ? false : ruta === href || ruta.startsWith(`${href}/`);
-        return <Link key={href} href={href} onClick={() => setAbierto(false)} aria-current={activo ? "page" : undefined}>{texto}</Link>;
-      })}
-    </nav>{ruta !== "/" && <TemaBoton cabecera />}<Link href={destino} className="action action-small action-account" aria-label={usuario ? "Ir a mi espacio" : "Iniciar sesión o crear una cuenta"} aria-current={ruta === "/cuenta" ? "page" : undefined}><Icono nombre="persona" size={17} /> {usuario ? "Mi espacio" : "Iniciar sesión"}</Link>
-  </div></header>;
+
+  const anclaActiva = enlaces.some(([href]) => href === "/" + ancla && ancla !== "");
+
+  return <header className="site-header" ref={header}>
+    <div className="site-header-inner">
+      <Link href="/" aria-label="DentaIA, inicio" className="marca-enlace" onNavigate={() => { setAncla(""); setAbierto(false); }}><Marca /></Link>
+      <button ref={toggle} type="button" className="menu-toggle" aria-label={abierto ? "Cerrar menú" : "Abrir menú"} aria-expanded={abierto} aria-controls="navegacion-principal" onClick={() => setAbierto(valor => !valor)}>
+        <Icono nombre={abierto ? "cerrar" : "menu"} size={20} />
+        <span>Menú</span>
+      </button>
+      <nav id="navegacion-principal" aria-label="Navegación principal" className={`site-nav ${abierto ? "is-open" : ""}`}>
+        {enlaces.map(([href, texto]) => {
+          const hash = href.includes("#") ? href.slice(href.indexOf("#")) : "";
+          const activo = hash ? ruta === "/" && hash === ancla : href === "/" ? ruta === "/" && !anclaActiva : ruta === href || ruta.startsWith(`${href}/`);
+          return <Link key={href} href={href} onNavigate={() => { setAbierto(false); setAncla(hash); }} aria-current={activo ? (hash ? "location" : "page") : undefined}>{texto}</Link>;
+        })}
+      </nav>
+      <Link href={destino} className="site-account" aria-current={ruta === "/cuenta" ? "page" : undefined} onNavigate={() => setAbierto(false)}>
+        {usuario ? "Mi espacio" : "Iniciar sesión"} <Icono nombre="flecha" size={16} />
+      </Link>
+    </div>
+  </header>;
 }
