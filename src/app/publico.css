@@ -1,0 +1,68 @@
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("/landing/fonts/instrument-sans.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Newsreader;
+  src: url("/landing/fonts/newsreader.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+}
+
+.public-site {
+  --public-navy: #0a2358;
+  --public-deep: #061b45;
+  --public-cobalt: #2759a5;
+  --public-sky: #54a2d9;
+  --public-mist: #a3c8da;
+  --public-pale: #e4eff6;
+  --public-fog: #cddfeb;
+  --public-paper: #fbfdfe;
+  --public-clay: #a86f57;
+  --public-muted: #40587a;
+  --public-light-text: #dcecf8;
+  --public-rule: #0a235833;
+  --public-light-rule: #dcecf84d;
+  --public-display: Newsreader, Georgia, serif;
+  --public-gutter: clamp(20px, 5.55vw, 88px);
+  --public-width: 1280px;
+  --public-content: min(var(--public-width), 100% - 2 * var(--public-gutter));
+  --public-section-space: clamp(56px, 7.2vw, 112px);
+  --public-h1: clamp(2.85rem, 5.7vw, 5.625rem);
+  --public-h2: clamp(2.55rem, 4.9vw, 4.875rem);
+  --public-control: 8px;
+  --public-panel: 16px;
+  --public-speed: 160ms;
+  --public-easing: cubic-bezier(.22, 1, .36, 1);
+  --public-focus: var(--public-cobalt);
+  --ink: var(--public-navy);
+  --muted: var(--public-muted);
+  --canvas: var(--public-pale);
+  --soft: var(--public-pale);
+  --soft-blue: var(--public-pale);
+  --teal: var(--public-cobalt);
+  --teal-dark: var(--public-navy);
+  --blue: var(--public-cobalt);
+  --line: var(--public-rule);
+  --shadow-card: none;
+  --shadow: none;
+  background: var(--public-pale);
+  color: var(--public-navy);
+  font-family: "Instrument Sans", "Segoe UI", Arial, sans-serif;
+  line-height: 1.55;
+}
+
+.public-site .public-wrap, .public-site .module-shell {
+  width: var(--public-content);
+  margin-inline: auto;
+}
+
+.public-site .module-shell { padding-block: clamp(32px, 4vw, 56px) var(--public-section-space); }
+.public-site .eyebrow, .public-label { margin: 0 0 16px; font-size: .875rem; font-weight: 600; letter-spacing: 0; }
+.public-title { margin: 0; font: 400 var(--public-h2)/.98 var(--public-display); letter-spacing: -.035em; text-wrap: pretty; }
+.public-site :focus-visible { outline-color: var(--public-focus) !important; }
