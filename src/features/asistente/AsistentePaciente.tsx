@@ -49,7 +49,7 @@ export default function AsistentePaciente() {
     if (abierto) {
       entrada.current?.focus();
       cuerpo.current?.scrollTo({ top: cuerpo.current.scrollHeight, behavior: "smooth" });
-    } else activador.current?.focus();
+    }
   }, [abierto]);
   useEffect(() => { if (abierto) cuerpo.current?.scrollTo({ top: cuerpo.current.scrollHeight, behavior: "smooth" }); }, [abierto, mensajes, preciosEstado]);
 
