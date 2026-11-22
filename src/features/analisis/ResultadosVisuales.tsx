@@ -77,7 +77,7 @@ export default function ResultadosVisuales({ result, oral, image, smileOverlay, 
           </div>}
         </div>
       </div>
-      <div className={styles.cardFooter}><span>Interpretación visual, no clínica.</span><Link href="/paciente/buenas-practicas" className={styles.textLink}>Ver buenas prácticas para el cuidado dental <span aria-hidden="true">↗</span></Link></div>
+      <div className={styles.cardFooter}><span>Interpretación visual, no clínica.</span><Link href="/buenas-practicas" className={styles.textLink}>Ver buenas prácticas para el cuidado dental <span aria-hidden="true">↗</span></Link></div>
     </section>
 
     <section className={styles.analysisCard} aria-labelledby="resultado-posicion-titulo">
@@ -116,7 +116,8 @@ export default function ResultadosVisuales({ result, oral, image, smileOverlay, 
       <p>{explanation?.summary ?? (explaining ? "Estamos preparando una explicación con los datos del análisis…" : "Tu fotografía se ha analizado; consulta las observaciones anteriores.")}</p>
       {explanation?.recommendation && <p>{explanation.recommendation}</p>}
       <div className={styles.educationActions}>
-        <Link href="/paciente/buenas-practicas" className={styles.primaryLink}>Conocer buenas prácticas <span aria-hidden="true">↗</span></Link>
+        <Link href="/buenas-practicas" className={styles.primaryLink}>Conocer buenas prácticas <span aria-hidden="true">↗</span></Link>
+        <Link href="/paciente/rutinas" className={styles.secondaryLink}>Seguir mi rutina preventiva</Link>
         <Link href="/panel/odontologos" className={styles.secondaryLink}>Buscar odontólogo</Link>
       </div>
       <small>{explanation?.disclaimer ?? "El resultado es orientativo y no constituye diagnóstico. No confirma una condición dental."}</small>
