@@ -92,11 +92,16 @@ begin
     where c.id=p_consent_id for update;
     if not found then raise exception 'ACCESO_DENEGADO' using errcode='42501'; end if;
   elsif p_accion in ('aceptar_plan','rechazar_plan','revocar_plan') then
-    select * into v_proposal from public.routine_plan_proposals p
-    where p.id=p_proposal_id for update;
+    -- Orden de locks consistente: consentimiento antes que propuesta.
+    -- Evita interbloqueos con revocaciones y propuestas simultáneas.
+    select p.consent_id into v_consent_id from public.routine_plan_proposals p
+    where p.id=p_proposal_id;
     if not found then raise exception 'ACCESO_DENEGADO' using errcode='42501'; end if;
     select * into v_consent from public.routine_followup_consents c
-    where c.id=v_proposal.consent_id for update;
+    where c.id=v_consent_id for update;
+    if not found then raise exception 'ACCESO_DENEGADO' using errcode='42501'; end if;
+    select * into v_proposal from public.routine_plan_proposals p
+    where p.id=p_proposal_id and p.consent_id=v_consent_id for update;
     if not found then raise exception 'ACCESO_DENEGADO' using errcode='42501'; end if;
   else
     raise exception 'SOLICITUD_INVALIDA' using errcode='22023';
@@ -127,6 +132,19 @@ begin
     insert into clinical.routine_followup_audit(consent_id,actor_user_id,action)
     values(v_consent.id,p_actor_user_id,p_accion);
     return jsonb_build_object('ok',true,'consentId',v_consent.id);
+  end if;
+
+  if p_accion = 'revocar_plan' then
+    -- Derecho del paciente a retirar su plan, incluso si el profesional fue suspendido.
+    if not (v_actor_roles ? 'paciente') or v_consent.patient_id<>p_actor_user_id
+      or v_proposal.patient_id<>p_actor_user_id or v_proposal.status<>'aceptada' then
+      raise exception 'ACCESO_DENEGADO' using errcode='42501';
+    end if;
+    update public.routine_plan_proposals set status='revocada',revoked_at=now()
+      where id=v_proposal.id;
+    insert into clinical.routine_followup_audit(consent_id,proposal_id,actor_user_id,action)
+    values(v_consent.id,v_proposal.id,p_actor_user_id,p_accion);
+    return jsonb_build_object('ok',true,'proposalId',v_proposal.id);
   end if;
 
   -- Toda aprobación o propuesta exige vínculo clínico vigente.
