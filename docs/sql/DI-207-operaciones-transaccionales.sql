@@ -62,6 +62,23 @@ begin
     ) then
       raise exception 'ACCESO_DENEGADO' using errcode = '42501';
     end if;
+    -- Revocación automática de invitaciones vencidas para permitir nuevas solicitudes.
+    update public.routine_plan_proposals prop
+      set status='revocada', revoked_at=now()
+    where prop.status='aceptada' and prop.consent_id in (
+      select old.id from public.routine_followup_consents old
+      where old.patient_id=v_patient_user_id and old.membership_id=p_membership_id
+        and old.status in ('pendiente','aprobado') and old.expires_at<=now()
+    );
+    with expiradas as (
+      update public.routine_followup_consents old
+        set status='expirado', revoked_at=now()
+      where old.patient_id=v_patient_user_id and old.membership_id=p_membership_id
+        and old.status in ('pendiente','aprobado') and old.expires_at<=now()
+      returning old.id
+    )
+    insert into clinical.routine_followup_audit(consent_id,actor_user_id,action)
+    select id,p_actor_user_id,'expirar' from expiradas;
     insert into public.routine_followup_consents(patient_id,membership_id,expires_at)
     values(v_patient_user_id,p_membership_id,now()+interval '14 days')
     returning id into v_consent_id;
@@ -70,7 +87,7 @@ begin
     return jsonb_build_object('ok',true,'consentId',v_consent_id);
   end if;
 
-  if p_accion in ('aprobar_seguimiento','revocar_seguimiento','proponer_plan') then
+  if p_accion in ('aprobar_seguimiento','rechazar_seguimiento','revocar_seguimiento','proponer_plan') then
     select * into v_consent from public.routine_followup_consents c
     where c.id=p_consent_id for update;
     if not found then raise exception 'ACCESO_DENEGADO' using errcode='42501'; end if;
@@ -83,6 +100,18 @@ begin
     if not found then raise exception 'ACCESO_DENEGADO' using errcode='42501'; end if;
   else
     raise exception 'SOLICITUD_INVALIDA' using errcode='22023';
+  end if;
+
+  if p_accion = 'rechazar_seguimiento' then
+    if v_consent.patient_id<>p_actor_user_id or not (v_actor_roles ? 'paciente')
+      or v_consent.status<>'pendiente' then
+      raise exception 'ACCESO_DENEGADO' using errcode='42501';
+    end if;
+    update public.routine_followup_consents
+      set status='rechazado', revoked_at=now() where id=v_consent.id;
+    insert into clinical.routine_followup_audit(consent_id,actor_user_id,action)
+    values(v_consent.id,p_actor_user_id,p_accion);
+    return jsonb_build_object('ok',true,'consentId',v_consent.id);
   end if;
 
   if p_accion = 'revocar_seguimiento' then
