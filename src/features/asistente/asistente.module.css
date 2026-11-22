@@ -17,3 +17,36 @@
 .opcionIA input{width:17px;height:17px;accent-color:#087e86;cursor:pointer}
 .origen{display:block;color:#527587;font-size:11px;margin-top:10px}
 @media(max-width:600px){.activador{padding:5px 13px 5px 4px}.panel{max-height:94dvh}}
+
+/* Conversación primero: respuestas y fuentes cortas, sin desplegar guías extensas. */
+.panel{background:#f5f9fb}
+.cuerpo{min-height:0}
+.intercambio{gap:7px;margin-bottom:14px}
+.respuesta,.alerta{line-height:1.6;padding:13px 14px}
+.respuesta>p,.alerta>p{white-space:pre-line;overflow-wrap:anywhere}
+.fuentes{margin-top:11px;border-top:1px solid #e1edf0;padding-top:9px;font-size:12px}
+.fuentes summary{color:#086b7b;font-weight:750;cursor:pointer;list-style-position:inside}
+.fuentes summary:hover{text-decoration:underline;text-underline-offset:3px}
+.listaFuentes{display:grid;gap:8px;margin-top:10px}
+.fuente{display:grid;gap:3px;padding:8px;border:1px solid #d6ebed;border-radius:10px;background:#f0f8f9}
+.fuente strong{font-size:12px;color:#174457}
+.fuentes a{font-size:11px;color:#086b7b;overflow-wrap:anywhere;text-decoration:underline;text-underline-offset:2px}
+.invitacionIA{display:flex;align-items:center;justify-content:space-between;gap:11px;padding:10px 12px;margin-bottom:10px;border:1px solid #b6dbdf;border-radius:13px;background:linear-gradient(110deg,#eaf9f8,#ecf6ff)}
+.invitacionIA>div{min-width:0;flex:1}
+.invitacionIA strong{display:block;color:#124657;font-size:12px;line-height:1.3}
+.invitacionIA p{margin:4px 0 0;color:#3d6173;font-size:11px;line-height:1.4}
+.invitacionIA button{flex:none;border:0;border-radius:10px;background:#007d87;color:#fff;font-weight:750;font-size:12px;padding:10px 11px;cursor:pointer;min-height:40px}
+.invitacionIA button:hover{background:#00616c}
+.estadoIA{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;padding:8px 10px;border:1px solid #b6e5d7;border-radius:10px;background:#e8f8f0;color:#116444;font-size:12px;font-weight:750}
+.estadoIA button{border:0;background:transparent;color:#17646b;text-decoration:underline;cursor:pointer;font-weight:650;font-size:11px}
+.sugerencias{scrollbar-width:none}
+.sugerencias::-webkit-scrollbar{display:none}
+.formulario:focus-within{border-color:#087e86;box-shadow:0 0 0 2px #087e861f}
+.origen{font-size:10px}
+@media (max-width:480px){
+  .invitacionIA{align-items:stretch;flex-direction:column}
+  .invitacionIA button{align-self:stretch}
+  .pie{padding:10px 12px}
+  .pie>small{font-size:10px}
+  .panel{height:min(94dvh,850px)}
+}
