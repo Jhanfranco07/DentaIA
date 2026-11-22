@@ -21,7 +21,7 @@ export default function PlanesDentaIA() {
       <p>Elige según lo que necesitas hoy y consulta qué funciones están previstas para cada plan.</p>
     </div>
     <div className={styles.grid}>
-      <article className={styles.card} data-reveal>
+      <article className={styles.card}>
         <h3>Gratis</h3>
         <p className={styles.price}>S/ 0 <small>/ siempre</small></p>
         <p>Accede a las herramientas esenciales de DentaIA.</p>
@@ -32,7 +32,7 @@ export default function PlanesDentaIA() {
         </ul>
         <Link className="action action-secondary" href="/cuenta?modo=registro">Comenzar gratis <Icono nombre="flecha" size={16} /></Link>
       </article>
-      <article className={`${styles.card} ${styles.featured} public-inverse`} data-reveal>
+      <article className={`${styles.card} ${styles.featured} public-inverse`}>
         <h3>Premium</h3>
         <p className={styles.price}>S/ {precio} <small>/ mes</small></p>
         <p>Suscripción de demostración con Stripe Sandbox.</p>
