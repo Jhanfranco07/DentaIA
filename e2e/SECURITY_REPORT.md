@@ -1,4 +1,10 @@
-# Fase 4: cierre de S-02, S-03 y S-04
+# Seguridad E2E: estado final e historial de fases
+
+## Estado final verificado
+
+El commit `fe301faf08eac04408f8247a65e98b0fe743d656` del [PR #112](https://github.com/Jhanfranco07/DentaIA/pull/112) pasó la [ejecución DevSecOps #422](https://github.com/Jhanfranco07/DentaIA/actions/runs/45133429576): **30/30 jobs exitosos**, Playwright **12/12 en 41,1 s** en Ubuntu, regresión de aislamiento **1/1**, `tests-resumen` y Quality Gates finales exitosos. La [ejecución #421](https://github.com/Jhanfranco07/DentaIA/actions/runs/45133051850) también terminó con 30/30 jobs y Playwright 12/12 (47,8 s). Estos resultados no implican cobertura total de funcionalidades ni seguridad absoluta. El inventario, la arquitectura y los límites actuales están consolidados en [DI-136 — Playwright y DevSecOps](../docs/qa/DI-136-playwright-devsecops.md).
+
+Las secciones siguientes conservan el diagnóstico cronológico. Las frases sobre comprobaciones «pendientes» o archivos «sin modificar» describen el momento de cada fase, no el estado final. En la publicación del PR se corrigió **solo la integridad** de `@next/swc-linux-x64-gnu@15.5.29` en `package-lock.json`; no se cambió su versión. El S-01 de FastAPI procede de un informe histórico fuera del alcance Playwright. En #422 `pip-audit` y el Security Quality Gate pasaron; esta documentación no reevalúa el aviso individual de FastAPI ni lo atribuye al PR. Las auditorías npm corresponden a JavaScript y son una verificación distinta.
 
 ## Diagnóstico de GitHub Actions en el PR #112
 
@@ -10,7 +16,7 @@ La ejecución #421 de DevSecOps en GitHub Actions, sobre `491d54c7844b902e0120bb
 
 ## Fase 7: observaciones finales de Claude
 
-`playwright.config.ts` incluye `HOME` en la lista permitida para Chromium en Ubuntu. Se copia solo esa variable de ruta y se mantienen fuera las credenciales y variables de servicio. En Windows, cuando `HOME` no existe, la configuración conserva el funcionamiento anterior. El job `tests-playwright` exige ahora los artefactos de fallo mediante `if-no-files-found: error`; los demás jobs y sus políticas de artefactos no cambiaron. La corrida final local con `CI=true` pasó 12/12; la regresión de la guarda pasó 1/1, TypeScript pasó, Vitest pasó 116/116 y el build aislado pasó con advertencias CSS preexistentes. `npm audit --package-lock-only --ignore-scripts` y su variante `--omit=dev` respondieron con 0 vulnerabilidades. El DAG local se verificó; la validación completa YAML/actionlint y la ejecución Ubuntu quedan pendientes de GitHub Actions por falta de esas herramientas en Windows.
+`playwright.config.ts` incluye `HOME` en la lista permitida para Chromium en Ubuntu. Se copia solo esa variable de ruta y se mantienen fuera las credenciales y variables de servicio. En Windows, cuando `HOME` no existe, la configuración conserva el funcionamiento anterior. El job `tests-playwright` exige ahora los artefactos de fallo mediante `if-no-files-found: error`; los demás jobs y sus políticas de artefactos no cambiaron. La corrida local con `CI=true` pasó 12/12; la regresión de la guarda pasó 1/1, TypeScript pasó, Vitest pasó 116/116 y el build aislado pasó con advertencias CSS preexistentes. `npm audit --package-lock-only --ignore-scripts` y su variante `--omit=dev` respondieron con 0 vulnerabilidades. El DAG se verificó localmente; YAML/actionlint y Ubuntu se comprobaron después en #421 y #422, pues esas herramientas no estaban disponibles localmente en Windows.
 
 ## Fase 5: correcciones de Claude e integración DevSecOps
 
@@ -18,11 +24,11 @@ La ejecución #421 de DevSecOps en GitHub Actions, sobre `491d54c7844b902e0120bb
 - **B-04/B-05:** `fixtures.json` concentra URL y clave ficticias; los tests validan explícitamente `baseURL` y rechazan cualquier destino distinto de HTTP local, sin aserciones no nulas ni fallback remoto.
 - **C-01/C-02/C-03/C-04:** el test de teclado exige foco visible en «Ir al contenido» y activación con Enter; CI usa un worker; la guarda registra el PID que abrió el puerto y Windows solo termina ese PID si aún es el listener; el WebSocket permitido exige `ws:`, host, puerto y ruta exactos sin query ni credenciales.
 - **Pipeline:** `tests-playwright` usa Ubuntu, Node 22, acciones fijadas por SHA, `npm ci`, Chromium del Playwright fijado por lockfile, regresión de aislamiento, suite E2E y artefactos solo ante fallo. Depende de `tests-preparacion` y es dependencia obligatoria de `tests-resumen`, cuyo `summary.py --gate` exige éxito de cada `needs`. La validación integral ya depende de `tests-resumen`.
-- **Resultados locales:** E2E 12/12; regresión 1/1; preflight pasó; TypeScript pasó; build pasó con advertencias CSS/autoprefixer existentes; Vitest 19 archivos y 116/116 pruebas; `node scripts/ci/lint.mjs` salió 0 pero no ejecuta ESLint; `git diff --check` salió 0 con advertencias de normalización LF/CRLF. `npm audit --omit=dev` no devolvió hallazgos porque falló la petición al registro. Ubuntu/Actions y los validadores Python/actionlint no pudieron ejecutarse en este Windows: WSL respondió acceso denegado y no hay Python ni actionlint instalados.
+- **Resultados locales de fase 5:** E2E 12/12; regresión 1/1; preflight pasó; TypeScript pasó; build pasó con advertencias CSS/autoprefixer existentes; Vitest 19 archivos y 116/116 pruebas; `node scripts/ci/lint.mjs` salió 0 pero no ejecuta ESLint; `git diff --check` salió 0 con advertencias de normalización LF/CRLF. En esa fase `npm audit` fue inconcluso y Ubuntu/Actions no pudo ejecutarse localmente. La fase 7 repitió las auditorías npm con 0 hallazgos y #421/#422 validaron Ubuntu en GitHub Actions.
 - **Corrección durante la validación:** una corrida intermedia con `CI=true` terminó 11/12 porque la aserción de foco esperaba `transform: matrix(...)` mientras Chromium devolvía `none` para el enlace ya visible. Se cambió a foco y visibilidad del enlace concreto más activación con Enter; la corrida completa posterior con un worker terminó 12/12.
 - **Pendientes:** S-01 corresponde al FastAPI preexistente del backend y requiere corrección coordinada separada. El bloqueo de red Node/Chromium no es un sandbox del sistema operativo frente a código nativo o procesos independientes. Ninguna prueba de esta suite acredita autenticación real, pagos, IA ni integración remota. No se cambió FastAPI, RLS, CSP, Quality Gates existentes ni dependencias.
 
-## Resumen
+## Resumen histórico de fase 4
 
 Revisión realizada en `test/playwright-public`, HEAD inicial `8db8fa1f1d34cff1d0814b2a352fdb60cf7f091c`, con `origin/main` como ancestro. Las 10 pruebas originales se conservaron y se añadieron 2 casos. No se modificaron dependencias, backend de IA, RLS, CSP ni workflows. No se creó commit ni se contactaron servicios de producción.
 
@@ -49,12 +55,12 @@ La primera corrida E2E falló por un método incorrecto del controlador WebSocke
 
 ## Pendientes y límites
 
-- **S-01 preexistente:** `services/dental-vision/requirements.txt` fija FastAPI 0.135.2 dentro del rango de GHSA-f56c-v883-vx8r (severidad alta). Requiere corrección coordinada fuera de este alcance.
-- La consulta npm de fase 4 no permitió enumerar vulnerabilidades; la repetición de fase 7 devolvió 0. No se agregaron ni actualizaron paquetes ni se cambió `package-lock.json`. El gate de CI repetirá su propia auditoría.
+- **S-01, registro histórico de fase 4:** se señaló FastAPI 0.135.2 en `services/dental-vision/requirements.txt` frente a GHSA-f56c-v883-vx8r. La versión fijada sigue en ese archivo, pero `pip-audit` y el gate de seguridad de #422 pasaron. Este documento no presenta S-01 como vulnerabilidad actual confirmada; el equipo del backend debe reconciliar el aviso y el resultado del pipeline por separado.
+- La consulta npm de fase 4 no permitió enumerar vulnerabilidades; la repetición de fase 7 devolvió 0. Hasta la fase 4 no se habían agregado ni actualizado paquetes ni cambiado `package-lock.json`. Posteriormente se corrigió solo la integridad SWC Linux y el gate de CI de #422 pasó.
 - La guarda de Node protege los caminos de red usados por la aplicación, pero no constituye un sandbox de sistema operativo contra código nativo malicioso o procesos arbitrarios. Para esa garantía, ejecutar también en un contenedor o sandbox sin salida de red.
 - Las pruebas simulan Supabase y teselas; no acreditan autenticación real, pagos, análisis de IA ni integración remota.
-- En algunos controladores Windows, Chromium escribe `debug.log` con mensajes de GPU; está ignorado por Git y se elimina al cerrar la revisión.
+- En algunos controladores Windows, Chromium escribe `debug.log` con mensajes de GPU; está ignorado por Git y no forma parte del PR.
 
-## Recomendación para DevSecOps
+## Recomendación histórica de fase 4 para DevSecOps (implementada)
 
-Añadir un job E2E público después de `npm ci`, typecheck y build: instalar Chromium de Playwright, ejecutar `npm run test:e2e`, conservar informe, trazas y capturas como artefactos cuando falle, y exigir el resultado en el Quality Gate existente. Mantener el `npm audit --omit=dev`, `pip-audit` y los demás gates actuales; no permitir credenciales de producción en el job E2E. La defensa técnica es doble: entorno y sockets del servidor restringidos, y contexto de Chromium interceptado con proxy sin salida.
+La propuesta de fase 4 era añadir un job E2E público que instalara Chromium, ejecutara `npm run test:e2e`, conservara informe y trazas ante fallos y exigiera su resultado en el Quality Gate, manteniendo `npm audit --omit=dev`, `pip-audit` y los demás controles. La implementación vigente se describe en el documento DI-136 y fue comprobada por #422. La defensa técnica combina entorno y sockets del servidor restringidos con intercepción y proxy del contexto Chromium; sus límites constan arriba.

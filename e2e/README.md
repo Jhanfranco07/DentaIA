@@ -1,38 +1,40 @@
-# E2E público
+# Suite E2E pública de DentaIA
 
-En Ubuntu, el job instala las dependencias opcionales con `npm ci --include=optional` y comprueba que el binario SWC de Linux fijado por el lockfile existe antes de activar la guarda de red. Si falta, el job falla durante la preparación; Next.js no puede descargarlo durante las pruebas.
+Guía breve de ejecución. La arquitectura, los doce casos, la cronología #418–#422 y la matriz de cobertura están en [DI-136 — Playwright y DevSecOps](../docs/qa/DI-136-playwright-devsecops.md). El [informe de seguridad](SECURITY_REPORT.md) conserva los hallazgos y decisiones de las fases anteriores.
 
-La entrada SWC Linux del lockfile usa la integridad publicada para la versión 15.5.29. Un hash previo distinto, heredado de `origin/main`, impedía su instalación en Ubuntu y provocaba que Next.js intentara descargarlo durante la suite; la guarda rechazó ese intento. Solo se actualizó la integridad, no la versión.
+## Estado verificado
 
-La ejecución #421 del pipeline integral en GitHub Actions verificó Ubuntu: regresión 1/1, Playwright 12/12, `tests-resumen` y los Quality Gates finales exitosos. La evidencia está en `https://github.com/Jhanfranco07/DentaIA/actions/runs/45133051850`. La ejecución local de Windows no sustituye esta verificación de CI.
+La [ejecución DevSecOps #422](https://github.com/Jhanfranco07/DentaIA/actions/runs/45133429576) del commit `fe301faf08eac04408f8247a65e98b0fe743d656` terminó con **30/30 jobs exitosos**. En Ubuntu, Playwright pasó **12/12 en 41,1 s** y la regresión de aislamiento pasó **1/1**. `tests-playwright` es obligatorio para `tests-resumen` y el gate final de calidad. La suite cubre interfaz y estados públicos; los servicios reales están simulados.
 
-Actualización para publicación: Chromium recibe `HOME` únicamente desde la lista permitida de variables del sistema. El job `tests-playwright` exige archivos de reporte cuando falla; `if-no-files-found: error` evita que una carga vacía parezca válida. Ninguno de estos cambios transmite credenciales ni altera los demás artefactos del pipeline.
+## Ejecutar en el worktree local
 
-La suite valida páginas reales de Next.js con Chromium. El `globalSetup` inicia y detiene exclusivamente el servidor local de esta corrida. No requiere cuentas, Supabase ni claves de servicios. Conserva los 10 casos iniciales y añade la guía pública de buenas prácticas y el estado de error seguro de una ficha.
+Requisitos: Node 22, dependencias del sistema necesarias para Chromium, puerto local libre (`43117` por defecto) y **ningún archivo `.env` local** en la raíz. El lanzador rechaza esos archivos sin leerlos. No copiar credenciales ni conectar las pruebas a servicios remotos. Las instalaciones descargan paquetes y navegador **antes** de iniciar la suite aislada.
 
-```sh
-npm ci
-npx playwright install chromium
-npm run test:e2e
+**Windows PowerShell** (usar `npm.cmd` si la política bloquea `npm.ps1`):
+
+```powershell
+npm.cmd ci
+node node_modules/playwright/cli.js install chromium
+node --test e2e/isolation/isolation.test.cjs
+$env:CI = 'true'
+npm.cmd run test:e2e
+Remove-Item Env:CI
 ```
 
-En Ubuntu CI, antes de la suite, ejecutar `./node_modules/.bin/playwright install --with-deps chromium` y `node --test e2e/isolation/*.test.cjs`. El CLI proviene de `npm ci` y queda fijado por `package-lock.json`; no se descarga una versión arbitraria del paquete. En PowerShell, usar `npm.cmd` para los scripts de npm si la política bloquea `npm.ps1`.
+**Ubuntu bash** (secuencia equivalente al job de CI):
 
-El job `tests-playwright` usa Node 22 y un worker en CI. Forma parte de `tests-resumen`: su fallo, cancelación u omisión hace fallar ese Quality Gate y la validación integral dependiente. En caso de fallo se suben durante siete días `playwright-report/` y `test-results/`, que contienen solo datos ficticios de estas pruebas; no se pasan secretos al job. La instalación previa requiere el registro npm y los paquetes de Chromium, pero la suite ejecuta Next y Chromium con las restricciones de red descritas abajo.
+```bash
+npm ci --include=optional
+test -f node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node
+./node_modules/.bin/playwright install --with-deps chromium
+node --test e2e/isolation/*.test.cjs
+CI=true npm run test:e2e
+```
 
-`e2e/isolation/fixtures.json` es la única fuente de la URL y clave ficticias de Supabase para lanzador, prueba de preflight, proxy y tests. `NODE_OPTIONS` carga la guarda con ruta entre comillas y separadores compatibles con Windows y Linux. El preflight verifica que la guarda ya se cargó antes de cualquier conexión. La regresión crea temporalmente una ruta con espacios y comprueba que la guarda bloquea un intento TCP externo simulado. El servidor registra el PID que abre el puerto dedicado; el cierre de Windows solo termina ese PID si sigue escuchando en ese puerto. Los WebSockets se permiten únicamente con protocolo `ws:`, destino local exacto y ruta HMR sin query ni credenciales.
+El CLI de Chromium procede de Playwright 1.65.1 fijado en `package-lock.json`. El hash de SWC Linux 15.5.29 se corrigió sin cambiar la versión; el job comprueba el binario antes de activar la guarda de red. Si el puerto predeterminado está ocupado, definir `E2E_PORT` con otro puerto local libre. Playwright se niega a reutilizar un servidor ajeno.
 
-El foco por teclado se valida sobre el enlace «Ir al contenido» y se comprueba que Enter llega a `#contenido`. La suite cubre 12 casos públicos: portada, cuenta, privacidad, directorio y búsqueda, dos estados de ficha, guía de buenas prácticas, premium informativo, guía de análisis, dos rutas que solicitan sesión y menú móvil. No valida autenticación real, pagos, Supabase remoto ni inferencia de IA.
+Los resultados HTML se escriben en `playwright-report/` y las capturas y trazas de fallos en `test-results/`; ambos directorios están ignorados por Git. En CI se suben como artefacto solo cuando el job falla; si faltan, `upload-artifact` también falla. No se incluyen secretos en el entorno de las pruebas.
 
-La ejecución local comprobó 12/12 E2E, 1/1 regresiones, typecheck, build y 116/116 pruebas Vitest. En la fase final, `npm audit --package-lock-only --ignore-scripts` y su variante `--omit=dev` respondieron con 0 vulnerabilidades; el intento de la fase anterior había sido inconcluso por falta de acceso al registro. WSL devolvió acceso denegado y no se pudo ejecutar Ubuntu ni GitHub Actions localmente. El script `scripts/ci/lint.mjs` retorna éxito, pero informa que ESLint no está configurado: este resultado no acredita lint real. El CI conserva sus verificaciones de TypeScript y SAST. FastAPI S-01 es un riesgo preexistente ajeno a esta rama. La guarda Node y el proxy del navegador cubren las rutas de red usadas por esta suite, pero no equivalen a un sandbox del sistema operativo para código nativo o procesos independientes.
+## Alcance del aislamiento
 
-En Windows, usar `npm.cmd` si PowerShell impide ejecutar `npm.ps1`. El puerto predeterminado es 43117; si está ocupado, definir `E2E_PORT` con un puerto local libre. Playwright nunca reutiliza un servidor existente.
-
-El lanzador `e2e/isolation/start-next.cjs` construye un entorno por lista permitida: no hereda credenciales, exige que no existan archivos `.env` locales y fija Supabase a `127.0.0.1:1` con una clave ficticia. Desactiva las banderas clínicas, administrativas, de escritura y de pagos. Antes de iniciar Next, `probe.cjs` verifica con un centinela sintético que el entorno se depuró y que las conexiones externas por `net`, TLS, UDP, DNS y `fetch` se bloquean. La guarda se precarga también en los procesos Node hijos mediante `NODE_OPTIONS`. Cada intento bloqueado del servidor queda registrado en un archivo temporal; el cierre falla si aparece alguno. La consulta fija de Next dev al registro npm para conocer su propia versión se responde localmente, sin red.
-
-En Chromium se bloquean Service Workers. Un proxy local sin servicio impide la salida de red incluso ante un redireccionamiento que el interceptor HTTP no vuelva a ver. La ruta a nivel de contexto permite solamente lecturas al origen local; responde de forma ficticia a las lecturas Supabase y a la RPC de consulta del directorio, y entrega una tesela PNG local al host exacto de OpenStreetMap. Los demás destinos y métodos se bloquean y hacen fallar la prueba. El WebSocket local de HMR se simula; cualquier otro WebSocket se bloquea. Se comprueban además excepciones JavaScript, errores de consola, solicitudes fallidas y respuestas HTTP inesperadas. Las pruebas no envían formularios, fotografías, solicitudes ni pagos.
-
-El bloqueo de sockets del servidor cubre los caminos de red de Node usados por esta aplicación; no es una frontera de seguridad contra código nativo malicioso o procesos arbitrarios independientes. Para una garantía de sistema operativo, ejecutar la suite también dentro de un contenedor o sandbox sin salida de red. El navegador recibe páginas reales, pero la integración con Supabase y las teselas del mapa se simulan deliberadamente.
-
-La salida HTML se guarda en `playwright-report/` y las capturas y trazas de fallos en `test-results/`; ambos directorios están ignorados por Git. Las pruebas autenticadas futuras deben vivir fuera de `e2e/public/` y usar una configuración y datos aislados.
-En algunos controladores gráficos de Windows, Chromium también escribe `debug.log` en el directorio actual; Git lo ignora. Ese archivo no es parte de la evidencia de las pruebas y se puede eliminar al cerrar la corrida.
+`globalSetup` inicia Next.js en loopback con un entorno construido por lista permitida y variables ficticias de Supabase. La guarda Node bloquea intentos externos por los caminos instrumentados. Chromium bloquea Service Workers y usa interceptores de contexto, respuestas simuladas y un proxy local sin servicio. Los intentos de red y errores inesperados hacen fallar las pruebas. Las salidas de instalación ocurren antes de esta fase. Estos controles no sustituyen un sandbox del sistema operativo ni prueban autenticación, pagos, inferencia de IA o Supabase remoto. Consultar la [explicación completa](../docs/qa/DI-136-playwright-devsecops.md#arquitectura-de-ejecución-y-aislamiento).
