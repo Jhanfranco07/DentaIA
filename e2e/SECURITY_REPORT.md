@@ -1,5 +1,9 @@
 # Fase 4: cierre de S-02, S-03 y S-04
 
+## Diagnóstico de GitHub Actions en el PR #112
+
+La primera ejecución Ubuntu de `tests-playwright` falló antes de abrir Next.js y ocultó la salida del launcher. Se añadió captura acotada de diagnóstico; la segunda ejecución mostró que Next.js intentaba descargar `@next/swc-linux-x64-gnu` desde npm. La guarda bloqueó esa salida como estaba previsto. El job solicita ahora explícitamente dependencias opcionales en `npm ci` y verifica la presencia del binario SWC de Linux antes de activar el aislamiento. Esta corrección se comprobará con una nueva ejecución de GitHub Actions; no se relaja la guarda.
+
 ## Fase 7: observaciones finales de Claude
 
 `playwright.config.ts` incluye `HOME` en la lista permitida para Chromium en Ubuntu. Se copia solo esa variable de ruta y se mantienen fuera las credenciales y variables de servicio. En Windows, cuando `HOME` no existe, la configuración conserva el funcionamiento anterior. El job `tests-playwright` exige ahora los artefactos de fallo mediante `if-no-files-found: error`; los demás jobs y sus políticas de artefactos no cambiaron. La corrida final local con `CI=true` pasó 12/12; la regresión de la guarda pasó 1/1, TypeScript pasó, Vitest pasó 116/116 y el build aislado pasó con advertencias CSS preexistentes. `npm audit --package-lock-only --ignore-scripts` y su variante `--omit=dev` respondieron con 0 vulnerabilidades. El DAG local se verificó; la validación completa YAML/actionlint y la ejecución Ubuntu quedan pendientes de GitHub Actions por falta de esas herramientas en Windows.

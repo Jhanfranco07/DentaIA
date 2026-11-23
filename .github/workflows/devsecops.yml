@@ -241,7 +241,10 @@ jobs:
       with:
         node-version: '22'
         cache: npm
-    - run: npm ci
+    - run: npm ci --include=optional
+    - name: Verificar SWC Linux antes de aislar Next.js
+      run: |-
+        node -e "const fs = require('node:fs'); const path = 'node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node'; if (!fs.existsSync(path)) throw new Error('Falta SWC Linux fijado en package-lock.json')"
     - name: Instalar Chromium fijado por el lockfile y sus dependencias
       run: ./node_modules/.bin/playwright install --with-deps chromium
     - name: Verificar guarda de red
