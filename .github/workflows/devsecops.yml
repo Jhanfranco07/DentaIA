@@ -1,5 +1,6 @@
-# Action SHAs: checkout v6, setup-node v6, setup-python v6.1.0; artifacts v4.
-name: DevSecOps
+# DevSecOps centralizado: se ejecutan aquí las verificaciones REALES una sola vez.
+# Los workflows especializados quedan disponibles solo mediante workflow_dispatch.
+name: DevSecOps · Pipeline integral
 'on':
   push:
     branches:
@@ -13,68 +14,509 @@ name: DevSecOps
 permissions:
   contents: read
   actions: read
+  deployments: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 env:
   NEXT_TELEMETRY_DISABLED: '1'
 jobs:
-  ci:
-    name: CI · observar Quality Gate
+  ci-preparacion:
+    name: Checkout · instalación y lockfile
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 20
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       with:
         persist-credentials: false
-    - run: node scripts/ci/observe.mjs ci.yml
-      env:
-        GH_TOKEN: ${{ github.token }}
-        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        TARGET_EVENT: ${{ github.event_name }}
-        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
-  tests:
-    name: Tests · observar Quality Gate
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: git diff --exit-code -- package.json package-lock.json
+
+  ci-typescript:
+    name: TypeScript
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 20
+    needs: ci-preparacion
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       with:
         persist-credentials: false
-    - run: node scripts/ci/observe.mjs tests.yml
-      env:
-        GH_TOKEN: ${{ github.token }}
-        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        TARGET_EVENT: ${{ github.event_name }}
-        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
-  security:
-    name: Security · observar Quality Gate
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: npm run typecheck
+
+  ci-lint:
+    name: Análisis estático configurado
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 20
+    needs: ci-preparacion
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       with:
         persist-credentials: false
-    - run: node scripts/ci/observe.mjs security.yml
-      env:
-        GH_TOKEN: ${{ github.token }}
-        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        TARGET_EVENT: ${{ github.event_name }}
-        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
-  backend:
-    name: Backend IA · observar Quality Gate
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/lint.mjs
+
+  ci-build:
+    name: Build Next.js
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 20
+    needs:
+    - ci-typescript
+    - ci-lint
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       with:
         persist-credentials: false
-    - run: node scripts/ci/observe.mjs backend-ia.yml
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: npm run build
+
+  ci-validacion-final:
+    name: CI · Validación final
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - ci-preparacion
+    - ci-typescript
+    - ci-lint
+    - ci-build
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py --gate
       env:
-        GH_TOKEN: ${{ github.token }}
-        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        TARGET_EVENT: ${{ github.event_name }}
-        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
+        NEEDS_JSON: ${{ toJSON(needs) }}
+
+  tests-preparacion:
+    name: Preparar inventario de suites
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: |-
+        node scripts/ci/node-tests.mjs --inventory
+        node --test scripts/ci/*.test.mjs
+
+  tests-unitarias:
+    name: Unitarias
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: tests-preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/node-tests.mjs unitarias
+    - name: Stripe Sandbox tests
+      run: npm test
+    - name: Premium catalog tests
+      run: npm run test:planes
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: node-unitarias
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+
+  tests-integracion:
+    name: Integracion
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: tests-preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/node-tests.mjs integracion
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: node-integracion
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+
+  tests-contratos:
+    name: Contratos
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: tests-preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/node-tests.mjs contratos
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: node-contratos
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+
+  tests-regresion:
+    name: Regresion
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: tests-preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/node-tests.mjs regresion
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: node-regresion
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+
+  tests-resumen:
+    name: Tests · Resumen y Quality Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - tests-preparacion
+    - tests-unitarias
+    - tests-integracion
+    - tests-contratos
+    - tests-regresion
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+
+  sec-dependencias:
+    name: Dependencias JavaScript · npm audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci
+    - run: node scripts/ci/assert-dev-only-picomatch.mjs
+    # Track the unpatched development-only advisory without declaring it resolved.
+    # This risk exception is documented in docs/security/PICOMATCH_CVE_2026_112366.md.
+    - name: Auditoría completa (diagnóstico de dependencias de desarrollo)
+      shell: bash
+      run: |
+        npm audit > /tmp/dentaia-npm-audit-full.txt 2>&1 || audit_status=$?
+        cat /tmp/dentaia-npm-audit-full.txt
+        if [ "${audit_status:-0}" -ne 0 ]; then
+          echo "::warning title=Riesgo de desarrollo pendiente::GHSA-fc5q-39xc-vjpf sigue sin parche. Ver issue #77. La auditoría completa no es el gate de producción."
+        fi
+    - name: Auditoría bloqueante de dependencias de producción
+      run: npm audit --omit=dev
+
+  sec-sast:
+    name: SAST · Semgrep local
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements.txt
+    - run: |-
+        python -m pip install semgrep==1.185.0
+        mkdir -p reports
+        semgrep scan --config .github/security/semgrep.yml --error --strict --metrics off --disable-version-check --json --output reports/semgrep.json src services/dental-vision/app
+        python scripts/ci/security-summary.py reports/semgrep.json
+
+  sec-secretos:
+    name: Secretos · Gitleaks OSS
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: bash scripts/ci/gitleaks.sh
+
+  sec-configuracion:
+    name: Configuración · YAML, permisos y actionlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements.txt
+    - run: |-
+        python -m pip install PyYAML==6.0.3
+        python scripts/ci/validate-workflows.py
+        bash scripts/ci/actionlint.sh
+
+  sec-python:
+    name: Dependencias Python · pip-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements.txt
+    - run: |-
+        python -m pip install pip-audit==2.10.1
+        pip-audit --progress-spinner off -r services/dental-vision/requirements.txt
+
+  sec-hallazgos:
+    name: Consolidación de hallazgos
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - sec-dependencias
+    - sec-sast
+    - sec-secretos
+    - sec-configuracion
+    - sec-python
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+
+  sec-quality-gate:
+    name: Security · Quality Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - sec-dependencias
+    - sec-sast
+    - sec-secretos
+    - sec-configuracion
+    - sec-python
+    - sec-hallazgos
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+
+  ia-preparacion:
+    name: Python · resolución y pip check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements.txt
+    - run: python -m pip install -r services/dental-vision/requirements.txt pytest==8.3.5
+    - run: python -m pip check
+    - run: python --version
+
+  ia-fastapi:
+    name: FastAPI · Smile V17
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: ia-preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements.txt
+    - run: python -m pip install -r services/dental-vision/requirements.txt pytest==8.3.5
+    - run: python -m pip check
+    - run: |-
+        mkdir -p reports
+        cd services/dental-vision
+        python -m pytest tests/test_smile_api_auth.py -q --junitxml=../../reports/fastapi.xml
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: backend-fastapi
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+
+  ia-contratos:
+    name: Contratos /health y /analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: ia-preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements.txt
+    - run: python -m pip install -r services/dental-vision/requirements.txt pytest==8.3.5
+    - run: python -m pip check
+    - run: |-
+        mkdir -p reports
+        cd services/dental-vision
+        python -m pytest tests/test_smile_api_auth.py -k "remote_mode_rejects_analyze_without_the_service_secret" -q --junitxml=../../reports/contratos.xml
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: backend-contratos
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+
+  ia-autenticacion:
+    name: Autenticación y errores
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: ia-preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements.txt
+    - run: python -m pip install -r services/dental-vision/requirements.txt pytest==8.3.5
+    - run: python -m pip check
+    - run: |-
+        mkdir -p reports
+        cd services/dental-vision
+        python -m pytest tests/test_smile_api_auth.py -k "remote_mode_does_not_start_with_a_short_service_secret" -q --junitxml=../../reports/autenticacion.xml
+    - run: python scripts/ci/test-summary.py reports/*.xml
+      if: ${{ always() }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: backend-autenticacion
+        path: reports/*.xml
+        if-no-files-found: error
+        retention-days: 7
+
+  ia-seguridad:
+    name: Seguridad backend · Bandit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: ia-preparacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548
+      with:
+        python-version: '3.11'
+        cache: pip
+        cache-dependency-path: services/dental-vision/requirements.txt
+    - run: |-
+        python -m pip install bandit==1.9.4
+        bandit -r services/dental-vision/app -ll
+
+  ia-validacion-final:
+    name: Backend IA · Validación final
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - ia-preparacion
+    - ia-fastapi
+    - ia-contratos
+    - ia-autenticacion
+    - ia-seguridad
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+
   rutinas-sql:
     name: Rutinas · PostgreSQL y permisos RLS
     runs-on: ubuntu-latest
@@ -113,6 +555,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f docs/sql/DI-207-consultas-autorizadas.sql
       - name: Probar consentimiento, acceso cruzado, progreso y revocación
         run: psql -v ON_ERROR_STOP=1 -f scripts/qa/rutinas/02_pruebas_rls.sql
+
   directorio-sql:
     name: Contactos y citas · PostgreSQL y permisos RLS
     runs-on: ubuntu-latest
@@ -149,44 +592,45 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261122181000_solicitudes_reales_y_resenas.sql
       - name: Probar WhatsApp, consentimiento, RLS, citas y transición
         run: psql -v ON_ERROR_STOP=1 -f scripts/qa/directorio/01_contacto_citas.sql
-  puerta-calidad:
-    name: Fase 2 · Calidad de código y pruebas
+
+  integridad-aplicacion:
+    name: Integración · calidad y pruebas
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     needs:
-    - ci
-    - tests
+    - ci-validacion-final
+    - tests-resumen
     if: ${{ always() }}
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       with:
         persist-credentials: false
-    - name: Validar calidad y pruebas del mismo commit
+    - name: Exigir todas las verificaciones anteriores
       run: python scripts/ci/summary.py --gate
       env:
         NEEDS_JSON: ${{ toJSON(needs) }}
 
-  puerta-seguridad:
-    name: Fase 2 · Seguridad de aplicación e IA
+  integridad-seguridad:
+    name: Integración · análisis de seguridad e IA
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     needs:
-    - security
-    - backend
+    - sec-quality-gate
+    - ia-validacion-final
     if: ${{ always() }}
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       with:
         persist-credentials: false
-    - name: Validar seguridad y backend IA del mismo commit
+    - name: Exigir todas las verificaciones anteriores
       run: python scripts/ci/summary.py --gate
       env:
         NEEDS_JSON: ${{ toJSON(needs) }}
 
-  puerta-datos:
-    name: Fase 2 · Integridad PostgreSQL y RLS
+  integridad-datos:
+    name: Integración · privacidad PostgreSQL
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     needs:
     - rutinas-sql
     - directorio-sql
@@ -195,39 +639,99 @@ jobs:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       with:
         persist-credentials: false
-    - name: Validar privacidad y aislamiento de datos sintéticos
+    - name: Exigir todas las verificaciones anteriores
       run: python scripts/ci/summary.py --gate
       env:
         NEEDS_JSON: ${{ toJSON(needs) }}
 
-  integracion-global:
-    name: Fase 3 · Integración de todos los controles
+  devsecops-final:
+    name: DevSecOps · Validación final integral
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     needs:
-    - puerta-calidad
-    - puerta-seguridad
-    - puerta-datos
+    - integridad-aplicacion
+    - integridad-seguridad
+    - integridad-datos
     if: ${{ always() }}
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       with:
         persist-credentials: false
-    - name: Exigir aprobación simultánea de las tres puertas
+    - name: Exigir todas las verificaciones anteriores
       run: python scripts/ci/summary.py --gate
       env:
         NEEDS_JSON: ${{ toJSON(needs) }}
 
-  validacion-final:
-    name: Validación final
+  entrega-commit:
+    name: Confirmar commit y rama
     runs-on: ubuntu-latest
     timeout-minutes: 20
     needs:
-    - integracion-global
-    - puerta-calidad
-    - puerta-seguridad
-    - puerta-datos
+    - devsecops-final
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: |-
+        git rev-parse HEAD
+        git diff --exit-code
+
+  entrega-publicacion:
+    name: Publicación existente · Vercel y Railway
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - entrega-commit
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: node scripts/ci/deployment.mjs
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        TARGET_EVENT: ${{ github.event_name }}
+        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
+
+  entrega-disponibilidad:
+    name: Comprobación pública de Preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+    - entrega-publicacion
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - run: node scripts/ci/deployment.mjs --smoke
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        TARGET_EVENT: ${{ github.event_name }}
+        TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
+
+  entrega-promocion-externa:
+    name: Production · autorización externa
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions: {}
+    needs:
+    - entrega-disponibilidad
+    steps:
+    - run: echo "Production no se publica desde Actions. Promoción fuera de este workflow, después de revisión y autorización."
+        >> "$GITHUB_STEP_SUMMARY"
+
+  entrega-resultado:
+    name: CD · Resultado de observación
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
     if: ${{ always() }}
+    needs:
+    - entrega-commit
+    - entrega-publicacion
+    - entrega-disponibilidad
+    - entrega-promocion-externa
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       with:
