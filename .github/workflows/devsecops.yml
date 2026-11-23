@@ -149,17 +149,84 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261122181000_solicitudes_reales_y_resenas.sql
       - name: Probar WhatsApp, consentimiento, RLS, citas y transición
         run: psql -v ON_ERROR_STOP=1 -f scripts/qa/directorio/01_contacto_citas.sql
+  puerta-calidad:
+    name: Fase 2 · Calidad de código y pruebas
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+    - ci
+    - tests
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - name: Validar calidad y pruebas del mismo commit
+      run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+
+  puerta-seguridad:
+    name: Fase 2 · Seguridad de aplicación e IA
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+    - security
+    - backend
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - name: Validar seguridad y backend IA del mismo commit
+      run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+
+  puerta-datos:
+    name: Fase 2 · Integridad PostgreSQL y RLS
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+    - rutinas-sql
+    - directorio-sql
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - name: Validar privacidad y aislamiento de datos sintéticos
+      run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+
+  integracion-global:
+    name: Fase 3 · Integración de todos los controles
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+    - puerta-calidad
+    - puerta-seguridad
+    - puerta-datos
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - name: Exigir aprobación simultánea de las tres puertas
+      run: python scripts/ci/summary.py --gate
+      env:
+        NEEDS_JSON: ${{ toJSON(needs) }}
+
   validacion-final:
     name: Validación final
     runs-on: ubuntu-latest
     timeout-minutes: 20
     needs:
-    - ci
-    - tests
-    - security
-    - backend
-    - rutinas-sql
-    - directorio-sql
+    - integracion-global
+    - puerta-calidad
+    - puerta-seguridad
+    - puerta-datos
     if: ${{ always() }}
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
