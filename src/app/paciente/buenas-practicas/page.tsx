@@ -22,7 +22,7 @@ export default function BuenasPracticasDentales() {
         {recomendaciones.map(item => <article className={styles.card} key={item.n}><span className={styles.number}>{item.n}</span><h2>{item.titulo}</h2><p>{item.texto}</p></article>)}
       </section>
       <aside className={styles.note}><strong>Si el análisis marcó amarillo o una posible ausencia dental</strong><p>Una fotografía puede cambiar con la luz, los filtros o los reflejos. No permite identificar por sí sola la causa de un cambio de color ni confirmar que falte un diente. Consulta con un odontólogo antes de decidir cualquier tratamiento o blanqueamiento.</p></aside>
-      <div className={styles.actions}><Link href="/panel/odontologos" className={styles.primary}>Buscar un odontólogo</Link><Link href="/panel" className={styles.secondary}>Volver a mi espacio</Link></div>
+      <div className={styles.actions}><Link href="/panel/odontologos" className={styles.primary}>Buscar un odontólogo</Link><Link href="/paciente/rutinas" className={styles.secondary}>Seguir mis rutinas</Link><Link href="/panel" className={styles.secondary}>Volver a mi espacio</Link></div>
     </div>
   </div></PublicShell>;
 }

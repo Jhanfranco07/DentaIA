@@ -208,12 +208,77 @@ export default function AnalisisDental() {
     {error && <div className={styles.error} role="alert"><Icono nombre="alerta" size={20} /><p>{error}</p>{fase === "analizando" && <button type="button" onClick={() => void analizar()}>Reintentar</button>}</div>}
 
     {fase === "preparacion" && <div className={styles.preparacionInicio}>
-      <section className={styles.banner}><div><span><Icono nombre="diente" size={19} /> ANÁLISIS</span><h1>Prepara una buena fotografía de tu sonrisa</h1><p>Sigue estas recomendaciones para obtener mediciones más consistentes.</p></div><Mascota /></section>
+      <section className={styles.banner}>
+        <div className={styles.heroContenido}>
+          <span className={styles.heroEtiqueta}><Icono nombre="diente" size={19} /> EXPERIENCIA DENTAIA · ANÁLISIS DE SONRISA</span>
+          <h1>Tu mejor sonrisa comienza con una buena fotografía.</h1>
+          <p>Prepara una imagen clara y natural para obtener una observación orientativa más consistente.</p>
+          <div className={styles.heroIndicadores} aria-label="Recomendaciones esenciales">
+            <span><Icono nombre="check" size={16} /> Luz uniforme</span>
+            <span><Icono nombre="check" size={16} /> De frente</span>
+            <span><Icono nombre="check" size={16} /> Sin filtros</span>
+          </div>
+        </div>
+        <Mascota />
+      </section>
       <div className={styles.preparacionGrid}>
-        <article className={styles.tarjeta}><h2>Consejos para una buena foto</h2><ul className={styles.consejos}>{["Usa buena iluminación natural o neutra.", "Mira de frente y sonríe de forma natural.", "Evita sombras intensas en la boca.", "No utilices filtros ni edites la fotografía."].map(text => <li key={text}><span><Icono nombre="check" size={20} /></span>{text}</li>)}</ul></article>
-        <article className={styles.tarjeta}><h2>Ejemplos de fotografía</h2><div className={styles.ejemplos}><div><span className={styles.ejemploBueno}><Icono nombre="diente" size={46} /></span><strong>✓ Correcto</strong><small>Buena luz y ángulo frontal</small></div><div><span className={styles.ejemploMalo}><Icono nombre="diente" size={46} /></span><strong>× Evitar</strong><small>Poca luz o ángulo lateral</small></div></div></article>
+        <article className={styles.tarjeta}>
+          <div className={styles.tarjetaEncabezado}>
+            <span className={styles.numeroTarjeta}>01</span>
+            <div><span className={styles.tarjetaSupertitulo}>ANTES DE EMPEZAR</span><h2>Prepara tu sonrisa</h2></div>
+          </div>
+          <p className={styles.tarjetaIntro}>Cuatro recomendaciones sencillas para mejorar la calidad de la imagen.</p>
+          <ul className={styles.consejos}>
+            {[
+              "Busca luz natural o blanca, uniforme y sin reflejos.",
+              "Coloca la cámara de frente y a la altura de tu sonrisa.",
+              "Sonríe de forma natural, mostrando los dientes con claridad.",
+              "Evita filtros, retoques, sombras fuertes y fotografías borrosas.",
+            ].map((consejo, index) => <li key={consejo}>
+              <span className={styles.consejoIcono}><Icono nombre="check" size={19} /></span>
+              <div><small>PASO {String(index + 1).padStart(2, "0")}</small><p>{consejo}</p></div>
+            </li>)}
+          </ul>
+        </article>
+        <article className={styles.tarjeta}>
+          <div className={styles.tarjetaEncabezado}>
+            <span className={styles.numeroTarjeta}>02</span>
+            <div><span className={styles.tarjetaSupertitulo}>GUÍA VISUAL</span><h2>Así debe verse tu foto</h2></div>
+          </div>
+          <p className={styles.tarjetaIntro}>Compara el encuadre antes de continuar.</p>
+          <div className={styles.ejemplos}>
+            <div className={styles.ejemploCorrecto}>
+              <span className={styles.ejemploBueno}><span className={styles.ejemploFigura}><Icono nombre="diente" size={48} /></span><span className={styles.ejemploLuz} aria-hidden="true">✦</span></span>
+              <strong><Icono nombre="check" size={16} /> Correcto</strong>
+              <small>Buena iluminación y cámara frontal</small>
+            </div>
+            <div className={styles.ejemploIncorrecto}>
+              <span className={styles.ejemploMalo}><span className={styles.ejemploFigura}><Icono nombre="diente" size={48} /></span><span className={styles.ejemploSombra} aria-hidden="true" /></span>
+              <strong>✕ Evitar</strong>
+              <small>Sombras intensas o ángulo lateral</small>
+            </div>
+          </div>
+          <p className={styles.ayudaEjemplos}>Los ejemplos son ilustraciones de encuadre, no resultados clínicos.</p>
+        </article>
       </div>
-      <button type="button" className={styles.primarioGrande} onClick={() => setFase("carga")}>Comenzar análisis <Icono nombre="flecha" size={21} /></button>
+      <section className={styles.queRevisamos} aria-labelledby="analisis-explicacion-titulo">
+        <div className={styles.queRevisamosIntro}>
+          <span className={styles.tarjetaSupertitulo}>¿QUÉ OBTENDRÁS?</span>
+          <h2 id="analisis-explicacion-titulo">Una primera orientación sobre tu sonrisa</h2>
+          <p>El sistema examina características visibles de la imagen y te indica cuándo conviene repetirla o solicitar una evaluación profesional.</p>
+        </div>
+        <div className={styles.aspectos}>
+          <span><Icono nombre="diente" size={20} /> Tonalidades visibles</span>
+          <span><Icono nombre="imagen" size={20} /> Calidad de la fotografía</span>
+          <span><Icono nombre="escudo" size={20} /> Orientación responsable</span>
+        </div>
+      </section>
+      <div className={styles.inicioAcciones}>
+        <button type="button" className={styles.primarioGrande} onClick={() => setFase("carga")}>
+          Comenzar análisis <Icono nombre="flecha" size={21} />
+        </button>
+        <p><Icono nombre="privacidad" size={17} /> Solo se enviará tu fotografía al servicio de análisis después de que la selecciones y autorices su procesamiento. El resultado no es un diagnóstico.</p>
+      </div>
     </div>}
 
     {fase === "carga" && <div className={styles.vistaFlujo}>

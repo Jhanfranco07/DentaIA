@@ -5,7 +5,9 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { leerRutinaDelDia } from "@/features/rutinas/datos";
 import { fechaHoyLima } from "@/features/rutinas/modelo";
 import { avisoRutinaDenti, type AvisoDenti } from "./avisos";
+import { consultaProgresoRutina, explicarProgresoRutina } from "./progresoRutina";
 import { GUIAS_BUCALES } from "@/features/buenas-practicas/contenido";
+import { claveVentanaAviso, leerHorarioAvisos, leerPreferenciaAvisos, momentoAviso } from "@/features/rutinas/configuracionAvisos";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { detectarDestinoDenti, responderOrientacion, type DestinoDenti, type ObservacionAsistente, type RespuestaAsistente } from "./motor";
 import styles from "./asistente.module.css";
@@ -15,7 +17,7 @@ type Mensaje = { id: number; pregunta?: string; respuesta: RespuestaAsistente; o
 type Precio = { id: string; nombre: string; profesional: string; distrito: string; especialidad: string; demo: boolean; monto: number | null; moneda: string; slug: string };
 type Fila = { id: string; name: string; price_amount: number | null; currency_code: string; dentist_id: string;
   dentists: { name: string; district: string; specialty: string; is_demo: boolean; is_active: boolean; slug: string } | null };
-const EJEMPLOS = ["Guía de cepillado", "¿Cómo uso hilo dental?", "Preparar fotografía", "¿Por qué tengo dientes amarillos?"];
+const EJEMPLOS = ["¿Cómo va mi rutina?", "Guía de cepillado", "Preparar fotografía", "¿Por qué tengo dientes amarillos?"];
 const SALUDO: RespuestaAsistente = {
   texto: "¡Hola! Soy Denti. Puedo llevarte a una guía o módulo con tu permiso, o responder aquí tus dudas generales sobre salud bucal. ¿Qué necesitas?",
   guias: [], especialidad: null, alerta: false, enlaces: [],
@@ -38,6 +40,8 @@ export default function AsistentePaciente() {
   const activador = useRef<HTMLButtonElement>(null);
   const contador = useRef(1);
   const consultaActual = useRef(0);
+  const consultasRutina = useRef(0);
+  const identidadMensajes = useRef<string | null>(null);
   useEffect(() => {
     let activo = true;
     const cliente = getSupabaseBrowserClient();
@@ -46,7 +50,17 @@ export default function AsistentePaciente() {
         const { data } = await cliente.auth.getUser();
         if (!activo) return;
         const id = data.user?.id ?? null;
+        if (identidadMensajes.current !== id) {
+          identidadMensajes.current = id;
+          consultasRutina.current += 1;
+          setPensando(false);
+          setMensajes([{ id: contador.current++, respuesta: SALUDO }]);
+          setObservacion(null);
+          setPrecios([]);
+          setPreciosEstado("inicial");
+        }
         setUsuarioIA(id);
+        setAviso(null);
         setUsarIA(id ? window.localStorage.getItem(`dentaia:denti:ia-consent:${id}`) === "true" : false);
       } catch { if (activo) { setUsuarioIA(null); setUsarIA(false); } }
     }
@@ -63,16 +77,28 @@ export default function AsistentePaciente() {
         const cliente = getSupabaseBrowserClient();
         const { data } = await cliente.auth.getUser();
         if (!vigente || !data.user) return;
+        if (!leerPreferenciaAvisos(data.user.id)) { setAviso(null); return; }
         const fecha = fechaHoyLima();
-        const hora = Number(new Intl.DateTimeFormat("en-GB", {
-          hour: "2-digit", hourCycle: "h23", timeZone: "America/Lima",
-        }).format(new Date()));
+        const ahoraLima = new Intl.DateTimeFormat("en-GB", {
+          hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: "America/Lima",
+        }).format(new Date());
+        const hora = Number(ahoraLima.slice(0, 2));
+        const horario = leerHorarioAvisos(data.user.id);
+        const momento = momentoAviso(ahoraLima, horario);
         let estado = null;
         try { estado = await leerRutinaDelDia(cliente, data.user.id, fecha); }
         catch { /* No mostramos progreso sin datos verificados. */ }
         if (!vigente) return;
         const siguiente = avisoRutinaDenti(hora, fecha, estado);
-        const clave = `denti:aviso:${data.user.id}:${siguiente.clave}`;
+        const completada = Boolean(estado?.plan && estado.actividades.length > 0
+          && estado.actividades.every(a => estado?.completadas.includes(a.id)));
+        // Sin actividades, el saludo puede mostrarse una vez al día.
+        // Con actividades pendientes, respetamos los horarios configurados.
+        if (estado?.plan && estado.actividades.length > 0 && !completada && !momento) return;
+        const claveLocal = estado?.plan && estado.actividades.length > 0
+          ? claveVentanaAviso(fecha, horario, momento ?? "fin", completada)
+          : "saludo:" + fecha;
+        const clave = "denti:aviso:" + data.user.id + ":" + claveLocal;
         if (window.sessionStorage.getItem(clave) === "visto") return;
         window.sessionStorage.setItem(clave, "visto");
         setAviso(siguiente);
@@ -81,8 +107,10 @@ export default function AsistentePaciente() {
     void cargarAviso();
     const alVolver = () => { if (document.visibilityState === "visible") void cargarAviso(); };
     window.addEventListener("focus", alVolver);
+    window.addEventListener("dentaia:preferencia-avisos", alVolver);
     window.addEventListener("dentaia:rutina-actualizada", alVolver);
-    return () => { vigente = false; window.removeEventListener("focus", alVolver); window.removeEventListener("dentaia:rutina-actualizada", alVolver); };
+    const intervalo = window.setInterval(alVolver, 60_000);
+    return () => { vigente = false; window.removeEventListener("focus", alVolver); window.removeEventListener("dentaia:preferencia-avisos", alVolver); window.removeEventListener("dentaia:rutina-actualizada", alVolver); window.clearInterval(intervalo); };
   }, [abierto]);
   function configurarIA(activar: boolean) {
     if (usuarioIA) {
@@ -136,6 +164,37 @@ export default function AsistentePaciente() {
   async function enviar(pregunta: string) {
     const limpia = pregunta.trim().slice(0, 500);
     if (!limpia || pensando) return;
+    if (consultaProgresoRutina(limpia)) {
+      const id = contador.current++;
+      const solicitud = ++consultasRutina.current;
+      const enlaces = [{ href: "/paciente/rutinas", etiqueta: "Abrir Mis rutinas" }];
+      setTexto("");
+      setMensajes(prev => [...prev.slice(-19), {
+        id, pregunta: limpia, respuesta: {
+          texto: "Consultando tus actividades registradas…", guias: [], enlaces: [], especialidad: null, alerta: false,
+        }, origen: "guiado",
+      }]);
+      setPensando(true);
+      try {
+        const cliente = getSupabaseBrowserClient();
+        const { data, error } = await cliente.auth.getUser();
+        if (error || !data.user) throw new Error("SESION_INVALIDA");
+        const estado = await leerRutinaDelDia(cliente, data.user.id, fechaHoyLima());
+        if (solicitud !== consultasRutina.current || identidadMensajes.current !== data.user.id) return;
+        setMensajes(prev => prev.map(m => m.id === id ? {
+          ...m, respuesta: { texto: explicarProgresoRutina(estado), guias: [], enlaces, especialidad: null, alerta: false },
+        } : m));
+      } catch {
+        if (solicitud !== consultasRutina.current) return;
+        setMensajes(prev => prev.map(m => m.id === id ? {
+          ...m, respuesta: {
+            texto: "No pude consultar tu progreso en este momento. Abre Mis rutinas para revisar tus registros e inténtalo nuevamente.",
+            guias: [], enlaces, especialidad: null, alerta: false,
+          },
+        } : m));
+      } finally { if (solicitud === consultasRutina.current) setPensando(false); }
+      return;
+    }
     const destino = detectarDestinoDenti(limpia);
     const respuesta: RespuestaAsistente = destino
       ? { texto: `Encontré ${destino.tipo === "guia" ? "una guía" : "un espacio de DentaIA"} para ayudarte: ${destino.titulo}. ¿Quieres que te lleve allí?`, guias: [], enlaces: [], especialidad: null, alerta: false }

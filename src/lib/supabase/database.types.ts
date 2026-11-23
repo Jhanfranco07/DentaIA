@@ -329,6 +329,30 @@ export type Database = {
         }
         Relationships: []
       }
+      dentist_contact_channels: {
+        Row: {
+          dentist_id: string
+          whatsapp_e164: string
+          whatsapp_publicado: boolean
+          consentimiento_publicacion_en: string | null
+          actualizado_en: string
+        }
+        Insert: {
+          dentist_id: string
+          whatsapp_e164: string
+          whatsapp_publicado?: boolean
+          consentimiento_publicacion_en?: string | null
+          actualizado_en?: string
+        }
+        Update: {
+          dentist_id?: string
+          whatsapp_e164?: string
+          whatsapp_publicado?: boolean
+          consentimiento_publicacion_en?: string | null
+          actualizado_en?: string
+        }
+        Relationships: [{ foreignKeyName: "dentist_contact_channels_dentist_id_fkey"; columns: ["dentist_id"]; isOneToOne: true; referencedRelation: "dentists"; referencedColumns: ["id"] }]
+      }
       dentist_reviews: {
         Row: {
           appointment_request_id: string
@@ -548,6 +572,35 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      contacto_odontologo_autorizado: {
+        Args: { p_dentist_id: string; p_propietario: boolean }
+        Returns: boolean
+      }
+      cancelar_cita_paciente: {
+        Args: { p_solicitud_id: string }
+        Returns: boolean
+      }
+      gestionar_cita_profesional: {
+        Args: { p_solicitud_id: string; p_accion: string }
+        Returns: Json
+      }
+      operar_seguimiento_rutina: {
+        Args: {
+          p_actor_user_id: string;
+          p_accion: string;
+          p_membership_id?: string | null;
+          p_patient_record_id?: string | null;
+          p_consent_id?: string | null;
+          p_proposal_id?: string | null;
+          p_plan_id?: string | null;
+          p_activity_ids?: string[] | null;
+        };
+        Returns: Json;
+      };
+      consultar_seguimiento_rutina: {
+        Args: { p_actor_user_id: string; p_membership_id?: string | null };
+        Returns: Json;
+      };
       dentaia_buscar_directorio: {
         Args: { p_query: string; p_district: string; p_specialty: string; p_order: string; p_page: number; p_size: number;
           p_lat?: number; p_lon?: number; p_radius?: number };

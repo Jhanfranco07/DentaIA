@@ -29,3 +29,155 @@
 :global(html[data-tema="oscuro"]) .preview>p{color:#d7cde9}
 :global(html[data-tema="oscuro"]) .stepper li[data-activo=true] strong,
 :global(html[data-tema="oscuro"]) .umbrales>button{color:#d0bdff}
+
+/* Preparación dental premium: solo afecta a la pantalla inicial.
+   Los flujos de cámara, validación, consentimiento y resultados quedan intactos. */
+.preparacionInicio{--preparacion-tinta:#173154;--preparacion-secundario:#57708a}
+.preparacionInicio .banner{
+  min-height:330px;
+  padding:clamp(30px,4.5vw,62px);
+  border:1px solid #29bdd9;
+  border-radius:30px;
+  background:
+    radial-gradient(ellipse at 85% 10%,#27c4d987 0%,transparent 40%),
+    radial-gradient(ellipse at 10% 90%,#5845be4d 0%,transparent 45%),
+    linear-gradient(116deg,#0b376b 0%,#0b658f 54%,#0b9eae 100%);
+  box-shadow:0 24px 48px #165a9530,inset 0 1px 0 #ffffff36;
+}
+.preparacionInicio .banner:after{right:-75px;bottom:-150px;width:330px;height:330px;border-color:#ffffff2e;pointer-events:none}
+.heroContenido{position:relative;z-index:2;max-width:730px}
+.preparacionInicio .banner .heroEtiqueta{
+  display:inline-flex;align-items:center;gap:9px;max-width:100%;
+  width:fit-content;margin-bottom:22px;padding:9px 13px;border:1px solid #ffffff42;
+  border-radius:999px;background:#ffffff1b;color:#e7f5ff;
+  font-size:11px;font-weight:850;letter-spacing:.075em;line-height:1.4;
+}
+.preparacionInicio .banner h1{
+  max-width:670px;margin-bottom:20px;
+  font-size:clamp(34px,4.4vw,60px);line-height:1.04;letter-spacing:-.055em;
+  text-wrap:balance;
+}
+.preparacionInicio .banner p{max-width:605px;font-size:clamp(16px,1.6vw,19px);line-height:1.6;color:#eaf6ff}
+.heroIndicadores{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}
+.heroIndicadores span{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 11px;border:1px solid #ffffff3b;border-radius:10px;
+  background:#ffffff18;color:#fff;font-size:12px;font-weight:700;
+}
+.preparacionInicio .mascota{position:relative;z-index:1;filter:drop-shadow(0 12px 25px #022f6b55)}
+.preparacionInicio .mascota>span{border:8px solid #ffffff79;transform:rotate(-7deg);animation:analisisMascota 4s ease-in-out infinite}
+.preparacionInicio .mascota i,.preparacionInicio .mascota b{animation:analisisDestello 3.2s ease-in-out infinite}
+@keyframes analisisMascota{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-9px) rotate(-3deg)}}
+@keyframes analisisDestello{0%,100%{opacity:.6;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+.preparacionInicio .preparacionGrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;margin-top:25px}
+.preparacionInicio .tarjeta{
+  min-width:0;padding:clamp(22px,2.6vw,33px);border:1px solid #d7e4f3;
+  border-radius:25px;background:linear-gradient(145deg,#fff 0%,#fbfdff 100%);
+  box-shadow:0 16px 39px #284a9010,0 3px 10px #3e559b0a;
+}
+.tarjetaEncabezado{display:flex;align-items:center;gap:15px}
+.numeroTarjeta{
+  flex:none;display:grid;place-items:center;width:48px;height:48px;
+  border-radius:15px;background:#eae5ff;color:#6040cf;font-size:16px;font-weight:900;
+}
+.tarjetaSupertitulo{display:block;color:#695cba;font-size:10px;font-weight:900;letter-spacing:.105em}
+.preparacionInicio .tarjeta h2{margin:3px 0 0;font-size:clamp(20px,2vw,26px);line-height:1.15;color:#1b3562}
+.tarjetaIntro{margin:16px 0 20px!important;color:#60748b;font-size:13px;line-height:1.6}
+.preparacionInicio .consejos{gap:0}
+.preparacionInicio .consejos li{
+  align-items:flex-start;gap:13px;padding:13px 0;border-bottom:1px solid #edf1f8;
+  font-size:14px;color:#304868;
+}
+.preparacionInicio .consejos li:last-child{border-bottom:0}
+.preparacionInicio .consejos .consejoIcono{
+  display:grid;place-items:center;flex:none;width:34px;height:34px;
+  border-radius:11px;background:#e2f8ef;color:#07855a;
+}
+.preparacionInicio .consejos li div{display:grid;gap:3px;min-width:0}
+.preparacionInicio .consejos li small{font-size:10px;color:#8490ab;font-weight:900;letter-spacing:.065em}
+.preparacionInicio .consejos li p{margin:0;font-size:13px;line-height:1.5;color:#314966}
+.preparacionInicio .ejemplos{gap:14px}
+.preparacionInicio .ejemplos>div{min-width:0;align-content:start;gap:10px}
+.preparacionInicio .ejemplos>div>span{
+  position:relative;min-height:170px;border:5px solid #fff;border-radius:18px;
+  box-shadow:0 9px 24px #28385b20;
+  overflow:hidden;
+}
+.preparacionInicio .ejemplos .ejemploBueno{background:radial-gradient(circle at 55% 35%,#fff9f4,#f6e1d4);color:#008a62}
+.preparacionInicio .ejemplos .ejemploMalo{background:linear-gradient(135deg,#614e4a,#a88780);color:#fff;filter:none}
+.ejemploFigura{display:grid;place-items:center;transform:translateY(0)}
+.ejemploCorrecto .ejemploFigura{filter:drop-shadow(0 8px 12px #0889662b)}
+.ejemploIncorrecto .ejemploFigura{transform:translate(12px,7px) rotate(20deg);opacity:.7}
+.ejemploLuz{position:absolute;right:18px;top:14px;color:#d1a015;font-size:28px}
+.ejemploSombra{position:absolute;inset:0;background:linear-gradient(105deg,transparent 20%,#24202165 100%);pointer-events:none}
+.preparacionInicio .ejemplos strong{display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px}
+.preparacionInicio .ejemplos>div:first-child strong{color:#078254}
+.preparacionInicio .ejemplos>div:last-child strong{color:#bd4b4b}
+.preparacionInicio .ejemplos small{font-size:12px;line-height:1.45;color:#5c7087;max-width:195px;margin:0 auto}
+.ayudaEjemplos{font-size:11px;line-height:1.55;color:#72809b;margin:15px 0 0!important;text-align:center}
+.queRevisamos{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  margin-top:22px;padding:24px 29px;border:1px solid #d7e4f3;border-radius:23px;
+  background:linear-gradient(120deg,#f7f9ff,#effbfd);
+}
+.queRevisamosIntro{max-width:540px}
+.queRevisamos h2{margin:7px 0 8px;font-size:clamp(20px,2.2vw,27px);color:#1b3562;letter-spacing:-.03em}
+.queRevisamos p{margin:0;color:#5b7189;font-size:13px;line-height:1.6}
+.aspectos{display:flex;flex-wrap:wrap;gap:9px;max-width:420px}
+.aspectos span{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 12px;
+  background:#fff;border:1px solid #dce7f4;border-radius:12px;
+  color:#285276;font-size:12px;font-weight:750;
+}
+.aspectos svg{color:#6a44ce}
+.inicioAcciones{display:grid;justify-items:center;gap:13px;margin-top:27px}
+.preparacionInicio .primarioGrande{
+  display:inline-flex;width:auto;min-width:290px;min-height:56px;
+  margin:0;padding:14px 31px;font-size:16px;font-weight:850;
+  box-shadow:0 14px 28px #6635d63d;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.preparacionInicio .primarioGrande:hover{transform:translateY(-2px);box-shadow:0 18px 31px #6635d64a}
+.inicioAcciones>p{
+  display:flex;align-items:flex-start;justify-content:center;gap:8px;
+  max-width:780px;color:#61738b;font-size:12px;line-height:1.6;text-align:center;
+}
+.inicioAcciones>p svg{flex:none;margin-top:2px;color:#7253cf}
+@media(max-width:900px){
+  .preparacionInicio .banner{min-height:280px}
+  .preparacionInicio .mascota{width:145px;height:155px}
+  .preparacionInicio .mascota>span{width:112px;height:112px;border-width:6px}
+  .preparacionInicio .preparacionGrid{grid-template-columns:1fr}
+  .queRevisamos{align-items:flex-start;flex-direction:column}
+  .aspectos{max-width:none}
+}
+@media(max-width:620px){
+  .modulo{padding:16px}
+  .preparacionInicio .banner{padding:28px 22px;border-radius:23px}
+  .preparacionInicio .banner h1{font-size:clamp(32px,8vw,42px)}
+  .preparacionInicio .banner .heroEtiqueta{font-size:9px;margin-bottom:18px}
+  .preparacionInicio .mascota{width:105px;height:105px;margin:20px 0 0 auto}
+  .preparacionInicio .mascota>span{width:92px;height:92px}
+  .preparacionInicio .tarjeta{padding:21px 19px}
+  .preparacionInicio .ejemplos>div>span{min-height:135px}
+  .queRevisamos{padding:20px}
+  .preparacionInicio .primarioGrande{width:100%;min-width:0}
+  .inicioAcciones>p{text-align:left}
+}
+@media(prefers-reduced-motion:reduce){
+  .preparacionInicio .mascota>span,.preparacionInicio .mascota i,.preparacionInicio .mascota b{animation:none}
+  .preparacionInicio .primarioGrande{transition:none}
+  .preparacionInicio .primarioGrande:hover{transform:none}
+}
+:global(html[data-tema="oscuro"]) .preparacionInicio .tarjeta,
+:global(html[data-tema="oscuro"]) .queRevisamos{background:#2c2448;border-color:#78649e}
+:global(html[data-tema="oscuro"]) .preparacionInicio .tarjeta h2,
+:global(html[data-tema="oscuro"]) .queRevisamos h2{color:#f3efff}
+:global(html[data-tema="oscuro"]) .preparacionInicio .consejos li p,
+:global(html[data-tema="oscuro"]) .preparacionInicio .tarjetaIntro,
+:global(html[data-tema="oscuro"]) .queRevisamos p,
+:global(html[data-tema="oscuro"]) .preparacionInicio .ejemplos small,
+:global(html[data-tema="oscuro"]) .ayudaEjemplos,
+:global(html[data-tema="oscuro"]) .inicioAcciones>p{color:#d7cde9}
+:global(html[data-tema="oscuro"]) .preparacionInicio .consejos li{border-color:#574b73}
+:global(html[data-tema="oscuro"]) .aspectos span{background:#403558;border-color:#746695;color:#f3efff}
