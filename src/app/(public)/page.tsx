@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import HeroCarousel from "@/components/HeroCarousel";
+import EntradaDentaIA from "@/components/EntradaDentaIA";
 import { Icono, type NombreIcono } from "@/components/Identidad";
 import LandingMotion from "@/components/LandingMotion";
 import PlanesDentaIA from "@/components/PlanesDentaIA";
@@ -50,6 +51,7 @@ function VistaPanel() {
 
 export default function Home() {
   return <>
+    <EntradaDentaIA />
     <LandingMotion />
     <HeroCarousel />
 

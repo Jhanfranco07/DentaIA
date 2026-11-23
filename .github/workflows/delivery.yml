@@ -1,14 +1,6 @@
 # Action SHAs: checkout v6, setup-node v6, setup-python v6.1.0; artifacts v4.
 name: Continuous Delivery
 'on':
-  push:
-    branches:
-    - main
-    - develop
-  pull_request:
-    branches:
-    - main
-    - develop
   workflow_dispatch: {}
 permissions:
   contents: read

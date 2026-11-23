@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
+import { useAccesibilidad } from "./Accesibilidad";
 
 export default function LandingMotion() {
+  const { preferencias } = useAccesibilidad();
   useEffect(() => {
     const section = document.getElementById("contenido");
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!section || !("IntersectionObserver" in window)) return;
+    if (!section || preferencias.movimiento || !("IntersectionObserver" in window)) return;
     const animaciones = new Map<HTMLElement, Animation>();
     const observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
@@ -33,6 +35,6 @@ export default function LandingMotion() {
       cancelar();
       motion.removeEventListener("change", cancelar);
     };
-  }, []);
+  }, [preferencias.movimiento]);
   return null;
 }

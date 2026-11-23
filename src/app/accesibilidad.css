@@ -1,0 +1,18 @@
+/* Ajustes del usuario: el panel y las ayudas permanecen fuera del contenido ampliado. */
+#dentaia-aplicacion{zoom:var(--a11y-escala,1)}
+html[data-a11y-espaciado="true"] #dentaia-aplicacion :is(p,li,dt,dd,label,legend,blockquote,summary){line-height:1.8!important;letter-spacing:.03em!important;word-spacing:.12em!important}
+html[data-a11y-fuente="true"] #dentaia-aplicacion :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,input,select,textarea,li,dt,dd,summary,table){font-family:Arial,"Segoe UI",sans-serif!important}
+html[data-a11y-enlaces="true"] #dentaia-aplicacion a{outline:2px solid currentColor!important;outline-offset:2px!important;text-decoration:underline!important;text-decoration-thickness:2px!important}
+html[data-a11y-saturacion="true"] #dentaia-aplicacion :is(img,video,svg,canvas){filter:saturate(.15)!important}
+html[data-a11y-imagenes="true"] #dentaia-aplicacion :is(img[alt=""],[data-a11y-decorativa="true"]){visibility:hidden!important;pointer-events:none!important}
+html[data-a11y-imagenes="true"] #dentaia-aplicacion [data-a11y-intro]{display:none!important}
+html[data-a11y-movimiento="true"] #dentaia-aplicacion,html[data-a11y-movimiento="true"] #dentaia-aplicacion *,html[data-a11y-movimiento="true"] #dentaia-aplicacion *::before,html[data-a11y-movimiento="true"] #dentaia-aplicacion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+html[data-a11y-movimiento="true"]{scroll-behavior:auto!important}
+html[data-a11y-movimiento="true"] #dentaia-aplicacion [data-a11y-intro]{display:none!important}
+html[data-a11y-contraste="true"] #dentaia-aplicacion,html[data-a11y-contraste="true"] #dentaia-aplicacion :not(svg):not(svg *):not(img):not(video):not(canvas){color:#fff!important;background-color:#07152e!important;background-image:none!important;border-color:#fff!important;box-shadow:none!important;text-shadow:none!important}
+html[data-a11y-contraste="true"] #dentaia-aplicacion a{color:#ffe27a!important;text-decoration:underline!important}
+html[data-a11y-contraste="true"] #dentaia-aplicacion :is(button[aria-pressed="true"],button[aria-selected="true"]){background-color:#fff!important;color:#07152e!important}
+html[data-a11y-contraste="true"] #dentaia-aplicacion :focus-visible{outline-color:#ffe27a!important}
+html[data-a11y-contraste="true"] #dentaia-aplicacion [data-a11y-intro],html[data-a11y-contraste="true"] #dentaia-aplicacion [data-a11y-intro] *{background-color:transparent!important}
+html[data-a11y-cursor="true"] #dentaia-aplicacion,html[data-a11y-cursor="true"] #dentaia-aplicacion :not(input):not(textarea){cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='44' viewBox='0 0 36 44'%3E%3Cpath d='M3 2v32l8-8 7 15 7-3-7-15h12Z' fill='%230a2358' stroke='white' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") 3 2,auto!important}
+@media print{#dentaia-aplicacion{zoom:1}}

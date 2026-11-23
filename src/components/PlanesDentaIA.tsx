@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PLAN_PREMIUM_MENSUAL } from "@/lib/stripe/plan";
 import { Icono } from "./Identidad";
+import AperturaPlanes from "./AperturaPlanes";
 import styles from "./planes-dentaia.module.css";
 
 const precio = (PLAN_PREMIUM_MENSUAL.amount / 100).toFixed(2);
@@ -20,8 +21,10 @@ export default function PlanesDentaIA() {
       <h2 className="public-title" id="planes-titulo">Empieza gratis, explora Premium</h2>
       <p>Elige según lo que necesitas hoy y consulta qué funciones están previstas para cada plan.</p>
     </div>
-    <div className={styles.grid}>
-      <article className={styles.card} data-reveal>
+    <AperturaPlanes className={styles.grid}>
+      <div className={styles.cardSlot}>
+      <div className={styles.cardStage}><div className={styles.cardFloat}>
+      <article className={styles.card}>
         <h3>Gratis</h3>
         <p className={styles.price}>S/ 0 <small>/ siempre</small></p>
         <p>Accede a las herramientas esenciales de DentaIA.</p>
@@ -32,7 +35,11 @@ export default function PlanesDentaIA() {
         </ul>
         <Link className="action action-secondary" href="/cuenta?modo=registro">Comenzar gratis <Icono nombre="flecha" size={16} /></Link>
       </article>
-      <article className={`${styles.card} ${styles.featured} public-inverse`} data-reveal>
+      </div></div>
+      </div>
+      <div className={styles.cardSlot}>
+      <div className={styles.cardStage}><div className={styles.cardFloat}>
+      <article className={`${styles.card} ${styles.featured} public-inverse`}>
         <h3>Premium</h3>
         <p className={styles.price}>S/ {precio} <small>/ mes</small></p>
         <p>Suscripción de demostración con Stripe Sandbox.</p>
@@ -44,7 +51,9 @@ export default function PlanesDentaIA() {
         <Link className="action" href="/premium?iniciar=1">Elegir Premium <Icono nombre="flecha" size={16} /></Link>
         <small className={styles.nota}>Pago de prueba. Stripe Sandbox no realiza cobros reales.</small>
       </article>
-    </div>
+      </div></div>
+      </div>
+    </AperturaPlanes>
     <div className={styles.details} data-reveal>
       <h3 id="planes-comparacion">Compara los planes</h3>
       <table aria-labelledby="planes-comparacion">
