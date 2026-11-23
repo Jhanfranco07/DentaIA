@@ -14,3 +14,4 @@ supabase/.temp/
 /reports/
 /playwright-report/
 /test-results/
+/debug.log

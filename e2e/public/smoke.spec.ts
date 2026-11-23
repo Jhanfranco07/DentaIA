@@ -1,39 +1,74 @@
-import { expect, test, type Page } from "playwright/test";
+import { expect, test as base, type Page } from "playwright/test";
+import fixtures from "../isolation/fixtures.json";
 
-const fakeSupabase = "http://127.0.0.1:1";
-let browserErrors: string[];
-let blockedWrites: string[];
+const fakeSupabase = fixtures.supabaseUrl;
+const tileOrigin = "https://tile.openstreetmap.org";
+const transparentPng = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/lXcAAAAASUVORK5CYII=", "base64");
 
-test.beforeEach(async ({ page, baseURL }) => {
-  browserErrors = [];
-  blockedWrites = [];
+const test = base.extend<{ isolatedNetwork: void }>({
+  isolatedNetwork: [async ({ context, page, baseURL }, use) => {
+  if (!baseURL) throw new Error("E2E requires an explicit Playwright baseURL");
+  const appURL = new URL(baseURL);
+  if (appURL.protocol !== "http:" || appURL.hostname !== "127.0.0.1" || !appURL.port || appURL.username || appURL.password) {
+    throw new Error(`E2E baseURL must be local HTTP on 127.0.0.1: ${baseURL}`);
+  }
+  const browserErrors: string[] = [];
+  const consoleErrors: string[] = [];
+  const failedRequests: string[] = [];
+  const unexpectedResponses: string[] = [];
+  const blockedRequests: string[] = [];
   page.on("pageerror", error => browserErrors.push(error.message));
-  const appOrigin = new URL(baseURL!).origin;
-  await page.route("**/*", async route => {
+  page.on("console", message => {
+    if (message.type() !== "error") return;
+    const location = message.location().url;
+    if (location.startsWith(`${fakeSupabase}/`) && /^Failed to load resource: the server responded with a status of 503/.test(message.text())) return;
+    consoleErrors.push(`${location}: ${message.text()}`);
+  });
+  context.on("requestfailed", request => {
+    failedRequests.push(`${request.method()} ${request.url()}: ${request.failure()?.errorText ?? "unknown"}`);
+  });
+  context.on("response", response => {
+    const url = new URL(response.url());
+    if (url.origin === fakeSupabase && response.status() === 503) return;
+    if (response.status() >= 400) unexpectedResponses.push(`${response.status()} ${response.url()}`);
+  });
+  const appOrigin = appURL.origin;
+  await context.route("**/*", async route => {
     const request = route.request();
     const url = new URL(request.url());
-    // PostgREST usa POST para esta función de consulta; la respuesta se simula localmente.
     const readOnlyDirectoryRpc = url.origin === fakeSupabase
       && request.method() === "POST"
       && url.pathname === "/rest/v1/rpc/dentaia_buscar_directorio";
-    if (!["GET", "HEAD"].includes(request.method()) && !readOnlyDirectoryRpc) {
-      blockedWrites.push(`${request.method()} ${url.pathname}`);
-      await route.abort();
-      return;
-    }
-    if (url.origin === appOrigin) return route.continue();
-    if (url.origin === fakeSupabase) {
+    if (url.origin === fakeSupabase && (["GET", "HEAD"].includes(request.method()) || readOnlyDirectoryRpc)) {
       await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ message: "Servicio no disponible en E2E público" }) });
       return;
     }
+    if (url.origin === tileOrigin && request.method() === "GET" && /^\/\d+\/\d+\/\d+\.png$/.test(url.pathname)) {
+      await route.fulfill({ status: 200, contentType: "image/png", body: transparentPng });
+      return;
+    }
+    if (url.origin === appOrigin && ["GET", "HEAD"].includes(request.method())) return route.continue();
+    blockedRequests.push(`${request.method()} ${request.url()}`);
     await route.abort();
   });
-});
-
-test.afterEach(async ({ page }) => {
-  expect(blockedWrites, "La visita pública intentó escribir datos").toEqual([]);
+  await context.routeWebSocket("**/*", socket => {
+    const url = new URL(socket.url());
+    if (url.protocol === "ws:" && url.hostname === "127.0.0.1" && url.port === appURL.port
+        && url.pathname === "/_next/webpack-hmr" && !url.username && !url.password && !url.search && !url.hash) {
+      // A local no-op HMR socket is sufficient for a fixed test run.
+    } else {
+      blockedRequests.push(`WebSocket ${socket.url()}`);
+      socket.close();
+    }
+  });
+  await use();
+  expect(blockedRequests, "Intentos de red o escrituras no autorizadas").toEqual([]);
   expect(browserErrors, "Errores JavaScript de la página").toEqual([]);
+  expect(consoleErrors, "Errores de consola").toEqual([]);
+  expect(failedRequests, "Solicitudes fallidas no simuladas").toEqual([]);
+  expect(unexpectedResponses, "Respuestas HTTP inesperadas").toEqual([]);
   await expect(page.getByText(/Application error|Internal Server Error/i)).toHaveCount(0);
+  }, { auto: true }],
 });
 
 async function visit(page: Page, path: string) {
@@ -47,7 +82,11 @@ test("portada: contenido y navegación de teclado", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.getByRole("link", { name: /Explorar el directorio/i })).toBeVisible();
   await page.keyboard.press("Tab");
-  await expect(page.locator(":focus-visible")).toHaveCount(1);
+  const skipLink = page.getByRole("link", { name: "Ir al contenido" });
+  await expect(skipLink).toBeFocused();
+  await expect(skipLink).toBeVisible();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#contenido$/);
 });
 
 test("cuenta: formulario visible sin enviar datos", async ({ page }) => {
@@ -82,6 +121,19 @@ test("detalle público: identificador demo válido", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.getByText(/Perfil ficticio · Sin atención real/)).toBeVisible();
   await expect(page.getByRole("link", { name: /Volver al directorio/ })).toBeVisible();
+});
+
+test("detalle público: error de consulta sin exponer datos", async ({ page }) => {
+  await visit(page, "/directorio/00000000-0000-4000-8000-000000000099");
+  await expect(page.getByRole("alert").filter({ hasText: "No pudimos cargar este perfil." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Reintentar" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Volver al directorio/ })).toBeVisible();
+});
+
+test("buenas prácticas: guía pública sin sesión", async ({ page }) => {
+  await visit(page, "/paciente/buenas-practicas");
+  await expect(page.getByRole("heading", { level: 1, name: "Pequeños hábitos para cuidar tu sonrisa." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Recomendaciones para el cuidado bucal" }).getByRole("article")).toHaveCount(4);
 });
 
 test("premium: información visible sin iniciar checkout", async ({ page }) => {
