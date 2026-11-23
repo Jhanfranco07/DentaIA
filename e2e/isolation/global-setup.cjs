@@ -59,15 +59,20 @@ module.exports = async function globalSetup() {
     if (process.env[name]) launchEnv[name] = process.env[name];
   }
   const child = spawn(process.execPath, [resolve(__dirname, "start-next.cjs"), String(port)], {
-    cwd: resolve(__dirname, "../.."), stdio: "ignore", windowsHide: true,
+    cwd: resolve(__dirname, "../.."), stdio: ["ignore", "pipe", "pipe"], windowsHide: true,
     env: launchEnv,
     detached: process.platform !== "win32",
   });
+  let diagnostics = "";
+  for (const stream of [child.stdout, child.stderr]) {
+    stream.on("data", chunk => { diagnostics = (diagnostics + chunk.toString()).slice(-16_384); });
+  }
+  child.on("error", error => { diagnostics = (diagnostics + error.message).slice(-16_384); });
   const deadline = Date.now() + 120_000;
   let ownerPid = null;
   try {
     while (Date.now() < deadline) {
-      if (child.exitCode !== null) throw new Error(`Isolated Next.js exited with code ${child.exitCode}`);
+      if (child.exitCode !== null) throw new Error(`Isolated Next.js exited with code ${child.exitCode}: ${diagnostics}`);
       if (await ready()) {
         ownerPid = existsSync(ownerFile) ? Number(readFileSync(ownerFile, "utf8")) : null;
         if (!Number.isInteger(ownerPid) || ownerPid <= 0 || (process.platform === "win32" && listenerPid() !== ownerPid)) {
@@ -83,7 +88,7 @@ module.exports = async function globalSetup() {
       }
       await new Promise(resolveWait => setTimeout(resolveWait, 250));
     }
-    throw new Error("Isolated Next.js did not become ready within 120 seconds");
+    throw new Error(`Isolated Next.js did not become ready within 120 seconds: ${diagnostics}`);
   } catch (error) {
     stop(child, ownerPid);
     if (existsSync(auditFile)) unlinkSync(auditFile);
