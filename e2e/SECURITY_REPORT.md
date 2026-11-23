@@ -2,7 +2,9 @@
 
 ## Diagnóstico de GitHub Actions en el PR #112
 
-La primera ejecución Ubuntu de `tests-playwright` falló antes de abrir Next.js y ocultó la salida del launcher. Se añadió captura acotada de diagnóstico; la segunda ejecución mostró que Next.js intentaba descargar `@next/swc-linux-x64-gnu` desde npm. La guarda bloqueó esa salida como estaba previsto. El job solicita ahora explícitamente dependencias opcionales en `npm ci` y verifica la presencia del binario SWC de Linux antes de activar el aislamiento. Esta corrección se comprobará con una nueva ejecución de GitHub Actions; no se relaja la guarda.
+La primera ejecución Ubuntu de `tests-playwright` falló antes de abrir Next.js y ocultó la salida del launcher. Se añadió captura acotada de diagnóstico; la segunda ejecución mostró que Next.js intentaba descargar `@next/swc-linux-x64-gnu` desde npm. La guarda bloqueó esa salida como estaba previsto. El job solicita ahora explícitamente dependencias opcionales en `npm ci` y verifica la presencia del binario SWC de Linux antes de activar el aislamiento. No se relaja la guarda.
+
+La tercera ejecución mostró que `npm ci --include=optional` rechazó dos veces el tarball SWC por integridad y dejó el paquete ausente. La entrada de `package-lock.json` para `@next/swc-linux-x64-gnu@15.5.29` tenía el hash `sha512-WXCf...`, también presente en `origin/main`; `npm view` contra `https://registry.npmjs.org/` devolvió `sha512-5WqW...` para esa misma versión. Se corrigió únicamente ese hash del lockfile, sin cambiar versión ni dependencias. El job mantiene el fail closed antes de iniciar la suite.
 
 ## Fase 7: observaciones finales de Claude
 

@@ -2,6 +2,8 @@
 
 En Ubuntu, el job instala las dependencias opcionales con `npm ci --include=optional` y comprueba que el binario SWC de Linux fijado por el lockfile existe antes de activar la guarda de red. Si falta, el job falla durante la preparación; Next.js no puede descargarlo durante las pruebas.
 
+La entrada SWC Linux del lockfile usa la integridad publicada para la versión 15.5.29. Un hash previo distinto, heredado de `origin/main`, impedía su instalación en Ubuntu y provocaba que Next.js intentara descargarlo durante la suite; la guarda rechazó ese intento. Solo se actualizó la integridad, no la versión.
+
 Actualización para publicación: Chromium recibe `HOME` únicamente desde la lista permitida de variables del sistema. El job `tests-playwright` exige archivos de reporte cuando falla; `if-no-files-found: error` evita que una carga vacía parezca válida. Ninguno de estos cambios transmite credenciales ni altera los demás artefactos del pipeline.
 
 La suite valida páginas reales de Next.js con Chromium. El `globalSetup` inicia y detiene exclusivamente el servidor local de esta corrida. No requiere cuentas, Supabase ni claves de servicios. Conserva los 10 casos iniciales y añade la guía pública de buenas prácticas y el estado de error seguro de una ficha.
