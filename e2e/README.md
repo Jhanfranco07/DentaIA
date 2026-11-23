@@ -4,6 +4,8 @@ En Ubuntu, el job instala las dependencias opcionales con `npm ci --include=opti
 
 La entrada SWC Linux del lockfile usa la integridad publicada para la versión 15.5.29. Un hash previo distinto, heredado de `origin/main`, impedía su instalación en Ubuntu y provocaba que Next.js intentara descargarlo durante la suite; la guarda rechazó ese intento. Solo se actualizó la integridad, no la versión.
 
+La ejecución #421 del pipeline integral en GitHub Actions verificó Ubuntu: regresión 1/1, Playwright 12/12, `tests-resumen` y los Quality Gates finales exitosos. La evidencia está en `https://github.com/Jhanfranco07/DentaIA/actions/runs/45133051850`. La ejecución local de Windows no sustituye esta verificación de CI.
+
 Actualización para publicación: Chromium recibe `HOME` únicamente desde la lista permitida de variables del sistema. El job `tests-playwright` exige archivos de reporte cuando falla; `if-no-files-found: error` evita que una carga vacía parezca válida. Ninguno de estos cambios transmite credenciales ni altera los demás artefactos del pipeline.
 
 La suite valida páginas reales de Next.js con Chromium. El `globalSetup` inicia y detiene exclusivamente el servidor local de esta corrida. No requiere cuentas, Supabase ni claves de servicios. Conserva los 10 casos iniciales y añade la guía pública de buenas prácticas y el estado de error seguro de una ficha.
