@@ -1,4 +1,8 @@
 -- QA aislada: nunca utiliza números, pacientes ni citas de producción.
+-- current_date debe coincidir con la fecha de Lima usada por la transición
+-- completar; en UTC, por la noche en Perú, la cita quedaría para mañana.
+set time zone 'America/Lima';
+
 do $$
 begin
   if has_table_privilege('anon','public.dentist_contact_channels','INSERT')

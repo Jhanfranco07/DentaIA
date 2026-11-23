@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useReducer, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { Icono } from "./Identidad";
 import styles from "./hero-carousel.module.css";
+import { useAccesibilidad } from "./Accesibilidad";
 
 const registro = "/cuenta?modo=registro";
 const directorio = "/directorio";
@@ -170,6 +171,7 @@ function Mensajes({ actual, anterior }: { actual: number; anterior: number | nul
 
 export default function HeroCarousel() {
   const [estado, dispatch] = useReducer(reducir, estadoInicial);
+  const { preferencias } = useAccesibilidad();
   const [reducido, setReducido] = useState(true);
   const [enPantalla, setEnPantalla] = useState(false);
   const [paginaVisible, setPaginaVisible] = useState(false);
@@ -179,8 +181,8 @@ export default function HeroCarousel() {
   const hero = useRef<HTMLElement>(null);
   const { actual, anterior, carga, fallidas, imagenLista } = estado;
   const siguiente = vecino(actual, 1, fallidas);
-  const reproduccion = !reducido && !pausa && !cursorDentro && !focoDentro && enPantalla && paginaVisible;
-  const cargarAnticipada = !reducido && !pausa && enPantalla && paginaVisible;
+  const reproduccion = !preferencias.movimiento && !reducido && !pausa && !cursorDentro && !focoDentro && enPantalla && paginaVisible;
+  const cargarAnticipada = !preferencias.movimiento && !reducido && !pausa && enPantalla && paginaVisible;
   const solicitudActiva = carga !== null && carga.modo !== "anticipada";
   const montadas = [...new Set([anterior, actual, carga?.indice ?? null])].filter(indice => indice !== null);
 
@@ -227,12 +229,12 @@ export default function HeroCarousel() {
 
   useEffect(() => {
     if (!carga?.lista || carga.modo === "anticipada" || (carga.modo === "automatica" && !reproduccion)) return;
-    dispatch({ tipo: "mostrar", indice: carga.indice, animar: !reducido });
-  }, [carga, reducido, reproduccion]);
+    dispatch({ tipo: "mostrar", indice: carga.indice, animar: !reducido && !preferencias.movimiento });
+  }, [carga, reducido, reproduccion, preferencias.movimiento]);
 
   useEffect(() => {
     if (anterior === null) return;
-    if (reducido) {
+    if (reducido || preferencias.movimiento) {
       dispatch({ tipo: "terminarFundido" });
       return;
     }
