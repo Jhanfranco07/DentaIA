@@ -8,6 +8,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "test:planes": "node --experimental-strip-types --test src/features/planes/catalogo.test.mjs",
     "test:profesional": "node --experimental-strip-types --test src/features/profesional/historial-sintetico.test.mjs src/features/profesional/historial-autorizado.test.mjs src/features/profesional/resultados-educativos.test.mjs src/features/profesional/resultados-educativos-integracion.test.mjs src/features/profesional/api-clinica.test.mjs src/features/profesional/control-consultas-clinicas.test.mjs src/features/profesional/control-revalidacion-historial.test.mjs src/features/profesional/bff-integracion.test.mjs",
     "check:supabase": "node --env-file-if-exists=.env.local scripts/check-supabase.mjs",

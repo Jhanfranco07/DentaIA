@@ -224,6 +224,43 @@ jobs:
         if-no-files-found: error
         retention-days: 7
 
+  tests-playwright:
+    name: Playwright · rutas públicas aisladas
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: tests-preparacion
+    permissions:
+      contents: read
+    env:
+      CI: 'true'
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+      with:
+        node-version: '22'
+        cache: npm
+    - run: npm ci --include=optional
+    - name: Verificar SWC Linux antes de aislar Next.js
+      run: |-
+        node -e "const fs = require('node:fs'); const path = 'node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node'; if (!fs.existsSync(path)) throw new Error('Falta SWC Linux fijado en package-lock.json')"
+    - name: Instalar Chromium fijado por el lockfile y sus dependencias
+      run: ./node_modules/.bin/playwright install --with-deps chromium
+    - name: Verificar guarda de red
+      run: node --test e2e/isolation/*.test.cjs
+    - name: Ejecutar suite pública aislada
+      run: npm run test:e2e
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ failure() }}
+      with:
+        name: playwright-fallos
+        path: |-
+          playwright-report/
+          test-results/
+        if-no-files-found: error
+        retention-days: 7
+
   tests-resumen:
     name: Tests · Resumen y Quality Gate
     runs-on: ubuntu-latest
@@ -234,6 +271,7 @@ jobs:
     - tests-integracion
     - tests-contratos
     - tests-regresion
+    - tests-playwright
     if: ${{ always() }}
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
