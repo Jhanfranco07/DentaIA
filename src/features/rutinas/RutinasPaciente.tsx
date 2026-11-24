@@ -10,6 +10,7 @@ import { marcarActividadRutina, leerHistorialRutinas, leerRutinaDelDia, type Est
 import { fechaHoyLima, progresoDelDia, progresoHistorial, type MarcaRutina, type IntervaloAsignacion } from "./modelo";
 import type { PlanCatalogo } from "./contrato";
 import SeguimientoRutinasPaciente from "./SeguimientoRutinasPaciente";
+import HistorialVisual from "./HistorialVisual";
 import styles from "./rutinas.module.css";
 
 const MOMENTOS = [
@@ -17,7 +18,6 @@ const MOMENTOS = [
   { clave: "daytime", titulo: "Durante el día" },
   { clave: "evening", titulo: "Por la noche" },
 ] as const;
-const formateadorFecha = new Intl.DateTimeFormat("es-PE", { dateStyle: "long", timeZone: "America/Lima" });
 
 export default function RutinasPaciente() {
   const { usuario } = useSesion();
@@ -76,6 +76,8 @@ export default function RutinasPaciente() {
       .map(actividad => ({ activity_id: actividad.id, plan_id: dia?.plan?.id ?? "", completion_date: fecha })));
   const historial = useMemo(() => progresoHistorial(catalogo, marcas, asignaciones), [catalogo, marcas, asignaciones]);
   const diasCompletos = historial.filter(d => d.progreso && d.progreso.total > 0 && d.progreso.completadas === d.progreso.total).length;
+  const progresoHoy = esHoy ? progreso.porcentaje : 0;
+  const diasConRegistros = historial.length;
 
   async function alternar(actividadId: string, completada: boolean) {
     if (!usuario || !dia?.plan || !esHoy || guardando) return;
@@ -91,22 +93,40 @@ export default function RutinasPaciente() {
 
   return <section className={styles.pagina} aria-labelledby="rutinas-titulo">
     <header className={styles.encabezado}>
-      <span className={styles.etiqueta}><Icono nombre="escudo" size={17} /> MI CUIDADO DENTAL</span>
-      <h1 id="rutinas-titulo">Mis rutinas</h1>
-      <p>Registra tus hábitos, aprende con las guías y revisa tu progreso. Las propuestas educativas se activan únicamente después de tu aceptación; no reemplazan un tratamiento odontológico.</p>
+      <div className={styles.heroTexto}>
+        <span className={styles.etiqueta}><Icono nombre="diente" size={21} /> MI CUIDADO DENTAL</span>
+        <h1 id="rutinas-titulo">Mis rutinas</h1>
+        <p>Registra tus hábitos, sigue tu progreso y accede a guías educativas personalizadas.</p>
+        <p>Las propuestas se activan solo después de tu aceptación y no reemplazan un tratamiento odontológico.</p>
+      </div>
+      <div className={styles.heroIlustracion} aria-hidden="true">
+        <span className={styles.heroDestello}>✧</span>
+        <span className={styles.dienteDecorativo}><Icono nombre="diente" size={106} /></span>
+        <span className={styles.escudoDecorativo}><Icono nombre="escudo" size={54}/></span>
+        <span className={styles.heroDestelloDos}>✦</span>
+      </div>
     </header>
 
     <div className={styles.resumen} aria-label="Resumen de actividades">
-      <div><span>Avance de hoy</span><strong>{!cargando && dia?.plan && esHoy ? progreso.porcentaje + "%" : "—"}</strong><small>Actividades registradas</small></div>
-      <div><span>Días con registros</span><strong>{cargando ? "—" : historial.length}</strong><small>Historial disponible</small></div>
-      <div><span>Días completos</span><strong>{cargando ? "—" : diasCompletos}</strong><small>Según cada plan vigente</small></div>
+      <div className={styles.resumenAvance}>
+        <span className={styles.iconoResumen}><Icono nombre="reporte" size={28} /></span>
+        <div className={styles.datoResumen}><span>Avance de hoy</span><strong>{cargando ? "—" : esHoy && dia?.plan ? progresoHoy + "%" : "—"}</strong>
+          <small>{!cargando && esHoy && dia?.plan ? `${progreso.completadas} de ${progreso.total} actividades registradas` : "Selecciona hoy para consultar el avance"}</small></div>
+        <div className={styles.anilloProgreso} style={{ "--avance-rutina": `${progresoHoy}%` } as React.CSSProperties} aria-hidden="true">
+          <Icono nombre="diente" size={28}/>
+        </div>
+      </div>
+      <div className={styles.resumenDias}><span className={styles.iconoResumen}><Icono nombre="calendario" size={27}/></span>
+        <div className={styles.datoResumen}><span>Días con registros</span><strong>{cargando ? "—" : diasConRegistros}</strong><small>Días con actividad registrada</small></div></div>
+      <div className={styles.resumenCompletos}><span className={styles.iconoResumen}><Icono nombre="escudo" size={27}/></span>
+        <div className={styles.datoResumen}><span>Días completos</span><strong>{cargando ? "—" : diasCompletos}</strong><small>Según el plan registrado cada día</small></div></div>
     </div>
     {error && <div className={styles.error} role="alert"><p>{error}</p><button type="button" onClick={() => setIntento(n => n + 1)}>Volver a cargar</button></div>}
     <div className={styles.columnas}>
       <div className={styles.principal}>
         <section className={styles.tarjeta} aria-labelledby="rutina-dia-titulo">
           <div className={styles.tituloFila}>
-            <div><span className={styles.sobrelinea}>{dia?.origen === "personalizado" ? "PLAN EDUCATIVO ACEPTADO" : "HÁBITOS PREVENTIVOS"}</span><h2 id="rutina-dia-titulo">{dia?.plan?.title ?? "Rutina del día"}</h2></div>
+            <div className={styles.tituloPlan}><span className={styles.planIcono}><Icono nombre="escudo" size={25}/></span><div><span className={styles.sobrelinea}>{dia?.origen === "personalizado" ? "PLAN EDUCATIVO ACEPTADO" : "HÁBITOS PREVENTIVOS"}</span><h2 id="rutina-dia-titulo">{dia?.plan?.title ?? "Rutina del día"}</h2></div></div>
             <div className={styles.fechaAcciones}>
             {!esHoy && <button type="button" className={styles.volverHoy} onClick={() => setFecha(hoy)}>Volver a hoy</button>}
             <label className={styles.selectorFecha}>Fecha
@@ -122,10 +142,10 @@ export default function RutinasPaciente() {
                 <div className={styles.barra} role="progressbar" aria-valuemin={0} aria-valuemax={Math.max(progreso.total, 1)} aria-valuenow={progreso.completadas} aria-valuetext={`${progreso.porcentaje}% completado`}><span style={{ width: `${progreso.porcentaje}%` }} /></div>
               </div>
               {esHoy && <div className={styles.siguiente}>
-                <div><span className={styles.sobrelinea}>SIGUIENTE PASO</span>
+                <div className={styles.siguienteContenido}><span className={styles.siguienteIcono}><Icono nombre="destello" size={26}/></span><div><span className={styles.sobrelinea}>SIGUIENTE PASO</span>
                   <strong>{siguiente ? siguiente.title : "¡Rutina completada!"}</strong>
                   <p>{siguiente ? "Te quedan " + pendientes.length + " actividades por registrar. Márcalas solo después de realizarlas." : "Todas las actividades de hoy están registradas."}</p>
-                </div>
+                </div></div>
                 {siguiente && guiaPorActividad(siguiente.activity_key) && <Link href={"/buenas-practicas?guia=" + guiaPorActividad(siguiente.activity_key)}>Ver cómo hacerlo ↗</Link>}
               </div>}
               {!esHoy && <p className={styles.soloLectura} role="status">El historial se consulta en modo de solo lectura.</p>}
@@ -133,7 +153,7 @@ export default function RutinasPaciente() {
                 const actividades = dia.actividades.filter(actividad => actividad.time_of_day === momento.clave);
                 if (!actividades.length) return null;
                 return <section className={styles.grupo} key={momento.clave} aria-labelledby={`grupo-${momento.clave}`}>
-                  <h3 id={`grupo-${momento.clave}`}>{momento.titulo}</h3>
+                  <div className={styles.grupoEncabezado}><h3 id={`grupo-${momento.clave}`}><span className={styles.momentoIcono}>{momento.clave==="morning" ? "☀" : momento.clave==="daytime" ? "◷" : "☾"}</span>{momento.titulo}</h3><span className={styles.contadorGrupo}>{actividades.filter(actividad=>dia.completadas.includes(actividad.id)).length} de {actividades.length} completadas</span></div>
                   <ul>{actividades.map(actividad => {
                     const marcada = dia.completadas.includes(actividad.id);
                     return <li key={actividad.id} className={marcada ? styles.actividadHecha : styles.actividad}>
@@ -182,18 +202,7 @@ export default function RutinasPaciente() {
         <p className={styles.nota}>Las rutinas se basan en actividades preventivas. La selección aceptada por ti no constituye tratamiento ni se genera automáticamente a partir de fotografías.</p>
       </div>
 
-      <aside className={styles.historial} aria-labelledby="historial-titulo">
-        <span className={styles.sobrelinea}>SEGUIMIENTO PERSONAL</span><h2 id="historial-titulo">Historial</h2>
-        <p>Consulta los días en que registraste actividades.</p>
-        {cargando && marcas.length === 0 ? <p className={styles.estado} role="status">Cargando historial…</p> : historial.length === 0 ?
-          <p className={styles.historialVacio}>Todavía no hay actividades registradas. Cuando marques una, aparecerá aquí.</p> :
-          <ul>{historial.map(({ fecha: diaHistorial, progreso: dato }) => <li key={diaHistorial}>
-            <button type="button" className={fecha === diaHistorial ? styles.historialActivo : styles.historialDia}
-              aria-pressed={fecha === diaHistorial} onClick={() => setFecha(diaHistorial)}>
-              <span><strong>{formateadorFecha.format(new Date(`${diaHistorial}T12:00:00-05:00`))}</strong><small>{dato ? `${dato.completadas} de ${dato.total} actividades` : "Versión del plan no disponible"}</small></span><b>{dato ? `${dato.porcentaje}%` : "—"}</b>
-            </button>
-          </li>)}</ul>}
-      </aside>
+      <HistorialVisual fecha={fecha} hoy={hoy} registros={marcas} catalogo={catalogo} historial={historial} onFecha={setFecha} />
     </div>
   </section>;
 }
