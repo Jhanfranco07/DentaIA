@@ -1,61 +1,85 @@
-# DentAI · Prototipo académico para pacientes
+# DentaIA
 
-Aplicación de demostración desarrollada con **Next.js 15, React 19 y TypeScript** para el proyecto final de carrera. Orientación preventiva de salud bucal y directorio de profesionales.
+**Plataforma web de orientación preventiva en salud bucal y búsqueda de profesionales odontológicos.** Proyecto académico del curso Proyecto Final de Carrera III de la Universidad San Ignacio de Loyola (USIL).
 
-## Premium Experience
+DentaIA integra información educativa, registro de rutinas, gestión de solicitudes, análisis orientativo de fotografías y un directorio odontológico en una experiencia web adaptable a dispositivos móviles y de escritorio. Los resultados automatizados son **educativos y no constituyen diagnósticos médicos ni reemplazan una evaluación odontológica**.
 
-El recorrido vigente incluye selección por contenido, revisión, preparación educativa, recomendaciones, reporte A4 y búsqueda opcional en el directorio existente. **Las tres fotografías clínicas siguen pendientes de autorización**: las muestras actuales son tarjetas editoriales identificadas como tales, sin anatomía ni hallazgos inventados. Ver [implementación y evidencia](docs/PREMIUM_EXPERIENCE.md) y [procedencia y material pendiente](docs/FOTOGRAFIAS_DEMO.md).
+- **Aplicación:** https://dent-ai-five.vercel.app/
+- **Código y trazabilidad:** https://github.com/Jhanfranco07/DentaIA
+- **Evidencias del Avance 02:** [Anexo técnico y matriz de trazabilidad](docs/ANEXO_TECNICO_AVANCE_02.md).
 
-## Ejecutar la aplicación
+## Funcionalidades implementadas
 
-Usar Node.js 22 LTS (ver `.nvmrc`).
+| Área | Funcionamiento |
+| --- | --- |
+| Acceso y perfiles | Registro, autenticación y vistas diferenciadas para paciente, odontólogo y administración, con permisos del lado del servidor y de la base de datos. |
+| Panel del paciente | Acceso central a orientación, directorio, solicitudes, fotografías, rutinas y contenidos preventivos. |
+| Directorio odontológico | Búsqueda, filtros, fichas de profesionales y referencias geográficas. La plataforma distingue datos de demostración de información de servicios reales. |
+| Mis solicitudes | Registro, consulta de estado, búsqueda, filtros e historial; las solicitudes de demostración se distinguen de las citas reales. |
+| Mis fotografías | Consentimiento, captura o selección, revisión y almacenamiento privado con autorización. |
+| Análisis orientativo | Procesamiento de imágenes mediante el servicio Smile V17 y presentación de observaciones educativas sobre características visibles, sujetas a calidad de imagen y al contrato de respuesta. |
+| Mis resultados | Consulta de resultados y presentación comprensible de observaciones de orientación. |
+| Rutinas preventivas | Registro diario de actividades, avance e historial del paciente. |
+| Buenas prácticas | Seis guías educativas, buscador y filtros, temporizador de cepillado y retos de autocuidado. |
+| Denti | Asistente conversacional con orientación basada en guías, navegación hacia módulos y servicio generativo opcional cuando está configurado y autorizado; conserva respuestas guiadas como respaldo. |
+| Portal odontológico | Funciones diferenciadas para el profesional y acceso a información autorizada. |
+| Administración | Herramientas de gestión protegidas por controles de rol y autenticación reforzada. |
+| Planes y pagos | Checkout y webhooks de Stripe en entorno de prueba, con registros de persistencia y políticas RLS. |
+
+La asignación de rutinas y el seguimiento clínico mediante consentimiento disponen de componentes de interfaz, API y contratos SQL. Su **habilitación operativa está sujeta a banderas de configuración y controles de autorización**, según [la documentación técnica](docs/arquitectura/DI-207-ACTIVACION-QA-SEGUIMIENTO.md). La implementación de componentes y su activación en un entorno son conceptos diferentes.
+
+## Arquitectura
+
+- **Interfaz y servidor web:** Next.js 15, React 19 y TypeScript; despliegue de la aplicación en Vercel.
+- **Autenticación, persistencia y almacenamiento:** Supabase Auth, PostgreSQL, Storage y políticas de seguridad a nivel de fila (RLS).
+- **Visión artificial:** microservicio Python/FastAPI con Smile V17 y segmentación Roboflow, integrado mediante rutas controladas. Consulte [el servicio de visión](services/dental-vision/README.md). Este es el componente documentado en la versión actual; no se presenta el detector ONNX retirado como parte del servicio vigente.
+- **Asistente:** orientación guiada y uso opcional de OpenAI, con verificaciones de identidad y restricciones de respuesta.
+- **Pagos:** Stripe Checkout en modo de pruebas, con verificación de webhooks y persistencia.
+- **Control de versiones y calidad:** GitHub y GitHub Actions.
+
+La solución separa presentación, autenticación, lógica de negocio, persistencia, servicios especializados e integraciones. Consulte las [arquitecturas lógica y física](docs/arquitectura/README.md).
+
+## Ejecución local
+
+Requisitos: Node.js 22 o superior, npm y las variables correspondientes a los servicios que se utilizarán. El archivo `.env.example` contiene las referencias públicas y nombres de configuración; no se deben incluir secretos en el repositorio.
 
 ```bash
 npm ci
+cp .env.example .env.local
 npm run dev
+```
+
+Para realizar verificaciones locales:
+
+```bash
+npm run typecheck
+npm run test
 npm run build
 ```
 
-## Base común para los cuatro avances
+Las pruebas de base de datos y del backend de visión cuentan con procedimientos específicos dentro del repositorio. Consulte [desarrollo](docs/DESARROLLO.md), [pagos](docs/PAGOS_STRIPE.md) y [pipelines](docs/DEVSECOPS_PIPELINES.md).
 
-La conexión cliente a Supabase, los tipos de las cinco tablas y las rutas separadas están preparados.
-Los módulos existentes de cuenta, directorio, solicitudes y fotografías se conservan y conectan con el nuevo recorrido. Las pruebas remotas requieren acceso al proyecto académico y una cuenta cuando corresponda.
+## Calidad y DevSecOps
 
-```bash
-cp .env.example .env.local
-npm run check:supabase
-npm run dev
-```
+La integración automatizada utiliza `.github/workflows/devsecops.yml`, un **grafo integral de 35 trabajos**. Incluye instalación y compilación, pruebas unitarias y de integración, contratos y regresión, auditoría de dependencias, análisis estático, detección de secretos, controles del backend Python/FastAPI, pruebas PostgreSQL con identidades sintéticas y puertas de calidad bloqueantes. Los workflows individuales se conservan para ejecución manual de diagnóstico.
 
-Abrir `/desarrollo/acceso` para comprobar la conexión e iniciar una sesión de prueba.
-Esta herramienta solo existe en desarrollo; no reemplaza el login final.
-Las cuentas deben crearse previamente: [guía del equipo](docs/DESARROLLO.md).
+- [Visualización y resultados de DevSecOps](https://github.com/Jhanfranco07/DentaIA/actions/workflows/devsecops.yml)
+- [Ejecución satisfactoria del 23 de noviembre de 2026, hora de Lima](https://github.com/Jhanfranco07/DentaIA/actions/runs/45326102779)
+- [Arquitectura y alcance del pipeline](docs/DEVSECOPS_PIPELINES.md)
 
-| Integrante | Ruta propia | Funcionalidad existente |
-| --- | --- | --- |
-| Jhan | `/cuenta` | Registro, login, cierre y perfil persistente |
-| Angie | `/directorio` | Consulta remota, búsqueda, filtros y detalle |
-| Anelis | `/solicitudes` | Crear, consultar y cancelar solicitudes de demostración |
-| Stephan | `/fotografias` | Consentimiento, carga privada y eliminación |
+Los jobs verifican código, contratos, pruebas y disponibilidad según su alcance; **no equivalen por sí solos a validación clínica**, ni a un cobro real ni a una prueba manual completa de todos los recorridos.
 
-No compartir contraseñas de BD ni claves secretas con el equipo. `.env.example` solo contiene
-la URL y clave publicable; los datos privados están protegidos por permisos y políticas RLS.
+## Protección de datos y alcance académico
 
-## Publicación en Vercel
-Importar `Jhanfranco07/DentaIA`, usar el framework **Next.js** y el directorio raíz.
-La demostración educativa no requiere variables de entorno. Los módulos conectados a Supabase requerirán
-las dos variables `NEXT_PUBLIC_` de `.env.example`. La herramienta de desarrollo devuelve 404 en producción.
-Preparar esta base no publica ni despliega una nueva versión.
+Las operaciones sensibles requieren autenticación y permisos. Las fotografías cuentan con un flujo de consentimiento; las políticas RLS restringen los registros por propietario y rol. Los resultados educativos no identifican enfermedades ni sustituyen la atención profesional. Las transacciones de demostración se realizan en modo de prueba.
 
-## Funcionalidades
-- Inicio responsivo y recorrido educativo.
-- Consentimiento explícito y vista previa de imágenes JPG, PNG o WebP de hasta 8 MB.
-- En la demostración, la selección permanece en el navegador. El módulo separado Mis fotografías permite almacenamiento privado real con sesión y consentimiento.
-- Reporte educativo predefinido asociado por hash a cada muestra; una imagen desconocida no recibe resultados.
-- Directorio de odontólogos y precios **ficticios**, con búsqueda y filtros.
-- Información de privacidad y alcance del prototipo.
+## Documentación y evidencias
 
-**Importante:** no existe ningún análisis automatizado ni diagnóstico clínico. Ante dolor o urgencia hay que consultar a un profesional. El modelo IA y los datos verificados corresponden a fases posteriores.
+- [Anexo técnico del Avance 02: trazabilidad, implementación y resultados](docs/ANEXO_TECNICO_AVANCE_02.md)
+- [Arquitectura del sistema](docs/arquitectura/README.md)
+- [DevSecOps y controles automatizados](docs/DEVSECOPS_PIPELINES.md)
+- [Integración de pagos](docs/PAGOS_STRIPE.md)
+- [Desarrollo e instrucciones de equipo](docs/DESARROLLO.md)
+- [Experiencia educativa de referencia](docs/PREMIUM_EXPERIENCE.md) (documentación de un incremento anterior).
 
-## Convención de commits
-En español: `feat: desarrollar navegación del paciente`; `fix: corregir validación de imágenes`; `docs: explicar alcance académico`.
+**Equipo académico:** desarrollo colaborativo de cuatro integrantes, con planificación en Jira y revisiones mediante GitHub.
