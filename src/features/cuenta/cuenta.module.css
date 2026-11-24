@@ -13,6 +13,10 @@
 .boton { font-size: 14px; }
 .error, .aviso { font-size: 14px; }
 
+.verificacionSesion{display:grid;place-items:center;min-height:36vh;padding:32px 20px;text-align:center}
+.verificacionSesion p{color:var(--muted);font-size:14px;line-height:1.6}
+.verificacionSesion button{margin-top:14px}
+
 /* Aplicación del tema del paciente a superficies existentes. */
 
 :global([data-area="Paciente"][data-tema="oscuro"]) .pagina{color:#f4edff}
