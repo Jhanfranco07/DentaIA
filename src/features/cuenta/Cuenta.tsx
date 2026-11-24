@@ -217,6 +217,13 @@ export default function Cuenta({ modoInicial = false, perfilSolicitado = false }
       </div>
     </div>
   </section>;
+  // Nunca mostrar el formulario público durante la verificación inicial de Auth.
+  // Evita el parpadeo de login al entrar a Mi perfil con una sesión activa.
+  if (cargando || errorSesion) return <main id="contenido" tabIndex={-1} className={`${styles.pagina} ${styles.verificacionSesion}`}>
+    {errorSesion ? <div><p role="alert">No pudimos validar tu sesión: {errorSesion}</p>
+      <button type="button" className={styles.boton} onClick={() => { void verificar(); }}>Volver a comprobar</button></div>
+      : <p role="status" aria-live="polite">Comprobando tu sesión…</p>}
+  </main>;
   if (destinoEntrada) return <main id="contenido" tabIndex={-1} className={styles.pagina}><p role="status">Abriendo tu panel…</p></main>;
   if (usuario && roles.length > 0) {
     const superusuario = roles.includes("superusuario");

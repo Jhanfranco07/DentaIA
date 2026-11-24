@@ -19,7 +19,7 @@ type Estado = {
 const ESTADOS_EXISTENTES = ["active", "trialing", "past_due", "unpaid", "incomplete"];
 
 export default function PremiumPage() {
-  const { usuario } = useSesion();
+  const { usuario, cargando: comprobandoSesion, errorSesion, verificar } = useSesion();
   const paciente = rolesDelUsuario(usuario).includes("paciente");
   const [estado, setEstado] = useState<Estado | null>(null);
   const [correo, setCorreo] = useState<string | null>(null);
@@ -204,6 +204,14 @@ export default function PremiumPage() {
       </div>
     </div>
   );
+
+  // Mientras Supabase valida la sesión, no renderizar la navegación pública.
+  // De otro modo aparece por un instante el acceso al cambiar desde el portal.
+  if (comprobandoSesion || errorSesion) return <main id="contenido" tabIndex={-1} className={`${styles.pagina} ${styles.verificacionSesion}`}>
+    {errorSesion ? <div><p role="alert">No pudimos validar tu sesión: {errorSesion}</p>
+      <button type="button" onClick={() => { void verificar(); }}>Volver a comprobar</button></div>
+      : <p role="status" aria-live="polite">Comprobando tu sesión…</p>}
+  </main>;
 
   // La suscripción es una sección del portal, no un destino aislado sin navegación.
   if (paciente) return <PortalShell area="Paciente" descripcion="Tu espacio personal" enlaces={NAVEGACION_PACIENTE} mostrarCuentaHeader={false}>{contenido}</PortalShell>;

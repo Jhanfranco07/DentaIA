@@ -44,3 +44,8 @@
 :global(html[data-tema="oscuro"]) .destacado{color:#d0bdff!important}
 :global(html[data-tema="oscuro"]) .error{background:#462838;border-color:#bd7a92;color:#ffd6df}
 :global(html[data-tema="oscuro"]) .ok{background:#173e37;color:#b9f2d8}
+
+/* Estado neutro durante la recuperación de Auth: evita un flash de sitio público. */
+.verificacionSesion{display:grid;place-items:center;min-height:36vh;padding:32px 20px;text-align:center}
+.verificacionSesion p{color:var(--muted);font-size:14px;line-height:1.6}
+.verificacionSesion button{margin-top:12px;padding:10px 16px;border:1px solid #0e818a;border-radius:10px;background:#0e818a;color:#fff;font:inherit;font-weight:700;cursor:pointer}
