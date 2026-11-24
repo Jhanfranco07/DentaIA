@@ -175,3 +175,7 @@
 :global([data-area="Paciente"][data-tema="oscuro"]) .progresoTexto span,:global([data-area="Paciente"][data-tema="oscuro"]) .progresoTexto strong,:global([data-area="Paciente"][data-tema="oscuro"]) .siguiente strong{color:#f7f0ff}
 :global([data-area="Paciente"][data-tema="oscuro"]) .contadorGrupo{background:#3d3558;color:#d2baff}
 @media(prefers-reduced-motion:reduce){.barra span{transition:none}}
+
+/* El historial reciente conserva una sola columna en móvil aunque el historial heredado use grilla. */
+.historial .listaReciente{display:block;grid-template-columns:none}
+.historial .listaReciente li{display:block}
