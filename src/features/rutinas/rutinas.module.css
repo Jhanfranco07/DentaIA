@@ -38,3 +38,140 @@
 .horariosAvisos label{display:grid;gap:6px;min-width:0;font-size:12px;font-weight:700;color:var(--rutina-texto)}
 .horariosAvisos input,.horariosAvisos select{min-height:42px;width:100%;min-width:0;background:var(--rutina-fondo);color:var(--rutina-texto);border:1px solid var(--rutina-borde);border-radius:10px;padding:8px;font:inherit}
 @media(max-width:490px){.horariosAvisos{grid-template-columns:1fr}}
+
+/* Rediseño premium 2026: extensión visual sin alterar la persistencia ni la lógica clínica. */
+.pagina{width:min(1370px,100%);padding:6px 0 58px}
+.encabezado{display:flex;align-items:center;justify-content:space-between;gap:28px;max-width:none;min-height:185px;margin:0 0 17px;padding:22px 32px;border:1px solid #e3eaf9;border-radius:27px;background:radial-gradient(circle at 75% 45%,#ddf4f8a6,transparent 33%),linear-gradient(112deg,#f7fbff,#edf4ff 58%,#eaeaff);position:relative;overflow:hidden}
+.encabezado:after{content:"";position:absolute;right:-20px;bottom:-90px;width:390px;height:200px;border-radius:50%;background:#cfd5fa47;transform:rotate(-17deg)}
+.heroTexto{position:relative;z-index:1;min-width:0;max-width:730px}
+.encabezado .etiqueta{color:#008d96;font-weight:850;font-size:11px;letter-spacing:.13em}
+.encabezado h1{margin:10px 0 8px;font-size:clamp(37px,4.3vw,54px);line-height:1.08;letter-spacing:-.045em;color:#142d4b}
+.encabezado p{margin:0 0 3px;max-width:72ch;font-size:13px;line-height:1.55;color:#52657d}
+.heroIlustracion{position:relative;z-index:1;width:190px;min-width:160px;height:156px;display:grid;place-items:center}
+.dienteDecorativo{display:grid;place-items:center;width:128px;height:132px;border-radius:48% 48% 44% 44%;color:#fcffff;background:radial-gradient(circle at 31% 22%,#fff,#b6e4f1 68%,#84a9dd);box-shadow:inset -12px -13px 19px #5d94b759,0 18px 30px #417ea22b;transform:rotate(-10deg)}
+.dienteDecorativo svg{filter:drop-shadow(0 3px 5px #5c9fc9)}
+.escudoDecorativo{position:absolute;right:1px;bottom:9px;display:grid;place-items:center;width:75px;height:84px;border:5px solid #d8f5ff;border-radius:21px 21px 30px 30px;color:#fff;background:linear-gradient(160deg,#17c6cf,#008d98);box-shadow:0 9px 20px #19899440}
+.heroDestello,.heroDestelloDos{position:absolute;color:#38c4d6;font-size:36px;left:6px;top:8px}.heroDestelloDos{color:#ad9bdb;left:auto;right:8px;top:-5px;font-size:24px}
+.resumen{gap:17px;margin-bottom:22px}
+.resumen>div{position:relative;display:flex;align-items:center;gap:15px;min-height:122px;padding:21px 23px;border-radius:19px;border:1px solid #d8e7f4;box-shadow:0 12px 22px #274e8510,0 2px 8px #18356a08}
+.resumen>.resumenAvance{background:linear-gradient(120deg,#ffffff,#e3f8f7)}
+.resumen>.resumenDias{background:linear-gradient(120deg,#ffffff,#f1ecff)}
+.resumen>.resumenCompletos{background:linear-gradient(120deg,#ffffff,#e7f3ff)}
+.resumen .iconoResumen{width:52px;height:52px;flex:none;display:grid;place-items:center;color:#0097a0;border-radius:15px;background:#e5f7f6}
+.resumenDias .iconoResumen{color:#875bea;background:#eee7ff}
+.resumenCompletos .iconoResumen{color:#238bcf;background:#deedff}
+.resumen .datoResumen{min-width:0;display:grid;gap:3px}
+.resumen .datoResumen>span{font-size:13px;color:#263f60;font-weight:800}
+.resumen .datoResumen>strong{font-size:clamp(27px,3vw,35px);line-height:1.12;color:#102b4a;letter-spacing:-.035em}
+.resumen .datoResumen>small{font-size:11px;color:#546783}
+.anilloProgreso{flex:none;display:grid;place-items:center;margin-left:auto;width:66px;height:66px;color:#74c9c3;background:conic-gradient(#048c94 var(--avance-rutina),#d7e6ed 0);border-radius:50%;position:relative}
+.anilloProgreso:before{content:"";position:absolute;inset:9px;background:#f8ffff;border-radius:50%}
+.anilloProgreso svg{position:relative;z-index:1}
+.columnas{grid-template-columns:minmax(0,1.75fr) minmax(300px,.95fr);gap:20px}
+.tarjeta,.historial{border-radius:23px;border-color:#dce7f3;box-shadow:0 15px 34px #21447b12}
+.tarjeta{padding:25px}.historial{padding:23px;top:88px}
+.tituloFila{align-items:center;gap:15px}.tituloPlan{display:flex;align-items:center;gap:13px;min-width:0}
+.planIcono{display:grid;place-items:center;flex:none;width:48px;height:48px;border-radius:14px;background:#e6f6f7;color:#058c98}
+.tituloFila h2{font-size:clamp(19px,2vw,25px);line-height:1.2;letter-spacing:-.025em}
+.tituloFila .sobrelinea{font-size:10px}
+.descripcion{font-size:12px;margin:13px 0 17px;color:#59708a}
+.progreso{padding:15px 17px;background:linear-gradient(125deg,#edfafa,#e5f5f8);margin-bottom:16px;border-color:#d9edef;box-shadow:0 5px 12px #27566f0a}
+.progresoTexto strong{color:#1f5163}.progresoTexto span{color:#3d5a6e}
+.barra{height:11px;background:#cbdde4}.barra span{background:linear-gradient(90deg,#04858d,#0eaaa8);box-shadow:0 0 10px #0ba4a95c}
+.siguiente{padding:17px;gap:10px;background:linear-gradient(110deg,#f1fbfc,#e0f8f6);border-color:#dceeed;box-shadow:0 7px 17px #206c6c12}
+.siguienteContenido{display:flex!important;align-items:center;gap:14px!important}
+.siguienteContenido>div{display:grid;gap:4px}
+.siguienteIcono{display:grid;place-items:center;flex:none;width:42px;height:42px;color:#009ca7}
+.siguiente .sobrelinea{letter-spacing:0;color:#008d94;font-size:12px}
+.siguiente strong{font-size:16px;color:#142f48}
+.siguiente p{font-size:11px}
+.siguiente a{background:linear-gradient(125deg,#007e89,#006171);border-radius:10px;padding:13px 17px;color:white;box-shadow:0 5px 12px #0065722e}
+.grupo{margin-top:18px}.grupoEncabezado{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:9px}
+.grupo h3{display:inline-flex;align-items:center;gap:10px;margin:0;color:#172e4c}
+.momentoIcono{color:#00a0a3;font-size:24px;line-height:1}
+.contadorGrupo{display:inline-flex;background:#e4f8f5;padding:5px 10px;border-radius:100px;color:#087f7f;font-size:11px;font-weight:750}
+.grupo ul{border:1px solid #e2eaf1;border-radius:14px;overflow:hidden;box-shadow:0 5px 12px #27487908}
+.grupo li{padding:12px 14px;background:#fff;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.grupo li+li{border-top:1px solid #e5edf3}
+.grupo li>label{align-items:center;flex:1;min-width:200px}
+.grupo li input{width:21px;height:21px;accent-color:#048b92}
+.grupo .actividadTexto>strong{font-size:13px;color:#183451}
+.grupo .actividadTexto>span{font-size:11px}
+.grupo .actividadHecha .actividadTexto strong{text-decoration:none;opacity:1}
+.enlaceGuia{margin:0 0 0 auto;background:#f0f5fa;padding:7px 10px;border-radius:9px;text-decoration:none;font-size:11px}
+.historial>.sobrelinea{display:flex;align-items:center;gap:7px;color:#008c96}
+.historial h2{margin:8px 0 4px;font-size:clamp(22px,2.3vw,28px)}
+.historial>p{font-size:12px;line-height:1.55}
+.miniCalendario{border:1px solid #e4eaf2;border-radius:17px;padding:14px;box-shadow:0 5px 15px #2739770a;background:#fff}
+.calendarioCabecera{display:flex;justify-content:space-between;align-items:center;gap:9px;margin-bottom:12px}
+.calendarioCabecera strong{font-size:12px;text-transform:capitalize;color:#1a3452}
+.calendarioCabecera button{width:34px;height:34px;border:0;background:#f4f8fb;border-radius:10px;color:#21516d;font-size:23px;cursor:pointer}
+.calendarioCabecera button:disabled{opacity:.3;cursor:not-allowed}
+.calendarioDias{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.calendarioDia,.calendarioSeleccionado{display:grid;justify-items:center;align-content:center;gap:5px;padding:9px 2px 8px;border:0;border-radius:10px;background:transparent;color:#243c5a;cursor:pointer;min-height:76px}
+.calendarioDia:disabled{opacity:.35;cursor:default}
+.calendarioSeleccionado{background:linear-gradient(160deg,#138f9c,#006b80);box-shadow:0 4px 12px #097c8b2e;color:#fff}
+.calendarioDia small,.calendarioSeleccionado small{font-size:10px;color:inherit}
+.calendarioDia strong,.calendarioSeleccionado strong{font-size:13px}
+.marcaCompleta,.marcaParcial,.marcaVacia{display:grid;place-items:center;width:18px;height:18px;border:2px solid #10a7a7;border-radius:50%;font-size:12px;font-weight:900;color:#068b90}
+.marcaParcial{background:#e0faf4}.marcaVacia{border-color:#d1dce9}
+.calendarioSeleccionado .marcaCompleta,.calendarioSeleccionado .marcaParcial,.calendarioSeleccionado .marcaVacia{border-color:#fff;color:#fff;background:#ffffff15}
+.actividadRecienteTitulo{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:21px 0 10px}
+.actividadRecienteTitulo h3{font-size:15px;margin:0}.actividadRecienteTitulo button{border:0;background:none;color:#007f8c;font-size:11px;font-weight:800;cursor:pointer}
+.listaReciente{border:1px solid #e3ebf3;border-radius:15px;overflow:hidden;background:#fff}
+.listaReciente li+li{border-top:1px solid #e3ebf3}
+.listaReciente li>button{display:flex;align-items:center;gap:9px;min-width:0;width:100%;border:0;background:#fff;padding:10px;text-align:left;cursor:pointer;color:#1e3855}
+.listaReciente li>button:hover,.calendarioDia:hover:not(:disabled){background:#f0f8fa}
+.actividadRecienteIcono{display:grid;place-items:center;width:35px;height:35px;flex:none;background:#e5f5ff;border-radius:12px;color:#1595bf}
+.actividadRecienteTexto{display:grid;min-width:0;flex:1;gap:2px}
+.actividadRecienteTexto strong{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.actividadRecienteTexto small{font-size:10px;color:#678099}
+.insigniaRegistrada{display:flex;align-items:center;gap:3px;background:#e3f8f2;color:#05765f;font-size:9px;font-weight:750;padding:5px 7px;border-radius:50px}
+.historialNota{font-size:10px!important;margin:13px 0 0!important}
+.ajustesAvisos{box-shadow:0 9px 18px #2854770b}
+:where(.pagina) :is(.calendarioDia,.calendarioSeleccionado,.calendarioCabecera button,.actividadRecienteTitulo button,.listaReciente button):focus-visible{outline:3px solid #e5a342;outline-offset:2px}
+@media(max-width:1150px){
+ .columnas{grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:14px}
+ .resumen>div{padding:17px 14px;gap:10px}
+ .resumen .iconoResumen{width:43px;height:43px}
+ .anilloProgreso{width:53px;height:53px}
+}
+@media(max-width:850px){
+ .encabezado{padding:23px;min-height:145px}
+ .heroIlustracion{width:120px;min-width:110px;transform:scale(.75);transform-origin:center}
+ .columnas{grid-template-columns:1fr}
+ .historial{position:static}
+}
+@media(max-width:680px){
+ .encabezado{padding:23px 19px}
+ .heroIlustracion{display:none}
+ .resumen{grid-template-columns:1fr 1fr;gap:10px}
+ .resumen>.resumenAvance{grid-column:1/-1}
+ .resumen>div{min-height:105px;padding:14px}
+ .resumen .datoResumen>strong{font-size:27px}
+ .resumen .anilloProgreso{width:62px;height:62px}
+ .tarjeta,.historial{padding:19px}
+ .grupo li{padding:12px 10px}
+ .siguiente a{width:100%}
+}
+@media(max-width:440px){
+ .resumen .iconoResumen{width:38px;height:38px}
+ .resumen .datoResumen>span{font-size:11px}
+ .resumen .datoResumen>small{font-size:10px}
+ .miniCalendario{padding:9px}
+ .calendarioDia,.calendarioSeleccionado{min-height:65px}
+ .insigniaRegistrada{font-size:0;gap:0;padding:5px}.insigniaRegistrada svg{width:14px;height:14px}
+}
+:global([data-area="Paciente"][data-tema="oscuro"]) .encabezado{background:linear-gradient(120deg,#2e2a52,#30234f);border-color:#625484}
+:global([data-area="Paciente"][data-tema="oscuro"]) .encabezado h1{color:#f5f1ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .encabezado p{color:#d8cfe8}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen>div{background:#30274d;border-color:#665482}
+:global([data-area="Paciente"][data-tema="oscuro"]) .resumen .datoResumen>:is(span,strong,small){color:#f0eaff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .miniCalendario,:global([data-area="Paciente"][data-tema="oscuro"]) .listaReciente{background:#30274d;border-color:#64547e}
+:global([data-area="Paciente"][data-tema="oscuro"]) .calendarioCabecera strong,:global([data-area="Paciente"][data-tema="oscuro"]) .calendarioDia{color:#f4eeff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .listaReciente li>button,:global([data-area="Paciente"][data-tema="oscuro"]) .grupo li{background:#30274d;color:#fff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .grupo ul,:global([data-area="Paciente"][data-tema="oscuro"]) .grupo li,:global([data-area="Paciente"][data-tema="oscuro"]) .listaReciente li+li{border-color:#64547e}
+:global([data-area="Paciente"][data-tema="oscuro"]) .grupo .actividadTexto>strong,:global([data-area="Paciente"][data-tema="oscuro"]) .grupo h3{color:#f4eeff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .progreso,:global([data-area="Paciente"][data-tema="oscuro"]) .siguiente{background:#293e4d;border-color:#53717b}
+:global([data-area="Paciente"][data-tema="oscuro"]) .progresoTexto span,:global([data-area="Paciente"][data-tema="oscuro"]) .progresoTexto strong,:global([data-area="Paciente"][data-tema="oscuro"]) .siguiente strong{color:#f7f0ff}
+:global([data-area="Paciente"][data-tema="oscuro"]) .contadorGrupo{background:#3d3558;color:#d2baff}
+@media(prefers-reduced-motion:reduce){.barra span{transition:none}}
