@@ -1,5 +1,6 @@
 import { readdirSync, mkdirSync, existsSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
+import { dirname, join } from 'node:path';
 const contracts = new Set(['src/features/profesional/api-clinica.test.mjs']);
 const regressions = new Set(['src/features/analisis/analisis-smile.test.mjs']);
 function walk(dir) {
@@ -22,7 +23,15 @@ if (process.argv[2] === '--inventory') {
   if (result.error) throw result.error;
   // Future Stripe/Vitest suite from PR #48 is preserved automatically when merged.
   if (category === 'unitarias' && existsSync('package.json') && JSON.parse(readFileSync('package.json')).scripts?.test) {
-    const extra = spawnSync('npm', ['test', '--', '--reporter=default', '--reporter=junit', '--outputFile=reports/vitest.xml'], {stdio:'inherit'});
+    const npmArgs = ['test', '--', '--reporter=default', '--reporter=junit', '--outputFile=reports/vitest.xml'];
+    let extra;
+    if (process.platform === 'win32') {
+      const npmCli = join(dirname(process.execPath), 'node_modules', 'npm', 'bin', 'npm-cli.js');
+      if (!existsSync(npmCli)) throw new Error(`No se encontró el ejecutable JavaScript de npm junto a Node: ${npmCli}`);
+      extra = spawnSync(process.execPath, [npmCli, ...npmArgs], {stdio:'inherit'});
+    } else {
+      extra = spawnSync('npm', npmArgs, {stdio:'inherit'});
+    }
     if (extra.error) throw extra.error;
     if (extra.status !== 0) process.exit(extra.status ?? 1);
   }

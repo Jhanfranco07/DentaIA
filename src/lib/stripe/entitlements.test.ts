@@ -18,6 +18,7 @@ describe("Premium server entitlements", () => {
       "smile_analysis_comparison",
       "smile_share_with_dentist",
       "smile_advanced_analysis",
+      "premium_visual_evaluation",
     ] as const) {
       expect(featureEnabled("premium", feature)).toBe(false);
     }

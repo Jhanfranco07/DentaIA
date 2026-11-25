@@ -1,5 +1,6 @@
 export const TAMANO_MAXIMO_FOTOGRAFIA = 8 * 1024 * 1024;
 export const TIPOS_FOTOGRAFIA_PERMITIDOS = ["image/jpeg", "image/png", "image/webp"] as const;
+export type TipoFotografiaPermitido = typeof TIPOS_FOTOGRAFIA_PERMITIDOS[number];
 
 export type ArchivoFotografico = Pick<File, "type" | "size">;
 export type ResultadoValidacionFotografia =
