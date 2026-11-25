@@ -1,0 +1,53 @@
+.chart {
+  margin-top: 1rem;
+  padding: clamp(.75rem, 3vw, 1.5rem);
+  border: 1px solid var(--line, currentColor);
+  border-radius: 1rem;
+  color: var(--ink);
+}
+.header, .orientation, .actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .6rem;
+}
+.header h3, .arch h4, .chart h4 { margin-block: .4rem; }
+.chart button, .chart select, .chart textarea {
+  min-height: 44px;
+  font: inherit;
+  color: inherit;
+  border: 1px solid var(--line, currentColor);
+  border-radius: .5rem;
+  background: var(--surface, transparent);
+  padding: .35rem .55rem;
+}
+.chart button { cursor: pointer; }
+.chart button:disabled { cursor: default; opacity: .65; }
+.chart :focus-visible { outline: 3px solid var(--teal-dark, currentColor); outline-offset: 2px; }
+.orientation { gap: .2rem; font-size: .78rem; margin-bottom: .25rem; }
+.quadrants { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.teeth { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: .22rem; }
+button.tooth { display: grid; place-items: center; padding: .2rem 0; min-width: 0; font-size: .82rem; line-height: 1.1; }
+button.tooth[data-recorded="true"] { color: var(--teal-dark, currentColor); border-color: currentColor; }
+button.tooth[aria-pressed="true"] { outline: 2px solid currentColor; outline-offset: 0; font-weight: 800; }
+.toothSvg { width: min(100%, 36px); height: auto; min-width: 0; }
+.legend { margin-block: .8rem; }
+.legend ul { display: flex; flex-wrap: wrap; gap: .3rem 1rem; list-style: none; padding-inline: 0; }
+.columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 1rem; }
+.editor fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; gap: .55rem; }
+.editor label { display: grid; gap: .2rem; }
+.timeline { list-style: none; padding: 0; display: grid; gap: .5rem; }
+.timeline > li { border-inline-start: 2px solid var(--line, currentColor); padding: .35rem .65rem; overflow-wrap: anywhere; }
+.timeline p { margin-block: .24rem; }
+.observations { border-top: 1px solid var(--line, currentColor); margin-top: 1rem; padding-top: .6rem; }
+.photo { margin: 0; display: grid; justify-items: start; gap: .5rem; }
+.photo img { max-width: 100%; max-height: 24rem; object-fit: contain; }
+.patient { overflow-wrap: anywhere; }
+@media (max-width: 850px) {
+  .teeth { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .columns { grid-template-columns: 1fr; }
+  .teeth { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
