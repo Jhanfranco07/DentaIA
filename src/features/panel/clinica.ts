@@ -10,7 +10,7 @@ export async function leerClinicaPropia(token: string | null, solicitar: typeof 
   if (!token) throw new ErrorClinicaPanel(401);
   const get = async (path: string) => {
     try {
-      const r = await solicitar(path, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store", credentials: "omit", redirect: "error",
+      const r = await solicitar(path, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store", credentials: "same-origin", redirect: "error",
         signal: AbortSignal.any([AbortSignal.timeout(10000), ...(signal ? [signal] : [])]) });
       if (!r.ok) throw new ErrorClinicaPanel(r.status);
       if (!r.headers.get("content-type")?.includes("application/json")) return invalido();
