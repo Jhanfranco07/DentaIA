@@ -6,6 +6,7 @@ test("Basic conserva Smile amarillo y no habilita funciones Premium futuras", ()
   assert.equal(featureEnabled("basic", "smile_yellow_teeth_basic"), true);
   assert.equal(featureEnabled("basic", "smile_analysis_history"), false);
   assert.equal(featureEnabled("premium", "smile_analysis_history"), false);
+  assert.equal(featureEnabled("premium", "premium_visual_evaluation"), false);
 });
 
 test("solo una suscripcion activa y vigente habilita Premium", () => {

@@ -4,6 +4,7 @@ export const PLAN_FEATURES = {
   smile_analysis_comparison: { minimumPlan: "premium", implemented: false },
   smile_share_with_dentist: { minimumPlan: "premium", implemented: false },
   smile_advanced_analysis: { minimumPlan: "premium", implemented: false },
+  premium_visual_evaluation: { minimumPlan: "premium", implemented: false },
 } as const;
 
 export type Plan = "basic" | "premium";
