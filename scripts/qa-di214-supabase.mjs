@@ -2,18 +2,20 @@
 import assert from "node:assert/strict";
 import { randomUUID, randomBytes, createHmac, createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
-import { writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
 
-const local = "http://127.0.0.1:57421";
-const app = "http://localhost:57430";
-const container = "supabase_db_dentaia_di214_qa";
+const combined = process.argv.includes("--combined");
+const local = combined ? "http://127.0.0.1:57521" : "http://127.0.0.1:57421";
+const app = combined ? "http://localhost:57530" : "http://localhost:57430";
+const container = combined ? "supabase_db_dentaia_di213_di214_qa" : "supabase_db_dentaia_di214_qa";
+const qaDir = "node_modules/.qa-di213-di214";
 const publicKey = process.env.DI214_LOCAL_PUBLIC_KEY;
 const adminKey = process.env.DI214_LOCAL_SERVICE_KEY;
 const docker = process.env.DI214_DOCKER ?? "docker";
 const run = process.env.DI214_RUN ?? randomBytes(3).toString("hex");
 const password = "DI214-local-only!542";
-const key = randomBytes(32).toString("hex");
+const key = combined ? null : randomBytes(32).toString("hex");
 const cursor = randomBytes(32).toString("base64url");
 
 function query(sql) {
@@ -66,7 +68,9 @@ query([
   " ('"+free.id+"','cus_di214_free_"+run+"','sub_di214_free_"+run+"','price_di214','active',now()-interval '1 hour',now());",
 ].join("\n"));
 const vaultEntryName = "di214_premium_ingest_v1";
-query([
+if (combined) {
+  assert.equal(query("\\set entry_name " + vaultEntryName + "\nSELECT count(*) FROM vault.secrets WHERE name=:'entry_name';"), "0");
+} else query([
   "\\set di214_vault_entry " + vaultEntryName,
   "\\set di214_fixture_key " + key,
   "BEGIN;",
@@ -138,7 +142,16 @@ const build=(stored,status,extra={})=>({ userId:paciente.id,id:randomUUID(),issu
 const save=(value,status=200,user=paciente,signature)=>{
   const payload=JSON.stringify(value);
   return rpc(user,"save",{p_evaluation:value.id,p_args:{payload,
-    signature:signature??createHmac("sha256",Buffer.from(key,"hex")).update(payload,"utf8").digest("hex")}},status);
+    signature:signature??(key ? createHmac("sha256",Buffer.from(key,"hex")).update(payload,"utf8").digest("hex") : "0".repeat(64))}},status);
+};
+// Seed only the dedicated integration database. Reads and permission changes still use JWTs.
+const persist = async value => {
+  if (!combined) return save(value);
+  const args = [value.userId,value.id,value.evaluatedAt,value.captureProtocol,value.resultConsentId,
+    value.photoConsentId,value.photoId,value.photoObjectId,value.photoDigest,JSON.stringify(value.result)];
+  const literals = args.map(arg => arg === undefined ? "NULL" : "'" + arg.replaceAll("'","''") + "'");
+  query("INSERT INTO clinical.premium_evaluations(user_id,id,evaluated_at,capture_protocol,result_consent_id," +
+    "photo_consent_id,photo_id,photo_object_id,photo_digest,result) VALUES (" + literals.join(",") + ");");
 };
 await save(build(randomUUID(),"evaluated"),403);
 await accept(paciente,results);
@@ -148,11 +161,16 @@ await save(build(resultConsent,"evaluated",{photoId,photoConsentId:randomUUID()}
 await accept(paciente,photographs);
 const photoConsent=(await rpc(paciente,"list")).consents[photographs];
 const withPhoto=build(resultConsent,"evaluated",{photoId,photoConsentId:photoConsent,...objectBinding});
-await Promise.all(Array.from({length:4},()=>save(withPhoto)));
-await save({...withPhoto,result:statusResult("evaluated_no_detections")},409);
+if (combined) {
+  await save(withPhoto,403);
+  await persist(withPhoto);
+} else {
+  await Promise.all(Array.from({length:4},()=>save(withPhoto)));
+  await save({...withPhoto,result:statusResult("evaluated_no_detections")},409);
+}
 const retained=build(resultConsent,"evaluated_no_detections");
-await save(retained);
-for(const status of ["partially_evaluated","not_evaluable","processing_error","provider_unavailable"]) await save(build(resultConsent,status));
+await persist(retained);
+for(const status of ["partially_evaluated","not_evaluable","processing_error","provider_unavailable"]) await persist(build(resultConsent,status));
 const page=await rpc(paciente,"list");
 assert.equal(page.items.length,6);
 assert.equal(page.items.find(item=>item.id===withPhoto.id).photo,true);
@@ -205,13 +223,38 @@ await rpc(paciente,"share",scope);
   assert.equal(query("select count(*) from clinical.premium_evaluations where id='"+withPhoto.id+"' and result is null and photo_id is null"),"1");
 }
 
+async function seedSmile() {
+  const smilePath = paciente.id + "/integracion.png";
+  const uploadedSmile = await admin.storage.from("smile-analysis-private").upload(smilePath,ownerPhoto,{contentType:"image/png"});
+  assert.equal(uploadedSmile.error,null);
+  const analysis = randomUUID(), consent = randomUUID();
+  const result = JSON.stringify({
+    status: "evaluable", model: "teeth-4coz7/1", image_width: 400, image_height: 300,
+    inference_ms: 10, analysis_ms: 12, thresholds: {}, detected_regions: 1, evaluable_regions: 1,
+    lighting_quality: "adequate", warnings: [], limitations: ["Fixture QA"],
+    regions: [{
+      region_id: 7, label: "tooth", evaluable: true, reason: null, valid_pixels: 200, valid_fraction: 1,
+      b_median: 1, level: "Leve", delta_l_halves: null, delta_b_halves: null, illumination_warning: false,
+      partial: false, zone_fraction: 0, zone_level: null,
+    }],
+  });
+  query([
+    "BEGIN;",
+    "INSERT INTO public.smile_analysis_consents(id,patient_id,consent_version) VALUES ('"+consent+"','"+paciente.id+"','qa-local');",
+    "INSERT INTO public.smile_analyses(id,patient_id,consent_id,engine_version,status,technical_result,original_object_path,original_mime_type,original_size_bytes)",
+    "VALUES ('"+analysis+"','"+paciente.id+"','"+consent+"','qa-sintetico','completed','"+result+"','"+smilePath+"','image/png',"+ownerPhoto.length+");",
+    "INSERT INTO public.smile_analysis_access_grants(analysis_id,patient_id,professional_id,expires_at)",
+    "VALUES ('"+analysis+"','"+paciente.id+"','"+dentistId+"',now()+interval '2 days');",
+    "COMMIT;",
+  ].join("\n"));
+}
 // Leave a separate, active fixture for manual and browser validation.
 await accept(paciente,results);
 await accept(paciente,photographs);
 const active=(await rpc(paciente,"list")).consents;
 const uiRow=build(active[results],"evaluated",{photoId,photoConsentId:active[photographs],...objectBinding});
-await save(uiRow);
-await save(build(active[results],"evaluated_no_detections"));
+await persist(uiRow);
+await persist(build(active[results],"evaluated_no_detections"));
 const manualGrant=randomUUID();
 const manual=await paciente.client.rpc("grant_clinical_access",{
   p_id:manualGrant,p_membership_id:membership,p_encounter_ids:[encounter],
@@ -225,6 +268,14 @@ if (process.env.DI214_WRITE_APP_ENV==="1") writeFileSync(".env.local",[
   "DENTAIA_CLINICAL_HTTP_ENABLED=true","DENTAIA_CLINICAL_TARGET=local","DENTAIA_CLINICAL_SUPABASE_URL="+local,
   "DENTAIA_CLINICAL_SUPABASE_PUBLISHABLE_KEY="+publicKey,"DENTAIA_CLINICAL_CURSOR_SECRET="+cursor,
 ].join("\n")+"\n",{flag:"wx"});
-console.log(JSON.stringify({app, users:Object.fromEntries(Object.entries(users).map(([role,user])=>[role,user.email])),
-  password,patientId,membership,photoEvaluation:uiRow.id,manualGrant}));
+const fixture = { app, users: Object.fromEntries(Object.entries(users).map(([role,user])=>[role,user.email])),
+  password, patientId, membership, photoEvaluation: uiRow.id, manualGrant };
+if (combined) {
+  await seedSmile();
+  mkdirSync(qaDir,{recursive:true});
+  writeFileSync(qaDir+"/fixture.json",JSON.stringify({ ...fixture, encounter, freeId, otherMembership, objectPath }));
+  console.log("Evaluaciones Premium sembradas por SQL y observacion Smile sintetica, con HMAC deshabilitado.");
+} else {
+  console.log(JSON.stringify(fixture));
+}
 console.log("DI-214: Auth, PostgREST, PostgreSQL con RLS y Storage local verificados con datos sintéticos.");

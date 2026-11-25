@@ -9,6 +9,7 @@ const compat = process.argv.includes("--with-di213");
 assert.ok([
   "supabase_db_dentaia_di214_qa",
   "supabase_db_dentaia_di214_clean",
+  "supabase_db_dentaia_di213_di214_qa",
 ].includes(container), "Expected an isolated DI-214 container.");
 
 function sql(source) {
@@ -23,7 +24,9 @@ assert.equal(sql("SELECT to_regclass('public.profiles') IS NULL AND NOT EXISTS (
 const root="supabase/migrations/";
 const phase="docs/arquitectura/integracion_fase8/migraciones/";
 const read=path=>readFileSync(path,"utf8");
-for (const migration of readdirSync(root).filter(file=>file.endsWith(".sql")).sort()) {
+const migrations = readdirSync(root).filter(file=>file.endsWith(".sql")).sort();
+const hasDi213 = migrations.includes("20261125061658_di213_odontograma.sql");
+for (const migration of migrations) {
   if (migration.startsWith("20261103")) {
     console.log(migration);
     sql(read(root+migration));
@@ -36,7 +39,7 @@ for (const migration of readdirSync(root).filter(file=>file.endsWith(".sql")).so
     }
     continue;
   }
-  if (compat && migration.includes("di214_premium_evaluation_history")) {
+  if (compat && !hasDi213 && migration.includes("di214_premium_evaluation_history")) {
     const di213=spawnSync("git",["show","5cbfe3368d2995010db211f428eb77a390645709:supabase/migrations/20261125061658_di213_odontograma.sql"],{
       encoding:"utf8",
     });
@@ -48,5 +51,5 @@ for (const migration of readdirSync(root).filter(file=>file.endsWith(".sql")).so
   sql(read(root+migration));
 }
 assert.equal(sql("SELECT to_regclass('clinical.premium_evaluations') IS NOT NULL;"),"t");
-if(compat) assert.equal(sql("SELECT to_regclass('clinical.odontogram_events') IS NOT NULL;"),"t");
+if(compat || hasDi213) assert.equal(sql("SELECT to_regclass('clinical.odontogram_events') IS NOT NULL;"),"t");
 console.log("PostgreSQL "+sql("SHOW server_version")+" · migraciones verificadas");
