@@ -332,45 +332,50 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
     const solicitudesConsulta = control.current.iniciar("solicitudes");
     const pacientesConsulta = control.current.iniciar("pacientes");
 
-    void api
-      .obtenerSolicitudes(contextoId, {}, solicitudesConsulta.signal)
-      .then((pagina) => {
-        if (!solicitudesConsulta.vigente() || contextoActual.current !== contextoId) return;
-        if (
-          !paginaSolicitudesCompatible(
-            pagina.data,
-            contextoId,
-            professionalId,
-          )
-        ) {
-          restringirContexto("El servicio respondió con un contexto no compatible.");
-          return;
-        }
-        setSolicitudes({
-          estado: pagina.data.items.length ? "listo" : "vacio",
-          items: pagina.data.items,
-          nextAfterId: pagina.nextAfterId,
-          cargandoMas: false,
-          mensaje: "",
-        });
-      })
-      .catch((error: unknown) => {
-        if (!solicitudesConsulta.vigente() || esSolicitudAbortada(error)) return;
-        if (error instanceof ErrorApiClinica && error.status === 401) {
-          expirarSesion();
-          return;
-        }
-        if (error instanceof ErrorApiClinica && error.status === 403) {
-          restringirContexto(mensajeSeguro(error));
-          return;
-        }
-        setSolicitudes({
-          ...listaInactiva(),
-          estado: "error",
-          mensaje: mensajeSeguro(error),
-        });
-      })
-      .finally(solicitudesConsulta.finalizar);
+    if (dentistIdDirectorio) {
+      void api
+        .obtenerSolicitudes(contextoId, {}, solicitudesConsulta.signal)
+        .then((pagina) => {
+          if (!solicitudesConsulta.vigente() || contextoActual.current !== contextoId) return;
+          if (
+            !paginaSolicitudesCompatible(
+              pagina.data,
+              contextoId,
+              professionalId,
+            )
+          ) {
+            restringirContexto("El servicio respondió con un contexto no compatible.");
+            return;
+          }
+          setSolicitudes({
+            estado: pagina.data.items.length ? "listo" : "vacio",
+            items: pagina.data.items,
+            nextAfterId: pagina.nextAfterId,
+            cargandoMas: false,
+            mensaje: "",
+          });
+        })
+        .catch((error: unknown) => {
+          if (!solicitudesConsulta.vigente() || esSolicitudAbortada(error)) return;
+          if (error instanceof ErrorApiClinica && error.status === 401) {
+            expirarSesion();
+            return;
+          }
+          if (error instanceof ErrorApiClinica && error.status === 403) {
+            restringirContexto(mensajeSeguro(error));
+            return;
+          }
+          setSolicitudes({
+            ...listaInactiva(),
+            estado: "error",
+            mensaje: mensajeSeguro(error),
+          });
+        })
+        .finally(solicitudesConsulta.finalizar);
+    } else {
+      solicitudesConsulta.finalizar();
+      setSolicitudes({ ...listaInactiva(), estado: "vacio" });
+    }
 
     void api
       .obtenerPacientes(contextoId, {}, pacientesConsulta.signal)

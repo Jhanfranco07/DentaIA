@@ -12,6 +12,7 @@ test("odontólogo usa el odontograma desde su portal con un BFF sintético", asy
     localStorage.setItem("sb-127-auth-token", JSON.stringify({ access_token: token, refresh_token: "synthetic", expires_at, token_type: "bearer", user }));
   }, { user });
   const observation = { analysisId: id(7), key: "region:2", source: "smile-v17" as const, label: "Amarillo visible · región 2", date, model: "Smile V17 QA", limitations: [] };
+  let consultasDirectorio = 0;
   const records: Registro[] = [];
   const reviews: ExpedienteOdontograma["reviews"] = [];
   const workspace = (kind: string, data: object) => ({ ok: true, apiVersion: "clinical.workspace.v1", kind, nextAfterId: null, requestId: id(20), environment: "qa_local", data });
@@ -24,7 +25,10 @@ test("odontólogo usa el odontograma desde su portal con un BFF sintético", asy
     if (pathname === "/api/professional/me") return json(workspace("professional", {
       professionalId: id(3), dentistId: null, contexts: [{ membershipId: id(4), clinicId: id(5), clinicName: "Clínica sintética", validFrom: date, validUntil: null }],
     }));
-    if (pathname === "/api/professional/requests") return json(workspace("requests", { membershipId: id(4), professionalId: id(3), items: [] }));
+    if (pathname === "/api/professional/requests") {
+      consultasDirectorio++;
+      return route.fulfill({ status: 403, json: { ok: false, code: "ACCESS_DENIED" } });
+    }
     if (pathname === "/api/professional/patients") return json(workspace("patients", { membershipId: id(4), items: [{ patientId: id(1) }, { patientId: id(2) }] }));
     if (pathname.endsWith("/history")) return json({
       ok: true, apiVersion: "clinical.v1", origen: "supabase", environment: "qa_local", estado: "sin_datos",
@@ -87,5 +91,6 @@ test("odontólogo usa el odontograma desde su portal con un BFF sintético", asy
   await page.getByRole("button", { name: "Abrir odontograma" }).click();
   await expect(page.getByText("Paciente sintético dos")).toBeVisible();
   await expect(page.getByText("Nota sintética corregida")).toHaveCount(0);
+  expect(consultasDirectorio).toBe(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
