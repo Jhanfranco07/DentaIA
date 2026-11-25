@@ -64,10 +64,16 @@ query([
   " INSERT INTO public.premium_subscriptions(user_id,stripe_customer_id,stripe_subscription_id,stripe_price_id,status,current_period_end,stripe_event_created_at)",
   " VALUES ('"+paciente.id+"','cus_di214_"+run+"','sub_di214_"+run+"','price_di214','active',now()+interval '1 month',now()),",
   " ('"+free.id+"','cus_di214_free_"+run+"','sub_di214_free_"+run+"','price_di214','active',now()-interval '1 hour',now());",
-  " SELECT CASE WHEN count(*)=0 THEN vault.create_secret('"+key+"','di214_premium_ingest_v1')",
-  " ELSE (SELECT id FROM vault.secrets WHERE name='di214_premium_ingest_v1') END",
-  " FROM vault.secrets WHERE name='di214_premium_ingest_v1';",
-  " SELECT vault.update_secret(id,'"+key+"') FROM vault.secrets WHERE name='di214_premium_ingest_v1';",
+].join("\n"));
+const vaultEntryName = "di214_premium_ingest_v1";
+query([
+  "\\set di214_vault_entry " + vaultEntryName,
+  "\\set di214_fixture_key " + key,
+  "BEGIN;",
+  "SELECT vault.create_secret(:'di214_fixture_key', :'di214_vault_entry')",
+  "WHERE NOT EXISTS (SELECT 1 FROM vault.secrets WHERE name=:'di214_vault_entry');",
+  "SELECT vault.update_secret(id, :'di214_fixture_key') FROM vault.secrets WHERE name=:'di214_vault_entry';",
+  "COMMIT;",
 ].join("\n"));
 assert.equal(query("select bool_and(relrowsecurity) and bool_and(not has_table_privilege('authenticated',oid,'SELECT,INSERT,UPDATE,DELETE')) from pg_class where oid in ('clinical.premium_evaluations'::regclass,'clinical.premium_history_consents'::regclass,'clinical.premium_grant_evaluations'::regclass);"),"t");
 assert.equal(query("select not has_function_privilege('anon','public.access_premium_history(text,uuid,uuid,uuid,uuid,jsonb)','execute') and not has_function_privilege('service_role','public.access_premium_history(text,uuid,uuid,uuid,uuid,jsonb)','execute');"),"t");
