@@ -7,8 +7,8 @@ async function abrirCarga(page: Page) {
   await page.getByRole("button", { name: "Comenzar análisis" }).click();
 }
 
-async function simularCamara(page: Page) {
-  await page.addInitScript(() => {
+async function simularCamara(page: Page, modo: "dual" | "unica" | "sin-alternativa" | "permiso-revocado" | "sin-metadatos" = "dual") {
+  await page.addInitScript(modo => {
     const retrato = new Image();
     retrato.src = "data:image/svg+xml," + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320">
@@ -26,10 +26,27 @@ async function simularCamara(page: Page) {
         <path d="M127 200Q145 196 160 199Q174 197 193 200Q177 229 160 228Q142 228 127 200Z" fill="#853f48"/>
         <path d="M133 201Q160 207 187 201L180 208Q161 217 140 209Z" fill="#fff5eb"/>
       </svg>`);
-    const prueba = { permisos: 0, rostro: false, pista: null as MediaStreamTrack | null, lienzo: null as HTMLCanvasElement | null };
+    const prueba = {
+      permisos: 0, rostro: false, pista: null as MediaStreamTrack | null, lienzo: null as HTMLCanvasElement | null,
+      solicitudes: [] as { modo: string | undefined; anterior: string | undefined }[],
+      espera: null as Promise<void> | null,
+      reanudar: null as (() => void) | null,
+    };
     Object.assign(window, { camaraSintetica: prueba });
-    navigator.mediaDevices.getUserMedia = async () => {
+    navigator.mediaDevices.enumerateDevices = async () =>
+      Array.from({ length: modo === "unica" ? 1 : 2 }, () => ({ kind: "videoinput" } as MediaDeviceInfo));
+    navigator.mediaDevices.getUserMedia = async restricciones => {
       prueba.permisos++;
+      const preferencia = (restricciones?.video as MediaTrackConstraints)?.facingMode as { exact?: string; ideal?: string };
+      prueba.solicitudes.push({ modo: preferencia.exact ?? preferencia.ideal, anterior: prueba.pista?.readyState });
+      if (modo === "sin-alternativa" && preferencia.exact) {
+        throw new DOMException("Orientación no disponible", "OverconstrainedError");
+      }
+      if (modo === "permiso-revocado" && preferencia.exact) {
+        throw new DOMException("Permiso revocado durante la prueba", "NotAllowedError");
+      }
+      if (preferencia.exact && prueba.espera) await prueba.espera;
+      const frente = modo === "unica" ? "user" : preferencia.exact ?? preferencia.ideal;
       const lienzo = document.createElement("canvas");
       lienzo.width = 640;
       lienzo.height = 480;
@@ -48,13 +65,15 @@ async function simularCamara(page: Page) {
       const flujo = lienzo.captureStream(15);
       const pista = flujo.getVideoTracks()[0];
       prueba.pista = pista;
-      pista.getSettings = () => ({ facingMode: "user" });
+      pista.getSettings = () => modo === "sin-metadatos" && preferencia.exact
+        ? {}
+        : { facingMode: frente, deviceId: frente };
       const temporizador = setInterval(dibujar, 65);
       const detener = pista.stop.bind(pista);
       pista.stop = () => { clearInterval(temporizador); detener(); };
       return flujo;
     };
-  });
+  }, modo);
 }
 
 test("activa el SDK con sesión de Preview, procesa localmente y permite capturar sin rostro", async ({ page, context, baseURL }) => {
@@ -97,7 +116,7 @@ test("activa el SDK con sesión de Preview, procesa localmente y permite captura
   expect(await page.evaluate(() => Reflect.get(window, "camaraSintetica").permisos)).toBe(0);
   await page.getByRole("button", { name: "Tomar fotografía con tu cámara" }).click();
   const video = page.getByLabel("Vista previa de la cámara");
-  await expect(video).toHaveAttribute("data-espejo", "true");
+  await expect(video).toHaveAttribute("data-espejo", "false");
   await expect(page.getByRole("button", { name: "Capturar fotografía" })).toBeEnabled();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   expect(cargas).toEqual([]);
@@ -177,7 +196,31 @@ test("activa el SDK con sesión de Preview, procesa localmente y permite captura
   ])).toEqual([480, 640]);
   await expect.poll(() => video.evaluate(element => element.clientWidth / element.clientHeight)).toBeCloseTo(.75, 1);
   await expect(page.getByText(/Buscando tu rostro/)).toBeVisible();
-  const workerCerrado = worker.waitForEvent("close");
+  const workerCerradoEnCambio = worker.waitForEvent("close");
+  const workerFrontal = page.waitForEvent("worker", actual => actual.url() === worker.url());
+  await page.getByRole("button", { name: "Cambiar a cámara frontal" }).click();
+  await workerCerradoEnCambio;
+  const frontal = await workerFrontal;
+  await expect(video).toHaveAttribute("data-espejo", "true");
+  await expect(guia).toBeChecked();
+  await expect(page.getByText(/Buscando tu rostro/)).toBeVisible({ timeout: 30_000 });
+  await page.evaluate(() => { Reflect.get(window, "camaraSintetica").rostro = true; });
+  await expect(contorno).toBeVisible();
+
+  const frontalCerrado = frontal.waitForEvent("close");
+  const workerPosterior = page.waitForEvent("worker", actual => actual.url() === worker.url());
+  await page.getByRole("button", { name: "Cambiar a cámara posterior" }).click();
+  await frontalCerrado;
+  const posterior = await workerPosterior;
+  await expect(video).toHaveAttribute("data-espejo", "false");
+  expect(await page.evaluate(() => Reflect.get(window, "camaraSintetica").solicitudes)).toEqual([
+    { modo: "environment", anterior: undefined },
+    { modo: "user", anterior: "ended" },
+    { modo: "environment", anterior: "ended" },
+  ]);
+
+  await page.evaluate(() => { Reflect.get(window, "camaraSintetica").rostro = false; });
+  const workerCerrado = posterior.waitForEvent("close");
   await guia.uncheck();
   await workerCerrado;
   expect(await page.evaluate(() => Reflect.get(window, "camaraSintetica").pista.readyState)).toBe("live");
@@ -199,6 +242,101 @@ test("activa el SDK con sesión de Preview, procesa localmente y permite captura
   expect(escrituras).toEqual([]);
   expect(externos).toEqual([]);
   expect(fallbacks).toEqual([]);
+});
+
+test("permite capturar con una sola cámara aunque la orientación inicial sea distinta", async ({ page }) => {
+  await simularCamara(page, "unica");
+  await abrirCarga(page);
+  await page.getByRole("button", { name: "Tomar fotografía con tu cámara" }).click();
+  await expect(page.getByLabel("Vista previa de la cámara")).toHaveAttribute("data-espejo", "true");
+  await expect(page.getByRole("button", { name: /Cambiar a cámara/ })).toHaveCount(0);
+  await page.getByRole("button", { name: "Capturar fotografía" }).click();
+  await expect(page.getByAltText("Vista previa local de la sonrisa")).toBeVisible();
+});
+
+test("recupera la cámara disponible si el navegador rechaza la otra orientación", async ({ page }) => {
+  await simularCamara(page, "sin-alternativa");
+  await abrirCarga(page);
+  await page.getByRole("button", { name: "Tomar fotografía con tu cámara" }).click();
+  await page.getByRole("button", { name: "Cambiar a cámara frontal" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "No se pudo cambiar de cámara" })).toBeVisible();
+  await expect(page.getByLabel("Vista previa de la cámara")).toHaveAttribute("data-espejo", "false");
+  await page.getByRole("button", { name: "Capturar fotografía" }).click();
+  await expect(page.getByAltText("Vista previa local de la sonrisa")).toBeVisible();
+});
+
+test("recupera la captura si la pista candidata no permite confirmar el cambio", async ({ page }) => {
+  await simularCamara(page, "sin-metadatos");
+  await abrirCarga(page);
+  await page.getByRole("button", { name: "Tomar fotografía con tu cámara" }).click();
+  await page.getByRole("button", { name: "Cambiar a cámara frontal" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "No se pudo cambiar de cámara" })).toBeVisible();
+  await expect(page.getByLabel("Vista previa de la cámara")).toHaveAttribute("data-espejo", "false");
+  expect(await page.evaluate(() => Reflect.get(window, "camaraSintetica").solicitudes.slice(1))).toEqual([
+    { modo: "user", anterior: "ended" },
+    { modo: "environment", anterior: "ended" },
+  ]);
+  await expect(page.getByRole("button", { name: "Capturar fotografía" })).toBeEnabled();
+});
+
+test("ignora pulsaciones consecutivas y libera la pista si se cancela un cambio pendiente", async ({ page }) => {
+  await simularCamara(page);
+  await abrirCarga(page);
+  await page.getByRole("button", { name: "Tomar fotografía con tu cámara" }).click();
+  await page.getByRole("button", { name: "Cambiar a cámara frontal" }).evaluate(boton => {
+    const prueba = Reflect.get(window, "camaraSintetica");
+    prueba.espera = new Promise<void>(resolve => { prueba.reanudar = resolve; });
+    prueba.pistaInicial = prueba.pista;
+    (boton as HTMLButtonElement).click();
+    (boton as HTMLButtonElement).click();
+  });
+  await expect(page.getByRole("button", { name: "Abriendo cámara…" })).toBeDisabled();
+  expect(await page.evaluate(() => Reflect.get(window, "camaraSintetica").permisos)).toBe(2);
+  await page.getByRole("button", { name: "Volver" }).click();
+  await page.evaluate(() => Reflect.get(window, "camaraSintetica").reanudar());
+  await expect.poll(() => page.evaluate(() => {
+    const prueba = Reflect.get(window, "camaraSintetica");
+    return prueba.pista !== prueba.pistaInicial && prueba.pista.readyState === "ended";
+  })).toBe(true);
+  await expect(page.getByLabel("Vista previa de la cámara")).toHaveCount(0);
+});
+
+test("bloquea el cambio desde que comienza la captura manual", async ({ page }) => {
+  await simularCamara(page);
+  await abrirCarga(page);
+  await page.getByRole("button", { name: "Tomar fotografía con tu cámara" }).click();
+  const capturar = page.getByRole("button", { name: "Capturar fotografía" });
+  const cambiar = page.getByRole("button", { name: "Cambiar a cámara frontal" });
+  await expect(capturar).toBeEnabled();
+  await cambiar.evaluate(boton => {
+    const prueba = Reflect.get(window, "camaraSintetica");
+    const toBlob = HTMLCanvasElement.prototype.toBlob;
+    HTMLCanvasElement.prototype.toBlob = function (...args) {
+      prueba.reanudar = () => toBlob.apply(this, args);
+    };
+    const captura = [...document.querySelectorAll("button")].find(actual => actual.textContent === "Capturar fotografía")!;
+    captura.click();
+    (boton as HTMLButtonElement).click();
+  });
+  await expect(cambiar).toBeDisabled();
+  expect(await page.evaluate(() => Reflect.get(window, "camaraSintetica").permisos)).toBe(1);
+  await page.evaluate(() => Reflect.get(window, "camaraSintetica").reanudar());
+  await expect(page.getByAltText("Vista previa local de la sonrisa")).toBeVisible();
+});
+
+test("informa si se revoca el permiso al cambiar de cámara", async ({ page }) => {
+  await simularCamara(page, "permiso-revocado");
+  await abrirCarga(page);
+  const abrir = page.getByRole("button", { name: "Tomar fotografía con tu cámara" });
+  await abrir.click();
+  await page.getByRole("button", { name: "Cambiar a cámara frontal" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "No se concedió permiso" })).toBeVisible();
+  await expect(abrir).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Seleccionar archivo" })).toBeEnabled();
+  expect(await page.evaluate(() => {
+    const prueba = Reflect.get(window, "camaraSintetica");
+    return [prueba.permisos, prueba.pista.readyState];
+  })).toEqual([2, "ended"]);
 });
 
 for (const fallo of ["face_landmarker.task", "runtime/guia.worker.js"]) {

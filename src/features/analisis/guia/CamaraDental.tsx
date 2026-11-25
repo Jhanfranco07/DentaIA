@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
+import { Icono } from "@/components/Identidad";
 import styles from "../analisis-dental.module.css";
 import { OBJETIVO, orientarBoca, type Indicacion } from "./geometria";
 import { useGuiaDental } from "./useGuiaDental";
@@ -16,18 +17,22 @@ const MENSAJES: Record<Indicacion, string> = {
 type Props = {
   video: RefObject<HTMLVideoElement | null>;
   espejo: boolean;
+  camaraCargando: boolean;
   capturando: boolean;
+  guiaActiva: boolean;
+  activarGuia: (activa: boolean) => void;
+  alternar?: () => void;
   capturar: () => void;
   cerrar: () => void;
 };
 
-export default function CamaraDental({ video, espejo, capturando, capturar, cerrar }: Props) {
+export default function CamaraDental({ video, espejo, camaraCargando, capturando, guiaActiva, activarGuia, alternar, capturar, cerrar }: Props) {
   const panel = useRef<HTMLElement>(null);
-  const [intento, setIntento] = useState(0);
+  const [intento, setIntento] = useState(1);
   const [proporcion, setProporcion] = useState(4 / 3);
   const [videoListo, setVideoListo] = useState(false);
-  const estado = useGuiaDental(video, intento);
-  const senal = intento && estado.tipo === "activa" ? estado.senal : null;
+  const estado = useGuiaDental(video, guiaActiva ? intento : 0);
+  const senal = guiaActiva && estado.tipo === "activa" ? estado.senal : null;
   const boca = senal?.boca ? orientarBoca(senal.boca, espejo) : null;
 
   useEffect(() => {
@@ -68,15 +73,18 @@ export default function CamaraDental({ video, espejo, capturando, capturar, cerr
     </div>
     <div className={styles.camaraControles}>
       <div className={styles.camaraAyuda}>
-        <label><input type="checkbox" checked={intento > 0} onChange={event => setIntento(event.target.checked ? 1 : 0)} /> Usar guía de encuadre</label>
+        <label><input type="checkbox" checked={guiaActiva} onChange={event => activarGuia(event.target.checked)} /> Usar guía de encuadre</label>
         <p>La guía procesa la vista de la cámara en este dispositivo.</p>
-        <p role="status">{intento > 0 && (senal ? MENSAJES[senal.indicacion] : estado.tipo === "error"
+        <p role="status">{guiaActiva && (senal ? MENSAJES[senal.indicacion] : estado.tipo === "error"
           ? "La guía no está disponible. Puedes reintentar o tomar la foto manualmente."
           : "Cargando la guía de encuadre…")}</p>
-        {intento > 0 && estado.tipo === "error" && <button type="button" className={styles.secundario}
+        {guiaActiva && estado.tipo === "error" && <button type="button" className={styles.secundario}
           onClick={() => setIntento(actual => actual + 1)}>Reintentar guía</button>}
       </div>
       <button type="button" className={styles.primario} onClick={capturar} disabled={!videoListo || capturando}>Capturar fotografía</button>
+      {alternar && <button type="button" className={styles.secundario} onClick={alternar} disabled={camaraCargando || capturando}>
+        <Icono nombre="actualizar" size={20} /> Cambiar a cámara {espejo ? "posterior" : "frontal"}
+      </button>}
       <button type="button" className={styles.secundario} onClick={cerrar}>Cerrar cámara</button>
     </div>
   </section>;

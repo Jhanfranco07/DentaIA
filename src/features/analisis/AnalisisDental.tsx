@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { Icono } from "@/components/Identidad";
 import { useFotografiaPreparacion } from "./FotografiaPreparacionContexto";
-import { mensajeErrorCamara, mensajeValidacionFotografia, restriccionesCamara, validarFotografia } from "./fotografia";
+import { cambioCamaraConfirmado, mensajeErrorCamara, mensajeValidacionFotografia, restriccionesCamara, validarFotografia, type OrientacionCamara } from "./fotografia";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { countReviewRegions, isSmileAnalysisResponse, isSmileExplanation, type SmileExplanation, type SmileResult, type OralBasicAnalysis } from "./smile-contract";
 import styles from "./analisis-dental.module.css";
@@ -12,6 +12,7 @@ import ResultadosVisuales from "./ResultadosVisuales";
 import CamaraDental from "./guia/CamaraDental";
 
 type Fase = "preparacion" | "carga" | "analizando" | "resultado" | "detalle";
+type SesionCamara = { id: number; flujo: MediaStream; orientacion: OrientacionCamara; alternable: boolean };
 const PASOS = ["Preparación", "Carga", "Análisis", "Resultado"] as const;
 
 function validarDecodificacion(archivo: File) {
@@ -79,24 +80,28 @@ export default function AnalisisDental() {
   const [oral, setOral] = useState<OralBasicAnalysis | null>(null);
   const [explicacion, setExplicacion] = useState<SmileExplanation | null>(null);
   const [explicando, setExplicando] = useState(false);
-  const [camaraAbierta, setCamaraAbierta] = useState(false);
+  const [camara, setCamara] = useState<SesionCamara | null>(null);
   const [camaraCargando, setCamaraCargando] = useState(false);
-  const [camaraEspejo, setCamaraEspejo] = useState(false);
+  const [guiaActiva, setGuiaActiva] = useState(false);
   const [capturando, setCapturando] = useState(false);
   const entrada = useRef<HTMLInputElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const stream = useRef<MediaStream | null>(null);
   const solicitudCamara = useRef(0);
+  const camaraOcupada = useRef(false);
+  const flujoCamara = camara?.flujo;
   const explicacionSolicitada = useRef<string | null>(null);
   const explicacionAbortada = useRef<AbortController | null>(null);
 
   const detenerCamara = useCallback(() => {
     solicitudCamara.current += 1;
+    camaraOcupada.current = false;
     if (video.current) video.current.srcObject = null;
     stream.current?.getTracks().forEach(track => track.stop());
     stream.current = null;
-    setCamaraAbierta(false);
+    setCamara(null);
     setCamaraCargando(false);
+    setGuiaActiva(false);
     setCapturando(false);
   }, []);
 
@@ -108,9 +113,9 @@ export default function AnalisisDental() {
   }, [archivo]);
 
   useEffect(() => {
-    const actual = stream.current;
+    const actual = flujoCamara;
     const vistaCamara = video.current;
-    if (!camaraAbierta || !actual || !vistaCamara) return;
+    if (!actual || !vistaCamara) return;
     function recuperar() {
       if (actual !== stream.current) return;
       detenerCamara();
@@ -121,7 +126,7 @@ export default function AnalisisDental() {
     vistaCamara.srcObject = actual;
     void vistaCamara.play().catch(recuperar);
     return () => pistas.forEach(pista => pista.removeEventListener("ended", recuperar));
-  }, [camaraAbierta, detenerCamara]);
+  }, [flujoCamara, detenerCamara]);
 
   useEffect(() => () => detenerCamara(), [detenerCamara]);
   useEffect(() => () => explicacionAbortada.current?.abort(), []);
@@ -157,27 +162,74 @@ export default function AnalisisDental() {
     void elegirArchivo(event.dataTransfer.files?.[0]);
   }
 
-  async function abrirCamara() {
-    setError(""); detenerCamara(); setCamaraCargando(true);
-    if (!navigator.mediaDevices?.getUserMedia) { setCamaraCargando(false); setError("Este navegador no permite usar la cámara. Puedes subir una fotografía."); return; }
+  async function abrirCamara(anterior?: SesionCamara) {
+    if (camaraOcupada.current || (anterior && anterior.flujo !== stream.current)) return;
+    const dispositivos = navigator.mediaDevices;
+    if (!dispositivos?.getUserMedia) {
+      setError("Este navegador no permite usar la cámara. Puedes subir una fotografía.");
+      return;
+    }
+    const dispositivoAnterior = anterior?.flujo.getVideoTracks()[0]?.getSettings().deviceId;
+    const admiteFacingMode = dispositivos.getSupportedConstraints?.().facingMode;
+    setError("");
+    detenerCamara();
+    camaraOcupada.current = true;
+    setCamaraCargando(true);
     const requestId = solicitudCamara.current;
+    let orientacion: OrientacionCamara = anterior?.orientacion === "environment" ? "user" : "environment";
+    let aviso = "";
     try {
-      const next = await navigator.mediaDevices.getUserMedia(restriccionesCamara());
-      if (requestId !== solicitudCamara.current) { next.getTracks().forEach(track => track.stop()); return; }
-      setCamaraEspejo(next.getVideoTracks()[0]?.getSettings().facingMode === "user");
-      stream.current = next; setCamaraAbierta(true); setCamaraCargando(false);
+      let next: MediaStream;
+      try {
+        next = await dispositivos.getUserMedia(restriccionesCamara(orientacion, Boolean(anterior)));
+        const actual = next.getVideoTracks()[0]?.getSettings();
+        if (anterior && !cambioCamaraConfirmado(dispositivoAnterior, actual, orientacion, admiteFacingMode === true)) {
+          next.getTracks().forEach(pista => pista.stop());
+          throw new DOMException("No se pudo confirmar el cambio de cámara", "NotFoundError");
+        }
+      } catch (cause) {
+        const nombre = cause instanceof DOMException ? cause.name : "";
+        if (!anterior || requestId !== solicitudCamara.current
+          || ["NotAllowedError", "PermissionDeniedError", "SecurityError"].includes(nombre)) throw cause;
+        orientacion = anterior.orientacion;
+        next = await dispositivos.getUserMedia(restriccionesCamara(orientacion));
+        aviso = "No se pudo cambiar de cámara. Puedes capturar con la cámara disponible.";
+      }
+      if (requestId !== solicitudCamara.current) {
+        next.getTracks().forEach(pista => pista.stop());
+        return;
+      }
+      const frente = next.getVideoTracks()[0]?.getSettings().facingMode;
+      stream.current = next;
+      setCamara({
+        id: requestId,
+        flujo: next,
+        orientacion: frente === "user" || frente === "environment" ? frente : orientacion,
+        alternable: admiteFacingMode !== false,
+      });
+      setGuiaActiva(Boolean(anterior) && guiaActiva);
+      setError(aviso);
+      void dispositivos.enumerateDevices?.().then(lista => {
+        if (lista.filter(dispositivo => dispositivo.kind === "videoinput").length !== 1) return;
+        setCamara(actual => actual?.id === requestId ? { ...actual, alternable: false } : actual);
+      }).catch(() => {});
     } catch (cause) {
       if (requestId !== solicitudCamara.current) return;
-      setCamaraCargando(false);
       setError(mensajeErrorCamara(cause instanceof DOMException ? cause.name : ""));
+    } finally {
+      if (requestId === solicitudCamara.current) {
+        camaraOcupada.current = false;
+        setCamaraCargando(false);
+      }
     }
   }
 
   async function capturar() {
     const source = video.current;
-    if (capturando) return;
+    if (camaraOcupada.current) return;
     if (!source?.videoWidth || !source.videoHeight || source.readyState < 2) { setError("Espera a que la cámara termine de preparar la imagen."); return; }
     const actual = solicitudCamara.current;
+    camaraOcupada.current = true;
     setCapturando(true);
     setError("");
     try {
@@ -194,7 +246,10 @@ export default function AnalisisDental() {
     } catch {
       if (actual === solicitudCamara.current) setError("No se pudo capturar la fotografía. Puedes intentarlo de nuevo o subir un archivo.");
     } finally {
-      if (actual === solicitudCamara.current) setCapturando(false);
+      if (actual === solicitudCamara.current) {
+        camaraOcupada.current = false;
+        setCapturando(false);
+      }
     }
   }
 
@@ -321,7 +376,9 @@ export default function AnalisisDental() {
 
     {fase === "carga" && <div className={styles.vistaFlujo}>
       <div className={styles.encabezadoVista}><div><h1>Sube la fotografía de tu sonrisa</h1><p>Carga una imagen clara y sin filtros. No se analizará hasta que pulses el botón.</p></div><Mascota compacta /></div>
-      {camaraAbierta && <CamaraDental video={video} espejo={camaraEspejo} capturando={capturando}
+      {camara && <CamaraDental key={camara.id} video={video} espejo={camara.orientacion === "user"} capturando={capturando}
+        guiaActiva={guiaActiva} activarGuia={setGuiaActiva} camaraCargando={camaraCargando}
+        alternar={camara.alternable ? () => void abrirCamara(camara) : undefined}
         capturar={() => void capturar()} cerrar={detenerCamara} />}
       <div className={styles.cargaGrid}>
         <div className={styles.dropzone} onDragOver={event => event.preventDefault()} onDrop={soltar}>
@@ -330,7 +387,7 @@ export default function AnalisisDental() {
           <button type="button" className={styles.secundario} onClick={() => entrada.current?.click()}>Seleccionar archivo</button><small>JPG, PNG o WebP · máximo 8 MB</small>
         </div>
         <div className={styles.cargaLateral}>
-          {!camaraAbierta && <button type="button" className={styles.camaraBoton} onClick={() => void abrirCamara()} disabled={camaraCargando}><Icono nombre="camara" size={30} />{camaraCargando ? "Abriendo cámara…" : vista ? "Tomar otra fotografía" : "Tomar fotografía con tu cámara"}</button>}
+          {!camara && <button type="button" className={styles.camaraBoton} onClick={() => void abrirCamara()} disabled={camaraCargando}><Icono nombre="camara" size={30} />{camaraCargando ? "Abriendo cámara…" : vista ? "Tomar otra fotografía" : "Tomar fotografía con tu cámara"}</button>}
           <article className={styles.preview}><h2><Icono nombre="imagen" size={20} /> Vista previa</h2>{vista ? <><img src={vista} alt="Vista previa local de la sonrisa" /><button type="button" onClick={() => { setArchivo(null); limpiarFotografia(); setConsentimiento(false); }} aria-label="Eliminar fotografía"><Icono nombre="cerrar" size={19} /></button></> : <p>Aún no has seleccionado una fotografía.</p>}</article>
         </div>
       </div>
