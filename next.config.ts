@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
         { key: "X-Frame-Options", value: "DENY" },
         { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self)" },
       ],
+    }, {
+      source: "/mediapipe/1.2.3/runtime/guia.worker.js",
+      headers: [{
+        key: "Content-Security-Policy",
+        value: "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'",
+      }],
     }];
   },
 };

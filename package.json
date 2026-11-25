@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/preparar-mediapipe.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/preparar-mediapipe.mjs",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "pretest:e2e": "node scripts/preparar-mediapipe.mjs",
     "test:e2e": "playwright test",
     "test:planes": "node --experimental-strip-types --test src/features/planes/catalogo.test.mjs",
     "test:profesional": "node --experimental-strip-types --test src/features/profesional/historial-sintetico.test.mjs src/features/profesional/historial-autorizado.test.mjs src/features/profesional/resultados-educativos.test.mjs src/features/profesional/resultados-educativos-integracion.test.mjs src/features/profesional/api-clinica.test.mjs src/features/profesional/control-consultas-clinicas.test.mjs src/features/profesional/control-revalidacion-historial.test.mjs src/features/profesional/bff-integracion.test.mjs",
@@ -15,6 +18,7 @@
     "setup:test-users": "node --env-file-if-exists=.env.local --env-file-if-exists=.env.admin.local scripts/create-test-users.mjs"
   },
   "dependencies": {
+    "@mediapipe/tasks-vision": "1.2.3",
     "@supabase/supabase-js": "2.118.0",
     "maplibre-gl": "6.16.0",
     "next": "15.5.29",
