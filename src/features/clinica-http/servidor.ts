@@ -65,7 +65,21 @@ function api(request: Request) {
         if (!assignment || assignment.roles.length > 3 || new Set(assignment.roles).size !== assignment.roles.length) return { ok: false, status: 403, diagnostico: "ROL_INSUFICIENTE" };
         // La decisión clínica por acción se conserva en el RPC para auditar denegaciones.
         return { ok: true, usuario: { id: user.id, sessionId: claims.session_id, exp: claims.exp, roles: assignment.roles },
-          rpc: async (name, args) => { const { data, error } = await client.rpc(name, args); return { data, error }; } };
+          rpc: async (name, args) => { const { data, error } = await client.rpc(name, args); return { data, error }; },
+          descargarFoto: async path => {
+            const encoded = path.split("/").map(encodeURIComponent).join("/");
+            const photo = await fetch(`${config.origin}/storage/v1/object/authenticated/smile-analysis-private/${encoded}`, {
+              headers: { apikey: config.key, Authorization: `Bearer ${token}` },
+              cache: "no-store", redirect: "error", signal: AbortSignal.timeout(8000),
+            });
+            if (!photo.ok) return null;
+            if (Number(photo.headers.get("content-length")) > 8_388_608) {
+              await photo.body?.cancel();
+              return null;
+            }
+            return photo.blob();
+          },
+        };
       } catch (error) { const status = errorIdentidad(error); return { ok: false, status,
         diagnostico: status === 503 ? "PROVEEDOR_IDENTIDAD_NO_DISPONIBLE" : "SESION_INVALIDA" }; }
     },
@@ -80,3 +94,5 @@ export const consultarMiProfesional = (request: Request) => api(request).workspa
 export const consultarMisConcesiones = (request: Request) => api(request).workspace(request, "grants");
 export const consultarPacientesAutorizados = (request: Request) => api(request).workspace(request, "patients");
 export const consultarSolicitudesProfesionales = (request: Request) => api(request).workspace(request, "requests");
+
+export const accederOdontograma = async (request: Request, context: { params: Promise<{ patientId: string }> }) => api(request).odontograma(request, (await context.params).patientId);

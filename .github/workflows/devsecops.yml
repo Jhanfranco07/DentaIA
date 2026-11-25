@@ -630,6 +630,11 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261122181000_solicitudes_reales_y_resenas.sql
       - name: Probar WhatsApp, consentimiento, RLS, citas y transición
         run: psql -v ON_ERROR_STOP=1 -f scripts/qa/directorio/01_contacto_citas.sql
+      - name: Probar odontograma, persistencia, consentimiento y RLS
+        shell: bash
+        run: |
+          createdb dentaia_di213_ci
+          node scripts/qa-di213-postgres.mjs --sql | psql -d dentaia_di213_ci -v ON_ERROR_STOP=1
 
   integridad-aplicacion:
     name: Integración · calidad y pruebas

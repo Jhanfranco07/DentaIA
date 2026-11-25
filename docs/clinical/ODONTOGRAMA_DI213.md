@@ -1,0 +1,20 @@
+# DI-213 · Odontograma clínico 2D
+
+El portal profesional abre el odontograma en el contexto del paciente y de la membresía seleccionados. La vista muestra las 32 piezas permanentes en FDI, sus superficies, registros vigentes y versiones anteriores. Las formas SVG y los símbolos de la leyenda son convenciones de interfaz pendientes de revisión odontológica. El modelo de dominio se puede consumir desde otra representación, incluido un futuro renderizador 3D.
+
+## Datos y acceso
+
+- El BFF reutiliza sesión, origen, allowlist y configuración clínica. El RPC exige identidad activa, rol odontólogo, verificación, membresía vigente y una concesión de lectura válida para los encuentros devueltos. El paciente utiliza sus mecanismos existentes de historial y concesión. El nuevo endpoint es profesional.
+- Una escritura requiere además un encuentro vigente del propio profesional, dentro de la concesión. Las revisiones se agregan como eventos inmutables con una llave idempotente. Una corrección conserva el registro anterior y describe su motivo. Las operaciones sobre una versión reemplazada devuelven conflicto.
+- `clinical.odontogram_events` referencia encuentros existentes. Se usa una extensión tipada porque `clinical_entries` admite antecedentes, diagnósticos y tratamientos genéricos sin selección de superficies ni revisiones de IA. Esto conserva el DTO y el significado de la cronología general.
+- La asistencia muestra regiones de color evaluables procedentes del historial Smile. El profesional elige la pieza, documenta la evidencia y decide si confirma, corrige o descarta. Un identificador de región se conserva como referencia técnica. El adaptador Premium Vision proyecta detecciones del contrato versionado a observaciones y queda disponible para una integración posterior. La aplicación no invoca RF-DETR.
+- La lectura de observaciones exige además consentimiento de almacenamiento y una concesión Smile vigentes. Una corrección clínica ya confirmada permanece en el expediente según su propio control de acceso. La foto original se descarga mediante el BFF con el token del usuario y una política de Storage limitada a la operación de descarga autenticada. Las respuestas clínicas usan `no-store`. La auditoría usa la infraestructura de DI-36.
+
+## Validación y despliegue
+
+- Ejecutar el test `src/features/odontograma/odontograma-integracion.test.mjs` con el runner Node 22 y `e2e/public/odontograma.spec.ts` con Playwright. El E2E intercepta el proveedor de sesión y el BFF con datos sintéticos. La prueba SQL ejecuta el RPC, las migraciones reales de Fase 8 y Smile y las políticas de fila con identidades sintéticas.
+- El pipeline integral ejecuta `scripts/qa-di213-postgres.mjs --sql` exclusivamente en un PostgreSQL temporal y vacío del runner. Para una comprobación local sin Docker, instalar `@electric-sql/pglite@0.6.0` fuera del repositorio y pasar la ruta de su paquete a `node scripts/qa-di213-postgres.mjs`. La fixture reproduce los contratos mínimos de Auth y Storage. La prueba de Storage verifica la política SQL, mientras que la descarga a través del servicio desplegado debe validarse en QA.
+- Antes de aplicar la migración en un Supabase alojado, verificar el paquete clínico aplicado, el historial Smile y la disponibilidad de `storage.allow_only_operation` en el entorno exacto. La migración adiciona una política de lectura de fotos para la combinación de concesiones descrita arriba. Su aplicación remota y la activación requieren aprobación específica.
+- El Preview de esta rama queda sujeto a la allowlist clínica vigente. Utilizar una instancia local/QA autorizada con las migraciones aplicadas y actores sintéticos para verificar Auth, PostgREST, Storage, guardado y recarga en una misma ejecución. El flujo actual de Smile puede devolver resultados transitorios. El odontograma muestra solo los análisis ya persistidos y compartidos mediante el contrato de historial existente.
+
+[DI-213](https://jhanfranco.atlassian.net/browse/DI-213) · [Políticas de Storage por operación](https://supabase.com/docs/guides/storage/schema/helper-functions)

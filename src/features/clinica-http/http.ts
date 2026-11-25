@@ -1,12 +1,14 @@
+import { entradaOdontograma } from "../odontograma/contrato-http";
+import { expedienteDto } from "../odontograma/dto";
 import { randomUUID } from "node:crypto";
 import { consultaWorkspace, workspaceDto, type TipoWorkspace } from "./workspace";
 import { firmarCursor, verificarCursor } from "./cursor";
 import { concesionDto, historialDto, revocacionDto } from "./dto";
 import { clavesExactas, consultaHistorial, entradaConcesion, ErrorEntrada, esObjeto, esUuid, fechaIso, leerJsonAcotado } from "./validaciones";
 
-export type RpcClinico = "grant_clinical_access" | "revoke_clinical_access" | "get_authorized_clinical_history" | "get_clinical_workspace";
+export type RpcClinico = "grant_clinical_access" | "revoke_clinical_access" | "get_authorized_clinical_history" | "get_clinical_workspace" | "access_clinical_odontogram";
 export type IdentidadClinica = { id: string; sessionId: string; exp: number; roles: readonly string[] };
-export type Autenticacion = { ok: true; usuario: IdentidadClinica; rpc: (name: RpcClinico, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> }
+export type Autenticacion = { ok: true; usuario: IdentidadClinica; rpc: (name: RpcClinico, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>; descargarFoto?: (path: string) => Promise<Blob | null> }
   | { ok: false; status: 401 | 403 | 503; diagnostico?: "CONFIGURACION_INVALIDA" | "PROVEEDOR_IDENTIDAD_NO_DISPONIBLE" | "SESION_INVALIDA" | "CUENTA_FUERA_DE_ALLOWLIST" | "ROL_INSUFICIENTE" };
 export type DependenciasClinicas = { enabled: boolean; cursorSecret: string; cursorTtl: number;
   environment?: "academic_remote";
@@ -77,6 +79,43 @@ export function crearApiClinica(deps: DependenciasClinicas) {
       const r = await invoke(auth, "revoke_clinical_access", { p_id: id.toLowerCase() }, trace);
       if (r.denied) return r.denied;
       return response({ ok: true, ...revocacionDto(r.raw, id.toLowerCase()), requestId: r.raw.requestId }, 200, trace);
+    }),
+    odontograma: (request: Request, patientId: string) => execute(request, "odontogram", async (auth, trace) => {
+      if (!esUuid(patientId)) throw new ErrorEntrada(400, "INVALID_REQUEST");
+      patientId = patientId.toLowerCase();
+      const search = new URL(request.url).searchParams;
+      const write = request.method === "POST";
+      if (write ? search.size !== 0 : [...search.keys()].some(k => !["photo", "membershipId"].includes(k) || search.getAll(k).length !== 1)) {
+        throw new ErrorEntrada(400, "INVALID_REQUEST");
+      }
+      const input = write ? entradaOdontograma(await leerJsonAcotado(request), request.headers.get("idempotency-key")) : null;
+      const membership = input?.membershipId ?? search.get("membershipId");
+      const photo = search.get("photo");
+      if (!esUuid(membership) || (photo !== null && !esUuid(photo))) throw new ErrorEntrada(400, "INVALID_REQUEST");
+      const r = await invoke(auth, "access_clinical_odontogram", {
+        p_patient: patientId, p_membership: membership.toLowerCase(),
+        p_id: input?.id ?? null, p_payload: input && { encounterId: input.encounterId, record: input.record, review: input.review },
+        p_photo: photo?.toLowerCase() ?? null,
+      }, trace);
+      if (r.denied) return r.denied;
+      if (!esObjeto(r.raw.data)) throw new Error("INVALID_ODONTOGRAM_DTO");
+      if (input) {
+        if (r.raw.data.id !== input.id) throw new Error("INVALID_ODONTOGRAM_DTO");
+        return response({ ok: true, id: input.id }, 201, trace);
+      }
+      if (photo) {
+        const path = r.raw.data.path;
+        if (typeof path !== "string" || !/^[a-zA-Z0-9_/-]+[.](jpe?g|png|webp)$/i.test(path)) throw new Error("INVALID_PHOTO_PATH");
+        const blob = await auth.descargarFoto?.(path);
+        if (!blob || !["image/jpeg", "image/webp", "image/png"].includes(blob.type) || blob.size > 8_388_608) {
+          return response({ ok: false, code: "NOT_FOUND" }, 404, trace);
+        }
+        const headers = response({}, 200, trace).headers;
+        headers.set("Content-Type", blob.type);
+        headers.set("X-Content-Type-Options", "nosniff");
+        return new Response(blob, { headers });
+      }
+      return response({ ok: true, data: expedienteDto(r.raw.data, patientId) }, 200, trace);
     }),
     historial: (request: Request, patientId: string) => execute(request, "history", async (auth, trace) => {
       if (!esUuid(patientId)) throw new ErrorEntrada(400, "INVALID_REQUEST");

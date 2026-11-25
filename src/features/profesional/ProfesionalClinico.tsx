@@ -1,5 +1,6 @@
 "use client";
 
+import OdontogramaClinico from "../odontograma/OdontogramaClinico";
 import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -131,6 +132,7 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
   const controlRevalidacion = useRef(crearControlRevalidacionHistorial());
   const contextoActual = useRef("");
   const pacienteActual = useRef("");
+  const confirmarSalidaOdontograma = useRef<(() => boolean) | null>(null);
   const [reintentoSesion, setReintentoSesion] = useState(0);
   const [revisionHistorial, setRevisionHistorial] = useState(0);
   const [avisoHistorial, setAvisoHistorial] = useState("");
@@ -543,6 +545,7 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
   }, [historial.vista, revalidarHistorial]);
 
   function cambiarContexto(nuevoContextoId: string) {
+    if (confirmarSalidaOdontograma.current?.() === false) return;
     control.current.invalidarTodo();
     contextoActual.current = nuevoContextoId;
     pacienteActual.current = "";
@@ -557,6 +560,7 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
   }
 
   function cambiarPaciente(nuevoPacienteId: string) {
+    if (confirmarSalidaOdontograma.current?.() === false) return;
     control.current.cancelar("historial");
     controlRevalidacion.current.invalidar();
     pacienteActual.current = nuevoPacienteId;
@@ -999,6 +1003,10 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
 
             {(pacientes.estado === "listo" || historial.vista.estado !== "inactivo") && (
               <EstadoHistorialClinico vista={historial.vista} />
+            )}
+            {pacienteId && contextoId && (
+              <OdontogramaClinico key={contextoId + ":" + pacienteId} patientId={pacienteId}
+                membershipId={contextoId} guard={confirmarSalidaOdontograma} />
             )}
             {avisoHistorial && (
               <div className={styles.estadoVacio} role="status" aria-live="polite">
