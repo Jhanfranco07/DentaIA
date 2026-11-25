@@ -34,8 +34,29 @@ export function mensajeErrorCamara(nombre: string): string {
   return "No se pudo iniciar la cámara. Puedes subir una fotografía o intentarlo de nuevo.";
 }
 
-export function restriccionesCamara() {
-  return { audio: false as const, video: { facingMode: { ideal: "environment" as const }, width: { ideal: 1920 }, height: { ideal: 1080 } } };
+export type OrientacionCamara = "user" | "environment";
+
+export function cambioCamaraConfirmado(
+  dispositivoAnterior: string | undefined,
+  actual: Pick<MediaTrackSettings, "deviceId" | "facingMode"> | undefined,
+  orientacion: OrientacionCamara,
+  admiteFacingMode: boolean,
+): boolean {
+  if (dispositivoAnterior && actual?.deviceId === dispositivoAnterior) return false;
+  if (actual?.facingMode) return actual.facingMode === orientacion;
+  // Con facingMode exacto soportado, otro identificador confirma el cambio de dispositivo.
+  return admiteFacingMode && Boolean(dispositivoAnterior && actual?.deviceId);
+}
+
+export function restriccionesCamara(orientacion: OrientacionCamara = "environment", exacta = false): MediaStreamConstraints {
+  return {
+    audio: false,
+    video: {
+      facingMode: exacta ? { exact: orientacion } : { ideal: orientacion },
+      width: { ideal: 1920 },
+      height: { ideal: 1080 },
+    },
+  };
 }
 
 export type EstadoAnalisisDental = "pendiente" | "procesando" | "completado" | "fallido";
