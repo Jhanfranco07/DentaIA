@@ -92,3 +92,23 @@ test("Se conserva la prohibición de Production académico tradicional",()=>{
  const config=configurarClinica({...prod,DENTAIA_CLINICAL_TARGET:"dentalia_academic"});
  assert.equal(config.valid,false);
 });
+
+// El nuevo Preview solo admite su hostname único y las cuentas sintéticas existentes.
+test('DI-213/214: rama exacta habilitada únicamente en Preview académico',()=>{
+ const e={...preview,VERCEL_GIT_COMMIT_REF:'integration/di-213-di-214'};
+ assert.equal(configurarClinica(e).enabled&&configurarClinica(e).valid,true);
+ for(const changes of [{VERCEL_GIT_COMMIT_REF:'integration/di-213-di-214-other'},{VERCEL_ENV:'production'},{DENTAIA_CLINICAL_PREVIEW_ENABLED:''},{DENTAIA_CLINICAL_HTTP_ENABLED:''}])assert.equal(configurarClinica({...e,...changes}).enabled,false);
+ for(const changes of [{DENTAIA_CLINICAL_CURSOR_SECRET:''},{DENTAIA_CLINICAL_DEMO_USER_IDS:''},{DENTAIA_CLINICAL_ACADEMIC_ENABLED:''}])assert.equal(configurarClinica({...e,...changes}).valid,false);
+ assert.equal(cuentaAcademicaPermitida(ids[0],{dentaia_development:{dataset:DATASET_ACADEMICO}},ids),true);
+ assert.equal(cuentaAcademicaPermitida(ids[0],{},ids),false);
+ assert.equal(cuentaAcademicaPermitida('ajeno',{dentaia_development:{dataset:DATASET_ACADEMICO}},ids),false);
+});
+test('DI-213/214: solo hostname exacto de Vercel, no alias anterior ni cross-site',()=>{
+ const e={...preview,VERCEL_GIT_COMMIT_REF:'integration/di-213-di-214'};
+ const url='https://'+e.VERCEL_URL+'/api/professional/me';
+ assert.equal(origenPreviewAutorizado(new Request(url),e),true);
+ assert.equal(origenPreviewAutorizado(new Request('https://dent-ai-git-integration-pr71-pr74-aa5dad-jhan-francos-projects.vercel.app/api/professional/me'),e),false);
+ assert.equal(origenPreviewAutorizado(new Request('https://otro.vercel.app/api/professional/me'),e),false);
+ assert.equal(origenPreviewAutorizado(new Request(url,{headers:{origin:'https://otro.vercel.app'}}),e),false);
+ assert.equal(origenPreviewAutorizado(new Request(url,{headers:{'sec-fetch-site':'cross-site'}}),e),false);
+});
