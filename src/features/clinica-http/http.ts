@@ -1,10 +1,13 @@
+import { historyCommand, historyPhoto, historyQuery } from "../premium-vision/history-http";
+import { historyDto } from "../premium-vision/history";
+import { PLAN_FEATURES } from "../planes/catalogo";
 import { randomUUID } from "node:crypto";
 import { consultaWorkspace, workspaceDto, type TipoWorkspace } from "./workspace";
 import { firmarCursor, verificarCursor } from "./cursor";
 import { concesionDto, historialDto, revocacionDto } from "./dto";
 import { clavesExactas, consultaHistorial, entradaConcesion, ErrorEntrada, esObjeto, esUuid, fechaIso, leerJsonAcotado } from "./validaciones";
 
-export type RpcClinico = "grant_clinical_access" | "revoke_clinical_access" | "get_authorized_clinical_history" | "get_clinical_workspace";
+export type RpcClinico = "grant_clinical_access" | "revoke_clinical_access" | "get_authorized_clinical_history" | "get_clinical_workspace" | "access_premium_history";
 export type IdentidadClinica = { id: string; sessionId: string; exp: number; roles: readonly string[] };
 export type Autenticacion = { ok: true; usuario: IdentidadClinica; rpc: (name: RpcClinico, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> }
   | { ok: false; status: 401 | 403 | 503; diagnostico?: "CONFIGURACION_INVALIDA" | "PROVEEDOR_IDENTIDAD_NO_DISPONIBLE" | "SESION_INVALIDA" | "CUENTA_FUERA_DE_ALLOWLIST" | "ROL_INSUFICIENTE" };
@@ -12,11 +15,16 @@ export type DependenciasClinicas = { enabled: boolean; cursorSecret: string; cur
   environment?: "academic_remote";
   diagnosticoConfiguracion?: "ENTORNO_NO_PERMITIDO" | "BFF_DESHABILITADO" | "CONFIGURACION_INVALIDA";
   autenticar: (token: string) => Promise<Autenticacion>;
+  downloadPremiumPhoto?: (token: string, photo: ReturnType<typeof historyPhoto>) => Promise<Blob | null>;
   registrar?: (event: { requestId: string; operation: string; status: number; code: string }) => void };
 
 const codes: Record<number, string> = { 400: "INVALID_REQUEST", 401: "AUTHENTICATION_REQUIRED", 403: "ACCESS_DENIED", 404: "NOT_FOUND", 409: "IDEMPOTENCY_CONFLICT", 413: "PAYLOAD_TOO_LARGE", 415: "UNSUPPORTED_MEDIA_TYPE", 503: "SERVICE_UNAVAILABLE" };
 function response(body: Record<string, unknown>, status: number, trace: string) {
-  return Response.json(body, { status, headers: { "Cache-Control": "private, no-store, max-age=0", "CDN-Cache-Control": "no-store", "Vercel-CDN-Cache-Control": "no-store", Pragma: "no-cache", Vary: "Authorization", "X-Request-Id": trace } });
+  return Response.json(body, { status, headers: privateHeaders(trace) });
+}
+
+function privateHeaders(trace: string) {
+  return { "Cache-Control": "private, no-store, max-age=0", "CDN-Cache-Control": "no-store", "Vercel-CDN-Cache-Control": "no-store", Pragma: "no-cache", Vary: "Authorization", "X-Request-Id": trace };
 }
 
 export function crearApiClinica(deps: DependenciasClinicas) {
@@ -52,6 +60,32 @@ export function crearApiClinica(deps: DependenciasClinicas) {
     return { raw, denied: null };
   }
   return {
+    premiumHistory: (request: Request, professional: boolean) => execute(request, "premium_history", async (auth, trace) => {
+      const query = await historyQuery(request, professional);
+      const result = await invoke(auth, "access_premium_history", {
+        p_action: query.action, p_patient: query.patient, p_member: query.membership,
+        p_evaluation: query.evaluation, p_args: query.args,
+      }, trace);
+      if (result.denied) return result.denied;
+      if (query.action === "list") return response({
+        ok: true, ...historyDto(result.raw.data), inferenceEnabled: PLAN_FEATURES.premium_visual_evaluation.implemented,
+      }, 200, trace);
+      const photo = historyPhoto(result.raw.data);
+      const blob = await deps.downloadPremiumPhoto?.(request.headers.get("authorization")!.slice(7), photo);
+      if (!blob) return response({ ok: false, code: "NOT_FOUND" }, 404, trace);
+      const extension = photo.mime === "image/jpeg" ? "jpg" : photo.mime.split("/")[1];
+      return new Response(blob, { headers: {
+        ...privateHeaders(trace), "Content-Type": photo.mime, "X-Content-Type-Options": "nosniff",
+        "Content-Disposition": "attachment; filename=fotografia." + extension,
+      } });
+    }),
+    premiumCommand: (request: Request) => execute(request, "premium_manage", async (auth, trace) => {
+      const command = await historyCommand(request);
+      const result = await invoke(auth, "access_premium_history", {
+        p_action: command.action, p_evaluation: command.evaluation, p_grant: command.grant, p_args: command.args,
+      }, trace);
+      return result.denied ?? response({ ok: true }, 200, trace);
+    }),
     workspace: (request: Request, kind: TipoWorkspace) => execute(request, "workspace_" + kind, async (auth, trace) => {
       const query = consultaWorkspace(request, kind);
       const r = await invoke(auth, "get_clinical_workspace", query, trace);

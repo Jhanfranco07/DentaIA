@@ -572,6 +572,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      access_premium_history: {
+        Args: {
+          p_action: string;
+          p_patient?: string | null;
+          p_member?: string | null;
+          p_evaluation?: string | null;
+          p_grant?: string | null;
+          p_args?: Json;
+        };
+        Returns: Json;
+      };
       contacto_odontologo_autorizado: {
         Args: { p_dentist_id: string; p_propietario: boolean }
         Returns: boolean

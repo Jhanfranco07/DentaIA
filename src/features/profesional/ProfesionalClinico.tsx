@@ -27,6 +27,7 @@ import {
   crearControlRevalidacionHistorial,
   estadoRevalidacionHistorial,
 } from "./control-revalidacion-historial";
+import PremiumHistory from "@/features/premium-vision/PremiumHistory";
 import EstadoHistorialClinico, {
   type VistaHistorialClinico,
 } from "./EstadoHistorialClinico";
@@ -1020,6 +1021,10 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
             )}
           </section>
           {dentistIdDirectorio && <><MisCitasProfesional dentistId={dentistIdDirectorio} /><MiWhatsappProfesional dentistId={dentistIdDirectorio} /></>}
+          {historial.vista.estado === "listo" && pacienteId && contextoId && (
+            <PremiumHistory key={contextoId + ":" + pacienteId}
+              professional={{ patientId: pacienteId, membershipId: contextoId }} />
+          )}
           <SeguimientoRutinasProfesional membershipId={contextoId} patientRecordId={pacienteId || null} />
           <section id="perfil-profesional" className={styles.tarjeta} tabIndex={-1} aria-labelledby="titulo-perfil-profesional">
             <header className={styles.cabeceraSeccion}>
