@@ -102,3 +102,57 @@ test("BFF respeta la denegación del RPC y conserva la llave idempotente", async
   const forbidden = prepare(null, 403);
   assert.equal((await forbidden.api.odontograma(req(body), id(1))).status, 403);
 });
+
+test("los módulos comparten sesión y conservan permisos de descarga independientes", async () => {
+  const calls = [];
+  const downloads = [];
+  let premiumShared = true;
+  const path = id(9) + "/" + id(3) + "/foto.png";
+  const photo = new Blob(["foto sintética"], { type: "image/png" });
+  const api = crearApiClinica({
+    enabled: true, cursorSecret: "local", cursorTtl: 60,
+    downloadPremiumPhoto: async (_token, reference) => {
+      downloads.push(["premium", reference.path]);
+      return photo;
+    },
+    autenticar: async () => ({
+      ok: true, usuario: { id: id(9), sessionId: id(8), exp: 9999999999, roles: ["odontologo"] },
+      descargarFoto: async (reference) => {
+        downloads.push(["odontograma", reference]);
+        return photo;
+      },
+      async rpc(name, args) {
+        calls.push({ name, args });
+        const isPremium = name === "access_premium_history";
+        const allowed = !isPremium || premiumShared;
+        const data = isPremium ? { path, mime: "image/png", size: photo.size, digest: "ab".repeat(32) } : { path };
+        return { data: { ok: allowed, status: allowed ? 200 : 403, requestId: id(11), data }, error: null };
+      },
+    }),
+  });
+  const premium = () => api.premiumHistory(new Request("http://localhost/api/professional/premium-history", {
+    method: "POST",
+    headers: { Authorization: "Bearer a.b.c", "Content-Type": "application/json" },
+    body: JSON.stringify({ patientId: id(1), membershipId: id(2), photo: id(7) }),
+  }), true);
+  const chart = () => api.odontograma(new Request(url + "?membershipId=" + id(2) + "&photo=" + id(7), {
+    headers: { Authorization: "Bearer a.b.c" },
+  }), id(1));
+
+  const initial = await premium();
+  assert.equal(initial.status, 200);
+  assert.match(initial.headers.get("cache-control"), /private.*no-store/);
+  assert.equal(initial.headers.get("x-content-type-options"), "nosniff");
+  premiumShared = false;
+  assert.equal((await premium()).status, 403);
+  const original = await chart();
+  assert.equal(original.status, 200);
+  assert.match(original.headers.get("cache-control"), /private.*no-store/);
+  assert.equal(original.headers.get("x-content-type-options"), "nosniff");
+  assert.deepEqual(downloads, [["premium", path], ["odontograma", path]]);
+  assert.deepEqual(calls.map(call => [call.name, call.args.p_patient, call.args.p_member ?? call.args.p_membership]), [
+    ["access_premium_history", id(1), id(2)],
+    ["access_premium_history", id(1), id(2)],
+    ["access_clinical_odontogram", id(1), id(2)],
+  ]);
+});

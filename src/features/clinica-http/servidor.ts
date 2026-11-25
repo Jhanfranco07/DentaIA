@@ -1,4 +1,6 @@
 import "server-only";
+
+import { createHash } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { leerAsignacionAdministrativa } from "../autorizacion/autorizacion";
 import { crearApiClinica, type Autenticacion } from "./http";
@@ -31,6 +33,24 @@ function api(request: Request) {
   return crearApiClinica({ enabled, cursorSecret: config.secret, cursorTtl: config.ttl,
     ...(!enabled ? { diagnosticoConfiguracion: diagnosticoConfiguracion(config) } : {}),
     ...(config.remote ? { environment: "academic_remote" as const } : {}),
+    downloadPremiumPhoto: async (token, photo) => {
+      const path = photo.path.split("/").map(encodeURIComponent).join("/");
+      const object = await fetch(config.origin + "/storage/v1/object/authenticated/dental-photos/" + path, {
+        headers: { apikey: config.key, Authorization: "Bearer " + token },
+        cache: "no-store", redirect: "error", signal: AbortSignal.timeout(8000),
+      });
+      if (!object.ok || object.headers.get("content-type") !== photo.mime ||
+        Number(object.headers.get("content-length")) !== photo.size) return null;
+      const data = await object.blob();
+      if (data.size !== photo.size) return null;
+      const header = new Uint8Array(await data.slice(0,12).arrayBuffer());
+      const ascii = (start: number, end: number) => String.fromCharCode(...header.slice(start,end));
+      const valid = photo.mime === "image/jpeg" ? header[0] === 255 && header[1] === 216 && header[2] === 255
+        : photo.mime === "image/png" ? header[0] === 137 && ascii(1,4) === "PNG" && header[4] === 13 && header[5] === 10 && header[6] === 26 && header[7] === 10
+        : ascii(0,4) === "RIFF" && ascii(8,12) === "WEBP";
+      if (!valid || createHash("sha256").update(Buffer.from(await data.arrayBuffer())).digest("hex") !== photo.digest) return null;
+      return data;
+    },
     registrar: event => console.info("clinical_security", JSON.stringify(event)),
     autenticar: async (token): Promise<Autenticacion> => {
       let client;
@@ -96,3 +116,5 @@ export const consultarPacientesAutorizados = (request: Request) => api(request).
 export const consultarSolicitudesProfesionales = (request: Request) => api(request).workspace(request, "requests");
 
 export const accederOdontograma = async (request: Request, context: { params: Promise<{ patientId: string }> }) => api(request).odontograma(request, (await context.params).patientId);
+export const consultarHistorialPremium = (request: Request, professional: boolean) => api(request).premiumHistory(request, professional);
+export const gestionarHistorialPremium = (request: Request) => api(request).premiumCommand(request);
