@@ -22,7 +22,7 @@ self.fetch = async (input, init) => {
   }
   return fetchOriginal(solicitud.url, {
     mode: "same-origin",
-    credentials: "omit",
+    credentials: "same-origin",
     redirect: "error",
     referrerPolicy: "no-referrer",
     signal: solicitud.signal,

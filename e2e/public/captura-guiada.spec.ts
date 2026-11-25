@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page, type Response } from "playwright/test";
 
 const recursos = "/mediapipe/1.2.3/";
 
@@ -57,20 +57,39 @@ async function simularCamara(page: Page) {
   });
 }
 
-test("activa el SDK solo por elección, procesa localmente y permite capturar sin rostro", async ({ page, context, baseURL }) => {
+test("activa el SDK con sesión de Preview, procesa localmente y permite capturar sin rostro", async ({ page, context, baseURL }) => {
   test.setTimeout(50_000);
+  const cookiePreview = { name: "dentaia_preview_prueba", value: "autorizado" };
+  await context.addCookies([{ ...cookiePreview, url: baseURL!, httpOnly: true }]);
+  const wasm = recursos + "runtime/vision_wasm_module_internal.wasm";
   const cargas: string[] = [];
   const escrituras: string[] = [];
   const externos: string[] = [];
+  const fallbacks: string[] = [];
+  const respuestasWasm: Response[] = [];
+  context.on("response", respuesta => {
+    if (respuesta.url() === baseURL + wasm && respuesta.request().resourceType() === "fetch") respuestasWasm.push(respuesta);
+  });
+  page.on("console", mensaje => {
+    if (/wasm streaming compile failed|falling back to ArrayBuffer/i.test(mensaje.text())) fallbacks.push(mensaje.text());
+  });
   context.on("request", request => {
     const url = new URL(request.url());
     if (url.pathname.startsWith(recursos)) cargas.push(url.pathname);
     if (request.method() !== "GET" && request.method() !== "HEAD") escrituras.push(url.pathname);
     if (url.origin !== baseURL) externos.push(url.origin);
   });
-  await context.route("**/*", route => {
-    const { origin } = new URL(route.request().url());
-    return origin === baseURL && ["GET", "HEAD"].includes(route.request().method()) ? route.continue() : route.abort();
+  await context.route("**/*", async route => {
+    const solicitud = route.request();
+    const { origin, pathname } = new URL(solicitud.url());
+    if (origin !== baseURL || !["GET", "HEAD"].includes(solicitud.method())) return route.abort();
+    if (pathname.startsWith(recursos)) {
+      const cookies = (await solicitud.headerValue("cookie"))?.split("; ") ?? [];
+      if (!cookies.includes(`${cookiePreview.name}=${cookiePreview.value}`)) {
+        return route.fulfill({ status: 302, headers: { location: "/autenticacion-preview-sintetica" } });
+      }
+    }
+    return route.continue();
   });
   await simularCamara(page);
   await page.setViewportSize({ width: 390, height: 844 });
@@ -91,16 +110,22 @@ test("activa el SDK solo por elección, procesa localmente y permite capturar si
   expect((await cabecera).headers()["content-security-policy"])
     .toBe("default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'");
   await expect(page.getByText(/Buscando tu rostro/)).toBeVisible({ timeout: 30_000 });
+  expect(respuestasWasm).toHaveLength(1);
+  const [binario] = respuestasWasm;
+  expect(binario.status()).toBe(200);
+  expect(binario.headers()["content-type"]).toBe("application/wasm");
+  expect(await binario.request().headerValue("referer")).toBeNull();
+  expect(cargas.filter(ruta => ruta === wasm)).toEqual([wasm]);
   expect(cargas).toEqual(expect.arrayContaining([
     recursos + "runtime/vision_bundle.mjs",
     recursos + "runtime/vision_wasm_module_internal.js",
-    recursos + "runtime/vision_wasm_module_internal.wasm",
+    wasm,
     recursos + "face_landmarker.task",
   ]));
 
   const autorizados = [
     recursos + "runtime/vision_wasm_module_internal.js",
-    recursos + "runtime/vision_wasm_module_internal.wasm",
+    wasm,
     recursos + "face_landmarker.task",
   ];
   const lecturas = await worker.evaluate(async rutas => Promise.all(rutas.map(async ruta => {
@@ -173,6 +198,7 @@ test("activa el SDK solo por elección, procesa localmente y permite capturar si
   expect(await page.evaluate(() => Reflect.get(window, "camaraSintetica").pista.readyState)).toBe("ended");
   expect(escrituras).toEqual([]);
   expect(externos).toEqual([]);
+  expect(fallbacks).toEqual([]);
 });
 
 for (const fallo of ["face_landmarker.task", "runtime/guia.worker.js"]) {
