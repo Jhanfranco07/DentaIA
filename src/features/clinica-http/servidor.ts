@@ -31,6 +31,9 @@ function api(request: Request) {
     ? origenProductionAutorizado(request, process.env)
     : config.preview ? origenPreviewAutorizado(request, process.env) : origenLocalAutorizado(request);
   const enabled = config.enabled && (!config.remote || originAllowed);
+  if (!enabled && config.preview && process.env.VERCEL_GIT_COMMIT_REF === "integration/di-213-di-214") {
+    console.info("clinical_preview_config", JSON.stringify({ enabled: config.enabled, valid: config.valid, remote: config.remote, originAllowed, hostMatches: (() => { try { return new URL(request.url).hostname === process.env.VERCEL_URL; } catch { return false; } })(), hasOrigin: request.headers.has("origin"), crossSite: request.headers.get("sec-fetch-site") === "cross-site", cursorConfigured: config.secret.length >= 43, demoCount: config.users.length }));
+  }
   return crearApiClinica({ enabled, cursorSecret: config.secret, cursorTtl: config.ttl,
     ...(!enabled ? { diagnosticoConfiguracion: diagnosticoConfiguracion(config) } : {}),
     ...(config.remote ? { environment: "academic_remote" as const } : {}),
