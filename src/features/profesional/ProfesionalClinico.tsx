@@ -1006,12 +1006,12 @@ export default function ProfesionalClinico({ qaPreview = false }: { qaPreview?: 
               />
             )}
 
-            {(pacientes.estado === "listo" || historial.vista.estado !== "inactivo") && (
-              <EstadoHistorialClinico vista={historial.vista} />
-            )}
             {pacienteId && contextoId && (
               <OdontogramaClinico key={contextoId + ":" + pacienteId} patientId={pacienteId}
                 membershipId={contextoId} guard={confirmarSalidaOdontograma} />
+            )}
+            {(pacientes.estado === "listo" || historial.vista.estado !== "inactivo") && (
+              <EstadoHistorialClinico vista={historial.vista} />
             )}
             {avisoHistorial && (
               <div className={styles.estadoVacio} role="status" aria-live="polite">

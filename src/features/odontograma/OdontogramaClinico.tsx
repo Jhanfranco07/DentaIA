@@ -40,6 +40,7 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
   const photoRequest = useRef<AbortController | null>(null);
   const edit = useRef<HTMLFormElement | null>(null);
   const editable = data?.encounters.filter(item => item.editable) ?? [];
+  const encounterEditable = editable.some(item => item.id === encounter);
 
   const clearPhoto = useCallback(() => {
     photoRequest.current?.abort();
@@ -79,22 +80,19 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
     pending.current = null;
   }, []);
 
-  const load = useCallback(async (hide = false) => {
-    read.current?.abort();
+  const load = useCallback(async (refresh = false) => {
+    if (read.current) return;
     const controller = new AbortController();
     read.current = controller;
-    if (hide) {
-      setData(null);
-      clearPhoto();
-    }
+    if (refresh) clearPhoto();
     setLoading(true);
     setError("");
     try {
-      const result = await leerOdontograma(patientId, membershipId, controller.signal);
-      if (controller.signal.aborted) return;
+      const signal = AbortSignal.any([controller.signal, AbortSignal.timeout(30_000)]);
+      const result = await leerOdontograma(patientId, membershipId, signal);
+      signal.throwIfAborted();
       setData(result);
-      setEncounter(previous => result.encounters.some(item => item.editable && item.id === previous)
-        ? previous : result.encounters.find(item => item.editable)?.id ?? "");
+      setEncounter(previous => previous || (result.encounters.find(item => item.editable)?.id ?? ""));
     } catch (err) {
       if (controller.signal.aborted) return;
       setData(null);
@@ -102,7 +100,10 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
       if (err instanceof ErrorOdontograma && [401, 403].includes(err.status)) reset();
       setError(mensajeError(err));
     } finally {
-      if (!controller.signal.aborted) setLoading(false);
+      if (read.current === controller) {
+        read.current = null;
+        setLoading(false);
+      }
     }
   }, [patientId, membershipId, clearPhoto, reset]);
 
@@ -120,6 +121,7 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
       document.removeEventListener("visibilitychange", revalidate);
       clearInterval(timer);
       read.current?.abort();
+      read.current = null;
     };
   }, [open, load]);
 
@@ -149,7 +151,7 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
   }
 
   async function save(decision?: "accepted" | "corrected" | "dismissed", source?: Observacion) {
-    if (operation.current || !encounter || !data || (decision && !source)) return;
+    if (operation.current || read.current || !encounterEditable || !data || (decision && !source)) return;
     if (!window.confirm(decision === "dismissed" ? "¿Descartar esta observación automatizada?" : "¿Confirmas el registro profesional en el expediente seleccionado?")) return;
     const payload: GuardarOdontograma = {
       id: crypto.randomUUID(), membershipId, encounterId: encounter,
@@ -193,6 +195,7 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
   }
 
   async function showPhoto(source: Observacion) {
+    if (read.current) return;
     clearPhoto();
     const controller = new AbortController();
     photoRequest.current = controller;
@@ -220,7 +223,7 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
       }}>{open ? "Cerrar odontograma" : "Abrir odontograma"}</button>
     </header>
     {open && <>
-      {loading && <p role="status">Verificando acceso y cargando expediente…</p>}
+      {loading && !data && <p role="status">Verificando acceso y cargando expediente…</p>}
       {message && <p role="status">{message}</p>}
       {error && <div role="alert"><p>{error}</p><button type="button" onClick={() => void load(true)} disabled={saving}>Actualizar expediente</button></div>}
       {data && <>
@@ -246,9 +249,10 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
             <h4>{replace ? "Corregir registro" : "Registro profesional"}</h4>
             {editable.length === 0 ? <p>Selecciona un expediente con un encuentro propio y autorizado para registrar información.</p> : <>
               {observation && <p>Asociación manual de {observation.label}. Confirma pieza y superficie con evidencia clínica.</p>}
-              <fieldset disabled={saving || loading}>
+              <fieldset disabled={saving}>
                 <label>Encuentro
-                  <select value={encounter} disabled={!!replace} onChange={e => { change(); setEncounter(e.target.value); }}>
+                  <select value={encounterEditable ? encounter : ""} disabled={!!replace} onChange={e => { change(); setEncounter(e.target.value); }}>
+                    {!encounterEditable && <option value="">Selecciona un encuentro autorizado</option>}
                     {editable.map(item => <option key={item.id} value={item.id}>{fecha(item.date)} · {item.id.slice(0, 8)}</option>)}
                   </select>
                 </label>
@@ -280,8 +284,8 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
                 <label htmlFor="odontograma-nota">Nota clínica<textarea id="odontograma-nota" value={note} required={condition === "nota" || !!observation} maxLength={1000} rows={3} onChange={e => { change(); setNote(e.target.value); }} /></label>
                 {replace && <label>Motivo de corrección<textarea required value={reason} maxLength={300} rows={2} onChange={e => { change(); setReason(e.target.value); }} /></label>}
                 <div className={styles.actions}>
-                  <button type="submit" name="decision" value="accepted" disabled={saving || !encounter}>{saving ? "Guardando…" : observation ? "Confirmar vínculo y guardar" : "Confirmar y guardar"}</button>
-                  {observation && <button type="submit" name="decision" value="corrected">Guardar con corrección profesional</button>}
+                  <button type="submit" name="decision" value="accepted" disabled={saving || loading || !encounterEditable}>{saving ? "Guardando…" : observation ? "Confirmar vínculo y guardar" : "Confirmar y guardar"}</button>
+                  {observation && <button type="submit" name="decision" value="corrected" disabled={loading || !encounterEditable}>Guardar con corrección profesional</button>}
                   {dirty && <button type="button" onClick={() => { if (permitirDescartar()) reset(); }}>Descartar borrador</button>}
                 </div>
               </fieldset>
@@ -306,13 +310,13 @@ export default function OdontogramaClinico({ patientId, membershipId, guard }: {
               <p>{review ? { accepted: "Asociada y confirmada", corrected: "Corregida por el profesional", dismissed: "Descartada" }[review.decision] : "Revisión pendiente"}</p>
               {item.limitations.length > 0 && <details><summary>Limitaciones</summary><ul>{item.limitations.map((value, index) => <li key={index}>{value}</li>)}</ul></details>}
               <div className={styles.actions}>
-                {data.availablePhotos.includes(item.analysisId) && <button type="button" onClick={() => void showPhoto(item)}>Ver fotografía</button>}
+                {data.availablePhotos.includes(item.analysisId) && <button type="button" disabled={loading} onClick={() => void showPhoto(item)}>Ver fotografía</button>}
                 {!review && editable.length > 0 && <>
                   <button type="button" disabled={saving} onClick={() => {
                     if (dirty && !permitirDescartar()) return;
                     reset(); setObservation(item); setCondition("nota"); setDirty(true); edit.current?.focus();
                   }}>Asociar manualmente a pieza {tooth}</button>
-                  <button type="button" disabled={saving} onClick={() => void save("dismissed", item)}>Descartar observación</button>
+                  <button type="button" disabled={saving || loading || !encounterEditable} onClick={() => void save("dismissed", item)}>Descartar observación</button>
                 </>}
               </div>
             </li>;

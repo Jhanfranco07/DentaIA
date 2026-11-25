@@ -13,6 +13,9 @@ test("odontólogo usa el odontograma desde su portal con un BFF sintético", asy
   }, { user });
   const observation = { analysisId: id(7), key: "region:2", source: "smile-v17" as const, label: "Amarillo visible · región 2", date, model: "Smile V17 QA", limitations: [] };
   let consultasDirectorio = 0;
+  let pausaLecturas: Promise<void> | undefined;
+  let estadoOdontograma = 200;
+  let estadoHistorial = 200;
   const records: Registro[] = [];
   const reviews: ExpedienteOdontograma["reviews"] = [];
   const workspace = (kind: string, data: object) => ({ ok: true, apiVersion: "clinical.workspace.v1", kind, nextAfterId: null, requestId: id(20), environment: "qa_local", data });
@@ -27,14 +30,24 @@ test("odontólogo usa el odontograma desde su portal con un BFF sintético", asy
     }));
     if (pathname === "/api/professional/requests") {
       consultasDirectorio++;
-      return route.fulfill({ status: 403, json: { ok: false, code: "ACCESS_DENIED" } });
+      return route.fulfill({ status: 403, json: { ok: false, code: "ACCESS_DENIED", requestId: id(20) } });
     }
     if (pathname === "/api/professional/patients") return json(workspace("patients", { membershipId: id(4), items: [{ patientId: id(1) }, { patientId: id(2) }] }));
-    if (pathname.endsWith("/history")) return json({
-      ok: true, apiVersion: "clinical.v1", origen: "supabase", environment: "qa_local", estado: "sin_datos",
-      caso: { patientId: pathname.split("/")[4], professionalContext: id(3), clinicContext: id(5) },
-      entries: [], nextCursor: null, requestId: id(20),
-    });
+    if (pathname.endsWith("/history")) {
+      await pausaLecturas;
+      if (estadoHistorial !== 200) return route.fulfill({ status: estadoHistorial, json: { ok: false, code: "ACCESS_DENIED", requestId: id(20) } });
+      return json({
+        ok: true, apiVersion: "clinical.v1", origen: "supabase", environment: "qa_local", estado: "listo",
+        caso: { patientId: pathname.split("/")[4], professionalContext: id(3), clinicContext: id(5) },
+        entries: [{
+          encounterId: id(6), attendedAt: date, recordedAt: date, status: "recorded",
+          replacesId: null, correctionReason: null,
+          origin: { clinicId: id(5), clinicName: "Clínica sintética", professionalId: id(3), professionalName: null },
+          background: { state: "not_recorded", value: null },
+          clinicalEntries: [], diagnoses: [], treatments: [], exams: [],
+        }], nextCursor: null, requestId: id(20),
+      });
+    }
     if (pathname.endsWith("/odontogram")) {
       const patientId = pathname.split("/")[4];
       if (request.method() === "POST") {
@@ -48,6 +61,10 @@ test("odontólogo usa el odontograma desde su portal con un BFF sintético", asy
         if (input.review) reviews.push({ ...input.review, entryId: input.record ? entryId : null, recordedAt: date });
         return json({ ok: true, id: entryId });
       }
+      await pausaLecturas;
+      if (estadoOdontograma !== 200) {
+        return route.fulfill({ status: estadoOdontograma, json: { ok: false } });
+      }
       const first = patientId === id(1);
       const data: ExpedienteOdontograma = { patientId, patientName: first ? "Paciente sintético uno" : "Paciente sintético dos",
         encounters: first ? [{ id: id(6), date, editable: true }] : [], records: first ? records : [], observations: first ? [observation] : [],
@@ -58,6 +75,7 @@ test("odontólogo usa el odontograma desde su portal con un BFF sintético", asy
   });
   page.on("dialog", dialog => void dialog.accept());
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.clock.install();
   await page.goto("/profesional");
   const select = page.getByLabel("Paciente autorizado", { exact: true });
   const abrir = async () => {
@@ -71,13 +89,49 @@ test("odontólogo usa el odontograma desde su portal con un BFF sintético", asy
   await page.keyboard.press("Enter");
   await expect(tooth).toHaveAttribute("aria-pressed", "true");
   await page.getByLabel("Superficie").selectOption("oclusal");
-  await page.getByRole("textbox", { name: "Nota clínica", exact: true }).fill("Nota sintética original");
+  const nota = page.getByRole("textbox", { name: "Nota clínica", exact: true });
+  const guardar = page.getByRole("button", { name: "Confirmar y guardar" });
+  await nota.fill("Nota sintética");
+  await expect(page.getByRole("heading", { name: "Atención clínica autorizada" })).toBeVisible();
+  await nota.scrollIntoViewIfNeeded();
+  await expect(nota).toBeInViewport();
+
+  const posicion = () => nota.evaluate(element => ({
+    scroll: window.scrollY, top: element.getBoundingClientRect().top,
+  }));
+  for (const origen of ["foco", "intervalo"]) {
+    await test.step(`Conserva el editor durante la revalidación por ${origen}`, async () => {
+      const antes = await posicion();
+      let liberar!: () => void;
+      pausaLecturas = new Promise<void>(resolve => { liberar = resolve; });
+      const lecturas = Promise.all(["/history", "/odontogram"].map(ruta =>
+        page.waitForRequest(request => new URL(request.url()).pathname.endsWith(ruta)),
+      ));
+      try {
+        if (origen === "foco") await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+        else await page.clock.fastForward(60_000);
+        await lecturas;
+        await expect(nota).toBeFocused({ timeout: 1000 });
+        await expect(guardar).toBeDisabled();
+        await expect.poll(posicion).toEqual(antes);
+        await page.keyboard.type(origen === "foco" ? " original" : " verificada");
+      } finally {
+        pausaLecturas = undefined;
+        liberar();
+      }
+      await expect(guardar).toBeEnabled();
+      await expect(page.getByRole("heading", { name: "Atención clínica autorizada" })).toBeVisible();
+      await expect(nota).toBeFocused();
+      await expect.poll(posicion).toEqual(antes);
+    });
+  }
+  await expect(nota).toHaveValue("Nota sintética original verificada");
   await page.getByRole("button", { name: "Confirmar y guardar" }).click();
   await expect(page.getByText("Registro guardado.")).toBeVisible();
   await page.reload();
   await abrir();
   await tooth.click();
-  await expect(page.getByText("Nota sintética original")).toBeVisible();
+  await expect(page.getByText("Nota sintética original verificada")).toBeVisible();
   await page.getByRole("button", { name: "Corregir", exact: true }).click();
   await page.getByLabel("Motivo de corrección").fill("Actualización de la evaluación");
   await page.getByRole("textbox", { name: "Nota clínica", exact: true }).fill("Nota sintética corregida");
@@ -91,6 +145,36 @@ test("odontólogo usa el odontograma desde su portal con un BFF sintético", asy
   await page.getByRole("button", { name: "Abrir odontograma" }).click();
   await expect(page.getByText("Paciente sintético dos")).toBeVisible();
   await expect(page.getByText("Nota sintética corregida")).toHaveCount(0);
+  await test.step("Retira datos ante errores y descarta el borrador al perder autorización", async () => {
+    await abrir();
+    await nota.fill("Borrador clínico por revocar");
+    const actualizar = page.getByRole("button", { name: "Actualizar expediente" });
+    estadoOdontograma = 503;
+    await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+    await expect(actualizar).toBeVisible();
+    await expect(nota).toHaveCount(0);
+    await expect(page.getByText("Paciente sintético uno")).toHaveCount(0);
+    estadoOdontograma = 200;
+    await actualizar.click();
+    await expect(nota).toHaveValue("Borrador clínico por revocar");
+
+    estadoOdontograma = 403;
+    await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+    await expect(page.getByText("El acceso clínico ya no está autorizado.")).toBeVisible();
+    await expect(nota).toHaveCount(0);
+    await expect(page.getByText("Paciente sintético uno")).toHaveCount(0);
+    estadoOdontograma = 200;
+    await actualizar.click();
+    await expect(nota).toHaveValue("");
+
+    await expect(page.getByRole("heading", { name: "Atención clínica autorizada" })).toBeVisible();
+    await nota.fill("Borrador con autorización del historial");
+    estadoHistorial = 403;
+    await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+    await expect(select).toHaveValue("");
+    await expect(nota).toHaveCount(0);
+    await expect(page.getByText("Paciente sintético uno")).toHaveCount(0);
+  });
   expect(consultasDirectorio).toBe(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
