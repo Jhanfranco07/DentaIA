@@ -401,8 +401,12 @@ jobs:
         scanners: vuln
         severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
         list-all-pkgs: 'true'
-    - name: Exigir cobertura y bloquear CVE altos o críticos
-      run: python scripts/ci/rfdetr-image-gate.py reports/rfdetr-image.json
+    - name: Gate de revisión PR · excepción acotada pendiente de aprobación
+      if: ${{ github.event_name == 'pull_request' }}
+      run: python scripts/ci/rfdetr-image-gate.py --mode review reports/rfdetr-image.json
+    - name: Gate de despliegue · imagen vulnerable bloqueada
+      if: ${{ github.event_name != 'pull_request' }}
+      run: python scripts/ci/rfdetr-image-gate.py --mode deploy reports/rfdetr-image.json
 
   sec-hallazgos:
     name: Consolidación de hallazgos
