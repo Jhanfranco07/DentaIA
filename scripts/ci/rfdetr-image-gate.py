@@ -11,7 +11,7 @@ from pathlib import Path
 REVIEW_EXCEPTION_CVES = frozenset({
     "CVE-2026-107493", "CVE-2026-84786", "CVE-2026-107496",
 })
-OPENSSL_PACKAGES = frozenset({"openssl", "libssl3t64"})
+OPENSSL_PACKAGES = frozenset({"openssl", "libssl3t64", "openssl-provider-legacy"})
 VULNERABLE_DEBIAN_VERSION = "3.5.9-1~deb13u1"
 RISK_RECORD = "docs/security/OPENSSL_CVE_2026_DI211_IMAGE.md"
 

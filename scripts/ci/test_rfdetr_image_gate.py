@@ -37,6 +37,12 @@ class ImageGateTests(unittest.TestCase):
         deploy_blockers, _, _ = evaluate(image, "deploy")
         self.assertEqual(len(deploy_blockers), 4)
 
+    def test_same_three_cves_in_legacy_openssl_package_are_review_only(self):
+        image = report([finding(cve, package="openssl-provider-legacy") for cve in CVES])
+        image["Results"][0]["Packages"].append({"Name": "openssl-provider-legacy", "Version": VERSION})
+        self.assertEqual(evaluate(image, "review")[0], [])
+        self.assertEqual(len(evaluate(image, "deploy")[0]), 4)
+
     def test_vulnerable_base_blocks_deploy_even_if_trivy_misses_advisories(self):
         image = report(openssl_version=VERSION)
         self.assertEqual(len(evaluate(image, "review")[1]), 1)
