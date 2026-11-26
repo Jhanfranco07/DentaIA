@@ -11,6 +11,9 @@ RUN python -I -m pip install --require-hashes --no-deps --target /opt/di211/site
       -r requirements.lock -r requirements-api.lock \
     && python -I -m pip uninstall --yes setuptools \
     && python -m pip check
+RUN apt-get update -qq \
+    && apt-get install --yes --no-install-recommends libzstd1=1.5.7+dfsg-1+deb13u1 \
+    && rm -rf /var/lib/apt/lists/*
 COPY app ./app
 COPY config ./config
 USER 65532:65532
