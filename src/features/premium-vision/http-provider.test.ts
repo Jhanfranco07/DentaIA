@@ -52,4 +52,11 @@ describe("independent RF-DETR HTTP provider", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(new Uint8Array(132001)));
     await expect(createRfdetrHttpProvider(runtime).evaluate(input)).rejects.toMatchObject({ code: "INVALID_RESPONSE" });
   });
+
+  it("accepts the exact 0.35 operational threshold from the Colab evaluator", async () => {
+    const candidate = structuredClone(valid);
+    candidate.evaluation.detections[0].confidence = 0.35;
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify(candidate)));
+    expect((await createRfdetrHttpProvider(runtime).evaluate(input)).evaluation.detections[0].confidence).toBe(0.35);
+  });
 });

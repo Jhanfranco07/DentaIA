@@ -62,7 +62,7 @@ export function createRfdetrHttpProvider(runtime: Extract<RfdetrRuntime, { enabl
           category.inference_class_index < 0 || category.inference_class_index >= CLASSES.length
           || category.coco_category_id !== category.inference_class_index + 1
           || category.original_label !== CLASSES[category.inference_class_index]
-          || confidence <= 0.35)) {
+          || confidence < 0.35)) {
         throw new PremiumProviderError("INVALID_RESPONSE");
       }
       return candidate;

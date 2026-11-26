@@ -25,8 +25,10 @@ def map_rows(rows: list[tuple[int, float, tuple[float, float, float, float]]], w
             continue
         if not isinstance(index, int) or index < 0 or index >= len(LABELS):
             raise ValueError("class_index")
-        if not math.isfinite(score) or score <= 0.35 or score > 1:
+        if not math.isfinite(score) or score < 0 or score > 1:
             raise ValueError("confidence")
+        if score < 0.35:
+            continue
         x1, y1, x2, y2 = box
         if not all(math.isfinite(v) for v in box) or not (0 <= x1 < x2 <= width and 0 <= y1 < y2 <= height):
             raise ValueError("bounding_box")

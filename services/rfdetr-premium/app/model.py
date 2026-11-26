@@ -117,7 +117,8 @@ def predict(image: Image.Image) -> dict:
             raise ValueError("output_shape")
         if not torch.isfinite(raw["pred_logits"]).all() or not torch.isfinite(raw["pred_boxes"]).all():
             raise ValueError("nonfinite_output")
-        rows = PostProcess(num_select=300)(raw, torch.tensor([[height, width]]), score_threshold=0.35)[0]
+        # The original Colab evaluator extracts at 0.0, then applies >= 0.35.
+        rows = PostProcess(num_select=300)(raw, torch.tensor([[height, width]]), score_threshold=0.0)[0]
     if not (len(rows["scores"]) == len(rows["labels"]) == len(rows["boxes"])):
         raise ValueError("postprocess_shape")
     return map_rows([(int(label), float(score), tuple(float(v) for v in box))

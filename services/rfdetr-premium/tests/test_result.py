@@ -14,8 +14,8 @@ class ResultMappingTests(unittest.TestCase):
 
     def test_exact_threshold_and_zero_detections(self):
         self.assertEqual(map_rows([], 10, 10)["evaluation"]["status"], "evaluated_no_detections")
-        with self.assertRaisesRegex(ValueError, "confidence"):
-            map_rows([(0, 0.35, (1, 1, 2, 2))], 10, 10)
+        result = map_rows([(0, 0.349999, (1, 1, 2, 2)), (0, 0.35, (1, 1, 2, 2))], 10, 10)
+        self.assertEqual([item["confidence"] for item in result["evaluation"]["detections"]], [0.35])
 
     def test_rejects_invalid_boxes_and_limits_to_contract_max(self):
         with self.assertRaisesRegex(ValueError, "bounding_box"):
