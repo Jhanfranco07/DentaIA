@@ -1,6 +1,9 @@
 """Regressions for distinct RF-DETR PR review and deployment controls."""
 import runpy
 import unittest
+from datetime import datetime, timezone
+from hashlib import sha256
+import json
 from pathlib import Path
 
 
@@ -23,7 +26,66 @@ def finding(cve, *, severity="HIGH", package="libssl3t64", version=VERSION, fix=
             "InstalledVersion": version, "FixedVersion": fix}
 
 
+QA_NOW = datetime(2026, 11, 27, tzinfo=timezone.utc)
+
+
+def qa_case(vulnerabilities=None):
+    vulnerabilities = vulnerabilities or [finding("CVE-2026-76642", package="bsdutils", version="1:2.41.5")]
+    image = report(vulnerabilities)
+    image["Metadata"] = {"ImageID": "sha256:" + "a" * 64}
+    exceptions = [{"cve": v["VulnerabilityID"], "source_class": "os-pkgs", "package": v["PkgName"],
+                   "version": v["InstalledVersion"], "severity": v["Severity"],
+                   "justification": "No fix reported; isolated synthetic QA only",
+                   "applicability": "Package present; exploitability unverified",
+                   "exposure": "QA service not deployed"} for v in vulnerabilities]
+    policy = {"scope": "railway-qa", "image_name": image["ArtifactName"],
+              "image_id": image["Metadata"]["ImageID"], "exceptions": exceptions}
+    approval = {"approved_by": "Jhanfranco07", "image_id": policy["image_id"],
+                "exceptions_sha256": sha256(json.dumps(exceptions, sort_keys=True,
+                     separators=(",", ":")).encode()).hexdigest(),
+                "approved_at": "2026-11-26T00:00:00Z", "expires_at": "2026-12-10T00:00:00Z"}
+    return image, policy, approval
+
+
 class ImageGateTests(unittest.TestCase):
+    def test_qa_exact_approval_does_not_change_review_or_deploy(self):
+        image, policy, approval = qa_case()
+        self.assertEqual(evaluate(image, "qa", policy, approval, QA_NOW)[0], [])
+        self.assertEqual(len(evaluate(image, "review")[0]), 1)
+        self.assertEqual(len(evaluate(image, "deploy")[0]), 1)
+
+    def test_qa_requires_specific_approval_and_image(self):
+        image, policy, approval = qa_case()
+        for changed in (None, {**approval, "image_id": "sha256:" + "b" * 64},
+                        {**approval, "approved_by": "someone-else"},
+                        {**approval, "exceptions_sha256": "0" * 64}):
+            with self.assertRaises(ValueError):
+                evaluate(image, "qa", policy, changed, QA_NOW)
+        image["Metadata"]["ImageID"] = "sha256:" + "c" * 64
+        with self.assertRaisesRegex(ValueError, "image ID"):
+            evaluate(image, "qa", policy, approval, QA_NOW)
+
+    def test_qa_expires_and_cannot_exceed_fourteen_days(self):
+        image, policy, approval = qa_case()
+        for changed, when in ((approval, datetime(2026, 12, 10, tzinfo=timezone.utc)),
+                              ({**approval, "expires_at": "2026-12-10T00:00:01Z"}, QA_NOW),
+                              ({**approval, "approved_at": "2026-11-28T00:00:00Z"}, QA_NOW)):
+            with self.assertRaisesRegex(ValueError, "14 days"):
+                evaluate(image, "qa", policy, changed, when)
+
+    def test_qa_blocks_new_critical_fixed_and_changed_findings(self):
+        image, policy, approval = qa_case()
+        for new_finding in (finding("CVE-NEW", package="bsdutils", version="1:2.41.5"),
+                            finding("CVE-NEW", severity="CRITICAL"),
+                            finding("CVE-NEW", severity="LOW", fix="2")):
+            image["Results"][0]["Vulnerabilities"].append(new_finding)
+            self.assertTrue(evaluate(image, "qa", policy, approval, QA_NOW)[0])
+            image["Results"][0]["Vulnerabilities"].pop()
+        image["Results"][0]["Vulnerabilities"][0]["FixedVersion"] = "2"
+        self.assertTrue(evaluate(image, "qa", policy, approval, QA_NOW)[0])
+        image["Results"][0]["Vulnerabilities"].clear()
+        self.assertTrue(evaluate(image, "qa", policy, approval, QA_NOW)[0])
+
     def test_clean_complete_image_passes_both_controls(self):
         for mode in ("review", "deploy"):
             self.assertEqual(evaluate(report(), mode), ([], [], 0))
@@ -93,7 +155,7 @@ class ImageGateTests(unittest.TestCase):
         image["ArtifactName"] = "another-image:local"
         with self.assertRaisesRegex(ValueError, "different target"):
             evaluate(image, "review")
-        with self.assertRaisesRegex(ValueError, "Explicit review or deploy"):
+        with self.assertRaisesRegex(ValueError, "Explicit review, qa or deploy"):
             evaluate(report(), "anything")
 
 

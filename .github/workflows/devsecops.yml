@@ -10,6 +10,7 @@ name: DevSecOps · Pipeline integral
     branches:
     - main
     - develop
+    - feat/di-211-rfdetr-premium
   workflow_dispatch: {}
 permissions:
   contents: read
@@ -402,8 +403,13 @@ jobs:
         severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
         list-all-pkgs: 'true'
     - name: Gate de revisión PR · excepción acotada pendiente de aprobación
-      if: ${{ github.event_name == 'pull_request' }}
+      if: ${{ github.event_name == 'pull_request' && (github.base_ref != 'feat/di-211-rfdetr-premium' || github.head_ref != 'feat/di-211-railway-qa' || github.event.pull_request.head.repo.full_name != 'Jhanfranco07/DentaIA') }}
       run: python scripts/ci/rfdetr-image-gate.py --mode review reports/rfdetr-image.json
+    - name: Gate QA Railway · aceptación temporal de imagen exacta
+      if: ${{ github.event_name == 'pull_request' && github.base_ref == 'feat/di-211-rfdetr-premium' && github.head_ref == 'feat/di-211-railway-qa' && github.event.pull_request.head.repo.full_name == 'Jhanfranco07/DentaIA' }}
+      env:
+        DI211_QA_APPROVAL_JSON: ${{ vars.DI211_QA_APPROVAL_JSON }}
+      run: python scripts/ci/rfdetr-image-gate.py --mode qa --policy docs/security/DI211_RAILWAY_QA_EXCEPTIONS.json reports/rfdetr-image.json
     - name: Gate de despliegue · imagen vulnerable bloqueada
       if: ${{ github.event_name != 'pull_request' }}
       run: python scripts/ci/rfdetr-image-gate.py --mode deploy reports/rfdetr-image.json
