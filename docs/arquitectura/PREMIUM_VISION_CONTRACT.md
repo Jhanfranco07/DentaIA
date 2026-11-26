@@ -2,7 +2,7 @@
 
 ## Alcance
 
-Este incremento prepara el límite técnico para un futuro proveedor RF-DETR Premium. No habilita inferencia, no crea rutas, no guarda resultados y no cambia la interfaz. Smile V17 conserva su contrato y comportamiento actuales.
+El contrato v1 se reutiliza en la integración local de RF-DETR Small Premium v1.0.0. El servicio FastAPI y la opción temporal en `/analisis` permanecen deshabilitados por defecto; no se han desplegado ni activado en producción. Esta integración no guarda resultados Premium ni habilita la ingesta HMAC de DI-214. Smile V17 conserva su contrato y comportamiento actuales.
 
 ## Componentes reutilizados
 
@@ -13,9 +13,9 @@ Este incremento prepara el límite técnico para un futuro proveedor RF-DETR Pre
 | Formato, tamaño y configuración de cámara | `src/features/analisis/fotografia.ts` | MediaPipe podrá observar el `video` y aportar instrucciones de encuadre antes de la captura. No sustituirá `getUserMedia`, el selector de archivo ni esta validación. |
 | Galería y consentimiento de almacenamiento | `src/app/(paciente)/fotografias/page.tsx` en `/fotografias` | El consentimiento de almacenamiento seguirá separado del procesamiento temporal y del acceso profesional. |
 | Autorización de identidad para visión | `src/features/autorizacion/vision-demo.ts` y `vision-demo-server.ts` | `premium-vision/server.ts` reutiliza esta verificación antes de consultar el plan. |
-| Plan efectivo | `src/features/planes/premium-server.ts` y `catalogo.ts` | La capacidad `premium_visual_evaluation` exige una suscripción activa y vigente obtenida por el servidor. Permanece deshabilitada. |
-| Smile V17 | `POST /api/desarrollo/dentaia-smile` y `src/features/analisis/smile-contract.ts` | Smile continúa como motor compartido. El proveedor Premium se orquestará como una capacidad adicional sin modificar su contrato. |
-| Historial y acceso profesional | `src/features/analisis/smile-history-server.ts` y las tablas ya versionadas | Son referencias para un incremento posterior. Este contrato no concede almacenamiento ni acceso profesional. |
+| Plan efectivo | `src/features/planes/premium-server.ts` y `catalogo.ts` | La capacidad `premium_visual_evaluation` exige una suscripción activa y vigente obtenida por el servidor; `runtime.ts` exige flags explícitos para invocar el servicio. |
+| Smile V17 | `POST /api/desarrollo/dentaia-smile` y `src/features/analisis/smile-contract.ts` | Smile continúa como motor compartido. La respuesta Premium opcional es independiente y un fallo del proveedor no se convierte en cero detecciones. |
+| Historial y acceso profesional | `src/features/premium-vision/history-server.ts` y los recursos de DI-214 | El resultado temporal aún no se conecta a la ingesta consentida ni a las concesiones profesionales. |
 
 ## Límites del módulo
 
@@ -27,29 +27,26 @@ Los estados diferencian una evaluación con detecciones, una evaluación sin det
 
 El contrato también declara calidad, disponibilidad y limitaciones. Todas las respuestas requieren una versión de modelo válida, excepto `provider_unavailable`, que es el único estado que admite `model.version: null`.
 
-`provider.ts` define la interfaz que deberá implementar el adaptador RF-DETR con pesos PyTorch. Reutiliza el tipo MIME permitido por `fotografia.ts`, recibe bytes ya autorizados y valida la respuesta contra el descriptor del proveedor. No conoce sesiones, planes, consentimientos, persistencia ni Smile.
+`provider.ts` define la interfaz del adaptador RF-DETR con pesos PyTorch. `http-provider.ts` la implementa frente al servicio independiente. Reutiliza el tipo MIME permitido por `fotografia.ts`, recibe bytes ya autorizados y valida la respuesta contra el descriptor del proveedor. No conoce sesiones, planes, consentimientos, persistencia ni Smile.
 
-`authorization.ts` compone decisiones verificadas. `server.ts` enlaza la identidad existente con `readEffectivePlan` y exige un verificador específico de consentimiento. La capacidad está registrada con `implemented: false`, por lo que cualquier integración futura falla cerrada hasta una activación explícita.
+`authorization.ts` compone decisiones verificadas. `server.ts` enlaza la identidad existente con `readEffectivePlan` y exige un verificador específico de consentimiento. La capacidad está registrada para Premium, pero `runtime.ts` la mantiene deshabilitada por defecto y exige un segundo flag en producción.
 
 ## Consentimientos
 
-El consentimiento de procesamiento Premium usa el alcance `temporary_premium_evaluation`. Una futura ruta deberá validar una versión explícita del consentimiento antes de leer o reenviar la imagen. Este consentimiento no autoriza almacenamiento. Guardar el original, el overlay o el resultado requiere verificar además un consentimiento de almacenamiento vigente. Compartir con un profesional requiere una concesión independiente y revocable.
+El consentimiento de procesamiento Premium usa el alcance `temporary_premium_evaluation`. La ruta valida la versión `premium-vision-processing-v1` antes de leer o reenviar la imagen. Este consentimiento no autoriza almacenamiento. Guardar el original, el overlay o el resultado requiere verificar además un consentimiento de almacenamiento vigente. Compartir con un profesional requiere una concesión independiente y revocable.
 
-## Secuencia futura
+## Secuencia implementada localmente
 
 1. La pantalla existente obtiene o recibe una fotografía y conserva la vista previa.
-2. El servidor verifica identidad, plan efectivo, capacidad activada y consentimiento. Antes de leer el cuerpo, procesar bytes de imagen o invocar cualquier inferencia, la futura ruta debe consumir obligatoriamente el limitador existente mediante `consumeVisionAnalysisRequestLimit(userId)` y detenerse si este rechaza la solicitud.
+2. El servidor verifica identidad, plan efectivo, capacidad activada y consentimiento. Antes de leer el cuerpo, procesar bytes de imagen o invocar cualquier inferencia, la ruta consume el limitador existente mediante `consumeVisionAnalysisRequestLimit(userId)` y se detiene si este rechaza la solicitud.
 3. Smile V17 puede producir su resultado compartido actual.
 4. Para Premium, el orquestador invoca además un `PremiumVisionProvider` y valida la respuesta con `assertPremiumVisionResult`.
-5. Un incremento posterior aplica almacenamiento consentido, historial y acceso profesional.
+5. Un incremento posterior conecta el almacenamiento consentido, el historial y el acceso profesional de DI-214.
 
-MediaPipe se incorporará antes del paso 2 como ayuda local de captura. RF-DETR se incorporará en el paso 4. Ninguno requiere duplicar la cámara, la carga, la preparación o la vista previa.
+MediaPipe sigue como ayuda local de captura antes del paso 2. RF-DETR se invoca opcionalmente en el paso 4. Ninguno duplica la cámara, la carga, la preparación o la vista previa.
 
 ## Pendientes para activar RF-DETR
 
-- Verificar pesos finales, hash, versión, licencia y términos del dataset.
-- Verificar el manifiesto COCO para mapear IDs de categoría a índices internos sin inferirlos.
-- Registrar métricas reales por clase y evidencia de evaluación. El smoke test o el entrenamiento por sí solos no aportan validación clínica.
-- Implementar un adaptador de servidor y sus límites operativos sin ONNX.
-- Definir persistencia versionada y probar RLS, revocación y separación entre procesamiento, almacenamiento y acceso profesional en un entorno autorizado.
-- Coordinar el punto de orquestación con el responsable de Smile para evitar cambios simultáneos en su ruta y contrato.
+- Resolver los tres hallazgos OpenSSL altos de la imagen antes de aprobar su publicación o documentar una decisión de riesgo específica para ese alcance. La aceptación existente cubre solo el smoke local offline.
+- Recuperar el evaluador original de Colab y una referencia verificable para certificar paridad numérica. El smoke sintético no aporta validación clínica.
+- Conectar la salida temporal con la ingesta consentida de DI-214, la clave HMAC y la autorización profesional solo después de la activación aprobada; probar RLS y revocación en un entorno autorizado.

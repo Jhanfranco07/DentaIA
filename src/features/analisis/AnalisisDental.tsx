@@ -7,6 +7,7 @@ import { useFotografiaPreparacion } from "./FotografiaPreparacionContexto";
 import { cambioCamaraConfirmado, mensajeErrorCamara, mensajeValidacionFotografia, restriccionesCamara, validarFotografia, type OrientacionCamara } from "./fotografia";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { countReviewRegions, isSmileAnalysisResponse, isSmileExplanation, type SmileExplanation, type SmileResult, type OralBasicAnalysis } from "./smile-contract";
+import { isPremiumVisionResult, type PremiumVisionResult } from "@/features/premium-vision/contract";
 import styles from "./analisis-dental.module.css";
 import ResultadosVisuales from "./ResultadosVisuales";
 import CamaraDental from "./guia/CamaraDental";
@@ -74,6 +75,10 @@ export default function AnalisisDental() {
   const [archivo, setArchivo] = useState<File | null>(fotografia);
   const [vista, setVista] = useState("");
   const [consentimiento, setConsentimiento] = useState(false);
+  const [premiumDisponible, setPremiumDisponible] = useState(false);
+  const [premiumSolicitado, setPremiumSolicitado] = useState(false);
+  const [premium, setPremium] = useState<PremiumVisionResult | null>(null);
+  const [premiumError, setPremiumError] = useState(false);
   const [error, setError] = useState("");
   const [resultado, setResultado] = useState<SmileResult | null>(null);
   const [overlay, setOverlay] = useState("");
@@ -131,6 +136,22 @@ export default function AnalisisDental() {
   useEffect(() => () => detenerCamara(), [detenerCamara]);
   useEffect(() => () => explicacionAbortada.current?.abort(), []);
 
+  useEffect(() => {
+    const controller = new AbortController();
+    void getSupabaseBrowserClient().auth.getSession().then(async ({ data, error }) => {
+      if (error || !data.session || controller.signal.aborted) return;
+      const response = await fetch("/api/premium/status", {
+        headers: { Authorization: `Bearer ${data.session.access_token}` },
+        cache: "no-store", signal: controller.signal,
+      });
+      if (!response.ok || controller.signal.aborted) return;
+      const status: unknown = await response.json();
+      if (!controller.signal.aborted && status && typeof status === "object" &&
+        "premium_vision_available" in status && status.premium_vision_available === true) setPremiumDisponible(true);
+    }).catch(() => {});
+    return () => controller.abort();
+  }, []);
+
   const elegirArchivo = useCallback(async (seleccion?: File, origenCamara?: number) => {
     if (!seleccion) return;
     setError("");
@@ -144,7 +165,7 @@ export default function AnalisisDental() {
       establecerFotografia(seleccion);
       setArchivo(seleccion);
       setConsentimiento(false);
-      setResultado(null); setOverlay(""); setOral(null); setExplicacion(null);
+      setResultado(null); setOverlay(""); setOral(null); setExplicacion(null); setPremium(null); setPremiumError(false);
     } catch {
       if (origenCamara === undefined || origenCamara === solicitudCamara.current) {
         setError("El archivo no se pudo abrir como una imagen válida.");
@@ -255,7 +276,7 @@ export default function AnalisisDental() {
 
   function nuevaFoto() {
     detenerCamara(); limpiarFotografia(); setArchivo(null); setConsentimiento(false); setError("");
-    explicacionAbortada.current?.abort(); explicacionSolicitada.current = null; setResultado(null); setOverlay(""); setOral(null); setExplicacion(null); setFase("carga");
+    explicacionAbortada.current?.abort(); explicacionSolicitada.current = null; setResultado(null); setOverlay(""); setOral(null); setExplicacion(null); setPremium(null); setPremiumError(false); setPremiumSolicitado(false); setFase("carga");
   }
 
   async function analizar() {
@@ -267,10 +288,26 @@ export default function AnalisisDental() {
       body.set("file", archivo);
       const { data, error: sessionError } = await getSupabaseBrowserClient().auth.getSession();
       if (sessionError || !data.session?.access_token) throw new Error("Inicia sesión con una cuenta autorizada para usar esta demostración.");
-      const response = await fetch("/api/desarrollo/dentaia-smile", { method: "POST", headers: { Authorization: `Bearer ${data.session.access_token}` }, body, cache: "no-store" });
-      const payload: unknown = await response.json().catch(() => null);
+      const requestedPremium = premiumDisponible && premiumSolicitado;
+      const headers = {
+        Authorization: `Bearer ${data.session.access_token}`,
+        ...(requestedPremium ? { "X-Dentaia-Premium-Processing-Consent": "premium-vision-processing-v1" } : {}),
+      };
+      let response = await fetch("/api/desarrollo/dentaia-smile", { method: "POST", headers, body, cache: "no-store" });
+      let payload: unknown = await response.json().catch(() => null);
+      // Premium preflight rejects before quota consumption and before image parsing.
+      // Retry Smile alone if the plan or the optional capability changed after page load.
+      if (requestedPremium && !response.ok && payload && typeof payload === "object" && "code" in payload
+        && ["PREMIUM_REQUIRED", "FEATURE_NOT_ENABLED", "PROCESSING_CONSENT_REQUIRED", "AUTH_UNAVAILABLE", "CONSENT_UNAVAILABLE"].includes(String(payload.code))) {
+        response = await fetch("/api/desarrollo/dentaia-smile", { method: "POST",
+          headers: { Authorization: `Bearer ${data.session.access_token}` }, body, cache: "no-store" });
+        payload = await response.json().catch(() => null);
+      }
       if (!response.ok) throw new Error(payload && typeof payload === "object" && "detail" in payload ? String(payload.detail) : "El servicio de análisis no está disponible.");
       if (!isSmileAnalysisResponse(payload)) throw new Error("El servicio devolvió un resultado Smile inesperado.");
+      const premiumValue = payload && typeof payload === "object" && "premium_vision" in payload ? payload.premium_vision : null;
+      setPremium(isPremiumVisionResult(premiumValue) ? premiumValue : null);
+      setPremiumError(Boolean(requestedPremium && !isPremiumVisionResult(premiumValue)));
       setResultado(payload.result); setOverlay(payload.overlay_url ?? ""); setOral(payload.oral_analysis ?? null); setFase("resultado"); void explicar(payload.result, payload.oral_analysis);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "No se pudo analizar la fotografía."); }
   }
@@ -392,6 +429,7 @@ export default function AnalisisDental() {
         </div>
       </div>
       <label className={styles.consentimiento}><input type="checkbox" checked={consentimiento} onChange={event => setConsentimiento(event.target.checked)} /><span><strong>Consentimiento de procesamiento</strong> Autorizo el envío temporal de esta fotografía al servicio de análisis. El resultado es temporal y todavía no se guarda en Mis resultados.</span></label>
+      {premiumDisponible && <label className={styles.consentimiento}><input type="checkbox" checked={premiumSolicitado} onChange={event => setPremiumSolicitado(event.target.checked)} /><span><strong>Evaluación fotográfica Premium</strong> Solicito además el procesamiento temporal con RF-DETR Small. Los hallazgos son preliminares, no son diagnósticos y no se guardan automáticamente.</span></label>}
       <div className={styles.acciones}><button type="button" className={styles.secundario} onClick={() => { detenerCamara(); setFase("preparacion"); }}>← Volver</button><button type="button" className={styles.primario} disabled={!archivo || !consentimiento} onClick={() => void analizar()}>Analizar fotografía <Icono nombre="flecha" size={20} /></button></div>
     </div>}
 
@@ -407,7 +445,7 @@ export default function AnalisisDental() {
     </div>}
 
     {fase === "resultado" && resultado && <div className={styles.vistaFlujo} aria-live="polite">
-      <ResultadosVisuales result={resultado} oral={oral} image={vista} smileOverlay={overlay} explanation={explicacion} explaining={explicando} onNewPhoto={nuevaFoto} />
+      <ResultadosVisuales result={resultado} oral={oral} premium={premium} premiumError={premiumError} image={vista} smileOverlay={overlay} explanation={explicacion} explaining={explicando} onNewPhoto={nuevaFoto} />
       <p className={styles.soloLectores}>Esta fotografía ofrece una observación educativa que no constituye diagnóstico y no confirma una condición dental.</p>
     </div>}
 

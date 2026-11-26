@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import type { OralBasicAnalysis, SmileExplanation, SmileResult } from "./smile-contract";
+import { PREMIUM_VISION_CATEGORY_LABELS, type PremiumVisionResult } from "@/features/premium-vision/contract";
 import styles from "./resultados-visuales.module.css";
 
 type Props = {
   result: SmileResult;
   oral: OralBasicAnalysis | null;
+  premium: PremiumVisionResult | null;
+  premiumError: boolean;
   image: string;
   smileOverlay: string;
   explanation: SmileExplanation | null;
@@ -27,7 +30,7 @@ function plural(total: number, singular: string, pluralValue: string) {
   return total === 1 ? singular : pluralValue;
 }
 
-export default function ResultadosVisuales({ result, oral, image, smileOverlay, explanation, explaining, onNewPhoto }: Props) {
+export default function ResultadosVisuales({ result, oral, premium, premiumError, image, smileOverlay, explanation, explaining, onNewPhoto }: Props) {
   const observed = result.regions.filter(r => r.evaluable && (r.partial || r.level !== "Sin amarillo destacado")).length;
   const missing = oral?.detections.filter(d => d.class === "toothLoss").length ?? 0;
   const crowding = oral?.detections.filter(d => d.class === "dentalCrowding").length ?? 0;
@@ -110,6 +113,37 @@ export default function ResultadosVisuales({ result, oral, image, smileOverlay, 
       </div>
       <div className={styles.cardFooter}><span>Esta detección es experimental.</span><Link href="/panel/odontologos" className={styles.textLink}>Consultar un odontólogo <span aria-hidden="true">↗</span></Link></div>
     </section>
+
+    {(premium || premiumError) && <section className={styles.analysisCard} aria-labelledby="resultado-premium-titulo">
+      <div className={styles.cardHeading}>
+        <span className={styles.number}>03</span>
+        <div><p className={styles.kicker}>HALLAZGOS FOTOGRÁFICOS PREMIUM</p><h2 id="resultado-premium-titulo">Revisión visual adicional</h2></div>
+        <span className={styles.modelLabel}>RF-DETR Small Premium {premium?.model.version ?? ""}</span>
+      </div>
+      <div className={styles.findings}>
+        {premiumError ? <p role="status">La evaluación Premium no estuvo disponible. Los resultados de Smile V17 permanecen independientes; no se ha concluido que la fotografía esté libre de hallazgos.</p> : <>
+          <p>{premium?.evaluation.status === "not_evaluable"
+            ? "La fotografía no pudo evaluarse con RF-DETR. Revisa las limitaciones y prueba otra imagen."
+            : premium?.evaluation.status === "processing_error" || premium?.evaluation.status === "provider_unavailable"
+              ? "La evaluación Premium no se completó. Los resultados de Smile V17 permanecen independientes."
+            : premium?.evaluation.status === "evaluated_no_detections"
+            ? "El detector no señaló zonas sobre su umbral operativo en esta fotografía. Esto no descarta una condición dental."
+            : premium?.evaluation.status === "partially_evaluated"
+              ? "Evaluación parcial: revisa las limitaciones antes de interpretar los hallazgos."
+              : "Zonas señaladas por el detector para revisión profesional."}</p>
+          <div className={styles.findingList}>
+            {Object.entries(PREMIUM_VISION_CATEGORY_LABELS).map(([category, label]) => {
+              const found = premium?.evaluation.detections.filter(d => d.category.original_label === category) ?? [];
+              return <div key={category}><span>{label}</span><strong>{found.length} {found.length === 1 ? "zona" : "zonas"}{found.length ? ` · confianza máxima ${(Math.max(...found.map(d => d.confidence)) * 100).toFixed(1)} %` : ""}</strong></div>;
+            })}
+          </div>
+          <p className={styles.description}>La confianza expresa la puntuación del detector; no es una probabilidad de diagnóstico. Las zonas no se asocian automáticamente a piezas dentales.</p>
+          {premium?.evaluation.limitations.map(limit => <p className={styles.hint} key={limit}>{limit}</p>)}
+          {premium?.evaluation.image_quality.issues.map(issue => <p className={styles.hint} key={issue}>{issue}</p>)}
+        </>}
+      </div>
+      <div className={styles.cardFooter}><span>Resultado temporal y preliminar; consulta a un odontólogo.</span></div>
+    </section>}
 
     <section className={styles.explanationCard} aria-labelledby="orientacion-titulo" aria-live="polite">
       <div className={styles.explanationHeader}><div><span className={styles.eyebrow}>INTERPRETACIÓN EDUCATIVA</span><h2 id="orientacion-titulo">Entiende tus resultados</h2></div><span className={styles.modelLabel}>{explanation?.source === "openai" ? "Explicación con IA" : "Orientación"}</span></div>
