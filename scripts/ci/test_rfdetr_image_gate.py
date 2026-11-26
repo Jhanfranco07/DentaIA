@@ -62,8 +62,14 @@ class ImageGateTests(unittest.TestCase):
             image = report([finding(next(iter(CVES)), package=package, version=version, severity="LOW")])
             self.assertEqual(len(evaluate(image, "review")[0]), 1)
 
-    def test_exception_requires_matching_package_inventory(self):
+    def test_os_vulnerability_record_is_sufficient_when_inventory_omits_package(self):
         image = report([finding(next(iter(CVES)), severity="LOW")])
+        self.assertEqual(evaluate(image, "review")[0], [])
+        self.assertEqual(len(evaluate(image, "deploy")[0]), 2)
+
+    def test_exception_rejects_python_result_with_same_package_and_version(self):
+        image = report()
+        image["Results"][1]["Vulnerabilities"] = [finding(next(iter(CVES)), severity="LOW")]
         self.assertEqual(len(evaluate(image, "review")[0]), 1)
 
     def test_missing_openssl_package_version_fails_closed(self):

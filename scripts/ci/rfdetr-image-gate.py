@@ -32,11 +32,14 @@ def evaluate(report: object, mode: str) -> tuple[list[str], list[str], int]:
     vulnerable_packages: set[str] = set()
     blockers: list[str] = []
     warnings: list[str] = []
-    records: list[dict] = []
+    records: list[tuple[dict, str]] = []
 
     for result in report["Results"]:
         if not isinstance(result, dict):
             raise ValueError("Invalid Trivy result")
+        source_class = result.get("Class")
+        if not isinstance(source_class, str):
+            raise ValueError("Invalid Trivy result class")
         packages = result.get("Packages") or []
         if not isinstance(packages, list):
             raise ValueError("Invalid package inventory")
@@ -59,11 +62,11 @@ def evaluate(report: object, mode: str) -> tuple[list[str], list[str], int]:
         for vulnerability in vulnerabilities:
             if not isinstance(vulnerability, dict):
                 raise ValueError("Invalid vulnerability record")
-            records.append(vulnerability)
+            records.append((vulnerability, source_class))
 
     if not os_packages or not python_packages:
         raise ValueError(f"Incomplete package coverage: os={os_packages}, python={python_packages}")
-    for vulnerability in records:
+    for vulnerability, source_class in records:
         identifier = vulnerability.get("VulnerabilityID")
         severity = vulnerability.get("Severity")
         fixed = vulnerability.get("FixedVersion") or ""
@@ -72,8 +75,11 @@ def evaluate(report: object, mode: str) -> tuple[list[str], list[str], int]:
         package = vulnerability.get("PkgName")
         version = vulnerability.get("InstalledVersion")
         label = f"{identifier} {package}@{version} ({severity})"
+        if source_class == "os-pkgs" and package in OPENSSL_PACKAGES and version == VULNERABLE_DEBIAN_VERSION:
+            vulnerable_packages.add(package)
         exception = (identifier in REVIEW_EXCEPTION_CVES
-                     and package in vulnerable_packages
+                     and source_class == "os-pkgs"
+                     and package in OPENSSL_PACKAGES
                      and version == VULNERABLE_DEBIAN_VERSION
                      and not fixed.strip()
                      and severity.upper() != "CRITICAL")
