@@ -374,7 +374,7 @@ jobs:
         pip-audit --progress-spinner off -r services/dental-vision/requirements.txt
 
   sec-imagen-rfdetr:
-    name: Imagen RF-DETR · CVE de sistema y Python
+    name: Imagen RF-DETR · Construcción y escaneo
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -387,6 +387,7 @@ jobs:
       run: |-
         docker build --pull=false --tag dentaia-rfdetr-ci:local services/rfdetr-premium
         mkdir -p reports
+        docker save dentaia-rfdetr-ci:local -o reports/rfdetr-image.tar
     - name: Escanear imagen completa sin exclusiones
       uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
       with:
@@ -402,12 +403,41 @@ jobs:
         scanners: vuln
         severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
         list-all-pkgs: 'true'
+    - name: ImageID de la imagen escaneada (requerido para DI211_QA_APPROVAL_JSON)
+      if: ${{ github.event_name == 'pull_request' && github.base_ref == 'feat/di-211-rfdetr-premium' && github.head_ref == 'feat/di-211-railway-qa' && github.event.pull_request.head.repo.full_name == 'Jhanfranco07/DentaIA' }}
+      run: python -c "import json; r=json.load(open('reports/rfdetr-image.json')); print('ImageID:', r.get('Metadata',{}).get('ImageID','NOT FOUND'))"
+    - name: Conservar imagen y reporte Trivy
+      if: ${{ always() }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: rfdetr-image-trivy
+        path: |
+          reports/rfdetr-image.json
+          reports/rfdetr-image.tar
+        if-no-files-found: error
+        retention-days: 7
+
+  sec-imagen-rfdetr-gate:
+    name: Imagen RF-DETR · CVE de sistema y Python
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs:
+    - sec-imagen-rfdetr
+    if: ${{ always() && needs.sec-imagen-rfdetr.result == 'success' }}
+    steps:
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      with:
+        persist-credentials: false
+    - name: Descargar imagen y reporte del job de construcción
+      uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        name: rfdetr-image-trivy
+        path: reports
+    - name: Cargar imagen exacta escaneada
+      run: docker load -i reports/rfdetr-image.tar
     - name: Gate de revisión PR · excepción acotada pendiente de aprobación
       if: ${{ github.event_name == 'pull_request' && (github.base_ref != 'feat/di-211-rfdetr-premium' || github.head_ref != 'feat/di-211-railway-qa' || github.event.pull_request.head.repo.full_name != 'Jhanfranco07/DentaIA') }}
       run: python scripts/ci/rfdetr-image-gate.py --mode review reports/rfdetr-image.json
-    - name: ImageID de la imagen escaneada (requerido para DI211_QA_APPROVAL_JSON)
-      if: ${{ github.event_name == 'pull_request' && github.base_ref == 'feat/di-211-rfdetr-premium' && github.head_ref == 'feat/di-211-railway-qa' && github.event.pull_request.head.repo.full_name == 'Jhanfranco07/DentaIA' }}
-      run: python -c "import json,sys; r=json.load(open('reports/rfdetr-image.json')); print('ImageID:', r.get('Metadata',{}).get('ImageID','NOT FOUND'))"
     - name: Gate QA Railway · aceptación temporal de imagen exacta
       if: ${{ github.event_name == 'pull_request' && github.base_ref == 'feat/di-211-rfdetr-premium' && github.head_ref == 'feat/di-211-railway-qa' && github.event.pull_request.head.repo.full_name == 'Jhanfranco07/DentaIA' }}
       env:
@@ -416,14 +446,6 @@ jobs:
     - name: Gate de despliegue · imagen vulnerable bloqueada
       if: ${{ github.event_name != 'pull_request' }}
       run: python scripts/ci/rfdetr-image-gate.py --mode deploy reports/rfdetr-image.json
-    - name: Conservar reporte completo de Trivy sin pesos
-      if: ${{ always() }}
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-      with:
-        name: rfdetr-image-trivy
-        path: reports/rfdetr-image.json
-        if-no-files-found: error
-        retention-days: 7
 
   sec-hallazgos:
     name: Consolidación de hallazgos
@@ -436,6 +458,7 @@ jobs:
     - sec-configuracion
     - sec-python
     - sec-imagen-rfdetr
+    - sec-imagen-rfdetr-gate
     if: ${{ always() }}
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -456,6 +479,7 @@ jobs:
     - sec-configuracion
     - sec-python
     - sec-imagen-rfdetr
+    - sec-imagen-rfdetr-gate
     - sec-hallazgos
     if: ${{ always() }}
     steps:
