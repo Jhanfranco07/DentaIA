@@ -3,7 +3,6 @@
   "scope": "railway-qa",
   "approval_status": "pending_specific_review",
   "image_name": "dentaia-rfdetr-ci:local",
-  "image_id": "sha256:56d8cbd3fa6cfb15d27779e77aba5de6d619d4e3a487d324889334d20ce63bbf",
   "source_report_sha256": "30533e3262c67bf3651cc35c5313b8c851d1818b71976982143bf3958e8bed0e",
   "source_report": "Trivy 0.76.2 full image JSON, generated locally from QA candidate tar",
   "exceptions": [

@@ -27,11 +27,10 @@ def _qa_approval(report: dict, policy: object, approval: object, now: datetime |
         raise ValueError("QA exception policy missing or wrong scope")
     metadata = report.get("Metadata")
     image_id = metadata.get("ImageID") if isinstance(metadata, dict) else None
-    if (policy.get("image_name") != report["ArtifactName"]
-            or policy.get("image_id") != image_id
-            or not isinstance(image_id, str)
-            or not re.fullmatch(r"sha256:[0-9a-f]{64}", image_id)):
-        raise ValueError("QA policy does not match the scanned image ID")
+    if policy.get("image_name") != report["ArtifactName"]:
+        raise ValueError("QA policy image_name does not match the scanned artifact")
+    if not isinstance(image_id, str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", image_id):
+        raise ValueError("Trivy report missing or invalid ImageID")
     exceptions = policy.get("exceptions")
     if not isinstance(exceptions, list) or not exceptions:
         raise ValueError("QA exception list missing")

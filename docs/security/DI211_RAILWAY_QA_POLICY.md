@@ -16,7 +16,7 @@ El SHA-256 canónico de `exceptions` (JSON con claves ordenadas y separadores co
 | `qa` | Solo PR desde `feat/di-211-railway-qa` del mismo repositorio hacia `feat/di-211-rfdetr-premium` | Requiere aprobación externa específica de Jhan, ImageID exacto, hash de las 222 entradas, hora efectiva y vencimiento ≤14 días. Bloquea cualquier hallazgo nuevo o desaparecido respecto del registro, CRITICAL, `FixedVersion`, cobertura incompleta, imagen distinta, aprobación ausente/futura/vencida. El reporte Trivy se adjunta siempre. No publica imagen. |
 | `deploy` | Push a `main`/`develop` o `workflow_dispatch` | Política estricta anterior, sin modificación: HIGH/CRITICAL y OpenSSL vulnerable bloquean. QA nunca se selecciona en este evento. |
 
-La única variable de aprobación es **metadata no secreta** en GitHub Repository Variables: `DI211_QA_APPROVAL_JSON`. Jhan debe establecerla **después** de revisar el JSON, el PR, el ImageID real del artefacto CI y la lista individual. Forma exacta, sin valores ficticios preconfigurados:
+La única variable de aprobación es **metadata no secreta** en GitHub Repository Variables: `DI211_QA_APPROVAL_JSON`. Jhan debe establecerla **después** de revisar el JSON, el PR, el ImageID real del artefacto CI (impreso en los logs del job `Imagen RF-DETR`) y la lista individual. El `image_id` vive exclusivamente en esta variable — el archivo de política es CI-agnóstico. Forma exacta, sin valores ficticios preconfigurados:
 
 ```json
 {"approved_by":"Jhanfranco07","image_id":"sha256:<ImageID de Trivy CI aprobado>","exceptions_sha256":"<SHA-256 canónico de exceptions del PR aprobado>","approved_at":"<UTC ISO-8601 de aprobación efectiva>","expires_at":"<UTC ISO-8601 posterior, máximo 14 días>"}

@@ -38,9 +38,8 @@ def qa_case(vulnerabilities=None):
                    "justification": "No fix reported; isolated synthetic QA only",
                    "applicability": "Package present; exploitability unverified",
                    "exposure": "QA service not deployed"} for v in vulnerabilities]
-    policy = {"scope": "railway-qa", "image_name": image["ArtifactName"],
-              "image_id": image["Metadata"]["ImageID"], "exceptions": exceptions}
-    approval = {"approved_by": "Jhanfranco07", "image_id": policy["image_id"],
+    policy = {"scope": "railway-qa", "image_name": image["ArtifactName"], "exceptions": exceptions}
+    approval = {"approved_by": "Jhanfranco07", "image_id": image["Metadata"]["ImageID"],
                 "exceptions_sha256": sha256(json.dumps(exceptions, sort_keys=True,
                      separators=(",", ":")).encode()).hexdigest(),
                 "approved_at": "2026-11-26T00:00:00Z", "expires_at": "2026-12-10T00:00:00Z"}
@@ -62,7 +61,7 @@ class ImageGateTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 evaluate(image, "qa", policy, changed, QA_NOW)
         image["Metadata"]["ImageID"] = "sha256:" + "c" * 64
-        with self.assertRaisesRegex(ValueError, "image ID"):
+        with self.assertRaisesRegex(ValueError, "bind this image"):
             evaluate(image, "qa", policy, approval, QA_NOW)
 
     def test_qa_expires_and_cannot_exceed_fourteen_days(self):
