@@ -11,14 +11,15 @@ describe("Premium server entitlements", () => {
     expect(effectivePlan({ status: "active", current_period_end: "2026-12-01T00:00:00.000Z" }, now)).toBe("premium");
   });
 
-  it("keeps future Premium features disabled while Basic Smile remains enabled", () => {
+  it("keeps future Premium features disabled while gating RF-DETR by plan", () => {
     expect(featureEnabled("basic", "smile_yellow_teeth_basic")).toBe(true);
+    expect(featureEnabled("basic", "premium_visual_evaluation")).toBe(false);
+    expect(featureEnabled("premium", "premium_visual_evaluation")).toBe(true);
     for (const feature of [
       "smile_analysis_history",
       "smile_analysis_comparison",
       "smile_share_with_dentist",
       "smile_advanced_analysis",
-      "premium_visual_evaluation",
     ] as const) {
       expect(featureEnabled("premium", feature)).toBe(false);
     }

@@ -1,0 +1,11 @@
+**/*.pth
+**/*.pt
+**/*.onnx
+**/*.jpg
+**/*.jpeg
+**/*.png
+**/*.webp
+**/.env*
+**/__pycache__
+**/.pytest_cache
+tests/

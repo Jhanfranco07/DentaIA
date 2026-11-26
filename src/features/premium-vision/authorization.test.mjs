@@ -50,12 +50,12 @@ test("falla cerrado cuando no se puede verificar plan o consentimiento", () => {
     { allowed: false, status: 503, code: "CONSENT_UNAVAILABLE" });
 });
 
-test("el adaptador de servidor reutiliza identidad y plan existentes y no activa inferencia ni rutas", () => {
+test("el adaptador de servidor reutiliza identidad y plan existentes", () => {
   const server = readFileSync(new URL("./server.ts", import.meta.url), "utf8");
   const catalog = readFileSync(new URL("../planes/catalogo.ts", import.meta.url), "utf8");
   assert.match(server, /authorizeVisionDemoRequest\(request\.headers\)/);
   assert.match(server, /readEffectivePlan\(accessToken\)/);
   assert.match(server, /verifyConsent\(\{ request, userId: identity\.userId, accessToken \}\)/);
-  assert.match(catalog, /premium_visual_evaluation: \{ minimumPlan: "premium", implemented: false \}/);
+  assert.match(catalog, /premium_visual_evaluation: \{ minimumPlan: "premium", implemented: true \}/);
   assert.doesNotMatch(server, /fetch\(/);
 });

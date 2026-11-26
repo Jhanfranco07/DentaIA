@@ -2,7 +2,8 @@ import { entradaOdontograma } from "../odontograma/contrato-http";
 import { expedienteDto } from "../odontograma/dto";
 import { historyCommand, historyPhoto, historyQuery } from "../premium-vision/history-http";
 import { historyDto } from "../premium-vision/history";
-import { PLAN_FEATURES } from "../planes/catalogo";
+import { premiumHistoryIngestRuntime } from "../premium-vision/history-ingest-runtime";
+import { rfdetrRuntime } from "../premium-vision/runtime";
 import { randomUUID } from "node:crypto";
 import { consultaWorkspace, workspaceDto, type TipoWorkspace } from "./workspace";
 import { firmarCursor, verificarCursor } from "./cursor";
@@ -69,9 +70,14 @@ export function crearApiClinica(deps: DependenciasClinicas) {
         p_evaluation: query.evaluation, p_args: query.args,
       }, trace);
       if (result.denied) return result.denied;
-      if (query.action === "list") return response({
-        ok: true, ...historyDto(result.raw.data), inferenceEnabled: PLAN_FEATURES.premium_visual_evaluation.implemented,
-      }, 200, trace);
+      if (query.action === "list") {
+        const page = historyDto(result.raw.data);
+        return response({
+          ok: true, ...page,
+          inferenceEnabled: page.premium && rfdetrRuntime(process.env).enabled
+            && premiumHistoryIngestRuntime(process.env).enabled,
+        }, 200, trace);
+      }
       const photo = historyPhoto(result.raw.data);
       const blob = await deps.downloadPremiumPhoto?.(request.headers.get("authorization")!.slice(7), photo);
       if (!blob) return response({ ok: false, code: "NOT_FOUND" }, 404, trace);

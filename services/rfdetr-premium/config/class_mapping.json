@@ -1,0 +1,42 @@
+{
+  "categories": [
+    {
+      "inference_class_index": 0,
+      "coco_category_id": 1,
+      "original_label": "calculus",
+      "label_es": "Cálculo dental"
+    },
+    {
+      "inference_class_index": 1,
+      "coco_category_id": 2,
+      "original_label": "caries",
+      "label_es": "Posibles signos de caries"
+    },
+    {
+      "inference_class_index": 2,
+      "coco_category_id": 3,
+      "original_label": "gingivitis",
+      "label_es": "Posibles signos de gingivitis"
+    },
+    {
+      "inference_class_index": 3,
+      "coco_category_id": 4,
+      "original_label": "missing teeth",
+      "label_es": "Ausencia dental aparente"
+    },
+    {
+      "inference_class_index": 4,
+      "coco_category_id": 5,
+      "original_label": "tooth_discolation",
+      "label_es": "Decoloración dental"
+    },
+    {
+      "inference_class_index": 5,
+      "coco_category_id": 6,
+      "original_label": "ulcer",
+      "label_es": "Posible úlcera oral"
+    }
+  ],
+  "excluded_background_index": 6,
+  "preserve_original_labels": true
+}

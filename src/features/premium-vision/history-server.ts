@@ -8,8 +8,10 @@ import { esUuid } from "@/features/clinica-http/validaciones";
 import { assertPremiumVisionResult } from "./contract";
 import { authorizePremiumVisionRequest, type VerifyPremiumVisionProcessingConsent } from "./server";
 import type { CaptureProtocol, HistoryEvaluation } from "./history";
+import { premiumHistoryIngestRuntime } from "./history-ingest-runtime";
+import { rfdetrRuntime } from "./runtime";
 
-type PersistEvaluation = {
+export type PersistEvaluation = {
   id: string;
   evaluatedAt: Date;
   resultConsentId: string;
@@ -20,18 +22,19 @@ type PersistEvaluation = {
 
 /**
  * Integration point for DI-211 after provider validation. There is no HTTP
- * ingestion route and the current inference capability denies this operation.
+ * ingestion route. Both this switch and the DB proof must be enabled separately.
  */
 export async function persistPremiumVisionResult(
   request: Request,
   verifyTemporaryConsent: VerifyPremiumVisionProcessingConsent,
   evaluation: PersistEvaluation,
 ) {
+  const runtime = premiumHistoryIngestRuntime(process.env);
+  if (!runtime.enabled || !rfdetrRuntime(process.env).enabled) throw new Error("PREMIUM_INGEST_UNAVAILABLE");
   const authorization = await authorizePremiumVisionRequest(request, verifyTemporaryConsent);
   if (!authorization.allowed) return authorization;
   const token = getAccessTokenFromRequest(request);
-  const secret = process.env.DENTAIA_PREMIUM_INGEST_HMAC_HEX;
-  if (!token || !secret || !/^[a-f0-9]{64}$/.test(secret)) throw new Error("PREMIUM_INGEST_UNAVAILABLE");
+  if (!token) throw new Error("PREMIUM_INGEST_UNAVAILABLE");
   const { id, resultConsentId, result, photo, evaluatedAt, captureProtocol } = evaluation;
   if (!esUuid(id) || !esUuid(resultConsentId)
     || (captureProtocol !== null && captureProtocol !== "frontal_intraoral_v1")) throw new Error("INVALID_PREMIUM_EVALUATION");
@@ -70,7 +73,7 @@ export async function persistPremiumVisionResult(
     photoId: photo?.id ?? null, photoConsentId: photo?.consentId ?? null, photoObjectId, photoDigest,
   });
   if (Buffer.byteLength(payload, "utf8") > 132000) throw new Error("INVALID_PREMIUM_EVALUATION");
-  const signature = createHmac("sha256", Buffer.from(secret,"hex")).update(payload,"utf8").digest("hex");
+  const signature = createHmac("sha256", Buffer.from(runtime.hmacHex,"hex")).update(payload,"utf8").digest("hex");
   const stored = await client.rpc("access_premium_history", {
     p_action: "save", p_evaluation: id.toLowerCase(), p_args: { payload, signature },
   });
