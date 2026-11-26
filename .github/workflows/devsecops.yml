@@ -407,6 +407,14 @@ jobs:
     - name: Gate de despliegue · imagen vulnerable bloqueada
       if: ${{ github.event_name != 'pull_request' }}
       run: python scripts/ci/rfdetr-image-gate.py --mode deploy reports/rfdetr-image.json
+    - name: Conservar reporte completo de Trivy sin pesos
+      if: ${{ always() }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: rfdetr-image-trivy
+        path: reports/rfdetr-image.json
+        if-no-files-found: error
+        retention-days: 7
 
   sec-hallazgos:
     name: Consolidación de hallazgos
