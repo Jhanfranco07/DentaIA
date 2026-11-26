@@ -32,7 +32,7 @@ Railway monta volúmenes propiedad de root y recomienda `RAILWAY_RUN_UID=0` para
 ## Criterios antes de conectar o activar
 
 - Escanear la imagen **final** con Trivy 0.76.2 sin exclusiones; conservar el JSON del job `sec-imagen-rfdetr`; exigir cero bloqueos en `--mode deploy` y checks obligatorios verdes. El gate actual registra 64 bloqueos, por lo que el servicio no se despliega todavía.
-- Validar imports, operadores, carga estricta Best EMA e inferencia sintética sobre esa imagen final; comprobar hash, memoria, p50/p95 y respuesta 429 con concurrencia limitada. La referencia independiente de Colab para la misma entrada aún falta.
+- Validar imports, operadores, carga estricta Best EMA e inferencia sintética sobre esa imagen final; comprobar hash, memoria, p50/p95 y respuesta 429 con concurrencia limitada. La paridad de 300 candidatos con Colab ya pasó en la imagen experimental actual para una entrada sintética, pero deberá repetirse si cambia la base, el runtime o el posprocesamiento; ver [evidencia de paridad](DI211_PARITY_SYNTHETIC.md).
 - Confirmar derechos del dataset y pesos derivados, política de fotografías clínicas y autorización de uso en Railway. La aceptación anterior cubre solo un smoke local offline.
 - Tras la aprobación, configurar en Vercel `DENTAIA_RFDETR_API_URL=https://<dominio-Railway>/analyze` y el mismo secreto privado. Mantener los flags de RF-DETR y de ingesta DI-214 en `false` hasta la ventana de activación. Para ingesta HMAC, el valor hexadecimal de 64 caracteres debe coincidir con el verificador en Supabase bajo control de Jhan; no compartirlo con Railway.
 
