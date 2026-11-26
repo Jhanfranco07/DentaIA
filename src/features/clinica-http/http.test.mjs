@@ -19,6 +19,14 @@ function prepare(result={data:good,error:null},options={}){
 }
 const req=(body=grantBody,extra={})=>new Request('http://localhost/api/clinical/access-grants',{method:'POST',headers:{Authorization:'Bearer a.b.c','Content-Type':'application/json','Idempotency-Key':id(71),...extra},body:JSON.stringify(body)});
 test('API desactivada falla cerrada sin llamar Auth ni RPC',async()=>{const p=prepare(undefined,{enabled:false});assert.equal((await p.api.conceder(req())).status,404);assert.equal(p.authCalls,0);});
+test('historial Premium no anuncia nuevas evaluaciones con inferencia e ingesta apagadas',async()=>{
+ const p=prepare({data:{ok:true,status:200,requestId:id(99),data:{items:[],premium:true,consents:{}}},error:null});
+ const request=new Request('http://localhost/api/clinical/patients/me/premium-history',{
+  method:'POST',headers:{Authorization:'Bearer a.b.c','Content-Type':'application/json'},body:'{}'});
+ const response=await p.api.premiumHistory(request,false);
+ assert.equal(response.status,200);
+ assert.equal((await response.json()).inferenceEnabled,false);
+});
 test('diagnóstico de configuración queda solo en el registro controlado, sin exponer valores',async()=>{
  const p=prepare(undefined,{enabled:false,diagnosticoConfiguracion:'CONFIGURACION_INVALIDA'});
  const r=await p.api.workspace(new Request('http://localhost/api/professional/me',{headers:{Authorization:'Bearer a.b.c'}}),'professional');

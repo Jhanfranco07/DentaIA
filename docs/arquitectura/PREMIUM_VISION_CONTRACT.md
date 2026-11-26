@@ -35,6 +35,8 @@ El contrato también declara calidad, disponibilidad y limitaciones. Todas las r
 
 El consentimiento de procesamiento Premium usa el alcance `temporary_premium_evaluation`. La ruta valida la versión `premium-vision-processing-v1` antes de leer o reenviar la imagen. Este consentimiento no autoriza almacenamiento. Guardar el original, el overlay o el resultado requiere verificar además un consentimiento de almacenamiento vigente. Compartir con un profesional requiere una concesión independiente y revocable.
 
+`history-server.ts` conserva el punto de escritura de DI-214 sin ruta HTTP de ingesta. `history-ingest-runtime.ts` exige un flag de ingesta separado, una clave HMAC válida y un segundo flag en producción; todos permanecen sin configurar. La escritura usa el JWT del paciente y `access_premium_history`, donde RLS, consentimiento de resultados y fotografía, y revocación se verifican de nuevo. La lectura y revocación del historial previo no dependen de estos flags. El historial solo anuncia nuevas evaluaciones cuando tanto la inferencia como la ingesta están habilitadas y el plan sigue vigente.
+
 ## Secuencia implementada localmente
 
 1. La pantalla existente obtiene o recibe una fotografía y conserva la vista previa.
@@ -48,5 +50,5 @@ MediaPipe sigue como ayuda local de captura antes del paso 2. RF-DETR se invoca 
 ## Pendientes para activar RF-DETR
 
 - Resolver los tres hallazgos OpenSSL altos de la imagen antes de aprobar su publicación o documentar una decisión de riesgo específica para ese alcance. La aceptación existente cubre solo el smoke local offline.
-- Recuperar el evaluador original de Colab y una referencia verificable para certificar paridad numérica. El smoke sintético no aporta validación clínica.
+- Obtener una referencia verificable del evaluador original de Colab para certificar paridad numérica. El notebook original (SHA-256 `12b7bd19d318d59cdc417ec5bc129233d899e49e4a07618b284d0ef6ccfb85d4`) muestra extracción a 0.0 y filtro operativo `>= 0.35`, pero aún no incluye una fixture permitida con predicciones de esa misma entrada antes y después del filtro. El smoke sintético no aporta validación clínica.
 - Conectar la salida temporal con la ingesta consentida de DI-214, la clave HMAC y la autorización profesional solo después de la activación aprobada; probar RLS y revocación en un entorno autorizado.
