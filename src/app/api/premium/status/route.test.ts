@@ -44,7 +44,7 @@ describe("consulta server-side del plan", () => {
     mocks.readPlan.mockResolvedValue("premium");
     const response = await GET(request("Bearer token_fixture"));
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ plan: "premium", subscription: null });
+    expect(await response.json()).toEqual({ plan: "premium", premium_vision_available: false, subscription: null });
     expect(mocks.getUser).toHaveBeenCalledTimes(1);
     expect(mocks.readPlan).toHaveBeenCalledWith("token_fixture");
     expect(response.headers.get("Cache-Control")).toBe("no-store");
