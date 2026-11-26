@@ -4,7 +4,7 @@ import path from "node:path";
 export default defineConfig({
   test: {
     environment: "node",
-    include: ["src/lib/**/*.test.ts", "src/app/**/*.test.ts"],
+    include: ["src/lib/**/*.test.ts", "src/app/**/*.test.ts", "src/features/premium-vision/**/*.test.ts"],
   },
   resolve: {
     alias: {

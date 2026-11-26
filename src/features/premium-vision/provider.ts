@@ -4,7 +4,7 @@ import { assertPremiumVisionResult, type PremiumVisionResult } from "./contract.
 export type PremiumVisionProviderInput = {
   image: Uint8Array;
   mediaType: TipoFotografiaPermitido;
-  referenceImage: { width: number; height: number };
+  referenceImage?: { width: number; height: number };
 };
 
 export type PremiumVisionProviderDescriptor = {
@@ -16,7 +16,7 @@ export type PremiumVisionProviderDescriptor = {
 };
 
 /**
- * Boundary for a future server-side RF-DETR adapter. Authentication, plan,
+ * Boundary for the server-side RF-DETR adapter. Authentication, plan,
  * consent, rate limits and persistence stay outside the inference provider.
  */
 export interface PremiumVisionProvider {

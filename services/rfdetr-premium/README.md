@@ -1,0 +1,15 @@
+# DI-211 · RF-DETR Small Premium v1.0.0
+
+Servicio FastAPI independiente de Smile V17. La imagen se construye sin pesos. `requirements.lock` fija 59 wheels ML por URL y SHA-256; `requirements-api.lock` fija tres wheels del servidor. `scripts/ci/check-rfdetr-lock.py` verifica los locks y los dos archivos de configuración copiados del paquete auditado.
+
+## Activación y ejecución
+
+El servicio y el BFF Next.js permanecen deshabilitados con los valores por defecto. Para una prueba local autorizada se requieren `DENTAIA_RFDETR_ENABLED=true`, `DENTAIA_ENV=local`, `DENTAIA_RFDETR_SERVICE_SECRET` de al menos 32 caracteres, `DENTAIA_RFDETR_CHECKPOINT` hacia el checkpoint externo y `DENTAIA_RFDETR_API_URL=http://127.0.0.1:7863/analyze` en el BFF. En producción ambos lados requieren además `DENTAIA_RFDETR_PRODUCTION_ENABLED=true`, una URL HTTPS exacta y una decisión de despliegue independiente. **No se han configurado estos valores en ningún entorno remoto.**
+
+El archivo montado debe tener SHA-256 `e45f9d6ee728123c37e6f3036aa541e464b2bc2110e4c6c03b684264f71c6007` y 127563327 bytes. El servicio rechaza cualquier discrepancia, globals no seguros, claves o formas distintas, y carga únicamente `payload["model"]` con `weights_only=True`, `map_location="cpu"`, sin descargar pesos base. El montaje de producción deberá ser de solo lectura y el proceso deberá ejecutarse sin privilegios. El modelo carga bajo demanda tras autenticar el servicio y validar la imagen. Una sola inferencia simultánea es admitida por proceso.
+
+El paciente con suscripción Premium activa solicita la evaluación desde la captura existente y acepta por separado el procesamiento temporal Premium. La ruta Smile comparte el limitador existente una sola vez; si RF-DETR falla, devuelve Smile junto con `premium_vision_error`, sin fabricar un resultado sin detecciones. El resultado Premium temporal no se persiste. El consentimiento de guardado, la foto almacenada y la concesión profesional de DI-214 siguen siendo independientes; la ingesta HMAC no se activa aquí.
+
+El postprocesador nativo RF-DETR 1.12.1 selecciona hasta 300 candidatos con puntuación estrictamente superior a 0.35, convierte `cxcywh` a `xyxy` en píxeles y limita cajas a la imagen. Se excluye solo el índice interno 6; la categoría COCO 6 corresponde a `ulcer`. Se entregan hasta 100 detecciones en el contrato v1; si había más, el estado es parcial. La calidad clínica no se determina automáticamente y no se asignan piezas FDI. La referencia original de Colab aún falta, por lo que la paridad numérica y clínica permanece pendiente.
+
+La imagen experimental local superó un smoke auténtico con entrada sintética. Esto no acredita capacidad de Railway ni seguridad de despliegue. La base Debian aún presenta tres hallazgos OpenSSL altos sin parche en la versión auditada. Se autorizó únicamente el smoke offline local con ese riesgo residual. No se debe activar remotamente hasta resolver o aceptar formalmente el riesgo aplicable y validar recursos, latencia, memoria y acceso privado en el destino real.
