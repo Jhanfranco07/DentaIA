@@ -3,6 +3,7 @@ import { readEffectivePlan } from "@/features/planes/premium-server";
 import { createUserScopedSupabaseClient } from "@/lib/supabase/request.server";
 import { getAccessTokenFromRequest, getUserFromRequest } from "@/lib/supabase/server-auth";
 import { rfdetrRuntime } from "@/features/premium-vision/runtime";
+import { premiumHistoryIngestRuntime } from "@/features/premium-vision/history-ingest-runtime";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -34,6 +35,8 @@ export async function GET(request: Request) {
     return NextResponse.json({
       plan,
       premium_vision_available: plan === "premium" && rfdetrRuntime(process.env).enabled,
+      premium_history_ingest_available: plan === "premium" && rfdetrRuntime(process.env).enabled
+        && premiumHistoryIngestRuntime(process.env).enabled,
       subscription: data ? {
         status: data.status,
         current_period_end: data.current_period_end,
