@@ -405,6 +405,9 @@ jobs:
     - name: Gate de revisión PR · excepción acotada pendiente de aprobación
       if: ${{ github.event_name == 'pull_request' && (github.base_ref != 'feat/di-211-rfdetr-premium' || github.head_ref != 'feat/di-211-railway-qa' || github.event.pull_request.head.repo.full_name != 'Jhanfranco07/DentaIA') }}
       run: python scripts/ci/rfdetr-image-gate.py --mode review reports/rfdetr-image.json
+    - name: ImageID de la imagen escaneada (requerido para DI211_QA_APPROVAL_JSON)
+      if: ${{ github.event_name == 'pull_request' && github.base_ref == 'feat/di-211-rfdetr-premium' && github.head_ref == 'feat/di-211-railway-qa' && github.event.pull_request.head.repo.full_name == 'Jhanfranco07/DentaIA' }}
+      run: python -c "import json,sys; r=json.load(open('reports/rfdetr-image.json')); print('ImageID:', r.get('Metadata',{}).get('ImageID','NOT FOUND'))"
     - name: Gate QA Railway · aceptación temporal de imagen exacta
       if: ${{ github.event_name == 'pull_request' && github.base_ref == 'feat/di-211-rfdetr-premium' && github.head_ref == 'feat/di-211-railway-qa' && github.event.pull_request.head.repo.full_name == 'Jhanfranco07/DentaIA' }}
       env:
