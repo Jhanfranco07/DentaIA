@@ -1,5 +1,7 @@
 # DI-211 · Preparación del servicio Railway RF-DETR Premium
 
+Para la propuesta de QA aislado y aún sin despliegue, ver [DI211_RAILWAY_QA_RUNBOOK.md](DI211_RAILWAY_QA_RUNBOOK.md). Este documento conserva el criterio de producción.
+
 Estado al 26 de noviembre de 2026: **preparación únicamente**. La imagen actual falla el gate de revisión y de despliegue de Trivy; no conectarla a despliegue automático ni activar inferencia. Este documento usa el servicio `rfdetr-premium` ya creado, sin crear otro servicio y sin modificar Smile V17.
 
 ## Configuración del servicio existente

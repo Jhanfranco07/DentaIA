@@ -1,5 +1,7 @@
 # DI-211 · Imagen RF-DETR y gate de seguridad
 
+La propuesta temporal para un entorno QA separado se documenta en [DI211_RAILWAY_QA_POLICY.md](DI211_RAILWAY_QA_POLICY.md). No cambia el resultado estricto de despliegue descrito aquí ni autoriza Railway por sí sola.
+
 Estado local al 26 de noviembre de 2026: `dentaia-rfdetr-di211-service:local` se construyó sin pesos con la base `python:3.11-slim@sha256:61e01f72680f86a5279ad510818ab7b2ee9f049822589d4e34e33e044360356c`. Docker Scout encontró 0 críticos y 3 altos en OpenSSL Debian `3.5.9-1~deb13u1`: CVE-2026-107493, CVE-2026-84786 y CVE-2026-107496. El consentimiento de riesgo existente cubre solo un smoke local offline, no publicación ni uso clínico.
 
 ## Búsqueda acotada de base
