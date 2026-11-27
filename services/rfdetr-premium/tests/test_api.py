@@ -43,6 +43,18 @@ class ApiTests(unittest.TestCase):
             self.assertEqual(self.request(secret="wrong").status_code, 401)
             inference.assert_not_called()
 
+    def test_qa_requires_qa_flag_and_keeps_production_disabled(self):
+        with patch.dict(os.environ, {"DENTAIA_ENV": "qa", "DENTAIA_RFDETR_ENABLED": "false",
+                                     "DENTAIA_RFDETR_PRODUCTION_ENABLED": "false"}):
+            self.assertEqual(self.client.get("/health").json()["status"], "disabled")
+        with patch.dict(os.environ, {"DENTAIA_ENV": "qa", "DENTAIA_RFDETR_ENABLED": "true",
+                                     "DENTAIA_RFDETR_PRODUCTION_ENABLED": "false"}):
+            self.assertEqual(self.client.get("/health").json()["status"], "configured")
+            self.assertEqual(self.request(secret="wrong").status_code, 401)
+        with patch.dict(os.environ, {"DENTAIA_ENV": "production", "DENTAIA_RFDETR_ENABLED": "true",
+                                     "DENTAIA_RFDETR_PRODUCTION_ENABLED": "false"}):
+            self.assertEqual(self.client.get("/health").json()["status"], "disabled")
+
     def test_media_size_and_decode_bounds(self):
         self.assertEqual(self.request(content_type="application/octet-stream").status_code, 415)
         self.assertEqual(self.request(data=b"x" * (8 * 1024 * 1024 + 1)).status_code, 413)

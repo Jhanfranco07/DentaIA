@@ -24,7 +24,7 @@ Image.MAX_IMAGE_PIXELS = MAX_PIXELS
 
 def enabled() -> bool:
     return (os.environ.get("DENTAIA_RFDETR_ENABLED") == "true"
-            and (os.environ.get("DENTAIA_ENV") in {"local", "test"}
+            and (os.environ.get("DENTAIA_ENV") in {"local", "test", "qa"}
                  or os.environ.get("DENTAIA_RFDETR_PRODUCTION_ENABLED") == "true"))
 
 

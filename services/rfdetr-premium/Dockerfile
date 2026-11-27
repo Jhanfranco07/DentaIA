@@ -12,8 +12,13 @@ RUN python -I -m pip install --require-hashes --no-deps --target /opt/di211/site
     && python -I -m pip uninstall --yes setuptools \
     && python -m pip check
 RUN apt-get update -qq \
-    && apt-get install --yes --no-install-recommends libzstd1=1.5.7+dfsg-1+deb13u1 \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install --yes --no-install-recommends \
+       libzstd1=1.5.7+dfsg-1+deb13u1 \
+       login.defs=1:4.17.4-2+deb13u1 \
+       passwd=1:4.17.4-2+deb13u1 \
+    && rm -rf /var/lib/apt/lists/* \
+    && python -I -m pip check \
+    && python -I -m pip uninstall --yes pip
 COPY app ./app
 COPY config ./config
 USER 65532:65532

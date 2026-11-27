@@ -1,5 +1,5 @@
 import test from'node:test';import assert from'node:assert/strict';
-import{configurarClinica,origenLocalAutorizado,origenPreviewAutorizado,origenProductionAutorizado,cuentaAcademicaPermitida,DENTALIA_REF,DATASET_ACADEMICO,DENTALIA_PREVIEW_BRANCH,DENTALIA_INTEGRATION_PREVIEW_BRANCH}from'./ambiente.ts';
+import{configurarClinica,origenLocalAutorizado,origenPreviewAutorizado,origenProductionAutorizado,cuentaAcademicaPermitida,DENTALIA_REF,DATASET_ACADEMICO,DENTALIA_PREVIEW_BRANCH,DENTALIA_INTEGRATION_PREVIEW_BRANCH,DENTALIA_RFDETR_QA_PREVIEW_BRANCH}from'./ambiente.ts';
 const ids=[1,2,3,4,5].map(n=>'00000000-0000-4000-8000-'+String(n).padStart(12,'0'));
 const env={NODE_ENV:'development',DENTAIA_CLINICAL_HTTP_ENABLED:'true',DENTAIA_CLINICAL_TARGET:'dentalia_academic',DENTAIA_CLINICAL_ACADEMIC_ENABLED:'true',DENTAIA_CLINICAL_PROJECT_REF:DENTALIA_REF,DENTAIA_CLINICAL_SUPABASE_URL:`https://${DENTALIA_REF}.supabase.co`,DENTAIA_CLINICAL_SUPABASE_PUBLISHABLE_KEY:'sb_publishable_fixture',DENTAIA_CLINICAL_CURSOR_SECRET:'a'.repeat(43),DENTAIA_CLINICAL_DEMO_USER_IDS:ids.join(',')};
 test('Remoto solo con todos los flags, origen y allowlist exactos',()=>assert.equal(configurarClinica(env).valid,true));
@@ -10,7 +10,7 @@ const preview={...env,NODE_ENV:'production',VERCEL:'1',VERCEL_ENV:'preview',VERC
 test('Preview académico habilitado solo con runtime, rama y flags exactos',()=>{const c=configurarClinica(preview);assert.equal(c.enabled,true);assert.equal(c.valid,true);assert.equal(c.preview,true);});
 for(const changes of [{DENTAIA_CLINICAL_PREVIEW_ENABLED:''},{VERCEL_ENV:'production'},{VERCEL_GIT_COMMIT_REF:'integration/sprint5-demo'},{VERCEL:undefined}])test('Preview denegado con condición ausente o distinta '+JSON.stringify(changes),()=>assert.equal(configurarClinica({...preview,...changes}).enabled,false));
 test('Preview no acepta configuración académica ajena al proyecto',()=>assert.equal(configurarClinica({...preview,DENTAIA_CLINICAL_PROJECT_REF:'otro-proyecto'}).valid,false));
-test('Preview clínico acepta solo develop y rechaza la rama experimental y cualquier otra rama',()=>{
+test('Preview clínico acepta develop y rechaza ramas no autorizadas',()=>{
  assert.equal(configurarClinica({...preview,VERCEL_GIT_COMMIT_REF:'develop'}).enabled,true);
  for(const branch of ['feature/preview-clinical-backend','main','integration/sprint5-demo',''])
   assert.equal(configurarClinica({...preview,VERCEL_GIT_COMMIT_REF:branch}).enabled,false);
@@ -91,4 +91,17 @@ test("Production restringe host, origen y sec-fetch-site",()=>{
 test("Se conserva la prohibición de Production académico tradicional",()=>{
  const config=configurarClinica({...prod,DENTAIA_CLINICAL_TARGET:"dentalia_academic"});
  assert.equal(config.valid,false);
+});
+
+test('DI-211 permite únicamente la rama QA exacta en Preview académico',()=>{
+ const qa={...preview,VERCEL_GIT_COMMIT_REF:DENTALIA_RFDETR_QA_PREVIEW_BRANCH};
+ const c=configurarClinica(qa);
+ assert.equal(c.preview,true);assert.equal(c.enabled,true);assert.equal(c.valid,true);assert.equal(c.production,false);
+ for(const changes of [{VERCEL_ENV:'production',DENTAIA_CLINICAL_PRODUCTION_ENABLED:'true'},{VERCEL_GIT_COMMIT_REF:'feat/di-211-railway-qa-other'},{DENTAIA_CLINICAL_PREVIEW_ENABLED:'false'},{DENTAIA_CLINICAL_HTTP_ENABLED:'false'}]){
+  const result=configurarClinica({...qa,...changes});assert.equal(result.enabled,false);
+ }
+ for(const changes of [{DENTAIA_CLINICAL_ACADEMIC_ENABLED:'false'},{DENTAIA_CLINICAL_DEMO_USER_IDS:''},{DENTAIA_CLINICAL_TARGET:'dentalia_production'}])assert.equal(configurarClinica({...qa,...changes}).valid,false);
+ assert.equal(origenProductionAutorizado(new Request('https://dent-ai-five.vercel.app/api/professional/me'),{...qa,VERCEL_ENV:'production'}),false);
+ assert.equal(origenPreviewAutorizado(new Request('https://'+qa.VERCEL_URL+'/api/professional/me'),qa),true);
+ assert.equal(origenPreviewAutorizado(new Request('https://otro.vercel.app/api/professional/me'),qa),false);
 });
