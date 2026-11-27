@@ -19,8 +19,14 @@ test("cabecera, saludo y cuenta utilizan la misma fuente de nombre", () => {
     assert.match(archivo(ruta), /useNombrePerfil\(usuario\)/, ruta);
   }
   const shell = archivo("src/components/PortalShell.tsx");
-  assert.match(shell, /area === "Paciente" \? nombreUsuario : area/);
-  assert.match(shell, /area === "Paciente" \? "Paciente" : "Espacio de trabajo"/);
+  assert.match(shell, /area !== "Paciente" && <div className=\{styles\.portalMarca\}>/);
+  const lateral = shell.slice(shell.indexOf("<aside "), shell.indexOf("</aside>"));
+  assert.doesNotMatch(lateral, /nombreUsuario/);
+  assert.match(lateral, /<strong>\{area\}<\/strong><span>Espacio de trabajo<\/span>/);
+  const header = shell.slice(shell.indexOf("<header "), shell.indexOf("</header>"));
+  assert.match(header, /<strong>\{nombreUsuario\}<\/strong>/);
+  assert.match(header, /nombreUsuario\.slice\(0, 1\)/);
+  assert.match(header, /etiquetaRol\(roles\)/);
   assert.match(shell, /useNombrePerfil\(usuario\)/);
 });
 
