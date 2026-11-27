@@ -3,10 +3,12 @@ export const DENTALIA_REF="vwmdknzjyvmsdqpepykz";
 export const DATASET_ACADEMICO="fase8-synthetic-v1";
 export const DENTALIA_PREVIEW_BRANCH="develop";
 export const DENTALIA_INTEGRATION_PREVIEW_BRANCH="integration/pr71-pr74-compat-20261117";
+// QA DI-211: autorización exclusiva de Preview académico; retirar al finalizar QA.
+export const DENTALIA_RFDETR_QA_PREVIEW_BRANCH="feat/di-211-railway-qa";
 type Env=Record<string,string|undefined>;
 export function configurarClinica(env:Env){
  const local=!env.VERCEL&&!env.VERCEL_ENV&&env.NODE_ENV==="development";
- const preview=env.VERCEL==="1"&&env.VERCEL_ENV==="preview"&&[DENTALIA_PREVIEW_BRANCH,DENTALIA_INTEGRATION_PREVIEW_BRANCH].includes(env.VERCEL_GIT_COMMIT_REF??"")&&env.DENTAIA_CLINICAL_PREVIEW_ENABLED==="true";
+ const preview=env.VERCEL==="1"&&env.VERCEL_ENV==="preview"&&[DENTALIA_PREVIEW_BRANCH,DENTALIA_INTEGRATION_PREVIEW_BRANCH,DENTALIA_RFDETR_QA_PREVIEW_BRANCH].includes(env.VERCEL_GIT_COMMIT_REF??"")&&env.DENTAIA_CLINICAL_PREVIEW_ENABLED==="true";
  const production=env.VERCEL==="1"&&env.VERCEL_ENV==="production"&&env.VERCEL_GIT_COMMIT_REF==="main"&&env.DENTAIA_CLINICAL_PRODUCTION_ENABLED==="true";
  const enabled=(local||preview||production)&&env.DENTAIA_CLINICAL_HTTP_ENABLED==="true";
  const remote=env.DENTAIA_CLINICAL_TARGET==="dentalia_academic";
