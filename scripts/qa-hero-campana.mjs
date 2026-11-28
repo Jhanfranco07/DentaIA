@@ -260,6 +260,43 @@ try {
       await page.close();
     }
   });
+  await probar("La estela dibuja píxeles translúcidos con color premultiplicado", async () => {
+    const page = await nuevaPagina();
+    const selector = "canvas[data-a11y-decorativa]";
+    try {
+      await page.addInitScript(selector => {
+        const drawArrays = WebGLRenderingContext.prototype.drawArrays;
+        WebGLRenderingContext.prototype.drawArrays = function (...args) {
+          drawArrays.apply(this, args);
+          const { canvas, drawingBufferWidth: ancho, drawingBufferHeight: alto } = this;
+          if (!canvas.matches(selector) || canvas.dataset.estelaPremultiplicada !== undefined) return;
+
+          // Leer antes de que el navegador componga y descarte el búfer.
+          const fila = new Uint8Array(ancho * 4);
+          this.readPixels(0, Math.floor(alto / 2), ancho, 1, this.RGBA, this.UNSIGNED_BYTE, fila);
+          let visible = false;
+          let valida = this.getContextAttributes().premultipliedAlpha;
+          for (let i = 0; i < fila.length; i += 4) {
+            const alpha = fila[i + 3];
+            visible ||= alpha > 0;
+            valida &&= alpha < 255 && Math.max(fila[i], fila[i + 1], fila[i + 2]) <= alpha;
+          }
+          if (visible) canvas.dataset.estelaPremultiplicada = String(valida);
+        };
+      }, selector);
+      await abrir(page);
+      await page.waitForFunction(selector => document.querySelector(selector)?.width > 300, selector);
+      await page.mouse.move(640, 450);
+      await page.mouse.move(800, 450, { steps: 24 });
+      const estela = page.locator(`${selector}[data-estela-premultiplicada]`);
+      assert.equal(await estela.getAttribute("data-estela-premultiplicada"), "true");
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await estela.waitFor({ state: "hidden" });
+    } finally {
+      await page.close();
+    }
+  });
+
   await probar("Sin errores de consola, hidratación ni recursos HTTP", () => assert.deepEqual([...errores], []));
 } finally {
   await browser.close();
