@@ -36,9 +36,11 @@ void main(){
   float prisma=sin(campo*10.0+normal.x*2.3+normal.y*1.7);
   vec3 agua=mix(vec3(.49,.79,.96),vec3(.83,.89,1.0),prisma*.5+.5);
   agua=mix(agua,vec3(1.0),brillo*.8);
+  float bordeSuave=smoothstep(.025,.11,campo);
   float cuerpo=smoothstep(.025,.35,campo)*.018;
-  float alpha=min(.34,orilla*(.16+brillo*.19)+interior*.045+cuerpo);
-  gl_FragColor=vec4(agua,alpha);
+  float alpha=min(.34,orilla*(.16+brillo*.19)+interior*.045+cuerpo)*bordeSuave;
+  // Entrega color premultiplicado al compositor del navegador.
+  gl_FragColor=vec4(agua*alpha,alpha);
 }`;
 
 type Gota = { x: number; y: number; radio: number; nacimiento: number };
@@ -61,7 +63,7 @@ export default function EstelaAgua() {
       if (!canvas || movimiento.matches || !raton.matches) return;
       const gl = canvas.getContext("webgl", {
         alpha: true, antialias: false, depth: false, stencil: false,
-        premultipliedAlpha: false, powerPreference: "low-power",
+        premultipliedAlpha: true, powerPreference: "low-power",
       });
       if (!gl) return;
 
